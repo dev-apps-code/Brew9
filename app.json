@@ -17,6 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "slug": "brew9",
+    "description": ""
   }
 }

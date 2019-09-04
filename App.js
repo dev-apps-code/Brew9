@@ -6,18 +6,36 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import React from "react"
-import { createBottomTabNavigator } from "react-navigation"
 import * as Font from "expo-font"
 import { DangerZone, AppLoading } from "expo"
+import { createBottomTabNavigator } from "react-navigation"
+import Checkout from "./App/Checkout/Checkout"
+import Profile from "./App/Profile/Profile"
+import MemberWallet from "./App/MemberWallet/MemberWallet"
+import MemberReward from "./App/MemberReward/MemberReward"
+import MembershipInfo from "./App/MembershipInfo/MembershipInfo"
+import PickUp from "./App/PickUp/PickUp"
+import React from "react"
+import MemberProfile from "./App/MemberProfile/MemberProfile"
 import Home from "./App/Home/Home"
 import { createStackNavigator, createAppContainer } from "react-navigation"
-import Profile from "./App/Profile/Profile"
-import PickUp from "./App/PickUp/PickUp"
+import VIPPurchase from "./App/VIPPurchase/VIPPurchase"
+import PointHistory from "./App/PointHistory/PointHistory"
+import Transaction from "./App/Transaction/Transaction"
+import OrderHistory from "./App/OrderHistory/OrderHistory"
 
 const PushRouteOne = createStackNavigator({
 	Home: {
 		screen: Home,
+	},
+	Checkout: {
+		screen: Checkout,
+		navigationOptions: {
+			tabBarVisible: false
+		}
+	},
+	Transaction: {
+		screen: Transaction,
 	},
 }, {
 	initialRouteName: "Home",
@@ -27,6 +45,9 @@ const PushRouteTwo = createStackNavigator({
 	PickUp: {
 		screen: PickUp,
 	},
+	OrderHistory: {
+		screen: OrderHistory,
+	},
 }, {
 	initialRouteName: "PickUp",
 })
@@ -35,9 +56,45 @@ const PushRouteThree = createStackNavigator({
 	Profile: {
 		screen: Profile,
 	},
+	VIPPurchase: {
+		screen: VIPPurchase,
+	},
+	Transaction: {
+		screen: Transaction,
+	},
+	MembershipInfo: {
+		screen: MembershipInfo,
+	},
+	MemberReward: {
+		screen: MemberReward,
+	},
+	PointHistory: {
+		screen: PointHistory,
+	},
+	MemberWallet: {
+		screen: MemberWallet,
+	},
+	OrderHistory: {
+		screen: OrderHistory,
+	},
+	MemberProfile: {
+		screen: MemberProfile,
+	},
 }, {
 	initialRouteName: "Profile",
 })
+
+PushRouteOne.navigationOptions = ({ navigation }) => {
+	let tabBarVisible = true;
+	for (let i = 0; i < navigation.state.routes.length; i++) {
+		if (navigation.state.routes[i].routeName != "Home") {
+			tabBarVisible = false;
+		}
+	}
+	return {
+		tabBarVisible
+	};
+};
 
 const TabGroupOne = createBottomTabNavigator({
 	PushRouteOne: {
@@ -109,8 +166,9 @@ export default class App extends React.Component {
 	async initProjectFonts() {
 	
 		await Font.loadAsync({
-			"Helvetica": require("./assets/fonts/Helvetica.ttf"),
 			"Helvetica-Bold": require("./assets/fonts/HelveticaBold.ttf"),
+			"Helvetica-LightOblique": require("./assets/fonts/HelveticaLightOblique.ttf"),
+			"Helvetica": require("./assets/fonts/Helvetica.ttf"),
 		})
 		this.setState({
 			fontsReady: true,

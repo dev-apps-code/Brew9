@@ -1,7 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="" />
+    <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/common/size.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Category.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Category.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Product.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Product.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PickUp/PickUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PickUp/PickUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-2@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-2@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-2@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-6@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-6@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-6@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-7-4@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-7-4@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-7-4@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-7@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-7@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-7@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-4@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-4@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-4@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-13-4@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-13-4@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-13-4@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-13@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-13@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-13@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-5@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-5@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-5@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-6@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-6@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-6@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-2@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-2@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-2@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-7@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-7@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-7@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-4@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-4@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-4@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-6@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-6@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-6@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-6@1x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-6@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-6@3x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,16 +82,41 @@
     </execution>
   </component>
   <component name="DefaultGradleProjectSettings">
-    <option name="testRunner" value="GRADLE" />
-    <option name="delegatedBuild" value="true" />
+    <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="94" column="50" selection-start-line="94" selection-start-column="50" selection-end-line="94" selection-end-column="50" />
+            <state relative-caret-position="555">
+              <caret line="37" column="28" lean-forward="true" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#105#138#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="593">
+              <caret line="45" column="31" selection-start-line="45" selection-start-column="31" selection-end-line="45" selection-end-column="31" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#111#136#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/PickUp/PickUp.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="31" column="53" lean-forward="true" selection-start-line="31" selection-start-column="45" selection-end-line="31" selection-end-column="53" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -32,12 +125,35 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
+        <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="546" column="12" selection-start-line="546" selection-start-column="8" selection-end-line="546" selection-end-column="12" />
+            <state relative-caret-position="262">
+              <caret line="103" column="57" selection-start-line="103" selection-start-column="49" selection-end-line="103" selection-end-column="57" />
               <folding>
-                <element signature="e#106#184#0" expanded="true" />
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#103#189#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/common/size.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="107" column="37" lean-forward="true" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#107#185#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,33 +162,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="78" column="23" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Home/Product.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="72" column="44" selection-start-line="72" selection-start-column="44" selection-end-line="72" selection-end-column="44" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#107#193#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Home/Category.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state relative-caret-position="341">
+              <caret line="39" column="20" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -81,87 +172,118 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ViewTwo</find>
-      <find>onViewTwoPress</find>
-      <find>moreText</find>
-      <find>SFNSText</find>
-      <find>Expresso</find>
-      <find>espresso</find>
-      <find>menucategoryFlatListViewWrapper</find>
-      <find>memberView</find>
-      <find>membershipinfoView</find>
-      <find>wallet</find>
-      <find>walletlabelText</find>
       <find>pointsView</find>
       <find>memberpointsView</find>
       <find>font</find>
+      <find>onViewPressed</find>
+      <find>pointbuttonButton</find>
+      <find>SFNSText</find>
+      <find>s</find>
+      <find>iphone8Copy7View</find>
+      <find>branch</find>
+      <find>createBottomTabNavigator</find>
+      <find>onOrderHistoryPressed</find>
+      <find>Branch</find>
+      <find>OrderHistory</find>
+      <find>cartView</find>
+      <find>status</find>
+      <find>Checkout</find>
+      <find>stack</find>
+      <find>navigationBarItemIcon</find>
+      <find>Points</find>
+      <find>iphone8Copy13View</find>
+      <find>contentView</find>
+      <find>pointHistoryView</find>
+      <find>pointRuleView</find>
+      <find>seperatorView</find>
+      <find>navigationBarItemTitle</find>
+      <find>pointRuleButton</find>
+      <find>pointscell</find>
+      <find>pointRuleButtonImage</find>
+      <find>./../../</find>
+      <find>./../../assets/images</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/App/Home/Category.js" />
         <option value="$PROJECT_DIR$/App/Home/Espresso.js" />
-        <option value="$PROJECT_DIR$/App/Home/Home.js" />
         <option value="$PROJECT_DIR$/App/Home/Product.js" />
+        <option value="$PROJECT_DIR$/App/PickUp/PickUp.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
+        <option value="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" />
         <option value="$PROJECT_DIR$/App/Profile/Profile.js" />
+        <option value="$PROJECT_DIR$/App/Home/Home.js" />
+        <option value="$PROJECT_DIR$/App/common/size.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/Cell.js" />
+        <option value="$PROJECT_DIR$/App/Views/Checkout/Checkout.js" />
+        <option value="$PROJECT_DIR$/App.js" />
+        <option value="$PROJECT_DIR$/App/Checkout/Checkout.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+    <option name="x" value="-12" />
+    <option name="y" value="25" />
     <option name="width" value="1680" />
-    <option name="height" value="962" />
+    <option name="height" value="955" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="Brew9" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Brew9" type="462c0819:PsiDirectoryNode" />
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Brew9" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Brew9" type="462c0819:PsiDirectoryNode" />
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Brew9" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Brew9" type="462c0819:PsiDirectoryNode" />
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="Home" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Brew9" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Brew9" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Brew9" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Brew9" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-              <item name="fonts" type="462c0819:PsiDirectoryNode" />
+              <item name="PickUp" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/App" />
+      <recent name="$PROJECT_DIR$/App/Views" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -186,28 +308,27 @@
       <option name="presentableId" value="Default" />
       <updated>1566982832646</updated>
       <workItem from="1566982834197" duration="5084000" />
+      <workItem from="1567478025416" duration="576000" />
+      <workItem from="1567480266758" duration="9266000" />
+      <workItem from="1567512520051" duration="2719000" />
+      <workItem from="1567566624391" duration="9764000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5084000" />
+    <option name="totallyTimeSpent" value="27409000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="962" extended-state="0" />
+    <frame x="-12" y="25" width="1680" height="955" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Image Layers" />
-      <window_info id="Designer" />
-      <window_info id="UI Designer" />
-      <window_info id="Capture Tool" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24969475" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26190478" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32988507" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -215,16 +336,21 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="right" id="rails-model-fields" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Maven" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="rails-model-fields" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Maven" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Database" order="9" />
     </layout>
     <layout-to-restore>
       <window_info id="Image Layers" order="0" />
@@ -262,10 +388,23 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/App/Home/Category.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+        <state relative-caret-position="-93">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -274,38 +413,89 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Home/Product.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
+        <state relative-caret-position="954">
           <caret line="72" column="44" selection-start-line="72" selection-start-column="44" selection-end-line="72" selection-end-column="44" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#107#193#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
+    <entry file="file://$PROJECT_DIR$/App/Home/Category.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="78" column="23" selection-start-line="78" selection-start-column="23" selection-end-line="78" selection-end-column="23" />
+        <state relative-caret-position="285">
+          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="546" column="12" selection-start-line="546" selection-start-column="8" selection-end-line="546" selection-end-column="12" />
-          <folding>
-            <element signature="e#106#184#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="1110">
+          <caret line="81" column="32" lean-forward="true" selection-start-line="79" selection-start-column="8" selection-end-line="81" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="39" column="20" selection-start-line="39" selection-start-column="20" selection-end-line="39" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/common/size.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="94" column="50" selection-start-line="94" selection-start-column="50" selection-end-line="94" selection-end-column="50" />
+        <state relative-caret-position="555">
+          <caret line="37" column="28" lean-forward="true" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
+            <element signature="e#105#138#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="103" column="57" selection-start-line="103" selection-start-column="49" selection-end-line="103" selection-end-column="57" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#103#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PickUp/PickUp.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="31" column="53" lean-forward="true" selection-start-line="31" selection-start-column="45" selection-end-line="31" selection-end-column="53" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="107" column="37" lean-forward="true" selection-start-line="107" selection-start-column="37" selection-end-line="107" selection-end-column="37" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#107#185#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="593">
+          <caret line="45" column="31" selection-start-line="45" selection-start-column="31" selection-end-line="45" selection-end-column="31" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#136#0" expanded="true" />
           </folding>
         </state>
       </provider>
