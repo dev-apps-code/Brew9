@@ -15,7 +15,7 @@ export function getBasicAuthentication(authToken) {
   return `Basic ${authToken}`
 }
 
-export function getMethod(object, authtoken) {
+export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}`
   return fetch(urlString, {
     method: 'GET',
