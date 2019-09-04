@@ -54,7 +54,7 @@ export default class Home extends React.Component {
 			this.setState({ refreshing: false })
 		  }
 		}
-		const obj = new PushRequestObject({device_key:'device_key',device_type: 'device_type',push_identifier: 'push_identifier', os:"os"})
+		const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
 		obj.setUrlId('1')
 		dispatch(
 		  createAction('members/loadStorePushToken')({

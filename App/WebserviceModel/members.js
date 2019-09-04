@@ -21,7 +21,7 @@ export default {
           const { object, callback } = payload
           var authtoken = "";
 
-          console.log("load store3")
+          console.log("load store3",object.getFormData())
           // const authtoken = yield select(state => state.member.userAuthToken)
           
           const json = yield call(
