@@ -15,7 +15,8 @@ export default {
       }
    },
   effects: {
-    *loadStorePushToken({ payload }, { call, put, select }) {
+    *loadStorePushToken({ payload }, { call, put, select }) 
+    {
         try {
 
           const { object, callback } = payload
@@ -28,8 +29,7 @@ export default {
             object,
           )
           const eventObject = new EventObject(json)
-          if (eventObject.success == true) {
-          }
+          if (eventObject.success == true) {}
           typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
       },    
