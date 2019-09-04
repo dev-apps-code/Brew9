@@ -1,14 +1,14 @@
-import { btoa } from './node_modules/Base64'
-import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER } from './Utils/server.js.js'
+// import { btoa } from './node_modules/Base64'
+import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER } from './server'
 
 export class WebserviceHelper {
-  static b64EncodeUnicode(str) {
-    return btoa(
-      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
-        String.fromCharCode(`0x${p1}`)
-      )
-    )
-  }
+  // static b64EncodeUnicode(str) {
+  //   return btoa(
+  //     encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
+  //       String.fromCharCode(`0x${p1}`)
+  //     )
+  //   )
+  // }
 }
 
 export function getBasicAuthentication(authToken) {
@@ -33,13 +33,16 @@ export function getMethod(urlString,object, authtoken) {
 }
 
 export function postMethod(authtoken,object) {
-    return fetch(`${KSERVERURL}/${object.getUrlString}`, {
+  console.log("postMethod " + object);
+  const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  console.log("postMethod " + urlString);
+    return fetch(urlString, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: getBasicAuthentication(authtoken),
-    }, body: formData
+    }, body: object.getFormData()
   })
     .then(logResponse('json'))
     .then(response => _parseJSON(response))
@@ -72,7 +75,7 @@ export function logResponse(description) {
 }
 
 export function _parseJSON(response) {
-  // console.log("response " + response);
+  console.log("response " + response);
   return response.text().then(text => (text ? JSON.parse(text) : {}))
 }
 

@@ -1,4 +1,4 @@
-export const KSERVERURL ='https://app.co3.co/api/'
+export const KSERVERURL ='http:/localhost:3000/api/'
 
 export const KURL_TERMS_OF_SERVICE =
   'http://innogix.com/co3/privacy_policy.html'
@@ -9,7 +9,7 @@ export const KURL_EULA = 'http://www.innogix.com/co3/eula.html'
 export const KURL_CREDIT = 'http://www.innogix.com/co3/credit_policy.html'
 export const KURL_TERMS_CO3_GO = 'http://www.innogix.com/co3/co3_go_agreement.html'
 
-export const KCURRENT_API_VERSION_HEADER = 'application/co3.v12'
+export const KCURRENT_API_VERSION_HEADER = 'application/dc.v12'
 
 export const KTIMEOUT = 3 * 1000
 

@@ -8,6 +8,8 @@
 
 import * as Font from "expo-font"
 import { DangerZone, AppLoading } from "expo"
+
+
 import { createBottomTabNavigator } from "react-navigation"
 import Checkout from "./App/Checkout/Checkout"
 import Profile from "./App/Profile/Profile"
@@ -23,6 +25,10 @@ import VIPPurchase from "./App/VIPPurchase/VIPPurchase"
 import PointHistory from "./App/PointHistory/PointHistory"
 import Transaction from "./App/Transaction/Transaction"
 import OrderHistory from "./App/OrderHistory/OrderHistory"
+import {createStore, applyMiddleware} from 'redux';
+import { create } from 'dva-core'
+import { Provider, connect } from 'react-redux'
+import {registerModels} from './App/Model/index'
 
 const PushRouteOne = createStackNavigator({
 	Home: {
@@ -145,6 +151,16 @@ const RootNavigator = createStackNavigator({
 	initialRouteName: "TabGroupOne",
 })
 
+ 
+
+ 
+const app = create(); // 创建dva实例，可传递配置参数。https://dvajs.com/api/#app-dva-opts
+ 
+registerModels(app)
+app.start(); // 实例初始化
+ 
+const store = app._store;
+
 const AppContainer = createAppContainer(RootNavigator)
 
 
@@ -175,9 +191,12 @@ export default class App extends React.Component {
 		})
 	}
 
+
 	render() {
 	
 		if (!this.state.fontsReady) { return (<AppLoading />); }
-		return <AppContainer/>
+		return <Provider store={store}>
+			<AppContainer/>
+	  	</Provider>
 	}
 }
