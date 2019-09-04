@@ -16,14 +16,15 @@ export function getBasicAuthentication(authToken) {
 }
 
 export function getMethod(authtoken,object) {
-  const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
+    console.log(urlString)
   return fetch(urlString, {
     method: 'GET',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: getBasicAuthentication(authtoken),
-    }, body: object.getFormData()
+    }
   })
     .then(response => _parseJSON(response))
     .then(logResponse('json'))

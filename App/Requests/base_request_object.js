@@ -12,9 +12,14 @@ class BaseRequestObject {
   
         let formBody = []
         Object.entries(this).forEach(entry => {
-            const encodedKey = encodeURIComponent(entry[0]);
-            const encodedValue = encodeURIComponent(entry[1]);
-            formBody.push(`${encodedKey}=${encodedValue}`)
+
+            if (entry[0] != 'url_id'){
+
+
+                const encodedKey = encodeURIComponent(entry[0]);
+                const encodedValue = encodeURIComponent(entry[1]);
+                formBody.push(`${encodedKey}=${encodedValue}`)
+            }
             //use key and value here
             });
             formBody = formBody.join('&')
