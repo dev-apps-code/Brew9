@@ -8,10 +8,12 @@
 
 import { Text, StyleSheet, FlatList, Image, TouchableOpacity, View , StatusBar} from "react-native"
 import React from "react"
+import PushRequestObject from '../Requests/push_request_object'
 import Product from "./Product"
 import Category from "./Category"
-
-
+import { connect } from 'react-redux';
+import {createAction} from '../Utils/index'
+@connect()
 export default class Home extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -41,8 +43,26 @@ export default class Home extends React.Component {
 	}
 
 	componentDidMount() {
-	
+		this.loadStorePushToken()
 	}
+
+	loadStorePushToken() {
+		const { dispatch } = this.props
+		this.setState({ refreshing: true });
+		const callback = eventObject => {
+		  if (eventObject.success) {
+			this.setState({ refreshing: false })
+		  }
+		}
+		const obj = new PushRequestObject({device_key:'device_key',device_type: 'device_type',push_identifier: 'push_identifier', os:"os"})
+		obj.setUrlId('1')
+		dispatch(
+		  createAction('members/loadStorePushToken')({
+			object:obj,
+			callback,
+		  })
+		)
+	  }
 
 	onRightTwoPressed = () => {
 	
