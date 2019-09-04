@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PointHistory/Cell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointHistory/Cell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Requests/base_request_object.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Requests/base_request_object.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Utils/webservice_helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Utils/webservice_helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/WebserviceModel/event_object.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebserviceModel/event_object.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,8 +28,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Utils/webservice_helper.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
+            <state relative-caret-position="279">
               <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="327">
+              <caret line="29" column="51" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="51" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/WebserviceModel/event_object.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="39" lean-forward="true" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -34,17 +55,34 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="48" lean-forward="true" selection-start-line="2" selection-start-column="48" selection-end-line="2" selection-end-column="48" />
+            <state relative-caret-position="135">
+              <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="138">
+              <caret line="156" column="20" lean-forward="true" selection-start-line="156" selection-start-column="20" selection-end-line="156" selection-end-column="20" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#111#136#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/Requests/base_request_object.js">
+        <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="400">
+              <caret line="58" column="80" selection-start-line="58" selection-start-column="80" selection-end-line="58" selection-end-column="80" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#103#189#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -53,12 +91,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>./../../assets/images</find>
-      <find>pointRuleButtonImage</find>
-      <find>ds.</find>
-      <find>historyFlatListViewWrapper</find>
-      <find>headerLeftContainer</find>
-      <find>availableView</find>
       <find>group4Image</find>
       <find>onBackPressed</find>
       <find>used</find>
@@ -83,6 +115,12 @@
       <find>console.l</find>
       <find>PointStatementRequestObject</find>
       <find>getM</find>
+      <find>console.log</find>
+      <find>flatlist</find>
+      <find>EventObject</find>
+      <find>isRefreshing</find>
+      <find>renderHistoryFlatListCell</find>
+      <find>description</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -105,7 +143,6 @@
         <option value="$PROJECT_DIR$/App/Models/point_statements/point_statements_models.js" />
         <option value="$PROJECT_DIR$/App/Models/point_statements.js" />
         <option value="$PROJECT_DIR$/App.js" />
-        <option value="$PROJECT_DIR$/App/PointHistory/Cell.js" />
         <option value="$PROJECT_DIR$/App/MemberReward/NewVoucherTwo.js" />
         <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
         <option value="$PROJECT_DIR$/package.json" />
@@ -118,15 +155,17 @@
         <option value="$PROJECT_DIR$/node_modules/redux/package.json" />
         <option value="$PROJECT_DIR$/node_modules/symbol-observable/package.json" />
         <option value="$PROJECT_DIR$/App/Model/index.js" />
-        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/members.js" />
         <option value="$PROJECT_DIR$/App/Services/point_statements.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" />
         <option value="$PROJECT_DIR$/App/Requests/push_request_object.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/App/Utils/webservice_helper.js" />
-        <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
         <option value="$PROJECT_DIR$/App/Requests/base_request_object.js" />
+        <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/event_object.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/Cell.js" />
       </list>
     </option>
   </component>
@@ -157,7 +196,7 @@
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="Model" type="462c0819:PsiDirectoryNode" />
+              <item name="PointHistory" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
@@ -223,18 +262,18 @@
       <workItem from="1567478025416" duration="576000" />
       <workItem from="1567480266758" duration="9266000" />
       <workItem from="1567512520051" duration="2719000" />
-      <workItem from="1567566624391" duration="24016000" />
+      <workItem from="1567566624391" duration="32051000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41661000" />
+    <option name="totallyTimeSpent" value="49696000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="4" y="23" width="1680" height="955" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26190478" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26190478" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -251,7 +290,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32908458" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32908458" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -378,16 +417,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="50" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/MemberReward/NewVoucherTwo.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2564">
@@ -434,9 +463,6 @@
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/event_object.js">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/package-lock.json">
       <provider selected="true" editor-type-id="text-editor">
@@ -521,17 +547,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="64" column="14" selection-start-line="64" selection-start-column="14" selection-end-line="64" selection-end-column="14" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#136#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/Requests/push_request_object.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -556,16 +571,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="25" column="29" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -578,22 +583,58 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Utils/webservice_helper.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
+        <state relative-caret-position="279">
           <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="48" lean-forward="true" selection-start-line="2" selection-start-column="48" selection-end-line="2" selection-end-column="48" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Requests/base_request_object.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/event_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="39" lean-forward="true" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="29" column="51" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="156" column="20" lean-forward="true" selection-start-line="156" selection-start-column="20" selection-end-line="156" selection-end-column="20" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#136#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="58" column="80" selection-start-line="58" selection-start-column="80" selection-end-line="58" selection-end-column="80" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#103#189#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

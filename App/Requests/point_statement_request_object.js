@@ -7,7 +7,6 @@ class PointStatementRequestObject extends BaseRequestObject{
     }
 
     setUrlId(url_id){
-        console.log("URKID")
         this.url_id = url_id
     }
 

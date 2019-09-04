@@ -7,7 +7,7 @@
 //
 
 import React from "react"
-import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity } from "react-native"
+import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity, RefreshControl } from "react-native"
 import Cell from "./Cell"
 import { alpha, fontAlpha } from "../common/size";
 import { createAction } from '../Utils/index'
@@ -49,26 +49,64 @@ export default class PointHistory extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			page: 1,
+			total: 0,
+			data: [],
+			loading: true,
+			isRefreshing: true,
+		}
 	}
 
 	loadPointHistory(page_no) {
-		console.log("Points")
 		const { dispatch } = this.props
-		this.setState({ refreshing: true });
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({ refreshing: false })
+				this.setState({
+					isRefreshing: false,
+					loading: false,
+					data: this.state.data.concat(eventObject.result),
+					total: eventObject.total,
+					page: this.state.page + 1
+				})
 			}
 		}
 		const obj = new PointStatementRequestObject({device_key:'device_key',device_type: 'device_type',push_identifier: 'push_identifier', os:"os"})
 		obj.setUrlId('1')
-		obj.setPage('1')
+		obj.setPage(page_no)
 		dispatch(
 			createAction('point_statements/loadPointHistory')({
 				object:obj,
 				callback
 			})
 		)
+	}
+
+	onRefresh() {
+		console.log("Refresh")
+		this.setState({
+			isRefreshing: true,
+			data: [],
+			page: 1
+		})
+		this.loadPointHistory(1)
+	}
+
+	loadMore() {
+		const {
+			total,
+			data,
+			loading,
+		} = this.state
+
+		if (!loading) {
+			if (total > data.length) {
+				this.setState({
+					isRefreshing: true
+				})
+				this.loadPointHistory(this.state.page)
+			}
+		}
 	}
 
 	componentDidMount() {
@@ -117,7 +155,13 @@ export default class PointHistory extends React.Component {
 	renderHistoryFlatListCell = ({ item }) => {
 
 		return <Cell
-			navigation={this.props.navigation}/>
+			id={item.id}
+			description={item.description}
+			value={item.value}
+			created_at={item.created_at}
+			shop={item.shop.name}
+			navigation={this.props.navigation}
+		/>
 	}
 
 	render() {
@@ -158,8 +202,14 @@ export default class PointHistory extends React.Component {
 					style={styles.historyFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderHistoryFlatListCell}
-						data={this.historyFlatListMockData}
-						style={styles.historyFlatList}/>
+						data={this.state.data}
+						style={styles.historyFlatList}
+						refreshing={this.state.isRefreshing}
+						onRefresh={this.onRefresh.bind(this)}
+						onEndReachedThreshold={0.1}
+						onEndReached={this.loadMore.bind(this)}
+						keyExtractor={(item, index) => index.toString()}
+					/>
 				</View>
 			</View>
 		</View>
