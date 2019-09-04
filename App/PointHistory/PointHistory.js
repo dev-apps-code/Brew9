@@ -62,10 +62,11 @@ export default class PointHistory extends React.Component {
 		}
 		const obj = new PointStatementRequestObject({device_key:'device_key',device_type: 'device_type',push_identifier: 'push_identifier', os:"os"})
 		obj.setUrlId('1')
+		obj.setPage('1')
 		dispatch(
 			createAction('point_statements/loadPointHistory')({
 				object:obj,
-				callback,
+				callback
 			})
 		)
 	}

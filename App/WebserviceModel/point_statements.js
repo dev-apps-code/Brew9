@@ -18,17 +18,14 @@ export default {
         *loadPointHistory({ payload }, { call, put, select }) {
             try {
 
-                console.log("Loading Point")
-                const { object, callback } = payload
-                var authtoken = "";
+                const { object, callback} = payload
 
-                // const authtoken = yield select(state => state.member.userAuthToken)
+                var authtoken = "";
 
                 const json = yield call(
                     loadPointHistory,
                     authtoken,
-                    object,
-                    page,
+                    object
                 )
                 const eventObject = new EventObject(json)
                 if (eventObject.success == true) {

@@ -18,8 +18,6 @@ class PushRequestObject extends BaseRequestObject{
        return `members/${this.url_id}/store_push_token`
    }
 
-   getFormData(){
-       
-   }
+
 }
 export default PushRequestObject

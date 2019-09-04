@@ -11,15 +11,21 @@ class PointStatementRequestObject extends BaseRequestObject{
     }
 
     setUrlId(url_id){
+        console.log("URKID")
         this.url_id = url_id
+    }
+
+    setPage(page) {
+        this.page_no = page
     }
 
     getUrlString() {
         return `members/${this.url_id}/pointHistory`
     }
 
-    getFormData(){
 
-    }
+
+
+
 }
 export default PointStatementRequestObject

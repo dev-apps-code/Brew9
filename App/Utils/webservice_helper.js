@@ -15,15 +15,15 @@ export function getBasicAuthentication(authToken) {
   return `Basic ${authToken}`
 }
 
-export function getMethod(urlString,object, authtoken) {
-
-  return fetch(`${KSERVERURL}/${urlString}`, {
+export function getMethod(authtoken,object) {
+  const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  return fetch(urlString, {
     method: 'GET',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: getBasicAuthentication(authtoken),
-    },
+    }, body: object.getFormData()
   })
     .then(response => _parseJSON(response))
     .then(logResponse('json'))
@@ -33,9 +33,9 @@ export function getMethod(urlString,object, authtoken) {
 }
 
 export function postMethod(authtoken,object) {
-  console.log("postMethod " + object);
-  const urlString = `${KSERVERURL}/${object.getUrlString()}`
-  console.log("postMethod " + urlString);
+
+    const urlString = `${KSERVERURL}/${object.getUrlString()}`
+
     return fetch(urlString, {
     method: 'POST',
     headers: {
@@ -51,14 +51,14 @@ export function postMethod(authtoken,object) {
     });
 }
 
-export function postMultipartMethod(urlString,object, authtoken) {
+export function postMultipartMethod(object, authtoken) {
     return fetch(`${KSERVERURL}/${urlString}`, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'multipart/form-data',
       Authorization: getBasicAuthentication(authtoken),
-    }, body: formData
+    }, body: object.getFormData()
   })
     .then(logResponse('json'))
     .then(response => _parseJSON(response))
