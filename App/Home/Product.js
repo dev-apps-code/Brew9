@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Text, View, Image, TouchableWithoutFeedback, StyleSheet } from "react-native"
+import { Text, Image, TouchableWithoutFeedback, StyleSheet, View } from "react-native"
 import React from "react"
 
 
@@ -52,7 +52,7 @@ export default class Product extends React.Component {
 							top: 5,
 							bottom: 5,
 							flexDirection: "row",
-							alignItems: "flex-end",
+							alignItems: "center",
 						}}>
 						<Image
 							source={require("./../../assets/images/bitmap-4.png")}
@@ -95,45 +95,45 @@ const styles = StyleSheet.create({
 		height: 101,
 	},
 	descriptionText: {
+		backgroundColor: "transparent",
+		opacity: 0.39,
 		color: "black",
 		fontFamily: "Helvetica",
 		fontSize: 10,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		opacity: 0.39,
 		width: 137,
 		marginLeft: 111,
 	},
 	productimageImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
-		alignSelf: "center",
 		width: 111,
 		height: 91,
 	},
 	titleText: {
-		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
 		fontFamily: "Helvetica",
 		fontSize: 14,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	priceText: {
-		backgroundColor: "transparent",
 		color: "rgb(62, 61, 61)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 16,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	addImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
+		alignSelf: "flex-end",
 		width: 19,
 		height: 21,
 		marginBottom: 10,

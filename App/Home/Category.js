@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native"
+import { View, TouchableWithoutFeedback, Text, StyleSheet } from "react-native"
 import React from "react"
 
 

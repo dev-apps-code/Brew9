@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { TouchableOpacity, Text, View, Image, StyleSheet } from "react-native"
+import { TouchableOpacity, View, StyleSheet, Image, Text } from "react-native"
 import React from "react"
 
 
@@ -50,8 +50,36 @@ export default class Profile extends React.Component {
 	
 	}
 
+	onProfileButtonPressed = () => {
+	
+	}
+
 	onGoToVIPPressed = () => {
 	
+		const { navigate } = this.props.navigation
+		
+		navigate("VIPPurchase")
+	}
+
+	onRewardButtonPressed = () => {
+	
+		const { navigate } = this.props.navigation
+		
+		navigate("MemberReward")
+	}
+
+	onPointButtonPressed = () => {
+	
+		const { navigate } = this.props.navigation
+		
+		navigate("PointHistory")
+	}
+
+	onVWalletButtonPressed = () => {
+	
+		const { navigate } = this.props.navigation
+		
+		navigate("MemberWallet")
 	}
 
 	render() {
@@ -59,46 +87,29 @@ export default class Profile extends React.Component {
 		return <View
 				style={styles.iphone8Copy7View}>
 				<View
-					style={styles.viewView}>
+					style={styles.contentView}>
 					<View
 						style={styles.headerView}>
-						<View
-							style={styles.backgroundView}>
-							<View
-								style={styles.group9View}>
-								<Image
-									source={require("./../../assets/images/group-3-2.png")}
-									style={styles.group3Image}/>
-								<View
-									pointerEvents="box-none"
-									style={{
-										alignSelf: "stretch",
-										height: 117,
-										marginRight: 1,
-										marginTop: 6,
-									}}>
-									<Image
-										source={require("./../../assets/images/group-6-4.png")}
-										style={styles.group6Image}/>
-									<Image
-										source={require("./../../assets/images/fill-7-4.png")}
-										style={styles.fill7Image}/>
-								</View>
-							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Image
-								source={require("./../../assets/images/group-13-4.png")}
-								style={styles.group13Image}/>
-						</View>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
 								left: 0,
 								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<Image
+								source={require("./../../assets/images/bg-02.png")}
+								style={styles.bg02Image}/>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								right: 0,
+								width: 375,
 								top: 10,
 								bottom: 20,
 								alignItems: "center",
@@ -130,7 +141,7 @@ export default class Profile extends React.Component {
 												onPress={this.onRightPressed}
 												style={styles.rightButton}>
 												<Image
-													source={require("./../../assets/images/right-6.png")}
+													source={require("./../../assets/images/right-7.png")}
 													style={styles.rightButtonImage}/>
 											</TouchableOpacity>
 										</View>
@@ -175,7 +186,7 @@ export default class Profile extends React.Component {
 												onPress={this.onLeftPressed}
 												style={styles.leftButton}>
 												<Image
-													source={require("./../../assets/images/left-6.png")}
+													source={require("./../../assets/images/left-7.png")}
 													style={styles.leftButtonImage}/>
 											</TouchableOpacity>
 										</View>
@@ -200,16 +211,40 @@ export default class Profile extends React.Component {
 								style={styles.membershipinfoView}>
 								<View
 									style={styles.memberView}>
-									<Text
-										style={styles.nameText}>Somebody</Text>
 									<View
+										pointerEvents="box-none"
 										style={{
-											flex: 1,
-										}}/>
-									<View
-										style={styles.levellabelView}>
+											position: "absolute",
+											left: 0,
+											right: 0,
+											top: 0,
+											bottom: 0,
+										}}>
 										<Text
-											style={styles.levelText}>Lv1</Text>
+											style={styles.nameText}>Somebody</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<View
+											style={styles.levellabelView}>
+											<Text
+												style={styles.levelText}>Lv1</Text>
+										</View>
+									</View>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											left: 0,
+											right: 0,
+											top: 0,
+											bottom: 0,
+											justifyContent: "center",
+										}}>
+										<TouchableOpacity
+											onPress={this.onProfileButtonPressed}
+											style={styles.profilebuttonButton}/>
 									</View>
 								</View>
 								<View
@@ -255,14 +290,38 @@ export default class Profile extends React.Component {
 									}}>
 									<View
 										style={styles.rewardpointsView}>
-										<Text
-											style={styles.pointsText}>0</Text>
 										<View
+											pointerEvents="box-none"
 											style={{
-												flex: 1,
-											}}/>
-										<Text
-											style={styles.rewardlabelText}>Reward </Text>
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+											}}>
+											<Text
+												style={styles.pointsText}>0</Text>
+											<View
+												style={{
+													flex: 1,
+												}}/>
+											<Text
+												style={styles.rewardlabelText}>Reward </Text>
+										</View>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<TouchableOpacity
+												onPress={this.onRewardButtonPressed}
+												style={styles.rewardbuttonButton}/>
+										</View>
 									</View>
 								</View>
 								<View
@@ -279,21 +338,45 @@ export default class Profile extends React.Component {
 										pointerEvents="box-none"
 										style={{
 											height: 54,
-											marginLeft: 67,
-											marginRight: 45,
+											marginLeft: 49,
+											marginRight: 16,
 											flexDirection: "row",
 											alignItems: "center",
 										}}>
 										<View
 											style={styles.memberpointsView}>
-											<Text
-												style={styles.pointsTwoText}>0</Text>
 											<View
+												pointerEvents="box-none"
 												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.memberlabelText}>Point </Text>
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+												}}>
+												<Text
+													style={styles.pointsTwoText}>0</Text>
+												<View
+													style={{
+														flex: 1,
+													}}/>
+												<Text
+													style={styles.memberlabelText}>Point </Text>
+											</View>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<TouchableOpacity
+													onPress={this.onPointButtonPressed}
+													style={styles.pointbuttonButton}/>
+											</View>
 										</View>
 										<View
 											style={{
@@ -304,7 +387,12 @@ export default class Profile extends React.Component {
 											<View
 												pointerEvents="box-none"
 												style={{
-													height: 34,
+													position: "absolute",
+													left: 0,
+													right: 19,
+													top: 4,
+													bottom: 0,
+													alignItems: "flex-start",
 												}}>
 												<View
 													style={styles.creditviewView}>
@@ -313,15 +401,29 @@ export default class Profile extends React.Component {
 													<Text
 														style={styles.creditsText}>0.00</Text>
 												</View>
+												<View
+													style={{
+														flex: 1,
+													}}/>
 												<Text
-													style={styles.nonActiveText}>non-active</Text>
+													style={styles.walletlabelText}>Wallet </Text>
 											</View>
-											<View
-												style={{
-													flex: 1,
-												}}/>
 											<Text
-												style={styles.walletlabelText}>Wallet </Text>
+												style={styles.nonActiveText}>non-active</Text>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<TouchableOpacity
+													onPress={this.onVWalletButtonPressed}
+													style={styles.walletbuttonButton}/>
+											</View>
 										</View>
 									</View>
 								</View>
@@ -329,13 +431,13 @@ export default class Profile extends React.Component {
 						</View>
 					</View>
 					<View
-						style={styles.contentView}>
+						style={styles.contentTwoView}>
 						<View
 							style={styles.membershipLevelView}>
 							<View
 								style={styles.membershipTwoView}>
 								<Image
-									source={require("./../../assets/images/group-14-6.png")}
+									source={require("./../../assets/images/group-14-7.png")}
 									style={styles.membershipiconImage}/>
 								<View
 									style={{
@@ -366,7 +468,7 @@ export default class Profile extends React.Component {
 							<View
 								style={styles.memberStatusView}>
 								<Image
-									source={require("./../../assets/images/group-3-7.png")}
+									source={require("./../../assets/images/group-3-8.png")}
 									style={styles.statusiconImage}/>
 								<Text
 									style={styles.memberStatusText}>Member Status</Text>
@@ -375,12 +477,12 @@ export default class Profile extends React.Component {
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.descriptionText}>Upgrade Member</Text>
+									style={styles.memberdesciprionText}>Upgrade Member</Text>
 							</View>
 							<View
 								style={styles.orderHistoryView}>
 								<Image
-									source={require("./../../assets/images/group-14-5.png")}
+									source={require("./../../assets/images/group-14-8.png")}
 									style={styles.historyiconImage}/>
 								<Text
 									style={styles.orderHistoryText}>Order History</Text>
@@ -405,7 +507,7 @@ export default class Profile extends React.Component {
 									style={styles.qriconView}>
 									<Image
 										source={require("./../../assets/images/group-3-3.png")}
-										style={styles.group3TwoImage}/>
+										style={styles.group3Image}/>
 									<View
 										pointerEvents="box-none"
 										style={{
@@ -417,7 +519,7 @@ export default class Profile extends React.Component {
 											justifyContent: "center",
 										}}>
 										<Image
-											source={require("./../../assets/images/clip-5-6.png")}
+											source={require("./../../assets/images/clip-5-8.png")}
 											style={styles.clip5Image}/>
 									</View>
 								</View>
@@ -433,7 +535,7 @@ export default class Profile extends React.Component {
 							<View
 								style={styles.exchangeStationView}>
 								<Image
-									source={require("./../../assets/images/group-12-4.png")}
+									source={require("./../../assets/images/group-12-5.png")}
 									style={styles.redeemiconImage}/>
 								<Text
 									style={styles.redeemStationText}>Redeem Station</Text>
@@ -453,13 +555,14 @@ export default class Profile extends React.Component {
 
 const styles = StyleSheet.create({
 	iphone8Copy7View: {
-		backgroundColor: "white",
+		backgroundColor: "rgb(243, 243, 243)",
 		flex: 1,
 	},
-	viewView: {
+	contentView: {
 		backgroundColor: "transparent",
-		height: 710,
+		flex: 1,
 		marginTop: 20,
+		marginBottom: 49,
 	},
 	headerView: {
 		backgroundColor: "transparent",
@@ -469,56 +572,11 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 212,
 	},
-	backgroundView: {
-		backgroundColor: "rgb(242, 242, 242)",
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		height: 212,
-		flexDirection: "row",
-		alignItems: "flex-start",
-	},
-	group9View: {
+	bg02Image: {
 		backgroundColor: "transparent",
-		opacity: 0.06,
-		width: 96,
-		height: 175,
-		alignItems: "center",
-	},
-	group3Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 27,
-		height: 51,
-		marginTop: 1,
-	},
-	group6Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		height: 117,
-	},
-	fill7Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		position: "absolute",
-		right: 27,
-		width: 36,
-		top: 56,
-		height: 32,
-	},
-	group13Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		opacity: 0.07,
-		width: 135,
-		height: 140,
-		marginRight: 36,
-		marginTop: 71,
+		resizeMode: "cover",
+		width: null,
+		height: 210,
 	},
 	menuView: {
 		backgroundColor: "transparent",
@@ -554,8 +612,8 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	circleImage: {
-		resizeMode: "contain",
 		backgroundColor: "transparent",
+		resizeMode: "contain",
 		width: null,
 		height: 16,
 		marginLeft: 12,
@@ -588,8 +646,8 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	dotImage: {
-		resizeMode: "contain",
 		backgroundColor: "transparent",
+		resizeMode: "contain",
 		width: null,
 		height: 6,
 		marginLeft: 13,
@@ -597,7 +655,7 @@ const styles = StyleSheet.create({
 	},
 	membershipinfoView: {
 		backgroundColor: "transparent",
-		width: 281,
+		width: 375,
 		height: 40,
 		marginTop: 26,
 		flexDirection: "row",
@@ -607,6 +665,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 72,
 		height: 40,
+		marginLeft: 78,
 	},
 	nameText: {
 		backgroundColor: "transparent",
@@ -636,10 +695,30 @@ const styles = StyleSheet.create({
 		marginLeft: 17,
 		marginRight: 14,
 	},
+	profilebuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 40,
+	},
+	profilebuttonButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	profilebuttonButtonImage: {
+		resizeMode: "contain",
+	},
 	membershipView: {
 		backgroundColor: "transparent",
 		width: 82,
 		height: 38,
+		marginRight: 16,
 	},
 	brew9memberText: {
 		backgroundColor: "transparent",
@@ -670,10 +749,6 @@ const styles = StyleSheet.create({
 		marginLeft: 8,
 		marginRight: 6,
 	},
-	goToVipButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10,
-	},
 	goToVipButtonText: {
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
@@ -682,16 +757,20 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 	},
+	goToVipButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10,
+	},
 	arrowImage: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		width: 7,
 		height: 8,
 		marginRight: 8,
 	},
 	pointsView: {
 		backgroundColor: "transparent",
-		alignSelf: "stretch",
+		width: 375,
 		height: 54,
 	},
 	rewardpointsView: {
@@ -710,13 +789,32 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 	},
 	rewardlabelText: {
+		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 16,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+	},
+	rewardbuttonButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	rewardbuttonButton: {
 		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 50,
+	},
+	rewardbuttonButtonImage: {
+		resizeMode: "contain",
 	},
 	memberpointsView: {
 		backgroundColor: "transparent",
@@ -724,24 +822,43 @@ const styles = StyleSheet.create({
 		height: 50,
 	},
 	pointsTwoText: {
-		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 25,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		backgroundColor: "transparent",
 		marginLeft: 13,
 		marginRight: 14,
 	},
 	memberlabelText: {
-		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 16,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	pointbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 50,
+	},
+	pointbuttonButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	pointbuttonButtonImage: {
+		resizeMode: "contain",
 	},
 	walletcreditsView: {
 		backgroundColor: "transparent",
@@ -750,46 +867,31 @@ const styles = StyleSheet.create({
 	},
 	creditviewView: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		right: 19,
-		top: 4,
+		alignSelf: "stretch",
 		height: 30,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
 	currencyText: {
-		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 8,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		backgroundColor: "transparent",
 		marginTop: 14,
 	},
 	creditsText: {
-		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 25,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		backgroundColor: "transparent",
 		flex: 1,
 		marginLeft: 4,
-	},
-	nonActiveText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 7,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		position: "absolute",
-		right: 0,
-		top: 0,
 	},
 	walletlabelText: {
 		color: "rgb(91, 91, 91)",
@@ -799,16 +901,46 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		alignSelf: "flex-start",
 		marginLeft: 10,
 	},
-	contentView: {
+	nonActiveText: {
 		backgroundColor: "transparent",
+		color: "rgb(91, 91, 91)",
+		fontFamily: "Helvetica",
+		fontSize: 7,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		position: "absolute",
+		right: 0,
+		top: 0,
+	},
+	walletbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 53,
+	},
+	walletbuttonButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	walletbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	contentTwoView: {
+		backgroundColor: "white",
 		position: "absolute",
 		left: 0,
 		right: 0,
 		top: 211,
-		height: 387,
+		height: 386,
 	},
 	membershipLevelView: {
 		backgroundColor: "transparent",
@@ -834,13 +966,13 @@ const styles = StyleSheet.create({
 		marginRight: 15,
 	},
 	memberlevelText: {
+		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 11,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "transparent",
 	},
 	pointRewardView: {
 		backgroundColor: "transparent",
@@ -857,13 +989,13 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 	},
 	pointRewardText: {
+		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 11,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "transparent",
 		alignSelf: "stretch",
 	},
 	profilesView: {
@@ -894,22 +1026,19 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginLeft: 23,
 	},
-	descriptionText: {
+	memberdesciprionText: {
 		color: "rgb(184, 180, 180)",
 		fontFamily: "Helvetica",
 		fontSize: 10,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "right",
 		backgroundColor: "transparent",
-		marginRight: 16,
+		marginRight: 38,
 	},
 	orderHistoryView: {
 		backgroundColor: "transparent",
-		height: 23,
-		marginLeft: 39,
-		marginRight: 229,
-		marginTop: 18,
+		height: 44,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -918,6 +1047,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 18,
 		height: 23,
+		marginLeft: 38,
 	},
 	orderHistoryText: {
 		color: "rgb(91, 91, 91)",
@@ -927,14 +1057,11 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginLeft: 23,
+		marginLeft: 24,
 	},
 	personalInfoView: {
 		backgroundColor: "transparent",
-		height: 21,
-		marginLeft: 38,
-		marginRight: 16,
-		marginTop: 28,
+		height: 44,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -943,6 +1070,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 21,
 		height: 21,
+		marginLeft: 38,
 	},
 	personalInfoText: {
 		color: "rgb(91, 91, 91)",
@@ -960,15 +1088,13 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "right",
 		backgroundColor: "transparent",
+		marginRight: 38,
 	},
 	qrCodeView: {
 		backgroundColor: "transparent",
-		height: 19,
-		marginLeft: 39,
-		marginRight: 16,
-		marginTop: 33,
+		height: 44,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -976,8 +1102,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 18,
 		height: 18,
+		marginLeft: 38,
 	},
-	group3TwoImage: {
+	group3Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		position: "absolute",
@@ -993,56 +1120,56 @@ const styles = StyleSheet.create({
 		height: 19,
 	},
 	qrCodeText: {
+		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 11,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "transparent",
-		marginLeft: 23,
+		marginLeft: 24,
 	},
 	qrdescriptionText: {
+		backgroundColor: "transparent",
 		color: "rgb(184, 180, 180)",
 		fontFamily: "Helvetica",
 		fontSize: 10,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
+		textAlign: "right",
+		marginRight: 36,
 	},
 	exchangeStationView: {
 		backgroundColor: "transparent",
-		height: 21,
-		marginLeft: 38,
-		marginRight: 14,
-		marginTop: 30,
+		height: 44,
 		flexDirection: "row",
 		alignItems: "center",
 	},
 	redeemiconImage: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
+		backgroundColor: "transparent",
 		width: 20,
 		height: 21,
+		marginLeft: 38,
 	},
 	redeemStationText: {
-		backgroundColor: "transparent",
 		color: "rgb(91, 91, 91)",
 		fontFamily: "Helvetica",
 		fontSize: 11,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		marginLeft: 26,
+		backgroundColor: "transparent",
+		marginLeft: 22,
 	},
 	redeemdescriptionText: {
-		backgroundColor: "transparent",
 		color: "rgb(184, 180, 180)",
 		fontFamily: "Helvetica",
 		fontSize: 10,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		marginRight: 38,
 	},
 })
