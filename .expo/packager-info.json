@@ -1,1 +1,9 @@
-{}
+{
+  "devToolsPort": 19003,
+  "expoServerPort": 19004,
+  "packagerPort": 19005,
+  "packagerPid": 26289,
+  "expoServerNgrokUrl": "https://i8-awj.anonymous.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.i8-awj.anonymous.brew9-app.exp.direct",
+  "ngrokPid": 26312
+}

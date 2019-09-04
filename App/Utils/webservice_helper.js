@@ -23,7 +23,7 @@ export function getMethod(object, authtoken) {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: getBasicAuthentication(authtoken),
-    },
+    }, body: object.getFormData()
   })
     .then(response => _parseJSON(response))
     .then(logResponse('json'))
