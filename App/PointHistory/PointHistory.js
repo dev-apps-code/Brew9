@@ -10,9 +10,11 @@ import React from "react"
 import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity } from "react-native"
 import Cell from "./Cell"
 import { alpha, fontAlpha } from "../common/size";
-import { createAction } from "../Utils";
-import { connect } from "react-redux"
+import { createAction } from '../Utils/index'
+import { connect } from "react-redux";
+import PointStatementRequestObject from "../Requests/point_statement_request_object"
 
+@connect()
 export default class PointHistory extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -47,57 +49,29 @@ export default class PointHistory extends React.Component {
 
 	constructor(props) {
 		super(props)
-		// const ds = new FlatList.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-		this.state = {
-			upcomingDataSourceArray: [],
-			upcomingDataTotal: 0,
-			pastDataTotal: 0,
-			pastDataSourceArray: [],
-			isLoading: false,
-			refreshing: false,
-			isInitialListLoading: true,
-			isLoadingTab: false,
-			tabPageNo: 1,
-		}
 	}
 
-	callpointHistory(page) {
+	loadPointHistory(page_no) {
+		console.log("Points")
 		const { dispatch } = this.props
-
-		const member_id = 1
-		const page_no = page
-
+		this.setState({ refreshing: true });
 		const callback = eventObject => {
-			this.setState({ isLoadingTab: false })
 			if (eventObject.success) {
-				this.setState({
-					pastDataSourceArray: this.state.pastDataSourceArray.concat(
-						eventObject.result
-					),
-					actualDataSource: this.state.actualDataSource.cloneWithRows(
-						this.state.pastDataSourceArray.concat(eventObject.result)
-					),
-					isInitialListLoading: false,
-					pastDataTotal: parseInt(eventObject.total),
-					tabPageNo: page_no + 1,
-				})
-			} else {
-				this.refs.toast.show(eventObject.message)
+				this.setState({ refreshing: false })
 			}
 		}
-		this.setState({ isLoadingTab: true })
-
-		// dispatch(
-		// 	createAction('point_statements/loadPointHistory')({
-		// 		callback,
-		// 		page: page_no,
-		// 		member_id: member_id,
-		// 	})
-		// )
+		const obj = new PointStatementRequestObject({device_key:'device_key',device_type: 'device_type',push_identifier: 'push_identifier', os:"os"})
+		obj.setUrlId('1')
+		dispatch(
+			createAction('point_statements/loadPointHistory')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	componentDidMount() {
-		this.callpointHistory(1)
+		this.loadPointHistory(1)
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,

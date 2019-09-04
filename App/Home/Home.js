@@ -12,7 +12,8 @@ import PushRequestObject from '../Requests/push_request_object'
 import Product from "./Product"
 import Category from "./Category"
 import { connect } from 'react-redux';
-import {createAction} from '../Utils/index'
+import { createAction } from '../Utils/index'
+
 @connect()
 export default class Home extends React.Component {
 

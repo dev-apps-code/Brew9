@@ -1,0 +1,40 @@
+import { loadPointHistory } from '../Services/point_statements'
+import EventObject from './event_object'
+
+export default {
+    namespace: 'point_statements',
+
+    state: {
+
+    },
+    reducers: {
+        setDefaultState(state, { payload }) {
+            return {
+                ...state,
+            }
+        }
+    },
+    effects: {
+        *loadPointHistory({ payload }, { call, put, select }) {
+            try {
+
+                console.log("Loading Point")
+                const { object, callback } = payload
+                var authtoken = "";
+
+                // const authtoken = yield select(state => state.member.userAuthToken)
+
+                const json = yield call(
+                    loadPointHistory,
+                    authtoken,
+                    object,
+                    page,
+                )
+                const eventObject = new EventObject(json)
+                if (eventObject.success == true) {
+                }
+                typeof callback === 'function' && callback(eventObject)
+            } catch (err) { }
+        },
+    },
+}
