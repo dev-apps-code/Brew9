@@ -1,4 +1,4 @@
-export const KSERVERURL ='https://app.co3.co/api/'
+export const KSERVERURL ='https://localhost:3000/api/'
 
 export const KURL_TERMS_OF_SERVICE =
   'http://innogix.com/co3/privacy_policy.html'
