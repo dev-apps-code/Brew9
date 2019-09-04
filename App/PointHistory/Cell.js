@@ -38,8 +38,8 @@ export default class Cell extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							position: "absolute",
-							left: 13,
-							width: 350,
+							left: 15 * alpha,
+							width: 350 * alpha,
 							top: 0,
 							bottom: 0,
 						}}>
@@ -63,9 +63,9 @@ export default class Cell extends React.Component {
 								style={{
 									position: "absolute",
 									left: 0,
-									width: 96,
-									top: 14,
-									bottom: 16,
+									width: 96 * alpha,
+									top: 14 * alpha,
+									bottom: 16 * alpha,
 									alignItems: "flex-start",
 								}}>
 								<Text
@@ -91,9 +91,9 @@ export default class Cell extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								width: 63,
-								height: 17,
-								marginRight: 22,
+								width: 63 * alpha,
+								height: 17 * alpha,
+								marginRight: 22 * alpha,
 								flexDirection: "row",
 								justifyContent: "flex-end",
 								alignItems: "center",

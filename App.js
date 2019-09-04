@@ -90,6 +90,21 @@ const PushRouteThree = createStackNavigator({
 	initialRouteName: "Profile",
 })
 
+PushRouteThree.navigationOptions = ({ navigation }) => {
+
+	let tabBarVisible = true;
+
+	let routeName = navigation.state.routes[navigation.state.index].routeName
+
+	if ( routeName != 'Profile' ) {
+		tabBarVisible = false
+	}
+
+	return {
+		tabBarVisible,
+	}
+}
+
 PushRouteOne.navigationOptions = ({ navigation }) => {
 	let tabBarVisible = true;
 	for (let i = 0; i < navigation.state.routes.length; i++) {

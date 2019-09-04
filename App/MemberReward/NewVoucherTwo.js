@@ -8,7 +8,7 @@
 
 import React from "react"
 import { Image, StyleSheet, TouchableWithoutFeedback, Text, View } from "react-native"
-
+import { alpha, fontAlpha } from "../common/size";
 
 export default class NewVoucherTwo extends React.Component {
 
@@ -58,9 +58,9 @@ export default class NewVoucherTwo extends React.Component {
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 36,
-									marginLeft: 6,
-									marginRight: 7,
+									height: 36 * alpha,
+									marginLeft: 6 * alpha,
+									marginRight: 7 * alpha,
 									flexDirection: "row",
 									alignItems: "flex-start",
 								}}>
@@ -89,9 +89,9 @@ export default class NewVoucherTwo extends React.Component {
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 12,
-									marginRight: 1,
-									marginBottom: 1,
+									height: 12 * alpha,
+									marginRight: 1 * alpha,
+									marginBottom: 1 * alpha,
 									flexDirection: "row",
 									alignItems: "flex-end",
 								}}>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 	newvoucher: {
 		backgroundColor: "transparent",
 		width: "100%",
-		height: 114,
+		height: 114 * alpha,
 	},
 	backgroundImage: {
 		backgroundColor: "transparent",
@@ -123,28 +123,28 @@ const styles = StyleSheet.create({
 		shadowRadius: 2,
 		shadowOpacity: 1,
 		resizeMode: "cover",
-		width: 342,
-		height: 94,
+		width: 342 * alpha,
+		height: 94 * alpha,
 	},
 	cellcontentView: {
 		backgroundColor: "transparent",
-		width: 311,
-		height: 72,
+		width: 311 * alpha,
+		height: 72 * alpha,
 	},
 	titleText: {
 		color: "rgb(68, 68, 68)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 12,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginTop: 8,
+		marginTop: 8 * alpha,
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 50,
-		height: 36,
+		width: 50 * alpha,
+		height: 36 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -152,46 +152,46 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
-		fontSize: 9,
+		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		alignSelf: "flex-start",
-		marginTop: 6,
+		marginTop: 6 * alpha,
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
-		fontSize: 30,
+		fontSize: 30 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		flex: 1,
-		marginLeft: 2,
+		marginLeft: 2 * alpha,
 	},
 	descriptionText: {
 		backgroundColor: "transparent",
 		color: "rgb(117, 117, 117)",
 		fontFamily: "Helvetica",
-		fontSize: 11,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		alignSelf: "flex-start",
-		marginLeft: 6,
+		marginLeft: 6 * alpha,
 	},
 	lineView: {
 		backgroundColor: "rgb(213, 212, 212)",
 		alignSelf: "center",
-		width: 308,
+		width: 308 * alpha,
 		height: 0,
-		marginTop: 14,
+		marginTop: 14 * alpha,
 	},
 	dateText: {
 		color: "rgb(68, 68, 68)",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 	termsConditionsText: {
 		color: "rgb(68, 68, 68)",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
