@@ -56,7 +56,7 @@ export default class Cell extends React.Component {
 									justifyContent: "center",
 								}}>
 								<Text
-									style={styles.locationText}>Setia Alam Branch</Text>
+									style={styles.locationText}>{this.props.shop}</Text>
 							</View>
 							<View
 								pointerEvents="box-none"
@@ -69,13 +69,13 @@ export default class Cell extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Text
-									style={styles.titleText}>Spend RM 70.00</Text>
+									style={styles.titleText}>{this.props.description}</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.timeText}>2019-06-23  14:03:26</Text>
+									style={styles.timeText}>{this.props.created_at}</Text>
 							</View>
 						</View>
 					</View>
@@ -99,7 +99,7 @@ export default class Cell extends React.Component {
 								alignItems: "center",
 							}}>
 							<Text
-								style={styles.pointsText}>+70</Text>
+								style={styles.pointsText}>{this.props.value}</Text>
 							<Image
 								source={require("./../../assets/images/group-2.png")}
 								style={styles.arrowImage}/>
