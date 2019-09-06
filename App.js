@@ -198,8 +198,10 @@ export default class App extends React.Component {
 	
 		await Font.loadAsync({
 			"Helvetica-Bold": require("./assets/fonts/HelveticaBold.ttf"),
-			"Helvetica-LightOblique": require("./assets/fonts/HelveticaLightOblique.ttf"),
+			"DINPro-Medium": require("./assets/fonts/DINProMedium139361.ttf"),
 			"Helvetica": require("./assets/fonts/Helvetica.ttf"),
+			"Helvetica-LightOblique": require("./assets/fonts/HelveticaLightOblique.ttf"),
+			"DINPro-Bold": require("./assets/fonts/DINProBold.otf"),
 		})
 		this.setState({
 			fontsReady: true,

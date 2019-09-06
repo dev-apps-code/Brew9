@@ -8,20 +8,23 @@
 
 import React from "react"
 import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity, RefreshControl } from "react-native"
-import Cell from "./Cell"
+import PointsCell from "./PointsCell"
 import { alpha, fontAlpha } from "../common/size";
 import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
 
-@connect()
+@connect(({ members }) => ({
+	member_id: members.member_id,
+	member_point: members.member_point,
+}))
 export default class PointHistory extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "",
+			title: "Points",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -32,17 +35,9 @@ export default class PointHistory extends React.Component {
 						source={require("./../../assets/images/back.png")}
 						style={styles.navigationBarItemIcon}/>
 				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={params.onItemPressed ? params.onItemPressed : () => null}
-					style={styles.navigationBarItem}>
-					<Text
-						style={styles.navigationBarItemTitle}>Points</Text>
-				</TouchableOpacity>
 			</View>,
 			headerRight: null,
 			headerStyle: {
-				elevation: 0,
-				shadowOpacity: 0
 			},
 		}
 	}
@@ -59,7 +54,7 @@ export default class PointHistory extends React.Component {
 	}
 
 	loadPointHistory(page_no) {
-		const { dispatch } = this.props
+		const { dispatch, member_id } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -71,19 +66,18 @@ export default class PointHistory extends React.Component {
 				})
 			}
 		}
-		const obj = new PointStatementRequestObject({device_key:'device_key',device_type: 'device_type',push_identifier: 'push_identifier', os:"os"})
-		obj.setUrlId('1')
+		const obj = new PointStatementRequestObject()
+		obj.setUrlId(member_id)
 		obj.setPage(page_no)
 		dispatch(
 			createAction('point_statements/loadPointHistory')({
-				object:obj,
+				object: obj,
 				callback
 			})
 		)
 	}
 
 	onRefresh() {
-		console.log("Refresh")
 		this.setState({
 			isRefreshing: true,
 			data: [],
@@ -130,31 +124,9 @@ export default class PointHistory extends React.Component {
 
 	}
 
-	historyFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
-
 	renderHistoryFlatListCell = ({ item }) => {
 
-		return <Cell
+		return <PointsCell
 			id={item.id}
 			description={item.description}
 			value={item.value}
@@ -172,10 +144,13 @@ export default class PointHistory extends React.Component {
 				style={styles.contentView}>
 				<View
 					style={styles.pointCollectedView}>
-					<Text
-						style={styles.headerText}>Points Collected</Text>
-					<Text
-						style={styles.pointsText}>843</Text>
+					<View
+						style={styles.pointCollectedTwoView}>
+						<Text
+							style={styles.pointsCollectedText}>Points Collected</Text>
+						<Text
+							style={styles.pointsText}>{this.props.member_point}</Text>
+					</View>
 					<View
 						style={{
 							flex: 1,
@@ -185,12 +160,8 @@ export default class PointHistory extends React.Component {
 						<Image
 							source={require("./../../assets/images/icon-rule.png")}
 							style={styles.iconRuleImage}/>
-						<TouchableOpacity
-							onPress={this.onPointRulePressed}
-							style={styles.pointRuleButton}>
-							<Text
-								style={styles.pointRuleButtonText}>Point Rule</Text>
-						</TouchableOpacity>
+						<Text
+							style={styles.pointRuleText}>Point Rule</Text>
 					</View>
 				</View>
 				<View
@@ -199,7 +170,7 @@ export default class PointHistory extends React.Component {
 						style={styles.transactionHistoryText}>Transaction History</Text>
 				</View>
 				<View
-					style={styles.historyFlatListViewWrapper}>
+					style={styles.pointhistoryFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderHistoryFlatListCell}
 						data={this.state.data}
@@ -217,18 +188,20 @@ export default class PointHistory extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	navigationBarItem: {
-	},
-	navigationBarItemTitle: {
-		color: "black",
-		marginLeft: 10 * alpha,
-	},
-	navigationBarItemIcon: {
-		tintColor: "black",
-	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
+	},
+	navigationBarItem: {
+
+	},
+	navigationBarItemTitle: {
+		color: "black",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+	},
+	navigationBarItemIcon: {
+		tintColor: "black",
 	},
 	pointHistoryView: {
 		backgroundColor: "rgb(243, 243, 243)",
@@ -241,38 +214,48 @@ const styles = StyleSheet.create({
 	pointCollectedView: {
 		backgroundColor: "white",
 		height: 130 * alpha,
-		marginLeft: 1 * alpha,
-		marginRight: 1 * alpha,
+		marginRight: 1,
 		alignItems: "center",
 	},
-	headerText: {
-		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica",
-		fontSize: 15 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
+	pointCollectedTwoView: {
 		backgroundColor: "transparent",
-		marginTop: 15 * alpha,
+		width: 163 * alpha,
+		height: 57 * alpha,
+		marginTop: 28 * alpha,
+	},
+	pointsCollectedText: {
+		backgroundColor: "transparent",
+		color: "rgb(59, 59, 59)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
 	},
 	pointsText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
-		fontSize: 36 * fontAlpha,
+		fontFamily: "DINPro-Medium",
+		fontSize: 31 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginTop: 11 * alpha,
+		position: "absolute",
+		alignSelf: "center",
+		top: 18 * alpha,
 	},
 	pointRuleView: {
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
-		width: 66 * alpha,
-		height: 13 * alpha,
-		marginRight: 19 * alpha,
+		width: 80 * alpha,
+		height: 15 * alpha,
+		marginRight: 26 * alpha,
+		marginBottom: 18 * alpha,
 		flexDirection: "row",
-		justifyContent: "flex-end",
 		alignItems: "center",
 	},
 	iconRuleImage: {
@@ -280,56 +263,43 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 8 * alpha,
 		height: 9 * alpha,
-		marginRight: 7 * alpha,
-		marginBottom: 12 * alpha,
 	},
-	pointRuleButtonText: {
+	pointRuleText: {
+		backgroundColor: "transparent",
 		color: "rgb(30, 29, 29)",
-		fontFamily: "Helvetica",
-		fontSize: 11 * fontAlpha,
+		fontFamily: "DINPro-Medium",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-	},
-	pointRuleButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		width: 55 * alpha,
-		height: 13 * alpha,
-		marginBottom: 12 * alpha,
-	},
-	pointRuleButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
+		flex: 1,
+		marginLeft: 6 * alpha,
 	},
 	headerView: {
 		backgroundColor: "white",
-		height: 43 * alpha,
+		height: 47 * alpha,
 		marginRight: 1 * alpha,
 		marginTop: 10 * alpha,
 		justifyContent: "center",
 		alignItems: "flex-start",
 	},
 	transactionHistoryText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica-Bold",
-		fontSize: 14 * fontAlpha,
+		fontFamily: "DINPro-Bold",
+		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		marginLeft: 15 * alpha,
+		backgroundColor: "transparent",
+		marginLeft: 26 * alpha,
 	},
-	historyFlatList: {
+	pointhistoryFlatList: {
 		backgroundColor: "white",
 		width: "100%",
 		height: "100%",
 	},
-	historyFlatListViewWrapper: {
+	pointhistoryFlatListViewWrapper: {
 		flex: 1,
-		marginLeft: 1 * alpha,
+		marginRight: 1,
 	},
 })

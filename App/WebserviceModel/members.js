@@ -5,7 +5,8 @@ export default {
   namespace: 'members',
 
   state: {
-
+      member_id: 1,
+      member_point: 300,
   },
   reducers: {
    setDefaultState(state, { payload }) {
@@ -17,12 +18,10 @@ export default {
   effects: {
     *loadStorePushToken({ payload }, { call, put, select }) {
         try {
-
           const { object, callback } = payload
-          var authtoken = "";
 
           // const authtoken = yield select(state => state.member.userAuthToken)
-          
+          const authtoken = ""
           const json = yield call(
             storePushToken,
             authtoken,

@@ -18,9 +18,5 @@ class PointStatementRequestObject extends BaseRequestObject{
         return `members/${this.url_id}/pointHistory`
     }
 
-
-
-
-
 }
 export default PointStatementRequestObject
