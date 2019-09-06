@@ -2,12 +2,243 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/App/PointHistory/PointsCell.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/Requests/voucher_request_object.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/Services/vouchers.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/WebserviceModel/vouchers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo-shared/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/PointHistory/Cell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointHistory/Cell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberReward/ExpiredcouponTwo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberReward/MemberReward.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MemberReward/MemberReward.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberReward/NewVoucherTwo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberReward/UsedVoucherTwo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Model/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Model/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PointHistory/Cell.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Requests/base_request_object.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Requests/base_request_object.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/WebserviceModel/event_object.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebserviceModel/event_object.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Utils/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Utils/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Utils/webservice_helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Utils/webservice_helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/WebserviceModel/members.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebserviceModel/members.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/add-4@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/add-4@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/add-4@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/add-4@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/add-4@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/add-4@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/arrow@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/arrow@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/arrow@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/arrow@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/arrow@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/arrow@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/back-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/back-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/back-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/back-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/back-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/back-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/back@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/back@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/back@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/back@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/back@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/back@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/bg-02@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bg-02@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/bg-02@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bg-02@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/bg-02@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bg-02@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/bitmap-4@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bitmap-4@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/bitmap-4@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bitmap-4@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/bitmap-4@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bitmap-4@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-06@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-06@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-06@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-06@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-06@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-06@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-08-copy@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-08-copy@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-08-copy@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-08-copy@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-08-copy@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-08-copy@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-09@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-09@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-09@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-09@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/brew9-doodle-09@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/brew9-doodle-09@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/card-04@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/card-04@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/card-04@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/card-04@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/card-04@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/card-04@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/chosen@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/chosen@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/chosen@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/chosen@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/chosen@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/chosen@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/circle@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/circle@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/circle@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/circle@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/circle@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/circle@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-8@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/clip-5-8@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-8@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/clip-5-8@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/clip-5-8@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/clip-5-8@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/coffee-card-05@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/coffee-card-05@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/coffee-card-05@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/coffee-card-05@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/coffee-card-05@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/coffee-card-05@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/delivery@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/delivery@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/delivery@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/delivery@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/delivery@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/delivery@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/dot@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/dot@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/dot@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/dot@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/dot@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/dot@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-1-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-1-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-1@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-1@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-1@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-1@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/fill-1@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-1@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-10-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-10-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-10-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-10@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-10@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-10@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-11-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-11-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-11-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-5@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-5@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-5@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-7@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-7@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-7@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-7@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-12-7@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-7@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-7@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-7@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-7@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-7@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-7@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-7@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-8@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-8@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-8@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-8@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-14-8@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-8@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-15@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-15@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-15@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-15@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-15@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-15@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-16@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-16@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-16@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-16@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-16@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-16@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-17@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-17@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-17@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-17@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-17@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-17@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-19@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-19@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-19@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-19@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-19@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-19@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-25@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-25@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-25@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-25@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-25@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-25@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-26-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-26-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-26-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-26-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-26-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-26-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-26-4@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-26-4@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-26-4@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-26-4@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-26-4@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-26-4@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-10@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-10@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-10@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-10@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-10@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-10@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-11@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-11@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-11@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-3@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-3@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-3@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-3@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-3@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-3@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-8@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-8@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-8@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-8@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-3-8@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-8@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-31@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-31@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-3@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-3@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-3@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-3@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-3@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-3@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-4@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-4@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-4@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-4@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-4@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-4@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-5@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-5@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-5@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-41-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-41-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-41-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-41-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-41-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-41-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-4@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-53@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-53@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-53@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-53@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-53@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-53@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-5@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-5@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-5@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-5@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-5@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-5@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-6@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-6@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-6@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-6@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-6-6@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-6@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-7@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-7@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-7@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-8-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-11@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-8-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-11@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-8-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-11@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-8-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-8-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-8-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-9-3@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-3@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-9-3@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-3@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-9-3@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-3@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/icon-rule@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/icon-rule@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/icon-rule@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/icon-rule@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/icon-rule@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/icon-rule@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-10@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-10@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-10@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-10@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-10@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-10@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-11@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-11@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-11@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-13@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-13@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-13@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-13@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-13@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-13@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-14@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-14@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-14@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-14@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-14@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-14@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-3@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-3@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-3@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-3@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/left-3@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/left-3@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/menu-button2-4@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/menu-button2-4@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/menu-button2-4@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/menu-button2-4@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/menu-button2-4@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/menu-button2-4@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/pick-up@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pick-up@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/pick-up@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pick-up@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/pick-up@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pick-up@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/profile-pic-copy@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/profile-pic-copy@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/profile-pic-copy@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/profile-pic-copy@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/profile-pic-copy@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/profile-pic-copy@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-10@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-10@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-10@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-10@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-10@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-10@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-11@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-11@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-11@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-13@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-13@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-13@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-13@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-13@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-13@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-14@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-14@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-14@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-14@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-14@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-14@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-3@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-3@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-3@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-3@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/right-3@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/right-3@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/stroke-6@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/stroke-6@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/stroke-6@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/stroke-6@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/stroke-6@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/stroke-6@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/stroke-7@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/stroke-7@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/stroke-7@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/stroke-7@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/stroke-7@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/stroke-7@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/tick-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/tick-2@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/tick-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/tick-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/tick-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/tick-2@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/tick@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/tick@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/tick@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/tick@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/tick@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/tick@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/x@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/x@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/x@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/x@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/x@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/x@3x.png" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,16 +251,97 @@
       <executable />
     </execution>
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Utils/webservice_helper.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
+            <state relative-caret-position="139">
+              <caret line="299" column="58" selection-start-line="299" selection-start-column="58" selection-end-line="299" selection-end-column="58" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#111#197#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="81" column="92" lean-forward="true" selection-start-line="81" selection-start-column="92" selection-end-line="81" selection-end-column="92" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#113#217#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/MemberReward/UsedVoucher.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-147">
+              <caret line="57" column="78" selection-start-line="57" selection-start-column="78" selection-end-line="57" selection-end-column="78" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#110#214#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="57" column="78" lean-forward="true" selection-start-line="57" selection-start-column="62" selection-end-line="57" selection-end-column="78" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#111#215#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Model/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="e#1#49#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#52#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -37,26 +349,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="29" column="51" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/WebserviceModel/event_object.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="39" lean-forward="true" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+            <state relative-caret-position="540">
+              <caret line="37" selection-start-line="37" selection-end-line="37" />
             </state>
           </provider>
         </entry>
@@ -64,8 +358,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="156" column="20" lean-forward="true" selection-start-line="156" selection-start-column="20" selection-end-line="156" selection-end-column="20" />
+            <state relative-caret-position="290">
+              <caret line="181" column="72" lean-forward="true" selection-start-line="177" selection-start-column="24" selection-end-line="181" selection-end-column="72" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#111#136#0" expanded="true" />
@@ -74,14 +368,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/WebserviceModel/vouchers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="58" column="80" selection-start-line="58" selection-start-column="80" selection-end-line="58" selection-end-column="80" />
+            <state relative-caret-position="513">
+              <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#103#189#0" expanded="true" />
+                <element signature="e#0#89#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -91,36 +384,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>group4Image</find>
-      <find>onBackPressed</find>
-      <find>used</find>
-      <find>howtousetext</find>
-      <find>pointCollectedView</find>
-      <find>&lt;&lt;&lt;&lt;</find>
-      <find>&lt;&lt;&lt;</find>
-      <find>voucherviewView</find>
-      <find>&lt;</find>
-      <find>HEad</find>
-      <find>JSON</find>
-      <find>setUrlId</find>
-      <find>PushRequestObject</find>
-      <find>storePushToken</find>
-      <find>s</find>
-      <find>loadStorePushToken</find>
-      <find>members</find>
-      <find>loadPointHistory</find>
-      <find>getMethod</find>
-      <find>KSERVERURL</find>
-      <find>getUrlString</find>
-      <find>console.l</find>
-      <find>PointStatementRequestObject</find>
-      <find>getM</find>
-      <find>console.log</find>
-      <find>flatlist</find>
-      <find>EventObject</find>
-      <find>isRefreshing</find>
+      <find>createAction</find>
+      <find>callback</find>
+      <find>authtoken</find>
       <find>renderHistoryFlatListCell</find>
-      <find>description</find>
+      <find>ngr</find>
+      <find>consol</find>
+      <find>ngrok</find>
+      <find>loadStorePushToken</find>
+      <find>getValidVoucher</find>
+      <find>getMethod</find>
+      <find>member_id</find>
+      <find>PointStatementRequestObject</find>
+      <find>loadPointHistory</find>
+      <find>pointCollectedTwoView</find>
+      <find>pointsCollectedText</find>
+      <find>loadVoucher</find>
+      <find>loadExpiredVoucher</find>
+      <find>current_data</find>
+      <find>has_reward</find>
+      <find>loadValidVoucher</find>
+      <find>loadUsedVoucher</find>
+      <find>onExpiredPressed</find>
+      <find>navigationBarItemIcon</find>
+      <find>renderVouchertableFlatListCell</find>
+      <find>iphone8Copy11View</find>
+      <find>backgroundImage</find>
+      <find>headerLeftContainer</find>
+      <find>currencyText</find>
+      <find>usedView</find>
+      <find>valueText</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -135,41 +428,48 @@
         <option value="$PROJECT_DIR$/App/PickUp/PickUp.js" />
         <option value="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" />
         <option value="$PROJECT_DIR$/App/Profile/Profile.js" />
-        <option value="$PROJECT_DIR$/App/common/size.js" />
         <option value="$PROJECT_DIR$/App/Views/Checkout/Checkout.js" />
         <option value="$PROJECT_DIR$/App/Checkout/Checkout.js" />
         <option value="$PROJECT_DIR$/App/Models/members.js" />
         <option value="$PROJECT_DIR$/App/Models/point_statements/all_functions.js" />
         <option value="$PROJECT_DIR$/App/Models/point_statements/point_statements_models.js" />
         <option value="$PROJECT_DIR$/App/Models/point_statements.js" />
-        <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/App/MemberReward/NewVoucherTwo.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/package-lock.json" />
         <option value="$PROJECT_DIR$/App/Utils/index.js" />
-        <option value="$PROJECT_DIR$/App/Utils/server.js" />
-        <option value="$PROJECT_DIR$/App/Home/Home.js" />
         <option value="$PROJECT_DIR$/node_modules/react-redux/node_modules/hoist-non-react-statics/package.json" />
         <option value="$PROJECT_DIR$/node_modules/react-redux/package.json" />
         <option value="$PROJECT_DIR$/node_modules/redux/package.json" />
         <option value="$PROJECT_DIR$/node_modules/symbol-observable/package.json" />
-        <option value="$PROJECT_DIR$/App/Model/index.js" />
-        <option value="$PROJECT_DIR$/App/WebserviceModel/members.js" />
-        <option value="$PROJECT_DIR$/App/Services/point_statements.js" />
-        <option value="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" />
         <option value="$PROJECT_DIR$/App/Requests/push_request_object.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/App/Utils/webservice_helper.js" />
         <option value="$PROJECT_DIR$/App/Requests/base_request_object.js" />
-        <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/event_object.js" />
-        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
+        <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
+        <option value="$PROJECT_DIR$/App/Model/index.js" />
+        <option value="$PROJECT_DIR$/App/Home/Home.js" />
+        <option value="$PROJECT_DIR$/App/Utils/webservice_helper.js" />
+        <option value="$PROJECT_DIR$/App/Utils/server.js" />
+        <option value="$PROJECT_DIR$/App/Requests/voucher_request_object.js" />
+        <option value="$PROJECT_DIR$/App/Services/vouchers.js" />
+        <option value="$PROJECT_DIR$/App.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/members.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" />
+        <option value="$PROJECT_DIR$/App/Services/point_statements.js" />
         <option value="$PROJECT_DIR$/App/PointHistory/Cell.js" />
+        <option value="$PROJECT_DIR$/App/common/size.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/PointsCell.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/vouchers.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/ValidVoucher.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/UsedVoucher.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1680" />
     <option name="height" value="955" />
@@ -180,6 +480,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -196,7 +497,7 @@
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="PointHistory" type="462c0819:PsiDirectoryNode" />
+              <item name="MemberReward" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
@@ -208,13 +509,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -225,7 +526,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -262,18 +563,23 @@
       <workItem from="1567478025416" duration="576000" />
       <workItem from="1567480266758" duration="9266000" />
       <workItem from="1567512520051" duration="2719000" />
-      <workItem from="1567566624391" duration="32051000" />
+      <workItem from="1567566624391" duration="35568000" />
+      <workItem from="1567644437445" duration="4332000" />
+      <workItem from="1567700820420" duration="10305000" />
+      <workItem from="1567739909510" duration="871000" />
+      <workItem from="1567741839637" duration="180000" />
+      <workItem from="1567742036404" duration="7625000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49696000" />
+    <option name="totallyTimeSpent" value="76526000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="23" width="1680" height="955" extended-state="6" />
+    <frame x="0" y="23" width="1680" height="955" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26190478" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2771673" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -290,7 +596,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.32908458" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31633836" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -370,13 +676,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/common/size.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/PickUp/PickUp.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -387,16 +686,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/0-Model/push_request_object.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/0-Model/base_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="2" lean-forward="true" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/App/0-Model/push_request_object.js" />
+    <entry file="file://$PROJECT_DIR$/App/0-Model/base_request_object.js" />
     <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -408,59 +699,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2151">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/MemberReward/NewVoucherTwo.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2564">
           <caret line="202" column="32" selection-start-line="202" selection-start-column="32" selection-end-line="202" selection-end-column="32" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#112#137#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3509">
-          <caret line="425" column="2" selection-start-line="425" selection-start-column="2" selection-end-line="425" selection-end-column="2" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#197#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Utils/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="1" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="54" selection-start-column="54" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="98" column="20" selection-start-line="98" selection-start-column="20" selection-end-line="98" selection-end-column="20" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#105#138#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -468,16 +710,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="736" column="19" lean-forward="true" selection-start-line="736" selection-start-column="19" selection-end-line="736" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="49" column="16" lean-forward="true" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
-          <folding>
-            <element signature="e#103#202#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -523,75 +755,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Services/members.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="38" lean-forward="true" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Models/point_statements.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="63" lean-forward="true" selection-start-line="16" selection-start-column="63" selection-end-line="16" selection-end-column="63" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Services/point_statements.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/push_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Models/point_statements.js" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="15" selection-start-column="15" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Model/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding>
-            <element signature="e#1#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="10" selection-start-line="23" selection-start-column="10" selection-end-line="23" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Utils/webservice_helper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="30" column="21" lean-forward="true" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/base_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>
@@ -602,24 +770,169 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
+    <entry file="file://$PROJECT_DIR$/App/Utils/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="29" column="51" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="51" />
+        <state relative-caret-position="90">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-native/Libraries/react-native/react-native-implementation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="566">
+          <caret line="161" column="6" selection-start-line="161" selection-start-column="6" selection-end-line="161" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/base_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/members.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="1" lean-forward="true" selection-end-line="5" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/push_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Utils/webservice_helper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="17" column="25" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/voucher_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/vouchers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="31" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="208" column="5" lean-forward="true" selection-start-line="208" selection-start-column="5" selection-end-line="208" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#105#138#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-439">
+          <caret line="57" column="95" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="95" />
+          <folding>
+            <element signature="e#103#202#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        <state relative-caret-position="30">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/point_statements.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="52" selection-start-line="2" selection-start-column="52" selection-end-line="2" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/common/size.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointsCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="81" column="23" lean-forward="true" selection-start-line="81" selection-start-column="23" selection-end-line="81" selection-end-column="23" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#101#187#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-native/Libraries/Lists/ListView/ListViewDataSource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="140" column="2" selection-start-line="140" selection-start-column="2" selection-end-line="140" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2947">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Model/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#1#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="156" column="20" lean-forward="true" selection-start-line="156" selection-start-column="20" selection-end-line="156" selection-end-column="20" />
+        <state relative-caret-position="290">
+          <caret line="181" column="72" lean-forward="true" selection-start-line="177" selection-start-column="24" selection-end-line="181" selection-end-column="72" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#111#136#0" expanded="true" />
@@ -627,13 +940,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointHistory/Cell.js">
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/vouchers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="58" column="80" selection-start-line="58" selection-start-column="80" selection-end-line="58" selection-end-column="80" />
+        <state relative-caret-position="513">
+          <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="57" column="78" lean-forward="true" selection-start-line="57" selection-start-column="62" selection-end-line="57" selection-end-column="78" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#103#189#0" expanded="true" />
+            <element signature="e#111#215#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/UsedVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-147">
+          <caret line="57" column="78" selection-start-line="57" selection-start-column="78" selection-end-line="57" selection-end-column="78" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#110#214#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="81" column="92" lean-forward="true" selection-start-line="81" selection-start-column="92" selection-end-line="81" selection-end-column="92" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#113#217#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="299" column="58" selection-start-line="299" selection-start-column="58" selection-end-line="299" selection-end-column="58" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#197#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -7,19 +7,25 @@
 //
 
 import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from "react-native"
-import ExpiredcouponTwo from "./ExpiredcouponTwo"
 import React from "react"
-import UsedVoucherTwo from "./UsedVoucherTwo"
-import NewVoucherTwo from "./NewVoucherTwo"
 import { alpha, fontAlpha } from "../common/size";
+import { createAction } from '../Utils/index'
+import { connect } from "react-redux";
+import VoucherRequestObject from "../Requests/voucher_request_object";
+import UsedVoucher from "./UsedVoucher"
+import ExpiredVoucher from "./ExpiredVoucher"
+import ValidVoucher from "./ValidVoucher"
 
+@connect(({ members }) => ({
+	member_id: members.member_id,
+}))
 export default class MemberReward extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "",
+			title: "Points",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -29,12 +35,6 @@ export default class MemberReward extends React.Component {
 					<Image
 						source={require("./../../assets/images/back.png")}
 						style={styles.navigationBarItemIcon}/>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={params.onItemPressed ? params.onItemPressed : () => null}
-					style={styles.navigationBarItem}>
-					<Text
-						style={styles.navigationBarItemTitle}>Rewards</Text>
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -48,11 +48,121 @@ export default class MemberReward extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			valid_initial: true,
+			used_initial: true,
+			expired_initial: true,
 			has_reward: true,
+			valid_selected: true,
+			used_selected: false,
+			expired_selected: false,
+			valid_page: 1,
+			used_page: 1,
+			expired_page: 1,
+			valid_total: 0,
+			used_total: 0,
+			expired_total: 0,
+			current_data: [],
+			valid_data: [],
+			used_data: [],
+			expired_data: [],
+			loading: true,
+			isRefreshing: true,
+			voucher_button: 1
 		}
 	}
 
+	loadValidVoucher(page_no) {
+		const { dispatch, member_id } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					isRefreshing: false,
+					loading: false,
+					valid_initial: false,
+					valid_data: this.state.valid_data.concat(eventObject.result),
+					valid_total: eventObject.total,
+					valid_page: this.state.valid_page + 1,
+				},function () {
+					this.setState({
+						current_data: this.state.valid_data,
+					});
+				}.bind(this))
+			}
+		}
+		const obj = new VoucherRequestObject()
+		obj.setUrlId(member_id)
+		obj.setPage(page_no)
+		obj.setStatus(2)
+		dispatch(
+			createAction('vouchers/loadValidVoucher')({
+				object: obj,
+				callback
+			})
+		)
+	}
+
+	loadUsedVoucher(page_no) {
+		const { dispatch, member_id } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					isRefreshing: false,
+					loading: false,
+					used_initial: false,
+					used_data: this.state.used_data.concat(eventObject.result),
+					used_total: eventObject.total,
+					used_page: this.state.used_page + 1,
+				},function () {
+					this.setState({
+						current_data: this.state.used_data,
+					});
+				}.bind(this))
+			}
+		}
+		const obj = new VoucherRequestObject()
+		obj.setUrlId(member_id)
+		obj.setPage(page_no)
+		obj.setStatus(1)
+		dispatch(
+			createAction('vouchers/loadUsedVoucher')({
+				object: obj,
+				callback
+			})
+		)
+	}
+
+	loadExpiredVoucher(page_no) {
+		const { dispatch, member_id } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					isRefreshing: false,
+					loading: false,
+					expired_initial: false,
+					expired_data: this.state.expired_data.concat(eventObject.result),
+					expired_total: eventObject.total,
+					expired_page: this.state.expired_page + 1,
+				},function () {
+					this.setState({
+						current_data: this.state.expired_data,
+					});
+				}.bind(this))
+			}
+		}
+		const obj = new VoucherRequestObject()
+		obj.setUrlId(member_id)
+		obj.setPage(page_no)
+		obj.setStatus(0)
+		dispatch(
+			createAction('vouchers/loadExpiredVoucher')({
+				object: obj,
+				callback
+			})
+		)
+	}
+
 	componentDidMount() {
+		this.onAvailablePressed()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -68,42 +178,154 @@ export default class MemberReward extends React.Component {
 
 	}
 
-	vouchertableFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
+	onAvailablePressed = () => {
+		const { valid_initial, valid_data, valid_page } = this.state
 
-	renderVouchertableFlatListCell = ({ item }) => {
-	
-		return <NewVoucherTwo
-				navigation={this.props.navigation}/>
+		if (valid_initial) {
+			this.loadValidVoucher(valid_page)
+		}
+
+		this.setState({
+			valid_selected: true,
+			used_selected: false,
+			expired_selected: false,
+			current_data: valid_data,
+		})
+
 	}
 
+	onUsedPressed = () => {
+		const { used_initial, used_data, used_page } = this.state
+
+		if (used_initial) {
+			this.loadUsedVoucher(used_page)
+		}
+
+		this.setState({
+			valid_selected: false,
+			used_selected: true,
+			expired_selected: false,
+			current_data: used_data,
+		})
+
+	}
+
+	onExpiredPressed = () => {
+		const { expired_initial, expired_data, expired_page } = this.state
+
+		if (expired_initial) {
+			this.loadExpiredVoucher(expired_page)
+		}
+
+		this.setState({
+			valid_selected: false,
+			used_selected: false,
+			expired_selected: true,
+			current_data: expired_data,
+		})
+
+	}
+
+	onRefresh() {
+		const { valid_selected, used_selected, expired_selected } = this.state
+
+		this.setState({
+			isRefreshing: true,
+		})
+
+		if (valid_selected) {
+			this.setState({
+				valid_data: [],
+				valid_page: 1,
+			})
+			this.loadValidVoucher(1)
+		}
+
+		if (used_selected) {
+			this.setState({
+				used_data: [],
+				used_page: 1,
+			})
+			this.loadUsedVoucher(1)
+		}
+
+		if (expired_selected) {
+			this.setState({
+				expired_data: [],
+				expired_page: 1,
+			})
+			this.loadExpiredVoucher(1)
+		}
+	}
+
+	loadMore() {
+		const { valid_selected, used_selected, expired_selected, loading, valid_data, used_data, expired_data, valid_total, used_total, expired_total, valid_page, used_page, expired_page } = this.state
+
+		if (!loading) {
+			if (valid_selected) {
+				if (valid_total > valid_data.length) {
+					this.setState({
+						isRefreshing: true
+					})
+					this.loadValidVoucher(valid_page)
+				}
+			}
+			if (used_selected) {
+				if (used_total > used_data.length) {
+					this.setState({
+						isRefreshing: true
+					})
+					this.loadUsedVoucher(used_page)
+				}
+			}
+			if (expired_selected) {
+				if (expired_total > expired_data.length) {
+					this.setState({
+						isRefreshing: true
+					})
+					this.loadExpiredVoucher(expired_page)
+				}
+			}
+		}
+	}
+
+	renderVouchertableFlatListCell = ({ item }) => {
+
+		if (this.state.valid_selected) {
+			return <ValidVoucher
+				navigation={this.props.navigation}
+				title={item.voucher.name}
+				description={item.voucher.description}
+				display_value={item.voucher.display_value}
+				discount_type={item.voucher.discount_type}
+				used_date={item.used_date}
+				expiry_date={item.expiry_date}
+			/>
+		} else if (this.state.used_selected) {
+			return <UsedVoucher
+				navigation={this.props.navigation}
+				title={item.voucher.name}
+				description={item.voucher.description}
+				used_date={item.used_date}
+				expiry_date={item.expiry_date}
+			/>
+		} else {
+			return <ExpiredVoucher
+				navigation={this.props.navigation}
+				title={item.voucher.name}
+				description={item.voucher.description}
+				used_date={item.used_date}
+				expiry_date={item.expiry_date}
+			/>
+		}
+
+	}
 	render() {
-		const {
-			has_reward,
-		} = this.state
+
 		return <View
-			style={styles.memberRewardView}>
+			style={styles.rewardView}>
 			<View
-				style={styles.rewardtabView}>
+				style={styles.availableView}>
 				<View
 					pointerEvents="box-none"
 					style={{
@@ -111,14 +333,16 @@ export default class MemberReward extends React.Component {
 						left: 0,
 						right: 0,
 						top: 0,
-						height: 38 * alpha,
+						height: 49 * alpha,
 						flexDirection: "row",
 						alignItems: "flex-start",
 					}}>
 					<View
-						style={styles.availableView}>
-						<View
-							style={styles.availableselectedView}/>
+						style={styles.availableTwoView}>
+						{this.state.valid_selected ?
+							<View
+							style={styles.availablebarView}/> : null
+						}
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -143,108 +367,149 @@ export default class MemberReward extends React.Component {
 						}}/>
 					<View
 						style={styles.expiredView}>
+						{this.state.expired_selected ?
+							<View
+								style={styles.expiredbarView}/> : null
+						}
 						<View
-							style={styles.expiredselectedView}/>
-						<TouchableOpacity
-							onPress={this.onExpiredPressed}
-							style={styles.expiredButton}>
-							<Text
-								style={styles.expiredButtonText}>Expired</Text>
-						</TouchableOpacity>
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								alignSelf: "center",
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<TouchableOpacity
+								onPress={this.onExpiredPressed}
+								style={styles.expiredButton}>
+								<Text
+									style={styles.expiredButtonText}>Expired</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</View>
 				<View
 					style={styles.usedView}>
+					{ this.state.used_selected ?
+						<View
+							style={styles.usedbarView}/> : null
+					}
 					<View
-						style={styles.usedselectedView}/>
-					<TouchableOpacity
-						onPress={this.onUsedPressed}
-						style={styles.usedButton}>
-						<Text
-							style={styles.usedButtonText}>Used</Text>
-					</TouchableOpacity>
-				</View>
-			</View>
-				<View
-					pointerEvents="box-none"
-					style={{
-						height: 503 * alpha,
-					}}>
-					{(has_reward ? (
-						<View
-							style={styles.voucherviewView}>
-							<View
-								style={styles.howToUseView}>
-								<Text
-									style={styles.howToUseText}>How to use</Text>
-							</View>
-							<View
-								style={styles.vouchertableFlatListViewWrapper}>
-								<FlatList
-									renderItem={this.renderVouchertableFlatListCell}
-									data={this.vouchertableFlatListMockData}
-									style={styles.vouchertableFlatList}/>
-							</View>
-						</View>
-					) : (
-						<View
-							style={styles.novoucherviewView}>
-							<Image
-								source={require("./../../assets/images/brew9-doodle-03.png")}
-								style={styles.storeimageImage}/>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
+						<TouchableOpacity
+							onPress={this.onUsedPressed}
+							style={styles.usedButton}>
 							<Text
-								style={styles.noRewardAvailableText}>No reward available</Text>
-						</View>
-					))}
-
-				</View>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-				<View
-					style={styles.redeemRewardView}>
-					<Text
-						style={styles.redeemRewardText}>Redeem Reward</Text>
+								style={styles.usedButtonText}>Used</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
+			<View
+				pointerEvents="box-none"
+				style={{
+					height: 490 * alpha,
+				}}>
+				<View
+					style={styles.voucherviewView}>
+					<TouchableOpacity
+						onPress={this.onHowToUseTwoPressed}
+						style={styles.howToUseButton}>
+						<Image
+							source={require("./../../assets/images/group-15-2.png")}
+							style={styles.howToUseButtonImage}/>
+						<Text
+							style={styles.howToUseButtonText}>How to use</Text>
+					</TouchableOpacity>
+					<View
+						style={styles.voucherlistviewFlatListViewWrapper}>
+						<FlatList
+							renderItem={this.renderVouchertableFlatListCell}
+							data={this.state.current_data}
+							style={styles.voucherlistviewFlatList}
+							refreshing={this.state.isRefreshing}
+							onRefresh={this.onRefresh.bind(this)}
+							onEndReachedThreshold={0.1}
+							onEndReached={this.loadMore.bind(this)}
+							keyExtractor={(item, index) => index.toString()}/>
+					</View>
+				</View>
+				{/*<View*/}
+				{/*	style={styles.novoucherviewView}>*/}
+				{/*	<Image*/}
+				{/*		source={require("./../../assets/images/brew9-doodle-03.png")}*/}
+				{/*		style={styles.storeimageImage}/>*/}
+				{/*	<Text*/}
+				{/*		style={styles.noRewardAvailableText}>No reward available</Text>*/}
+				{/*</View>*/}
+			</View>
+			<View
+				style={{
+					flex: 1,
+				}}/>
+			<TouchableOpacity
+				onPress={this.onRedeemRewardPressed}
+				style={styles.redeemrewardButton}>
+				<Text
+					style={styles.redeemrewardButtonText}>Redeem Reward</Text>
+			</TouchableOpacity>
+		</View>
 	}
 }
 
 const styles = StyleSheet.create({
-	navigationBarItem: {
-	},
-	navigationBarItemTitle: {
-		color: "black",
-		marginLeft: 10 * alpha,
-	},
-	navigationBarItemIcon: {
-		tintColor: "black",
-	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
 	},
-	memberRewardView: {
+	navigationBarItem: {
+
+	},
+	navigationBarItemTitle: {
+		color: "black",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+	},
+	navigationBarItemIcon: {
+		tintColor: "black",
+	},
+	rewardView: {
 		backgroundColor: "rgb(243, 243, 243)",
 		flex: 1,
 	},
-	rewardtabView: {
-		backgroundColor: "white",
-		height: 38 * alpha,
-	},
 	availableView: {
+		backgroundColor: "white",
+		height: 49 * alpha,
+	},
+	availableTwoView: {
 		backgroundColor: "transparent",
 		width: 125 * alpha,
-		height: 38 * alpha,
+		height: 49 * alpha,
 	},
-	availableselectedView: {
-		backgroundColor: "rgb(216, 216, 216)",
+	availablebarView: {
+		backgroundColor: "rgb(68, 68, 68)",
 		position: "absolute",
-		alignSelf: "center",
-		width: 49 * alpha,
-		bottom: 0,
+		right: 26 * alpha,
+		width: 67 * alpha,
+		bottom: 0 * alpha,
 		height: 2 * alpha,
+	},
+	availableButtonText: {
+		color: "rgb(68, 68, 68)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	availableButton: {
 		backgroundColor: "transparent",
@@ -252,30 +517,58 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 38 * alpha,
+		height: 49 * alpha,
 	},
 	availableButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
-	availableButtonText: {
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12 * fontAlpha,
+	usedView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		alignSelf: "center",
+		width: 125 * alpha,
+		top: 0,
+		height: 49 * alpha,
+	},
+	usedbarView: {
+		backgroundColor: "rgb(68, 68, 68)",
+		position: "absolute",
+		alignSelf: "center",
+		width: 67 * alpha,
+		bottom: 0,
+		height: 2 * alpha,
+	},
+	usedButtonText: {
+		color: "rgb(118, 118, 118)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	usedButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 49 * alpha,
+	},
+	usedButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 	expiredView: {
 		backgroundColor: "transparent",
 		width: 125 * alpha,
-		height: 38 * alpha,
+		height: 49 * alpha,
 	},
-	expiredselectedView: {
-		backgroundColor: "rgb(216, 216, 216)",
+	expiredbarView: {
+		backgroundColor: "rgb(68, 68, 68)",
 		position: "absolute",
 		alignSelf: "center",
-		width: 49 * alpha,
+		width: 67 * alpha,
 		bottom: 0,
 		height: 2 * alpha,
 	},
@@ -285,90 +578,20 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
+		width: 125 * alpha,
+		height: 49 * alpha,
+	},
+	expiredButtonText: {
+		color: "rgb(118, 118, 118)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	expiredButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
-	},
-	expiredButtonText: {
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	usedView: {
-		backgroundColor: "transparent",
-		position: "absolute",
-		alignSelf: "center",
-		width: 125 * alpha,
-		top: 0,
-		height: 38 * alpha,
-	},
-	usedselectedView: {
-		backgroundColor: "rgb(216, 216, 216)",
-		position: "absolute",
-		alignSelf: "center",
-		width: 49 * alpha,
-		bottom: 0,
-		height: 2 * alpha,
-	},
-	usedButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
-	},
-	usedButtonText: {
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	usedButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
-	novoucherviewView: {
-		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		height: 503 * alpha,
-		alignItems: "flex-start",
-	},
-	storeimageImage: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		width: 375 * alpha,
-		height: 91 * alpha,
-		marginTop: 181 * alpha,
-	},
-	noRewardAvailableText: {
-		color: "rgb(190, 190, 190)",
-		fontFamily: "Helvetica",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		alignSelf: "center",
-		marginTop: 14,
 	},
 	voucherviewView: {
 		backgroundColor: "transparent",
@@ -376,51 +599,89 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		top: 0,
-		height: 503 * alpha,
-		alignItems: "flex-start",
-	},
-	howToUseView: {
-		backgroundColor: "transparent",
-		width: 375 * alpha,
-		height: 21 * alpha,
+		height: 490 * alpha,
 		alignItems: "flex-end",
 	},
-	howToUseText: {
+	howToUseButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 80 * alpha,
+		height: 23 * alpha,
+		marginRight: 15 * alpha,
+		marginTop: 10 * alpha,
+	},
+	howToUseButtonText: {
 		color: "rgb(151, 151, 151)",
 		fontFamily: "Helvetica",
-		fontSize: 9 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "right",
-		backgroundColor: "transparent",
-		marginRight: 13 * alpha,
-		marginTop: 5 * alpha,
+		textAlign: "left",
 	},
-	vouchertableFlatList: {
+	howToUseButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	voucherlistviewFlatList: {
 		backgroundColor: "transparent",
 		width: "100%",
 		height: "100%",
 	},
-	vouchertableFlatListViewWrapper: {
+	voucherlistviewFlatListViewWrapper: {
+		flex: 1,
 		alignSelf: "stretch",
-		height: 482 * alpha,
 	},
-	redeemRewardView: {
-		backgroundColor: "white",
-		borderWidth: 1,
-		borderColor: "white",
-		borderStyle: "solid",
-		height: 54 * alpha,
-		justifyContent: "center",
+	novoucherviewView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		alignSelf: "center",
+		width: 375 * alpha,
+		top: 0,
+		height: 490 * alpha,
 		alignItems: "center",
 	},
-	redeemRewardText: {
-		color: "rgb(65, 64, 64)",
+	storeimageImage: {
+		resizeMode: "contain",
+		backgroundColor: "transparent",
+		alignSelf: "flex-start",
+		width: 375 * alpha,
+		height: 91 * alpha,
+		marginTop: 165 * alpha,
+	},
+	noRewardAvailableText: {
+		backgroundColor: "transparent",
+		color: "rgb(190, 190, 190)",
 		fontFamily: "Helvetica",
-		fontSize: 14,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
+		marginTop: 14 * alpha,
+	},
+	redeemrewardButton: {
+		backgroundColor: "rgb(255, 254, 254)",
+		borderWidth: 0.5 * alpha,
+		borderColor: "rgb(215, 215, 215)",
+		borderStyle: "solid",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 51 * alpha,
+	},
+	redeemrewardButtonText: {
+		color: "rgb(82, 82, 82)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "right",
+	},
+	redeemrewardButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 })

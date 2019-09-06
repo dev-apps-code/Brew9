@@ -18,10 +18,10 @@ export default {
         *loadPointHistory({ payload }, { call, put, select }) {
             try {
 
-                const { object, callback} = payload
+                const { object, callback } = payload
 
-                var authtoken = "";
-
+                // const authtoken = yield select(state => state.member.userAuthToken)
+                const authtoken = ""
                 const json = yield call(
                     loadPointHistory,
                     authtoken,

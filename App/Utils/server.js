@@ -1,4 +1,4 @@
-export const KSERVERURL ='http://85274e07.ngrok.io/api'
+export const KSERVERURL ='http://9be8bb1b.ngrok.io/api'
 
 export const KURL_TERMS_OF_SERVICE =
   'http://innogix.com/co3/privacy_policy.html'

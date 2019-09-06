@@ -16,6 +16,7 @@ export function getBasicAuthentication(authToken) {
 }
 
 export function getMethod(authtoken,object) {
+<<<<<<< HEAD
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
   
   return fetch(urlString, {
@@ -26,6 +27,18 @@ export function getMethod(authtoken,object) {
       Authorization: getBasicAuthentication(authtoken),
     }
   })
+=======
+    const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
+    console.log(urlString)
+    return fetch(urlString, {
+        method: 'GET',
+        headers: {
+          Accept: KCURRENT_API_VERSION_HEADER,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: getBasicAuthentication(authtoken),
+        }
+    })
+>>>>>>> 416464d3be9b9445f4344bba75d18c5592022220
     .then(response => _parseJSON(response))
     .then(logResponse('json'))
     .catch(error => {
@@ -36,7 +49,7 @@ export function getMethod(authtoken,object) {
 export function postMethod(authtoken,object) {
 
     const urlString = `${KSERVERURL}/${object.getUrlString()}`
-
+    console.log(urlString)
     return fetch(urlString, {
     method: 'POST',
     headers: {
