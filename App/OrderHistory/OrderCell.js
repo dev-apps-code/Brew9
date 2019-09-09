@@ -1,14 +1,14 @@
 //
-//  OrderCell
+//  Puchong
 //  Brew9
 //
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { TouchableOpacity, Text, Image, TouchableWithoutFeedback, StyleSheet, View } from "react-native"
+import { Text, Image, TouchableWithoutFeedback, TouchableOpacity, View, StyleSheet } from "react-native"
 import React from "react"
-
+import { alpha, fontAlpha } from "../common/size";
 
 export default class OrderCell extends React.Component {
 
@@ -20,264 +20,283 @@ export default class OrderCell extends React.Component {
 	
 	}
 
-	onOrderCellPress = () => {
+	onPuchongPress = () => {
 	
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
-				onPress={this.onOrderCellPress}>
+			onPress={this.onPuchongPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.ordercell}>
 				<View
-					navigation={this.props.navigation}
-					style={styles.ordercell}>
+					pointerEvents="box-none"
+					style={{
+						height: 122 * alpha,
+					}}>
 					<View
-						style={styles.cellcontentView}>
+						style={styles.orderheaderView}>
+						<Text
+							style={styles.puchongBranchText}>Puchong Branch</Text>
 						<View
-							style={styles.headerView}>
-							<Text
-								style={styles.puchongBranchText}>Puchong Branch</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.receivedCopyText}>Received</Text>
-							<Image
-								source={require("./../../assets/images/group-10.png")}
-								style={styles.groupImage}/>
-						</View>
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.completedText}>Completed</Text>
+						<Image
+							source={require("./../../assets/images/group-10.png")}
+							style={styles.groupImage}/>
+					</View>
+					<View
+						style={styles.orderitemsView}>
+						<Image
+							source={require("./../../assets/images/group-10-3.png")}
+							style={styles.group10Image}/>
+						<Image
+							source={require("./../../assets/images/group-11-3.png")}
+							style={styles.group11Image}/>
+						<Image
+							source={require("./../../assets/images/group-12-8.png")}
+							style={styles.group12Image}/>
+						<Image
+							source={require("./../../assets/images/group-13-5.png")}
+							style={styles.group13Image}/>
 						<View
-							style={styles.productimagesView}>
-							<Image
-								source={require("./../../assets/images/group-33.png")}
-								style={styles.group10Image}/>
-							<Image
-								source={require("./../../assets/images/group-11.png")}
-								style={styles.group11Image}/>
-							<Image
-								source={require("./../../assets/images/group-32.png")}
-								style={styles.group12Image}/>
+							style={styles.group14View}>
 							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Image
-								source={require("./../../assets/images/group-31.png")}
-								style={styles.group13Image}/>
-							<Image
-								source={require("./../../assets/images/group-33.png")}
-								style={styles.group14Image}/>
-							<View
-								style={styles.group15View}>
-								<Image
-									source={require("./../../assets/images/group-15.png")}
-									style={styles.groupTwoImage}/>
-							</View>
-						</View>
-						<View
-							style={styles.orderinfoView}>
-							<View
-								style={styles.group17View}>
-								<Text
-									style={styles.orderNoCopyText}>Order No.   :</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.textText}>9876543210</Text>
-							</View>
+								style={styles.rectangleCopy11View}/>
 							<View
 								pointerEvents="box-none"
 								style={{
-									flex: 1,
-									alignSelf: "stretch",
-									flexDirection: "row",
-									alignItems: "flex-end",
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
 								}}>
-								<View
-									style={styles.group18View}>
-									<Text
-										style={styles.orderTimeCopyText}>Order Time :</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.textTwoText}>2019-06-20  16:06:00</Text>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.rm11700Text}>RM117.00</Text>
+								<Image
+									source={require("./../../assets/images/bitmap-copy-7.png")}
+									style={styles.bitmapCopy7Image}/>
 							</View>
+						</View>
+						<View
+							style={styles.group15View}>
+							<Image
+								source={require("./../../assets/images/group-21.png")}
+								style={styles.groupTwoImage}/>
+						</View>
+					</View>
+				</View>
+				<View
+					style={styles.detailsView}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							height: 25 * alpha,
+							marginLeft: 21 * alpha,
+							marginRight: 20 * alpha,
+							marginTop: 10 * alpha,
+							flexDirection: "row",
+							alignItems: "flex-start",
+						}}>
+						<View
+							style={styles.ordernoView}>
+							<Text
+								style={styles.orderNoText}>Order No.   :</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Text
+								style={styles.textText}>1234567890</Text>
 						</View>
 						<View
 							style={{
 								flex: 1,
 							}}/>
+						<Text
+							style={styles.priceText}>RM117.00</Text>
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<View
+						style={styles.ordertimeView}>
+						<Text
+							style={styles.orderTimeText}>Order Time :</Text>
 						<View
-							style={styles.lineView}/>
-						<View
-							style={styles.bottomsectionView}>
-							<TouchableOpacity
-								onPress={this.onReviewPressed}
-								style={styles.reviewButton}>
-								<Text
-									style={styles.reviewButtonText}>Review</Text>
-							</TouchableOpacity>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<TouchableOpacity
-								onPress={this.onReceiptPressed}
-								style={styles.receiptButton}>
-								<Text
-									style={styles.receiptButtonText}>Receipt</Text>
-							</TouchableOpacity>
-						</View>
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.textTwoText}>2019-06-23  14:01:52</Text>
 					</View>
 				</View>
-			</TouchableWithoutFeedback>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+				<View
+					style={styles.lineView}/>
+				<View
+					style={styles.optionView}>
+					<TouchableOpacity
+						onPress={this.onReviewPressed}
+						style={styles.reviewButton}>
+						<Text
+							style={styles.reviewButtonText}>Review</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={this.onReceiptPressed}
+						style={styles.receiptButton}>
+						<Text
+							style={styles.receiptButtonText}>Receipt</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 
 const styles = StyleSheet.create({
 	ordercell: {
-		backgroundColor: "transparent",
-		shadowColor: "rgb(226, 226, 226)",
-		shadowRadius: 4,
-		shadowOpacity: 1,
-		width: "100%",
-		height: 185,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	cellcontentView: {
 		backgroundColor: "white",
-		width: 375,
-		height: 174,
-		alignItems: "center",
+		width: "100%",
+		height: 228 * alpha,
 	},
-	headerView: {
+	orderheaderView: {
 		backgroundColor: "transparent",
-		width: 323,
-		height: 14,
-		marginTop: 3,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
 	puchongBranchText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 12,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 20 * alpha,
 	},
-	receivedCopyText: {
+	completedText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
-		fontSize: 9,
+		fontFamily: "Helvetica-Bold",
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "normal",
+		fontWeight: "bold",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginRight: 6,
+		marginRight: 5 * alpha,
 	},
 	groupImage: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
-		flex: 1,
-		height: 8,
-		marginLeft: 6,
+		backgroundColor: "transparent",
+		width: 7 * alpha,
+		height: 8 * alpha,
+		marginRight: 20 * alpha,
 	},
-	productimagesView: {
+	orderitemsView: {
 		backgroundColor: "rgb(248, 248, 248)",
-		alignSelf: "stretch",
-		height: 58,
-		marginRight: 10,
-		marginTop: 10,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 50 * alpha,
+		height: 72 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
 	group10Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		alignSelf: "flex-start",
-		width: 42,
-		height: 47,
-		marginLeft: 30,
-		marginTop: 3,
+		width: 43 * alpha,
+		height: 48 * alpha,
+		marginLeft: 21 * alpha,
 	},
 	group11Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: 44,
-		height: 42,
-		marginLeft: 8,
+		width: 45 * alpha,
+		height: 43 * alpha,
+		marginLeft: 8 * alpha,
 	},
 	group12Image: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
-		width: 42,
-		height: 42,
-		marginLeft: 8,
+		backgroundColor: "transparent",
+		width: 42 * alpha,
+		height: 43 * alpha,
+		marginLeft: 9 * alpha,
 	},
 	group13Image: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: 42,
-		height: 42,
-		marginRight: 9,
-	},
-	group14Image: {
 		resizeMode: "center",
-		backgroundColor: "transparent",
-		alignSelf: "flex-start",
-		width: 42,
-		height: 47,
-		marginRight: 9,
-		marginTop: 3,
+		width: 42 * alpha,
+		height: 43 * alpha,
+		marginLeft: 10 * alpha,
 	},
-	group15View: {
+	group14View: {
+		backgroundColor: "transparent",
+		width: 45 * alpha,
+		height: 48 * alpha,
+		marginLeft: 9 * alpha,
+	},
+	rectangleCopy11View: {
 		backgroundColor: "rgb(252, 252, 252)",
-		width: 42,
-		height: 42,
-		marginRight: 48,
-		justifyContent: "center",
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 5 * alpha,
+		height: 4 * alpha,
 	},
-	groupTwoImage: {
+	bitmapCopy7Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: null,
-		height: 3,
-		marginLeft: 14,
-		marginRight: 13,
+		height: 44 * alpha,
+		marginLeft: 8 * alpha,
+		marginRight: 3 * alpha,
 	},
-	orderinfoView: {
-		backgroundColor: "transparent",
-		width: 321,
-		height: 23,
-		marginTop: 5,
-		alignItems: "flex-start",
+	group15View: {
+		backgroundColor: "rgb(252, 252, 252)",
+		flex: 1,
+		height: 43 * alpha,
+		marginLeft: 7 * alpha,
+		marginRight: 51 * alpha,
+		justifyContent: "center",
 	},
-	group17View: {
+	groupTwoImage: {
 		backgroundColor: "transparent",
-		width: 99,
-		height: 10,
+		resizeMode: "center",
+		width: null,
+		height: 3 * alpha,
+		marginLeft: 15 * alpha,
+		marginRight: 13 * alpha,
+	},
+	detailsView: {
+		backgroundColor: "transparent",
+		height: 52 * alpha,
+	},
+	ordernoView: {
+		backgroundColor: "transparent",
+		width: 132 * alpha,
+		height: 14 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	orderNoCopyText: {
+	orderNoText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
-		fontSize: 8,
+		fontFamily: "DINPro-Medium",
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -286,111 +305,117 @@ const styles = StyleSheet.create({
 	textText: {
 		backgroundColor: "transparent",
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
-		fontSize: 8,
+		fontFamily: "DINPro-Medium",
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	group18View: {
+	priceText: {
+		color: "black",
+		fontFamily: "DINPro-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
 		backgroundColor: "transparent",
-		width: 131,
-		height: 10,
+		alignSelf: "center",
+	},
+	ordertimeView: {
+		backgroundColor: "transparent",
+		alignSelf: "flex-start",
+		width: 178 * alpha,
+		height: 14 * alpha,
+		marginLeft: 21 * alpha,
+		marginBottom: 10 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	orderTimeCopyText: {
-		backgroundColor: "transparent",
+	orderTimeText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
-		fontSize: 8,
+		fontFamily: "DINPro-Medium",
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	textTwoText: {
+		backgroundColor: "transparent",
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
-		fontSize: 8,
+		fontFamily: "DINPro-Medium",
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 	},
-	rm11700Text: {
+	lineView: {
+		backgroundColor: "rgb(241, 241, 241)",
+		alignSelf: "center",
+		width: 334 * alpha,
+		height: 1 * alpha,
+		marginBottom: 10 * alpha,
+	},
+	optionView: {
 		backgroundColor: "transparent",
-		color: "black",
+		alignSelf: "flex-end",
+		width: 150 * alpha,
+		height: 31 * alpha,
+		marginRight: 19 * alpha,
+		marginBottom: 11 * alpha,
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center",
+	},
+	reviewButtonText: {
+		color: "rgb(94, 94, 94)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 11,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		alignSelf: "flex-start",
-	},
-	lineView: {
-		backgroundColor: "rgb(246, 246, 246)",
-		width: 321,
-		height: 1,
-		marginBottom: 9,
-	},
-	bottomsectionView: {
-		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 113,
-		height: 22,
-		marginRight: 35,
-		marginBottom: 18,
-		flexDirection: "row",
-		alignItems: "center",
 	},
 	reviewButton: {
 		backgroundColor: "transparent",
-		borderRadius: 2,
-		borderWidth: 1,
-		borderColor: "rgb(242, 242, 242)",
+		borderRadius: 2 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(231, 230, 230)",
 		borderStyle: "solid",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 53,
-		height: 22,
+		width: 70 * alpha,
+		height: 31 * alpha,
+		marginRight: 11 * alpha,
 	},
 	reviewButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10,
-	},
-	reviewButtonText: {
-		color: "rgb(94, 94, 94)",
-		fontFamily: "Helvetica",
-		fontSize: 8,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	receiptButtonText: {
-		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
-		fontSize: 8,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
+		marginRight: 10 * alpha,
 	},
 	receiptButton: {
 		backgroundColor: "transparent",
-		borderRadius: 2,
-		borderWidth: 1,
+		borderRadius: 2 * alpha,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 53,
-		height: 22,
+		width: 69 * alpha,
+		height: 31 * alpha,
+	},
+	receiptButtonText: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	receiptButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10,
+		marginRight: 10 * alpha,
 	},
 })

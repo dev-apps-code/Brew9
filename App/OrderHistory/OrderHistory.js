@@ -6,21 +6,35 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { FlatList, View, StyleSheet, Text, Image } from "react-native"
+import OrderCell from "./OrderCell.js"
+import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-native"
 import React from "react"
-import OrderCell from "./OrderCell"
-
+import { alpha, fontAlpha } from "../common/size";
 
 export default class OrderHistory extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-	
+
 		const { params = {} } = navigation.state
 		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+			title: "Order History",
+			headerTintColor: "black",
+			headerLeft: <View
+				style={styles.headerLeftContainer}>
+				<TouchableOpacity
+					onPress={params.onBackPressed ? params.onBackPressed : () => null}
+					style={styles.navigationBarItem}>
+					<Image
+						source={require("./../../assets/images/back.png")}
+						style={styles.navigationBarItemIcon}/>
+				</TouchableOpacity>
+			</View>,
+			headerRight: null,
+			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
+			},
+		}
 	}
 
 	constructor(props) {
@@ -28,10 +42,18 @@ export default class OrderHistory extends React.Component {
 	}
 
 	componentDidMount() {
-	
+		this.props.navigation.setParams({
+			onBackPressed: this.onBackPressed,
+			onItemPressed: this.onItemPressed,
+		})
 	}
 
-	orderlistFlatListMockData = [{
+	onBackPressed = () => {
+
+		this.props.navigation.goBack()
+	}
+
+	orderHistoryFlatListMockData = [{
 		key: "1",
 	}, {
 		key: "2",
@@ -53,7 +75,7 @@ export default class OrderHistory extends React.Component {
 		key: "10",
 	}]
 
-	renderOrderlistFlatListCell = ({ item }) => {
+	renderOrderHistoryFlatListCell = ({ item }) => {
 	
 		return <OrderCell
 				navigation={this.props.navigation}/>
@@ -62,133 +84,9 @@ export default class OrderHistory extends React.Component {
 	render() {
 	
 		return <View
-				style={styles.iphone8Copy19View}>
+				style={styles.OrderHistoryView}>
 				<View
-					style={styles.navigationView}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0,
-							right: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<View
-							style={styles.logoView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									style={styles.rightCircleView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/right-14.png")}
-											style={styles.rightImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/circle.png")}
-											style={styles.circleImage}/>
-									</View>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									style={styles.leftDotView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/left-14.png")}
-											style={styles.leftImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/dot.png")}
-											style={styles.dotImage}/>
-									</View>
-								</View>
-							</View>
-						</View>
-					</View>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								width: 101,
-								height: 14,
-								marginLeft: 21,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/group-4-3.png")}
-								style={styles.group4Image}/>
-							<Text
-								style={styles.orderHistoryText}>Order History</Text>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.purchaseHistoryView}>
+					style={styles.headerView}>
 					<Text
 						style={styles.purchaseHistoryText}>Purchase History</Text>
 					<View
@@ -202,161 +100,81 @@ export default class OrderHistory extends React.Component {
 						style={styles.groupImage}/>
 				</View>
 				<View
-					pointerEvents="box-none"
-					style={{
-						height: 556,
-					}}>
-					<View
-						style={styles.rectangleView}/>
-					<View
-						style={styles.orderlistFlatListViewWrapper}>
-						<FlatList
-							renderItem={this.renderOrderlistFlatListCell}
-							data={this.orderlistFlatListMockData}
-							style={styles.orderlistFlatList}/>
-					</View>
+					style={styles.orderHistoryFlatListViewWrapper}>
+					<FlatList
+						renderItem={this.renderOrderHistoryFlatListCell}
+						data={this.orderHistoryFlatListMockData}
+						style={styles.orderHistoryFlatList}/>
 				</View>
 			</View>
 	}
 }
 
 const styles = StyleSheet.create({
-	iphone8Copy19View: {
-		backgroundColor: "rgb(243, 243, 243)",
+	headerLeftContainer: {
+		flexDirection: "row",
+		marginLeft: 8 * alpha,
+	},
+	navigationBarItem: {
+
+	},
+	navigationBarItemTitle: {
+		color: "black",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+	},
+	navigationBarItemIcon: {
+		tintColor: "black",
+	},
+	OrderHistoryView: {
+		backgroundColor: "white",
 		flex: 1,
 	},
-	navigationView: {
-		backgroundColor: "transparent",
-		height: 52,
-		marginTop: 20,
-	},
-	logoView: {
+	headerView: {
 		backgroundColor: "white",
-		height: 52,
+		shadowColor: "rgba(226, 226, 226, 0.5)",
+		shadowRadius: 4 * alpha,
+		shadowOpacity: 1 * alpha,
+		height: 38 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
 	},
-	rightCircleView: {
+	purchaseHistoryText: {
 		backgroundColor: "transparent",
-		width: 44,
-		height: 32,
-		marginRight: 9,
-	},
-	rightImage: {
-		backgroundColor: "transparent",
-		opacity: 0.6,
-		resizeMode: "center",
-		width: null,
-		height: 30,
-		marginLeft: 3,
-		marginRight: 2,
-	},
-	circleImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 16,
-		marginLeft: 12,
-		marginRight: 17,
-	},
-	leftDotView: {
-		backgroundColor: "transparent",
-		width: 44,
-		height: 32,
-		marginRight: 47,
-	},
-	leftImage: {
-		backgroundColor: "transparent",
-		opacity: 0.61,
-		resizeMode: "center",
-		width: null,
-		height: 30,
-		marginLeft: 3,
-		marginRight: 2,
-	},
-	dotImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 6,
-		marginLeft: 13,
-		marginRight: 12,
-	},
-	group4Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 13,
-		height: 12,
-	},
-	orderHistoryText: {
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 12,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 10,
-	},
-	purchaseHistoryView: {
-		backgroundColor: "white",
-		shadowColor: "rgba(226, 226, 226, 0.5)",
-		shadowRadius: 4,
-		shadowOpacity: 1,
-		height: 39,
-		flexDirection: "row",
-		alignItems: "flex-start",
-	},
-	purchaseHistoryText: {
-		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 26,
-		marginTop: 15,
+		marginLeft: 20 * alpha,
 	},
 	seeAllText: {
-		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
-		fontSize: 9,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
 		backgroundColor: "transparent",
-		marginRight: 6,
-		marginTop: 17,
+		color: "rgb(102, 101, 101)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		marginRight: 5 * alpha,
 	},
 	groupImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
-		flex: 1,
-		height: 8,
-		marginLeft: 6,
-		marginRight: 24,
-		marginTop: 20,
+		width: 7 * alpha,
+		height: 8 * alpha,
+		marginRight: 20 * alpha,
 	},
-	rectangleView: {
-		backgroundColor: "rgb(244, 244, 244)",
+	orderHistoryFlatList: {
+		backgroundColor: "rgb(247, 247, 247)",
 		shadowColor: "rgba(238, 238, 238, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		height: 556,
-	},
-	orderlistFlatList: {
-		backgroundColor: "transparent",
+		shadowRadius: 1 * alpha,
+		shadowOpacity: 1 * alpha,
 		width: "100%",
 		height: "100%",
 	},
-	orderlistFlatListViewWrapper: {
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 10,
-		height: 546,
+	orderHistoryFlatListViewWrapper: {
+		flex: 1,
 	},
 })

@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
 	},
 	rightButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
+		fontFamily: "Helvetica",
 		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
 	},
 	leftButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
+		fontFamily: "Helvetica",
 		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -2,36 +2,36 @@
 //  Profile
 //  Brew9
 //
-//  Created by [Author].
+//  Created by .
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { TouchableOpacity, View, StyleSheet, Image, Text } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import React from "react"
-
+import { alpha, fontAlpha } from "../common/size";
 
 export default class Profile extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-	
+
 		const { params = {} } = navigation.state
 		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+			header: null,
+			headerLeft: null,
+			headerRight: null,
+		}
 	}
 
 	static tabBarItemOptions = ({ navigation }) => {
-	
+
 		return {
-				tabBarLabel: "Profile",
-				tabBarIcon: ({ iconTintColor }) => {
-				
-					return <Image
-							source={require("./../../assets/images/group-14-2.png")}/>
-				},
-			}
+			tabBarLabel: "Profile",
+			tabBarIcon: ({ iconTintColor }) => {
+
+				return <Image
+					source={require("./../../assets/images/group-14-2.png")}/>
+			},
+		}
 	}
 
 	constructor(props) {
@@ -39,474 +39,268 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
-	onRightPressed = () => {
-	
-	}
+	onLevelPressed = () => {
 
-	onLeftPressed = () => {
-	
-	}
-
-	onProfileButtonPressed = () => {
-	
-	}
-
-	onGoToVIPPressed = () => {
-	
 		const { navigate } = this.props.navigation
-		
+
+		navigate("MemberProfile")
+	}
+
+	onVIPPressed = () => {
+
+		const { navigate } = this.props.navigation
+
 		navigate("VIPPurchase")
 	}
 
 	onRewardButtonPressed = () => {
-	
+
 		const { navigate } = this.props.navigation
-		
+
 		navigate("MemberReward")
 	}
 
 	onPointButtonPressed = () => {
-	
+
 		const { navigate } = this.props.navigation
-		
+
 		navigate("PointHistory")
 	}
 
-	onVWalletButtonPressed = () => {
-	
+	onWalletButtonPressed = () => {
+
 		const { navigate } = this.props.navigation
-		
+
 		navigate("MemberWallet")
 	}
 
+	onMemberButtonPressed = () => {
+
+		const { navigate } = this.props.navigation
+
+		navigate("MemberProfile")
+	}
+
+	onOrderButtonPressed = () => {
+
+		const { navigate } = this.props.navigation
+
+		navigate("OrderHistory")
+	}
+
+	onPersonalButtonPressed = () => {
+
+		const { navigate } = this.props.navigation
+
+		navigate("MemberProfile")
+	}
+
+	onQRButtonTwoPressed = () => {
+
+	}
+
+	onRedeemButtonTwoPressed = () => {
+
+	}
+
+	onNotificationButtonPressed = () => {
+
+	}
+
+	onPointShopPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("PointShop")
+	}
+
+	onClubPressed = () => {
+
+	}
+
 	render() {
-	
+
 		return <View
-				style={styles.iphone8Copy7View}>
-				<View
-					style={styles.contentView}>
+			style={styles.profileView}>
+				<ScrollView
+					style={styles.scrollScrollView}>
 					<View
-						style={styles.headerView}>
+						style={styles.topsectionView}>
+						<Image
+							source={require("./../../assets/images/brew9-doodle-02.png")}
+							style={styles.backgroundImage}/>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
 								left: 0,
 								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/bg-02.png")}
-								style={styles.bg02Image}/>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								right: 0,
-								width: 375,
-								top: 10,
-								bottom: 20,
-								alignItems: "center",
+								top: 49 * alpha,
+								height: 146 * alpha,
 							}}>
 							<View
-								style={styles.menuView}>
+								pointerEvents="box-none"
+								style={{
+									height: 58 * alpha,
+									marginLeft: 21 * alpha,
+									marginRight: 21 * alpha,
+									flexDirection: "row",
+									alignItems: "flex-start",
+								}}>
+								<Image
+									source={require("./../../assets/images/profile-pic-4.png")}
+									style={styles.profilePicImage}/>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
+										width: 60 * alpha,
+										height: 48 * alpha,
+										marginLeft: 9 * alpha,
+										marginTop: 4 * alpha,
+										alignItems: "flex-start",
 									}}>
-									<View
-										style={styles.navrightbuttonView}>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<TouchableOpacity
-												onPress={this.onRightPressed}
-												style={styles.rightButton}>
-												<Image
-													source={require("./../../assets/images/right-7.png")}
-													style={styles.rightButtonImage}/>
-											</TouchableOpacity>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<Image
-												source={require("./../../assets/images/circle.png")}
-												style={styles.circleImage}/>
-										</View>
-									</View>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<View
-										style={styles.navleftbuttonView}>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<TouchableOpacity
-												onPress={this.onLeftPressed}
-												style={styles.leftButton}>
-												<Image
-													source={require("./../../assets/images/left-7.png")}
-													style={styles.leftButtonImage}/>
-											</TouchableOpacity>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<Image
-												source={require("./../../assets/images/dot.png")}
-												style={styles.dotImage}/>
-										</View>
-									</View>
-								</View>
-							</View>
-							<View
-								style={styles.membershipinfoView}>
-								<View
-									style={styles.memberView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-										}}>
+									<Text
+										style={styles.nameText}>Nobody</Text>
+									<TouchableOpacity
+										onPress={this.onLevelPressed}
+										style={styles.levelButton}>
 										<Text
-											style={styles.nameText}>Somebody</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											style={styles.levellabelView}>
-											<Text
-												style={styles.levelText}>Lv1</Text>
-										</View>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<TouchableOpacity
-											onPress={this.onProfileButtonPressed}
-											style={styles.profilebuttonButton}/>
-									</View>
+											style={styles.levelButtonText}>Lv2</Text>
+									</TouchableOpacity>
 								</View>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<View
-									style={styles.membershipView}>
+									pointerEvents="box-none"
+									style={{
+										width: 105 * alpha,
+										height: 51 * alpha,
+										marginTop: 5 * alpha,
+										alignItems: "flex-end",
+									}}>
 									<Text
-										style={styles.brew9memberText}>Brew9 member</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<View
-										style={styles.goToVipView}>
-										<TouchableOpacity
-											onPress={this.onGoToVIPPressed}
-											style={styles.goToVipButton}>
-											<Text
-												style={styles.goToVipButtonText}>Go to VIP</Text>
-										</TouchableOpacity>
+										style={styles.memberText}>Gold member</Text>
+									<TouchableOpacity
+										onPress={this.onVIPPressed}
+										style={styles.vipButton}>
+										<Text
+											style={styles.vipButtonText}>2020-06-19 expired</Text>
 										<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
-									</View>
+											source={require("./../../assets/images/arrow-2.png")}
+											style={styles.vipButtonImage}/>
+									</TouchableOpacity>
 								</View>
 							</View>
 							<View
-								style={{
-									flex: 1,
-								}}/>
-							<View
-								style={styles.pointsView}>
+								style={styles.memberpointsinfoView}>
 								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										alignSelf: "center",
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<View
-										style={styles.rewardpointsView}>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-											}}>
-											<Text
-												style={styles.pointsText}>0</Text>
-											<View
-												style={{
-													flex: 1,
-												}}/>
-											<Text
-												style={styles.rewardlabelText}>Reward </Text>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<TouchableOpacity
-												onPress={this.onRewardButtonPressed}
-												style={styles.rewardbuttonButton}/>
-										</View>
-									</View>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
+									style={styles.pointviewView}>
 									<View
 										pointerEvents="box-none"
 										style={{
-											height: 54,
-											marginLeft: 49,
-											marginRight: 16,
-											flexDirection: "row",
+											position: "absolute",
+											alignSelf: "center",
+											width: 37 * alpha,
+											top: 0,
+											height: 47 * alpha,
+											alignItems: "center",
+										}}>
+										<Text
+											style={styles.pointvalueText}>843</Text>
+										<Text
+											style={styles.pointText}>Point </Text>
+									</View>
+									<TouchableOpacity
+										onPress={this.onPointButtonPressed}
+										style={styles.pointbuttonButton}>
+										<Text
+											style={styles.pointbuttonButtonText}></Text>
+									</TouchableOpacity>
+								</View>
+								<View
+									style={styles.rewardviewView}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											width: 49 * alpha,
+											top: 0,
+											height: 47 * alpha,
+											alignItems: "center",
+										}}>
+										<Text
+											style={styles.rewardvalueText}>7</Text>
+										<Text
+											style={styles.rewardText}>Reward </Text>
+									</View>
+									<TouchableOpacity
+										onPress={this.onRewardButtonPressed}
+										style={styles.rewardbuttonButton}>
+										<Text
+											style={styles.rewardbuttonButtonText}></Text>
+									</TouchableOpacity>
+								</View>
+								<View
+									style={styles.walletviewView}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											width: 75 * alpha,
+											top: 0,
+											height: 47 * alpha,
 											alignItems: "center",
 										}}>
 										<View
-											style={styles.memberpointsView}>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													bottom: 0,
-												}}>
-												<Text
-													style={styles.pointsTwoText}>0</Text>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.memberlabelText}>Point </Text>
-											</View>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													bottom: 0,
-													justifyContent: "center",
-												}}>
-												<TouchableOpacity
-													onPress={this.onPointButtonPressed}
-													style={styles.pointbuttonButton}/>
-											</View>
-										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View
-											style={styles.walletcreditsView}>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 19,
-													top: 4,
-													bottom: 0,
-													alignItems: "flex-start",
-												}}>
-												<View
-													style={styles.creditviewView}>
-													<Text
-														style={styles.currencyText}>RM</Text>
-													<Text
-														style={styles.creditsText}>0.00</Text>
-												</View>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<Text
-													style={styles.walletlabelText}>Wallet </Text>
-											</View>
+											style={styles.walletvalueView}>
 											<Text
-												style={styles.nonActiveText}>non-active</Text>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													bottom: 0,
-													justifyContent: "center",
-												}}>
-												<TouchableOpacity
-													onPress={this.onVWalletButtonPressed}
-													style={styles.walletbuttonButton}/>
-											</View>
+												style={styles.rmText}>RM</Text>
+											<Text
+												style={styles.textText}>30.00</Text>
 										</View>
+										<Text
+											style={styles.walletText}>Wallet </Text>
 									</View>
+									<TouchableOpacity
+										onPress={this.onWalletButtonPressed}
+										style={styles.buttonButton}>
+										<Text
+											style={styles.buttonButtonText}></Text>
+									</TouchableOpacity>
 								</View>
 							</View>
 						</View>
 					</View>
 					<View
-						style={styles.contentTwoView}>
+						style={styles.midsectionView}>
 						<View
-							style={styles.membershipLevelView}>
-							<View
-								style={styles.membershipTwoView}>
-								<Image
-									source={require("./../../assets/images/group-14-7.png")}
-									style={styles.membershipiconImage}/>
-								<View
-									style={{
-										flex: 1,
-									}}/>
+							style={styles.viewTwoView}>
+							<TouchableOpacity
+								onPress={this.onClubPressed}
+								style={styles.clubbuttonButton}>
 								<Text
-									style={styles.memberlevelText}>Member Club</Text>
-							</View>
+									style={styles.clubbuttonButtonText}></Text>
+							</TouchableOpacity>
 							<View
+								pointerEvents="box-none"
 								style={{
-									flex: 1,
-								}}/>
-							<View
-								style={styles.pointRewardView}>
-								<Image
-									source={require("./../../assets/images/group-7.png")}
-									style={styles.pointsiconImage}/>
+									position: "absolute",
+									alignSelf: "center",
+									width: 54 * alpha,
+									top: 17 * alpha,
+									height: 55 * alpha,
+									alignItems: "center",
+								}}>
 								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.pointRewardText}>Point Reward</Text>
-							</View>
-						</View>
-						<View
-							style={styles.profilesView}>
-							<View
-								style={styles.memberStatusView}>
-								<Image
-									source={require("./../../assets/images/group-3-8.png")}
-									style={styles.statusiconImage}/>
-								<Text
-									style={styles.memberStatusText}>Member Status</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.memberdesciprionText}>Upgrade Member</Text>
-							</View>
-							<View
-								style={styles.orderHistoryView}>
-								<Image
-									source={require("./../../assets/images/group-14-8.png")}
-									style={styles.historyiconImage}/>
-								<Text
-									style={styles.orderHistoryText}>Order History</Text>
-							</View>
-							<View
-								style={styles.personalInfoView}>
-								<Image
-									source={require("./../../assets/images/group-8-2.png")}
-									style={styles.personaliconImage}/>
-								<Text
-									style={styles.personalInfoText}>Personal Info</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.personaldescriptionText}>Update Info</Text>
-							</View>
-							<View
-								style={styles.qrCodeView}>
-								<View
-									style={styles.qriconView}>
+									style={styles.vipiconView}>
 									<Image
-										source={require("./../../assets/images/group-3-3.png")}
+										source={require("./../../assets/images/group-3-12.png")}
 										style={styles.group3Image}/>
 									<View
 										pointerEvents="box-none"
@@ -519,288 +313,529 @@ export default class Profile extends React.Component {
 											justifyContent: "center",
 										}}>
 										<Image
-											source={require("./../../assets/images/clip-5-8.png")}
-											style={styles.clip5Image}/>
+											source={require("./../../assets/images/group-8-13.png")}
+											style={styles.group8Image}/>
 									</View>
 								</View>
 								<Text
-									style={styles.qrCodeText}>QR Code</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.qrdescriptionText}>Scan for reward or pay</Text>
+									style={styles.vipClubText}>VIP Club</Text>
+							</View>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<View
+							style={styles.viewView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									alignSelf: "center",
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<TouchableOpacity
+									onPress={this.onPointShopPressed}
+									style={styles.pointshopbuttonButton}>
+									<Text
+										style={styles.pointshopbuttonButtonText}></Text>
+								</TouchableOpacity>
 							</View>
 							<View
-								style={styles.exchangeStationView}>
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									alignSelf: "center",
+									width: 84 * alpha,
+									top: 22 * alpha,
+									height: 50 * alpha,
+									alignItems: "center",
+								}}>
 								<Image
-									source={require("./../../assets/images/group-12-5.png")}
-									style={styles.redeemiconImage}/>
+									source={require("./../../assets/images/group-7-2.png")}
+									style={styles.pointiconImage}/>
 								<Text
-									style={styles.redeemStationText}>Redeem Station</Text>
+									style={styles.pointRewardText}>Point Reward</Text>
+							</View>
+						</View>
+					</View>
+				<View
+					style={styles.bottomsectionView}>
+					<View
+						style={styles.memberStatusView}>
+						<TouchableOpacity
+							onPress={this.onMemberButtonPressed}
+							style={styles.memberbuttonButton}>
+							<Text
+								style={styles.memberbuttonButtonText}></Text>
+						</TouchableOpacity>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 19 * alpha,
+									marginLeft: 30 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-5-4.png")}
+									style={styles.membericonImage}/>
+								<Text
+									style={styles.memberStatusText}>Member Status</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.redeemdescriptionText}>Redeem for member or voucher</Text>
+									style={styles.upgradeMemberText}>Upgrade Member</Text>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.orderhistoryView}>
+						<TouchableOpacity
+							onPress={this.onOrderButtonPressed}
+							style={styles.orderbuttonButton}>
+							<Text
+								style={styles.orderbuttonButtonText}></Text>
+						</TouchableOpacity>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 22 * alpha,
+									marginLeft: 30 * alpha,
+									marginRight: 237 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-9-5.png")}
+									style={styles.ordericonImage}/>
+								<Text
+									style={styles.orderHistoryText}>Order History</Text>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.personalInfoView}>
+						<TouchableOpacity
+							onPress={this.onPersonalButtonPressed}
+							style={styles.personalbuttonButton}>
+							<Text
+								style={styles.personalbuttonButtonText}></Text>
+						</TouchableOpacity>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 107 * alpha,
+									height: 20 * alpha,
+									marginLeft: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<View
+									style={styles.personaliconView}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											left: 0,
+											right: 0,
+											top: 0,
+											bottom: 0,
+											justifyContent: "center",
+										}}>
+										<Image
+											source={require("./../../assets/images/group-3-13.png")}
+											style={styles.group3TwoImage}/>
+									</View>
+									<Image
+										source={require("./../../assets/images/group-6-7.png")}
+										style={styles.group6Image}/>
+								</View>
+								<Text
+									style={styles.personalInfoText}>Personal Info</Text>
+							</View>
+						</View>
+					</View>
+					<View
+						pointerEvents="box-none"
+						style={{
+							height: 98 * alpha,
+						}}>
+						<View
+							style={styles.qrCodeView}>
+							<TouchableOpacity
+								onPress={this.onQRButtonTwoPressed}
+								style={styles.qrbuttonButton}>
+								<Text
+									style={styles.qrbuttonButtonText}></Text>
+							</TouchableOpacity>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 30 * alpha,
+										marginRight: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<View
+										style={styles.qriconView}>
+										<Image
+											source={require("./../../assets/images/group-3-3.png")}
+											style={styles.group3ThreeImage}/>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/clip-5-11.png")}
+												style={styles.clip5Image}/>
+										</View>
+									</View>
+									<Text
+										style={styles.qrCodeText}>QR Code</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.qrDescriptionText}>Scan for reward or pay</Text>
+								</View>
+							</View>
+						</View>
+						<View
+							style={styles.redeemStationView}>
+							<TouchableOpacity
+								onPress={this.onRedeemButtonTwoPressed}
+								style={styles.redeembuttonButton}>
+								<Text
+									style={styles.redeembuttonButtonText}></Text>
+							</TouchableOpacity>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 17 * alpha,
+										marginLeft: 30 * alpha,
+										marginRight: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<View
+										style={styles.redeemiconView}>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/group-5-5.png")}
+												style={styles.group5Image}/>
+										</View>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/stroke-6-2.png")}
+												style={styles.stroke6Image}/>
+										</View>
+									</View>
+									<Text
+										style={styles.redeemStationText}>Redeem Station</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.redeemDescriptionText}>Redeem voucher</Text>
+								</View>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.notificationView}>
+						<TouchableOpacity
+							onPress={this.onNotificationButtonPressed}
+							style={styles.notificationbuttonButton}>
+							<Text
+								style={styles.notificationbuttonButtonText}></Text>
+						</TouchableOpacity>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 97 * alpha,
+									height: 20 * alpha,
+									marginLeft: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-9-6.png")}
+									style={styles.notificationiconImage}/>
+								<Text
+									style={styles.notificationText}>Notification</Text>
 							</View>
 						</View>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
+		</View>
 	}
 }
-
 const styles = StyleSheet.create({
-	iphone8Copy7View: {
-		backgroundColor: "rgb(243, 243, 243)",
+	amendedView: {
+		backgroundColor: "white",
 		flex: 1,
 	},
-	contentView: {
+	scrollScrollView: {
 		backgroundColor: "transparent",
-		flex: 1,
-		marginTop: 20,
-		marginBottom: 49,
+		height: 603 * alpha,
+		marginTop: 20 * alpha,
 	},
-	headerView: {
+	topsectionView: {
 		backgroundColor: "transparent",
+		height: 213 * alpha,
+	},
+	backgroundImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
 		position: "absolute",
 		left: 0,
 		right: 0,
 		top: 0,
-		height: 212,
+		bottom: 0,
+		height: 213 * alpha,
 	},
-	bg02Image: {
+	profilePicImage: {
+		resizeMode: "center",
 		backgroundColor: "transparent",
-		resizeMode: "cover",
-		width: null,
-		height: 210,
-	},
-	menuView: {
-		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 82,
-		height: 32,
-		marginRight: 9,
-	},
-	navrightbuttonView: {
-		backgroundColor: "transparent",
-		width: 44,
-		height: 32,
-	},
-	rightButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		height: 30,
-		marginLeft: 3,
-		marginRight: 2,
-	},
-	rightButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	rightButtonImage: {
-		resizeMode: "contain",
-	},
-	circleImage: {
-		backgroundColor: "transparent",
-		resizeMode: "contain",
-		width: null,
-		height: 16,
-		marginLeft: 12,
-		marginRight: 17,
-	},
-	navleftbuttonView: {
-		backgroundColor: "transparent",
-		width: 44,
-		height: 32,
-	},
-	leftButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		height: 30,
-		marginLeft: 3,
-		marginRight: 2,
-	},
-	leftButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	leftButtonImage: {
-		resizeMode: "contain",
-	},
-	dotImage: {
-		backgroundColor: "transparent",
-		resizeMode: "contain",
-		width: null,
-		height: 6,
-		marginLeft: 13,
-		marginRight: 12,
-	},
-	membershipinfoView: {
-		backgroundColor: "transparent",
-		width: 375,
-		height: 40,
-		marginTop: 26,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	memberView: {
-		backgroundColor: "transparent",
-		width: 72,
-		height: 40,
-		marginLeft: 78,
+		width: 58 * alpha,
+		height: 58 * alpha,
 	},
 	nameText: {
 		backgroundColor: "transparent",
-		color: "rgb(73, 73, 73)",
+		color: "rgb(51, 49, 49)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 14,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
 	},
-	levellabelView: {
-		backgroundColor: "rgb(67, 67, 67)",
-		borderRadius: 8.5,
-		height: 17,
-		marginLeft: 11,
-		marginRight: 13,
-		justifyContent: "center",
-	},
-	levelText: {
+	levelButtonText: {
 		color: "white",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	levelButton: {
+		backgroundColor: "rgb(50, 50, 50)",
+		borderRadius: 8.5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 48 * alpha,
+		height: 17 * alpha,
+		marginTop: 12 * alpha,
+	},
+	levelButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	memberText: {
+		backgroundColor: "transparent",
+		color: "rgb(51, 49, 49)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	vipButtonText: {
+		color: "rgb(108, 108, 108)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 8 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	vipButton: {
+		backgroundColor: "rgba(255, 253, 253, 0.28)",
+		borderRadius: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0 * alpha,
+		width: 105 * alpha,
+		height: 23 * alpha,
+		marginTop: 10 * alpha,
+	},
+	vipButtonImage: {
+		resizeMode: "contain",
+		marginLeft: 10 * alpha,
+	},
+	memberpointsinfoView: {
+		backgroundColor: "transparent",
+		height: 47 * alpha,
+		marginTop: 41 * alpha,
+		flexDirection: "row",
+		alignItems: "flex-start",
+	},
+	pointviewView: {
+		backgroundColor: "transparent",
+		width: 125 * alpha,
+		height: 47 * alpha,
+	},
+	pointvalueText: {
+		color: "rgb(32, 32, 32)",
+		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginLeft: 17,
-		marginRight: 14,
 	},
-	profilebuttonButton: {
+	pointText: {
+		color: "rgb(32, 32, 32)",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginTop: 7 * alpha,
+	},
+	pointbuttonButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 40,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
 	},
-	profilebuttonButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12,
+	pointbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	pointbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	profilebuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	membershipView: {
+	rewardviewView: {
 		backgroundColor: "transparent",
-		width: 82,
-		height: 38,
-		marginRight: 16,
-	},
-	brew9memberText: {
-		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-	},
-	goToVipView: {
-		backgroundColor: "rgb(216, 216, 216)",
-		borderRadius: 8.5,
-		height: 17,
-		marginLeft: 10,
-		marginRight: 4,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	goToVipButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
 		flex: 1,
-		height: 11,
-		marginLeft: 8,
-		marginRight: 6,
+		alignSelf: "stretch",
 	},
-	goToVipButtonText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 9,
+	rewardvalueText: {
+		backgroundColor: "transparent",
+		color: "rgb(32, 32, 32)",
+		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 	},
-	goToVipButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10,
-	},
-	arrowImage: {
+	rewardText: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 7,
-		height: 8,
-		marginRight: 8,
-	},
-	pointsView: {
-		backgroundColor: "transparent",
-		width: 375,
-		height: 54,
-	},
-	rewardpointsView: {
-		backgroundColor: "transparent",
-		width: 60,
-		height: 50,
-	},
-	pointsText: {
-		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
+		color: "rgb(32, 32, 32)",
 		fontFamily: "Helvetica",
-		fontSize: 25,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		alignSelf: "center",
-	},
-	rewardlabelText: {
-		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 16,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
+		marginTop: 7 * alpha,
 	},
 	rewardbuttonButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12,
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -811,365 +846,532 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 50,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
 	},
 	rewardbuttonButtonImage: {
 		resizeMode: "contain",
 	},
-	memberpointsView: {
+	walletviewView: {
 		backgroundColor: "transparent",
-		width: 41,
-		height: 50,
+		width: 125 * alpha,
+		height: 47 * alpha,
+		marginRight: 1,
 	},
-	pointsTwoText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 25,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
+	walletvalueView: {
 		backgroundColor: "transparent",
-		marginLeft: 13,
-		marginRight: 14,
-	},
-	memberlabelText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 16,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	pointbuttonButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		height: 50,
-	},
-	pointbuttonButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	pointbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	walletcreditsView: {
-		backgroundColor: "transparent",
-		width: 85,
-		height: 53,
-	},
-	creditviewView: {
-		backgroundColor: "transparent",
-		alignSelf: "stretch",
-		height: 30,
+		width: 75 * alpha,
+		height: 24 * alpha,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
-	currencyText: {
-		color: "rgb(91, 91, 91)",
+	rmText: {
+		backgroundColor: "transparent",
+		color: "rgb(32, 32, 32)",
 		fontFamily: "Helvetica",
-		fontSize: 8,
+		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "transparent",
-		marginTop: 14,
+		marginTop: 12 * alpha,
 	},
-	creditsText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 25,
+	textText: {
+		color: "rgb(32, 32, 32)",
+		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
 		flex: 1,
-		marginLeft: 4,
+		alignSelf: "center",
+		marginLeft: 3 * alpha,
 	},
-	walletlabelText: {
-		color: "rgb(91, 91, 91)",
+	walletText: {
+		backgroundColor: "transparent",
+		color: "rgb(32, 32, 32)",
 		fontFamily: "Helvetica",
-		fontSize: 16,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "transparent",
-		marginLeft: 10,
+		marginTop: 7 * alpha,
 	},
-	nonActiveText: {
-		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 7,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		position: "absolute",
-		right: 0,
-		top: 0,
-	},
-	walletbuttonButton: {
+	buttonButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 53,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
 	},
-	walletbuttonButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12,
+	buttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	walletbuttonButtonImage: {
+	buttonButtonImage: {
 		resizeMode: "contain",
 	},
-	contentTwoView: {
-		backgroundColor: "white",
+	midsectionView: {
+		backgroundColor: "transparent",
+		height: 90 * alpha,
+		marginRight: 1,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	viewView: {
+		backgroundColor: "transparent",
+		width: 146 * alpha,
+		height: 90 * alpha,
+		marginRight: 41 * alpha,
+	},
+	viewTwoView: {
+		backgroundColor: "transparent",
+		width: 146 * alpha,
+		height: 90 * alpha,
+		marginLeft: 41 * alpha,
+	},
+	pointshopbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0 * alpha,
+		width: 146 * alpha,
+		height: 90 * alpha,
+	},
+	pointshopbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	pointshopbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	clubbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
 		position: "absolute",
 		left: 0,
 		right: 0,
-		top: 211,
-		height: 386,
+		top: 0,
+		bottom: 0,
 	},
-	membershipLevelView: {
-		backgroundColor: "transparent",
-		alignSelf: "center",
-		width: 219,
-		height: 48,
-		marginTop: 40,
-		flexDirection: "row",
-		alignItems: "flex-start",
+	clubbuttonButtonImage: {
+		resizeMode: "contain",
 	},
-	membershipTwoView: {
-		backgroundColor: "transparent",
-		width: 67,
-		height: 43,
-		marginTop: 5,
-	},
-	membershipiconImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 22,
-		marginLeft: 16,
-		marginRight: 15,
-	},
-	memberlevelText: {
-		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
+	clubbuttonButtonText: {
+		color: "white",
 		fontFamily: "Helvetica",
-		fontSize: 11,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 	},
-	pointRewardView: {
-		backgroundColor: "transparent",
-		alignSelf: "center",
-		width: 67,
-		height: 48,
-		alignItems: "flex-start",
-	},
-	pointsiconImage: {
+	pointiconImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: 27,
-		height: 27,
-		marginLeft: 20,
+		width: 28 * alpha,
+		height: 27 * alpha,
 	},
 	pointRewardText: {
 		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 11,
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "normal",
+		fontWeight: "bold",
 		textAlign: "center",
-		alignSelf: "stretch",
+		marginTop: 7 * alpha,
 	},
-	profilesView: {
+	vipiconView: {
 		backgroundColor: "transparent",
-		height: 248,
-		marginTop: 34,
-	},
-	memberStatusView: {
-		backgroundColor: "transparent",
-		height: 44,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	statusiconImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 19,
-		height: 21,
-		marginLeft: 38,
-	},
-	memberStatusText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 11,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginLeft: 23,
-	},
-	memberdesciprionText: {
-		color: "rgb(184, 180, 180)",
-		fontFamily: "Helvetica",
-		fontSize: 10,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "right",
-		backgroundColor: "transparent",
-		marginRight: 38,
-	},
-	orderHistoryView: {
-		backgroundColor: "transparent",
-		height: 44,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	historyiconImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 18,
-		height: 23,
-		marginLeft: 38,
-	},
-	orderHistoryText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 11,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginLeft: 24,
-	},
-	personalInfoView: {
-		backgroundColor: "transparent",
-		height: 44,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	personaliconImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 21,
-		height: 21,
-		marginLeft: 38,
-	},
-	personalInfoText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 11,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginLeft: 21,
-	},
-	personaldescriptionText: {
-		color: "rgb(184, 180, 180)",
-		fontFamily: "Helvetica",
-		fontSize: 10,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "right",
-		backgroundColor: "transparent",
-		marginRight: 38,
-	},
-	qrCodeView: {
-		backgroundColor: "transparent",
-		height: 44,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	qriconView: {
-		backgroundColor: "transparent",
-		width: 18,
-		height: 18,
-		marginLeft: 38,
+		width: 20 * alpha,
+		height: 31 * alpha,
 	},
 	group3Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 9,
-		top: 0,
-		height: 9,
+		left: 3 * alpha,
+		right: 4 * alpha,
+		top: 6 * alpha,
+		height: 13 * alpha,
 	},
-	clip5Image: {
+	group8Image: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: null,
+		height: 31 * alpha,
+		marginRight: 1 * alpha,
+	},
+	vipClubText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginTop: 8 * alpha,
+	},
+
+	bottomsectionView: {
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		width: 375 * alpha,
+		height: 300 * alpha,
+		marginRight: 1,
+	},
+	memberStatusView: {
+		backgroundColor: "transparent",
+		height: 50 * alpha,
+	},
+	memberbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	memberbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	memberbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	membericonImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 19 * alpha,
+	},
+	memberStatusText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 11 * alpha,
+	},
+	upgradeMemberText: {
+		backgroundColor: "transparent",
+		color: "rgb(184, 180, 180)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	orderhistoryView: {
+		backgroundColor: "transparent",
+		height: 50 * alpha,
+	},
+	orderbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	orderbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	orderbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	ordericonImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
+		width: 15 * alpha,
+		height: 22 * alpha,
+	},
+	orderHistoryText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		flex: 1,
+		marginLeft: 15 * alpha,
+	},
+	personalInfoView: {
+		backgroundColor: "transparent",
+		height: 50 * alpha,
+	},
+	personalbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	personalbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	personalbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	personaliconView: {
+		backgroundColor: "transparent",
+		width: 20 * alpha,
+		height: 20 * alpha,
+	},
+	group3TwoImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
 		width: null,
-		height: 19,
+		height: 17 * alpha,
+	},
+	group6Image: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		position: "absolute",
+		left: 3 * alpha,
+		right: 4 * alpha,
+		top: 1 * alpha,
+		height: 6 * alpha,
+	},
+	personalInfoText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 10 * alpha,
+	},
+	qrCodeView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0,
+		right: 1 * alpha,
+		top: 0,
+		height: 50 * alpha,
+	},
+	qrbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	qrbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	qrbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	qriconView: {
+		backgroundColor: "transparent",
+		width: 18 * alpha,
+		height: 18 * alpha,
+	},
+	group3ThreeImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		position: "absolute",
+		left: 0,
+		right: 9 * alpha,
+		top: 0,
+		height: 9 * alpha,
+	},
+	clip5Image: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: null,
+		height: 19 * alpha,
 	},
 	qrCodeText: {
 		backgroundColor: "transparent",
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 12 * alpha,
+	},
+	qrDescriptionText: {
+		color: "rgb(184, 180, 180)",
+		fontFamily: "Helvetica-Bold",
 		fontSize: 11,
 		fontStyle: "normal",
-		fontWeight: "normal",
+		fontWeight: "bold",
 		textAlign: "center",
-		marginLeft: 24,
-	},
-	qrdescriptionText: {
 		backgroundColor: "transparent",
-		color: "rgb(184, 180, 180)",
-		fontFamily: "Helvetica",
-		fontSize: 10,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "right",
-		marginRight: 36,
 	},
-	exchangeStationView: {
+	redeemStationView: {
 		backgroundColor: "transparent",
-		height: 44,
+		position: "absolute",
+		left: 1,
+		right: 0,
+		top: 48 * alpha,
+		height: 50 * alpha,
+	},
+	redeembuttonButton: {
+		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
 	},
-	redeemiconImage: {
+	redeembuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	redeembuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	redeemiconView: {
+		backgroundColor: "transparent",
+		width: 20 * alpha,
+		height: 17 * alpha,
+	},
+	group5Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: 20,
-		height: 21,
-		marginLeft: 38,
+		width: null,
+		height: 16 * alpha,
+	},
+	stroke6Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 8 * alpha,
+		marginLeft: 14 * alpha,
+		marginRight: 3 * alpha,
 	},
 	redeemStationText: {
-		color: "rgb(91, 91, 91)",
-		fontFamily: "Helvetica",
-		fontSize: 11,
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 10 * alpha,
+	},
+	redeemDescriptionText: {
+		color: "rgb(184, 180, 180)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginLeft: 22,
 	},
-	redeemdescriptionText: {
-		color: "rgb(184, 180, 180)",
+	notificationView: {
+		backgroundColor: "transparent",
+		height: 50 * alpha,
+	},
+	notificationbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 1 * alpha,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	notificationbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	notificationbuttonButtonText: {
+		color: "white",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "right",
+		textAlign: "left",
+	},
+	notificationiconImage: {
 		backgroundColor: "transparent",
-		marginRight: 38,
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 20 * alpha,
+	},
+	notificationText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginLeft: 11 * alpha,
 	},
 })

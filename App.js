@@ -25,6 +25,9 @@ import VIPPurchase from "./App/VIPPurchase/VIPPurchase"
 import PointHistory from "./App/PointHistory/PointHistory"
 import Transaction from "./App/Transaction/Transaction"
 import OrderHistory from "./App/OrderHistory/OrderHistory"
+import PointShop from "./App/PointShop/PointShop"
+import PointShopItem from "./App/PointShopItem/PointShopItem"
+import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
 import {createStore, applyMiddleware} from 'redux';
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -82,6 +85,15 @@ const PushRouteThree = createStackNavigator({
 	},
 	OrderHistory: {
 		screen: OrderHistory,
+	},
+	PointShop: {
+		screen: PointShop,
+	},
+	PointShopItem: {
+		screen: PointShopItem,
+	},
+	PointShopHistory: {
+		screen: PointShopHistory,
 	},
 	MemberProfile: {
 		screen: MemberProfile,
