@@ -9,11 +9,7 @@ class PushRequestObject extends BaseRequestObject{
         this.push_identifier = push_identifier
         this.os = os
     }
-
-    setUrlId(url_id){
-        this.url_id = url_id
-    }
-    
+  
     getUrlString() {
        return `members/${this.url_id}/store_push_token`
    }

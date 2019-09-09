@@ -6,17 +6,8 @@ class PointStatementRequestObject extends BaseRequestObject{
         super();
     }
 
-    setUrlId(url_id){
-        this.url_id = url_id
-    }
-
-    setPage(page) {
-        this.page_no = page
-    }
-
     getUrlString() {
         return `members/${this.url_id}/pointHistory`
     }
-
 }
 export default PointStatementRequestObject
