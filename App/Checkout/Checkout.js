@@ -2,24 +2,38 @@
 //  Checkout
 //  Brew9
 //
-//  Created by [Author].
+//  Created by .
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native"
+import { TextInput, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
 import React from "react"
-
+import { alpha, fontAlpha } from "../common/size";
 
 export default class Checkout extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-	
+
 		const { params = {} } = navigation.state
 		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+			title: "Checkout",
+			headerTintColor: "black",
+			headerLeft: <View
+				style={styles.headerLeftContainer}>
+				<TouchableOpacity
+					onPress={params.onBackPressed ? params.onBackPressed : () => null}
+					style={styles.navigationBarItem}>
+					<Image
+						source={require("./../../assets/images/back.png")}
+						style={styles.navigationBarItemIcon}/>
+				</TouchableOpacity>
+			</View>,
+			headerRight: null,
+			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
+			},
+		}
 	}
 
 	constructor(props) {
@@ -27,22 +41,352 @@ export default class Checkout extends React.Component {
 	}
 
 	componentDidMount() {
-	
+		this.props.navigation.setParams({
+			onBackPressed: this.onBackPressed,
+			onItemPressed: this.onItemPressed,
+		})
+	}
+
+	onBackPressed = () => {
+
+		this.props.navigation.goBack()
+	}
+
+	onBranchButtonPressed = () => {
+
+	}
+
+	onLocationButtonPressed = () => {
+
+	}
+
+	onDeliveryButtonPressed = () => {
+
+	}
+
+	onButtonPressed = () => {
+
+	}
+
+	onAutoFillPressed = () => {
+
+	}
+
+	onPromoCodePressed = () => {
+
+	}
+
+	onPaymentMethodPressed = () => {
+
 	}
 
 	onPayNowPressed = () => {
-	
+
 		const { navigate } = this.props.navigation
-		
+
 		navigate("Transaction")
 	}
 
 	render() {
-	
+
 		return <View
-				style={styles.iphone8Copy5View}>
+			style={styles.checkoutView}>
+			<ScrollView
+				style={styles.scrollviewScrollView}>
 				<View
-					style={styles.navigationView}>
+					style={styles.branchView}>
+					<View
+						style={styles.branchTwoView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								alignSelf: "stretch",
+								height: 31 * alpha,
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
+							<TouchableOpacity
+								onPress={this.onBranchButtonPressed}
+								style={styles.branchbuttonButton}>
+								<Text
+									style={styles.branchbuttonButtonText}>Branch</Text>
+								<Image
+									source={require("./../../assets/images/group-2.png")}
+									style={styles.branchbuttonButtonImage}/>
+							</TouchableOpacity>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<TouchableOpacity
+								onPress={this.onLocationButtonPressed}
+								style={styles.locationbuttonButton}>
+								<Image
+									source={require("./../../assets/images/group-8-11.png")}
+									style={styles.locationbuttonButtonImage}/>
+							</TouchableOpacity>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.distanceText}>Distance 1km, please confirm your nearest branch</Text>
+					</View>
+					<View
+						pointerEvents="box-none"
+						style={{
+							height: 54 * alpha,
+							marginLeft: 15 * alpha,
+							marginRight: 15 * alpha,
+							marginTop: 23 * alpha,
+							flexDirection: "row",
+							alignItems: "flex-start",
+						}}>
+						<View
+							style={styles.selfPickUpView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 25 * alpha,
+									right: 0,
+									bottom: 0,
+									height: 39 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/pick-up-2.png")}
+									style={styles.pickUpImage}/>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<Text
+									style={styles.selfPickUpText}>Self Pick-up</Text>
+								<Image
+									source={require("./../../assets/images/fill-1-3.png")}
+									style={styles.fill1Image}/>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									alignSelf: "center",
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<TouchableOpacity
+									onPress={this.onButtonPressed}
+									style={styles.pickupbuttonButton}>
+									<Text
+										style={styles.pickupbuttonButtonText}></Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<View
+							style={styles.deliveryView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 23 * alpha,
+										marginLeft: 36 * alpha,
+										marginRight: 26 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/delivery-2.png")}
+										style={styles.deliveryImage}/>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.deliveryText}>Delivery</Text>
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									alignSelf: "center",
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<TouchableOpacity
+									onPress={this.onDeliveryButtonPressed}
+									style={styles.deliverybuttonButton}>
+									<Text
+										style={styles.deliverybuttonButtonText}></Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<View
+						style={styles.contactView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.contactText}>Contact</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<TouchableOpacity
+									onPress={this.onAutoFillPressed}
+									style={styles.autoFillButton}>
+									<Text
+										style={styles.autoFillButtonText}>Auto-fill</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								alignSelf: "center",
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<TextInput
+								autoCorrect={false}
+								placeholder="Drop your contact, so we can contact you"
+								style={styles.contactinputTextInput}/>
+						</View>
+					</View>
+				</View>
+				<View
+					style={styles.orderConfirmationView}>
+					<Text
+						style={styles.orderConfirmationText}>Order Confirmation</Text>
+					<View
+						style={styles.itemView}>
+						<Text
+							style={styles.nameText}>Espresso</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.quantityText}>X 2</Text>
+						<Text
+							style={styles.priceText}>RM20</Text>
+					</View>
+					<View
+						style={styles.itemTwoView}>
+						<Text
+							style={styles.nameTwoText}>Espresso</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.quantityTwoText}>X 2</Text>
+						<Text
+							style={styles.priceTwoText}>RM20</Text>
+					</View>
+					<View
+						style={styles.promoCodeView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 17 * alpha,
+									marginLeft: 16 * alpha,
+									marginRight: 16 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.promoCodeText}>Promo Code</Text>
+								<Image
+									source={require("./../../assets/images/group-10-2.png")}
+									style={styles.group10Image}/>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<Text
+									style={styles.noText}>No</Text>
+								<Image
+									source={require("./../../assets/images/group-4-5.png")}
+									style={styles.group4Image}/>
+							</View>
+						</View>
+						<TouchableOpacity
+							onPress={this.onPromoCodePressed}
+							style={styles.promocodeButton}>
+							<Text
+								style={styles.promocodeButtonText}>Click me</Text>
+						</TouchableOpacity>
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.totalText}>Total 3 units:</Text>
+				</View>
+			</ScrollView>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+				<View
+					style={styles.paymentMethodView}>
+					<TouchableOpacity
+						onPress={this.onPaymentMethodPressed}
+						style={styles.paymentmethodButton}>
+						<Text
+							style={styles.paymentmethodButtonText}></Text>
+					</TouchableOpacity>
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -54,839 +398,421 @@ export default class Checkout extends React.Component {
 							justifyContent: "center",
 						}}>
 						<View
-							style={styles.logoView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									style={styles.rightCircleView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/right-14.png")}
-											style={styles.rightImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/circle.png")}
-											style={styles.circleImage}/>
-									</View>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									style={styles.leftDotView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/left-14.png")}
-											style={styles.leftImage}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/dot.png")}
-											style={styles.dotImage}/>
-									</View>
-								</View>
-							</View>
-						</View>
-					</View>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								width: 99,
-								height: 14,
-								marginLeft: 21,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/group-4-3.png")}
-								style={styles.group4Image}/>
+							style={styles.paymentMethodTwoView}>
 							<Text
-								style={styles.shoppingCartText}>Shopping Cart</Text>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.contentView}>
-					<View
-						style={styles.deliveryView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-							}}>
-							<View
-								style={styles.groupView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 31,
-										flexDirection: "row",
-										alignItems: "flex-start",
-									}}>
-									<Text
-										style={styles.branchText}>Branch</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/group-8-11.png")}
-										style={styles.group8Image}/>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.distance1kmPleaseText}>Distance 1km, please confirm your nearest branch</Text>
-							</View>
+								style={styles.paymentMethodText}>Payment Method</Text>
 							<View
 								style={{
 									flex: 1,
 								}}/>
 							<View
-								pointerEvents="box-none"
-								style={{
-									height: 19,
-									marginLeft: 25,
-									marginRight: 21,
-									marginBottom: 12,
-									flexDirection: "row",
-									alignItems: "flex-end",
-								}}>
-								<Text
-									style={styles.contactText}>Contact</Text>
+								style={styles.group7View}>
 								<View
+									pointerEvents="box-none"
 									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.dropYourContactSText}>Drop your contact, so we can contact you</Text>
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-3-11.png")}
+										style={styles.group3Image}/>
+								</View>
 								<View
-									style={styles.autoFillView}>
-									<Text
-										style={styles.autoFillText}>Auto-fill</Text>
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-6-6.png")}
+										style={styles.group6Image}/>
 								</View>
 							</View>
 							<View
-								style={styles.rectangleView}/>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 52,
-									marginLeft: 25,
-									marginRight: 21,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<View
-									style={styles.selfPickUpView}>
-									<Image
-										source={require("./../../assets/images/pick-up.png")}
-										style={styles.pickUpImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.selfPickUpText}>Self Pick-up</Text>
-									<View
-										pointerEvents="box-none"
-										style={{
-											alignSelf: "flex-end",
-											width: 16,
-											height: 16,
-										}}>
-										<Image
-											source={require("./../../assets/images/fill-1-2.png")}
-											style={styles.fill1Image}/>
-										<Image
-											source={require("./../../assets/images/tick-2.png")}
-											style={styles.tickImage}/>
-									</View>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.deliveryTwoView}>
-									<Image
-										source={require("./../../assets/images/delivery.png")}
-										style={styles.deliveryImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.deliveryText}>Delivery</Text>
-								</View>
-							</View>
+								style={styles.ovalView}/>
+							<Image
+								source={require("./../../assets/images/group-4-5.png")}
+								style={styles.group4TwoImage}/>
 						</View>
 					</View>
+				</View>
+				<View
+					style={styles.remarkView}>
 					<View
-						style={styles.toPaymentView}>
-						<View
-							style={styles.orderConfirmationView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									style={styles.frapView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											alignSelf: "stretch",
-											width: 81,
-											alignItems: "flex-start",
-										}}>
-										<Text
-											style={styles.frappucinoText}>Frappucino</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<Text
-											style={styles.ventiText}>Venti</Text>
-									</View>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/x.png")}
-										style={styles.xCopyImage}/>
-									<Text
-										style={styles.textTwoText}>1</Text>
-									<Text
-										style={styles.rm12Text}>RM12</Text>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.orderConfirmationText}>Order Confirmation</Text>
-								<View
-									style={styles.espressoView}>
-									<Text
-										style={styles.espressoText}>Espresso</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/x.png")}
-										style={styles.xImage}/>
-									<Text
-										style={styles.textText}>2</Text>
-									<Text
-										style={styles.rm20Text}>RM20</Text>
-								</View>
-								<View
-									style={styles.promoCodeView}>
-									<Text
-										style={styles.promoCodeText}>Promo Code</Text>
-									<Image
-										source={require("./../../assets/images/group-10-2.png")}
-										style={styles.group10Image}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.noText}>No</Text>
-									<Image
-										source={require("./../../assets/images/group-4-5.png")}
-										style={styles.group4TwoImage}/>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.total3UnitsRm32Text}>Total 3 units,</Text>
-								<View
-									style={styles.rectangleTwoView}/>
-							</View>
-						</View>
-						<View
-							style={styles.paymentMethodView}>
-							<View
-								style={styles.paymentMethodTwoView}>
-								<Text
-									style={styles.paymentMethodText}>Payment Method</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.group7View}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/group-3-11.png")}
-											style={styles.group3Image}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/group-6-6.png")}
-											style={styles.group6Image}/>
-									</View>
-								</View>
-								<Image
-									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.group4ThreeImage}/>
-							</View>
-						</View>
+						style={styles.remarkTwoView}>
+						<Text
+							style={styles.remarkText}>Remark</Text>
 						<View
 							style={{
 								flex: 1,
 							}}/>
-						<View
-							style={styles.remarkView}>
-							<View
-								style={styles.remarkTwoView}>
-								<Text
-									style={styles.remarkText}>Remark</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.noSugarText}>No sugar</Text>
-								<Image
-									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.group4FourImage}/>
-							</View>
-						</View>
-						<View
-							style={styles.rectangleCopy4View}/>
+						<Text
+							style={styles.noSugarText}>No sugar</Text>
+						<Image
+							source={require("./../../assets/images/group-4-5.png")}
+							style={styles.group4ThreeImage}/>
 					</View>
 				</View>
 				<View
-					style={{
-						flex: 1,
-					}}/>
-				<View
-					style={styles.payNowView}>
+					style={styles.totalPayNowView}>
 					<Text
-						style={styles.rm32Text}>RM32</Text>
+						style={styles.priceThreeText}>RM32</Text>
 					<View
 						style={{
 							flex: 1,
 						}}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							width: 84,
-							height: 39,
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								style={styles.rectangleThreeView}/>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<TouchableOpacity
-								onPress={this.onPayNowPressed}
-								style={styles.payNowButton}>
-								<Text
-									style={styles.payNowButtonText}>Pay Now</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
+					<TouchableOpacity
+						onPress={this.onPayNowPressed}
+						style={styles.payNowButton}>
+						<Text
+							style={styles.payNowButtonText}>Pay Now</Text>
+					</TouchableOpacity>
 				</View>
-			</View>
+		</View>
 	}
 }
 
 const styles = StyleSheet.create({
-	iphone8Copy5View: {
-		backgroundColor: "white",
+	headerLeftContainer: {
+		flexDirection: "row",
+		marginLeft: 8 * alpha,
+	},
+	navigationBarItem: {
+
+	},
+	navigationBarItemTitle: {
+		color: "black",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+	},
+	navigationBarItemIcon: {
+		tintColor: "black",
+	},
+	scrollviewScrollView: {
+		backgroundColor: "transparent",
+		height: "100%",
+	},
+	checkoutView: {
+		backgroundColor: "rgb(247, 247, 247)",
 		flex: 1,
 	},
-	navigationView: {
-		backgroundColor: "transparent",
-		height: 52,
-		marginTop: 20,
-	},
-	logoView: {
+	branchView: {
 		backgroundColor: "white",
-		height: 52,
+		height: 173 * alpha,
 	},
-	rightCircleView: {
+	branchTwoView: {
 		backgroundColor: "transparent",
-		width: 44,
-		height: 32,
-		marginRight: 9,
+		height: 38 * alpha,
+		marginLeft: 15 * alpha,
+		marginRight: 15 * alpha,
+		marginTop: 14 * alpha,
+		alignItems: "flex-start",
 	},
-	rightImage: {
+	branchbuttonButton: {
 		backgroundColor: "transparent",
-		opacity: 0.6,
-		resizeMode: "center",
-		width: null,
-		height: 30,
-		marginLeft: 3,
-		marginRight: 2,
-	},
-	circleImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 16,
-		marginLeft: 12,
-		marginRight: 17,
-	},
-	leftDotView: {
-		backgroundColor: "transparent",
-		width: 44,
-		height: 32,
-		marginRight: 47,
-	},
-	leftImage: {
-		backgroundColor: "transparent",
-		opacity: 0.61,
-		resizeMode: "center",
-		width: null,
-		height: 30,
-		marginLeft: 3,
-		marginRight: 2,
-	},
-	dotImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 6,
-		marginLeft: 13,
-		marginRight: 12,
-	},
-	group4Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 13,
-		height: 12,
-	},
-	shoppingCartText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginLeft: 9,
-	},
-	contentView: {
-		backgroundColor: "transparent",
-		height: 613,
-		marginTop: 11,
-	},
-	deliveryView: {
-		backgroundColor: "transparent",
-		height: 152,
-	},
-	groupView: {
-		backgroundColor: "transparent",
-		alignSelf: "center",
-		width: 329,
-		height: 32,
-	},
-	branchText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 16,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	group8Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 23,
-		height: 23,
-		marginTop: 8,
-	},
-	distance1kmPleaseText: {
-		backgroundColor: "transparent",
-		color: "rgb(188, 181, 181)",
-		fontFamily: "Helvetica",
-		fontSize: 10,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		alignSelf: "flex-start",
-	},
-	contactText: {
-		color: "rgb(70, 76, 84)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginBottom: 2,
-	},
-	dropYourContactSText: {
-		color: "rgb(219, 212, 212)",
-		fontFamily: "Helvetica",
-		fontSize: 9,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginRight: 5,
-		marginBottom: 3,
-	},
-	autoFillView: {
-		backgroundColor: "transparent",
-		borderWidth: 1,
-		borderColor: "rgb(0, 178, 227)",
-		borderStyle: "solid",
-		width: 45,
-		height: 19,
+		flexDirection: "row",
+		alignItems: "center",
 		justifyContent: "center",
+		padding: 0,
+		width: 87 * alpha,
+		height: 22 * alpha,
 	},
-	autoFillText: {
-		color: "rgb(0, 178, 227)",
+	branchbuttonButtonImage: {
+		resizeMode: "contain",
+		marginLeft: 10 * alpha,
+	},
+	branchbuttonButtonText: {
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 8,
+		fontSize: 18 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	locationbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		alignSelf: "center",
+		width: 23 * alpha,
+		height: 23 * alpha,
+	},
+	locationbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	locationbuttonButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	distanceText: {
+		color: "rgb(163, 163, 163)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 9,
-		marginRight: 9,
-	},
-	rectangleView: {
-		backgroundColor: "rgb(247, 247, 247)",
-		height: 9,
 	},
 	selfPickUpView: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
-		width: 160,
-		height: 52,
-		flexDirection: "row",
-		alignItems: "center",
+		width: 168 * alpha,
+		height: 54 * alpha,
 	},
 	pickUpImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: 32,
-		height: 28,
-		marginLeft: 30,
+		width: 32 * alpha,
+		height: 26 * alpha,
 	},
 	selfPickUpText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginRight: 14,
+		marginRight: 11 * alpha,
 	},
 	fill1Image: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		position: "absolute",
-		right: 0,
-		width: 16,
-		bottom: 0,
-		height: 16,
+		alignSelf: "flex-end",
+		width: 17 * alpha,
+		height: 17 * alpha,
 	},
-	tickImage: {
-		resizeMode: "center",
+	pickupbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	pickupbuttonButton: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		right: 1,
-		width: 9,
-		bottom: 1,
-		height: 7,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 168 * alpha,
+		height: 54 * alpha,
 	},
-	deliveryTwoView: {
+	pickupbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	deliveryView: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(151, 151, 151)",
 		borderStyle: "solid",
-		width: 151,
-		height: 52,
-		flexDirection: "row",
-		alignItems: "flex-start",
+		width: 168 * alpha,
+		height: 54 * alpha,
 	},
 	deliveryImage: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: 33,
-		height: 23,
-		marginLeft: 25,
-		marginTop: 17,
+		resizeMode: "center",
+		width: 35 * alpha,
+		height: 23 * alpha,
 	},
 	deliveryText: {
 		color: "rgb(70, 76, 84)",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		alignSelf: "center",
-		marginRight: 41,
 	},
-	toPaymentView: {
-		backgroundColor: "white",
-		height: 313,
+	deliverybuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 168 * alpha,
+		height: 54 * alpha,
+	},
+	deliverybuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	deliverybuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	contactView: {
+		backgroundColor: "transparent",
+		height: 24 * alpha,
+		marginLeft: 15 * alpha,
+		marginRight: 15 * alpha,
+		marginBottom: 5 * alpha,
+	},
+	contactText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 14,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	autoFillButton: {
+		backgroundColor: "transparent",
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(0, 178, 227)",
+		borderStyle: "solid",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 45 * alpha,
+		height: 24 * alpha,
+	},
+	autoFillButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	autoFillButtonText: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	contactinputTextInput: {
+		color: "rgb(219, 212, 212)",
+		fontFamily: "Helvetica",
+		fontSize: 10.5 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		padding: 0,
+		width: 229 * alpha,
+		height: 14 * alpha,
 	},
 	orderConfirmationView: {
-		backgroundColor: "transparent",
-		height: 184,
-		marginTop: 10,
-	},
-	frapView: {
-		backgroundColor: "transparent",
-		width: 321,
-		height: 33,
-		flexDirection: "row",
-		alignItems: "flex-start",
-	},
-	frappucinoText: {
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 16,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	ventiText: {
-		color: "rgb(130, 128, 128)",
-		fontFamily: "Helvetica-LightOblique",
-		fontSize: 11,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	xCopyImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 9,
-		height: 9,
-		marginRight: 3,
-		marginTop: 6,
-	},
-	textTwoText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginRight: 18,
-		marginTop: 3,
-	},
-	rm12Text: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginTop: 3,
+		backgroundColor: "white",
+		height: 220 * alpha,
+		marginTop: 10 * alpha,
 	},
 	orderConfirmationText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 16,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		alignSelf: "flex-start",
-		marginLeft: 26,
-	},
-	espressoView: {
 		backgroundColor: "transparent",
-		width: 321,
-		height: 19,
-		marginTop: 23,
+		alignSelf: "flex-start",
+		marginLeft: 16 * alpha,
+		marginTop: 13 * alpha,
+	},
+	itemView: {
+		backgroundColor: "transparent",
+		height: 40 * alpha,
+		marginTop: 10 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	espressoText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
+	nameText: {
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 16,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-	},
-	xImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 9,
-		height: 9,
-		marginRight: 3,
+		marginLeft: 16 * alpha,
 	},
-	textText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
+	quantityText: {
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginRight: 18,
-	},
-	rm20Text: {
 		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
+		marginRight: 13 * alpha,
+	},
+	priceText: {
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
+		marginRight: 15 * alpha,
+	},
+	itemTwoView: {
+		backgroundColor: "transparent",
+		height: 40 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameTwoText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 16 * alpha,
+	},
+	quantityTwoText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 16 * alpha,
+	},
+	priceTwoText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 15 * alpha,
 	},
 	promoCodeView: {
 		backgroundColor: "transparent",
-		width: 318,
-		height: 14,
-		marginTop: 62,
-		flexDirection: "row",
-		alignItems: "center",
+		height: 45 * alpha,
+		marginTop: 13 * alpha,
 	},
 	promoCodeText: {
 		backgroundColor: "transparent",
 		color: "rgb(99, 97, 97)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -894,176 +820,211 @@ const styles = StyleSheet.create({
 	group10Image: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
-		width: 13,
-		height: 14,
-		marginLeft: 7,
+		width: 13 * alpha,
+		height: 14 * alpha,
+		marginLeft: 8 * alpha,
 	},
 	noText: {
 		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
+		color: "rgb(181, 181, 181)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginRight: 8,
+		marginRight: 5 * alpha,
 	},
-	group4TwoImage: {
+	group4Image: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
-		width: 11,
-		height: 11,
+		width: 11 * alpha,
+		height: 11 * alpha,
 	},
-	total3UnitsRm32Text: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		alignSelf: "flex-end",
-		marginRight: 30,
-		marginBottom: 10,
-	},
-	rectangleTwoView: {
-		backgroundColor: "rgb(247, 247, 247)",
-		alignSelf: "stretch",
-		height: 9,
-	},
-	paymentMethodView: {
-		backgroundColor: "white",
-		height: 41,
-		justifyContent: "center",
-		alignItems: "flex-start",
-	},
-	paymentMethodTwoView: {
-		backgroundColor: "transparent",
-		width: 327,
-		height: 27,
-		marginLeft: 18,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	paymentMethodText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	group7View: {
-		backgroundColor: "transparent",
-		width: 26,
-		height: 27,
-		marginRight: 8,
-	},
-	group3Image: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 24,
-		marginLeft: 1,
-		marginRight: 1,
-	},
-	group6Image: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 24,
-	},
-	group4ThreeImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 11,
-		height: 11,
-	},
-	remarkView: {
-		backgroundColor: "white",
-		height: 41,
-		justifyContent: "center",
-		alignItems: "flex-start",
-	},
-	remarkTwoView: {
-		backgroundColor: "transparent",
-		width: 327,
-		height: 14,
-		marginLeft: 18,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	remarkText: {
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	noSugarText: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginRight: 8,
-	},
-	group4FourImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 11,
-		height: 11,
-	},
-	rectangleCopy4View: {
-		backgroundColor: "rgb(247, 247, 247)",
-		height: 37,
-	},
-	payNowView: {
-		backgroundColor: "transparent",
-		height: 39,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	rm32Text: {
-		backgroundColor: "transparent",
-		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica-Bold",
-		fontSize: 14,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-		marginLeft: 18,
-	},
-	rectangleThreeView: {
-		backgroundColor: "rgb(0, 178, 227)",
-		width: 84,
-		height: 39,
-	},
-	payNowButtonText: {
-		color: "white",
-		fontFamily: "Helvetica-Bold",
-		fontSize: 12,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-	},
-	payNowButton: {
+	promocodeButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 51,
-		height: 14,
-		marginRight: 16,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+	},
+	promocodeButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	promocodeButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	totalText: {
+		color: "rgb(135, 135, 135)",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		marginRight: 16 * alpha,
+		marginBottom: 8 * alpha,
+	},
+	paymentMethodView: {
+		backgroundColor: "white",
+		height: 41 * alpha,
+	},
+	paymentmethodButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+	},
+	paymentmethodButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	paymentmethodButtonImage: {
+		resizeMode: "contain",
+	},
+	paymentMethodTwoView: {
+		backgroundColor: "transparent",
+		height: 41 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	paymentMethodText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 16 * alpha,
+	},
+	group7View: {
+		backgroundColor: "transparent",
+		width: 26 * alpha,
+		height: 27 * alpha,
+		marginRight: 8 * alpha,
+	},
+	group3Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 24 * alpha,
+		marginRight: 2 * alpha,
+	},
+	group6Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 24 * alpha,
+	},
+	ovalView: {
+		backgroundColor: "rgb(232, 88, 88)",
+		borderRadius: 3.5 * alpha,
+		width: 7 * alpha,
+		height: 7 * alpha,
+		marginRight: 9 * alpha,
+	},
+	group4TwoImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 11 * alpha,
+		height: 11 * alpha,
+		marginRight: 16 * alpha,
+	},
+	remarkView: {
+		backgroundColor: "white",
+		height: 41 * alpha,
+		justifyContent: "center",
+	},
+	remarkTwoView: {
+		backgroundColor: "transparent",
+		height: 41 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	remarkText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 16 * alpha,
+	},
+	noSugarText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 7 * alpha,
+	},
+	group4ThreeImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 11 * alpha,
+		height: 11 * alpha,
+		marginRight: 16 * alpha,
+	},
+	totalPayNowView: {
+		backgroundColor: "transparent",
+		height: 47 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	priceThreeText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 18 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		marginLeft: 16 * alpha,
+	},
+	payNowButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 114 * alpha,
+		height: 47 * alpha,
+	},
+	payNowButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	payNowButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10,
+		marginRight: 10 * alpha,
 	},
 })

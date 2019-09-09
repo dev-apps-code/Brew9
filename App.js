@@ -28,6 +28,7 @@ import OrderHistory from "./App/OrderHistory/OrderHistory"
 import PointShop from "./App/PointShop/PointShop"
 import PointShopItem from "./App/PointShopItem/PointShopItem"
 import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
+import PayByWallet from "./App/PayByWallet/PayByWallet"
 import {createStore, applyMiddleware} from 'redux';
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -42,6 +43,9 @@ const PushRouteOne = createStackNavigator({
 		navigationOptions: {
 			tabBarVisible: false
 		}
+	},
+	PayByWallet: {
+		screen: PayByWallet,
 	},
 	Transaction: {
 		screen: Transaction,

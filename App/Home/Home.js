@@ -272,6 +272,106 @@ export default class Home extends React.Component {
 						style={styles.productlistFlatList}/>
 				</View>
 			</View>
+			<View
+				style={styles.cartView}>
+				<View
+					pointerEvents="box-none"
+					style={{
+						position: "absolute",
+						left: 0,
+						top: 0,
+						bottom: 0,
+						justifyContent: "center",
+					}}>
+					<View
+						style={styles.totalAmountView}>
+						<View
+							style={styles.rectangleView}/>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 38,
+								right: 13,
+								top: 5,
+								height: 45,
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
+							<View
+								style={styles.shopppingCartView}>
+								<View
+									style={styles.group5View}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											width: 15,
+											marginTop: 1,
+											marginBottom: 4,
+										}}>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/fill-1.png")}
+												style={styles.fill1Image}/>
+										</View>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 3,
+												width: 9,
+												top: 0,
+												bottom: 2,
+												alignItems: "flex-start",
+											}}>
+											<Image
+												source={require("./../../assets/images/group-4-2.png")}
+												style={styles.group4Image}/>
+											<View
+												style={{
+													flex: 1,
+												}}/>
+											<View
+												style={styles.line8View}/>
+										</View>
+									</View>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.shoppingCartText}>Shopping{"\n"}Cart</Text>
+								</View>
+							</View>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Text
+								style={styles.totalpriceText}>RM20</Text>
+						</View>
+						<View
+							style={styles.badgeView}>
+							<Text
+								style={styles.numberofitemText}>2</Text>
+						</View>
+					</View>
+				</View>
+				<TouchableOpacity
+					onPress={this.onCheckoutPressed}
+					style={styles.checkoutButton}>
+					<Text
+						style={styles.checkoutButtonText}>Checkout</Text>
+				</TouchableOpacity>
+			</View>
 		</View>
 	}
 }
@@ -446,6 +546,126 @@ const styles = StyleSheet.create({
 	productlistFlatListViewWrapper: {
 		width: 285 * alpha,
 		marginBottom: 1 * alpha,
+	},
+	cartView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0,
+		right: 0,
+		bottom: 0,
+		height: 61 * alpha,
+	},
+	totalAmountView: {
+		backgroundColor: "transparent",
+		width: 280 * alpha,
+		height: 61 * alpha,
+	},
+	rectangleView: {
+		backgroundColor: "rgb(231, 230, 230)",
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 10 * alpha,
+		height: 51 * alpha,
+	},
+	shopppingCartView: {
+		backgroundColor: "white",
+		borderRadius: 22.5 * alpha,
+		width: 102 * alpha,
+		height: 45 * alpha,
+		justifyContent: "center",
+	},
+	group5View: {
+		backgroundColor: "transparent",
+		height: 26 * alpha,
+		marginLeft: 15 * alpha,
+		marginRight: 12 * alpha,
+		flexDirection: "row",
+	},
+	fill1Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 15 * alpha,
+		height: 16 * alpha,
+	},
+	group4Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 8 * alpha,
+		height: 8 * alpha,
+	},
+	line8View: {
+		backgroundColor: "rgb(85, 85, 85)",
+		width: 9 * alpha,
+		height: 1 * alpha,
+	},
+	shoppingCartText: {
+		color: "rgb(57, 57, 57)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 11 * alpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		alignSelf: "center",
+	},
+	totalpriceText: {
+		color: "rgb(57, 57, 57)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 18 * alpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginTop: 20 * alpha,
+	},
+	badgeView: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 10,
+		borderWidth: 1,
+		borderColor: "white",
+		borderStyle: "solid",
+		position: "absolute",
+		left: 123 * alpha,
+		right: 137 * alpha,
+		top: 0,
+		height: 20 * alpha,
+		justifyContent: "center",
+	},
+	numberofitemText: {
+		color: "rgb(255, 251, 251)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginLeft: 6 * alpha,
+		marginRight: 6 * alpha,
+	},
+	checkoutButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		right: 0,
+		width: 95 * alpha,
+		top: 10 * alpha,
+		height: 51 * alpha,
+	},
+	checkoutButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	checkoutButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 })
 
