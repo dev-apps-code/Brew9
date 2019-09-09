@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App/WebserviceModel/members.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebserviceModel/members.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Category.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Product.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-53@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-53@1x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-53@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-53@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/group-53@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-53@3x.png" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,84 +41,16 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="620">
-              <caret line="53" column="5" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="53" selection-end-column="5" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#108#194#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="71" column="17" lean-forward="true" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#115#195#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
+        <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#52#0" expanded="true" />
-              </folding>
+              <caret line="15" selection-start-line="15" selection-end-line="15" selection-end-column="50" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointShopHistory/Cell.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="101" column="46" selection-start-line="101" selection-start-column="46" selection-end-line="101" selection-end-column="46" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#103#189#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointShop/PointProductCell.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1030">
-              <caret line="96" column="32" selection-start-line="96" selection-start-column="32" selection-end-line="96" selection-end-column="32" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#115#201#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1410">
-              <caret line="94" column="23" lean-forward="true" selection-start-line="94" selection-start-column="23" selection-end-line="94" selection-end-column="23" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#105#138#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointShopItem/PointShopItem.js">
+        <entry file="file://$PROJECT_DIR$/App/Home/ProductCell.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
               <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="50" />
@@ -123,26 +61,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/App/Home/CategoryCell.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="55" column="31" lean-forward="true" selection-start-line="53" selection-start-column="8" selection-end-line="55" selection-end-column="31" />
+            <state relative-caret-position="135">
+              <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
               <folding>
-                <element signature="e#98#188#0" expanded="true" />
+                <element signature="n#!!doc" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
+        <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="127" column="6" lean-forward="true" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="6" />
+            <state relative-caret-position="135">
+              <caret line="9" column="25" lean-forward="true" selection-start-line="9" selection-start-column="25" selection-end-line="10" selection-end-column="50" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#111#149#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -152,10 +89,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>loadUsedVoucher</find>
-      <find>onExpiredPressed</find>
-      <find>navigationBarItemIcon</find>
-      <find>renderVouchertableFlatListCell</find>
       <find>iphone8Copy11View</find>
       <find>currencyText</find>
       <find>headerLeftContainer</find>
@@ -182,6 +115,10 @@
       <find>viewview</find>
       <find>text</find>
       <find>vipiconView</find>
+      <find>HEAD</find>
+      <find>productsectionView</find>
+      <find>more</find>
+      <find>moreView</find>
     </findStrings>
     <replaceStrings>
       <replace>width:</replace>
@@ -194,8 +131,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/App/Home/Product.js" />
-        <option value="$PROJECT_DIR$/App/PickUp/PickUp.js" />
         <option value="$PROJECT_DIR$/App/Views/Checkout/Checkout.js" />
         <option value="$PROJECT_DIR$/App/Checkout/Checkout.js" />
         <option value="$PROJECT_DIR$/App/Models/members.js" />
@@ -235,7 +170,6 @@
         <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
         <option value="$PROJECT_DIR$/App/OrderHistory/OrderHistory.js" />
         <option value="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" />
-        <option value="$PROJECT_DIR$/App/Home/Home.js" />
         <option value="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" />
         <option value="$PROJECT_DIR$/App/Profile/Profile.js" />
         <option value="$PROJECT_DIR$/App/PointShopItem/PointShopItem.js" />
@@ -245,6 +179,9 @@
         <option value="$PROJECT_DIR$/App/PointShopHistory/Cell.js" />
         <option value="$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/members.js" />
+        <option value="$PROJECT_DIR$/App/Home/Home.js" />
+        <option value="$PROJECT_DIR$/App/Home/ProductCell.js" />
+        <option value="$PROJECT_DIR$/App/Home/CategoryCell.js" />
       </list>
     </option>
   </component>
@@ -271,6 +208,12 @@
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="Home" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
@@ -397,12 +340,12 @@
       <workItem from="1567741839637" duration="180000" />
       <workItem from="1567742036404" duration="11826000" />
       <workItem from="1567781431550" duration="10940000" />
-      <workItem from="1567988642533" duration="2588000" />
+      <workItem from="1567988642533" duration="4013000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94255000" />
+    <option name="totallyTimeSpent" value="95680000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="955" extended-state="6" />
@@ -474,8 +417,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/App/0-Model/push_request_object.js" />
-    <entry file="file://$PROJECT_DIR$/App/0-Model/base_request_object.js" />
     <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -715,16 +656,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Utils/parse_date.js" />
-    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9299">
-          <caret line="57" column="95" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="95" />
-          <folding>
-            <element signature="e#103#202#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -762,17 +693,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#111#197#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="31">
-          <caret line="58" column="27" lean-forward="true" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#112#201#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -866,7 +786,7 @@
     <entry file="file://$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="421">
-          <caret line="71" column="17" lean-forward="true" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#115#195#0" expanded="true" />
@@ -876,10 +796,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
+        <state relative-caret-position="285">
+          <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="25" lean-forward="true" selection-start-line="9" selection-start-column="25" selection-end-line="10" selection-end-column="50" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="15" selection-start-line="15" selection-end-line="15" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/ProductCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="50" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/CategoryCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
