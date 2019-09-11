@@ -38,6 +38,9 @@ export default class Checkout extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			delivery_options: 'pickup'
+		}
 	}
 
 	componentDidMount() {
@@ -61,11 +64,15 @@ export default class Checkout extends React.Component {
 	}
 
 	onDeliveryButtonPressed = () => {
-
+		this.setState({
+			delivery_options: 'delivery'
+		})
 	}
 
-	onButtonPressed = () => {
-
+	onPickUpButtonPressed = () => {
+		this.setState({
+			delivery_options: 'pickup'
+		})
 	}
 
 	onAutoFillPressed = () => {
@@ -144,7 +151,7 @@ export default class Checkout extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<View
-							style={styles.selfPickUpView}>
+							style={this.state.delivery_options == 'pickup' ? styles.selfPickUpView_selected : styles.selfPickUpView}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -152,22 +159,22 @@ export default class Checkout extends React.Component {
 									left: 25 * alpha,
 									right: 0,
 									bottom: 0,
-									height: 39 * alpha,
+									height: 54 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
 								}}>
 								<Image
 									source={require("./../../assets/images/pick-up-2.png")}
-									style={styles.pickUpImage}/>
+									style={this.state.delivery_options == 'pickup' ? styles.pickUpImage_selected : styles.pickUpImage}/>
+								<Text
+									style={this.state.delivery_options == 'pickup' ? styles.selfPickUpText_selected : styles.selfPickUpText}>Self Pick-up</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
-								<Text
-									style={styles.selfPickUpText}>Self Pick-up</Text>
-								<Image
+								{this.state.delivery_options == 'pickup' ? <Image
 									source={require("./../../assets/images/fill-1-3.png")}
-									style={styles.fill1Image}/>
+									style={styles.tabTwoImage}/> : null}
 							</View>
 							<View
 								pointerEvents="box-none"
@@ -179,48 +186,47 @@ export default class Checkout extends React.Component {
 									justifyContent: "center",
 								}}>
 								<TouchableOpacity
-									onPress={this.onButtonPressed}
+									onPress={this.onPickUpButtonPressed}
 									style={styles.pickupbuttonButton}>
 									<Text
 										style={styles.pickupbuttonButtonText}></Text>
 								</TouchableOpacity>
 							</View>
 						</View>
+
+
 						<View
 							style={{
 								flex: 1,
 							}}/>
+
 						<View
-							style={styles.deliveryView}>
+							style={this.state.delivery_options == 'delivery' ? styles.deliveryView_selected : styles.deliveryView}>
 							<View
 								pointerEvents="box-none"
 								style={{
 									position: "absolute",
-									left: 0,
+									left: 36 * alpha,
 									right: 0,
-									top: 0,
 									bottom: 0,
-									justifyContent: "center",
+									height: 54 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
 								}}>
+								<Image
+									source={require("./../../assets/images/delivery-2.png")}
+									style={this.state.delivery_options == 'delivery' ? styles.deliveryImage_selected : styles.deliveryImage}/>
+								<Text
+									style={this.state.delivery_options == 'delivery' ? styles.deliveryText_selected : styles.deliveryText}>Delivery</Text>
 								<View
-									pointerEvents="box-none"
 									style={{
-										height: 23 * alpha,
-										marginLeft: 36 * alpha,
-										marginRight: 26 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
+										flex: 1,
+									}}/>
+								{this.state.delivery_options == 'delivery' ?
 									<Image
-										source={require("./../../assets/images/delivery-2.png")}
-										style={styles.deliveryImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.deliveryText}>Delivery</Text>
-								</View>
+										source={require("./../../assets/images/fill-1-3.png")}
+										style={styles.tabImage}/>
+									: null}
 							</View>
 							<View
 								pointerEvents="box-none"
@@ -570,6 +576,14 @@ const styles = StyleSheet.create({
 	selfPickUpView: {
 		backgroundColor: "white",
 		borderWidth: 1 * alpha,
+		borderColor: "rgb(151, 151, 151)",
+		borderStyle: "solid",
+		width: 168 * alpha,
+		height: 54 * alpha,
+	},
+	selfPickUpView_selected: {
+		backgroundColor: "white",
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -580,16 +594,33 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 32 * alpha,
 		height: 26 * alpha,
+		tintColor : "rgb(70, 76, 84)"
+	},
+	pickUpImage_selected: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 32 * alpha,
+		height: 26 * alpha,
 	},
 	selfPickUpText: {
+		backgroundColor: "transparent",
+		color: "rgb(70, 76, 84)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginLeft: 18 * alpha,
+	},
+	selfPickUpText_selected: {
+		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		marginRight: 11 * alpha,
+		marginLeft: 18 * alpha,
 	},
 	fill1Image: {
 		resizeMode: "center",
@@ -626,20 +657,46 @@ const styles = StyleSheet.create({
 		width: 168 * alpha,
 		height: 54 * alpha,
 	},
+	deliveryView_selected: {
+		backgroundColor: "white",
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(0, 178, 227)",
+		borderStyle: "solid",
+		width: 168 * alpha,
+		height: 54 * alpha,
+	},
 	deliveryImage: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
+		backgroundColor: "transparent",
 		width: 35 * alpha,
 		height: 23 * alpha,
+	},
+	deliveryImage_selected: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 35 * alpha,
+		height: 23 * alpha,
+		tintColor: "rgb(0, 178, 227)",
 	},
 	deliveryText: {
 		color: "rgb(70, 76, 84)",
 		fontFamily: "Helvetica",
-		fontSize: 12 * fontAlpha,
+		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
+		marginLeft: 27 * alpha,
+	},
+	deliveryText_selected: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * alpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 27 * alpha,
 	},
 	deliverybuttonButton: {
 		backgroundColor: "transparent",
@@ -1026,5 +1083,19 @@ const styles = StyleSheet.create({
 	payNowButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
+	},
+	tabImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		width: 17 * alpha,
+		height: 17 * alpha,
+	},
+	tabTwoImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		width: 17 * alpha,
+		height: 17 * alpha,
 	},
 })
