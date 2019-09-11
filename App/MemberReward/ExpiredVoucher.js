@@ -26,67 +26,65 @@ export default class ExpiredVoucher extends React.Component {
 	}
 
 	render() {
-	
-		return <TouchableWithoutFeedback
-				onPress={this.onExpiredVoucherPress}>
-				<View
-					navigation={this.props.navigation}
-					style={styles.expiredvoucher}>
 
+		return <TouchableWithoutFeedback
+			onPress={this.onExpiredVoucherPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.expiredvoucher}>
+				<View
+					style={styles.cellcontentView}>
+					<Image
+						source={require("./../../assets/images/group-5-copy-3-2.png")}
+						style={styles.backgroundImage}/>
+					<Text
+						style={styles.titleText}>{this.props.title}</Text>
 					<View
-						style={styles.cellcontentView}>
-						<Image
-							source={require("./../../assets/images/group-5-3.png")}
-							style={styles.backgroundImage}/>
-						<Text
-							style={styles.titleText}>{this.props.title}</Text>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							right: 14 * alpha,
+							top: 41 * alpha,
+							height: 86 * alpha,
+						}}>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 30 * alpha,
-								right: 14 * alpha,
-								top: 40 * alpha,
-								height: 88 * alpha,
+								left: 0,
+								right: 16 * alpha,
+								top: 9 * alpha,
+								height: 63 * alpha,
+								alignItems: "flex-end",
 							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 17 * alpha,
-									top: 10 * alpha,
-									height: 56 * alpha,
-									alignItems: "flex-end",
-								}}>
-								<Text
-									style={styles.descriptionText}>{this.props.description}</Text>
-								<View
-									style={styles.termsView}>
-									<TouchableOpacity
-										onPress={this.onTermsThreePressed}
-										style={styles.termsButton}>
-										<Text
-											style={styles.termsButtonText}>Terms & Conditions</Text>
-									</TouchableOpacity>
-									<Image
-										source={require("./../../assets/images/group-18.png")}
-										style={styles.arrowImage}/>
-								</View>
-							</View>
-							<Image
-								source={require("./../../assets/images/bitmap-9.png")}
-								style={styles.expiredImage}/>
-
+							<Text
+								style={styles.descriptionText}>{this.props.description}</Text>
 							<Image
 								source={require("./../../assets/images/line-16-copy-5.png")}
 								style={styles.lineImage}/>
+							<View
+								style={styles.termsView}>
+								<TouchableOpacity
+									onPress={this.onTermsTwoPressed}
+									style={styles.termsButton}>
+									<Text
+										style={styles.termsButtonText}>Terms & Conditions</Text>
+								</TouchableOpacity>
+								<Image
+									source={require("./../../assets/images/group-18.png")}
+									style={styles.arrowImage}/>
+							</View>
 						</View>
-						<Text
-							style={styles.dateText}>{this.props.expiry_date}</Text>
+						<Image
+							source={require("./../../assets/images/bitmap-9.png")}
+							style={styles.expiredImage}/>
 					</View>
+					<Text
+						style={styles.dateText}>{this.props.expiry_date}</Text>
 				</View>
-			</TouchableWithoutFeedback>
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 
@@ -110,39 +108,59 @@ const styles = StyleSheet.create({
 	},
 	cellcontentView: {
 		backgroundColor: "transparent",
-		flex: 1,
-		marginTop: 8 * alpha,
-		marginBottom: 8 * alpha,
+		opacity: 0.41,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 7 * alpha,
+		bottom: 8 * alpha,
 	},
 	titleText: {
+		backgroundColor: "transparent",
 		color: "rgb(68, 68, 68)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		position: "absolute",
 		left: 30 * alpha,
 		top: 24 * alpha,
 	},
 	descriptionText: {
+		backgroundColor: "transparent",
 		color: "rgb(124, 124, 124)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		alignSelf: "flex-start",
+	},
+	lineImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		alignSelf: "stretch",
+		width: null,
+		height: 2 * alpha,
+		marginTop: 20 * alpha,
 	},
 	termsView: {
 		backgroundColor: "transparent",
 		width: 118 * alpha,
 		height: 13 * alpha,
-		marginTop: 29 * alpha,
+		marginRight: 1 * alpha,
+		marginTop: 14 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
+	},
+	termsButtonText: {
+		color: "rgb(136, 133, 133)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	termsButton: {
 		backgroundColor: "transparent",
@@ -153,14 +171,6 @@ const styles = StyleSheet.create({
 		width: 95 * alpha,
 		height: 12 * alpha,
 		marginLeft: 13 * alpha,
-	},
-	termsButtonText: {
-		color: "rgb(136, 133, 133)",
-		fontFamily: "Helvetica-Bold",
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
 	},
 	termsButtonImage: {
 		resizeMode: "contain",
@@ -184,18 +194,9 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 86 * alpha,
 	},
-	lineImage: {
-		backgroundColor: "transparent",
-		resizeMode: "cover",
-		position: "absolute",
-		left: 0,
-		right: 16 * alpha,
-		top: 37 * alpha,
-		height: 2 * alpha,
-	},
 	dateText: {
 		backgroundColor: "transparent",
-		color: "rgb(149, 148, 148)",
+		color: "rgb(132, 132, 132)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",

@@ -55,7 +55,7 @@ export default class ProductCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.priceText}>BND {this.props.productprice}</Text>
+								style={styles.priceText}>$ {this.props.productprice}</Text>
 							<View
 								style={{
 									flex: 1,

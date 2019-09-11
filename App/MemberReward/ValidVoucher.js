@@ -64,7 +64,7 @@ export default class ValidVoucher extends React.Component {
 									style={styles.valueView}>
 									{ this.props.discount_type == 'fixed' ?
 										<Text
-											style={styles.currencyText}>RM</Text> : null
+											style={styles.currencyText}>$</Text> : null
 									}
 									<View
 										pointerEvents="box-none"
