@@ -117,7 +117,9 @@ export default class Profile extends React.Component {
 	}
 
 	onClubPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("MemberCenter")
 	}
 
 	render() {
@@ -327,28 +329,18 @@ export default class Profile extends React.Component {
 							}}/>
 						<View
 							style={styles.viewView}>
+							<TouchableOpacity
+								onPress={this.onPointShopPressed}
+								style={styles.pointshopbuttonButton}>
+								<Text
+									style={styles.pointshopbuttonButtonText}></Text>
+							</TouchableOpacity>
 							<View
 								pointerEvents="box-none"
 								style={{
 									position: "absolute",
 									alignSelf: "center",
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onPointShopPressed}
-									style={styles.pointshopbuttonButton}>
-									<Text
-										style={styles.pointshopbuttonButtonText}></Text>
-								</TouchableOpacity>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									width: 84 * alpha,
+									width: 85 * alpha,
 									top: 22 * alpha,
 									height: 50 * alpha,
 									alignItems: "center",
