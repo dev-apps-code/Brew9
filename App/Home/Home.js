@@ -14,8 +14,12 @@ import { createAction } from '../Utils/index'
 import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
 import { alpha, fontAlpha } from "../common/size";
+import ProductRequestObject from "../Requests/product_request_object.js";
 
-@connect()
+@connect(({ members }) => ({
+	member_id: members.member_id,
+	member_point: members.member_point,
+}))
 export default class Home extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -35,6 +39,8 @@ export default class Home extends React.Component {
 			</View>,
 			headerRight: null,
 			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
 			},
 		}
 	}
@@ -53,10 +59,19 @@ export default class Home extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			page: 1,
+			total: 0,
+			data: [],
+			products:[],
+			loading: true,
+			isRefreshing: true,
+		}
 	}
 
 	componentDidMount() {
 		this.loadStorePushToken()
+		this.loadStoreProducts()
 	}
 
 	loadStorePushToken() {
@@ -77,66 +92,76 @@ export default class Home extends React.Component {
 		)
 	}
 
+	loadStoreProducts() {
+
+		const { dispatch } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					isRefreshing: false,
+					loading: false,
+					data: this.state.data.concat(eventObject.result),
+					total: eventObject.total,
+					page: this.state.page + 1,
+				},function () {
+					var items = []
+					for(var index in this.state.data) {
+						items = items.concat(this.state.data[index].products)
+					}
+					this.setState({
+						products: this.state.products.concat(items)
+					})
+				}.bind(this))
+			}
+		}
+
+		const obj = new ProductRequestObject()
+		obj.setUrlId(1)
+		dispatch(
+			createAction('products/loadStoreProducts')({
+				object: obj,
+				callback
+			})
+		)
+	}
+
+	onRefresh() {
+		this.setState({
+			isRefreshing: true,
+			data: [],
+			products: [],
+		})
+		this.loadStoreProducts()
+	}
+
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
 
 		navigate("Checkout")
 	}
 
-	categorylistFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
-
 	renderCategorylistFlatListCell = ({ item }) => {
 
+		var selected = false
+		if(item.id == 1) {
+			selected = true
+		}
 		return <CategoryCell
-			navigation={this.props.navigation}/>
+			navigation={this.props.navigation}
+			categoryname={item.name}
+			selected={selected}
+		/>
 	}
-
-	productlistFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
 
 	renderProductlistFlatListCell = ({ item }) => {
 
+		console.log(item.image.url)
 		return <ProductCell
-			navigation={this.props.navigation}/>
+			navigation={this.props.navigation}
+			productname={item.name}
+			productprice={item.price}
+			productimage={item.image.url}
+		/>
 	}
 
 	render() {
@@ -257,8 +282,9 @@ export default class Home extends React.Component {
 					style={styles.categorylistFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderCategorylistFlatListCell}
-						data={this.categorylistFlatListMockData}
-						style={styles.categorylistFlatList}/>
+						data={this.state.data}
+						style={styles.categorylistFlatList}
+						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 				<View
 					style={{
@@ -268,8 +294,11 @@ export default class Home extends React.Component {
 					style={styles.productlistFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderProductlistFlatListCell}
-						data={this.productlistFlatListMockData}
-						style={styles.productlistFlatList}/>
+						data={this.state.products}
+						style={styles.productlistFlatList}
+						refreshing={this.state.isRefreshing}
+						onRefresh={this.onRefresh.bind(this)}
+						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</View>
 			<View
@@ -487,7 +516,7 @@ const styles = StyleSheet.create({
 	},
 	moreView: {
 		backgroundColor: "transparent",
-		width: 32 * alpha,
+		width: 40 * alpha,
 		height: 12 * alpha,
 		marginTop: 1 * alpha,
 		flexDirection: "row",

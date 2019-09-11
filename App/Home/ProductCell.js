@@ -25,14 +25,14 @@ export default class ProductCell extends React.Component {
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
 				onPress={this.onProductCellPress}>
 				<View
 					navigation={this.props.navigation}
 					style={styles.productcell}>
 					<Image
-						source={require("./../../assets/images/bitmap-10.png")}
+						source={{uri: this.props.productimage}}
 						style={styles.productimageImage}/>
 					<View
 						style={{
@@ -41,7 +41,7 @@ export default class ProductCell extends React.Component {
 					<View
 						style={styles.detailsView}>
 						<Text
-							style={styles.titleText}>Espresso</Text>
+							style={styles.titleText}>{this.props.productname}</Text>
 						<Text
 							style={styles.descriptionText}>Lorem ipsum dolor sit amet, iief consectetuer adipiscing elite…</Text>
 						<View
@@ -55,7 +55,7 @@ export default class ProductCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.priceText}>RM10</Text>
+								style={styles.priceText}>BND {this.props.productprice}</Text>
 							<View
 								style={{
 									flex: 1,

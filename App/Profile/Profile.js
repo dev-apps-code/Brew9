@@ -662,7 +662,6 @@ const styles = StyleSheet.create({
 	scrollScrollView: {
 		backgroundColor: "transparent",
 		height: 603 * alpha,
-		marginTop: 20 * alpha,
 	},
 	topsectionView: {
 		backgroundColor: "transparent",

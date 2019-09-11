@@ -30,11 +30,11 @@ export default class CategoryCell extends React.Component {
 				onPress={this.onCategoryCellPress}>
 				<View
 					navigation={this.props.navigation}
-					style={styles.categorycell}>
-					<View
-						style={styles.selectbarView}/>
+					style={this.props.selected ? styles.categorycell_selected :styles.categorycell}>
+					{this.props.selected ? <View
+						style={styles.selectbarView}/> : null}
 					<Text
-						style={styles.labelText}>Best Seller</Text>
+						style={this.props.selected ? styles.labelText_selected : styles.labelText}>{this.props.categoryname}</Text>
 				</View>
 			</TouchableWithoutFeedback>
 	}
@@ -42,6 +42,13 @@ export default class CategoryCell extends React.Component {
 
 const styles = StyleSheet.create({
 	categorycell: {
+		backgroundColor: "transparent",
+		width: "100%",
+		height: 54 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	categorycell_selected: {
 		backgroundColor: "white",
 		width: "100%",
 		height: 54 * alpha,
@@ -54,6 +61,18 @@ const styles = StyleSheet.create({
 		height: 54 * alpha,
 	},
 	labelText: {
+		backgroundColor: "transparent",
+		color: "rgb(78, 77, 77)",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		flex: 1,
+		marginLeft: 13 * alpha,
+		marginRight: 14 * alpha,
+	},
+	labelText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
 		fontFamily: "Helvetica",

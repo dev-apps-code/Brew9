@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity} from "react-native"
+import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
 
@@ -63,7 +63,7 @@ export default class MemberWallet extends React.Component {
 	
 		return <View
 				style={styles.walletView}>
-				<View
+				<ScrollView
 					style={styles.viewView}>
 					<View
 						style={styles.cardviewView}>
@@ -262,7 +262,7 @@ export default class MemberWallet extends React.Component {
 							</View>
 						</View>
 					</View>
-				</View>
+				</ScrollView>
 			</View>
 	}
 }
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
 	},
 	viewView: {
 		backgroundColor: "transparent",
-		flex: 1
+		flex: 1,
 	},
 	cardviewView: {
 		backgroundColor: "transparent",
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
 	},
 	infoView: {
 		backgroundColor: "transparent",
-		height: 620 * alpha,
+		height: 380 * alpha,
 		marginRight: 10 * alpha,
 		alignItems: "center",
 	},

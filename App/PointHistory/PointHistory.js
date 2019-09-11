@@ -38,6 +38,8 @@ export default class PointHistory extends React.Component {
 			</View>,
 			headerRight: null,
 			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
 			},
 		}
 	}

@@ -7,7 +7,7 @@ class PointStatementRequestObject extends BaseRequestObject{
     }
 
     getUrlString() {
-        return `members/${this.url_id}/pointHistory`
+        return `members/${this.url_id}/point_history`
     }
 }
 export default PointStatementRequestObject
