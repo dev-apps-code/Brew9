@@ -18,11 +18,11 @@ export default class ExpiredVoucher extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onExpiredVoucherPress = () => {
-	
+
 	}
 
 	render() {
@@ -37,8 +37,28 @@ export default class ExpiredVoucher extends React.Component {
 					<Image
 						source={require("./../../assets/images/group-5-copy-3-2.png")}
 						style={styles.backgroundImage}/>
-					<Text
-						style={styles.titleText}>{this.props.title}</Text>
+
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							width: 247 * alpha,
+							top: 24 * alpha,
+							bottom: 12 * alpha,
+							alignItems: "flex-start",
+						}}>
+						<Text
+							style={styles.titleText}>{this.props.title}</Text>
+						<Text
+							style={styles.descriptionText}>{this.props.description}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.dateText}>{this.props.expiry_date}</Text>
+					</View>
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -54,12 +74,9 @@ export default class ExpiredVoucher extends React.Component {
 								position: "absolute",
 								left: 0,
 								right: 16 * alpha,
-								top: 9 * alpha,
-								height: 63 * alpha,
-								alignItems: "flex-end",
+								top: 43 * alpha,
+								height: 29 * alpha,
 							}}>
-							<Text
-								style={styles.descriptionText}>{this.props.description}</Text>
 							<Image
 								source={require("./../../assets/images/line-16-copy-5.png")}
 								style={styles.lineImage}/>
@@ -79,9 +96,8 @@ export default class ExpiredVoucher extends React.Component {
 						<Image
 							source={require("./../../assets/images/bitmap-9.png")}
 							style={styles.expiredImage}/>
+
 					</View>
-					<Text
-						style={styles.dateText}>{this.props.expiry_date}</Text>
 				</View>
 			</View>
 		</TouchableWithoutFeedback>
@@ -107,13 +123,11 @@ const styles = StyleSheet.create({
 		right: 14 * alpha,
 	},
 	cellcontentView: {
-		backgroundColor: "transparent",
 		opacity: 0.41,
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 7 * alpha,
-		bottom: 8 * alpha,
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 8 * alpha,
+		marginBottom: 8 * alpha,
 	},
 	titleText: {
 		backgroundColor: "transparent",
@@ -123,36 +137,51 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		position: "absolute",
-		left: 30 * alpha,
-		top: 24 * alpha,
 	},
 	descriptionText: {
-		backgroundColor: "transparent",
 		color: "rgb(124, 124, 124)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		alignSelf: "flex-start",
+		backgroundColor: "transparent",
+		marginTop: 7 * alpha,
+	},
+	dateText: {
+		color: "rgb(132, 132, 132)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	lineImage: {
-		backgroundColor: "transparent",
 		resizeMode: "cover",
-		alignSelf: "stretch",
+		backgroundColor: "transparent",
 		width: null,
 		height: 2 * alpha,
-		marginTop: 20 * alpha,
 	},
 	termsView: {
 		backgroundColor: "transparent",
+		alignSelf: "flex-end",
 		width: 118 * alpha,
 		height: 13 * alpha,
 		marginRight: 1 * alpha,
 		marginTop: 14 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
+	},
+	termsButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0 * alpha,
+		width: 95 * alpha,
+		height: 12 * alpha,
+		marginLeft: 13 * alpha,
 	},
 	termsButtonText: {
 		color: "rgb(136, 133, 133)",
@@ -161,16 +190,6 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-	},
-	termsButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		width: 95 * alpha,
-		height: 12 * alpha,
-		marginLeft: 13 * alpha,
 	},
 	termsButtonImage: {
 		resizeMode: "contain",
@@ -194,16 +213,5 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 86 * alpha,
 	},
-	dateText: {
-		backgroundColor: "transparent",
-		color: "rgb(132, 132, 132)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		position: "absolute",
-		left: 30 * alpha,
-		bottom: 12 * alpha,
-	},
+
 })

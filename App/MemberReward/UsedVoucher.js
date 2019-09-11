@@ -27,77 +27,77 @@ export default class UsedVoucher extends React.Component {
 	render() {
 	
 		return <TouchableWithoutFeedback
-				onPress={this.onUsedVoucherPress}>
+			onPress={this.onUsedVoucherPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.usedvoucher}>
 				<View
-					navigation={this.props.navigation}
-					style={styles.usedvoucher}>
+					style={styles.cellcontentView}>
+					<Image
+						source={require("./../../assets/images/group-5-copy-3-2.png")}
+						style={styles.backgroundImage}/>
 					<View
-						style={styles.cellcontentView}>
-						<Image
-							source={require("./../../assets/images/group-5-copy-3-2.png")}
-							style={styles.backgroundImage}/>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							width: 247 * alpha,
+							top: 24 * alpha,
+							bottom: 12 * alpha,
+							alignItems: "flex-start",
+						}}>
+						<Text
+							style={styles.titleText}>{this.props.title}</Text>
+						<Text
+							style={styles.descriptionText}>{this.props.description}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.dateText}>{this.props.used_date}</Text>
+					</View>
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							right: 14 * alpha,
+							top: 41 * alpha,
+							height: 86 * alpha,
+						}}>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 30 * alpha,
-								width: 247 * alpha,
-								top: 24 * alpha,
-								bottom: 12 * alpha,
-								alignItems: "flex-start",
+								left: 0,
+								right: 16 * alpha,
+								top: 43 * alpha,
+								height: 29 * alpha,
 							}}>
-							<Text
-								style={styles.titleText}>{this.props.title}</Text>
-							<Text
-								style={styles.descriptionText}>{this.props.description}</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.dateText}>{this.props.used_date}</Text>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 30 * alpha,
-								right: 14 * alpha,
-								top: 41 * alpha,
-								height: 86 * alpha,
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 16 * alpha,
-									top: 43 * alpha,
-									height: 29 * alpha,
-								}}>
-								<Image
-									source={require("./../../assets/images/line-16-copy-5.png")}
-									style={styles.lineImage}/>
-								<View
-									style={styles.termsView}>
-									<TouchableOpacity
-										onPress={this.onTermsTwoPressed}
-										style={styles.termsButton}>
-										<Text
-											style={styles.termsButtonText}>Terms & Conditions</Text>
-									</TouchableOpacity>
-									<Image
-										source={require("./../../assets/images/group-18.png")}
-										style={styles.arrowImage}/>
-								</View>
-							</View>
 							<Image
-								source={require("./../../assets/images/bitmap-8.png")}
-								style={styles.usedImage}/>
+								source={require("./../../assets/images/line-16-copy-5.png")}
+								style={styles.lineImage}/>
+							<View
+								style={styles.termsView}>
+								<TouchableOpacity
+									onPress={this.onTermsTwoPressed}
+									style={styles.termsButton}>
+									<Text
+										style={styles.termsButtonText}>Terms & Conditions</Text>
+								</TouchableOpacity>
+								<Image
+									source={require("./../../assets/images/group-18.png")}
+									style={styles.arrowImage}/>
+							</View>
 						</View>
+						<Image
+							source={require("./../../assets/images/bitmap-8.png")}
+							style={styles.usedImage}/>
 					</View>
 				</View>
-			</TouchableWithoutFeedback>
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
 		right: 14 * alpha,
 	},
 	cellcontentView: {
+		opacity: 0.41,
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 8 * alpha,
