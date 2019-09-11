@@ -25,7 +25,7 @@ export default class MemberReward extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Points",
+			title: "Rewards",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

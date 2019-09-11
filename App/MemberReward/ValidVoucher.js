@@ -10,7 +10,6 @@ import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Te
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
 
-
 export default class ValidVoucher extends React.Component {
 
 	constructor(props) {
