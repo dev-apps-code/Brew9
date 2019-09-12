@@ -18,75 +18,89 @@ export default class ExpiredVoucher extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onExpiredVoucherPress = () => {
-	
+
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
-				onPress={this.onExpiredVoucherPress}>
+			onPress={this.onExpiredVoucherPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.expiredvoucher}>
 				<View
-					navigation={this.props.navigation}
-					style={styles.expiredvoucher}>
+					style={styles.cellcontentView}>
+					<Image
+						source={require("./../../assets/images/group-5-copy-3-2.png")}
+						style={styles.backgroundImage}/>
 
 					<View
-						style={styles.cellcontentView}>
-						<Image
-							source={require("./../../assets/images/group-5-3.png")}
-							style={styles.backgroundImage}/>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							width: 247 * alpha,
+							top: 24 * alpha,
+							bottom: 12 * alpha,
+							alignItems: "flex-start",
+						}}>
 						<Text
 							style={styles.titleText}>{this.props.title}</Text>
+						<Text
+							style={styles.descriptionText}>{this.props.description}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.dateText}>{this.props.expiry_date}</Text>
+					</View>
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							right: 14 * alpha,
+							top: 41 * alpha,
+							height: 86 * alpha,
+						}}>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 30 * alpha,
-								right: 14 * alpha,
-								top: 40 * alpha,
-								height: 88 * alpha,
+								left: 0,
+								right: 16 * alpha,
+								top: 43 * alpha,
+								height: 29 * alpha,
 							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 17 * alpha,
-									top: 10 * alpha,
-									height: 56 * alpha,
-									alignItems: "flex-end",
-								}}>
-								<Text
-									style={styles.descriptionText}>{this.props.description}</Text>
-								<View
-									style={styles.termsView}>
-									<TouchableOpacity
-										onPress={this.onTermsThreePressed}
-										style={styles.termsButton}>
-										<Text
-											style={styles.termsButtonText}>Terms & Conditions</Text>
-									</TouchableOpacity>
-									<Image
-										source={require("./../../assets/images/group-18.png")}
-										style={styles.arrowImage}/>
-								</View>
-							</View>
-							<Image
-								source={require("./../../assets/images/bitmap-9.png")}
-								style={styles.expiredImage}/>
-
 							<Image
 								source={require("./../../assets/images/line-16-copy-5.png")}
 								style={styles.lineImage}/>
+							<View
+								style={styles.termsView}>
+								<TouchableOpacity
+									onPress={this.onTermsTwoPressed}
+									style={styles.termsButton}>
+									<Text
+										style={styles.termsButtonText}>Terms & Conditions</Text>
+								</TouchableOpacity>
+								<Image
+									source={require("./../../assets/images/group-18.png")}
+									style={styles.arrowImage}/>
+							</View>
 						</View>
-						<Text
-							style={styles.dateText}>{this.props.expiry_date}</Text>
+						<Image
+							source={require("./../../assets/images/bitmap-9.png")}
+							style={styles.expiredImage}/>
+
 					</View>
 				</View>
-			</TouchableWithoutFeedback>
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 
@@ -109,38 +123,53 @@ const styles = StyleSheet.create({
 		right: 14 * alpha,
 	},
 	cellcontentView: {
+		opacity: 0.41,
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 8 * alpha,
 		marginBottom: 8 * alpha,
 	},
 	titleText: {
+		backgroundColor: "transparent",
 		color: "rgb(68, 68, 68)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		position: "absolute",
-		left: 30 * alpha,
-		top: 24 * alpha,
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		alignSelf: "flex-start",
+		marginTop: 7 * alpha,
+	},
+	dateText: {
+		color: "rgb(132, 132, 132)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	lineImage: {
+		resizeMode: "cover",
+		backgroundColor: "transparent",
+		width: null,
+		height: 2 * alpha,
 	},
 	termsView: {
 		backgroundColor: "transparent",
+		alignSelf: "flex-end",
 		width: 118 * alpha,
 		height: 13 * alpha,
-		marginTop: 29 * alpha,
+		marginRight: 1 * alpha,
+		marginTop: 14 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -149,7 +178,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		padding: 0,
+		padding: 0 * alpha,
 		width: 95 * alpha,
 		height: 12 * alpha,
 		marginLeft: 13 * alpha,
@@ -184,25 +213,5 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 86 * alpha,
 	},
-	lineImage: {
-		backgroundColor: "transparent",
-		resizeMode: "cover",
-		position: "absolute",
-		left: 0,
-		right: 16 * alpha,
-		top: 37 * alpha,
-		height: 2 * alpha,
-	},
-	dateText: {
-		backgroundColor: "transparent",
-		color: "rgb(149, 148, 148)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		position: "absolute",
-		left: 30 * alpha,
-		bottom: 12 * alpha,
-	},
+
 })

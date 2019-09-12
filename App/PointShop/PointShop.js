@@ -10,6 +10,7 @@ import {Text, View, StyleSheet, FlatList, TouchableOpacity, Image} from "react-n
 import React from "react"
 import PointProductCell from "./PointProductCell"
 import { alpha, fontAlpha } from "../common/size";
+import { KURL_INFO } from "../../App/Utils/server.js"
 
 export default class PointShop extends React.Component {
 
@@ -75,6 +76,15 @@ export default class PointShop extends React.Component {
 
 	}
 
+	onRulesPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("WebCommon", {
+			title: 'Rules',
+			web_url: KURL_INFO + '?page=point_rules&id=1',
+		})
+	}
+
 	pointproductlistFlatListMockData = [{
 		key: "1",
 	}, {
@@ -104,11 +114,16 @@ export default class PointShop extends React.Component {
 	}
 
 	render() {
-	
+
 		return <View
-				style={styles.pointShopView}>
+			style={styles.pointShopView}>
+			<View
+				style={styles.contentView}>
 				<View
-					style={styles.contentView}>
+					pointerEvents="box-none"
+					style={{
+						height: 122 * alpha,
+					}}>
 					<View
 						style={styles.pointCollectedView}>
 						<View
@@ -119,68 +134,77 @@ export default class PointShop extends React.Component {
 								style={styles.pointsCollectedText}>Points Collected</Text>
 						</View>
 					</View>
+					<TouchableOpacity
+						onPress={this.onRulesPressed}
+						style={styles.rulesButton}>
+						<Image
+							source={require("./../../assets/images/icon-rule.png")}
+							style={styles.rulesButtonImage}/>
+						<Text
+							style={styles.rulesButtonText}>Point Rule</Text>
+					</TouchableOpacity>
+				</View>
+				<View
+					style={styles.headerView}>
 					<View
-						style={styles.headerView}>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
 						<View
 							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
+								height: 21 * alpha,
+								marginLeft: 45 * alpha,
+								marginRight: 28 * alpha,
+								flexDirection: "row",
+								alignItems: "center",
 							}}>
+							<TouchableOpacity
+								onPress={this.onPointHistoryPressed}
+								style={styles.pointHistoryButton}>
+								<Text
+									style={styles.pointHistoryButtonText}>Points History</Text>
+							</TouchableOpacity>
 							<View
-								pointerEvents="box-none"
 								style={{
-									height: 22 * alpha,
-									marginLeft: 45 * alpha,
-									marginRight: 28 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onPointHistoryPressed}
-									style={styles.pointHistoryButton}>
-									<Text
-										style={styles.pointHistoryButtonText}>Points History</Text>
-								</TouchableOpacity>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<TouchableOpacity
-									onPress={this.onTransactionHistoryPressed}
-									style={styles.transactionHistoryButton}>
-									<Text
-										style={styles.transactionHistoryButtonText}>Transaction History</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								alignSelf: "center",
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								style={styles.seperatorView}/>
+									flex: 1,
+								}}/>
+							<TouchableOpacity
+								onPress={this.onTransactionHistoryPressed}
+								style={styles.transactionHistoryButton}>
+								<Text
+									style={styles.transactionHistoryButtonText}>Transaction History</Text>
+							</TouchableOpacity>
 						</View>
 					</View>
 					<View
-						style={styles.pointproductlistFlatListViewWrapper}>
-						<FlatList
-							renderItem={this.renderPointproductlistFlatListCell}
-							data={this.pointproductlistFlatListMockData}
-							style={styles.pointproductlistFlatList}
-							numColumns={2}/>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							alignSelf: "center",
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
+						<View
+							style={styles.seperatorView}/>
 					</View>
 				</View>
+				<View
+					style={styles.pointproductlistFlatListViewWrapper}>
+					<FlatList
+						renderItem={this.renderPointproductlistFlatListCell}
+						data={this.pointproductlistFlatListMockData}
+						style={styles.pointproductlistFlatList}/>
+				</View>
 			</View>
+		</View>
 	}
 }
 
@@ -207,28 +231,32 @@ const styles = StyleSheet.create({
 	contentView: {
 		backgroundColor: "transparent",
 		flex: 1,
+		marginBottom: 3 * alpha,
 	},
 	pointCollectedView: {
 		backgroundColor: "white",
-		height: 130 * alpha,
-		marginRight: 1 * alpha,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		top: 0,
+		height: 122 * alpha,
 		alignItems: "center",
 	},
 	pointCollectedTwoView: {
 		backgroundColor: "transparent",
 		width: 163 * alpha,
 		height: 57 * alpha,
-		marginTop: 40 * alpha,
+		marginTop: 21 * alpha,
 		alignItems: "center",
 	},
 	pointsText: {
+		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 31 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 	},
 	pointsCollectedText: {
 		color: "rgb(59, 59, 59)",
@@ -239,42 +267,89 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
+	rulesButtonText: {
+		color: "rgb(42, 42, 42)",
+		fontFamily: "Helvetica",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	rulesButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		right: 21 * alpha,
+		width: 81 * alpha,
+		top: 90 * alpha,
+		height: 13 * alpha,
+	},
+	rulesButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
 	headerView: {
 		backgroundColor: "white",
-		height: 47 * alpha,
+		height: 31 * alpha,
 		marginRight: 1 * alpha,
-		marginTop: 10 * alpha,
 	},
-	pointHistoryText: {
+	pointHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 15 * fontAlpha,
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
-		backgroundColor: "transparent",
 	},
-	transactionHistoryText: {
+	pointHistoryButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 97 * alpha,
+		height: 21 * alpha,
+	},
+	pointHistoryButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	transactionHistoryButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 133 * alpha,
+		height: 21 * alpha,
+	},
+	transactionHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 15 * fontAlpha,
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
-		backgroundColor: "transparent",
+	},
+	transactionHistoryButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 	seperatorView: {
 		backgroundColor: "rgb(221, 221, 221)",
-		width: 1,
-		height: 25 * alpha,
-	},
-	pointproductlistFlatListViewWrapper: {
-		flex: 1,
-		marginRight: 1 * alpha,
+		width: 1 * alpha,
+		height: 20 * alpha,
 	},
 	pointproductlistFlatList: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: "100%",
 		height: "100%",
+	},
+	pointproductlistFlatListViewWrapper: {
+		flex: 1,
+		marginRight: 1 * alpha,
 	},
 })

@@ -38,6 +38,8 @@ export default class PointHistory extends React.Component {
 			</View>,
 			headerRight: null,
 			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
 			},
 		}
 	}
@@ -149,20 +151,21 @@ export default class PointHistory extends React.Component {
 						<Text
 							style={styles.pointsCollectedText}>Points Collected</Text>
 						<Text
-							style={styles.pointsText}>{this.props.member_point}</Text>
+							style={styles.pointsText}>843</Text>
 					</View>
 					<View
 						style={{
 							flex: 1,
 						}}/>
-					<View
-						style={styles.pointRuleView}>
+					<TouchableOpacity
+						onPress={this.onPointRulePressed}
+						style={styles.pointRuleButton}>
 						<Image
 							source={require("./../../assets/images/icon-rule.png")}
-							style={styles.iconRuleImage}/>
+							style={styles.pointRuleButtonImage}/>
 						<Text
-							style={styles.pointRuleText}>Point Rule</Text>
-					</View>
+							style={styles.pointRuleButtonText}>Point Rule</Text>
+					</TouchableOpacity>
 				</View>
 				<View
 					style={styles.headerView}>
@@ -210,30 +213,32 @@ const styles = StyleSheet.create({
 	contentView: {
 		backgroundColor: "transparent",
 		flex: 1,
+		marginBottom: 32 * alpha,
 	},
 	pointCollectedView: {
 		backgroundColor: "white",
 		height: 130 * alpha,
-		marginRight: 1,
-		alignItems: "center",
+		marginRight: 1 * alpha,
+		alignItems: "flex-end",
 	},
 	pointCollectedTwoView: {
 		backgroundColor: "transparent",
+		alignSelf: "center",
 		width: 163 * alpha,
 		height: 57 * alpha,
 		marginTop: 28 * alpha,
 	},
 	pointsCollectedText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
+		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 0,
+		left: 28 * alpha,
+		right: 30 * alpha,
 		top: 0,
 	},
 	pointsText: {
@@ -248,32 +253,28 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		top: 18 * alpha,
 	},
-	pointRuleView: {
+	pointRuleButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	pointRuleButton: {
 		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 80 * alpha,
-		height: 15 * alpha,
-		marginRight: 26 * alpha,
-		marginBottom: 18 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 77 * alpha,
+		height: 15 * alpha,
+		marginRight: 19 * alpha,
+		marginBottom: 18 * alpha,
 	},
-	iconRuleImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 8 * alpha,
-		height: 9 * alpha,
-	},
-	pointRuleText: {
-		backgroundColor: "transparent",
+	pointRuleButtonText: {
 		color: "rgb(30, 29, 29)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 12 * fontAlpha,
+		fontFamily: "Helvetica",
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		flex: 1,
-		marginLeft: 6 * alpha,
 	},
 	headerView: {
 		backgroundColor: "white",
@@ -284,13 +285,13 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 	transactionHistoryText: {
+		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginLeft: 26 * alpha,
 	},
 	pointhistoryFlatList: {

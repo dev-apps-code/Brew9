@@ -2,66 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.expo-shared/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Checkout/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Checkout/Checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Home/ProductCell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/ProductCell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PointShop/PointShop.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointShop/PointShop.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PointShopHistory/Cell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointShopHistory/Cell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Utils/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Utils/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/delivery-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/delivery-2@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/delivery-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/delivery-2@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/delivery-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/delivery-2@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-1-3@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-1-3@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-1-3@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-1-3@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-4-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-4-2@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-4-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-4-2@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-4-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-4-2@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-7-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-7-5@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-7-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-7-5@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/fill-7-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/fill-7-5@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-10-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10-2@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-10-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10-2@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-10-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-10-2@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-12-10@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-10@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-12-10@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-10@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-12-10@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-12-10@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-7@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-7@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-7@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-7@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-7@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-7@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-14-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-11@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-14-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-11@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-14-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-14-11@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-2@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-2@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-2@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-11@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-11@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-11@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-14@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-14@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-14@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-14@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-14@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-14@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-15@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-15@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-15@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-15@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-15@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-15@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-4-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-5@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-4-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-5@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-4-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-4-5@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-6@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-6@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-6@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-6@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-6@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-6@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-8@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-8@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-8@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-8@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-8@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-8@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-11@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-11@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-11@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/pick-up-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pick-up-2@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/pick-up-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pick-up-2@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/pick-up-2@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pick-up-2@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/profile-pic-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/profile-pic-5@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/profile-pic-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/profile-pic-5@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/profile-pic-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/profile-pic-5@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/qr-code-2@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/qr-code-2@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/qr-code-2@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/qr-code-2@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/WebCommon/WebCommon.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebCommon/WebCommon.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -94,10 +45,36 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
+        <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1208">
-              <caret line="606" column="31" selection-start-line="606" selection-start-column="31" selection-end-line="606" selection-end-column="31" />
+            <state relative-caret-position="1785">
+              <caret line="208" column="20" selection-start-line="208" selection-start-column="20" selection-end-line="208" selection-end-column="20" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#111#136#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="605">
+              <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#108#194#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -108,8 +85,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/WebCommon/WebCommon.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="75" column="29" lean-forward="true" selection-start-line="75" selection-start-column="29" selection-end-line="75" selection-end-column="29" />
+            <state relative-caret-position="375">
+              <caret line="50" column="27" lean-forward="true" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#108#187#0" expanded="true" />
@@ -118,37 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="26" selection-start-column="26" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="59" column="31" lean-forward="true" selection-start-line="59" selection-start-column="16" selection-end-line="59" selection-end-column="31" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#111#136#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Transaction/Transaction.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="146" column="20" selection-start-line="146" selection-start-column="19" selection-end-line="146" selection-end-column="20" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#102#127#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="30">
+              <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -157,36 +108,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onBackPressed</find>
-      <find>iphone8Copy18View</find>
-      <find>rightblock</find>
-      <find>grouptwo</find>
-      <find>transactionHistoryView</find>
-      <find>fontFamily: &quot;.SFNSText&quot;,</find>
-      <find>bottoms</find>
+      <find>this.setState</find>
+      <find>ProductRequestObject</find>
+      <find>getUrlString</find>
+      <find>setUrlId</find>
+      <find>URL</find>
+      <find>loadStoreProducts</find>
+      <find>renderCategorylistFlatListCell</find>
+      <find>console</find>
+      <find>app.co3.co</find>
+      <find>fla</find>
+      <find>console.l</find>
+      <find>scrollScrollView</find>
+      <find>pointHistory</find>
+      <find>moreButtonText</find>
+      <find>headerStyle:</find>
+      <find>headerstyle</find>
+      <find>productimageImage</find>
+      <find>BND</find>
+      <find>RM</find>
+      <find>%</find>
+      <find>percentText</find>
+      <find>termsButtonText</find>
+      <find>viewView</find>
       <find>backgroundImage</find>
-      <find>SFNSText</find>
-      <find>.SFNSText</find>
-      <find>SFNS</find>
-      <find>pointshopbuttonButton</find>
-      <find>vipbutton</find>
-      <find>clubbuttonButton</find>
-      <find>mid</find>
-      <find>viewview</find>
-      <find>text</find>
-      <find>vipiconView</find>
-      <find>HEAD</find>
-      <find>productsectionView</find>
-      <find>more</find>
-      <find>moreView</find>
-      <find>tabImage</find>
-      <find>deliveryView</find>
-      <find>selfPickUpText</find>
-      <find>deliveryText</find>
-      <find>tint</find>
-      <find>deliveryImage</find>
-      <find>pickUpImage</find>
-      <find>pickUpImage_selected</find>
+      <find>width</find>
+      <find>memberrightstext</find>
+      <find>Agree w</find>
+      <find>benefitView</find>
+      <find>server</find>
+      <find>pointHistoryView</find>
     </findStrings>
     <replaceStrings>
       <replace>width:</replace>
@@ -199,13 +150,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/App/Models/point_statements/point_statements_models.js" />
-        <option value="$PROJECT_DIR$/App/Models/point_statements.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/NewVoucherTwo.js" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/package-lock.json" />
-        <option value="$PROJECT_DIR$/App/Utils/index.js" />
-        <option value="$PROJECT_DIR$/node_modules/react-redux/node_modules/hoist-non-react-statics/package.json" />
         <option value="$PROJECT_DIR$/node_modules/react-redux/package.json" />
         <option value="$PROJECT_DIR$/node_modules/redux/package.json" />
         <option value="$PROJECT_DIR$/node_modules/symbol-observable/package.json" />
@@ -213,43 +157,50 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/App/Requests/base_request_object.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/event_object.js" />
-        <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
-        <option value="$PROJECT_DIR$/App/Model/index.js" />
         <option value="$PROJECT_DIR$/App/Utils/webservice_helper.js" />
         <option value="$PROJECT_DIR$/App/Requests/voucher_request_object.js" />
         <option value="$PROJECT_DIR$/App/Services/vouchers.js" />
-        <option value="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" />
         <option value="$PROJECT_DIR$/App/Services/point_statements.js" />
         <option value="$PROJECT_DIR$/App/PointHistory/Cell.js" />
         <option value="$PROJECT_DIR$/App/common/size.js" />
         <option value="$PROJECT_DIR$/App/PointHistory/PointsCell.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/vouchers.js" />
-        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/UsedVoucher.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js" />
         <option value="$PROJECT_DIR$/App/Utils/parse_date.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/ValidVoucher.js" />
         <option value="$PROJECT_DIR$/App/OrderHistory/OrderCell.js" />
         <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
         <option value="$PROJECT_DIR$/App/OrderHistory/OrderHistory.js" />
         <option value="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" />
-        <option value="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" />
-        <option value="$PROJECT_DIR$/App/Profile/Profile.js" />
         <option value="$PROJECT_DIR$/App/PointShopItem/PointShopItem.js" />
-        <option value="$PROJECT_DIR$/App/PointShop/PointShop.js" />
         <option value="$PROJECT_DIR$/App/PointShop/PointProductCell.js" />
-        <option value="$PROJECT_DIR$/App/PointShopHistory/Cell.js" />
         <option value="$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/members.js" />
-        <option value="$PROJECT_DIR$/App/Home/ProductCell.js" />
-        <option value="$PROJECT_DIR$/App/Home/CategoryCell.js" />
-        <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/App/PayByWallet/PayByWallet.js" />
-        <option value="$PROJECT_DIR$/App/Home/Home.js" />
         <option value="$PROJECT_DIR$/App/Checkout/Checkout.js" />
         <option value="$PROJECT_DIR$/App/Transaction/Transaction.js" />
+        <option value="$PROJECT_DIR$/App/MemberCenter/MemberCenter.js" />
+        <option value="$PROJECT_DIR$/App/Model/index.js" />
+        <option value="$PROJECT_DIR$/App/Services/products.js" />
+        <option value="$PROJECT_DIR$/App/Requests/product_request_object.js" />
+        <option value="$PROJECT_DIR$/App/Home/CategoryCell.js" />
+        <option value="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" />
+        <option value="$PROJECT_DIR$/App/PickUp/PickUp.js" />
+        <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/products.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/point_statements.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/ValidVoucher.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/UsedVoucher.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js" />
+        <option value="$PROJECT_DIR$/App/Profile/Profile.js" />
+        <option value="$PROJECT_DIR$/App/Home/Home.js" />
+        <option value="$PROJECT_DIR$/App/Home/ProductCell.js" />
+        <option value="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" />
+        <option value="$PROJECT_DIR$/App/PointShopHistory/Cell.js" />
+        <option value="$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js" />
+        <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
+        <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/App/WebCommon/WebCommon.js" />
         <option value="$PROJECT_DIR$/App/Utils/server.js" />
+        <option value="$PROJECT_DIR$/App/PointShop/PointShop.js" />
       </list>
     </option>
   </component>
@@ -264,6 +215,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -276,29 +228,10 @@
               <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="Checkout" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="Transaction" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
-              <item name="App" type="462c0819:PsiDirectoryNode" />
-              <item name="WebCommon" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -361,49 +294,19 @@
       <workItem from="1567742036404" duration="11826000" />
       <workItem from="1567781431550" duration="10940000" />
       <workItem from="1567988642533" duration="6973000" />
-      <workItem from="1568097967935" duration="5025000" />
+      <workItem from="1568097967935" duration="7458000" />
+      <workItem from="1568179140885" duration="27224000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103665000" />
+    <option name="totallyTimeSpent" value="133322000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="955" extended-state="6" />
+    <frame x="0" y="23" width="1680" height="955" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17765568" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32908458" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31633836" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="rails-model-fields" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Maven" order="6" />
-      <window_info anchor="right" id="Capture Analysis" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-      <window_info anchor="right" id="Database" order="9" />
-    </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17765568" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17948718" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -432,48 +335,55 @@
       <window_info anchor="right" id="Capture Analysis" order="7" />
       <window_info anchor="right" id="Palette&#9;" order="8" />
       <window_info anchor="right" id="Database" order="9" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17948718" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32908458" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31633836" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="rails-model-fields" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Maven" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Database" order="9" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js</url>
+          <line>8</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/redux/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="61" selection-start-line="4" selection-start-column="61" selection-end-line="4" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/symbol-observable/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="24" lean-forward="true" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.expo/packager-info.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/react-redux/node_modules/hoist-non-react-statics/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="28" column="68" selection-start-line="28" selection-start-column="68" selection-end-line="28" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Models/point_statements.js" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -499,20 +409,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="566">
           <caret line="161" column="6" selection-start-line="161" selection-start-column="6" selection-end-line="161" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/base_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Services/members.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="1" lean-forward="true" selection-end-line="5" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -544,35 +440,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Services/point_statements.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="52" selection-start-line="2" selection-start-column="52" selection-end-line="2" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/common/size.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointsCell.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="81" column="23" lean-forward="true" selection-start-line="81" selection-start-column="23" selection-end-line="81" selection-end-column="23" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#101#187#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -583,75 +454,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Model/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="e#1#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/vouchers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#89#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/UsedVoucher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-147">
-          <caret line="57" column="78" selection-start-line="57" selection-start-column="78" selection-end-line="57" selection-end-column="78" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#110#214#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="81" column="92" selection-start-line="81" selection-start-column="92" selection-end-line="81" selection-end-column="92" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#113#217#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/Utils/parse_date.js" />
-    <entry file="file://$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="50" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderCell.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1428">
@@ -663,45 +466,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="168" column="10" lean-forward="true" selection-start-line="165" selection-start-column="8" selection-end-line="168" selection-end-column="10" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#197#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberWallet/MemberWallet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="284" column="6" lean-forward="true" selection-start-line="270" selection-start-column="4" selection-end-line="284" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#187#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/PointShopItem/PointShopItem.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="50" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointShopHistory/Cell.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="101" column="46" selection-start-line="101" selection-start-column="46" selection-end-line="101" selection-end-column="46" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#103#189#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -717,38 +487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="55" column="31" lean-forward="true" selection-start-line="53" selection-start-column="8" selection-end-line="55" selection-end-column="31" />
-          <folding>
-            <element signature="e#98#188#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="127" column="6" lean-forward="true" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#149#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
-          <caret line="53" column="5" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="53" selection-end-column="5" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#108#194#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="421">
@@ -760,66 +498,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Home/ProductCell.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="50" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="55" selection-start-line="30" selection-start-column="55" selection-end-line="30" selection-end-column="55" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Home/CategoryCell.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/PayByWallet/PayByWallet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="54" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="54" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="111" column="5" selection-start-line="111" selection-start-column="5" selection-end-line="111" selection-end-column="5" />
-          <folding>
-            <element signature="e#103#202#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
@@ -827,17 +505,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#112#201#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="59" column="31" lean-forward="true" selection-start-line="59" selection-start-column="16" selection-end-line="59" selection-end-column="31" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#136#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -855,18 +522,306 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1208">
-          <caret line="606" column="31" selection-start-line="606" selection-start-column="31" selection-end-line="606" selection-end-column="31" />
+        <state relative-caret-position="342">
+          <caret line="503" column="6" lean-forward="true" selection-start-line="489" selection-start-column="4" selection-end-line="503" selection-end-column="6" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/App/PayByWallet/PayByWallet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="201" column="6" lean-forward="true" selection-start-line="187" selection-start-column="4" selection-end-line="201" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#110#186#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1905">
+          <caret line="127" column="6" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/members.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/base_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/product_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="35" lean-forward="true" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Model/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#1#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/CategoryCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-177">
+          <caret line="45" column="22" selection-start-line="45" selection-start-column="22" selection-end-line="45" selection-end-column="22" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#190#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="32" column="10" lean-forward="true" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/point_statements.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="52" selection-start-line="2" selection-start-column="52" selection-end-line="2" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/point_statement_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="46" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/vouchers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="750">
+          <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/members.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="26" column="22" lean-forward="true" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberCenter/MemberCenter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="413">
+          <caret line="46" column="10" lean-forward="true" selection-start-line="46" selection-start-column="10" selection-end-line="46" selection-end-column="10" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="85" lean-forward="true" selection-start-column="85" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PickUp/PickUp.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="99" column="33" lean-forward="true" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="33" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#97#175#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="192" column="15" selection-start-line="192" selection-start-column="4" selection-end-line="192" selection-end-column="15" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#215#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2144">
+          <caret line="144" column="31" selection-start-line="144" selection-start-column="31" selection-end-line="144" selection-end-column="31" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#197#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="121" column="25" lean-forward="true" selection-start-line="121" selection-start-column="25" selection-end-line="121" selection-end-column="25" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#113#217#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/UsedVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="118" column="25" lean-forward="true" selection-start-line="118" selection-start-column="25" selection-end-line="118" selection-end-column="25" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#110#214#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/ProductCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="52" column="54" lean-forward="true" selection-start-line="52" selection-start-column="54" selection-end-line="52" selection-end-column="54" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#110#196#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="163" column="49" selection-start-line="163" selection-start-column="12" selection-end-line="163" selection-end-column="49" />
+          <folding>
+            <element signature="e#103#202#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="686" column="15" lean-forward="true" selection-start-line="686" selection-start-column="15" selection-end-line="686" selection-end-column="15" />
+          <folding>
+            <element signature="e#98#188#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberWallet/MemberWallet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="749">
+          <caret line="52" column="5" lean-forward="true" selection-start-line="14" selection-start-column="4" selection-end-line="52" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="76" column="20" lean-forward="true" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#113#211#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointsCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="696">
+          <caret line="145" column="2" lean-forward="true" selection-start-line="26" selection-start-column="4" selection-end-line="145" selection-end-column="2" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#101#187#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointShopHistory/Cell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="124" column="29" lean-forward="true" selection-start-line="124" selection-start-column="29" selection-end-line="124" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#103#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="662">
+          <caret line="341" column="37" lean-forward="true" selection-start-line="341" selection-start-column="37" selection-end-line="341" selection-end-column="37" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#102#127#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1785">
+          <caret line="208" column="20" selection-start-line="208" selection-start-column="20" selection-end-line="208" selection-end-column="20" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#136#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/App/WebCommon/WebCommon.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="75" column="29" lean-forward="true" selection-start-line="75" selection-start-column="29" selection-end-line="75" selection-end-column="29" />
+        <state relative-caret-position="375">
+          <caret line="50" column="27" lean-forward="true" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#108#187#0" expanded="true" />
@@ -874,10 +829,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
+    <entry file="file://$PROJECT_DIR$/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="26" selection-start-column="26" selection-end-column="26" />
+        <state relative-caret-position="186">
+          <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="605">
+          <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#108#194#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

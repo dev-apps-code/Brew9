@@ -117,7 +117,9 @@ export default class Profile extends React.Component {
 	}
 
 	onClubPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("MemberCenter")
 	}
 
 	render() {
@@ -327,28 +329,18 @@ export default class Profile extends React.Component {
 							}}/>
 						<View
 							style={styles.viewView}>
+							<TouchableOpacity
+								onPress={this.onPointShopPressed}
+								style={styles.pointshopbuttonButton}>
+								<Text
+									style={styles.pointshopbuttonButtonText}></Text>
+							</TouchableOpacity>
 							<View
 								pointerEvents="box-none"
 								style={{
 									position: "absolute",
 									alignSelf: "center",
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onPointShopPressed}
-									style={styles.pointshopbuttonButton}>
-									<Text
-										style={styles.pointshopbuttonButtonText}></Text>
-								</TouchableOpacity>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									width: 84 * alpha,
+									width: 85 * alpha,
 									top: 22 * alpha,
 									height: 50 * alpha,
 									alignItems: "center",
@@ -662,6 +654,7 @@ export default class Profile extends React.Component {
 		</View>
 	}
 }
+
 const styles = StyleSheet.create({
 	amendedView: {
 		backgroundColor: "white",
@@ -670,20 +663,19 @@ const styles = StyleSheet.create({
 	scrollScrollView: {
 		backgroundColor: "transparent",
 		height: 603 * alpha,
-		marginTop: 20 * alpha,
 	},
 	topsectionView: {
 		backgroundColor: "transparent",
 		height: 213 * alpha,
 	},
 	backgroundImage: {
-		backgroundColor: "transparent",
 		resizeMode: "cover",
+		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0,
-		right: 0,
+		right: 1,
 		top: 0,
-		bottom: 0,
+		width: "100%",
 		height: 213 * alpha,
 	},
 	profilePicImage: {

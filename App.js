@@ -8,19 +8,19 @@
 
 import * as Font from "expo-font"
 import { DangerZone, AppLoading } from "expo"
-
+import React from "react"
 
 import { createBottomTabNavigator } from "react-navigation"
+import { createStackNavigator, createAppContainer } from "react-navigation"
+
 import Checkout from "./App/Checkout/Checkout"
 import Profile from "./App/Profile/Profile"
 import MemberWallet from "./App/MemberWallet/MemberWallet"
 import MemberReward from "./App/MemberReward/MemberReward"
 import MembershipInfo from "./App/MembershipInfo/MembershipInfo"
 import PickUp from "./App/PickUp/PickUp"
-import React from "react"
 import MemberProfile from "./App/MemberProfile/MemberProfile"
 import Home from "./App/Home/Home"
-import { createStackNavigator, createAppContainer } from "react-navigation"
 import VIPPurchase from "./App/VIPPurchase/VIPPurchase"
 import PointHistory from "./App/PointHistory/PointHistory"
 import Transaction from "./App/Transaction/Transaction"
@@ -29,7 +29,9 @@ import PointShop from "./App/PointShop/PointShop"
 import PointShopItem from "./App/PointShopItem/PointShopItem"
 import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
 import PayByWallet from "./App/PayByWallet/PayByWallet"
-import {createStore, applyMiddleware} from 'redux';
+import MemberCenter from "./App/MemberCenter/MemberCenter"
+import WebCommon from "./App/WebCommon/WebCommon"
+
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
 import {registerModels} from './App/Model/index'
@@ -102,6 +104,12 @@ const PushRouteThree = createStackNavigator({
 	MemberProfile: {
 		screen: MemberProfile,
 	},
+	MemberCenter: {
+		screen: MemberCenter,
+	},
+	WebCommon: {
+		screen: WebCommon,
+	}
 }, {
 	initialRouteName: "Profile",
 })
