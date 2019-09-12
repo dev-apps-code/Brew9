@@ -43,7 +43,7 @@ export default class ProductCell extends React.Component {
 						<Text
 							style={styles.titleText}>{this.props.productname}</Text>
 						<Text
-							style={styles.descriptionText}>Lorem ipsum dolor sit amet, iief consectetuer adipiscing elite…</Text>
+							style={styles.descriptionText}>{this.props.productdescription}</Text>
 						<View
 							pointerEvents="box-none"
 							style={{

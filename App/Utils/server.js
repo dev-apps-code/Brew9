@@ -1,5 +1,8 @@
 export const KSERVERURL ='http://139.162.16.119:3050/api'
 
+export const KURL_INFO = 'http://6519cff4.ngrok.io/info'
+
+
 export const KURL_TERMS_OF_SERVICE =
   'http://innogix.com/co3/privacy_policy.html'
 export const KURL_PRIVACY_POLICY =

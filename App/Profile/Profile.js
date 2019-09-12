@@ -654,6 +654,7 @@ export default class Profile extends React.Component {
 		</View>
 	}
 }
+
 const styles = StyleSheet.create({
 	amendedView: {
 		backgroundColor: "white",

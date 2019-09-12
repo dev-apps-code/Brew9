@@ -30,8 +30,8 @@ import PointShopItem from "./App/PointShopItem/PointShopItem"
 import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
 import PayByWallet from "./App/PayByWallet/PayByWallet"
 import MemberCenter from "./App/MemberCenter/MemberCenter"
+import WebCommon from "./App/WebCommon/WebCommon"
 
-import {createStore, applyMiddleware} from 'redux';
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
 import {registerModels} from './App/Model/index'
@@ -106,6 +106,9 @@ const PushRouteThree = createStackNavigator({
 	},
 	MemberCenter: {
 		screen: MemberCenter,
+	},
+	WebCommon: {
+		screen: WebCommon,
 	}
 }, {
 	initialRouteName: "Profile",

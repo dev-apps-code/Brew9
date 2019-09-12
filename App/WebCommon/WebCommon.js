@@ -17,7 +17,7 @@ export default class WebCommon extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "",
+			title: navigation.getParam("title", ""),
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -60,7 +60,7 @@ export default class WebCommon extends React.Component {
 				style={styles.commonWebView}>
 				<WebView
 					style={styles.webviewWebView}
-					source={{ uri: this.props.url }}/>
+					source={{ uri: this.props.navigation.getParam("web_url", "") }}/>
 			</View>
 	}
 }

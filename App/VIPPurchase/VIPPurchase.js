@@ -60,251 +60,264 @@ export default class VIPPurchase extends React.Component {
 		navigate("Transaction")
 	}
 
+	onOtherDetailPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("MembershipInfo")
+	}
+
 	render() {
 
 		return <View
 			style={styles.VIPView}>
-			<ScrollView
-				style={styles.scrollviewScrollView}>
-				<View
-					style={styles.welcomeGiftPackView}>
+			<View
+				pointerEvents="box-none"
+				style={{
+					flex: 1,
+				}}>
+				<ScrollView
+					style={styles.scrollviewScrollView}>
 					<View
-						style={styles.membercardView}>
+						style={styles.welcomeGiftPackView}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/coffee-card-05-2.png")}
-								style={styles.coffeeCard05Image}/>
-						</View>
-						<Text
-							style={styles.memberCardText}>Member Card</Text>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<View
-						style={styles.packInformationView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								width: 147 * alpha,
-								height: 114 * alpha,
-								alignItems: "flex-start",
-							}}>
-							<Text
-								style={styles.welcomeGiftPackText}>Welcome Gift Pack</Text>
-							<View
-								style={styles.prioritydescriptionView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										alignSelf: "center",
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-3-16.png")}
-										style={styles.group3Image}/>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										alignSelf: "center",
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Text
-										style={styles.noNeedQueueText}>No need queue</Text>
-								</View>
-							</View>
+							style={styles.membercardView}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									width: 146 * alpha,
-									height: 53 * alpha,
-									marginLeft: 1 * alpha,
-									marginTop: 9 * alpha,
-									flexDirection: "row",
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/coffee-card-05-2.png")}
+									style={styles.coffeeCard05Image}/>
+							</View>
+							<Text
+								style={styles.memberCardText}>Member Card</Text>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<View
+							style={styles.packInformationView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 147 * alpha,
+									height: 114 * alpha,
 									alignItems: "flex-start",
 								}}>
+								<Text
+									style={styles.welcomeGiftPackText}>Welcome Gift Pack</Text>
 								<View
-									style={styles.priorityView}>
+									style={styles.prioritydescriptionView}>
 									<View
-										style={styles.priorityiconView}>
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											top: 0,
+											bottom: 0,
+											justifyContent: "center",
+										}}>
 										<Image
-											source={require("./../../assets/images/group-4-8.png")}
-											style={styles.group4Image}/>
-										<View
-											style={styles.group2View}>
-											<Text
-												style={styles.x2Text}>x2</Text>
-										</View>
+											source={require("./../../assets/images/group-3-16.png")}
+											style={styles.group3Image}/>
 									</View>
-									<Text
-										style={styles.priorityText}>Priority</Text>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											top: 0,
+											bottom: 0,
+											justifyContent: "center",
+										}}>
+										<Text
+											style={styles.noNeedQueueText}>No need queue</Text>
+									</View>
 								</View>
 								<View
-									style={styles.deliveryView}>
+									pointerEvents="box-none"
+									style={{
+										width: 146 * alpha,
+										height: 53 * alpha,
+										marginLeft: 1 * alpha,
+										marginTop: 9 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
+									}}>
 									<View
-										style={styles.deliveryiconView}>
+										style={styles.priorityView}>
 										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
+											style={styles.priorityiconView}>
+											<Image
+												source={require("./../../assets/images/group-4-8.png")}
+												style={styles.group4Image}/>
 											<View
-												style={styles.group20View}>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/group-7-3.png")}
-														style={styles.group7Image}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<View
-														style={styles.stroke8View}/>
-												</View>
-												<View
-													pointerEvents="box-none"
-													style={{
-														position: "absolute",
-														left: 0,
-														right: 0,
-														top: 0,
-														bottom: 0,
-														justifyContent: "center",
-													}}>
-													<Image
-														source={require("./../../assets/images/group-19-2.png")}
-														style={styles.group19Image}/>
-												</View>
+												style={styles.group2View}>
+												<Text
+													style={styles.x2Text}>x2</Text>
 											</View>
 										</View>
-										<View
-											style={styles.group2CopyView}>
-											<Text
-												style={styles.x2TwoText}>x2</Text>
-										</View>
+										<Text
+											style={styles.priorityText}>Priority</Text>
 									</View>
-									<Text
-										style={styles.freeDeliveryText}>Free Delivery</Text>
+									<View
+										style={styles.deliveryView}>
+										<View
+											style={styles.deliveryiconView}>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<View
+													style={styles.group20View}>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<Image
+															source={require("./../../assets/images/group-7-3.png")}
+															style={styles.group7Image}/>
+													</View>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<View
+															style={styles.stroke8View}/>
+													</View>
+													<View
+														pointerEvents="box-none"
+														style={{
+															position: "absolute",
+															left: 0,
+															right: 0,
+															top: 0,
+															bottom: 0,
+															justifyContent: "center",
+														}}>
+														<Image
+															source={require("./../../assets/images/group-19-2.png")}
+															style={styles.group19Image}/>
+													</View>
+												</View>
+											</View>
+											<View
+												style={styles.group2CopyView}>
+												<Text
+													style={styles.x2TwoText}>x2</Text>
+											</View>
+										</View>
+										<Text
+											style={styles.freeDeliveryText}>Free Delivery</Text>
+									</View>
 								</View>
 							</View>
-						</View>
-						<View
-							style={styles.buy1free1View}>
 							<View
-								style={styles.free1iconView}>
-								<Image
-									source={require("./../../assets/images/group-9-8.png")}
-									style={styles.group9Image}/>
+								style={styles.buy1free1View}>
 								<View
-									style={styles.group2Copy2View}>
-									<Text
-										style={styles.x1Text}>x1</Text>
+									style={styles.free1iconView}>
+									<Image
+										source={require("./../../assets/images/group-9-8.png")}
+										style={styles.group9Image}/>
+									<View
+										style={styles.group2Copy2View}>
+										<Text
+											style={styles.x1Text}>x1</Text>
+									</View>
 								</View>
+								<Text
+									style={styles.buy1Free1Text}>Buy 1 Free 1</Text>
 							</View>
-							<Text
-								style={styles.buy1Free1Text}>Buy 1 Free 1</Text>
-						</View>
-						<View
-							style={styles.buy2free1View}>
 							<View
-								style={styles.free2iconView}>
-								<Image
-									source={require("./../../assets/images/group-13-8.png")}
-									style={styles.group13Image}/>
+								style={styles.buy2free1View}>
 								<View
-									style={styles.group2Copy3View}>
-									<Text
-										style={styles.x2ThreeText}>x2</Text>
+									style={styles.free2iconView}>
+									<Image
+										source={require("./../../assets/images/group-13-8.png")}
+										style={styles.group13Image}/>
+									<View
+										style={styles.group2Copy3View}>
+										<Text
+											style={styles.x2ThreeText}>x2</Text>
+									</View>
 								</View>
+								<Text
+									style={styles.buy2Free1Text}>Buy 2 Free 1</Text>
 							</View>
-							<Text
-								style={styles.buy2Free1Text}>Buy 2 Free 1</Text>
 						</View>
 					</View>
-				</View>
+					<View
+						style={styles.monthlyAfterActivateView}>
+						<Text
+							style={styles.detailsText}>Monthly after activate: Silver Member</Text>
+						<View
+							style={styles.rm5OffView}>
+							<Text
+								style={styles.descriptionText}>RM5 off with RM150 spend</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Text
+								style={styles.valueText}>x2/mth</Text>
+						</View>
+						<View
+							style={styles.offView}>
+							<Text
+								style={styles.descriptionTwoText}>10% off on specific drinks</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Text
+								style={styles.valueTwoText}>x1/mth</Text>
+						</View>
+						<TouchableOpacity
+							onPress={this.onOtherDetailPressed}
+							style={styles.otherdetailsButton}>
+							<Text
+								style={styles.otherdetailsButtonText}>Other Membership Details</Text>
+							<Image
+								source={require("./../../assets/images/group-2.png")}
+								style={styles.otherdetailsButtonImage}/>
+						</TouchableOpacity>
+					</View>
+				</ScrollView>
 				<View
-					style={styles.monthlyAfterActivateView}>
+					style={styles.termsView}>
+					<View
+						style={styles.rectangleView}/>
 					<Text
-						style={styles.detailsText}>Monthly after activate: Silver Member</Text>
-					<View
-						style={styles.rm5OffView}>
-						<Text
-							style={styles.descriptionText}>RM5 off with RM150 spend</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.valueText}>x2/mth</Text>
-					</View>
-					<View
-						style={styles.offView}>
-						<Text
-							style={styles.descriptionTwoText}>10% off on specific drinks</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.valueTwoText}>x1/mth</Text>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<View
-						style={styles.termsView}>
-						<View
-							style={styles.rectangleView}/>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.agreeWithBrew9MemText}>Agree with</Text>
-						<Text
-							style={styles.agreeWithBrew9MemTwoText}>Brew9 member regulations</Text>
-					</View>
+						style={styles.agreeWithBrew9MemText}>Agree with</Text>
+					<Text
+						style={styles.agreeWithBrew9MemTwoText}>Brew9 member regulations</Text>
 				</View>
-			</ScrollView>
+			</View>
 			<View
 				style={styles.totalPayNowView}>
 				<View
@@ -378,16 +391,16 @@ const styles = StyleSheet.create({
 	scrollviewScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
+		marginBottom: 33 * alpha,
 	},
 	welcomeGiftPackView: {
 		backgroundColor: "white",
 		height: 365 * alpha,
-		marginRight: 1 * alpha,
-		alignItems: "flex-end",
+		marginRight: 1,
+		alignItems: "center",
 	},
 	membercardView: {
 		backgroundColor: "transparent",
-		alignSelf: "center",
 		width: 280 * alpha,
 		height: 182 * alpha,
 		marginTop: 6 * alpha,
@@ -412,6 +425,7 @@ const styles = StyleSheet.create({
 	},
 	packInformationView: {
 		backgroundColor: "transparent",
+		alignSelf: "flex-end",
 		width: 324 * alpha,
 		height: 114 * alpha,
 		marginRight: 21 * alpha,
@@ -420,13 +434,13 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 	welcomeGiftPackText: {
+		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
 	},
 	prioritydescriptionView: {
 		backgroundColor: "transparent",
@@ -435,8 +449,8 @@ const styles = StyleSheet.create({
 		marginTop: 17 * alpha,
 	},
 	group3Image: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
+		backgroundColor: "transparent",
 		width: 77 * alpha,
 		height: 16 * alpha,
 	},
@@ -461,8 +475,8 @@ const styles = StyleSheet.create({
 		marginRight: 2 * alpha,
 	},
 	group4Image: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		position: "absolute",
 		left: 0,
 		right: 6 * alpha,
@@ -471,7 +485,7 @@ const styles = StyleSheet.create({
 	},
 	group2View: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 7,
+		borderRadius: 7 * alpha,
 		position: "absolute",
 		right: 0,
 		width: 15 * alpha,
@@ -491,13 +505,13 @@ const styles = StyleSheet.create({
 		marginRight: 3 * alpha,
 	},
 	priorityText: {
-		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 		marginTop: 11 * alpha,
 	},
 	deliveryView: {
@@ -518,8 +532,8 @@ const styles = StyleSheet.create({
 		marginRight: 4 * alpha,
 	},
 	group7Image: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		width: null,
 		height: 21 * alpha,
 		marginLeft: 3 * alpha,
@@ -541,31 +555,31 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 7 * alpha,
 		position: "absolute",
-		right: 1 * alpha,
+		right: 1,
 		width: 15 * alpha,
 		top: 12 * alpha,
 		height: 14 * alpha,
 		justifyContent: "center",
 	},
 	x2TwoText: {
-		backgroundColor: "transparent",
 		color: "rgb(253, 253, 253)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		backgroundColor: "transparent",
 		marginLeft: 3 * alpha,
 		marginRight: 3 * alpha,
 	},
 	freeDeliveryText: {
+		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginTop: 11 * alpha,
 	},
 	buy1free1View: {
@@ -574,10 +588,10 @@ const styles = StyleSheet.create({
 		height: 57 * alpha,
 		marginLeft: 18 * alpha,
 		marginTop: 57 * alpha,
+		alignItems: "center",
 	},
 	free1iconView: {
 		backgroundColor: "transparent",
-		alignSelf: "center",
 		width: 26 * alpha,
 		height: 30 * alpha,
 	},
@@ -592,7 +606,7 @@ const styles = StyleSheet.create({
 	},
 	group2Copy2View: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 7 * alpha,
+		borderRadius: 7,
 		position: "absolute",
 		left: 10 * alpha,
 		right: 0,
@@ -601,24 +615,25 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	x1Text: {
+		backgroundColor: "transparent",
 		color: "rgb(253, 253, 253)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginLeft: 4 * alpha,
 		marginRight: 3 * alpha,
 	},
 	buy1Free1Text: {
-		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
+		alignSelf: "stretch",
 		marginTop: 13 * alpha,
 	},
 	buy2free1View: {
@@ -654,46 +669,46 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	x2ThreeText: {
-		backgroundColor: "transparent",
 		color: "rgb(253, 253, 253)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		backgroundColor: "transparent",
 		marginLeft: 4 * alpha,
 		marginRight: 3 * alpha,
 	},
 	buy2Free1Text: {
+		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginTop: 13 * alpha,
 	},
 	monthlyAfterActivateView: {
 		backgroundColor: "white",
-		height: 200 * alpha,
+		height: 170 * alpha,
 		marginTop: 10 * alpha,
-		alignItems: "flex-start",
+		alignItems: "center",
 	},
 	detailsText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		backgroundColor: "transparent",
+		alignSelf: "flex-start",
 		marginLeft: 30 * alpha,
 		marginTop: 29 * alpha,
 	},
 	rm5OffView: {
 		backgroundColor: "transparent",
-		alignSelf: "center",
 		width: 317 * alpha,
 		height: 16 * alpha,
 		marginTop: 24 * alpha,
@@ -701,26 +716,25 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	descriptionText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	valueText: {
-		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	offView: {
 		backgroundColor: "transparent",
-		alignSelf: "center",
 		width: 317 * alpha,
 		height: 16 * alpha,
 		marginTop: 28 * alpha,
@@ -728,59 +742,85 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	descriptionTwoText: {
+		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 	},
 	valueTwoText: {
-		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	otherdetailsButtonText: {
+		color: "rgb(176, 176, 176)",
+		fontFamily: "Helvetica",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	otherdetailsButtonImage: {
+		resizeMode: "contain",
+		marginLeft: 10 * alpha,
+	},
+	otherdetailsButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		alignSelf: "stretch",
+		height: 16 * alpha,
+		marginLeft: 83 * alpha,
+		marginRight: 83 * alpha,
+		marginTop: 14 * alpha,
 	},
 	termsView: {
-		backgroundColor: "transparent",
-		width: 214 * alpha,
-		height: 16 * alpha,
-		marginLeft: 31 * alpha,
-		marginBottom: 19 * alpha,
+		backgroundColor: "white",
+		position: "absolute",
+		left: 0,
+		right: 1 * alpha,
+		bottom: 0,
+		height: 34 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
 	rectangleView: {
 		backgroundColor: "transparent",
 		borderRadius: 3 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(229, 229, 229)",
 		borderStyle: "solid",
 		width: 16 * alpha,
 		height: 16 * alpha,
+		marginLeft: 30 * alpha,
 	},
 	agreeWithBrew9MemText: {
+		backgroundColor: "transparent",
 		color: "rgb(148, 147, 147)",
 		fontFamily: "Helvetica",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,
 	},
 	agreeWithBrew9MemTwoText: {
+		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginLeft: 2 * alpha,
 	},
 	totalPayNowView: {
