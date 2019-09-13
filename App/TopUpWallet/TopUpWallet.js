@@ -1,0 +1,205 @@
+//
+//  TopUpWallet
+//  Brew9
+//
+//  Created by [Author].
+//  Copyright © 2018 brew9. All rights reserved.
+//
+
+import { Text, TouchableOpacity, View, StyleSheet, Image, FlatList } from "react-native"
+import Card from "./Card"
+import React from "react"
+import {alpha, fontAlpha} from "../common/size";
+
+
+export default class TopUpWallet extends React.Component {
+
+	static navigationOptions = ({ navigation }) => {
+
+		const { params = {} } = navigation.state
+		return {
+			title: "Top Up Wallet",
+			headerTintColor: "black",
+			headerLeft: <View
+				style={styles.headerLeftContainer}>
+				<TouchableOpacity
+					onPress={params.onBackPressed ? params.onBackPressed : () => null}
+					style={styles.navigationBarItem}>
+					<Image
+						source={require("./../../assets/images/back.png")}
+						style={styles.navigationBarItemIcon}/>
+				</TouchableOpacity>
+			</View>,
+			headerRight: null,
+			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
+			},
+		}
+	}
+
+	constructor(props) {
+		super(props)
+	}
+
+	componentDidMount() {
+		this.props.navigation.setParams({
+			onBackPressed: this.onBackPressed,
+			onItemPressed: this.onItemPressed,
+		})
+	}
+
+	onBackPressed = () => {
+
+		this.props.navigation.goBack()
+	}
+
+	onTopUpPressed = () => {
+
+	}
+
+	topuplistFlatListMockData = [{
+		key: "1",
+	}, {
+		key: "2",
+	}, {
+		key: "3",
+	}, {
+		key: "4",
+	}, {
+		key: "5",
+	}, {
+		key: "6",
+	}, {
+		key: "7",
+	}, {
+		key: "8",
+	}, {
+		key: "9",
+	}, {
+		key: "10",
+	}]
+
+	renderTopuplistFlatListCell = ({ item }) => {
+	
+		return <Card
+				navigation={this.props.navigation}/>
+	}
+
+	render() {
+
+		return <View
+			style={styles.topUpWalletView}>
+			<View
+				style={styles.noticeView}>
+				<Text
+					style={styles.messageText}>Please contact customer service for top up receipt, orders will no longer be issued.</Text>
+			</View>
+			<View
+				style={styles.topuplistFlatListViewWrapper}>
+				<FlatList
+					renderItem={this.renderTopuplistFlatListCell}
+					data={this.topuplistFlatListMockData}
+					style={styles.topuplistFlatList}/>
+			</View>
+			<View
+				style={styles.topUpView}>
+				<Text
+					style={styles.selectedValueText}>BND200</Text>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+				<TouchableOpacity
+					onPress={this.onTopUpPressed}
+					style={styles.topupButton}>
+					<Text
+						style={styles.topupButtonText}>Top Up</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	}
+}
+
+const styles = StyleSheet.create({
+	headerLeftContainer: {
+		flexDirection: "row",
+		marginLeft: 8 * alpha,
+	},
+	navigationBarItem: {
+
+	},
+	navigationBarItemTitle: {
+		color: "black",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+	},
+	navigationBarItemIcon: {
+		tintColor: "black",
+	},
+	topUpWalletView: {
+		backgroundColor: "rgb(248, 248, 248)",
+		flex: 1,
+	},
+	noticeView: {
+		backgroundColor: "rgba(141, 230, 255, 0.4)",
+		height: 34 * alpha,
+		justifyContent: "center",
+		alignItems: "flex-end",
+	},
+	messageText: {
+		backgroundColor: "transparent",
+		color: "rgb(59, 59, 59)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 20 * alpha,
+	},
+	topuplistFlatList: {
+		backgroundColor: "transparent",
+		width: "100%",
+		height: "100%",
+	},
+	topuplistFlatListViewWrapper: {
+		flex: 1,
+	},
+	topUpView: {
+		backgroundColor: "white",
+		height: 52 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	selectedValueText: {
+		color: "rgb(59, 59, 59)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 21 * alpha,
+	},
+	topupButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 129 * alpha,
+		height: 52 * alpha,
+	},
+	topupButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	topupButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+})

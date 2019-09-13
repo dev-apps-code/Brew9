@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
 	},
 	redeemrewardButton: {
 		backgroundColor: "rgb(255, 254, 254)",
-		borderWidth: 0.5 * alpha,
+		borderWidth: 0.5,
 		borderColor: "rgb(215, 215, 215)",
 		borderStyle: "solid",
 		flexDirection: "row",

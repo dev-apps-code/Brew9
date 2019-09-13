@@ -59,6 +59,12 @@ export default class MemberWallet extends React.Component {
 		navigate("OrderHistory")
 	}
 
+	onTopUpPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("TopUpWallet")
+	}
+
 	render() {
 	
 		return <View
@@ -106,11 +112,12 @@ export default class MemberWallet extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-							<View
-								style={styles.topUpView}>
+							<TouchableOpacity
+								onPress={this.onTopUpPressed}
+								style={styles.topUpButton}>
 								<Text
-									style={styles.topUpText}>Top Up</Text>
-							</View>
+									style={styles.topUpButtonText}>Top Up</Text>
+							</TouchableOpacity>
 						</View>
 						<View
 							style={styles.optionsView}>
@@ -379,21 +386,26 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignSelf: "center",
 	},
-	topUpView: {
+	topUpButton: {
 		backgroundColor: "rgb(70, 70, 70)",
 		borderRadius: 3 * alpha,
-		height: 36 * alpha,
-		justifyContent: "center",
+		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 36 * alpha,
 	},
-	topUpText: {
+	topUpButtonText: {
 		color: "white",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
+	},
+	topUpButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 	optionsView: {
 		backgroundColor: "transparent",

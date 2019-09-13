@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
 	updateButton: {
 		backgroundColor: "transparent",
 		borderRadius: 1 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(187, 186, 186)",
 		borderStyle: "solid",
 		flexDirection: "row",
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
 	radioView: {
 		backgroundColor: "rgb(238, 234, 234)",
 		borderRadius: 6 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(226, 226, 226)",
 		borderStyle: "solid",
 		width: 12 * alpha,

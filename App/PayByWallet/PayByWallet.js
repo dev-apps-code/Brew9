@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
 	selectView: {
 		backgroundColor: "transparent",
 		borderRadius: 8 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(208, 205, 205)",
 		borderStyle: "solid",
 		width: 16 * alpha,
