@@ -71,6 +71,7 @@ export default class Home extends React.Component {
 
 	componentDidMount() {
 		this.loadStorePushToken()
+		this.loadShops()
 		this.loadStoreProducts()
 	}
 
