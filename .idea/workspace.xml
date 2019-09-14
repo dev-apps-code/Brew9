@@ -2,17 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/App/Requests/membership_request_object.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/Services/memberships.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/WebserviceModel/memberships.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Home/ProductCell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/ProductCell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Checkout/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Checkout/Checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberCenter/MemberCenter.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MemberCenter/MemberCenter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberReward/MemberReward.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MemberReward/MemberReward.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointHistory/PointHistory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/PointShop/PointShop.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointShop/PointShop.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/PointShopHistory/Cell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PointShopHistory/Cell.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Utils/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Utils/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/WebCommon/WebCommon.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebCommon/WebCommon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Model/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Model/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/OrderHistory/OrderCell.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/OrderHistory/OrderCell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PayByWallet/PayByWallet.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PayByWallet/PayByWallet.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,26 +49,51 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/PointHistory/PointHistory.js">
+        <entry file="file://$PROJECT_DIR$/App/OrderReceipt/OrderReceipt.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="208" column="20" selection-start-line="208" selection-start-column="20" selection-end-line="208" selection-end-column="20" />
+            <state relative-caret-position="469">
+              <caret line="311" column="6" selection-start-line="297" selection-start-column="4" selection-end-line="311" selection-end-column="6" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#111#136#0" expanded="true" />
+                <element signature="e#111#189#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="127" column="6" lean-forward="true" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="6" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#111#149#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderCell.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="394">
+              <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#106#210#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
+        <entry file="file://$PROJECT_DIR$/App/OrderInvoice/OrderInvoice.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="605">
-              <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
+            <state relative-caret-position="362">
+              <caret line="256" column="27" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="27" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#108#194#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -73,33 +102,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+            <state relative-caret-position="326">
+              <caret line="126" column="29" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
+                <element signature="e#105#138#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/WebCommon/WebCommon.js">
+        <entry file="file://$PROJECT_DIR$/App/OrderReview/OrderReview.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="50" column="27" lean-forward="true" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
+            <state relative-caret-position="172">
+              <caret line="148" column="34" selection-start-line="148" selection-start-column="34" selection-end-line="148" selection-end-column="34" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#108#187#0" expanded="true" />
+                <element signature="e#110#135#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -108,17 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>this.setState</find>
-      <find>ProductRequestObject</find>
-      <find>getUrlString</find>
-      <find>setUrlId</find>
-      <find>URL</find>
-      <find>loadStoreProducts</find>
-      <find>renderCategorylistFlatListCell</find>
-      <find>console</find>
-      <find>app.co3.co</find>
-      <find>fla</find>
-      <find>console.l</find>
       <find>scrollScrollView</find>
       <find>pointHistory</find>
       <find>moreButtonText</find>
@@ -138,10 +148,24 @@
       <find>benefitView</find>
       <find>server</find>
       <find>pointHistoryView</find>
+      <find>const</find>
+      <find>borderWidth</find>
+      <find>callIconButton</find>
+      <find>borderwidth</find>
+      <find>borderwi</find>
+      <find>orderReviewView</find>
+      <find>(height: \d*),</find>
+      <find>(marginTop: \d*),</find>
+      <find>(fontSize: \d*),</find>
+      <find>(marginLeft: \d*),</find>
+      <find>(bottom: \d*),</find>
     </findStrings>
     <replaceStrings>
       <replace>width:</replace>
       <replace>Helvetica</replace>
+      <replace>width: \d* /* alpha,</replace>
+      <replace>$1 * fontAlpha,</replace>
+      <replace>$1 * alpha,</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -150,14 +174,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/node_modules/react-redux/package.json" />
-        <option value="$PROJECT_DIR$/node_modules/redux/package.json" />
-        <option value="$PROJECT_DIR$/node_modules/symbol-observable/package.json" />
-        <option value="$PROJECT_DIR$/App/Requests/push_request_object.js" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/App/Requests/base_request_object.js" />
-        <option value="$PROJECT_DIR$/App/WebserviceModel/event_object.js" />
-        <option value="$PROJECT_DIR$/App/Utils/webservice_helper.js" />
         <option value="$PROJECT_DIR$/App/Requests/voucher_request_object.js" />
         <option value="$PROJECT_DIR$/App/Services/vouchers.js" />
         <option value="$PROJECT_DIR$/App/Services/point_statements.js" />
@@ -166,23 +182,15 @@
         <option value="$PROJECT_DIR$/App/PointHistory/PointsCell.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/vouchers.js" />
         <option value="$PROJECT_DIR$/App/Utils/parse_date.js" />
-        <option value="$PROJECT_DIR$/App/OrderHistory/OrderCell.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
         <option value="$PROJECT_DIR$/App/OrderHistory/OrderHistory.js" />
-        <option value="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" />
         <option value="$PROJECT_DIR$/App/PointShopItem/PointShopItem.js" />
         <option value="$PROJECT_DIR$/App/PointShop/PointProductCell.js" />
         <option value="$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/members.js" />
-        <option value="$PROJECT_DIR$/App/PayByWallet/PayByWallet.js" />
-        <option value="$PROJECT_DIR$/App/Checkout/Checkout.js" />
         <option value="$PROJECT_DIR$/App/Transaction/Transaction.js" />
-        <option value="$PROJECT_DIR$/App/MemberCenter/MemberCenter.js" />
-        <option value="$PROJECT_DIR$/App/Model/index.js" />
         <option value="$PROJECT_DIR$/App/Services/products.js" />
         <option value="$PROJECT_DIR$/App/Requests/product_request_object.js" />
         <option value="$PROJECT_DIR$/App/Home/CategoryCell.js" />
-        <option value="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" />
         <option value="$PROJECT_DIR$/App/PickUp/PickUp.js" />
         <option value="$PROJECT_DIR$/App/Requests/point_statement_request_object.js" />
         <option value="$PROJECT_DIR$/App/WebserviceModel/products.js" />
@@ -193,14 +201,30 @@
         <option value="$PROJECT_DIR$/App/Profile/Profile.js" />
         <option value="$PROJECT_DIR$/App/Home/Home.js" />
         <option value="$PROJECT_DIR$/App/Home/ProductCell.js" />
-        <option value="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" />
         <option value="$PROJECT_DIR$/App/PointShopHistory/Cell.js" />
         <option value="$PROJECT_DIR$/App/VIPPurchase/VIPPurchase.js" />
         <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
-        <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/App/WebCommon/WebCommon.js" />
         <option value="$PROJECT_DIR$/App/Utils/server.js" />
         <option value="$PROJECT_DIR$/App/PointShop/PointShop.js" />
+        <option value="$PROJECT_DIR$/App/MemberWallet/MemberWallet.js" />
+        <option value="$PROJECT_DIR$/App/TopUpWallet/TopUpWallet.js" />
+        <option value="$PROJECT_DIR$/App/Requests/membership_request_object.js" />
+        <option value="$PROJECT_DIR$/App/Services/memberships.js" />
+        <option value="$PROJECT_DIR$/App/WebserviceModel/memberships.js" />
+        <option value="$PROJECT_DIR$/App/Model/index.js" />
+        <option value="$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js" />
+        <option value="$PROJECT_DIR$/App/TopUpWallet/Card.js" />
+        <option value="$PROJECT_DIR$/App/PayByWallet/PayByWallet.js" />
+        <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
+        <option value="$PROJECT_DIR$/App/MemberCenter/MemberCenter.js" />
+        <option value="$PROJECT_DIR$/App/MemberProfile/MemberProfile.js" />
+        <option value="$PROJECT_DIR$/App/Checkout/Checkout.js" />
+        <option value="$PROJECT_DIR$/App/OrderReceipt/OrderReceipt.js" />
+        <option value="$PROJECT_DIR$/App/OrderReview/OrderReview.js" />
+        <option value="$PROJECT_DIR$/App.js" />
+        <option value="$PROJECT_DIR$/App/OrderHistory/OrderCell.js" />
+        <option value="$PROJECT_DIR$/App/OrderInvoice/OrderInvoice.js" />
       </list>
     </option>
   </component>
@@ -227,6 +251,72 @@
               <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
               <item name="App" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="MemberCenter" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="MemberProfile" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="MemberReward" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="Model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="OrderHistory" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="OrderInvoice" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="OrderReceipt" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="OrderReview" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="PayByWallet" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="PointShopHistory" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="brew9-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="brew9-app" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="Profile" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -295,12 +385,12 @@
       <workItem from="1567781431550" duration="10940000" />
       <workItem from="1567988642533" duration="6973000" />
       <workItem from="1568097967935" duration="7458000" />
-      <workItem from="1568179140885" duration="27224000" />
+      <workItem from="1568179140885" duration="44652000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133322000" />
+    <option name="totallyTimeSpent" value="150750000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="955" extended-state="0" />
@@ -314,7 +404,7 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32908458" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32908458" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -384,69 +474,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="15" selection-start-column="15" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/event_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="39" lean-forward="true" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Utils/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/react-native/Libraries/react-native/react-native-implementation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="161" column="6" selection-start-line="161" selection-start-column="6" selection-end-line="161" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/push_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Utils/webservice_helper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="17" column="25" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/voucher_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Services/vouchers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="31" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/common/size.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/react-native/Libraries/Lists/ListView/ListViewDataSource.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -455,17 +482,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Utils/parse_date.js" />
-    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderCell.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="184" column="32" selection-start-line="184" selection-start-column="32" selection-end-line="184" selection-end-column="32" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#106#210#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/PointShopItem/PointShopItem.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -483,28 +499,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#115#201#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#115#195#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="264" column="6" selection-start-line="250" selection-start-column="4" selection-end-line="264" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#112#201#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -530,28 +524,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/PayByWallet/PayByWallet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="201" column="6" lean-forward="true" selection-start-line="187" selection-start-column="4" selection-end-line="201" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#110#186#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1905">
-          <caret line="127" column="6" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#149#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/Services/members.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -566,23 +538,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Requests/product_request_object.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="35" lean-forward="true" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Model/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#1#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/Home/CategoryCell.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-177">
@@ -591,13 +546,6 @@
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#111#190#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/products.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="32" column="10" lean-forward="true" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -635,24 +583,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberCenter/MemberCenter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="46" column="10" lean-forward="true" selection-start-line="46" selection-start-column="10" selection-end-line="46" selection-end-column="10" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#189#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Services/products.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="85" lean-forward="true" selection-start-column="85" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/WebserviceModel/point_statements.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
@@ -667,28 +597,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#97#175#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="192" column="15" selection-start-line="192" selection-start-column="4" selection-end-line="192" selection-end-column="15" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#215#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2144">
-          <caret line="144" column="31" selection-start-line="144" selection-start-column="31" selection-end-line="144" selection-end-column="31" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#111#197#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -722,47 +630,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#110#196#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="163" column="49" selection-start-line="163" selection-start-column="12" selection-end-line="163" selection-end-column="49" />
-          <folding>
-            <element signature="e#103#202#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="686" column="15" lean-forward="true" selection-start-line="686" selection-start-column="15" selection-end-line="686" selection-end-column="15" />
-          <folding>
-            <element signature="e#98#188#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberWallet/MemberWallet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="749">
-          <caret line="52" column="5" lean-forward="true" selection-start-line="14" selection-start-column="4" selection-end-line="52" selection-end-column="5" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="76" column="20" lean-forward="true" selection-start-line="76" selection-start-column="20" selection-end-line="76" selection-end-column="20" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#113#211#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -829,23 +696,269 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App.js">
+    <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+        <state relative-caret-position="181">
+          <caret line="91" column="8" lean-forward="true" selection-start-line="91" selection-start-column="8" selection-end-line="91" selection-end-column="8" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#108#194#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberWallet/MemberWallet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="291" column="6" lean-forward="true" selection-start-line="277" selection-start-column="4" selection-end-line="291" selection-end-column="6" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/PointShop/PointShop.js">
+    <entry file="file://$PROJECT_DIR$/App/Requests/product_request_object.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="83" column="51" selection-start-line="83" selection-start-column="51" selection-end-line="83" selection-end-column="51" />
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-end-line="12" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/membership_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="29" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="26" column="27" lean-forward="true" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Model/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#1#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/TopUpWallet/TopUpWallet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="107" column="56" selection-start-line="107" selection-start-column="56" selection-end-line="107" selection-end-column="56" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#108#194#0" expanded="true" />
+            <element signature="e#110#198#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Requests/voucher_request_object.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="5" lean-forward="true" selection-end-line="25" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="1" lean-forward="true" selection-end-line="4" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/WebserviceModel/memberships.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberProfile/MemberProfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3178">
+          <caret line="264" column="6" selection-start-line="250" selection-start-column="4" selection-end-line="264" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#112#201#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Services/memberships.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="33" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="107" column="34" selection-start-line="107" selection-start-column="34" selection-end-line="107" selection-end-column="34" />
+          <folding>
+            <element signature="e#103#202#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MembershipInfo/MembershipInfo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="229" column="23" selection-start-line="229" selection-start-column="23" selection-end-line="229" selection-end-column="23" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#113#211#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="192" column="15" selection-start-line="192" selection-start-column="4" selection-end-line="192" selection-end-column="15" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#215#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PayByWallet/PayByWallet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2792">
+          <caret line="201" column="6" lean-forward="true" selection-start-line="187" selection-start-column="4" selection-end-line="201" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#110#186#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Profile/Profile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="48" column="33" selection-start-line="46" selection-start-column="8" selection-end-line="48" selection-end-column="33" />
+          <folding>
+            <element signature="e#98#188#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-526">
+          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#197#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/MemberCenter/MemberCenter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="355" column="6" selection-start-line="341" selection-start-column="4" selection-end-line="355" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/TopUpWallet/Card.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="110" column="6" selection-start-line="110" selection-start-column="6" selection-end-line="110" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#103#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/PointShopHistory/PointShopHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="859">
+          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#115#195#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderReceipt/OrderReceipt.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="469">
+          <caret line="311" column="6" selection-start-line="297" selection-start-column="4" selection-end-line="311" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#189#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderReview/OrderReview.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="148" column="34" selection-start-line="148" selection-start-column="34" selection-end-line="148" selection-end-column="34" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#110#135#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="126" column="29" selection-start-line="126" selection-start-column="29" selection-end-line="126" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#105#138#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderCell.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#106#210#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderHistory/OrderHistory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="127" column="6" lean-forward="true" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#111#149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/OrderInvoice/OrderInvoice.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="256" column="27" selection-start-line="256" selection-start-column="27" selection-end-line="256" selection-end-column="27" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>

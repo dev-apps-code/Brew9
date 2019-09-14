@@ -1,9 +1,10 @@
 {
   "packagerPort": 19001,
-  "packagerPid": 99833,
+  "packagerPid": 33907,
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://ev-cnd.anonymous.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.ev-cnd.anonymous.brew9-app.exp.direct",
-  "ngrokPid": 99856
+  "expoServerNgrokUrl": "https://ev-cnd.jasonfoo.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.ev-cnd.jasonfoo.brew9-app.exp.direct",
+  "ngrokPid": 33920,
+  "webpackServerPort": null
 }

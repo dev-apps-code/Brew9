@@ -10,8 +10,14 @@ import {Image, FlatList, ScrollView, Text, View, StyleSheet, TouchableOpacity} f
 import React from "react"
 import BenefitCell from "./BenefitCell"
 import {alpha, fontAlpha} from "../common/size";
+import MembershipRequestObject from "../Requests/membership_request_object.js";
+import {createAction} from "../Utils";
+import {connect} from "react-redux";
 
-
+@connect(({ members }) => ({
+	member_id: members.member_id,
+	member_point: members.member_point,
+}))
 export default class MembershipInfo extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -40,9 +46,18 @@ export default class MembershipInfo extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			page: 1,
+			total: 0,
+			data: [],
+			membership_levels:[],
+			loading: true,
+			isRefreshing: true,
+		}
 	}
 
 	componentDidMount() {
+		this.loadMembershipPlans()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -52,6 +67,33 @@ export default class MembershipInfo extends React.Component {
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
+	}
+
+	loadMembershipPlans() {
+
+		const { dispatch } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					isRefreshing: false,
+					loading: false,
+					data: eventObject.result,
+				},function () {
+					this.setState({
+						membership_levels: this.state.data[1].membership_levels //HardCoded
+					})
+				}.bind(this))
+			}
+		}
+
+		const obj = new MembershipRequestObject()
+		obj.setUrlId(1)
+		dispatch(
+			createAction('memberships/loadMembershipPlans')({
+				object: obj,
+				callback
+			})
+		)
 	}
 
 	benefitlistFlatListMockData = [{
@@ -74,85 +116,92 @@ export default class MembershipInfo extends React.Component {
 
 	render() {
 
-		return <View
-			style={styles.membershipInfoView}>
+		const items = this.state.membership_levels.map((item, key) =>
+
 			<ScrollView
-				style={styles.scrollviewScrollView}>
+				style={styles.scrollviewScrollView}
+				key={item.id}>
 				<View
 					style={styles.memberRightsView}>
-					<Text
-						style={styles.memberRightsText}>Member Rights</Text>
 					<View
-						pointerEvents="box-none"
-						style={{
-							height: 153 * alpha,
-							marginLeft: 27 * alpha,
-							marginRight: 1 * alpha,
-							marginTop: 11 * alpha,
-							flexDirection: "row",
-							alignItems: "flex-start",
-						}}>
+						style={styles.memberRightsTwoView}>
+						<Text
+							style={styles.memberRightsText}>Member Rights</Text>
 						<View
-							style={styles.cardView}>
+							pointerEvents="box-none"
+							style={{
+								height: 153 * alpha,
+								marginRight: 1 * alpha,
+								marginTop: 11 * alpha,
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
 							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/brew9-doodle-06-2.png")}
-									style={styles.backgroundImage}/>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 19 * alpha,
-									width: 91 * alpha,
-									top: 13 * alpha,
-									bottom: 12 * alpha,
-									alignItems: "flex-start",
-								}}>
-								<Text
-									style={styles.membershipnameText}>Silver Member</Text>
+								style={styles.cardView}>
 								<View
+									pointerEvents="box-none"
 									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.group27View}>
-									<Text
-										style={styles.textText}>0</Text>
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
 									<Image
-										source={require("./../../assets/images/group-25-4.png")}
-										style={styles.group25Image}/>
+										source={require("./../../assets/images/brew9-doodle-06-2.png")}
+										style={styles.backgroundImage}/>
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 19 * alpha,
+										width: 91 * alpha,
+										top: 13 * alpha,
+										bottom: 12 * alpha,
+										alignItems: "flex-start",
+									}}>
 									<Text
-										style={styles.expText}>exp</Text>
+										style={styles.membershipnameText}>{item.name} Member</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
-									<Image
-										source={require("./../../assets/images/group-26-5.png")}
-										style={styles.group26Image}/>
-									<Text
-										style={styles.textTwoText}>501</Text>
+									<View
+										style={styles.group27View}>
+										<Text
+											style={styles.textText}>0</Text>
+										<Image
+											source={require("./../../assets/images/group-25-4.png")}
+											style={styles.group25Image}/>
+										<Text
+											style={styles.expText}>exp</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Image
+											source={require("./../../assets/images/group-26-5.png")}
+											style={styles.group26Image}/>
+										<Text
+											style={styles.textTwoText}>501</Text>
+									</View>
 								</View>
 							</View>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Image
+								source={require("./../../assets/images/brew9-doodle-08-copy-2.png")}
+								style={styles.nextcardImage}/>
 						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Image
-							source={require("./../../assets/images/brew9-doodle-08-copy-2.png")}
-							style={styles.nextcardImage}/>
 					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
 					<Image
 						source={require("./../../assets/images/slide-left-2.png")}
 						style={styles.slideLeftImage}/>
@@ -169,6 +218,16 @@ export default class MembershipInfo extends React.Component {
 							style={styles.benefitlistFlatList}/>
 					</View>
 				</View>
+			</ScrollView>
+		)
+
+		return <View
+			style={styles.membershipView}>
+			<ScrollView
+				horizontal={true}
+				pagingEnabled={true}
+				style={styles.horizontalscrollScrollView}>
+				{items}
 			</ScrollView>
 		</View>
 	}
@@ -190,40 +249,42 @@ const styles = StyleSheet.create({
 	navigationBarItemIcon: {
 		tintColor: "black",
 	},
-	membershipInfoView: {
+	membershipView: {
 		backgroundColor: "white",
 		flex: 1,
 	},
-	scrollviewScrollView: {
+	horizontalscrollScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
 		marginLeft: 1 * alpha,
 		marginTop: 20 * alpha,
 		marginBottom: 1 * alpha,
 	},
+	scrollviewScrollView: {
+		backgroundColor: "transparent",
+		flex: 1,
+	},
 	memberRightsView: {
 		backgroundColor: "transparent",
 		height: 223 * alpha,
-		alignItems: "flex-end",
+		alignItems: "flex-start",
 	},
 	memberRightsTwoView: {
 		backgroundColor: "transparent",
 		width: 349 * alpha,
 		height: 186 * alpha,
+		marginLeft: 27 * alpha,
 		marginTop: 9 * alpha,
 		alignItems: "flex-start",
 	},
 	memberRightsText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		alignSelf: "flex-start",
-		marginLeft: 27 * alpha,
-		marginTop: 9 * alpha,
+		backgroundColor: "transparent",
 	},
 	cardView: {
 		backgroundColor: "transparent",
@@ -237,13 +298,13 @@ const styles = StyleSheet.create({
 		height: 151 * alpha,
 	},
 	membershipnameText: {
-		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	group27View: {
 		backgroundColor: "transparent",
@@ -263,8 +324,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	group25Image: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		width: 7 * alpha,
 		height: 8 * alpha,
 		marginLeft: 3 * alpha,
@@ -289,13 +350,13 @@ const styles = StyleSheet.create({
 		marginTop: 8 * alpha,
 	},
 	textTwoText: {
-		backgroundColor: "transparent",
 		color: "white",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	nextcardImage: {
 		backgroundColor: "transparent",
@@ -310,31 +371,33 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		width: 43 * alpha,
 		height: 3 * alpha,
-		marginTop: 11 * alpha,
+		marginBottom: 15 * alpha,
 	},
 	benefitView: {
 		backgroundColor: "transparent",
 		flex: 1,
+		marginTop: 20 * alpha,
+		alignItems: "flex-start",
 	},
 	benefitsText: {
-		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		alignSelf: "flex-start",
+		backgroundColor: "transparent",
 		marginLeft: 27 * alpha,
+	},
+	benefitlistFlatListViewWrapper: {
+		flex: 1,
+		alignSelf: "stretch",
+		marginRight: 1 * alpha,
+		marginTop: 13 * alpha,
 	},
 	benefitlistFlatList: {
 		backgroundColor: "transparent",
 		width: "100%",
 		height: "100%",
-	},
-	benefitlistFlatListViewWrapper: {
-		flex: 1,
-		marginRight: 1 * alpha,
-		marginTop: 13 * alpha,
 	},
 })

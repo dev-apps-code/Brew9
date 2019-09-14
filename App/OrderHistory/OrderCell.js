@@ -20,14 +20,31 @@ export default class OrderCell extends React.Component {
 	
 	}
 
-	onPuchongPress = () => {
+	onCellPress = () => {
 	
 	}
 
+	onCompletedPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("OrderReceipt")
+	}
+
+	onReviewPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("OrderReview")
+	}
+
+	onInvoicePressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("OrderInvoice")
+	}
 	render() {
 
 		return <TouchableWithoutFeedback
-			onPress={this.onPuchongPress}>
+			onPress={this.onCellPress}>
 			<View
 				navigation={this.props.navigation}
 				style={styles.ordercell}>
@@ -39,13 +56,17 @@ export default class OrderCell extends React.Component {
 					<View
 						style={styles.orderheaderView}>
 						<Text
-							style={styles.puchongBranchText}>Puchong Branch</Text>
+							style={styles.branchText}>Puchong Branch</Text>
 						<View
 							style={{
 								flex: 1,
 							}}/>
-						<Text
-							style={styles.completedText}>Completed</Text>
+						<TouchableOpacity
+							onPress={this.onCompletedPressed}
+							style={styles.completedButton}>
+							<Text
+								style={styles.completedButtonText}>Completed</Text>
+						</TouchableOpacity>
 						<Image
 							source={require("./../../assets/images/group-10.png")}
 							style={styles.groupImage}/>
@@ -152,7 +173,7 @@ export default class OrderCell extends React.Component {
 							style={styles.reviewButtonText}>Review</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={this.onReceiptPressed}
+						onPress={this.onInvoicePressed}
 						style={styles.receiptButton}>
 						<Text
 							style={styles.receiptButtonText}>Receipt</Text>
@@ -179,7 +200,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	puchongBranchText: {
+	branchText: {
 		color: "rgb(59, 59, 59)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 13 * fontAlpha,
@@ -189,15 +210,27 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginLeft: 20 * alpha,
 	},
-	completedText: {
+	completedButtonText: {
 		color: "rgb(149, 149, 149)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+	},
+	completedButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	completedButton: {
 		backgroundColor: "transparent",
-		marginRight: 5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 53 * alpha,
+		height: 13 * alpha,
+		marginRight: 3 * alpha,
 	},
 	groupImage: {
 		resizeMode: "center",
@@ -378,7 +411,7 @@ const styles = StyleSheet.create({
 	reviewButton: {
 		backgroundColor: "transparent",
 		borderRadius: 2 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(231, 230, 230)",
 		borderStyle: "solid",
 		flexDirection: "row",
@@ -396,7 +429,7 @@ const styles = StyleSheet.create({
 	receiptButton: {
 		backgroundColor: "transparent",
 		borderRadius: 2 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		flexDirection: "row",

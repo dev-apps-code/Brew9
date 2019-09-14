@@ -31,6 +31,10 @@ import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
 import PayByWallet from "./App/PayByWallet/PayByWallet"
 import MemberCenter from "./App/MemberCenter/MemberCenter"
 import WebCommon from "./App/WebCommon/WebCommon"
+import TopUpWallet from "./App/TopUpWallet/TopUpWallet"
+import OrderReceipt from "./App/OrderReceipt/OrderReceipt"
+import OrderReview from "./App/OrderReview/OrderReview"
+import OrderInvoice from "./App/OrderInvoice/OrderInvoice"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -109,6 +113,18 @@ const PushRouteThree = createStackNavigator({
 	},
 	WebCommon: {
 		screen: WebCommon,
+	},
+	TopUpWallet: {
+		screen: TopUpWallet,
+	},
+	OrderReceipt: {
+		screen: OrderReceipt,
+	},
+	OrderReview: {
+		screen: OrderReview,
+	},
+	OrderInvoice: {
+		screen: OrderInvoice,
 	}
 }, {
 	initialRouteName: "Profile",

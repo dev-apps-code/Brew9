@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
 	},
 	selfPickUpView: {
 		backgroundColor: "white",
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(151, 151, 151)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
 	},
 	selfPickUpView_selected: {
 		backgroundColor: "white",
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -651,7 +651,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryView: {
 		backgroundColor: "white",
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(151, 151, 151)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -659,7 +659,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryView_selected: {
 		backgroundColor: "white",
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
 	},
 	autoFillButton: {
 		backgroundColor: "transparent",
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		flexDirection: "row",

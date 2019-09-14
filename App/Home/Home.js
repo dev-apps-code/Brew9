@@ -92,6 +92,27 @@ export default class Home extends React.Component {
 		)
 	}
 
+	loadShops(){
+		const { dispatch } = this.props
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+				loading: false,
+				})
+			}
+		}
+		const obj = new NearestShopRequestObject(latitude, longitude)
+		obj.setUrlId(1) 
+		dispatch(
+			createAction('companies/loadShops')({
+				object:obj,
+				callback,
+			}
+		))
+	}
+
 	loadStoreProducts() {
 
 		const { dispatch } = this.props

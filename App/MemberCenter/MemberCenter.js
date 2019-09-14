@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
 	exclaimationView: {
 		backgroundColor: "transparent",
 		borderRadius: 6.5 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(110, 110, 110)",
 		borderStyle: "solid",
 		width: 13 * alpha,
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
 	activateButtonButton: {
 		backgroundColor: "transparent",
 		borderRadius: 12 * alpha,
-		borderWidth: 1 * alpha,
+		borderWidth: 1,
 		borderColor: "rgb(54, 54, 54)",
 		borderStyle: "solid",
 		flexDirection: "row",
