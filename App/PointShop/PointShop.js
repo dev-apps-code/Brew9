@@ -11,7 +11,13 @@ import React from "react"
 import PointProductCell from "./PointProductCell"
 import { alpha, fontAlpha } from "../common/size";
 import { KURL_INFO } from "../../App/Utils/server.js"
+import {createAction} from "../Utils";
+import {connect} from "react-redux";
+import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
 
+@connect(({ members }) => ({
+	members: members
+}))
 export default class PointShop extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -40,9 +46,14 @@ export default class PointShop extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			loading: true,
+			data: [],
+		}
 	}
 
 	componentDidMount() {
+		this.loadPointsProducts()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -54,67 +65,85 @@ export default class PointShop extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	formatData = (data, numColumns) => {
-		const numberofFullRows = Math.floor(data.length / numColumns)
+	loadPointsProducts(){
+		const { dispatch, members } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					loading: false,
+					data: eventObject.result,
+				})
+			}
 
-		let numberofElementsLastRow = data.length - (numColumns * numberofFullRows)
-
-		while (numberofElementsLastRow !== numColumns) {
-			data.push({ key: `blank-${numberofElementsLastRow}`, empty: true})
-			numberofElementsLastRow = numberofElementsLastRow + 1
 		}
+		const obj = new PointsProductsRequestObject()
+		obj.setUrlId(members.company_id)
+		dispatch(
+			createAction('companies/loadPointsProducts')({
+				object:obj,
+				callback,
+			})
+		)
 	}
+
+	sectionData = [
+
+		{
+			title: 'Main dishes',
+			data: ['Pizza', 'Burger', 'Risotto'],
+		},
+		{
+			title: 'Sides',
+			data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
+		},
+		{
+			title: 'Drinks',
+			data: ['Water', 'Coke', 'Beer'],
+		},
+		{
+			title: 'Desserts',
+			data: ['Cheese Cake', 'Ice Cream'],
+		},
+
+
+	]
 
 	onPointHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
 
-		navigate("PointShopHistory")
+		navigate("PointHistory")
 	}
 
 	onTransactionHistoryPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("PointShopHistory")
 	}
 
 	onRulesPressed = () => {
 		const { navigate } = this.props.navigation
 
 		navigate("WebCommon", {
-			title: 'Rules',
+			title: 'Point Rules',
 			web_url: KURL_INFO + '?page=point_rules&id=1',
 		})
 	}
 
-	pointproductlistFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
-
-	renderPointproductlistFlatListCell = ({ item }) => {
+	renderPointproductlistFlatListCell = ({ item, index }) => {
 	
 		return <PointProductCell
-				navigation={this.props.navigation}/>
+				navigation={this.props.navigation}
+				sectionId={item.id}
+				sectionHeader={item.name}
+				products={item.points_products}
+				index={index}/>
 	}
 
 	render() {
 
+		const { members } = this.props
 		return <View
 			style={styles.pointShopView}>
 			<View
@@ -129,7 +158,7 @@ export default class PointShop extends React.Component {
 						<View
 							style={styles.pointCollectedTwoView}>
 							<Text
-								style={styles.pointsText}>843</Text>
+								style={styles.pointsText}>{members.member_points}</Text>
 							<Text
 								style={styles.pointsCollectedText}>Points Collected</Text>
 						</View>
@@ -200,8 +229,9 @@ export default class PointShop extends React.Component {
 					style={styles.pointproductlistFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderPointproductlistFlatListCell}
-						data={this.pointproductlistFlatListMockData}
-						style={styles.pointproductlistFlatList}/>
+						data={this.state.data}
+						style={styles.pointproductlistFlatList}
+						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</View>
 		</View>
@@ -344,7 +374,7 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	pointproductlistFlatList: {
-		backgroundColor: "rgb(244, 244, 244)",
+		backgroundColor: "white",
 		width: "100%",
 		height: "100%",
 	},

@@ -9,7 +9,12 @@
 import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import {connect} from "react-redux";
+import {KURL_INFO} from "../Utils/server";
 
+@connect(({ members }) => ({
+	members: members
+}))
 export default class MemberWallet extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -65,214 +70,227 @@ export default class MemberWallet extends React.Component {
 		navigate("TopUpWallet")
 	}
 
+	onFaqPressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
+		})
+	}
+
 	render() {
-	
+
+		const { members } = this.props
+
 		return <View
-				style={styles.walletView}>
-				<ScrollView
-					style={styles.viewView}>
+			style={styles.walletView}>
+			<ScrollView
+				style={styles.viewScrollView}>
+				<View
+					style={styles.cardviewView}>
 					<View
-						style={styles.cardviewView}>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0 * alpha,
+							right: 0 * alpha,
+							top: 0 * alpha,
+							bottom: 15 * alpha,
+						}}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								height: 196 * alpha,
-							}}>
-							<View
-								style={styles.greyblockView}/>
-							<View
-								style={styles.rightblockView}/>
-						</View>
-						<Image
-							source={require("./../../assets/images/card-04-2.png")}
-							style={styles.card04Image}/>
+							style={styles.greyblockView}/>
+						<View
+							style={styles.rightblockView}/>
 					</View>
+					<Image
+						source={require("./../../assets/images/card-04-2.png")}
+						style={styles.card04Image}/>
+				</View>
+				<View
+					style={styles.infoView}>
 					<View
-						style={styles.infoView}>
+						style={styles.balanceView}>
+						<Text
+							style={styles.availableBalanceText}>Available Balance</Text>
 						<View
-							style={styles.balanceView}>
+							style={styles.rm30View}>
 							<Text
-								style={styles.availableBalanceText}>Available Balance</Text>
-							<View
-								style={styles.rm30View}>
-								<Text
-									style={styles.rmText}>RM</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.textText}>30</Text>
-							</View>
+								style={styles.rmText}>{members.currency}</Text>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<TouchableOpacity
-								onPress={this.onTopUpPressed}
-								style={styles.topUpButton}>
-								<Text
-									style={styles.topUpButtonText}>Top Up</Text>
-							</TouchableOpacity>
+							<Text
+								style={styles.textText}>{members.member_credits}</Text>
 						</View>
 						<View
-							style={styles.optionsView}>
-							<View
-								style={styles.seperatorView}/>
+							style={{
+								flex: 1,
+							}}/>
+						<TouchableOpacity
+							onPress={this.onTopUpPressed}
+							style={styles.topUpButton}>
+							<Text
+								style={styles.topUpButtonText}>Top Up</Text>
+						</TouchableOpacity>
+					</View>
+					<View
+						style={styles.optionsView}>
+						<View
+							style={styles.seperatorView}/>
+						<View
+							style={styles.transactionHistoryView}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 98 * alpha,
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
 								}}>
-								<View
-									style={styles.transactionHistoryView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<TouchableOpacity
-											onPress={this.onTransactionHistoryPressed}
-											style={styles.transactionhistoryButton}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 10 * alpha,
-											right: 10 * alpha,
-											top: 17 * alpha,
-											height: 37 * alpha,
-											alignItems: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/group-2.png")}
-											style={styles.groupImage}/>
-										<View
-											style={styles.seperatorTwoView}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.transactionHistoryText}>Transaction History</Text>
-									</View>
-								</View>
-								<View
-									style={styles.changePasswordView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											right: 10,
-											width: 356,
-											top: 19,
-											height: 34,
-											alignItems: "flex-end",
-										}}>
-										<Image
-											source={require("./../../assets/images/group-2.png")}
-											style={styles.groupTwoImage}/>
-										<View
-											style={styles.seperatorThreeView}/>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.changePasswordText}>Change Password</Text>
-									</View>
-								</View>
+								<TouchableOpacity
+									onPress={this.onTransactionHistoryPressed}
+									style={styles.transactionhistoryButton}/>
 							</View>
 							<View
-								style={styles.resetPasswordView}>
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									right: 10 * alpha,
+									width: 356 * alpha,
+									top: 21 * alpha,
+									height: 33 * alpha,
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-2.png")}
+									style={styles.groupImage}/>
 								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 10 * alpha,
-										right: 10 * alpha,
-										top: 22 * alpha,
-										height: 32 * alpha,
-										alignItems: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-2.png")}
-										style={styles.groupThreeImage}/>
-									<View
-										style={styles.seperatorFourView}/>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Text
-										style={styles.resetPasswordText}>Reset Password</Text>
-								</View>
+									style={styles.seperatorTwoView}/>
 							</View>
 							<View
-								style={styles.faqView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										right: 11 * alpha,
-										width: 354 * alpha,
-										top: 26 * alpha,
-										height: 28 * alpha,
-										alignItems: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-2.png")}
-										style={styles.groupFourImage}/>
-									<View
-										style={styles.seperatorFiveView}/>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Text
-										style={styles.faqText}>FAQ</Text>
-								</View>
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<Text
+									style={styles.transactionHistoryText}>Transaction History</Text>
 							</View>
 						</View>
+						<View
+							style={styles.faqView}>
+							<TouchableOpacity
+								onPress={this.onFaqPressed}
+								style={styles.faqButton}>
+								<Text
+									style={styles.faqButtonText}></Text>
+							</TouchableOpacity>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									right: 11 * alpha,
+									width: 354 * alpha,
+									top: 26 * alpha,
+									height: 28 * alpha,
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-2.png")}
+									style={styles.groupTwoImage}/>
+								<View
+									style={styles.seperatorThreeView}/>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<Text
+									style={styles.faqText}>FAQ</Text>
+							</View>
+						</View>
+						{/*<View*/}
+						{/*	style={styles.changePasswordView}>*/}
+						{/*	<View*/}
+						{/*		pointerEvents="box-none"*/}
+						{/*		style={{*/}
+						{/*			position: "absolute",*/}
+						{/*			right: 10 * alpha,*/}
+						{/*			width: 356 * alpha,*/}
+						{/*			top: 19 * alpha,*/}
+						{/*			height: 34 * alpha,*/}
+						{/*			alignItems: "center",*/}
+						{/*		}}>*/}
+						{/*		<Image*/}
+						{/*			source={require("./../../assets/images/group-2.png")}*/}
+						{/*			style={styles.groupThreeImage}/>*/}
+						{/*		<View*/}
+						{/*			style={styles.seperatorFourView}/>*/}
+						{/*	</View>*/}
+						{/*	<View*/}
+						{/*		pointerEvents="box-none"*/}
+						{/*		style={{*/}
+						{/*			position: "absolute",*/}
+						{/*			left: 0 * alpha,*/}
+						{/*			top: 0 * alpha,*/}
+						{/*			bottom: 0 * alpha,*/}
+						{/*			justifyContent: "center",*/}
+						{/*		}}>*/}
+						{/*		<Text*/}
+						{/*			style={styles.changePasswordText}>Change Password</Text>*/}
+						{/*	</View>*/}
+						{/*</View>*/}
+						{/*<View*/}
+						{/*	style={styles.resetPasswordView}>*/}
+						{/*	<View*/}
+						{/*		pointerEvents="box-none"*/}
+						{/*		style={{*/}
+						{/*			position: "absolute",*/}
+						{/*			right: 10 * alpha,*/}
+						{/*			width: 356 * alpha,*/}
+						{/*			top: 22 * alpha,*/}
+						{/*			height: 32 * alpha,*/}
+						{/*			alignItems: "center",*/}
+						{/*		}}>*/}
+						{/*		<Image*/}
+						{/*			source={require("./../../assets/images/group-2.png")}*/}
+						{/*			style={styles.groupFourImage}/>*/}
+						{/*		<View*/}
+						{/*			style={styles.seperatorFiveView}/>*/}
+						{/*	</View>*/}
+						{/*	<View*/}
+						{/*		pointerEvents="box-none"*/}
+						{/*		style={{*/}
+						{/*			position: "absolute",*/}
+						{/*			left: 0 * alpha,*/}
+						{/*			top: 0 * alpha,*/}
+						{/*			bottom: 0 * alpha,*/}
+						{/*			justifyContent: "center",*/}
+						{/*		}}>*/}
+						{/*		<Text*/}
+						{/*			style={styles.resetPasswordText}>Reset Password</Text>*/}
+						{/*	</View>*/}
+						{/*</View>*/}
 					</View>
-				</ScrollView>
-			</View>
+				</View>
+			</ScrollView>
+		</View>
 	}
 }
+
 
 const styles = StyleSheet.create({
 	headerLeftContainer: {
@@ -294,22 +312,23 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(243, 243, 243)",
 		flex: 1,
 	},
-	viewView: {
+	viewScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
+		marginBottom: 1 * alpha,
 	},
 	cardviewView: {
 		backgroundColor: "transparent",
 		height: 211 * alpha,
-		marginLeft: 1 * alpha,
-		marginRight: 10 * alpha,
+		marginLeft: 0 * alpha,
+		marginRight: 0 * alpha,
 	},
 	greyblockView: {
 		backgroundColor: "rgb(248, 248, 248)",
 		position: "absolute",
-		left: 0,
-		right: 10 * alpha,
-		top: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
 		height: 123 * alpha,
 	},
 	rightblockView: {
@@ -319,10 +338,10 @@ const styles = StyleSheet.create({
 		shadowRadius: 2 * alpha,
 		shadowOpacity: 1,
 		position: "absolute",
-		right: -24 * alpha,
+		right: -12 * alpha,
 		width: 24 * alpha,
 		top: 52 * alpha,
-		bottom: 0,
+		bottom: 0 * alpha,
 	},
 	card04Image: {
 		resizeMode: "cover",
@@ -335,15 +354,16 @@ const styles = StyleSheet.create({
 	},
 	infoView: {
 		backgroundColor: "transparent",
-		height: 380 * alpha,
+		height: 378 * alpha,
 		marginRight: 10 * alpha,
-		alignItems: "center",
 	},
 	balanceView: {
 		backgroundColor: "transparent",
+		alignSelf: "center",
 		width: 158 * alpha,
 		height: 113 * alpha,
 		marginTop: 16 * alpha,
+		alignItems: "center",
 	},
 	availableBalanceText: {
 		color: "rgb(58, 58, 58)",
@@ -353,8 +373,6 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 20 * alpha,
-		marginRight: 19 * alpha,
 	},
 	rm30View: {
 		backgroundColor: "transparent",
@@ -364,9 +382,9 @@ const styles = StyleSheet.create({
 		marginLeft: 45 * alpha,
 		marginTop: 7 * alpha,
 		flexDirection: "row",
-		alignItems: "flex-start",
+		alignItems: "center",
 	},
-	rmText: {
+	currencyText: {
 		backgroundColor: "transparent",
 		color: "rgb(58, 58, 58)",
 		fontFamily: "Helvetica-Bold",
@@ -374,17 +392,17 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		alignSelf: "flex-start",
 		marginTop: 7 * alpha,
 	},
-	textText: {
+	userCreditText: {
+		backgroundColor: "transparent",
 		color: "rgb(58, 58, 58)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 27 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		alignSelf: "center",
 	},
 	topUpButton: {
 		backgroundColor: "rgb(70, 70, 70)",
@@ -393,7 +411,12 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
+		width: 158 * alpha,
 		height: 36 * alpha,
+	},
+	topUpButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 	topUpButtonText: {
 		color: "white",
@@ -403,13 +426,8 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "left",
 	},
-	topUpButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
 	optionsView: {
 		backgroundColor: "transparent",
-		alignSelf: "stretch",
 		height: 248 * alpha,
 	},
 	seperatorView: {
@@ -421,11 +439,9 @@ const styles = StyleSheet.create({
 	},
 	transactionHistoryView: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 1 * alpha,
-		right: 1 * alpha,
-		top: 0,
 		height: 51 * alpha,
+		marginLeft: 1 * alpha,
+		marginRight: 1 * alpha,
 	},
 	transactionhistoryButton: {
 		backgroundColor: "transparent",
@@ -433,12 +449,12 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 51,
+		height: 51 * alpha,
 	},
 	transactionhistoryButtonText: {
 		color: "black",
-		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontFamily: ".SFNSText",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -447,8 +463,8 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	groupImage: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		alignSelf: "flex-end",
 		width: 9 * alpha,
 		height: 10 * alpha,
@@ -458,9 +474,57 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,
 		height: 1 * alpha,
-		marginTop: 26 * alpha,
+		marginTop: 22 * alpha,
 	},
 	transactionHistoryText: {
+		backgroundColor: "transparent",
+		color: "rgb(41, 41, 41)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		marginLeft: 20 * alpha,
+	},
+	faqView: {
+		backgroundColor: "transparent",
+		height: 51 * alpha,
+		marginRight: 1 * alpha,
+	},
+	faqButtonImage: {
+		resizeMode: "contain",
+	},
+	faqButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 51 * alpha,
+	},
+	faqButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	groupTwoImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		alignSelf: "flex-end",
+		width: 9 * alpha,
+		height: 10 * alpha,
+		marginRight: 10 * alpha,
+	},
+	seperatorThreeView: {
+		backgroundColor: "rgb(244, 244, 244)",
+		width: 354 * alpha,
+		height: 1 * alpha,
+		marginTop: 17 * alpha,
+	},
+	faqText: {
 		color: "rgb(41, 41, 41)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 14 * fontAlpha,
@@ -472,11 +536,21 @@ const styles = StyleSheet.create({
 	},
 	changePasswordView: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 50 * alpha,
 		height: 51 * alpha,
+	},
+	groupThreeImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		alignSelf: "flex-end",
+		width: 9 * alpha,
+		height: 10 * alpha,
+		marginRight: 11 * alpha,
+	},
+	seperatorFourView: {
+		backgroundColor: "rgb(244, 244, 244)",
+		width: 356 * alpha,
+		height: 1 * alpha,
+		marginTop: 23 * alpha,
 	},
 	changePasswordText: {
 		color: "rgb(41, 41, 41)",
@@ -488,51 +562,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginLeft: 20 * alpha,
 	},
-	groupTwoImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		alignSelf: "flex-end",
-		width: 9 * alpha,
-		height: 10 * alpha,
-		marginRight: 11 * alpha,
-	},
-	seperatorThreeView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		position: "absolute",
-		alignSelf: "center",
-		width: 356 * alpha,
-		top: 52 * alpha,
-		height: 1 * alpha,
-	},
 	resetPasswordView: {
-		backgroundColor: "transparent",
-		height: 51 * alpha,
-		marginRight: 1 * alpha,
-	},
-	groupThreeImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 9 * alpha,
-		height: 10 * alpha,
-		marginRight: 11 * alpha,
-	},
-	seperatorFourView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		width: 356 * alpha,
-		height: 1 * alpha,
-	},
-	resetPasswordText: {
-		color: "rgb(41, 41, 41)",
-		fontFamily: "Helvetica-Bold",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 20 * alpha,
-	},
-	faqView: {
 		backgroundColor: "transparent",
 		height: 51 * alpha,
 		marginRight: 1 * alpha,
@@ -547,11 +577,10 @@ const styles = StyleSheet.create({
 	},
 	seperatorFiveView: {
 		backgroundColor: "rgb(244, 244, 244)",
-		width: 354 * alpha,
+		width: 356 * alpha,
 		height: 1 * alpha,
-		marginTop: 17 * alpha,
 	},
-	faqText: {
+	resetPasswordText: {
 		backgroundColor: "transparent",
 		color: "rgb(41, 41, 41)",
 		fontFamily: "Helvetica-Bold",

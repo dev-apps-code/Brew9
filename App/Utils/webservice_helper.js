@@ -36,7 +36,7 @@ export function getMethod(authtoken,object) {
 export function postMethod(authtoken,object) {
 
     const urlString = `${KSERVERURL}/${object.getUrlString()}`
-    console.log(urlString)
+    // console.log(urlString)
     return fetch(urlString, {
     method: 'POST',
     headers: {

@@ -17,8 +17,7 @@ import { alpha, fontAlpha } from "../common/size";
 import ProductRequestObject from "../Requests/product_request_object.js";
 
 @connect(({ members }) => ({
-	member_id: members.member_id,
-	member_point: members.member_point,
+	members: members
 }))
 export default class Home extends React.Component {
 
@@ -52,7 +51,7 @@ export default class Home extends React.Component {
 				tabBarIcon: ({ iconTintColor }) => {
 				
 					return <Image
-							source={require("./../../assets/images/group-53.png")}/>
+							source={require("./../../assets/images/group-8-18.png")}/>
 				},
 			}
 	}
@@ -155,9 +154,9 @@ export default class Home extends React.Component {
 
 	renderProductlistFlatListCell = ({ item }) => {
 
-		console.log(item.image.url)
 		return <ProductCell
 			navigation={this.props.navigation}
+			currency={this.props.members.currency}
 			productname={item.name}
 			productprice={item.price}
 			productimage={item.image.url}

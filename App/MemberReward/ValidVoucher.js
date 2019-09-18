@@ -9,6 +9,7 @@
 import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Text } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import {KURL_INFO} from "../Utils/server";
 
 export default class ValidVoucher extends React.Component {
 
@@ -22,6 +23,16 @@ export default class ValidVoucher extends React.Component {
 
 	onValidVoucherPress = () => {
 	
+	}
+
+	onTermsPressed = () => {
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+
+		navigate("WebCommon", {
+			title: 'Terms & Condition',
+			web_url: KURL_INFO + '?page=voucher_terms&id=' + company_id,
+		})
 	}
 
 	render() {

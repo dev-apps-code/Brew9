@@ -6,18 +6,19 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from "react-native"
+import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
-import { createAction } from '../Utils/index'
+import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import VoucherRequestObject from "../Requests/voucher_request_object";
 import UsedVoucher from "./UsedVoucher"
 import ExpiredVoucher from "./ExpiredVoucher"
 import ValidVoucher from "./ValidVoucher"
+import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	member_id: members.member_id,
+	members: members
 }))
 export default class MemberReward extends React.Component {
 
@@ -66,13 +67,13 @@ export default class MemberReward extends React.Component {
 			used_data: [],
 			expired_data: [],
 			loading: true,
-			isRefreshing: true,
+			isRefreshing: false,
 			voucher_button: 1
 		}
 	}
 
 	loadValidVoucher(page_no) {
-		const { dispatch, member_id } = this.props
+		const { dispatch, members } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -90,9 +91,9 @@ export default class MemberReward extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(member_id)
+		obj.setUrlId(members.member_id)
 		obj.setPage(page_no)
-		obj.setStatus(2)
+		obj.setStatus(2) //Hardcoded
 		dispatch(
 			createAction('vouchers/loadValidVoucher')({
 				object: obj,
@@ -102,7 +103,7 @@ export default class MemberReward extends React.Component {
 	}
 
 	loadUsedVoucher(page_no) {
-		const { dispatch, member_id } = this.props
+		const { dispatch, members } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -120,7 +121,7 @@ export default class MemberReward extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(member_id)
+		obj.setUrlId(members.member_id)
 		obj.setPage(page_no)
 		obj.setStatus(1)
 		dispatch(
@@ -132,7 +133,7 @@ export default class MemberReward extends React.Component {
 	}
 
 	loadExpiredVoucher(page_no) {
-		const { dispatch, member_id } = this.props
+		const { dispatch, members } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -150,7 +151,7 @@ export default class MemberReward extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(member_id)
+		obj.setUrlId(members.member_id)
 		obj.setPage(page_no)
 		obj.setStatus(0)
 		dispatch(
@@ -183,6 +184,9 @@ export default class MemberReward extends React.Component {
 
 		if (valid_initial) {
 			this.loadValidVoucher(valid_page)
+			this.setState({
+				loading: true,
+			})
 		}
 
 		this.setState({
@@ -199,6 +203,9 @@ export default class MemberReward extends React.Component {
 
 		if (used_initial) {
 			this.loadUsedVoucher(used_page)
+			this.setState({
+				loading: true,
+			})
 		}
 
 		this.setState({
@@ -215,6 +222,9 @@ export default class MemberReward extends React.Component {
 
 		if (expired_initial) {
 			this.loadExpiredVoucher(expired_page)
+			this.setState({
+				loading: true,
+			})
 		}
 
 		this.setState({
@@ -224,6 +234,22 @@ export default class MemberReward extends React.Component {
 			current_data: expired_data,
 		})
 
+	}
+
+	onRedeemRewardPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("RedeemPromotion")
+	}
+
+	onHowToUsePressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'How To Use',
+			web_url: KURL_INFO + '?page=voucher_uses&id=' + members.company_id,
+		})
 	}
 
 	onRefresh() {
@@ -265,7 +291,7 @@ export default class MemberReward extends React.Component {
 			if (valid_selected) {
 				if (valid_total > valid_data.length) {
 					this.setState({
-						isRefreshing: true
+						loading: true
 					})
 					this.loadValidVoucher(valid_page)
 				}
@@ -273,7 +299,7 @@ export default class MemberReward extends React.Component {
 			if (used_selected) {
 				if (used_total > used_data.length) {
 					this.setState({
-						isRefreshing: true
+						loading: true
 					})
 					this.loadUsedVoucher(used_page)
 				}
@@ -281,7 +307,7 @@ export default class MemberReward extends React.Component {
 			if (expired_selected) {
 				if (expired_total > expired_data.length) {
 					this.setState({
-						isRefreshing: true
+						loading: true
 					})
 					this.loadExpiredVoucher(expired_page)
 				}
@@ -299,6 +325,7 @@ export default class MemberReward extends React.Component {
 				display_value={item.voucher.display_value}
 				discount_type={item.voucher.discount_type}
 				used_date={item.used_date}
+				company_id={this.props.company_id}
 				expiry_date={item.expiry_date}
 			/>
 		} else if (this.state.used_selected) {
@@ -330,27 +357,27 @@ export default class MemberReward extends React.Component {
 					pointerEvents="box-none"
 					style={{
 						position: "absolute",
-						left: 0,
-						right: 0,
-						top: 0,
+						left: 0 * alpha,
+						right: 0 * alpha,
+						top: 0 * alpha,
 						height: 49 * alpha,
 						flexDirection: "row",
 						alignItems: "flex-start",
 					}}>
 					<View
 						style={styles.availableTwoView}>
-						{this.state.valid_selected ?
+						{ this.state.valid_selected && (
 							<View
-							style={styles.availablebarView}/> : null
-						}
+								style={styles.availablebarView}/>
+						)}
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
 								justifyContent: "center",
 							}}>
 							<TouchableOpacity
@@ -367,17 +394,17 @@ export default class MemberReward extends React.Component {
 						}}/>
 					<View
 						style={styles.expiredView}>
-						{this.state.expired_selected ?
+						{ this.state.expired_selected && (
 							<View
-								style={styles.expiredbarView}/> : null
-						}
+								style={styles.expiredbarView}/>
+						)}
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
 								alignSelf: "center",
-								top: 0,
-								bottom: 0,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
 								justifyContent: "center",
 							}}>
 							<TouchableOpacity
@@ -391,38 +418,27 @@ export default class MemberReward extends React.Component {
 				</View>
 				<View
 					style={styles.usedView}>
-					{ this.state.used_selected ?
+					{ this.state.used_selected && (
 						<View
-							style={styles.usedbarView}/> : null
-					}
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0,
-							right: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<TouchableOpacity
-							onPress={this.onUsedPressed}
-							style={styles.usedButton}>
-							<Text
-								style={styles.usedButtonText}>Used</Text>
-						</TouchableOpacity>
-					</View>
+							style={styles.usedbarView}/>
+					)}
+					<TouchableOpacity
+						onPress={this.onUsedPressed}
+						style={styles.usedButton}>
+						<Text
+							style={styles.usedButtonText}>Used</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
 			<View
 				pointerEvents="box-none"
 				style={{
-					height: 490 * alpha,
+					flex: 1,
 				}}>
 				<View
 					style={styles.voucherviewView}>
 					<TouchableOpacity
-						onPress={this.onHowToUseTwoPressed}
+						onPress={this.onHowToUsePressed}
 						style={styles.howToUseButton}>
 						<Image
 							source={require("./../../assets/images/group-15-2.png")}
@@ -430,6 +446,11 @@ export default class MemberReward extends React.Component {
 						<Text
 							style={styles.howToUseButtonText}>How to use</Text>
 					</TouchableOpacity>
+					{ this.state.loading && (
+						<View style={[styles.container, styles.horizontal]}>
+							<ActivityIndicator size="large" />
+						</View>
+					)}
 					<View
 						style={styles.voucherlistviewFlatListViewWrapper}>
 						<FlatList
@@ -452,16 +473,15 @@ export default class MemberReward extends React.Component {
 				{/*		style={styles.noRewardAvailableText}>No reward available</Text>*/}
 				{/*</View>*/}
 			</View>
-			<View
-				style={{
-					flex: 1,
-				}}/>
-			<TouchableOpacity
-				onPress={this.onRedeemRewardPressed}
-				style={styles.redeemrewardButton}>
-				<Text
-					style={styles.redeemrewardButtonText}>Redeem Reward</Text>
-			</TouchableOpacity>
+			{ this.state.valid_selected && (
+				<TouchableOpacity
+					onPress={this.onRedeemRewardPressed}
+					style={styles.redeemrewardButton}>
+					<Text
+						style={styles.redeemrewardButtonText}>Redeem Reward</Text>
+				</TouchableOpacity>
+			)}
+
 		</View>
 	}
 }
@@ -481,6 +501,15 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemIcon: {
 		tintColor: "black",
+	},
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
 	},
 	rewardView: {
 		backgroundColor: "rgb(243, 243, 243)",
@@ -503,14 +532,6 @@ const styles = StyleSheet.create({
 		bottom: 0 * alpha,
 		height: 2 * alpha,
 	},
-	availableButtonText: {
-		color: "rgb(68, 68, 68)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-	},
 	availableButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
@@ -523,44 +544,16 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
-	usedView: {
-		backgroundColor: "transparent",
-		position: "absolute",
-		alignSelf: "center",
-		width: 125 * alpha,
-		top: 0,
-		height: 49 * alpha,
-	},
-	usedbarView: {
-		backgroundColor: "rgb(68, 68, 68)",
-		position: "absolute",
-		alignSelf: "center",
-		width: 67 * alpha,
-		bottom: 0,
-		height: 2 * alpha,
-	},
-	usedButtonText: {
-		color: "rgb(118, 118, 118)",
-		fontFamily: "Helvetica-Bold",
+	availableButtonText: {
+		color: "rgb(68, 68, 68)",
+		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
 	},
-	usedButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		height: 49 * alpha,
-	},
-	usedButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
 	expiredView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		width: 125 * alpha,
 		height: 49 * alpha,
 	},
@@ -569,7 +562,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		alignSelf: "center",
 		width: 67 * alpha,
-		bottom: 0,
+		bottom: 0 * alpha,
 		height: 2 * alpha,
 	},
 	expiredButton: {
@@ -581,6 +574,10 @@ const styles = StyleSheet.create({
 		width: 125 * alpha,
 		height: 49 * alpha,
 	},
+	expiredButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
 	expiredButtonText: {
 		color: "rgb(118, 118, 118)",
 		fontFamily: "Helvetica-Bold",
@@ -589,18 +586,53 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "left",
 	},
-	expiredButtonImage: {
+	usedView: {
+		backgroundColor: "white",
+		position: "absolute",
+		alignSelf: "center",
+		width: 125 * alpha,
+		top: 0 * alpha,
+		height: 49 * alpha,
+	},
+	usedbarView: {
+		backgroundColor: "rgb(68, 68, 68)",
+		position: "absolute",
+		alignSelf: "center",
+		width: 67 * alpha,
+		bottom: 0 * alpha,
+		height: 2 * alpha,
+	},
+	usedButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		height: 49 * alpha,
+	},
+	usedButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
+	},
+	usedButtonText: {
+		color: "rgb(118, 118, 118)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	voucherviewView: {
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		height: 490 * alpha,
-		alignItems: "flex-end",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
 	},
 	howToUseButton: {
 		backgroundColor: "transparent",
@@ -608,10 +640,15 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
+		alignSelf: "flex-end",
 		width: 80 * alpha,
 		height: 23 * alpha,
 		marginRight: 15 * alpha,
 		marginTop: 10 * alpha,
+	},
+	howToUseButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 	howToUseButtonText: {
 		color: "rgb(151, 151, 151)",
@@ -621,10 +658,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	howToUseButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
 	voucherlistviewFlatList: {
 		backgroundColor: "transparent",
 		width: "100%",
@@ -632,21 +665,19 @@ const styles = StyleSheet.create({
 	},
 	voucherlistviewFlatListViewWrapper: {
 		flex: 1,
-		alignSelf: "stretch",
 	},
 	novoucherviewView: {
 		backgroundColor: "transparent",
 		position: "absolute",
 		alignSelf: "center",
 		width: 375 * alpha,
-		top: 0,
+		top: 0 * alpha,
 		height: 490 * alpha,
-		alignItems: "center",
+		alignItems: "flex-start",
 	},
 	storeimageImage: {
-		resizeMode: "contain",
 		backgroundColor: "transparent",
-		alignSelf: "flex-start",
+		resizeMode: "contain",
 		width: 375 * alpha,
 		height: 91 * alpha,
 		marginTop: 165 * alpha,
@@ -659,6 +690,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		alignSelf: "center",
 		marginTop: 14 * alpha,
 	},
 	redeemrewardButton: {
@@ -672,6 +704,10 @@ const styles = StyleSheet.create({
 		padding: 0,
 		height: 51 * alpha,
 	},
+	redeemrewardButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
 	redeemrewardButtonText: {
 		color: "rgb(82, 82, 82)",
 		fontFamily: "Helvetica-Bold",
@@ -679,9 +715,5 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "right",
-	},
-	redeemrewardButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
 	},
 })

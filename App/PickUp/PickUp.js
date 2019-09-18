@@ -29,7 +29,7 @@ export default class PickUp extends React.Component {
 			tabBarIcon: ({ iconTintColor }) => {
 
 				return <Image
-					source={require("./../../assets/images/group-41-2.png")}/>
+					source={require("./../../assets/images/group-41-4.png")}/>
 			},
 		}
 	}
@@ -44,6 +44,9 @@ export default class PickUp extends React.Component {
 
 	onOrderHistoryPressed = () => {
 
+		const { navigate } = this.props.navigation
+
+		navigate("OrderHistory")
 	}
 
 	onOrderPressed = () => {
@@ -94,6 +97,15 @@ export default class PickUp extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	navigationBarItem: {
+	},
+	navigationBarItemIcon: {
+		tintColor: "rgb(0, 194, 236)",
+	},
+	headerLeftContainer: {
+		flexDirection: "row",
+		marginLeft: 8 * alpha,
+	},
 	pickupView: {
 		backgroundColor: "rgb(243, 243, 243)",
 		flex: 1,

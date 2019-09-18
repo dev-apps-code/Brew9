@@ -7,16 +7,16 @@
 //
 
 import React from "react"
-import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity, RefreshControl } from "react-native"
+import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity, ActivityIndicator } from "react-native"
 import PointsCell from "./PointsCell"
 import { alpha, fontAlpha } from "../common/size";
 import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
+import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	member_id: members.member_id,
-	member_point: members.member_point,
+	members: members
 }))
 export default class PointHistory extends React.Component {
 
@@ -51,12 +51,12 @@ export default class PointHistory extends React.Component {
 			total: 0,
 			data: [],
 			loading: true,
-			isRefreshing: true,
+			isRefreshing: false,
 		}
 	}
 
 	loadPointHistory(page_no) {
-		const { dispatch, member_id } = this.props
+		const { dispatch, members } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -69,7 +69,7 @@ export default class PointHistory extends React.Component {
 			}
 		}
 		const obj = new PointStatementRequestObject()
-		obj.setUrlId(member_id)
+		obj.setUrlId(members.member_id)
 		obj.setPage(page_no)
 		dispatch(
 			createAction('point_statements/loadPointHistory')({
@@ -114,7 +114,13 @@ export default class PointHistory extends React.Component {
 	}
 
 	onPointRulePressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
 
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=point_rules&id=' + members.company_id,
+		})
 	}
 
 	onBackPressed = () => {
@@ -133,12 +139,14 @@ export default class PointHistory extends React.Component {
 			description={item.description}
 			value={item.value}
 			created_at={item.created_at}
-			shop={item.shop.name}
+			shop={item.shop}
 			navigation={this.props.navigation}
 		/>
 	}
 
 	render() {
+
+		const { members } = this.props
 
 		return <View
 			style={styles.pointHistoryView}>
@@ -151,7 +159,7 @@ export default class PointHistory extends React.Component {
 						<Text
 							style={styles.pointsCollectedText}>Points Collected</Text>
 						<Text
-							style={styles.pointsText}>843</Text>
+							style={styles.pointsText}>{members.member_points}</Text>
 					</View>
 					<View
 						style={{
@@ -170,8 +178,14 @@ export default class PointHistory extends React.Component {
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.transactionHistoryText}>Transaction History</Text>
+						style={styles.transactionHistoryText}>Point History</Text>
 				</View>
+
+				{this.state.loading && (
+					<View style={[styles.container, styles.horizontal]}>
+						<ActivityIndicator size="large" />
+					</View>
+				)}
 				<View
 					style={styles.pointhistoryFlatListViewWrapper}>
 					<FlatList
@@ -205,6 +219,15 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemIcon: {
 		tintColor: "black",
+	},
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
 	},
 	pointHistoryView: {
 		backgroundColor: "rgb(243, 243, 243)",

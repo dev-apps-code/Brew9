@@ -9,8 +9,11 @@
 import { Text, TouchableOpacity, View, StyleSheet, Image, ScrollView } from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../common/size";
+import {connect} from "react-redux";
 
-
+@connect(({ members }) => ({
+	members:members
+}))
 export default class OrderReceipt extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -71,15 +74,15 @@ export default class OrderReceipt extends React.Component {
 				style={styles.orderReceiptView}>
 				<ScrollView
 					style={styles.orderScrollView}>
-					<TouchableOpacity
-						onPress={this.onCustomerServicePressed}
-						style={styles.customerServiceButton}>
-						<Image
-							source={require("./../../assets/images/group-3-22.png")}
-							style={styles.customerServiceButtonImage}/>
-						<Text
-							style={styles.customerServiceButtonText}>Customer Service</Text>
-					</TouchableOpacity>
+					{/*<TouchableOpacity*/}
+					{/*	onPress={this.onCustomerServicePressed}*/}
+					{/*	style={styles.customerServiceButton}>*/}
+					{/*	<Image*/}
+					{/*		source={require("./../../assets/images/group-3-22.png")}*/}
+					{/*		style={styles.customerServiceButtonImage}/>*/}
+					{/*	<Text*/}
+					{/*		style={styles.customerServiceButtonText}>Customer Service</Text>*/}
+					{/*</TouchableOpacity>*/}
 					<View
 						style={styles.orderCartView}>
 						<View

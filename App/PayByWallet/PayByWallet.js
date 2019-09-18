@@ -6,12 +6,20 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {StyleSheet, Image, Text, View, TouchableOpacity} from "react-native"
+import {StyleSheet, Image, Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../common/size";
+import {connect} from "react-redux";
+import QrCodeRequestObject from "../Requests/qr_code_request_object";
+import {createAction} from "../Utils";
+import QRCode from 'react-native-qrcode';
 
-
+@connect(({ members }) => ({
+	members: members
+}))
 export default class PayByWallet extends React.Component {
+
+	timer = null
 
 	static navigationOptions = ({ navigation }) => {
 
@@ -39,148 +47,187 @@ export default class PayByWallet extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			loading: true,
+			qr_code: null,
+		}
 	}
 
 	componentDidMount() {
+		this.loadQrCode()
+		this.timer = setInterval(()=> this.loadQrCode(), 30000)
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
 	}
 
-	onBackPressed = () => {
+	componentWillUnmount() {
+		clearInterval(this.timer);
+	}
 
+	onBackPressed = () => {
 		this.props.navigation.goBack()
 	}
 
+	loadQrCode(){
+		const { dispatch, members } = this.props
+		this.setState({ loading_list: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					loading: false,
+					qr_code: eventObject.result.code
+				})
+			}
+		}
+		const obj = new QrCodeRequestObject()
+		obj.setUrlId(members.member_id)
+		dispatch(
+			createAction('members/loadQrCode')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
+	onSelectWalletPressed = () => {
+
+	}
+
 	render() {
-	
+
+		const { members } = this.props
+
 		return <View
-				style={styles.walletPaymentView}>
+			style={styles.walletPaymentView}>
+			<ScrollView
+				style={styles.scrollviewScrollView}>
 				<View
 					style={styles.topiconsView}>
 					<View
 						style={styles.iconView}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								height: 55 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<View
-								style={styles.group9View}>
-								<Image
-									source={require("./../../assets/images/group-3-14.png")}
-									style={styles.group3Image}/>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 36 * alpha,
-									}}>
-									<Image
-										source={require("./../../assets/images/group-6-8.png")}
-										style={styles.group6Image}/>
-									<Image
-										source={require("./../../assets/images/fill-7-5.png")}
-										style={styles.fill7Image}/>
-								</View>
-							</View>
+							style={styles.group9View}>
 							<Image
-								source={require("./../../assets/images/group-13-7.png")}
-								style={styles.group13Image}/>
+								source={require("./../../assets/images/group-3-14.png")}
+								style={styles.group3Image}/>
 							<View
+								pointerEvents="box-none"
 								style={{
-									flex: 1,
-								}}/>
-							<View
-								style={styles.group6View}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-3-15.png")}
-										style={styles.group3TwoImage}/>
-								</View>
+									height: 36 * alpha,
+								}}>
 								<Image
-									source={require("./../../assets/images/fill-4-2.png")}
-									style={styles.fill4Image}/>
+									source={require("./../../assets/images/group-6-11.png")}
+									style={styles.group6Image}/>
+								<Image
+									source={require("./../../assets/images/fill-7-6.png")}
+									style={styles.fill7Image}/>
+							</View>
+						</View>
+						<Image
+							source={require("./../../assets/images/group-13-10.png")}
+							style={styles.group13Image}/>
+						<Image
+							source={require("./../../assets/images/group-14-12.png")}
+							style={styles.group14Image}/>
+						<View
+							style={styles.group6View}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-3-24.png")}
+									style={styles.group3TwoImage}/>
 							</View>
 							<Image
-								source={require("./../../assets/images/group-12-10.png")}
-								style={styles.group12Image}/>
+								source={require("./../../assets/images/fill-4-3.png")}
+								style={styles.fill4Image}/>
 						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								alignSelf: "center",
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/group-14-11.png")}
-								style={styles.group14Image}/>
-						</View>
+						<Image
+							source={require("./../../assets/images/group-12-12.png")}
+							style={styles.group12Image}/>
 					</View>
 				</View>
 				<View
-					pointerEvents="box-none"
-					style={{
-						height: 557 * alpha,
-					}}>
+					style={styles.walletBalanceView}>
+					<Image
+						source={{uri: members.member_image}}
+						style={styles.profilePicImage}/>
+					<Text
+						style={styles.nicknameText}>Somebody</Text>
 					<View
-						style={styles.walletBalanceView}>
-						<Image
-							source={require("./../../assets/images/profile-pic-5.png")}
-							style={styles.profilePicImage}/>
-						<Text
-							style={styles.nicknameText}>Somebody</Text>
+						style={styles.payByWalletView}>
+						{members.wallet_enabled && (<TouchableOpacity
+								onPress={this.onSelectWalletPressed}
+								style={styles.selectwalletButton}>
+								<Text
+									style={styles.selectwalletButtonText}></Text>
+							</TouchableOpacity>
+						)}
 						<View
+							pointerEvents="box-none"
 							style={{
-								flex: 1,
-							}}/>
-						<View
-							style={styles.payByWalletView}>
+								position: "absolute",
+								left: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
 							<View
-								style={styles.selectView}/>
-							<Text
-								style={styles.payByBrew9WalletText}>Pay by Brew9 wallet</Text>
-							<View
+								pointerEvents="box-none"
 								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.balanceText}>(Balance RM0)</Text>
+									width: 253 * alpha,
+									height: 17 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<View
+									style={styles.selectView}/>
+								<Text
+									style={members.wallet_enabled ? styles.payByBrew9WalletText : styles.payByBrew9WalletTextDisabled}>Pay by Brew9 wallet</Text>
+								<Text
+									style={styles.balanceText}>(Balance {members.currency}{members.member_credits})</Text>
+							</View>
 						</View>
-						<Image
-							source={require("./../../assets/images/line-12.png")}
-							style={styles.lineImage}/>
 					</View>
 					<View
-						style={styles.qrCodeViewView}>
-						<Text
-							style={styles.scanQrcodeToEarnText}>Scan QRCode to earn point (Payment not supported)</Text>
-						<Image
-							source={require("./../../assets/images/qr-code-2.png")}
-							style={styles.qrCodeImage}/>
-						<Text
-							style={styles.autoText}>Auto refresh every 30 seconds</Text>
-					</View>
+						style={{
+							flex: 1,
+						}}/>
+					<Image
+						source={require("./../../assets/images/line-12-2.png")}
+						style={styles.lineImage}/>
 				</View>
-			</View>
+				<View
+					style={styles.qrCodeViewView}>
+					<Text
+						style={styles.scanQrcodeToEarnText}>Scan QRCode to earn point (Payment not supported)</Text>
+					{ this.state.qr_code && (
+						<QRCode
+							value={this.state.qr_code}
+							size={161 * alpha}
+							bgColor='black'
+							fgColor='white'/>
+						)
+					}
+					{this.state.loading && (
+						<View style={[styles.container, styles.horizontal]}>
+							<ActivityIndicator size="large" />
+						</View>
+					)}
+					<Text
+						style={styles.autoText}>Auto refresh every 30 seconds</Text>
+				</View>
+			</ScrollView>
+		</View>
 	}
 }
 
@@ -200,21 +247,40 @@ const styles = StyleSheet.create({
 	navigationBarItemIcon: {
 		tintColor: "black",
 	},
+	container: {
+		height: 160 * alpha,
+		width: 160 * alpha,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
+	},
+	scrollviewScrollView: {
+		backgroundColor: "transparent",
+		flex: 1,
+	},
 	walletPaymentView: {
 		backgroundColor: "white",
 		flex: 1,
 	},
 	topiconsView: {
 		backgroundColor: "rgb(216, 216, 216)",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
 		height: 130 * alpha,
-		alignItems: "flex-end",
 	},
 	iconView: {
 		backgroundColor: "transparent",
-		width: 293 * alpha,
 		height: 55 * alpha,
+		marginLeft: 44 * alpha,
 		marginRight: 38 * alpha,
 		marginTop: 21 * alpha,
+		flexDirection: "row",
+		alignItems: "flex-start",
 	},
 	group9View: {
 		backgroundColor: "transparent",
@@ -230,17 +296,17 @@ const styles = StyleSheet.create({
 		marginRight: 9 * alpha,
 	},
 	group6Image: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
+		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
 		height: 36 * alpha,
 	},
 	fill7Image: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
+		backgroundColor: "transparent",
 		position: "absolute",
 		left: 9 * alpha,
 		right: 8 * alpha,
@@ -248,30 +314,38 @@ const styles = StyleSheet.create({
 		height: 10 * alpha,
 	},
 	group13Image: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
-		alignSelf: "flex-start",
+		backgroundColor: "transparent",
 		width: 40 * alpha,
 		height: 43 * alpha,
 		marginLeft: 32 * alpha,
 		marginTop: 12 * alpha,
 	},
+	group14Image: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 32 * alpha,
+		height: 48 * alpha,
+		marginLeft: 33 * alpha,
+		marginTop: 5 * alpha,
+	},
 	group6View: {
 		backgroundColor: "transparent",
 		width: 31 * alpha,
 		height: 52 * alpha,
-		marginRight: 33 * alpha,
+		marginLeft: 32 * alpha,
+		marginTop: 3 * alpha,
 	},
 	group3TwoImage: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		width: null,
 		height: 52 * alpha,
 		marginLeft: 1 * alpha,
 	},
 	fill4Image: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		position: "absolute",
 		left: 8 * alpha,
 		right: 9 * alpha,
@@ -281,51 +355,66 @@ const styles = StyleSheet.create({
 	group12Image: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
-		alignSelf: "flex-start",
 		width: 34 * alpha,
 		height: 42 * alpha,
+		marginLeft: 33 * alpha,
 		marginTop: 12 * alpha,
-	},
-	group14Image: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 32 * alpha,
-		height: 48 * alpha,
 	},
 	walletBalanceView: {
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		height: 129 * alpha,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 92 * alpha,
+		height: 167 * alpha,
 		alignItems: "center",
 	},
 	profilePicImage: {
-		resizeMode: "center",
 		backgroundColor: "transparent",
+		resizeMode: "center",
 		width: 73 * alpha,
 		height: 73 * alpha,
 	},
 	nicknameText: {
-		backgroundColor: "transparent",
 		color: "rgb(69, 67, 67)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
-		textAlign: "left",
+		textAlign: "center",
+		backgroundColor: "transparent",
 		marginTop: 10 * alpha,
 	},
 	payByWalletView: {
 		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 253 * alpha,
+		alignSelf: "stretch",
 		height: 17 * alpha,
+		marginLeft: 64 * alpha,
 		marginRight: 58 * alpha,
-		marginBottom: 20 * alpha,
+		marginTop: 27 * alpha,
+	},
+	selectwalletButton: {
+		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	selectwalletButtonImage: {
+		resizeMode: "contain",
+	},
+	selectwalletButtonText: {
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
 	},
 	selectView: {
 		backgroundColor: "transparent",
@@ -346,29 +435,41 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginLeft: 10 * alpha,
 	},
+	payByBrew9WalletTextDisabled: {
+		color: "rgb(186, 179, 179)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 10 * alpha,
+	},
 	balanceText: {
+		backgroundColor: "transparent",
 		color: "rgb(186, 179, 179)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
+		marginLeft: 6 * alpha,
 	},
 	lineImage: {
 		backgroundColor: "transparent",
 		resizeMode: "cover",
-		alignSelf: "flex-end",
-		width: 275 * alpha,
+		alignSelf: "stretch",
+		width: null,
 		height: 3 * alpha,
+		marginLeft: 60 * alpha,
 		marginRight: 40 * alpha,
 	},
 	qrCodeViewView: {
 		backgroundColor: "white",
 		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 128 * alpha,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 238 * alpha,
 		height: 429 * alpha,
 		alignItems: "center",
 	},
@@ -381,22 +482,16 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 44 * alpha,
-	},
-	qrCodeImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 161 * alpha,
-		height: 163 * alpha,
-		marginTop: 19 * alpha,
+		marginBottom: 19 * alpha,
 	},
 	autoText: {
+		backgroundColor: "transparent",
 		color: "rgb(192, 192, 192)",
 		fontFamily: "Helvetica",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginTop: 9 * alpha,
 	},
 })

@@ -32,16 +32,16 @@ export default class BenefitCell extends React.Component {
 					navigation={this.props.navigation}
 					style={styles.benefitcell}>
 					<Image
-						source={require("./../../assets/images/group-8-7.png")}
+						source={{uri: this.props.image}}
 						style={styles.iconImage}/>
 					<Text
-						style={styles.descriptionText}>10% off for Specific Drinks</Text>
+						style={styles.descriptionText}>{this.props.name}</Text>
 					<View
 						style={{
 							flex: 1,
 						}}/>
 					<Text
-						style={styles.amountText}>x1</Text>
+						style={styles.amountText}>x{this.props.quantity}</Text>
 				</View>
 			</TouchableWithoutFeedback>
 	}

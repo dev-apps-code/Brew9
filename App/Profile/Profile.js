@@ -9,7 +9,12 @@
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import {connect} from "react-redux";
+import {KURL_INFO} from "../Utils/server";
 
+@connect(({ members }) => ({
+	members: members
+}))
 export default class Profile extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -29,7 +34,7 @@ export default class Profile extends React.Component {
 			tabBarIcon: ({ iconTintColor }) => {
 
 				return <Image
-					source={require("./../../assets/images/group-14-2.png")}/>
+					source={require("./../../assets/images/group-5-12.png")}/>
 			},
 		}
 	}
@@ -39,7 +44,6 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-
 	}
 
 	onLevelPressed = () => {
@@ -51,9 +55,17 @@ export default class Profile extends React.Component {
 
 	onVIPPressed = () => {
 
-		const { navigate } = this.props.navigation
+		if (this.props.members.isPremium) {
+			const { navigate } = this.props.navigation
 
-		navigate("VIPPurchase")
+			navigate("MemberCenter")
+		}
+		else {
+			const { navigate } = this.props.navigation
+
+			navigate("VIPPurchase")
+		}
+
 	}
 
 	onRewardButtonPressed = () => {
@@ -98,16 +110,22 @@ export default class Profile extends React.Component {
 		navigate("MemberProfile")
 	}
 
-	onQRButtonTwoPressed = () => {
+	onQRButtonPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("PayByWallet")
 	}
 
-	onRedeemButtonTwoPressed = () => {
+	onRedeemButtonPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("RedeemPromotion")
 	}
 
 	onNotificationButtonPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("Notification")
 	}
 
 	onPointShopPressed = () => {
@@ -122,7 +140,19 @@ export default class Profile extends React.Component {
 		navigate("MemberCenter")
 	}
 
+	onAboutButtonPressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
+		})
+	}
+
 	render() {
+
+		const { members } = this.props
 
 		return <View
 			style={styles.profileView}>
@@ -131,7 +161,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.topsectionView}>
 						<Image
-							source={require("./../../assets/images/brew9-doodle-02.png")}
+							source={{uri: members.membership_background}}
 							style={styles.backgroundImage}/>
 						<View
 							pointerEvents="box-none"
@@ -152,7 +182,7 @@ export default class Profile extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Image
-									source={require("./../../assets/images/profile-pic-4.png")}
+									source={{uri: members.member_image}}
 									style={styles.profilePicImage}/>
 								<View
 									pointerEvents="box-none"
@@ -164,12 +194,12 @@ export default class Profile extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.nameText}>Nobody</Text>
+										style={styles.nameText}>{members.member_name}</Text>
 									<TouchableOpacity
 										onPress={this.onLevelPressed}
 										style={styles.levelButton}>
 										<Text
-											style={styles.levelButtonText}>Lv2</Text>
+											style={styles.levelButtonText}>{members.free_membership_level}</Text>
 									</TouchableOpacity>
 								</View>
 								<View
@@ -185,12 +215,12 @@ export default class Profile extends React.Component {
 										alignItems: "flex-end",
 									}}>
 									<Text
-										style={styles.memberText}>Gold member</Text>
+										style={styles.memberText}>{members.membership_name}</Text>
 									<TouchableOpacity
 										onPress={this.onVIPPressed}
 										style={styles.vipButton}>
 										<Text
-											style={styles.vipButtonText}>2020-06-19 expired</Text>
+											style={styles.vipButtonText}>{ members.isPremium ? "Expired at " + members.membership_expiry_date : "Purchase Membership" }</Text>
 										<Image
 											source={require("./../../assets/images/arrow-2.png")}
 											style={styles.vipButtonImage}/>
@@ -212,9 +242,9 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.pointvalueText}>843</Text>
+											style={styles.pointvalueText}>{members.member_points}</Text>
 										<Text
-											style={styles.pointText}>Point </Text>
+											style={styles.pointText}>Point</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onPointButtonPressed}
@@ -236,9 +266,9 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.rewardvalueText}>7</Text>
+											style={styles.rewardvalueText}>{members.member_available_vouchers}</Text>
 										<Text
-											style={styles.rewardText}>Reward </Text>
+											style={styles.rewardText}>Reward</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onRewardButtonPressed}
@@ -262,12 +292,12 @@ export default class Profile extends React.Component {
 										<View
 											style={styles.walletvalueView}>
 											<Text
-												style={styles.rmText}>RM</Text>
+												style={styles.currencyText}>{members.currency}</Text>
 											<Text
-												style={styles.textText}>30.00</Text>
+												style={styles.userCreditText}>{members.member_credits.toFixed(2)}</Text>
 										</View>
 										<Text
-											style={styles.walletText}>Wallet </Text>
+											style={styles.walletText}>Wallet</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onWalletButtonPressed}
@@ -490,7 +520,7 @@ export default class Profile extends React.Component {
 						<View
 							style={styles.qrCodeView}>
 							<TouchableOpacity
-								onPress={this.onQRButtonTwoPressed}
+								onPress={this.onQRButtonPressed}
 								style={styles.qrbuttonButton}>
 								<Text
 									style={styles.qrbuttonButtonText}></Text>
@@ -548,7 +578,7 @@ export default class Profile extends React.Component {
 						<View
 							style={styles.redeemStationView}>
 							<TouchableOpacity
-								onPress={this.onRedeemButtonTwoPressed}
+								onPress={this.onRedeemButtonPressed}
 								style={styles.redeembuttonButton}>
 								<Text
 									style={styles.redeembuttonButtonText}></Text>
@@ -604,7 +634,7 @@ export default class Profile extends React.Component {
 										</View>
 									</View>
 									<Text
-										style={styles.redeemStationText}>Redeem Station</Text>
+										style={styles.redeemStationText}>Redeem Award</Text>
 									<View
 										style={{
 											flex: 1,
@@ -649,6 +679,40 @@ export default class Profile extends React.Component {
 							</View>
 						</View>
 					</View>
+					<View
+						style={styles.aboutView}>
+						<TouchableOpacity
+							onPress={this.onAboutButtonPressed}
+							style={styles.aboutbuttonButton}>
+							<Text
+								style={styles.aboutbuttonButtonText}></Text>
+						</TouchableOpacity>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 97 * alpha,
+									height: 20 * alpha,
+									marginLeft: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/group-9-6.png")}
+									style={styles.abouticonImage}/>
+								<Text
+									style={styles.aboutText}>About Brew9</Text>
+							</View>
+						</View>
+					</View>
 				</View>
 			</ScrollView>
 		</View>
@@ -656,13 +720,13 @@ export default class Profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	amendedView: {
+	profileView: {
 		backgroundColor: "white",
 		flex: 1,
 	},
 	scrollScrollView: {
 		backgroundColor: "transparent",
-		height: 603 * alpha,
+		flex: 1,
 	},
 	topsectionView: {
 		backgroundColor: "transparent",
@@ -740,13 +804,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0 * alpha,
-		width: 105 * alpha,
+		width: 113 * alpha,
 		height: 23 * alpha,
 		marginTop: 10 * alpha,
 	},
 	vipButtonImage: {
 		resizeMode: "contain",
-		marginLeft: 10 * alpha,
+		marginLeft: 7 * alpha,
 	},
 	memberpointsinfoView: {
 		backgroundColor: "transparent",
@@ -855,12 +919,12 @@ const styles = StyleSheet.create({
 	},
 	walletvalueView: {
 		backgroundColor: "transparent",
-		width: 75 * alpha,
+		width: 85 * alpha,
 		height: 24 * alpha,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
-	rmText: {
+	currencyText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
 		fontFamily: "Helvetica",
@@ -870,7 +934,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginTop: 12 * alpha,
 	},
-	textText: {
+	userCreditText: {
 		color: "rgb(32, 32, 32)",
 		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
@@ -1028,7 +1092,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
 		width: 375 * alpha,
-		height: 300 * alpha,
+		height: 350 * alpha,
 		marginRight: 1,
 	},
 	memberStatusView: {
@@ -1357,6 +1421,49 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	notificationText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginLeft: 11 * alpha,
+	},
+	aboutView: {
+		backgroundColor: "transparent",
+		height: 50 * alpha,
+	},
+	aboutbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 1 * alpha,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	aboutbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	aboutbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	abouticonImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 20 * alpha,
+	},
+	aboutText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 12 * fontAlpha,

@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		marginLeft: 17 * alpha,
 	},
-	textText: {
+	userCreditText: {
 		backgroundColor: "transparent",
 		color: "rgb(76, 76, 76)",
 		fontFamily: "DINPro-Medium",

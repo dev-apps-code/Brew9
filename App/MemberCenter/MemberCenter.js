@@ -9,7 +9,13 @@
 import { Image, Text, StyleSheet, TouchableOpacity, View } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import { connect } from "react-redux";
+import { ProgressBar, Colors } from 'react-native-paper';
+import {KURL_INFO} from "../Utils/server";
 
+@connect(({ members }) => ({
+	members: members
+}))
 export default class MemberCenter extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -53,31 +59,62 @@ export default class MemberCenter extends React.Component {
 	}
 
 	onMemberServicePressed = () => {
-	
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'Member Services',
+			web_url: KURL_INFO + '?page=member_services&id=' + members.company_id,
+		})
 	}
 
 	onActivateButtonPressed = () => {
-	
+		const { navigate } = this.props.navigation
+
+		navigate("VIPPurchase")
 	}
 
 	onUpgradePressed = () => {
-	
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'Brew9',
+			web_url: KURL_INFO + '?page=level_infos&id=' + members.company_id,
+		})
 	}
 
 	onMissionCentrePressed = () => {
-	
+		const { navigate } = this.props.navigation
+
+		navigate("MissionCenter")
 	}
 
 	onWalletPressed = () => {
-	
+		const { navigate } = this.props.navigation
+
+		navigate("MemberWallet")
 	}
 
-	onOtherLevelRewardPressed = () => {
-	
+	onOtherLevelBenefitsPressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'Member Services',
+			web_url: KURL_INFO + '?page=level_benefits&id=' + members.company_id,
+		})
 	}
 
 	render() {
-	
+
+		const { members } = this.props
+
+		var membership_progress = members.isPremium ? members.member_premium_membership_exp/members.premium_membership_next_level_exp : members.member_free_membership_exp/members.free_membership_next_level_exp
+		var membership_exp = members.isPremium ? members.member_premium_membership_exp : members.member_free_membership_exp
+		var membership_next_level_exp = members.isPremium ? members.premium_membership_next_level_exp: members.free_membership_next_level_exp
+		var exp_to_next_level = membership_next_level_exp - membership_exp
+
 		return <View
 				style={styles.memberCenterView}>
 				<View
@@ -88,7 +125,7 @@ export default class MemberCenter extends React.Component {
 					<View
 						style={styles.profileView}>
 						<Image
-							source={require("./../../assets/images/profile-pic-copy-4.png")}
+							source={{uri: members.member_image}}
 							style={styles.avatarImage}/>
 						<View
 							pointerEvents="box-none"
@@ -100,7 +137,7 @@ export default class MemberCenter extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.nameText}>明辉</Text>
+								style={styles.nameText}>{members.member_name}</Text>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -112,7 +149,7 @@ export default class MemberCenter extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Text
-									style={styles.levelText}>Lv1</Text>
+									style={styles.levelText}>{members.free_membership_level}</Text>
 								<View
 									pointerEvents="box-none"
 									style={{
@@ -123,9 +160,11 @@ export default class MemberCenter extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.expText}>0/299</Text>
-									<View
-										style={styles.lineView}/>
+										style={styles.expText}>{membership_exp}/{membership_next_level_exp}</Text>
+									<ProgressBar style={styles.lineView} progress={membership_progress} color={"rgb(0, 178, 227)"} />
+
+
+
 								</View>
 							</View>
 						</View>
@@ -153,7 +192,7 @@ export default class MemberCenter extends React.Component {
 						<View
 							style={styles.membershipTwoView}>
 							<Image
-								source={require("./../../assets/images/bg-02-2.png")}
+								source={{uri: members.membership_background}}
 								style={styles.backgroundImage}/>
 							<View
 								pointerEvents="box-none"
@@ -173,17 +212,20 @@ export default class MemberCenter extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.membershipText}>Membership</Text>
+										style={styles.membershipText}>{members.membership_name}</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
-									<TouchableOpacity
-										onPress={this.onActivateButtonPressed}
-										style={styles.activateButtonButton}>
-										<Text
-											style={styles.activateButtonButtonText}>Activate</Text>
-									</TouchableOpacity>
+									{
+										members.isPremium ? null : <TouchableOpacity
+											onPress={this.onActivateButtonPressed}
+											style={styles.activateButtonButton}>
+											<Text
+												style={styles.activateButtonButtonText}>Activate</Text>
+										</TouchableOpacity>
+									}
+
 								</View>
 								<View
 									style={{
@@ -193,7 +235,7 @@ export default class MemberCenter extends React.Component {
 									onPress={this.onUpgradePressed}
 									style={styles.upgradeButton}>
 									<Text
-										style={styles.upgradeButtonText}>300 exp more to upgrade to Lv2, upgrade info</Text>
+										style={styles.upgradeButtonText}>{exp_to_next_level} exp more to upgrade to next level, upgrade info</Text>
 									<Image
 										source={require("./../../assets/images/group-18.png")}
 										style={styles.upgradeButtonImage}/>
@@ -260,10 +302,10 @@ export default class MemberCenter extends React.Component {
 								flex: 1,
 							}}/>
 						<TouchableOpacity
-							onPress={this.onOtherLevelRewardPressed}
+							onPress={this.onOtherLevelBenefitsPressed}
 							style={styles.otherLevelRewardButton}>
 							<Text
-								style={styles.otherLevelRewardButtonText}>Other level reward</Text>
+								style={styles.otherLevelRewardButtonText}>Other Level Benefits</Text>
 							<Image
 								source={require("./../../assets/images/group-2.png")}
 								style={styles.otherLevelRewardButtonImage}/>
@@ -404,7 +446,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(228, 228, 228)",
 		width: 74 * alpha,
 		height: 2 * alpha,
-		marginTop: 1 * alpha,
 	},
 	memberServiceView: {
 		backgroundColor: "transparent",
@@ -533,7 +574,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		alignSelf: "flex-start",
-		width: 223 * alpha,
+		width: 250 * alpha,
 		height: 14 * alpha,
 	},
 	missionCentreButton: {

@@ -10,8 +10,13 @@ import { Text, TouchableOpacity, View, StyleSheet, Image, FlatList } from "react
 import Card from "./Card"
 import React from "react"
 import {alpha, fontAlpha} from "../common/size";
+import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
+import {createAction} from "../Utils";
+import {connect} from "react-redux";
 
-
+@connect(({ members }) => ({
+	members: members
+}))
 export default class TopUpWallet extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -40,9 +45,44 @@ export default class TopUpWallet extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			loading: true,
+			data: [],
+			selected_price: null,
+			selected: 0,
+		}
+	}
+
+	loadTopUpProducts(){
+		const { dispatch } = this.props
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					loading: false,
+					data: eventObject.result,
+				},function () {
+					if (eventObject.result.length > 0) {
+						this.setState({
+							selected_price: eventObject.result[0].price
+						})
+					}
+				}.bind(this))
+			}
+		}
+		const obj = new TopUpProductsRequestObject()
+		obj.setUrlId(1)
+		dispatch(
+			createAction('companies/loadTopUpProducts')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	componentDidMount() {
+		this.loadTopUpProducts()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -55,57 +95,56 @@ export default class TopUpWallet extends React.Component {
 	}
 
 	onTopUpPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("Transaction", {
+			transaction_name: 'Top Up Wallet',
+			amount: this.state.selected_price,
+		})
 	}
 
-	topuplistFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
+	onTopUpCardPressed = (price,index) => {
 
-	renderTopuplistFlatListCell = ({ item }) => {
+		this.setState({
+			selected_price: price,
+			selected: index,
+		})
+	}
+
+	renderTopuplistFlatListCell = ({ item, index }) => {
 	
 		return <Card
-				navigation={this.props.navigation}/>
+			navigation={this.props.navigation}
+			image={item.image}
+			price={item.price}
+			index={index}
+			selected={this.state.selected}
+			onPressItem={this.onTopUpCardPressed}
+		/>
 	}
 
 	render() {
 
 		return <View
 			style={styles.topUpWalletView}>
-			<View
-				style={styles.noticeView}>
-				<Text
-					style={styles.messageText}>Please contact customer service for top up receipt, orders will no longer be issued.</Text>
-			</View>
+			{/*<View*/}
+			{/*	style={styles.noticeView}>*/}
+			{/*	<Text*/}
+			{/*		style={styles.messageText}>Please contact customer service for top up receipt, orders will no longer be issued.</Text>*/}
+			{/*</View>*/}
 			<View
 				style={styles.topuplistFlatListViewWrapper}>
 				<FlatList
 					renderItem={this.renderTopuplistFlatListCell}
-					data={this.topuplistFlatListMockData}
-					style={styles.topuplistFlatList}/>
+					data={this.state.data}
+					style={styles.topuplistFlatList}
+					selected={this.state.selected}
+					keyExtractor={(item, index) => index.toString()}/>
 			</View>
 			<View
 				style={styles.topUpView}>
 				<Text
-					style={styles.selectedValueText}>BND200</Text>
+					style={styles.selectedValueText}>{this.state.selected_price ? this.state.selected_price : '' }</Text>
 				<View
 					style={{
 						flex: 1,

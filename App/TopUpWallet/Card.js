@@ -15,25 +15,31 @@ export default class Card extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			selected: null,
+		}
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onCardPress = () => {
-	
+		this.props.onPressItem(this.props.price,this.props.index);
+		this.setState({
+			selected: this.props.selected
+		})
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
 				onPress={this.onCardPress}>
 				<View
 					navigation={this.props.navigation}
 					style={styles.cardcell}>
 					<Image
-						source={require("./../../assets/images/card-04-3.png")}
+						source={{uri: this.props.image}}
 						style={styles.cardImage}/>
 					<View
 						style={styles.infoView}>
@@ -71,13 +77,13 @@ export default class Card extends React.Component {
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.valueText}>RM100</Text>
+									style={styles.valueText}>{this.props.price}</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<View
-									style={styles.selectView}/>
+									style={ this.props.selected === this.props.index ? styles.selectView_selected : styles.selectView }/>
 							</View>
 						</View>
 					</View>
@@ -126,6 +132,15 @@ const styles = StyleSheet.create({
 	},
 	selectView: {
 		backgroundColor: "transparent",
+		borderRadius: 8.5 * alpha,
+		borderWidth: 1,
+		borderColor: "rgb(219, 219, 219)",
+		borderStyle: "solid",
+		width: 17 * alpha,
+		height: 17 * alpha,
+	},
+	selectView_selected: {
+		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 8.5 * alpha,
 		borderWidth: 1,
 		borderColor: "rgb(219, 219, 219)",

@@ -70,9 +70,9 @@ export default class Transaction extends React.Component {
 					<View
 						style={styles.cartinfoView}>
 						<Text
-							style={styles.itemnameText}>Annual Membership Card</Text>
+							style={styles.itemnameText}>{this.props.navigation.getParam("transaction_name","Transaction")}</Text>
 						<Text
-							style={styles.carttotalText}>RM179.00</Text>
+							style={styles.carttotalText}>{this.props.navigation.getParam("amount","0.00")}</Text>
 					</View>
 					<View
 						style={styles.payeeView}>

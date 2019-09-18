@@ -21,7 +21,11 @@ export default class PointsCell extends React.Component {
 	}
 
 	onPointsCellPress = () => {
+		if (this.props.shop) {
+			const { navigate } = this.props.navigation
 
+			navigate("OrderReceipt")
+		}
 	}
 
 	render() {
@@ -31,54 +35,78 @@ export default class PointsCell extends React.Component {
 			<View
 				navigation={this.props.navigation}
 				style={styles.pointscell}>
+				<Image
+					source={require("./../../assets/images/line-7.png")}
+					style={styles.seperatorImage}/>
 				<View
 					pointerEvents="box-none"
 					style={{
 						position: "absolute",
-						left: 0,
-						right: 0,
-						top: 0,
-						bottom: 0,
+						left: 0 * alpha,
+						right: 0 * alpha,
+						top: 0 * alpha,
+						bottom: 0 * alpha,
 						justifyContent: "center",
 					}}>
 					<View
 						pointerEvents="box-none"
 						style={{
-							height: 19 * alpha,
+							height: 57 * alpha,
 							marginLeft: 26 * alpha,
 							marginRight: 20 * alpha,
 							flexDirection: "row",
 							alignItems: "center",
 						}}>
+						<View
+							style={this.props.shop ? styles.leftblockView : styles.leftblockView2}>
+							{this.props.shop ?
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+
+									<Text
+										style={styles.locationText}>{this.props.shop.name}</Text>
+
+								</View> : null
+							}
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									width: 178 * alpha,
+									top: 0,
+									bottom: 0,
+									alignItems: "flex-start",
+								}}>
+								<Text
+									style={this.props.shop ? styles.titleText : styles.titleText2 }>{this.props.description}</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<Text
+									style={this.props.shop ? styles.timeText : styles.timeText2 }>{this.props.created_at}</Text>
+							</View>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
 						<Text
-							style={styles.locationText}>{this.props.shop}</Text>
-						<Text
-							style={styles.pointsText}>{this.props.value}</Text>
-						<Image
-							source={require("./../../assets/images/group-2.png")}
-							style={styles.arrowImage}/>
+							style={this.props.shop ? styles.pointsText : styles.pointsText2 }>{this.props.value}</Text>
+						{this.props.shop ?
+							<Image
+								source={require("./../../assets/images/group-2.png")}
+								style={styles.arrowImage}/> : null
+						}
 					</View>
-				</View>
-				<View
-					pointerEvents="box-none"
-					style={{
-						position: "absolute",
-						left: 26 * alpha,
-						right: 0,
-						top: 9 * alpha,
-						bottom: 1,
-					}}>
-					<Text
-						style={styles.titleText}>{this.props.description}</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.timeText}>{this.props.created_at}</Text>
-					<Image
-						source={require("./../../assets/images/line-7.png")}
-						style={styles.seperatorImage}/>
 				</View>
 			</View>
 		</TouchableWithoutFeedback>
@@ -91,6 +119,26 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: 78 * alpha,
 	},
+	seperatorImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		position: "absolute",
+		left: 26 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,
+		height: 3 * alpha,
+	},
+	leftblockView: {
+		backgroundColor: "transparent",
+		width: 196 * alpha,
+		height: 57 * alpha,
+	},
+	leftblockView2: {
+		backgroundColor: "transparent",
+		width: 196 * alpha,
+		height: 57 * alpha,
+		alignItems: "flex-start",
+	},
 	locationText: {
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
@@ -99,23 +147,6 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		flex: 1,
-	},
-	pointsText: {
-		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginRight: 14 * alpha,
-	},
-	arrowImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 9 * alpha,
-		height: 10 * alpha,
 	},
 	titleText: {
 		backgroundColor: "transparent",
@@ -125,23 +156,62 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-		marginLeft: 1 * alpha,
+	},
+	titleText2: {
+		backgroundColor: "transparent",
+		color: "rgb(61, 61, 61)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		marginTop: 9 * alpha,
 	},
 	timeText: {
+		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
 		fontFamily: "DINPro-Medium",
-		fontSize: 11,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		marginBottom: 8 * alpha,
 	},
-	seperatorImage: {
+	timeText2: {
 		backgroundColor: "transparent",
-		resizeMode: "cover",
-		width: null,
-		height: 3 * alpha,
+		color: "rgb(151, 151, 151)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginBottom: 11 * alpha,
+	},
+	pointsText: {
+		backgroundColor: "transparent",
+		color: "rgb(0, 178, 227)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 14 * alpha,
+	},
+	pointsText2: {
+		backgroundColor: "transparent",
+		color: "rgb(0, 178, 227)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 23 * alpha,
+	},
+	arrowImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 9 * alpha,
+		height: 10 * alpha,
 	},
 })
+
 

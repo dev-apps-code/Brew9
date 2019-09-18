@@ -10,7 +10,11 @@ import OrderCell from "./OrderCell.js"
 import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import { connect } from "react-redux";
 
+@connect(({ members }) => ({
+	members:members
+}))
 export default class OrderHistory extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -53,6 +57,93 @@ export default class OrderHistory extends React.Component {
 		this.props.navigation.goBack()
 	}
 
+	temp_data = [
+		{
+			id: 1,
+			total: 10,
+			receipt_no: "bw201922112311",
+			payment_time: "2019-11-03 10:10:30",
+			shop_name: "Brew9 Beribi",
+			products: [
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				}
+			]
+		},
+		{
+			id: 2,
+			total: 20,
+			receipt_no: "bw201922112311",
+			payment_time: "2019-11-03 10:10:30",
+			shop_name: "Brew9 Beribi",
+			products: [
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				},
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				}
+			]
+		},
+		{
+			id: 3,
+			total: 40,
+			receipt_no: "bw201922112311",
+			payment_time: "2019-11-03 10:10:30",
+			shop_name: "Brew9 Beribi",
+			products: [
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				},
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				},
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				},
+				{
+					name: "Double Chocolate",
+					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
+				},
+				{
+					name: "Pineapple Lemonade",
+					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
+				}
+			]
+		}
+	]
+
+
 	orderHistoryFlatListMockData = [{
 		key: "1",
 	}, {
@@ -78,7 +169,15 @@ export default class OrderHistory extends React.Component {
 	renderOrderHistoryFlatListCell = ({ item }) => {
 	
 		return <OrderCell
-				navigation={this.props.navigation}/>
+				navigation={this.props.navigation}
+				order_id={item.id}
+				total={item.total}
+				receipt_no={item.receipt_no}
+				payment_time={item.payment_time}
+				shop_name={item.shop_name}
+				products={item.products}
+				currency={this.props.members.currency}
+		/>
 	}
 
 	render() {
@@ -88,23 +187,24 @@ export default class OrderHistory extends React.Component {
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.purchaseHistoryText}>Purchase History</Text>
+						style={styles.purchaseHistoryText}>Order History</Text>
 					<View
 						style={{
 							flex: 1,
 						}}/>
-					<Text
-						style={styles.seeAllText}>See all</Text>
-					<Image
-						source={require("./../../assets/images/group-16.png")}
-						style={styles.groupImage}/>
+					{/*<Text*/}
+					{/*	style={styles.seeAllText}>See all</Text>*/}
+					{/*<Image*/}
+					{/*	source={require("./../../assets/images/group-16.png")}*/}
+					{/*	style={styles.groupImage}/>*/}
 				</View>
 				<View
 					style={styles.orderHistoryFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderOrderHistoryFlatListCell}
-						data={this.orderHistoryFlatListMockData}
-						style={styles.orderHistoryFlatList}/>
+						data={this.temp_data}
+						style={styles.orderHistoryFlatList}
+						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</View>
 	}

@@ -18,7 +18,6 @@ export default {
         *loadValidVoucher({ payload }, { call, put, select }) {
             try {
 
-                console.log("load valid")
                 const { object, callback } = payload
 
                 // const authtoken = yield select(state => state.member.userAuthToken)

@@ -26,6 +26,7 @@ import PointHistory from "./App/PointHistory/PointHistory"
 import Transaction from "./App/Transaction/Transaction"
 import OrderHistory from "./App/OrderHistory/OrderHistory"
 import PointShop from "./App/PointShop/PointShop"
+import PointShopFullList from "./App/PointShop/PointShopFullList"
 import PointShopItem from "./App/PointShopItem/PointShopItem"
 import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
 import PayByWallet from "./App/PayByWallet/PayByWallet"
@@ -35,6 +36,9 @@ import TopUpWallet from "./App/TopUpWallet/TopUpWallet"
 import OrderReceipt from "./App/OrderReceipt/OrderReceipt"
 import OrderReview from "./App/OrderReview/OrderReview"
 import OrderInvoice from "./App/OrderInvoice/OrderInvoice"
+import RedeemPromotion from "./App/RedeemPromotion/RedeemPromotion"
+import Notification from "./App/Notification/Notification"
+import MissionCenter from "./App/MissionCenter/MissionCenter"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -99,6 +103,9 @@ const PushRouteThree = createStackNavigator({
 	PointShop: {
 		screen: PointShop,
 	},
+	PointShopFullList: {
+		screen: PointShopFullList,
+	},
 	PointShopItem: {
 		screen: PointShopItem,
 	},
@@ -125,10 +132,46 @@ const PushRouteThree = createStackNavigator({
 	},
 	OrderInvoice: {
 		screen: OrderInvoice,
+	},
+	RedeemPromotion: {
+		screen: RedeemPromotion,
+	},
+	Notification: {
+		screen: Notification,
+	},
+	PayByWallet: {
+		screen: PayByWallet,
+	},
+	MissionCenter: {
+		screen: MissionCenter,
 	}
 }, {
 	initialRouteName: "Profile",
 })
+
+PushRouteOne.navigationOptions = ({ navigation }) => {
+	let tabBarVisible = true;
+	for (let i = 0; i < navigation.state.routes.length; i++) {
+		if (navigation.state.routes[i].routeName != "Home") {
+			tabBarVisible = false;
+		}
+	}
+	return {
+		tabBarVisible
+	};
+};
+
+PushRouteTwo.navigationOptions = ({ navigation }) => {
+	let tabBarVisible = true;
+	for (let i = 0; i < navigation.state.routes.length; i++) {
+		if (navigation.state.routes[i].routeName != "PickUp") {
+			tabBarVisible = false;
+		}
+	}
+	return {
+		tabBarVisible
+	};
+};
 
 PushRouteThree.navigationOptions = ({ navigation }) => {
 
@@ -145,17 +188,7 @@ PushRouteThree.navigationOptions = ({ navigation }) => {
 	}
 }
 
-PushRouteOne.navigationOptions = ({ navigation }) => {
-	let tabBarVisible = true;
-	for (let i = 0; i < navigation.state.routes.length; i++) {
-		if (navigation.state.routes[i].routeName != "Home") {
-			tabBarVisible = false;
-		}
-	}
-	return {
-		tabBarVisible
-	};
-};
+
 
 const TabGroupOne = createBottomTabNavigator({
 	PushRouteOne: {

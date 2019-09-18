@@ -9,6 +9,13 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import PointProductsItemRequestObject from "../Requests/point_products_item_request_object"
+import {createAction, toTitleCase} from "../Utils";
+import {connect} from "react-redux";
+
+@connect(({ members }) => ({
+	members: members
+}))
 
 export default class PointShopItem extends React.Component {
 
@@ -16,7 +23,7 @@ export default class PointShopItem extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Item",
+			title: navigation.getParam("item_name", ""),
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -38,9 +45,14 @@ export default class PointShopItem extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			loading: true,
+			data: []
+		}
 	}
 
 	componentDidMount() {
+		this.loadPointsProducts()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -52,12 +64,35 @@ export default class PointShopItem extends React.Component {
 		this.props.navigation.goBack()
 	}
 
+	loadPointsProducts(){
+	const { dispatch } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					loading: false,
+					data: eventObject.result
+				})
+			}
+		}
+		const obj = new PointProductsItemRequestObject()
+		obj.setUrlId(this.props.navigation.getParam("item_id", ""))
+		dispatch(
+			createAction('point_products/loadPointProduct')({
+				object:obj,
+				callback,
+			})
+		)
+}
+
 	onRedeemRewardPressed = () => {
 	
 	}
 
 	render() {
-	
+
+		const { data } = this.state
+
 		return <View
 				style={styles.pointItemView}>
 				<Image
@@ -77,14 +112,14 @@ export default class PointShopItem extends React.Component {
 							style={{
 								position: "absolute",
 								left: 13 * alpha,
-								width: 64 * alpha,
+								width: 250 * alpha,
 								top: 5 * alpha,
 								height: 40 * alpha,
 							}}>
 							<Text
-								style={styles.titleText}>Voucher A</Text>
+								style={styles.titleText}>{data.name}</Text>
 							<Text
-								style={styles.valueText}>1000</Text>
+								style={styles.valueText}>{data.points}</Text>
 						</View>
 						<Text
 							style={styles.pointsText}>Points</Text>
@@ -95,21 +130,21 @@ export default class PointShopItem extends React.Component {
 					<Text
 						style={styles.titleTwoText}>Product Type</Text>
 					<Text
-						style={styles.pointsTwoText}> - Voucher</Text>
+						style={styles.pointsTwoText}> - {toTitleCase(`${data.product_type}`)}</Text>
 				</View>
 				<View
 					style={styles.viewFourView}>
 					<Text
 						style={styles.titleThreeText}>Valid Date</Text>
 					<Text
-						style={styles.pointsThreeText}> - 1 month from date of purchase</Text>
+						style={styles.pointsThreeText}> - {data.expired_in} {data.expired_in_type} from date of purchase</Text>
 				</View>
 				<View
 					style={styles.viewFiveView}>
 					<Text
 						style={styles.titleFourText}>Time of use</Text>
 					<Text
-						style={styles.pointsFourText}> - All Day</Text>
+						style={styles.pointsFourText}> - {toTitleCase(`${data.can_use_time}`)}</Text>
 				</View>
 				<View
 					style={{

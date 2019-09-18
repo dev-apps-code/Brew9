@@ -60,7 +60,7 @@ export default class WebCommon extends React.Component {
 				style={styles.commonWebView}>
 				<WebView
 					style={styles.webviewWebView}
-					source={{ uri: this.props.navigation.getParam("web_url", "") }}/>
+					source={{uri: this.props.navigation.getParam("web_url", "")}}/>
 			</View>
 	}
 }

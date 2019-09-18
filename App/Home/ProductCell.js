@@ -55,7 +55,7 @@ export default class ProductCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.priceText}>$ {this.props.productprice}</Text>
+								style={styles.priceText}>{this.props.currency}{this.props.productprice}</Text>
 							<View
 								style={{
 									flex: 1,
@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 	productimageImage: {
-		resizeMode: "center",
+		resizeMode: "cover",
 		backgroundColor: "transparent",
 		width: 86 * alpha,
-		height: 64 * alpha,
+		height: 84 * alpha,
 		marginLeft: 4 * alpha,
-		marginTop: 14 * alpha,
+		marginTop: 4 * alpha,
 	},
 	detailsView: {
 		backgroundColor: "transparent",
