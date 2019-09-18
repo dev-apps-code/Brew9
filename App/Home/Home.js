@@ -70,6 +70,7 @@ export default class Home extends React.Component {
 
 	componentDidMount() {
 		this.loadStorePushToken()
+		this.loadShops()
 		this.loadStoreProducts()
 	}
 
@@ -89,6 +90,27 @@ export default class Home extends React.Component {
 			callback,
 		  })
 		)
+	}
+
+	loadShops(){
+		const { dispatch } = this.props
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+				loading: false,
+				})
+			}
+		}
+		const obj = new NearestShopRequestObject(latitude, longitude)
+		obj.setUrlId(1) 
+		dispatch(
+			createAction('companies/loadShops')({
+				object:obj,
+				callback,
+			}
+		))
 	}
 
 	loadStoreProducts() {
