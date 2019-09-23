@@ -114,7 +114,6 @@ export default class Home extends React.Component {
 	}
 
 	loadStoreProducts() {
-
 		const { dispatch } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
@@ -157,12 +156,10 @@ export default class Home extends React.Component {
 
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
-
 		navigate("Checkout")
 	}
 
 	renderCategorylistFlatListCell = ({ item }) => {
-
 		var selected = false
 		if(item.id == 1) {
 			selected = true
