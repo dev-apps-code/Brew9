@@ -17,7 +17,7 @@ export function getBasicAuthentication(authToken) {
 
 export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
-  
+  // console.log(urlString)
   return fetch(urlString, {
     method: 'GET',
     headers: {
@@ -52,8 +52,11 @@ export function postMethod(authtoken,object) {
     });
 }
 
-export function postMultipartMethod(object, authtoken) {
-    return fetch(`${KSERVERURL}/${urlString}`, {
+export function postMultipartMethod(authtoken, object) {
+     const urlString = `${KSERVERURL}/${object.getUrlString()}`
+    // console.log(urlString)
+    // console.log(object.getFormData())
+    return fetch(urlString, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
@@ -70,13 +73,14 @@ export function postMultipartMethod(object, authtoken) {
 
 export function logResponse(description) {
   return function(res) {
-    console.log(description, res)
-    return res
+      // console.log("Description")
+      // console.log(description, res)
+      return res
   }
 }
 
 export function _parseJSON(response) {
-  console.log("response " + response);
+  // console.log("response " + response);
   return response.text().then(text => (text ? JSON.parse(text) : {}))
 }
 

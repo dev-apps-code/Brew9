@@ -15,7 +15,7 @@ import {createAction} from "../Utils";
 import QRCode from 'react-native-qrcode';
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class PayByWallet extends React.Component {
 
@@ -82,7 +82,7 @@ export default class PayByWallet extends React.Component {
 			}
 		}
 		const obj = new QrCodeRequestObject()
-		obj.setUrlId(members.member_id)
+		obj.setUrlId(members.id)
 		dispatch(
 			createAction('members/loadQrCode')({
 				object:obj,
@@ -159,7 +159,7 @@ export default class PayByWallet extends React.Component {
 				<View
 					style={styles.walletBalanceView}>
 					<Image
-						source={{uri: members.member_image}}
+						source={{uri: members.image}}
 						style={styles.profilePicImage}/>
 					<Text
 						style={styles.nicknameText}>Somebody</Text>
@@ -370,10 +370,11 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	profilePicImage: {
-		backgroundColor: "transparent",
 		resizeMode: "center",
-		width: 73 * alpha,
-		height: 73 * alpha,
+		backgroundColor: "rgb(164, 163, 163)",
+		borderRadius: 37 * alpha,
+		width: 74 * alpha,
+		height: 74 * alpha,
 	},
 	nicknameText: {
 		color: "rgb(69, 67, 67)",

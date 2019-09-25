@@ -457,7 +457,6 @@ const styles = StyleSheet.create({
 	},
 	callIconButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -501,7 +500,6 @@ const styles = StyleSheet.create({
 	},
 	directionIconButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

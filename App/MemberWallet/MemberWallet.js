@@ -13,7 +13,7 @@ import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class MemberWallet extends React.Component {
 
@@ -123,7 +123,7 @@ export default class MemberWallet extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.textText}>{members.member_credits}</Text>
+								style={styles.textText}>{parseFloat(members.credits).toFixed(2)}</Text>
 						</View>
 						<View
 							style={{
@@ -453,7 +453,6 @@ const styles = StyleSheet.create({
 	},
 	transactionhistoryButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

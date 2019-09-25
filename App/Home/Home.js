@@ -6,18 +6,35 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Text, StyleSheet, FlatList, Image, TouchableOpacity, View , StatusBar} from "react-native"
+import {
+	Text,
+	StyleSheet,
+	FlatList,
+	Image,
+	TouchableOpacity,
+	View,
+	Animated,
+	TouchableHighlight,
+	TextInput,
+	ScrollView, TouchableWithoutFeedback,
+} from "react-native"
 import React from "react"
+import Modal from "react-native-modal"
 import PushRequestObject from '../Requests/push_request_object'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { createAction } from '../Utils/index'
 import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
-import { alpha, fontAlpha } from "../common/size";
-import ProductRequestObject from "../Requests/product_request_object.js";
+import BannerCell from "./BannerCell"
+import CartCell from "./CartCell"
+import { alpha, fontAlpha, windowHeight } from "../common/size"
+import ProductRequestObject from "../Requests/product_request_object"
+import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
+import SwitchSelector from "react-native-switch-selector"
+import _ from 'lodash'
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class Home extends React.Component {
 
@@ -37,10 +54,6 @@ export default class Home extends React.Component {
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
-			headerStyle: {
-				elevation: 0,
-				shadowOpacity: 0
-			},
 		}
 	}
 
@@ -58,31 +71,45 @@ export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			isCartToggle: false,
 			page: 1,
-			total: 0,
 			data: [],
+			cart: [],
+			cart_total: 0,
 			products:[],
 			loading: true,
 			isRefreshing: true,
+			profile: [],
+			banners: [],
+			product_view_height: 0 * alpha,
+			modalVisible: false,
+			selected_index: null,
+			select_quantity: 1,
 		}
+		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
+
+	}
+
+	componentWillMount() {
+		const { dispatch } = this.props
+		dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	componentDidMount() {
-		this.loadStorePushToken()
 		this.loadShops()
-		this.loadStoreProducts()
+		this.loadStorePushToken()
 	}
 
 	loadStorePushToken() {
-		const { dispatch } = this.props
-		this.setState({ refreshing: true });
+		const { dispatch, members } = this.props
+		this.setState({ isRefreshing: true });
 		const callback = eventObject => {
 		  if (eventObject.success) {
-			this.setState({ refreshing: false })
+			this.setState({ isRefreshing: false })
 		  }
 		}
 		const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
-		obj.setUrlId('1')
+		obj.setUrlId(this.props.members.id)
 		dispatch(
 		  createAction('members/loadStorePushToken')({
 			object:obj,
@@ -92,20 +119,26 @@ export default class Home extends React.Component {
 	}
 
 	loadShops(){
-		const { dispatch } = this.props
+		const { dispatch, members } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-				loading: false,
+					loading: false,
+					products: this.state.products.concat(eventObject.result.menu_banners)
+				}, function () {
+					this.loadStoreProducts()
 				})
 			}
 		}
+		//Hardcoded
+		var latitude = 11.0
+		var longitude = 11.0
 		const obj = new NearestShopRequestObject(latitude, longitude)
-		obj.setUrlId(1) 
+		obj.setUrlId(members.company_id)
 		dispatch(
-			createAction('companies/loadShops')({
+			createAction('shops/loadShops')({
 				object:obj,
 				callback,
 			}
@@ -113,7 +146,12 @@ export default class Home extends React.Component {
 	}
 
 	loadStoreProducts() {
+<<<<<<< HEAD
 		const { dispatch } = this.props
+=======
+
+		const { dispatch, members } = this.props
+>>>>>>> 61cb3a495d3e33f541982b34b8f915645f6d6e17
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -129,13 +167,14 @@ export default class Home extends React.Component {
 					}
 					this.setState({
 						products: this.state.products.concat(items)
+
 					})
 				}.bind(this))
 			}
 		}
 
 		const obj = new ProductRequestObject()
-		obj.setUrlId(1)
+		obj.setUrlId(members.company_id)
 		dispatch(
 			createAction('products/loadStoreProducts')({
 				object: obj,
@@ -150,12 +189,90 @@ export default class Home extends React.Component {
 			data: [],
 			products: [],
 		})
-		this.loadStoreProducts()
+		this.loadShopBanners()
 	}
 
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
 		navigate("Checkout")
+	}
+
+	onBannerPressed = (item,index) => {
+		const { navigate } = this.props.navigation
+
+		navigate("BannerView", {
+			image_url: item.banner_detail_image
+		})
+	}
+
+	_toggleDelivery = (value) => {
+		this.setState({
+			delivery_options: value
+		})
+	}
+
+	_toggleCart = (isUpdate) => {
+
+		const { isCartToggle, product_view_height } = this.state
+
+		var product_checkout_height = product_view_height
+		var headerHeight = 31 * alpha
+		var height = (this.state.cart.length * 71) * alpha
+		var checkoutHeight = 51 * alpha
+		var content = headerHeight + height + checkoutHeight
+		var finalheight = product_checkout_height - content
+		var height_cap = product_view_height * 0.4
+
+		if (finalheight < height_cap) {
+			finalheight = height_cap
+		}
+
+		if (isUpdate) {
+			console.log(isUpdate, isCartToggle)
+			if(isCartToggle) {
+				Animated.spring(this.moveAnimation, {
+					toValue: {x: 0, y: this.state.cart.length == 0 ? windowHeight : finalheight},
+				}).start()
+			}
+		} else {
+			if (isCartToggle) {
+				this.setState({ isCartToggle: false }, function(){
+					Animated.spring(this.moveAnimation, {
+						toValue: {x: 0, y: windowHeight},
+					}).start()
+				})
+			} else {
+				this.setState({ isCartToggle: true }, function(){
+					Animated.spring(this.moveAnimation, {
+						toValue: {x: 0, y: finalheight},
+					}).start()
+				})
+			}
+		}
+
+	}
+
+	measureView(event) {
+		this.setState({
+			product_view_height: event.nativeEvent.layout.height
+		})
+	}
+
+	renderPopOutCartFlatListCell = ({ item, index }) => {
+
+		console.log("Item", item)
+		return <CartCell
+			navigation={this.props.navigation}
+			id={item.id}
+			name={item.name}
+			index={index}
+			item={item}
+			quantity={item.quantity}
+			variations={item.selected_variants}
+			currency={this.props.members.currency}
+			onChangeQuantity={this.onChangeQuantityPress}
+			price={item.price}
+		/>
 	}
 
 	renderCategorylistFlatListCell = ({ item }) => {
@@ -170,132 +287,550 @@ export default class Home extends React.Component {
 		/>
 	}
 
-	renderProductlistFlatListCell = ({ item }) => {
+	renderProductlistFlatListCell = ({ item, index }) => {
 
-		return <ProductCell
-			navigation={this.props.navigation}
-			currency={this.props.members.currency}
-			productname={item.name}
-			productprice={item.price}
-			productimage={item.image.url}
-			productdescription={item.description}
-		/>
+		if (item) {
+			if (item.clazz == "product") {
+				return <ProductCell
+					navigation={this.props.navigation}
+					currency={"BND"}
+					index={index}
+					item={item}
+					productname={item.name}
+					productprice={item.price}
+					productimage={item.image.url}
+					productquantity={item.quantity}
+					productdescription={item.description}
+					productvariant={item.variants}
+					producttotalquantity={item.total_quantity}
+					onChangeQuantity={this.onChangeQuantityPress}
+					onCellPress={this.onCellPress}
+				/>
+			} else if (item.clazz == "menu_banner") {
+				return <BannerCell
+					index={index}
+					item={item}
+					navigation={this.props.navigation}
+					bannerImage={item.image}
+					onPressItem={this.onBannerPressed}
+				/>
+			}
+		}
+	}
+
+	onCellPress = (item, index) => {
+		if (this.state.isCartToggle) {
+			this._toggleCart(false)
+		}
+		this.setState({ modalVisible: true, selected_index: index })
+	}
+
+
+	onChangeQuantityPress = (item,index,operation,isCart) => {
+
+		let cart = [...this.state.cart]
+
+		if (isCart) {
+
+			var product_index = this.state.products.findIndex(element => element.id == item.id && element.clazz == 'product')
+			var item = this.state.products[product_index]
+
+			var selected_cart = cart[index]
+
+			var cartItem = {
+				clazz: item.clazz,
+				id: item.id,
+				name: item.name,
+				description: item.description,
+				image: item.image,
+				price: selected_cart.price,
+				selected_variants: selected_cart.selected_variants,
+				quantity: selected_cart.quantity,
+			}
+
+			if (operation === "add") {
+				if (cartItem.quantity) {
+					item.quantity = item.quantity + 1
+					cartItem.quantity = cartItem.quantity + 1
+					item.total_quantity = item.total_quantity + 1
+				} else {
+					item.quantity = 1
+					cartItem.quantity = 1
+				}
+
+				this.state.products[product_index] = item
+
+				if (index >= 0) {
+					cart[index] = cartItem
+					this.setState({ cart }, function(){this._toggleCart(true)})
+				} else {
+					this.setState({
+						cart: this.state.cart.concat(cartItem)
+					}, function(){
+						this._toggleCart(true)
+					})
+				}
+
+				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(cartItem.price)).toFixed(2)
+			} else {
+
+				console.log("Minus", cartItem.quantity, item.quantity)
+				if (cartItem.quantity > 1) {
+					if (item.quantity > 0) item.quantity = item.quantity - 1
+					cartItem.quantity = cartItem.quantity - 1
+					item.total_quantity = item.total_quantity - 1
+				} else {
+					item.quantity = null
+					cartItem.quantity = null
+					item.total_quantity = 0
+				}
+
+				this.state.products[product_index] = item
+
+				if (index >= 0) {
+					cart[index] = cartItem
+					// this.state.cart.splice(cart_index, 1, cartItem)
+				}
+				if (cartItem.quantity === null) {
+					cart.splice(index, 1)
+				}
+				this.setState({ cart }, function(){this._toggleCart(true)})
+				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
+			}
+
+			this.forceUpdate()
+
+		} else {
+
+			var item = this.state.products[index]
+
+			var cartItem = {
+				clazz: item.clazz,
+				id: item.id,
+				name: item.name,
+				description: item.description,
+				image: item.image,
+				price: item.price,
+				quantity: item.quantity,
+			}
+
+			var cart_index = cart.findIndex(element => element.id == item.id)
+
+			if (operation === "add") {
+				if (item.quantity) {
+					item.quantity = item.quantity + 1
+					cartItem.quantity = cartItem.quantity + 1
+				} else {
+					item.quantity = 1
+					cartItem.quantity = 1
+				}
+
+				this.state.products[index] = item
+
+				if (cart_index >= 0) {
+					cart[cart_index] = cartItem
+					this.setState({ cart }, function(){this._toggleCart(true)})
+				} else {
+					this.setState({
+						cart: this.state.cart.concat(cartItem)
+					}, function(){
+						this._toggleCart(true)
+					})
+				}
+
+				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(item.price)).toFixed(2)
+			} else {
+				if (item.quantity > 1) {
+					item.quantity = item.quantity - 1
+					cartItem.quantity = cartItem.quantity - 1
+				} else {
+					item.quantity = null
+					cartItem.quantity = null
+				}
+
+				this.state.products[index] = item
+
+				if (cart_index >= 0) {
+					cart[cart_index] = cartItem
+					// this.state.cart.splice(cart_index, 1, cartItem)
+				}
+				if (item.quantity === null) {
+					cart.splice(cart_index, 1)
+				}
+				this.setState({ cart }, function(){this._toggleCart(true)})
+				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(item.price)).toFixed(2)
+			}
+
+			this.forceUpdate()
+		}
+
+	}
+
+	onAddToCartPressed = (product) => {
+
+		let cart = [...this.state.cart]
+
+		this.setState({
+			modalVisible: false,
+		})
+
+		const clone_variants = _.cloneDeep(product.selected_variants)
+		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
+
+		var search_cart = this.state.cart[search_cart_index]
+
+		console.log("Search", search_cart)
+
+		let cartItem = {
+			clazz: product.clazz,
+			id: product.id,
+			name: product.name,
+			description: product.description,
+			image: product.image,
+			price: product.calculated_price,
+			quantity: this.state.select_quantity,
+			selected_variants: clone_variants
+		}
+
+		product.total_quantity = parseInt(product.total_quantity) + parseInt(this.state.select_quantity)
+
+		let total_price = product.calculated_price * this.state.select_quantity
+
+		if (search_cart) {
+			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
+			this.setState({ cart, select_quantity: 1 })
+		} else {
+			this.setState({
+				cart: this.state.cart.concat(cartItem),
+				products: this.state.products,
+				select_quantity: 1,
+			}, function(){
+				this._toggleCart(true)
+			})
+		}
+
+		this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
+	}
+
+
+	onClosePressed = () => {
+		this.setState({ modalVisible: false })
+	}
+
+	onClearPress = () => {
+		if (this.state.isCartToggle) {
+			this._toggleCart(false)
+		}
+		this.state.cart = []
+		for (var index in this.state.products) {
+			this.state.products[index].quantity = null
+		}
+	}
+
+	get_product(index) {
+
+		if (index) {
+			let product = this.state.products[index]
+			if (product.quantity == null) product.quantity = 1
+			if (product.calculated_price == null) product.calculated_price = product.price
+			if (product.selected_quantity == null) product.selected_quantity = 1
+			if (product.total_quantity == null) product.total_quantity = 0
+			if (product.variants) {
+				if (product.selected_variants == null) {
+					var selected = []
+					for (var index in product.variants) {
+						var variant = product.variants[index]
+						var value = variant.required ? variant.variant_values[0] : null
+						selected.push(value)
+					}
+					product.selected_variants = selected
+				}
+			}
+			return product
+		}
+		return null
+
+	}
+
+	onVariantPressed = (selected_product, selected_variants, key, selected_value) => {
+		selected_variants[key] = selected_value
+		let filtered = selected_variants.filter(function(el) { return el })
+		let total = filtered.reduce((a, b) => +a + +b.price, 0)
+		selected_product.calculated_price = (parseFloat(selected_product.price) + parseFloat(total)).toFixed(2)
+		this.setState({
+			products: this.state.products
+		})
+	}
+
+	renderModalContent = (selected_product) => {
+
+		let select_quantity = this.state.select_quantity
+
+		const variants = selected_product.variants.map((item, key) => {
+
+			let selected_variants = selected_product.selected_variants
+
+			return <View
+				style={styles.optionsTwoView}>
+				<Text
+					style={styles.optiontitleTwoText}>{item.display_name}</Text>
+				<View
+					style={styles.optionchoiceView}>
+					{
+						item.variant_values.map((value, value_key) => {
+
+							var selected = selected_variants.includes(value)
+
+							return <TouchableOpacity
+								onPress={() => this.onVariantPressed(selected_product,selected_variants, key, value)}
+								style={ selected ? styles.selectedButton : styles.choiceFourButton}>
+								<Text
+									style={selected ? styles.selectedButtonText : styles.choiceFourButtonText}>{value.value} { value.price > 0 && (`$${value.price}`)}</Text>
+							</TouchableOpacity>
+						})
+					}
+				</View>
+			</View>
+		})
+
+		return <View
+			style={styles.popOutView}>
+			<View
+				style={styles.imageblockView}>
+				<Image
+					source={{uri : selected_product.image.url}}
+					style={styles.productimageImage}/>
+			</View>
+			<View
+				pointerEvents="box-none"
+				style={{
+					position: "absolute",
+					left: 0 * alpha,
+					right: 0 * alpha,
+					top: 13 * alpha,
+					bottom: 0 * alpha,
+				}}>
+				<View
+					style={styles.topbuttonView}>
+					{/*<TouchableOpacity*/}
+					{/*	onPress={this.onFavouritePressed}*/}
+					{/*	style={styles.favouriteButton}>*/}
+					{/*	<Image*/}
+					{/*		source={require("./../../assets/images/group-9-11.png")}*/}
+					{/*		style={styles.favouriteButtonImage}/>*/}
+					{/*</TouchableOpacity>*/}
+					<TouchableOpacity
+						onPress={this.onClosePressed}
+						style={styles.closeButton}>
+						<Text
+							style={styles.closeButtonText}>X</Text>
+					</TouchableOpacity>
+
+				</View>
+				<ScrollView
+					style={styles.contentScrollView}>
+					<View
+						style={styles.productView}>
+						<Text
+							style={styles.nameText}>{selected_product.name}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						{/*<View*/}
+						{/*	pointerEvents="box-none"*/}
+						{/*	style={{*/}
+						{/*		alignSelf: "flex-start",*/}
+						{/*		width: 76 * alpha,*/}
+						{/*		height: 14 * alpha,*/}
+						{/*		marginLeft: 1 * alpha,*/}
+						{/*		flexDirection: "row",*/}
+						{/*		alignItems: "flex-end",*/}
+						{/*	}}>*/}
+						{/*	<View*/}
+						{/*		style={styles.ingredientView}>*/}
+						{/*		<Text*/}
+						{/*			style={styles.alcoholText}>Alcohol</Text>*/}
+						{/*	</View>*/}
+						{/*	<View*/}
+						{/*		style={styles.ingredientTwoView}>*/}
+						{/*		<Text*/}
+						{/*			style={styles.milkText}>Milk</Text>*/}
+						{/*	</View>*/}
+						{/*</View>*/}
+					</View>
+					{variants}
+				</ScrollView>
+				<View
+					style={styles.bottomView}>
+					<View
+						style={styles.lineView}/>
+					<View
+						style={styles.summaryView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								height: 32 * alpha,
+								flexDirection: "row",
+								alignItems: "center",
+							}}>
+							<Text
+								style={styles.priceText}>{this.props.members.currency}{selected_product.calculated_price}</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<View
+								style={styles.controlView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										alignSelf: "center",
+										top: 0 * alpha,
+										bottom: 0 * alpha,
+										justifyContent: "center",
+									}}>
+									<Text
+										style={styles.quantityText}>{select_quantity}</Text>
+
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0 * alpha,
+										right: 0 * alpha,
+										top: 0 * alpha,
+										height: 23 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
+									}}>
+									<TouchableOpacity
+										onPress={() => { if (select_quantity > 1) this.setState({select_quantity: select_quantity -= 1}) }}
+										style={styles.removeButton}>
+										<Image
+											source={require("./../../assets/images/button-4.png")}
+											style={styles.removeButtonImage}/>
+									</TouchableOpacity>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<TouchableOpacity
+										onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
+										style={styles.addButton}>
+										<Image
+											source={require("./../../assets/images/add-18.png")}
+											style={styles.addButtonImage}/>
+									</TouchableOpacity>
+								</View>
+							</View>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.optionsText}>Without Peach Fruits, Standard (Recommended), Less…</Text>
+					</View>
+					<TouchableOpacity
+						onPress={() => this.onAddToCartPressed(selected_product)}
+						style={styles.addToCartButton}>
+						<Text
+							style={styles.addToCartButtonText}>Add to Cart</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+
+
+		</View>
 	}
 
 	render() {
 
+		const selected_product = this.get_product(this.state.selected_index)
+
 		return <View
 			style={styles.page1View}>
+			{/*<View*/}
+			{/*	style={styles.topsectionView}>*/}
+			{/*	<View*/}
+			{/*		pointerEvents="box-none"*/}
+			{/*		style={{*/}
+			{/*			height: 31 * alpha,*/}
+			{/*			marginLeft: 14 * alpha,*/}
+			{/*			marginRight: 14 * alpha,*/}
+			{/*			marginTop: 4 * alpha,*/}
+			{/*			flexDirection: "row",*/}
+			{/*			alignItems: "flex-start",*/}
+			{/*		}}>*/}
+			{/*		<View*/}
+			{/*			style={styles.branchView}>*/}
+			{/*			<TouchableOpacity*/}
+			{/*				onPress={this.onBranchPressed}*/}
+			{/*				style={styles.branchButton}>*/}
+			{/*				<Text*/}
+			{/*					style={styles.branchButtonText}>Branch</Text>*/}
+			{/*				/!*<Image*!/*/}
+			{/*				/!*	source={require("./../../assets/images/group-22.png")}*!/*/}
+			{/*				/!*	style={styles.branchButtonImage}/>*!/*/}
+			{/*			</TouchableOpacity>*/}
+			{/*		</View>*/}
+			{/*		<View*/}
+			{/*			style={{*/}
+			{/*				flex: 1,*/}
+			{/*			}}/>*/}
+			{/*		<SwitchSelector*/}
+			{/*			options={[*/}
+			{/*				{ label: "PickUp", value: 0 },*/}
+			{/*				{ label: "Delivery", value: 1 }]}*/}
+			{/*			initial={0}*/}
+			{/*			textColor={"#4E4D4D"}*/}
+			{/*			selectedColor={"#FFFFFF"}*/}
+			{/*			buttonColor={"#2A2929"}*/}
+			{/*			borderColor={"#979797"}*/}
+			{/*			backgroundColor={"#D8D8D8"}*/}
+			{/*			style={styles.pickUpDeliveryView}*/}
+			{/*			textStyle={styles.optionText}*/}
+			{/*			fontSize={10 * alpha}*/}
+			{/*			height={32 * alpha}*/}
+			{/*			onPress={(value) => this._toggleDelivery(value)}*/}
+			{/*		/>*/}
+			{/*	</View>*/}
+			{/*	<View*/}
+			{/*		pointerEvents="box-none"*/}
+			{/*		style={{*/}
+			{/*			height: 14 * alpha,*/}
+			{/*			marginLeft: 14 * alpha,*/}
+			{/*			marginRight: 19 * alpha,*/}
+			{/*			marginTop: 7 * alpha,*/}
+			{/*			flexDirection: "row",*/}
+			{/*			alignItems: "flex-start",*/}
+			{/*		}}>*/}
+			{/*		<Text*/}
+			{/*			style={styles.distance1kmText}>Distance 1km</Text>*/}
+			{/*		<View*/}
+			{/*			style={{*/}
+			{/*				flex: 1,*/}
+			{/*			}}/>*/}
+			{/*		<View*/}
+			{/*			style={styles.moreView}>*/}
+			{/*			<TouchableOpacity*/}
+			{/*				onPress={this.onMorePressed}*/}
+			{/*				style={styles.moreButton}>*/}
+			{/*				<Text*/}
+			{/*					style={styles.moreButtonText}>More</Text>*/}
+			{/*			</TouchableOpacity>*/}
+			{/*			<Image*/}
+			{/*				source={require("./../../assets/images/bitmap-14.png")}*/}
+			{/*				style={styles.bitmapImage}/>*/}
+			{/*		</View>*/}
+			{/*	</View>*/}
+			{/*</View>*/}
 			<View
-				style={styles.topsectionView}>
-				<View
-					pointerEvents="box-none"
-					style={{
-						height: 31 * alpha,
-						marginLeft: 14 * alpha,
-						marginRight: 14 * alpha,
-						marginTop: 4 * alpha,
-						flexDirection: "row",
-						alignItems: "flex-start",
-					}}>
-					<View
-						style={styles.branchView}>
-						<TouchableOpacity
-							onPress={this.onBranchPressed}
-							style={styles.branchButton}>
-							<Text
-								style={styles.branchButtonText}>Branch</Text>
-							<Image
-								source={require("./../../assets/images/group-22.png")}
-								style={styles.branchButtonImage}/>
-						</TouchableOpacity>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<View
-						style={styles.pickUpDeliveryView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Image
-								source={require("./../../assets/images/rectangle-3.png")}
-								style={styles.rectangleImage}/>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 29 * alpha,
-									marginLeft: 1 * alpha,
-									marginRight: 4 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<View
-									style={styles.pickUpView}>
-									<Text
-										style={styles.pickUpText}>Pick Up</Text>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.deliveryText}>Delivery</Text>
-							</View>
-						</View>
-					</View>
-				</View>
-				<View
-					pointerEvents="box-none"
-					style={{
-						height: 14 * alpha,
-						marginLeft: 14 * alpha,
-						marginRight: 19 * alpha,
-						marginTop: 7 * alpha,
-						flexDirection: "row",
-						alignItems: "flex-start",
-					}}>
-					<Text
-						style={styles.distance1kmText}>Distance 1km</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<View
-						style={styles.moreView}>
-						<TouchableOpacity
-							onPress={this.onMorePressed}
-							style={styles.moreButton}>
-							<Text
-								style={styles.moreButtonText}>More</Text>
-						</TouchableOpacity>
-						<Image
-							source={require("./../../assets/images/bitmap-14.png")}
-							style={styles.bitmapImage}/>
-					</View>
-				</View>
-			</View>
-			<View
-				style={styles.productsectionView}>
+				style={styles.productsectionView}
+				onLayout={(event) => this.measureView(event)}>
 				<View
 					style={styles.categorylistFlatListViewWrapper}>
 					<FlatList
@@ -319,15 +854,43 @@ export default class Home extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</View>
+
+			<Animated.View
+				style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]}
+			>
+				<View
+					style={styles.clearAllView}>
+					<TouchableOpacity
+						onPress={this.onClearPress}
+						style={styles.clearButton}>
+						<Image
+							source={require("./../../assets/images/group-14-13.png")}
+							style={styles.clearButtonImage}/>
+						<Text
+							style={styles.clearButtonText}>Clear</Text>
+					</TouchableOpacity>
+				</View>
+				<View
+					style={styles.popOutCartFlatListViewWrapper}>
+					<FlatList
+						renderItem={this.renderPopOutCartFlatListCell}
+						data={this.state.cart}
+						style={styles.popOutCartFlatList}
+						keyExtractor={(item, index) => index.toString()}/>
+				</View>
+			</Animated.View>
+
+			{ this.state.cart.length > 0 ?
+
 			<View
 				style={styles.cartView}>
 				<View
 					pointerEvents="box-none"
 					style={{
 						position: "absolute",
-						left: 0,
-						top: 0,
-						bottom: 0,
+						left: 0 * alpha,
+						top: 0 * alpha,
+						bottom: 0 * alpha,
 						justifyContent: "center",
 					}}>
 					<View
@@ -338,77 +901,81 @@ export default class Home extends React.Component {
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 38,
-								right: 13,
-								top: 5,
-								height: 45,
+								left: 38 * alpha,
+								right: 13 * alpha,
+								top: 5 * alpha,
+								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
 							}}>
 							<View
 								style={styles.shopppingCartView}>
-								<View
-									style={styles.group5View}>
+								<TouchableOpacity
+									onPress={() => this._toggleCart(false)}
+									style={styles.shopppingCartButton}>
 									<View
-										pointerEvents="box-none"
-										style={{
-											width: 15,
-											marginTop: 1,
-											marginBottom: 4,
-										}}>
+										style={styles.group5View}>
 										<View
 											pointerEvents="box-none"
 											style={{
-												position: "absolute",
-												left: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
+												width: 15 * alpha,
+												marginTop: 1 * alpha,
+												marginBottom: 4 * alpha,
 											}}>
-											<Image
-												source={require("./../../assets/images/fill-1.png")}
-												style={styles.fill1Image}/>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 3,
-												width: 9,
-												top: 0,
-												bottom: 2,
-												alignItems: "flex-start",
-											}}>
-											<Image
-												source={require("./../../assets/images/group-4-2.png")}
-												style={styles.group4Image}/>
 											<View
+												pointerEvents="box-none"
 												style={{
-													flex: 1,
-												}}/>
+													position: "absolute",
+													left: 0 * alpha,
+													top: 0 * alpha,
+													bottom: 0 * alpha,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/fill-1.png")}
+													style={styles.fill1Image}/>
+											</View>
 											<View
-												style={styles.line8View}/>
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 3 * alpha,
+													width: 9 * alpha,
+													top: 0 * alpha,
+													bottom: 2 * alpha,
+													alignItems: "flex-start",
+												}}>
+												<Image
+													source={require("./../../assets/images/group-4-2.png")}
+													style={styles.group4Image}/>
+												<View
+													style={{
+														flex: 1,
+													}}/>
+												<View
+													style={styles.line8View}/>
+											</View>
 										</View>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Text
+											style={styles.shoppingCartText}>Cart</Text>
 									</View>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.shoppingCartText}>Shopping{"\n"}Cart</Text>
-								</View>
+								</TouchableOpacity>
 							</View>
 							<View
 								style={{
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.totalpriceText}>RM20</Text>
+								style={styles.totalpriceText}>{this.props.members.currency}{this.state.cart_total}</Text>
 						</View>
 						<View
 							style={styles.badgeView}>
 							<Text
-								style={styles.numberofitemText}>2</Text>
+								style={styles.numberofitemText}>{this.state.cart.length}</Text>
 						</View>
 					</View>
 				</View>
@@ -418,8 +985,12 @@ export default class Home extends React.Component {
 					<Text
 						style={styles.checkoutButtonText}>Checkout</Text>
 				</TouchableOpacity>
-			</View>
+			</View> : null }
+			<Modal isVisible={this.state.modalVisible} >
+				{ selected_product && (this.renderModalContent(selected_product))}
+			</Modal>
 		</View>
+
 	}
 }
 
@@ -443,8 +1014,8 @@ const styles = StyleSheet.create({
 		shadowRadius: 5 * alpha,
 		shadowOpacity: 1 * alpha,
 		position: "absolute",
-		left: 0,
-		right: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
 		height: 67 * alpha,
 	},
 	branchView: {
@@ -485,9 +1056,9 @@ const styles = StyleSheet.create({
 		marginLeft: 6 * alpha,
 	},
 	pickUpDeliveryView: {
-		backgroundColor: "transparent",
+		borderRadius: 16 * alpha,
 		width: 96 * alpha,
-		height: 31 * alpha,
+		height: 32 * alpha,
 	},
 	rectangleImage: {
 		resizeMode: "center",
@@ -502,6 +1073,10 @@ const styles = StyleSheet.create({
 		width: 49 * alpha,
 		height: 29 * alpha,
 		justifyContent: "center",
+	},
+	optionText: {
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
 	},
 	pickUpText: {
 		color: "rgb(253, 253, 253)",
@@ -527,7 +1102,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(188, 181, 181)",
 		fontFamily: "Helvetica",
-		fontSize: 12,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -571,10 +1146,11 @@ const styles = StyleSheet.create({
 	productsectionView: {
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 67 * alpha,
-		bottom: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		// top: 67 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
 		flexDirection: "row",
 	},
 	categorylistFlatList: {
@@ -591,15 +1167,16 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	productlistFlatListViewWrapper: {
+
 		width: 285 * alpha,
 		marginBottom: 1 * alpha,
 	},
 	cartView: {
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 0,
-		right: 0,
-		bottom: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,
 		height: 61 * alpha,
 	},
 	totalAmountView: {
@@ -610,8 +1187,8 @@ const styles = StyleSheet.create({
 	rectangleView: {
 		backgroundColor: "rgb(231, 230, 230)",
 		position: "absolute",
-		left: 0,
-		right: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
 		top: 10 * alpha,
 		height: 51 * alpha,
 	},
@@ -621,6 +1198,17 @@ const styles = StyleSheet.create({
 		width: 102 * alpha,
 		height: 45 * alpha,
 		justifyContent: "center",
+	},
+	shopppingCartButton: {
+		backgroundColor: "transparent",
+		borderRadius: 22.5,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		width: 102 * alpha,
+		height: 45 * alpha,
 	},
 	group5View: {
 		backgroundColor: "transparent",
@@ -653,6 +1241,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
+		marginLeft: 10 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "center",
 	},
@@ -668,14 +1257,14 @@ const styles = StyleSheet.create({
 	},
 	badgeView: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 10,
+		borderRadius: 10 * alpha,
 		borderWidth: 1,
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
 		left: 123 * alpha,
 		right: 137 * alpha,
-		top: 0,
+		top: 0 * alpha,
 		height: 20 * alpha,
 		justifyContent: "center",
 	},
@@ -697,7 +1286,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		right: 0,
+		right: 0 * alpha,
 		width: 95 * alpha,
 		top: 10 * alpha,
 		height: 51 * alpha,
@@ -714,6 +1303,506 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
+	cartsummaryviewView: {
+		backgroundColor: "white",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 51 * alpha,
+		flex: 1,
+	},
+	clearAllView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		height: 31 * alpha,
+		marginLeft: 1 * alpha,
+		marginRight: 1 * alpha,
+		justifyContent: "center",
+		alignItems: "flex-start",
+	},
+	clearButtonText: {
+		color: "rgb(144, 141, 141)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	clearButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 55 * alpha,
+		height: 18 * alpha,
+		marginLeft: 15 * alpha,
+	},
+	clearButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	popOutCartFlatList: {
+		backgroundColor: "white",
+		width: "100%",
+		flex: 1
+	},
+	popOutCartFlatListViewWrapper: {
+		flex: 1,
+	},
+	popOutView: {
+		backgroundColor: "white",
+		borderRadius: 11 * alpha,
+		position: "absolute",
+		width: "100%",
+		height: "70%",
+	},
+	topbuttonView: {
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		width: 67 * alpha,
+		height: 28 * alpha,
+		marginRight: 14 * alpha,
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "flex-start",
+	},
+	favouriteButtonImage: {
+		resizeMode: "contain",
+	},
+	favouriteButtonText: {
+		color: "black",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	favouriteButton: {
+		backgroundColor: "rgb(193, 191, 191)",
+		borderRadius: 14 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 28 * alpha,
+		height: 28 * alpha,
+		marginRight: 11 * alpha,
+	},
+	closeButton: {
+		backgroundColor: "rgb(193, 191, 191)",
+		borderRadius: 14 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 28 * alpha,
+		height: 28 * alpha,
+	},
+	closeButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	closeButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	contentScrollView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 130 * alpha,
+		alignItems: "flex-start",
+	},
+	productView: {
+		backgroundColor: "transparent",
+		width: "100%",
+		height: 22 * alpha,
+		marginLeft: 19 * alpha,
+		marginTop: 25 * alpha,
+	},
+	nameText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginRight: 28 * alpha,
+	},
+	ingredientView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		width: 39 * alpha,
+		height: 14 * alpha,
+		justifyContent: "center",
+	},
+	alcoholText: {
+		backgroundColor: "transparent",
+		color: "rgb(167, 167, 167)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginLeft: 5 * alpha,
+		marginRight: 4 * alpha,
+	},
+	ingredientTwoView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		width: 27 * alpha,
+		height: 14 * alpha,
+		marginLeft: 10 * alpha,
+		justifyContent: "center",
+	},
+	milkText: {
+		color: "rgb(167, 167, 167)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 6 * alpha,
+		marginRight: 5 * alpha,
+	},
+	optionsTwoView: {
+		backgroundColor: "transparent",
+		width: 334 * alpha,
+		flex: 1,
+		marginTop: 10 * alpha,
+		alignItems: "flex-start",
+	},
+	optiontitleTwoText: {
+		color: "rgb(141, 141, 141)",
+		fontFamily: "Helvetica",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 20 * alpha,
+	},
+	optionchoiceView: {
+		backgroundColor: "transparent",
+		alignSelf: "stretch",
+		flex: 1,
+		flexWrap: 'wrap',
+		marginLeft: 20 * alpha,
+		marginRight: 20 * alpha,
+		marginTop: 7 * alpha,
+		flexDirection: "row",
+		alignItems: "flex-start",
+	},
+	choiceFourButton: {
+		backgroundColor: "rgb(238, 238, 238)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		flex: 1,
+		height: 28 * alpha,
+		marginRight: 9 * alpha,
+		marginBottom: 4 * alpha,
+		marginTop: 1 * alpha,
+	},
+	choiceFourButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	choiceFourButtonText: {
+		color: "rgb(82, 80, 80)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	selectedButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		flex: 1,
+		height: 28 * alpha,
+		marginRight: 9 * alpha,
+		marginBottom: 4 * alpha,
+		marginTop: 1 * alpha,
+	},
+	selectedButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	selectedButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	optionsView: {
+		backgroundColor: "transparent",
+		width: 270 * alpha,
+		height: 87 * alpha,
+		marginLeft: 20 * alpha,
+		marginTop: 10 * alpha,
+		alignItems: "flex-start",
+	},
+	optiontitleText: {
+		color: "rgb(141, 141, 141)",
+		fontFamily: "Helvetica",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	recommendedButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	recommendedButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 85 * alpha,
+		height: 28 * alpha,
+	},
+	recommendedButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	unavailableButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	unavailableButtonText: {
+		color: "rgb(201, 201, 201)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	unavailableButton: {
+		backgroundColor: "rgba(238, 238, 238, 0.62)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 67 * alpha,
+		height: 28 * alpha,
+		marginLeft: 12 * alpha,
+	},
+	choiceThreeButton: {
+		backgroundColor: "rgb(238, 238, 238)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 94 * alpha,
+		height: 28 * alpha,
+	},
+	choiceThreeButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	choiceThreeButtonText: {
+		color: "rgb(82, 80, 80)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	choiceTwoButton: {
+		backgroundColor: "rgb(238, 238, 238)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 84 * alpha,
+		height: 27 * alpha,
+	},
+	choiceTwoButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	choiceTwoButtonText: {
+		color: "rgb(82, 80, 80)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	choiceButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	choiceButton: {
+		backgroundColor: "rgb(238, 238, 238)",
+		borderRadius: 2 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 66 * alpha,
+		height: 27 * alpha,
+		marginLeft: 13 * alpha,
+	},
+	choiceButtonText: {
+		color: "rgb(82, 80, 80)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	bottomView: {
+		backgroundColor: "transparent",
+		height: 113 * alpha,
+		justifyContent: "flex-end",
+	},
+	lineView: {
+		backgroundColor: "rgb(151, 151, 151)",
+		opacity: 0.29,
+		height: 1 * alpha,
+		marginBottom: 12 * alpha,
+	},
+	summaryView: {
+		backgroundColor: "transparent",
+		height: 37 * alpha,
+		marginLeft: 20 * alpha,
+		marginRight: 20 * alpha,
+		marginBottom: 12 * alpha,
+	},
+	priceText: {
+		backgroundColor: "transparent",
+		color: "rgb(0, 178, 227)",
+		fontFamily: "Helvetica",
+		fontSize: 18 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		alignSelf: "flex-start",
+	},
+	controlView: {
+		backgroundColor: "transparent",
+		width: 74 * alpha,
+		height: 23 * alpha,
+	},
+	quantityText: {
+		backgroundColor: "transparent",
+		color: "rgb(85, 83, 81)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	removeButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 23 * alpha,
+		height: 23 * alpha,
+	},
+	removeButtonImage: {
+		resizeMode: "contain",
+	},
+	removeButtonText: {
+		color: "black",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	addButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		alignSelf: "center",
+		width: 23 * alpha,
+		height: 23 * alpha,
+	},
+	addButtonText: {
+		color: "black",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	addButtonImage: {
+		resizeMode: "contain",
+	},
+	optionsText: {
+		backgroundColor: "transparent",
+		color: "rgb(141, 141, 141)",
+		fontFamily: "Helvetica-Oblique",
+		fontSize: 8 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		alignSelf: "flex-start",
+		marginLeft: 1 * alpha,
+	},
+	addToCartButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 4 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 36 * alpha,
+		marginLeft: 20 * alpha,
+		marginRight: 20 * alpha,
+		marginBottom: 15 * alpha,
+	},
+	addToCartButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	addToCartButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	productimageImage: {
+		resizeMode: "cover",
+		backgroundColor: "transparent",
+		alignSelf: "center",
+		width: 150 * alpha,
+		height: 150 * alpha,
+	},
+	imageblockView: {
+		backgroundColor: "white",
+		position: "absolute",
+		width: "100%",
+		top: 21 * alpha,
+		height: 150 * alpha,
+		alignItems: "center",
+	},
 })
-
-

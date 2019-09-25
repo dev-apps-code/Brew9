@@ -14,7 +14,7 @@ import { ProgressBar, Colors } from 'react-native-paper';
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class MemberCenter extends React.Component {
 
@@ -110,9 +110,13 @@ export default class MemberCenter extends React.Component {
 
 		const { members } = this.props
 
-		var membership_progress = members.isPremium ? members.member_premium_membership_exp/members.premium_membership_next_level_exp : members.member_free_membership_exp/members.free_membership_next_level_exp
-		var membership_exp = members.isPremium ? members.member_premium_membership_exp : members.member_free_membership_exp
-		var membership_next_level_exp = members.isPremium ? members.premium_membership_next_level_exp: members.free_membership_next_level_exp
+		var isPremium = members.premium_membership ? true : false
+		var membership_progress = isPremium ?
+			members.premium_membership.experience_points/members.premium_membership.membership_level.maximum_experience :
+			members.free_membership.experience_points/members.free_membership.membership_level.maximum_experience
+
+		var membership_exp = isPremium ? members.premium_membership.membership_level.experience_needed : members.free_membership.membership_level.experience_needed
+		var membership_next_level_exp = isPremium ? members.premium_membership.membership_level.maximum_experience : members.free_membership.membership_level.maximum_experience
 		var exp_to_next_level = membership_next_level_exp - membership_exp
 
 		return <View
@@ -125,7 +129,7 @@ export default class MemberCenter extends React.Component {
 					<View
 						style={styles.profileView}>
 						<Image
-							source={{uri: members.member_image}}
+							source={{uri: members.image}}
 							style={styles.avatarImage}/>
 						<View
 							pointerEvents="box-none"
@@ -137,7 +141,7 @@ export default class MemberCenter extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.nameText}>{members.member_name}</Text>
+								style={styles.nameText}>{members.name}</Text>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -149,7 +153,7 @@ export default class MemberCenter extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Text
-									style={styles.levelText}>{members.free_membership_level}</Text>
+									style={styles.levelText}>{isPremium ? members.premium_membership.membership_level.name : members.free_membership.membership_level.name}</Text>
 								<View
 									pointerEvents="box-none"
 									style={{
@@ -192,7 +196,7 @@ export default class MemberCenter extends React.Component {
 						<View
 							style={styles.membershipTwoView}>
 							<Image
-								source={{uri: members.membership_background}}
+								source={{uri: members.image}}
 								style={styles.backgroundImage}/>
 							<View
 								pointerEvents="box-none"
@@ -212,7 +216,7 @@ export default class MemberCenter extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.membershipText}>{members.membership_name}</Text>
+										style={styles.membershipText}>{isPremium ? members.premium_membership.membership_plan.name : members.free_membership.membership_plan.name }</Text>
 									<View
 										style={{
 											flex: 1,
@@ -279,10 +283,6 @@ export default class MemberCenter extends React.Component {
 				</View>
 				<View
 					style={styles.lineTwoView}/>
-				<View
-					style={{
-						flex: 1,
-					}}/>
 				<View
 					style={styles.nextLevelRewardView}>
 					<View
@@ -411,9 +411,10 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 	avatarImage: {
-		backgroundColor: "transparent",
+		backgroundColor: "rgba(164, 163, 163, 0.41)",
+		borderRadius: 24 * alpha,
 		resizeMode: "center",
-		width: 49 * alpha,
+		width: 48 * alpha,
 		height: 48 * alpha,
 		marginLeft: 21 * alpha,
 		marginTop: 14 * alpha,
@@ -514,7 +515,7 @@ const styles = StyleSheet.create({
 		marginRight: 20 * alpha,
 	},
 	backgroundImage: {
-		backgroundColor: "transparent",
+		backgroundColor: "#EEEEEE",
 		opacity: 0.68,
 		resizeMode: "cover",
 		width: 336 * alpha,
@@ -622,10 +623,9 @@ const styles = StyleSheet.create({
 	},
 	lineTwoView: {
 		backgroundColor: "rgb(224, 224, 224)",
-		alignSelf: "flex-end",
-		width: 334 * alpha,
-		height: 1 * alpha,
-		marginRight: 20 * alpha,
+		alignSelf: "center",
+		width: 334,
+		height: 1,
 	},
 	nextLevelRewardView: {
 		backgroundColor: "transparent",

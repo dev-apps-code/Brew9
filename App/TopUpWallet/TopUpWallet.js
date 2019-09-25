@@ -72,7 +72,7 @@ export default class TopUpWallet extends React.Component {
 			}
 		}
 		const obj = new TopUpProductsRequestObject()
-		obj.setUrlId(1)
+		obj.setUrlId(1) //Hardcoded
 		dispatch(
 			createAction('companies/loadTopUpProducts')({
 				object:obj,

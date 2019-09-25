@@ -20,14 +20,14 @@ export default class BenefitCell extends React.Component {
 	
 	}
 
-	onBemefitCellPress = () => {
+	onBenefitCellPress = () => {
 	
 	}
 
 	render() {
 	
 		return <TouchableWithoutFeedback
-				onPress={this.onBemefitCellPress}>
+				onPress={this.onBenefitCellPress}>
 				<View
 					navigation={this.props.navigation}
 					style={styles.benefitcell}>

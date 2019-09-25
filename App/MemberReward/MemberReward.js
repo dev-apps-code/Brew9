@@ -18,7 +18,7 @@ import ValidVoucher from "./ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class MemberReward extends React.Component {
 
@@ -91,7 +91,7 @@ export default class MemberReward extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(members.member_id)
+		obj.setUrlId(members.id)
 		obj.setPage(page_no)
 		obj.setStatus(2) //Hardcoded
 		dispatch(
@@ -121,7 +121,7 @@ export default class MemberReward extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(members.member_id)
+		obj.setUrlId(members.id)
 		obj.setPage(page_no)
 		obj.setStatus(1)
 		dispatch(
@@ -151,7 +151,7 @@ export default class MemberReward extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(members.member_id)
+		obj.setUrlId(members.id)
 		obj.setPage(page_no)
 		obj.setStatus(0)
 		dispatch(

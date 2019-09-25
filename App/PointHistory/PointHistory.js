@@ -16,7 +16,7 @@ import PointStatementRequestObject from "../Requests/point_statement_request_obj
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class PointHistory extends React.Component {
 
@@ -69,7 +69,7 @@ export default class PointHistory extends React.Component {
 			}
 		}
 		const obj = new PointStatementRequestObject()
-		obj.setUrlId(members.member_id)
+		obj.setUrlId(members.id)
 		obj.setPage(page_no)
 		dispatch(
 			createAction('point_statements/loadPointHistory')({
@@ -159,7 +159,7 @@ export default class PointHistory extends React.Component {
 						<Text
 							style={styles.pointsCollectedText}>Points Collected</Text>
 						<Text
-							style={styles.pointsText}>{members.member_points}</Text>
+							style={styles.pointsText}>{members.points}</Text>
 					</View>
 					<View
 						style={{

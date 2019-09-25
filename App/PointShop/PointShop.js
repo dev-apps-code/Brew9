@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class PointShop extends React.Component {
 
@@ -158,7 +158,7 @@ export default class PointShop extends React.Component {
 						<View
 							style={styles.pointCollectedTwoView}>
 							<Text
-								style={styles.pointsText}>{members.member_points}</Text>
+								style={styles.pointsText}>{members.points}</Text>
 							<Text
 								style={styles.pointsCollectedText}>Points Collected</Text>
 						</View>

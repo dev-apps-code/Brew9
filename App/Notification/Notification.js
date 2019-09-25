@@ -50,7 +50,7 @@ export default class Notification extends React.Component {
             loading: false,
             data: [],
             unread: 0,
-            notification_index: 0,
+            last_read: 0,
         }
     }
 
@@ -72,6 +72,11 @@ export default class Notification extends React.Component {
                     loading: false,
                     data: eventObject.result
                 }, function(){
+                    const maxValue = Math.max(...this.state.data.map(o => o.id), 0);
+                     this.setState({
+                        last_read: maxValue
+                    })
+
                     this.count_unread()
                 })
             }
@@ -88,9 +93,16 @@ export default class Notification extends React.Component {
 
     loadLocalStore() {
         SecureStore.getItemAsync("notification_key").then((result)=>{
-            this.setState({
-                notification_index: result
-            })
+            if (isNaN(result)) {
+                this.setState({
+                    last_read: 0
+                })
+            }
+            else {
+                this.setState({
+                    last_read: result
+                })
+            }
         }).catch((error)=>{
             console.log(error)
         })
@@ -102,7 +114,7 @@ export default class Notification extends React.Component {
         var count = 0
         for(var index in results) {
             result = results[index]
-            if(result.id > this.state.notification_index) {
+            if(result.id > this.state.last_read) {
                 count++
             }
         }
@@ -124,16 +136,15 @@ export default class Notification extends React.Component {
             title={item.title}
             text={item.text}
             time={item.created_at}
-            last_read={this.state.notification_index}
+            last_read={this.state.last_read}
         />
     }
 
     onReadAllPressed = () => {
-        const maxValue = Math.max(this.state.data.map(o => o.id), 0);
-        SecureStore.setItemAsync("notification_key", "1").catch((error)=>{
+
+        SecureStore.setItemAsync("notification_key", `${this.state.last_read}`).catch((error)=>{
             console.log(error)
         })
-        console.log(maxValue)
     }
 
     render() {
