@@ -13,7 +13,7 @@ import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-    members: members
+    members: members.profile
 }))
 export default class MissionCenter extends React.Component {
 

@@ -10,23 +10,26 @@
   "dependencies": {
     "dva-core": "^1.1.0",
     "expo": "^34.0.0",
-<<<<<<< HEAD
-    "expo-secure-store": "^6.0.0",
-=======
     "expo-facebook": "^6.0.0",
->>>>>>> d25975fe210daf70ca9cf4f1f86ee1f1dd6d48b7
+    "expo-image-picker": "^6.0.0",
+    "expo-secure-store": "^6.0.0",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native-auto-height-image": "^1.1.1",
+    "react-native-confirmation-code-input": "^1.0.4",
+    "react-native-countdown-component": "^2.5.2",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-easy-loading-view": "^1.0.3",
     "react-native-gesture-handler": "~1.3.0",
-<<<<<<< HEAD
+    "react-native-modal": "^11.3.1",
     "react-native-paper": "^2.16.0",
+    "react-native-phone-input": "^0.2.2",
     "react-native-qrcode": "^0.2.7",
     "react-native-reanimated": "~1.1.0",
+    "react-native-simple-radio-button": "^2.7.3",
     "react-native-snap-carousel": "^3.8.0",
-=======
-    "react-native-reanimated": "~1.1.0",
->>>>>>> d25975fe210daf70ca9cf4f1f86ee1f1dd6d48b7
+    "react-native-switch-selector": "^1.1.14",
     "react-navigation": "3.11.1",
     "react-redux": "^5.0.2",
     "redux": "3.7.2"

@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, TouchableWithoutFeedback, StyleSheet } from "react-native"
+import { View, Text, Image, TouchableWithoutFeedback, StyleSheet, TouchableOpacity } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
 
@@ -14,18 +14,26 @@ export default class ProductCell extends React.Component {
 
 	constructor(props) {
 		super(props)
+
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onProductCellPress = () => {
-	
+		this.props.onCellPress(this.props.item,this.props.index);
+	}
+
+	onAddPressed = () => {
+		this.props.onChangeQuantity(this.props.item,this.props.index, "add", false);
+	}
+
+	onRemovePressed = () => {
+		this.props.onChangeQuantity(this.props.item,this.props.index, "remove", false);
 	}
 
 	render() {
-
 		return <TouchableWithoutFeedback
 				onPress={this.onProductCellPress}>
 				<View
@@ -60,9 +68,61 @@ export default class ProductCell extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-							<Image
-								source={require("./../../assets/images/add-5.png")}
-								style={styles.addImage}/>
+							<View
+								style={styles.optionsView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										alignSelf: "center",
+										top: 0 * alpha,
+										bottom: 0 * alpha,
+										justifyContent: "center",
+									}}>
+                                    {this.props.productquantity ?
+                                        <Text
+                                            style={styles.quantityText}>{this.props.productquantity ? this.props.productquantity : 1}</Text> : null
+                                    }
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										right: 0 * alpha,
+										top: 0 * alpha,
+										bottom: 0 * alpha,
+										justifyContent: "center",
+									}}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											width: 74 * alpha,
+											height: 23 * alpha,
+											flexDirection: "row",
+											justifyContent: "flex-end",
+											alignItems: "center",
+										}}>
+										{ this.props.productquantity ? <TouchableOpacity
+											onPress={this.onRemovePressed}
+											style={styles.minusButton}>
+											<Image
+												source={require("./../../assets/images/button-4.png")}
+												style={styles.minusButtonImage}/>
+										</TouchableOpacity> : null }
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<TouchableOpacity
+											onPress={this.onAddPressed}
+											style={styles.addButton}>
+											<Image
+												source={require("./../../assets/images/add-17.png")}
+												style={styles.addButtonImage}/>
+										</TouchableOpacity>
+									</View>
+								</View>
+							</View>
 						</View>
 					</View>
 				</View>
@@ -124,11 +184,56 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "left",
 	},
-	addImage: {
+	optionsView: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 20 * alpha,
-		height: 20 * alpha,
-		marginTop: 2 * alpha,
+		width: 74 * alpha,
+		height: 23 * alpha,
+	},
+	quantityText: {
+		backgroundColor: "transparent",
+		color: "rgb(85, 83, 81)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	minusButtonText: {
+		color: "black",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	minusButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 23 * alpha,
+		height: 23 * alpha,
+	},
+	minusButtonImage: {
+		resizeMode: "contain",
+	},
+	addButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 23 * alpha,
+		height: 23 * alpha,
+	},
+	addButtonImage: {
+		resizeMode: "contain",
+	},
+	addButtonText: {
+		color: "black",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
 	},
 })

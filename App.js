@@ -11,9 +11,12 @@ import { DangerZone, AppLoading } from "expo"
 import React from "react"
 
 import { createBottomTabNavigator } from "react-navigation"
-import { createStackNavigator, createAppContainer } from "react-navigation"
+import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation"
 
+import SplashScreen from "./App/SplashScreen/SplashScreen"
+import Login from "./App/Login/Login"
 import Checkout from "./App/Checkout/Checkout"
+import CheckoutVoucher from "./App/Checkout/CheckoutVoucher"
 import Profile from "./App/Profile/Profile"
 import MemberWallet from "./App/MemberWallet/MemberWallet"
 import MemberReward from "./App/MemberReward/MemberReward"
@@ -39,6 +42,9 @@ import OrderInvoice from "./App/OrderInvoice/OrderInvoice"
 import RedeemPromotion from "./App/RedeemPromotion/RedeemPromotion"
 import Notification from "./App/Notification/Notification"
 import MissionCenter from "./App/MissionCenter/MissionCenter"
+import Confirmation from "./App/Confirmation/Confirmation"
+import FirstScreen from "./App/FirstScreen/FirstScreen"
+import BannerView from "./App/Home/BannerView"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -53,6 +59,12 @@ const PushRouteOne = createStackNavigator({
 		navigationOptions: {
 			tabBarVisible: false
 		}
+	},
+	CheckoutVoucher: {
+		screen: CheckoutVoucher,
+	},
+	BannerView: {
+		screen: BannerView,
 	},
 	PayByWallet: {
 		screen: PayByWallet,
@@ -205,8 +217,8 @@ const TabGroupOne = createBottomTabNavigator({
 	animationEnabled: true,
 	tabBarOptions: {
 		showIcon: true,
-		activeTintColor: "rgb(85, 85, 85)",
-		inactiveTintColor: "black",
+		activeTintColor: "black",
+		inactiveTintColor: "rgb(85, 85, 85)",
 		indicatorStyle: {
 			backgroundColor: "transparent",
 		},
@@ -229,15 +241,42 @@ const TabGroupOne = createBottomTabNavigator({
 	},
 })
 
-const RootNavigator = createStackNavigator({
+const AuthenticationStack = createStackNavigator({
+	Login: {
+		screen: Login,
+	},
+	Confirmation: {
+		screen: Confirmation,
+	},
+}, {
+	initialRouteName: "Login",
+})
+
+const RootNavigator = createSwitchNavigator({
+	FirstScreen: {
+		screen: FirstScreen,
+	},
+	AuthenticationStack: {
+		screen: AuthenticationStack,
+	},
 	TabGroupOne: {
 		screen: TabGroupOne,
 	},
 }, {
 	mode: "modal",
 	headerMode: "none",
-	initialRouteName: "TabGroupOne",
+	initialRouteName: "FirstScreen",
 })
+//
+// const RootNavigator = createStackNavigator({
+// 	TabGroupOne: {
+// 		screen: TabGroupOne,
+// 	},
+// }, {
+// 	mode: "modal",
+// 	headerMode: "none",
+// 	initialRouteName: "TabGroupOne",
+// })
 
  
 
@@ -275,6 +314,8 @@ export default class App extends React.Component {
 			"Helvetica": require("./assets/fonts/Helvetica.ttf"),
 			"Helvetica-LightOblique": require("./assets/fonts/HelveticaLightOblique.ttf"),
 			"DINPro-Bold": require("./assets/fonts/DINProBold.otf"),
+			"Helvetica-Light": require("./assets/fonts/HelveticaLight.ttf"),
+			"Helvetica-Oblique": require("./assets/fonts/HelveticaOblique.ttf"),
 		})
 		this.setState({
 			fontsReady: true,

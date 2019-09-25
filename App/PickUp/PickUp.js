@@ -56,7 +56,7 @@ export default class PickUp extends React.Component {
 	render() {
 
 		return <View
-			style={styles.pickupView}>
+			style={styles.iphone8Copy2View}>
 			<View
 				style={styles.noOrderView}>
 				<View
@@ -97,27 +97,18 @@ export default class PickUp extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	navigationBarItem: {
-	},
-	navigationBarItemIcon: {
-		tintColor: "rgb(0, 194, 236)",
-	},
-	headerLeftContainer: {
-		flexDirection: "row",
-		marginLeft: 8 * alpha,
-	},
-	pickupView: {
+	iphone8Copy2View: {
 		backgroundColor: "rgb(243, 243, 243)",
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
 	},
 	noOrderView: {
 		backgroundColor: "white",
 		borderRadius: 13 * alpha,
-		width: 327 * alpha,
-		height: 528 * alpha,
-		marginTop: 40 * alpha,
+		flex: 1,
+		marginLeft: 24 * alpha,
+		marginRight: 24 * alpha,
+		marginTop: 70 * alpha,
+		marginBottom: 70 * alpha,
 		alignItems: "center",
 	},
 	group2View: {
@@ -150,13 +141,13 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	grabYoursNowText: {
+		backgroundColor: "transparent",
 		color: "rgb(134, 134, 134)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "transparent",
 		marginTop: 7 * alpha,
 	},
 	orderButton: {
@@ -170,6 +161,10 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 		marginBottom: 23 * alpha,
 	},
+	orderButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
 	orderButtonText: {
 		color: "rgb(254, 254, 254)",
 		fontFamily: "Helvetica",
@@ -178,9 +173,9 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	orderButtonImage: {
+	orderHistoryButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10 * alpha,
+		marginLeft: 10 * alpha,
 	},
 	orderHistoryButton: {
 		backgroundColor: "transparent",
@@ -200,8 +195,5 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	orderHistoryButtonImage: {
-		resizeMode: "contain",
-		marginLeft: 10 * alpha,
-	},
 })
+

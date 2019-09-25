@@ -1,6 +1,6 @@
 // export const KSERVERURL ='http://139.162.16.119:3050/api'
-export const KSERVERURL ='https://4ab01521.ngrok.io/api'
-export const KURL_INFO = 'https://4ab01521.ngrok.io/info'
+export const KSERVERURL ='https://969fe5d3.ngrok.io/api'
+export const KURL_INFO = 'https://969fe5d3.ngrok.io/info'
 
 
 export const KURL_TERMS_OF_SERVICE =

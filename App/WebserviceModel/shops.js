@@ -1,4 +1,4 @@
-import { loadShops } from '../Services/shops'
+import { shops, shop_banner } from '../Services/shops'
 import EventObject from './event_object'
 
 export default {
@@ -20,7 +20,7 @@ export default {
         try{
     
             const { object, callback } = payload
-            const authtoken = yield select(state => state.member.userAuthToken)
+            const authtoken = yield select(state => state.userAuthToken)
             const json = yield call(
                 shops,
                 authtoken,
@@ -29,6 +29,22 @@ export default {
             const eventObject = new EventObject(json)
             if (eventObject.success == true) {}
             typeof callback === 'function' && callback(eventObject)
+            } catch (err) { }
+        },
+        *loadShopBanners({ payload }, { call, put, select })
+        {
+            try{
+
+                const { object, callback } = payload
+                const authtoken = yield select(state => state.userAuthToken)
+                const json = yield call(
+                    shop_banner,
+                    authtoken,
+                    object,
+            )
+                const eventObject = new EventObject(json)
+                if (eventObject.success == true) {}
+                typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
     },

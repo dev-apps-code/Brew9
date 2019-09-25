@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import * as SecureStore from 'expo-secure-store';
 
 function clear() {
   return AsyncStorage.clear()
@@ -32,6 +33,22 @@ function multiRemove(...keys) {
   return AsyncStorage.multiRemove([...keys])
 }
 
+function secureGet(key) {
+
+  return SecureStore.getItemAsync(key).then((result)=>{
+   result
+  }).catch((error)=>{
+    console.log(error)
+  })
+
+}
+
+function secureSet(key, value) {
+  SecureStore.setItemAsync(key, JSON.stringify(value)).catch((error)=>{
+    console.log(error)
+  })
+}
+
 export default {
   clear,
   get,
@@ -39,4 +56,6 @@ export default {
   remove,
   multiGet,
   multiRemove,
+  secureGet,
+  secureSet,
 }

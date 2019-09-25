@@ -13,7 +13,9 @@ import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile,
+	free_membership: members.free_membership,
+	premium_membership: members.premium_membership
 }))
 export default class Profile extends React.Component {
 
@@ -44,6 +46,7 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log("Profile", this.props.members)
 	}
 
 	onLevelPressed = () => {
@@ -55,7 +58,7 @@ export default class Profile extends React.Component {
 
 	onVIPPressed = () => {
 
-		if (this.props.members.isPremium) {
+		if (this.props.members.premium_membership) {
 			const { navigate } = this.props.navigation
 
 			navigate("MemberCenter")
@@ -161,7 +164,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.topsectionView}>
 						<Image
-							source={{uri: members.membership_background}}
+							source={{uri: members.image}}
 							style={styles.backgroundImage}/>
 						<View
 							pointerEvents="box-none"
@@ -182,24 +185,24 @@ export default class Profile extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Image
-									source={{uri: members.member_image}}
+									source={{uri: members.image}}
 									style={styles.profilePicImage}/>
 								<View
 									pointerEvents="box-none"
 									style={{
-										width: 60 * alpha,
+										width: 150 * alpha,
 										height: 48 * alpha,
 										marginLeft: 9 * alpha,
 										marginTop: 4 * alpha,
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.nameText}>{members.member_name}</Text>
+										style={styles.nameText}>{members.name}</Text>
 									<TouchableOpacity
 										onPress={this.onLevelPressed}
 										style={styles.levelButton}>
 										<Text
-											style={styles.levelButtonText}>{members.free_membership_level}</Text>
+											style={styles.levelButtonText}>{members.premium_membership ? members.premium_membership.membership_level.name : members.free_membership.membership_level.name}</Text>
 									</TouchableOpacity>
 								</View>
 								<View
@@ -215,12 +218,12 @@ export default class Profile extends React.Component {
 										alignItems: "flex-end",
 									}}>
 									<Text
-										style={styles.memberText}>{members.membership_name}</Text>
+										style={styles.memberText}></Text>
 									<TouchableOpacity
 										onPress={this.onVIPPressed}
 										style={styles.vipButton}>
 										<Text
-											style={styles.vipButtonText}>{ members.isPremium ? "Expired at " + members.membership_expiry_date : "Purchase Membership" }</Text>
+											style={styles.vipButtonText}>{ members.premium_membership ? "Expired at " + members.premium_membership.expiry_date : "Purchase Membership" }</Text>
 										<Image
 											source={require("./../../assets/images/arrow-2.png")}
 											style={styles.vipButtonImage}/>
@@ -242,7 +245,7 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.pointvalueText}>{members.member_points}</Text>
+											style={styles.pointvalueText}>{members.points}</Text>
 										<Text
 											style={styles.pointText}>Point</Text>
 									</View>
@@ -266,7 +269,7 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.rewardvalueText}>{members.member_available_vouchers}</Text>
+											style={styles.rewardvalueText}>{members.voucher_items_count}</Text>
 										<Text
 											style={styles.rewardText}>Reward</Text>
 									</View>
@@ -294,7 +297,7 @@ export default class Profile extends React.Component {
 											<Text
 												style={styles.currencyText}>{members.currency}</Text>
 											<Text
-												style={styles.userCreditText}>{members.member_credits.toFixed(2)}</Text>
+												style={styles.userCreditText}>{parseFloat(members.credits).toFixed(2)}</Text>
 										</View>
 										<Text
 											style={styles.walletText}>Wallet</Text>
@@ -316,42 +319,41 @@ export default class Profile extends React.Component {
 							<TouchableOpacity
 								onPress={this.onClubPressed}
 								style={styles.clubbuttonButton}>
-								<Text
-									style={styles.clubbuttonButtonText}></Text>
-							</TouchableOpacity>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									width: 54 * alpha,
-									top: 17 * alpha,
-									height: 55 * alpha,
-									alignItems: "center",
-								}}>
 								<View
-									style={styles.vipiconView}>
-									<Image
-										source={require("./../../assets/images/group-3-12.png")}
-										style={styles.group3Image}/>
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										alignSelf: "center",
+										width: 54 * alpha,
+										top: 17 * alpha,
+										height: 55 * alpha,
+										alignItems: "center",
+									}}>
 									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
+										style={styles.vipiconView}>
 										<Image
-											source={require("./../../assets/images/group-8-13.png")}
-											style={styles.group8Image}/>
+											source={require("./../../assets/images/group-3-12.png")}
+											style={styles.group3Image}/>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/group-8-13.png")}
+												style={styles.group8Image}/>
+										</View>
 									</View>
+									<Text
+										style={styles.vipClubText}>VIP Club</Text>
 								</View>
-								<Text
-									style={styles.vipClubText}>VIP Club</Text>
-							</View>
+
+							</TouchableOpacity>
 						</View>
 						<View
 							style={{
@@ -362,25 +364,23 @@ export default class Profile extends React.Component {
 							<TouchableOpacity
 								onPress={this.onPointShopPressed}
 								style={styles.pointshopbuttonButton}>
-								<Text
-									style={styles.pointshopbuttonButtonText}></Text>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										alignSelf: "center",
+										width: 85 * alpha,
+										top: 22 * alpha,
+										height: 50 * alpha,
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-7-2.png")}
+										style={styles.pointiconImage}/>
+									<Text
+										style={styles.pointRewardText}>Point Reward</Text>
+								</View>
 							</TouchableOpacity>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									width: 85 * alpha,
-									top: 22 * alpha,
-									height: 50 * alpha,
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/group-7-2.png")}
-									style={styles.pointiconImage}/>
-								<Text
-									style={styles.pointRewardText}>Point Reward</Text>
-							</View>
 						</View>
 					</View>
 				<View
@@ -390,127 +390,121 @@ export default class Profile extends React.Component {
 						<TouchableOpacity
 							onPress={this.onMemberButtonPressed}
 							style={styles.memberbuttonButton}>
-							<Text
-								style={styles.memberbuttonButtonText}></Text>
-						</TouchableOpacity>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 19 * alpha,
-									marginLeft: 30 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
 								}}>
-								<Image
-									source={require("./../../assets/images/group-5-4.png")}
-									style={styles.membericonImage}/>
-								<Text
-									style={styles.memberStatusText}>Member Status</Text>
 								<View
+									pointerEvents="box-none"
 									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.upgradeMemberText}>Upgrade Member</Text>
+										height: 19 * alpha,
+										marginLeft: 30 * alpha,
+										marginRight: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-5-4.png")}
+										style={styles.membericonImage}/>
+									<Text
+										style={styles.memberStatusText}>Member Status</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.upgradeMemberText}>Upgrade Member</Text>
+								</View>
 							</View>
-						</View>
+						</TouchableOpacity>
 					</View>
 					<View
 						style={styles.orderhistoryView}>
 						<TouchableOpacity
 							onPress={this.onOrderButtonPressed}
 							style={styles.orderbuttonButton}>
-							<Text
-								style={styles.orderbuttonButtonText}></Text>
-						</TouchableOpacity>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 22 * alpha,
-									marginLeft: 30 * alpha,
-									marginRight: 237 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
 								}}>
-								<Image
-									source={require("./../../assets/images/group-9-5.png")}
-									style={styles.ordericonImage}/>
-								<Text
-									style={styles.orderHistoryText}>Order History</Text>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 22 * alpha,
+										marginLeft: 30 * alpha,
+										marginRight: 237 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-9-5.png")}
+										style={styles.ordericonImage}/>
+									<Text
+										style={styles.orderHistoryText}>Order History</Text>
+								</View>
 							</View>
-						</View>
+						</TouchableOpacity>
 					</View>
 					<View
 						style={styles.personalInfoView}>
 						<TouchableOpacity
 							onPress={this.onPersonalButtonPressed}
 							style={styles.personalbuttonButton}>
-							<Text
-								style={styles.personalbuttonButtonText}></Text>
-						</TouchableOpacity>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									width: 107 * alpha,
-									height: 20 * alpha,
-									marginLeft: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
+									position: "absolute",
+									left: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
 								}}>
 								<View
-									style={styles.personaliconView}>
+									pointerEvents="box-none"
+									style={{
+										width: 107 * alpha,
+										height: 20 * alpha,
+										marginLeft: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
 									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
+										style={styles.personaliconView}>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/group-3-13.png")}
+												style={styles.group3TwoImage}/>
+										</View>
 										<Image
-											source={require("./../../assets/images/group-3-13.png")}
-											style={styles.group3TwoImage}/>
+											source={require("./../../assets/images/group-6-7.png")}
+											style={styles.group6Image}/>
 									</View>
-									<Image
-										source={require("./../../assets/images/group-6-7.png")}
-										style={styles.group6Image}/>
+									<Text
+										style={styles.personalInfoText}>Personal Info</Text>
 								</View>
-								<Text
-									style={styles.personalInfoText}>Personal Info</Text>
 							</View>
-						</View>
+						</TouchableOpacity>
 					</View>
 					<View
 						pointerEvents="box-none"
@@ -522,127 +516,127 @@ export default class Profile extends React.Component {
 							<TouchableOpacity
 								onPress={this.onQRButtonPressed}
 								style={styles.qrbuttonButton}>
-								<Text
-									style={styles.qrbuttonButtonText}></Text>
-							</TouchableOpacity>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
+
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 18 * alpha,
-										marginLeft: 30 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
 									}}>
 									<View
-										style={styles.qriconView}>
-										<Image
-											source={require("./../../assets/images/group-3-3.png")}
-											style={styles.group3ThreeImage}/>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<Image
-												source={require("./../../assets/images/clip-5-11.png")}
-												style={styles.clip5Image}/>
-										</View>
-									</View>
-									<Text
-										style={styles.qrCodeText}>QR Code</Text>
-									<View
+										pointerEvents="box-none"
 										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.qrDescriptionText}>Scan for reward or pay</Text>
+											height: 18 * alpha,
+											marginLeft: 30 * alpha,
+											marginRight: 30 * alpha,
+											flexDirection: "row",
+											alignItems: "center",
+										}}>
+										<View
+											style={styles.qriconView}>
+											<Image
+												source={require("./../../assets/images/group-3-3.png")}
+												style={styles.group3ThreeImage}/>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/clip-5-11.png")}
+													style={styles.clip5Image}/>
+											</View>
+										</View>
+										<Text
+											style={styles.qrCodeText}>QR Code</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Text
+											style={styles.qrDescriptionText}>Scan for reward or pay</Text>
+									</View>
 								</View>
-							</View>
+
+							</TouchableOpacity>
 						</View>
 						<View
 							style={styles.redeemStationView}>
 							<TouchableOpacity
 								onPress={this.onRedeemButtonPressed}
 								style={styles.redeembuttonButton}>
-								<Text
-									style={styles.redeembuttonButtonText}></Text>
-							</TouchableOpacity>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0,
-									right: 0,
-									top: 0,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
+
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 17 * alpha,
-										marginLeft: 30 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
+										position: "absolute",
+										left: 0,
+										right: 0,
+										top: 0,
+										bottom: 0,
+										justifyContent: "center",
 									}}>
 									<View
-										style={styles.redeemiconView}>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<Image
-												source={require("./../../assets/images/group-5-5.png")}
-												style={styles.group5Image}/>
-										</View>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0,
-												right: 0,
-												top: 0,
-												bottom: 0,
-												justifyContent: "center",
-											}}>
-											<Image
-												source={require("./../../assets/images/stroke-6-2.png")}
-												style={styles.stroke6Image}/>
-										</View>
-									</View>
-									<Text
-										style={styles.redeemStationText}>Redeem Award</Text>
-									<View
+										pointerEvents="box-none"
 										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.redeemDescriptionText}>Redeem voucher</Text>
+											height: 17 * alpha,
+											marginLeft: 30 * alpha,
+											marginRight: 30 * alpha,
+											flexDirection: "row",
+											alignItems: "center",
+										}}>
+										<View
+											style={styles.redeemiconView}>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/group-5-5.png")}
+													style={styles.group5Image}/>
+											</View>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													bottom: 0,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/stroke-6-2.png")}
+													style={styles.stroke6Image}/>
+											</View>
+										</View>
+										<Text
+											style={styles.redeemStationText}>Redeem Award</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Text
+											style={styles.redeemDescriptionText}>Redeem voucher</Text>
+									</View>
 								</View>
-							</View>
+
+							</TouchableOpacity>
 						</View>
 					</View>
 					<View
@@ -650,68 +644,66 @@ export default class Profile extends React.Component {
 						<TouchableOpacity
 							onPress={this.onNotificationButtonPressed}
 							style={styles.notificationbuttonButton}>
-							<Text
-								style={styles.notificationbuttonButtonText}></Text>
-						</TouchableOpacity>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
+
 							<View
 								pointerEvents="box-none"
 								style={{
-									width: 97 * alpha,
-									height: 20 * alpha,
-									marginLeft: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
+									position: "absolute",
+									left: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
 								}}>
-								<Image
-									source={require("./../../assets/images/group-9-6.png")}
-									style={styles.notificationiconImage}/>
-								<Text
-									style={styles.notificationText}>Notification</Text>
+								<View
+									pointerEvents="box-none"
+									style={{
+										width: 97 * alpha,
+										height: 20 * alpha,
+										marginLeft: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-9-6.png")}
+										style={styles.notificationiconImage}/>
+									<Text
+										style={styles.notificationText}>Notification</Text>
+								</View>
 							</View>
-						</View>
+						</TouchableOpacity>
 					</View>
+
 					<View
 						style={styles.aboutView}>
 						<TouchableOpacity
 							onPress={this.onAboutButtonPressed}
 							style={styles.aboutbuttonButton}>
-							<Text
-								style={styles.aboutbuttonButtonText}></Text>
-						</TouchableOpacity>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									width: 97 * alpha,
-									height: 20 * alpha,
-									marginLeft: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
+									position: "absolute",
+									left: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
 								}}>
-								<Image
-									source={require("./../../assets/images/group-9-6.png")}
-									style={styles.abouticonImage}/>
-								<Text
-									style={styles.aboutText}>About Brew9</Text>
+								<View
+									pointerEvents="box-none"
+									style={{
+										width: 97 * alpha,
+										height: 20 * alpha,
+										marginLeft: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/group-9-6.png")}
+										style={styles.abouticonImage}/>
+									<Text
+										style={styles.aboutText}>About Brew9</Text>
+								</View>
 							</View>
-						</View>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</ScrollView>
@@ -729,7 +721,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	topsectionView: {
-		backgroundColor: "transparent",
+		backgroundColor: "#EEEEEE",
 		height: 213 * alpha,
 	},
 	backgroundImage: {
@@ -744,7 +736,8 @@ const styles = StyleSheet.create({
 	},
 	profilePicImage: {
 		resizeMode: "center",
-		backgroundColor: "transparent",
+		backgroundColor: "rgba(164, 163, 163, 0.41)",
+		borderRadius: 29 * alpha,
 		width: 58 * alpha,
 		height: 58 * alpha,
 	},
@@ -772,7 +765,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 48 * alpha,
+		width: 60 * alpha,
 		height: 17 * alpha,
 		marginTop: 12 * alpha,
 	},
@@ -1303,7 +1296,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 12,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
@@ -1312,7 +1305,7 @@ const styles = StyleSheet.create({
 	qrDescriptionText: {
 		color: "rgb(184, 180, 180)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 11,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",

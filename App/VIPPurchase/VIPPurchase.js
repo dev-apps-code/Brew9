@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 22 * alpha,
 	},
-	group2View: {
+	codeView: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 7 * alpha,
 		position: "absolute",

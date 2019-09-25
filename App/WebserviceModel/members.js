@@ -1,46 +1,57 @@
-import { storePushToken, qrCode, notifications } from '../Services/members'
+import {
+  storePushToken,
+  qrCode,
+  notifications,
+  profile,
+  updateProfile,
+  updatePhoneNumber,
+  verifyPhoneNumberUpdate,
+  login,
+  loginWithFacebook,
+  activateAccount,
+} from '../Services/members'
 import EventObject from './event_object'
+import { AsyncStorage } from 'react-native'
+import {createAction} from "../Utils"
+
+function getCurrentUser() {
+  return AsyncStorage.getItem("profile", (err, result) => {
+    if (result != null) {
+      return result
+    }
+    return null
+  })
+}
 
 export default {
+
   namespace: 'members',
 
   state: {
     userAuthToken: "",
-    member_id: 1,
-    member_name: 'Jason',
-    member_points: 300,
-    member_credits: 100.20,
-    member_free_membership_exp: 100,
-    member_premium_membership_exp: 200,
-    member_available_vouchers: 4,
-    currency: "BND",
-    member_image: "https://cdn4.iconfinder.com/data/icons/user-avatar-flat-icons/512/User_Avatar-04-512.png",
-    company_id: 1,
-    wallet_enabled: false,
-    isPremium: false,
-    membership_name: "Free Member",
-    free_membership_level: "Lv1",
-    free_membership_next_level_exp: 300,
-    premium_membership_next_level_exp: 500,
-    // membership_background: "https://9e7a68b5.ngrok.io/uploads/membership_plan/plan_image/1/bg-02_3x.png",
-    membership_background: "https://4ab01521.ngrok.io/uploads/membership_plan/plan_image/2/bg-03_3x.png",
-    membership_expiry_date: "2020-01-01",
-
+    profile: null,
+    isReady: false,
   },
 
+
   reducers: {
-   setDefaultState(state, { payload }) {
+     setDefaultState(state, { payload }) {
         return {
-          ...state,       
+          ...state,
+          profile:null,
+          isReady: false,
         }
-      }
-   },
+     },
+    loadCurrentUser(state, { payload }) {
+      return { ...state, profile: payload, isReady: true }
+    },
+  },
   effects: {
     *loadStorePushToken({ payload }, { call, put, select }) 
     {
       try {
         const { object, callback } = payload
-        const authtoken = yield select(state => state.member.userAuthToken)
+        const authtoken = yield select(state => state.userAuthToken)
         const json = yield call(
           storePushToken,
           authtoken,
@@ -73,8 +84,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        // const authtoken = yield select(state => state.member.userAuthToken)
-        const authtoken = ""
+        const authtoken = yield select(state => state.userAuthToken)
         const json = yield call(
             notifications,
             authtoken,
@@ -84,6 +94,132 @@ export default {
         if (eventObject.success == true) {}
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
+    },
+    *loadProfile({ payload }, { call, put, select })
+    {
+      try{
+        const { object, callback } = payload
+        // const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = ""
+        const json = yield call(
+            profile,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+        }
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadUpdateProfile({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.userAuthToken)
+        const json = yield call(
+            updateProfile,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadUpdatePhoneNumber({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.userAuthToken)
+        const json = yield call(
+            updatePhoneNumber,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadVerifyPhoneNumberUpdate({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.userAuthToken)
+        const json = yield call(
+            verifyPhoneNumberUpdate,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadLogin({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.userAuthToken)
+        const json = yield call(
+            login,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadLoginWithFacebook({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.userAuthToken)
+        const json = yield call(
+            loginWithFacebook,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadActivateAccount({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        console.log("Activate", object)
+        const authtoken = yield select(state => state.userAuthToken)
+        const json = yield call(
+            activateAccount,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadCurrentUserFromCache({ payload }, { call, put, select }) {
+      try {
+        console.log("Loading from cache")
+        const json = yield call(getCurrentUser)
+        const currentUser = JSON.parse(json)
+
+        yield put(createAction('loadCurrentUser')(currentUser))
+
+      } catch (err) {
+        console.log('loadingCurrentUser', err)
+      }
     },
   },
 }

@@ -79,11 +79,13 @@ export default class Checkout extends React.Component {
 
 	}
 
-	onPromoCodePressed = () => {
+	onVoucherButtonPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("CheckoutVoucher")
 	}
 
-	onPaymentMethodPressed = () => {
+	onPaymentButtonPressed = () => {
 
 	}
 
@@ -107,38 +109,32 @@ export default class Checkout extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								alignSelf: "stretch",
 								height: 31 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
 							}}>
-							<TouchableOpacity
-								onPress={this.onBranchButtonPressed}
-								style={styles.branchbuttonButton}>
+							<View
+								style={styles.branchThreeView}>
 								<Text
-									style={styles.branchbuttonButtonText}>Branch</Text>
+									style={styles.branchText}>Branch</Text>
 								<Image
-									source={require("./../../assets/images/group-2.png")}
-									style={styles.branchbuttonButtonImage}/>
-							</TouchableOpacity>
+									source={require("./../../assets/images/group-4-5.png")}
+									style={styles.arrowImage2}/>
+							</View>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<TouchableOpacity
-								onPress={this.onLocationButtonPressed}
-								style={styles.locationbuttonButton}>
-								<Image
-									source={require("./../../assets/images/group-8-11.png")}
-									style={styles.locationbuttonButtonImage}/>
-							</TouchableOpacity>
+							<Image
+								source={require("./../../assets/images/group-8-11.png")}
+								style={styles.group8Image}/>
 						</View>
 						<View
 							style={{
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.distanceText}>Distance 1km, please confirm your nearest branch</Text>
+							style={styles.distance1kmPleaseText}>Distance 1km, please confirm your nearest branch</Text>
 					</View>
 					<View
 						pointerEvents="box-none"
@@ -157,8 +153,8 @@ export default class Checkout extends React.Component {
 								style={{
 									position: "absolute",
 									left: 25 * alpha,
-									right: 0,
-									bottom: 0,
+									right: 0 * alpha,
+									bottom: 0 * alpha,
 									height: 54 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
@@ -181,8 +177,8 @@ export default class Checkout extends React.Component {
 								style={{
 									position: "absolute",
 									alignSelf: "center",
-									top: 0,
-									bottom: 0,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
 									justifyContent: "center",
 								}}>
 								<TouchableOpacity
@@ -207,8 +203,8 @@ export default class Checkout extends React.Component {
 								style={{
 									position: "absolute",
 									left: 36 * alpha,
-									right: 0,
-									bottom: 0,
+									right: 0 * alpha,
+									bottom: 0 * alpha,
 									height: 54 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
@@ -233,8 +229,8 @@ export default class Checkout extends React.Component {
 								style={{
 									position: "absolute",
 									alignSelf: "center",
-									top: 0,
-									bottom: 0,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
 									justifyContent: "center",
 								}}>
 								<TouchableOpacity
@@ -252,55 +248,48 @@ export default class Checkout extends React.Component {
 						}}/>
 					<View
 						style={styles.contactView}>
+						<Text
+							style={styles.contactText}>Contact</Text>
 						<View
-							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.contactText}>Contact</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<TouchableOpacity
-									onPress={this.onAutoFillPressed}
-									style={styles.autoFillButton}>
-									<Text
-										style={styles.autoFillButtonText}>Auto-fill</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								alignSelf: "center",
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<TextInput
-								autoCorrect={false}
-								placeholder="Drop your contact, so we can contact you"
-								style={styles.contactinputTextInput}/>
-						</View>
+								flex: 1,
+							}}/>
+						<TextInput
+							keyboardType="number-pad"
+							autoCorrect={false}
+							placeholder="Drop your contact, so we can contact you"
+							style={styles.phoneinputTextInput}/>
+						<TouchableOpacity
+							onPress={this.onAutoFillPressed}
+							style={styles.autoFillButton}>
+							<Text
+								style={styles.autoFillButtonText}>Auto-fill</Text>
+						</TouchableOpacity>
 					</View>
 				</View>
+				{/*<View*/}
+				{/*	style={styles.capacityView}>*/}
+				{/*	<View*/}
+				{/*		style={styles.groupView}>*/}
+				{/*		<Text*/}
+				{/*			style={styles.orderCapacityText}>Order Capacity</Text>*/}
+				{/*		<View*/}
+				{/*			style={styles.rateView}>*/}
+				{/*			<View*/}
+				{/*				style={styles.rectangleView}/>*/}
+				{/*		</View>*/}
+				{/*		<Text*/}
+				{/*			style={styles.orders34CupsText}>13</Text>*/}
+				{/*		<View*/}
+				{/*			style={{*/}
+				{/*				flex: 1,*/}
+				{/*			}}/>*/}
+				{/*		<Text*/}
+				{/*			style={styles.estimated15MinsToText}>Estimated </Text>*/}
+				{/*	</View>*/}
+				{/*</View>*/}
 				<View
-					style={styles.orderConfirmationView}>
+					style={styles.ordersummaryView}>
 					<Text
 						style={styles.orderConfirmationText}>Order Confirmation</Text>
 					<View
@@ -312,9 +301,9 @@ export default class Checkout extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.quantityText}>X 2</Text>
+							style={styles.quantityText}>x2</Text>
 						<Text
-							style={styles.priceText}>RM20</Text>
+							style={styles.rm20Text}>RM20</Text>
 					</View>
 					<View
 						style={styles.itemTwoView}>
@@ -325,163 +314,172 @@ export default class Checkout extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.quantityTwoText}>X 2</Text>
+							style={styles.quantityTwoText}>x2</Text>
 						<Text
-							style={styles.priceTwoText}>RM20</Text>
+							style={styles.rm20TwoText}>RM20</Text>
 					</View>
 					<View
-						style={styles.promoCodeView}>
+						style={styles.voucherView}>
+						<TouchableOpacity
+							onPress={this.onVoucherButtonPressed}
+							style={styles.voucherButton}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 16 * alpha,
+										marginRight: 16 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.promoCodeText}>Promo Code</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.statusText}>No</Text>
+									<Image
+										source={require("./../../assets/images/group-4-5.png")}
+										style={styles.arrowImage}/>
+								</View>
+							</View>
+						</TouchableOpacity>
+
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.summaryText}>Total 3 units:</Text>
+				</View>
+				<View
+					style={styles.paymentMethodView}>
+					<TouchableOpacity
+						onPress={this.onPaymentButtonPressed}
+						style={styles.paymentButton}>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
 								justifyContent: "center",
 							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 17 * alpha,
+									height: 27 * alpha,
 									marginLeft: 16 * alpha,
 									marginRight: 16 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.promoCodeText}>Promo Code</Text>
+									style={styles.paymentMethodText}>Payment Method</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<View
+									style={styles.paymenticonView}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											top: 0 * alpha,
+											bottom: 0 * alpha,
+											justifyContent: "center",
+										}}>
+										<Image
+											source={require("./../../assets/images/group-3-11.png")}
+											style={styles.group3TwoImage}/>
+									</View>
+									<Image
+										source={require("./../../assets/images/group-6-6.png")}
+										style={styles.group6TwoImage}/>
+								</View>
+								<Text
+									style={styles.paymenttypeText}>C</Text>
 								<Image
-									source={require("./../../assets/images/group-10-2.png")}
-									style={styles.group10Image}/>
+									source={require("./../../assets/images/group-4-5.png")}
+									style={styles.arrowTwoImage}/>
+							</View>
+
+
+						</View>
+					</TouchableOpacity>
+				</View>
+				<View
+					style={styles.remarkView}>
+					<TouchableOpacity
+						onPress={this.onRemarkButtonPressed}
+						style={styles.remarkButton}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 19 * alpha,
+									marginLeft: 16 * alpha,
+									marginRight: 16 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.remarkText}>Remark</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.noText}>No</Text>
+									style={styles.remarksText}>No sugar</Text>
 								<Image
 									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.group4Image}/>
+									style={styles.arrowThreeImage}/>
 							</View>
 						</View>
-						<TouchableOpacity
-							onPress={this.onPromoCodePressed}
-							style={styles.promocodeButton}>
-							<Text
-								style={styles.promocodeButtonText}>Click me</Text>
-						</TouchableOpacity>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.totalText}>Total 3 units:</Text>
+					</TouchableOpacity>
 				</View>
 			</ScrollView>
+			<View
+				style={styles.totalPayNowView}>
+				<Text
+					style={styles.priceText}>RM32</Text>
 				<View
 					style={{
 						flex: 1,
 					}}/>
-				<View
-					style={styles.paymentMethodView}>
-					<TouchableOpacity
-						onPress={this.onPaymentMethodPressed}
-						style={styles.paymentmethodButton}>
-						<Text
-							style={styles.paymentmethodButtonText}></Text>
-					</TouchableOpacity>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0,
-							right: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<View
-							style={styles.paymentMethodTwoView}>
-							<Text
-								style={styles.paymentMethodText}>Payment Method</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<View
-								style={styles.group7View}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-3-11.png")}
-										style={styles.group3Image}/>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0,
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-6-6.png")}
-										style={styles.group6Image}/>
-								</View>
-							</View>
-							<View
-								style={styles.ovalView}/>
-							<Image
-								source={require("./../../assets/images/group-4-5.png")}
-								style={styles.group4TwoImage}/>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.remarkView}>
-					<View
-						style={styles.remarkTwoView}>
-						<Text
-							style={styles.remarkText}>Remark</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.noSugarText}>No sugar</Text>
-						<Image
-							source={require("./../../assets/images/group-4-5.png")}
-							style={styles.group4ThreeImage}/>
-					</View>
-				</View>
-				<View
-					style={styles.totalPayNowView}>
+				<TouchableOpacity
+					onPress={this.onPayNowPressed}
+					style={styles.payNowButton}>
 					<Text
-						style={styles.priceThreeText}>RM32</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<TouchableOpacity
-						onPress={this.onPayNowPressed}
-						style={styles.payNowButton}>
-						<Text
-							style={styles.payNowButtonText}>Pay Now</Text>
-					</TouchableOpacity>
-				</View>
+						style={styles.payNowButtonText}>Pay Now</Text>
+				</TouchableOpacity>
+			</View>
 		</View>
 	}
 }
@@ -502,13 +500,15 @@ const styles = StyleSheet.create({
 	navigationBarItemIcon: {
 		tintColor: "black",
 	},
-	scrollviewScrollView: {
-		backgroundColor: "transparent",
-		height: "100%",
-	},
 	checkoutView: {
 		backgroundColor: "rgb(247, 247, 247)",
 		flex: 1,
+	},
+	scrollviewScrollView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		top: 0,
+		bottom: 57 * alpha,
 	},
 	branchView: {
 		backgroundColor: "white",
@@ -520,58 +520,46 @@ const styles = StyleSheet.create({
 		marginLeft: 15 * alpha,
 		marginRight: 15 * alpha,
 		marginTop: 14 * alpha,
-		alignItems: "flex-start",
 	},
-	branchbuttonButton: {
+	branchThreeView: {
 		backgroundColor: "transparent",
+		width: 90 * alpha,
+		height: 22 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		width: 87 * alpha,
-		height: 22 * alpha,
 	},
-	branchbuttonButtonImage: {
-		resizeMode: "contain",
-		marginLeft: 10 * alpha,
-	},
-	branchbuttonButtonText: {
+	branchText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 18 * fontAlpha,
+		fontSize: 18,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-	},
-	locationbuttonButton: {
 		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
+	},
+	arrowImage2: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 11 * alpha,
+		height: 11 * alpha,
+		marginLeft: 21 * alpha,
+	},
+	group8Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
 		alignSelf: "center",
 		width: 23 * alpha,
 		height: 23 * alpha,
 	},
-	locationbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	locationbuttonButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	distanceText: {
+	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
 		fontFamily: "Helvetica",
-		fontSize: 10 * fontAlpha,
+		fontSize: 10,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
+		alignSelf: "flex-start",
 	},
 	selfPickUpView: {
 		backgroundColor: "white",
@@ -623,6 +611,20 @@ const styles = StyleSheet.create({
 		marginLeft: 18 * alpha,
 	},
 	fill1Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		width: 17 * alpha,
+		height: 17 * alpha,
+	},
+	tabImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		alignSelf: "flex-end",
+		width: 17 * alpha,
+		height: 17 * alpha,
+	},
+	tabTwoImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
@@ -724,15 +726,30 @@ const styles = StyleSheet.create({
 		marginLeft: 15 * alpha,
 		marginRight: 15 * alpha,
 		marginBottom: 5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
 	},
 	contactText: {
-		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 14,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	phoneinputTextInput: {
+		backgroundColor: "transparent",
+		padding: 0,
+		color: "rgb(219, 212, 212)",
+		fontFamily: "Helvetica",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		width: 212 * alpha,
+		height: 12 * alpha,
+		marginRight: 15 * alpha,
 	},
 	autoFillButton: {
 		backgroundColor: "transparent",
@@ -758,19 +775,66 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	contactinputTextInput: {
-		color: "rgb(219, 212, 212)",
+	capacityView: {
+		backgroundColor: "white",
+		borderWidth: 1,
+		borderColor: "white",
+		borderStyle: "solid",
+		height: 134 * alpha,
+		marginTop: 10 * alpha,
+		justifyContent: "center",
+	},
+	groupView: {
+		backgroundColor: "transparent",
+		height: 103 * alpha,
+		marginLeft: 16 * alpha,
+		marginRight: 15 * alpha,
+		alignItems: "flex-start",
+	},
+	orderCapacityText: {
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 10.5 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		padding: 0,
-		width: 229 * alpha,
-		height: 14 * alpha,
 	},
-	orderConfirmationView: {
+	rateView: {
+		backgroundColor: "rgb(244, 244, 244)",
+		borderRadius: 11 * alpha,
+		alignSelf: "stretch",
+		height: 22 * alpha,
+		marginTop: 8 * alpha,
+		justifyContent: "center",
+		alignItems: "flex-start",
+	},
+	rectangleView: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 11 * alpha,
+		width: 216 * alpha,
+		height: 22 * alpha,
+	},
+	orders34CupsText: {
+		color: "rgb(55, 56, 57)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginTop: 10 * alpha,
+	},
+	estimated15MinsToText: {
+		color: "rgb(79, 76, 76)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	ordersummaryView: {
 		backgroundColor: "white",
 		height: 220 * alpha,
 		marginTop: 10 * alpha,
@@ -789,8 +853,8 @@ const styles = StyleSheet.create({
 	},
 	itemView: {
 		backgroundColor: "transparent",
-		height: 40 * alpha,
-		marginTop: 10 * alpha,
+		height: 50 * alpha,
+		marginTop: 5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -810,11 +874,11 @@ const styles = StyleSheet.create({
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		backgroundColor: "transparent",
-		marginRight: 13 * alpha,
+		marginRight: 14 * alpha,
 	},
-	priceText: {
+	rm20Text: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
@@ -826,7 +890,7 @@ const styles = StyleSheet.create({
 	},
 	itemTwoView: {
 		backgroundColor: "transparent",
-		height: 40 * alpha,
+		height: 50 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -841,130 +905,91 @@ const styles = StyleSheet.create({
 		marginLeft: 16 * alpha,
 	},
 	quantityTwoText: {
-		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
-		marginRight: 16 * alpha,
+		textAlign: "right",
+		backgroundColor: "transparent",
+		marginRight: 14 * alpha,
 	},
-	priceTwoText: {
-		backgroundColor: "transparent",
+	rm20TwoText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 		marginRight: 15 * alpha,
 	},
-	promoCodeView: {
+	voucherView: {
 		backgroundColor: "transparent",
-		height: 45 * alpha,
-		marginTop: 13 * alpha,
+		height: 50 * alpha,
 	},
 	promoCodeText: {
-		backgroundColor: "transparent",
 		color: "rgb(99, 97, 97)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-	},
-	group10Image: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 13 * alpha,
-		height: 14 * alpha,
-		marginLeft: 8 * alpha,
 	},
-	noText: {
-		backgroundColor: "transparent",
+	statusText: {
 		color: "rgb(181, 181, 181)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 61 * alpha,
 		marginRight: 5 * alpha,
 	},
-	group4Image: {
+	arrowImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		width: 11 * alpha,
 		height: 11 * alpha,
 	},
-	promocodeButton: {
+	voucherButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
+		width: 375 * alpha,
+		height: 50 * alpha,
 	},
-	promocodeButtonText: {
+	voucherButtonImage: {
+		resizeMode: "contain",
+	},
+	voucherButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		fontWeight: "normal",
 		textAlign: "left",
 	},
-	promocodeButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
-	totalText: {
+	summaryText: {
 		color: "rgb(135, 135, 135)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
-		marginRight: 16 * alpha,
+		marginRight: 15 * alpha,
 		marginBottom: 8 * alpha,
 	},
 	paymentMethodView: {
 		backgroundColor: "white",
-		height: 41 * alpha,
-	},
-	paymentmethodButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
-	},
-	paymentmethodButtonText: {
-		color: "white",
-		fontFamily: "Helvetica",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	paymentmethodButtonImage: {
-		resizeMode: "contain",
-	},
-	paymentMethodTwoView: {
-		backgroundColor: "transparent",
-		height: 41 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
+		height: 50 * alpha,
+		marginTop: 10 * alpha,
 	},
 	paymentMethodText: {
 		color: "rgb(54, 54, 54)",
@@ -974,51 +999,71 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 16 * alpha,
 	},
-	group7View: {
+	paymenticonView: {
 		backgroundColor: "transparent",
 		width: 26 * alpha,
 		height: 27 * alpha,
-		marginRight: 8 * alpha,
+		marginRight: 1 * alpha,
 	},
-	group3Image: {
+	group3TwoImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: null,
+		width: 24 * alpha,
 		height: 24 * alpha,
-		marginRight: 2 * alpha,
 	},
-	group6Image: {
+	group6TwoImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
-		width: null,
+		position: "absolute",
+		alignSelf: "center",
+		width: 26 * alpha,
+		top: 0 * alpha,
 		height: 24 * alpha,
 	},
-	ovalView: {
-		backgroundColor: "rgb(232, 88, 88)",
+	paymenttypeText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
 		borderRadius: 3.5 * alpha,
-		width: 7 * alpha,
-		height: 7 * alpha,
 		marginRight: 9 * alpha,
 	},
-	group4TwoImage: {
+	arrowTwoImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: 11 * alpha,
 		height: 11 * alpha,
-		marginRight: 16 * alpha,
+	},
+	paymentButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	paymentButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	paymentButtonImage: {
+		resizeMode: "contain",
 	},
 	remarkView: {
 		backgroundColor: "white",
-		height: 41 * alpha,
-		justifyContent: "center",
-	},
-	remarkTwoView: {
-		backgroundColor: "transparent",
-		height: 41 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
+		height: 50 * alpha,
 	},
 	remarkText: {
 		color: "rgb(54, 54, 54)",
@@ -1028,39 +1073,64 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 16 * alpha,
 	},
-	noSugarText: {
-		backgroundColor: "transparent",
+	remarksText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
-		marginRight: 7 * alpha,
+		textAlign: "right",
+		backgroundColor: "transparent",
+		marginRight: 9 * alpha,
 	},
-	group4ThreeImage: {
+	arrowThreeImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		width: 11 * alpha,
 		height: 11 * alpha,
-		marginRight: 16 * alpha,
+	},
+	remarkButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	remarkButtonImage: {
+		resizeMode: "contain",
+	},
+	remarkButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
 	},
 	totalPayNowView: {
 		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,
 		height: 47 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	priceThreeText: {
-		backgroundColor: "transparent",
+	priceText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica-Bold",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+		backgroundColor: "transparent",
 		marginLeft: 16 * alpha,
 	},
 	payNowButton: {
@@ -1072,6 +1142,10 @@ const styles = StyleSheet.create({
 		width: 114 * alpha,
 		height: 47 * alpha,
 	},
+	payNowButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
 	payNowButtonText: {
 		color: "white",
 		fontFamily: "Helvetica-Bold",
@@ -1079,23 +1153,5 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
-	},
-	payNowButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
-	tabImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 17 * alpha,
-		height: 17 * alpha,
-	},
-	tabTwoImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 17 * alpha,
-		height: 17 * alpha,
 	},
 })
