@@ -48,8 +48,7 @@ export default class Home extends React.Component {
 	
 		return {
 				tabBarLabel: "Order",
-				tabBarIcon: ({ iconTintColor }) => {
-				
+				tabBarIcon: ({ iconTintColor }) => {				
 					return <Image
 							source={require("./../../assets/images/group-8-18.png")}/>
 				},
