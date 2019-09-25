@@ -33,7 +33,14 @@ export default class ProductCell extends React.Component {
 		this.props.onChangeQuantity(this.props.item,this.props.index, "remove", false);
 	}
 
+	onSelectOptionPressed = () => {
+		this.props.onCellPress(this.props.item,this.props.index);
+	}
+
 	render() {
+
+		let noVariant = this.props.productvariant.length == 0 ? true : false
+
 		return <TouchableWithoutFeedback
 				onPress={this.onProductCellPress}>
 				<View
@@ -63,7 +70,7 @@ export default class ProductCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.priceText}>{this.props.currency}{this.props.productprice}</Text>
+								style={styles.priceText}>{this.props.currency}{parseFloat(this.props.productprice).toFixed(2)}</Text>
 							<View
 								style={{
 									flex: 1,
@@ -79,7 +86,7 @@ export default class ProductCell extends React.Component {
 										bottom: 0 * alpha,
 										justifyContent: "center",
 									}}>
-                                    {this.props.productquantity ?
+                                    {this.props.productquantity && noVariant ?
                                         <Text
                                             style={styles.quantityText}>{this.props.productquantity ? this.props.productquantity : 1}</Text> : null
                                     }
@@ -102,7 +109,7 @@ export default class ProductCell extends React.Component {
 											justifyContent: "flex-end",
 											alignItems: "center",
 										}}>
-										{ this.props.productquantity ? <TouchableOpacity
+										{ (this.props.productquantity && noVariant) ? <TouchableOpacity
 											onPress={this.onRemovePressed}
 											style={styles.minusButton}>
 											<Image
@@ -113,13 +120,31 @@ export default class ProductCell extends React.Component {
 											style={{
 												flex: 1,
 											}}/>
-										<TouchableOpacity
-											onPress={this.onAddPressed}
-											style={styles.addButton}>
-											<Image
-												source={require("./../../assets/images/add-17.png")}
-												style={styles.addButtonImage}/>
-										</TouchableOpacity>
+										{
+											noVariant ? <TouchableOpacity
+												onPress={this.onAddPressed}
+												style={styles.addButton}>
+												<Image
+													source={require("./../../assets/images/add-17.png")}
+													style={styles.addButtonImage}/>
+											</TouchableOpacity> : <View
+												style={styles.selectoptionView}>
+												<TouchableOpacity
+													onPress={this.onSelectOptionPressed}
+													style={styles.optionButton}>
+													<Text
+														style={styles.optionButtonText}>Option</Text>
+												</TouchableOpacity>
+												{
+													this.props.producttotalquantity ? <View
+														style={styles.badgeView}>
+														<Text
+															style={styles.numberofitemText}>{parseInt(this.props.producttotalquantity)}</Text>
+													</View> : null
+												}
+											</View>
+										}
+
 									</View>
 								</View>
 							</View>
@@ -235,5 +260,60 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+	},
+	selectoptionView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		right: 0 * alpha,
+		width: 61 * alpha,
+		bottom: 0 * alpha,
+		height: 28 * alpha,
+	},
+	optionButton: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		right: 6 * alpha,
+		width: 55 * alpha,
+		bottom: 0 * alpha,
+		height: 20 * alpha,
+	},
+	optionButtonText: {
+		color: "white",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	optionButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	badgeView: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 7 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "white",
+		borderStyle: "solid",
+		position: "absolute",
+		right: 0,
+		width: 14 * alpha,
+		bottom: 13 * alpha,
+		height: 14 * alpha,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	numberofitemText: {
+		backgroundColor: "transparent",
+		color: "rgb(255, 251, 251)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
 	},
 })

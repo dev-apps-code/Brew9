@@ -31,6 +31,7 @@ import { alpha, fontAlpha, windowHeight } from "../common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
 import SwitchSelector from "react-native-switch-selector"
+import _ from 'lodash'
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -124,7 +125,6 @@ export default class Home extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log("Shop", eventObject.result)
 				this.setState({
 					loading: false,
 					products: this.state.products.concat(eventObject.result.menu_banners)
@@ -159,7 +159,6 @@ export default class Home extends React.Component {
 					page: this.state.page + 1,
 				},function () {
 					var items = []
-					console.log(this.state.data)
 					for(var index in this.state.data) {
 						items = items.concat(this.state.data[index].products)
 					}
@@ -229,12 +228,10 @@ export default class Home extends React.Component {
 		if (isUpdate) {
 			console.log(isUpdate, isCartToggle)
 			if(isCartToggle) {
-
 				Animated.spring(this.moveAnimation, {
-					toValue: {x: 0, y: this.state.cart.length == 0 ? finalheight : windowHeight},
+					toValue: {x: 0, y: this.state.cart.length == 0 ? windowHeight : finalheight},
 				}).start()
 			}
-
 		} else {
 			if (isCartToggle) {
 				this.setState({ isCartToggle: false }, function(){
@@ -261,6 +258,7 @@ export default class Home extends React.Component {
 
 	renderPopOutCartFlatListCell = ({ item, index }) => {
 
+		console.log("Item", item)
 		return <CartCell
 			navigation={this.props.navigation}
 			id={item.id}
@@ -302,6 +300,8 @@ export default class Home extends React.Component {
 					productimage={item.image.url}
 					productquantity={item.quantity}
 					productdescription={item.description}
+					productvariant={item.variants}
+					producttotalquantity={item.total_quantity}
 					onChangeQuantity={this.onChangeQuantityPress}
 					onCellPress={this.onCellPress}
 				/>
@@ -334,20 +334,24 @@ export default class Home extends React.Component {
 			var product_index = this.state.products.findIndex(element => element.id == item.id && element.clazz == 'product')
 			var item = this.state.products[product_index]
 
+			var selected_cart = cart[index]
+
 			var cartItem = {
 				clazz: item.clazz,
 				id: item.id,
 				name: item.name,
 				description: item.description,
 				image: item.image,
-				price: item.price,
-				quantity: item.quantity,
+				price: selected_cart.price,
+				selected_variants: selected_cart.selected_variants,
+				quantity: selected_cart.quantity,
 			}
 
 			if (operation === "add") {
-				if (item.quantity) {
+				if (cartItem.quantity) {
 					item.quantity = item.quantity + 1
 					cartItem.quantity = cartItem.quantity + 1
+					item.total_quantity = item.total_quantity + 1
 				} else {
 					item.quantity = 1
 					cartItem.quantity = 1
@@ -366,14 +370,18 @@ export default class Home extends React.Component {
 					})
 				}
 
-				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(item.price)).toFixed(2)
+				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(cartItem.price)).toFixed(2)
 			} else {
-				if (item.quantity > 1) {
-					item.quantity = item.quantity - 1
+
+				console.log("Minus", cartItem.quantity, item.quantity)
+				if (cartItem.quantity > 1) {
+					if (item.quantity > 0) item.quantity = item.quantity - 1
 					cartItem.quantity = cartItem.quantity - 1
+					item.total_quantity = item.total_quantity - 1
 				} else {
 					item.quantity = null
 					cartItem.quantity = null
+					item.total_quantity = 0
 				}
 
 				this.state.products[product_index] = item
@@ -382,11 +390,11 @@ export default class Home extends React.Component {
 					cart[index] = cartItem
 					// this.state.cart.splice(cart_index, 1, cartItem)
 				}
-				if (item.quantity === null) {
+				if (cartItem.quantity === null) {
 					cart.splice(index, 1)
 				}
 				this.setState({ cart }, function(){this._toggleCart(true)})
-				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(item.price)).toFixed(2)
+				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
 			}
 
 			this.forceUpdate()
@@ -459,9 +467,18 @@ export default class Home extends React.Component {
 
 	onAddToCartPressed = (product) => {
 
+		let cart = [...this.state.cart]
+
 		this.setState({
 			modalVisible: false,
 		})
+
+		const clone_variants = _.cloneDeep(product.selected_variants)
+		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
+
+		var search_cart = this.state.cart[search_cart_index]
+
+		console.log("Search", search_cart)
 
 		let cartItem = {
 			clazz: product.clazz,
@@ -471,20 +488,25 @@ export default class Home extends React.Component {
 			image: product.image,
 			price: product.calculated_price,
 			quantity: this.state.select_quantity,
-			selected_variants: product.selected_variants
+			selected_variants: clone_variants
 		}
 
-		let newcartItem = Object.assign({}, cartItem)
-
-		product.total_quantity += this.state.select_quantity
+		product.total_quantity = parseInt(product.total_quantity) + parseInt(this.state.select_quantity)
 
 		let total_price = product.calculated_price * this.state.select_quantity
 
-		this.setState({
-			cart: this.state.cart.concat(newcartItem)
-		}, function(){
-			this._toggleCart(true)
-		})
+		if (search_cart) {
+			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
+			this.setState({ cart, select_quantity: 1 })
+		} else {
+			this.setState({
+				cart: this.state.cart.concat(cartItem),
+				products: this.state.products,
+				select_quantity: 1,
+			}, function(){
+				this._toggleCart(true)
+			})
+		}
 
 		this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
 	}
@@ -511,6 +533,7 @@ export default class Home extends React.Component {
 			if (product.quantity == null) product.quantity = 1
 			if (product.calculated_price == null) product.calculated_price = product.price
 			if (product.selected_quantity == null) product.selected_quantity = 1
+			if (product.total_quantity == null) product.total_quantity = 0
 			if (product.variants) {
 				if (product.selected_variants == null) {
 					var selected = []
@@ -530,7 +553,8 @@ export default class Home extends React.Component {
 
 	onVariantPressed = (selected_product, selected_variants, key, selected_value) => {
 		selected_variants[key] = selected_value
-		let total = selected_variants.reduce((a, b) => +a + +b.price, 0)
+		let filtered = selected_variants.filter(function(el) { return el })
+		let total = filtered.reduce((a, b) => +a + +b.price, 0)
 		selected_product.calculated_price = (parseFloat(selected_product.price) + parseFloat(total)).toFixed(2)
 		this.setState({
 			products: this.state.products

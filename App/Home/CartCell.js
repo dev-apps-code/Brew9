@@ -31,8 +31,13 @@ export default class CartCell extends React.Component {
 
 	render() {
 
-		let filtered = this.props.variations.filter(function(el) { return el })
-		let variants = filtered.map(a => a.value)
+		var filtered = []
+		var variants = []
+
+		if (this.props.variations) {
+			filtered = this.props.variations.filter(function(el) { return el })
+			variants = filtered.map(a => a.value)
+		}
 
 		return <TouchableWithoutFeedback
 			onPress={this.onCart3Press}>
@@ -72,7 +77,7 @@ export default class CartCell extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.priceText}>{this.props.currency}{this.props.price}</Text>
+								style={styles.priceText}>{this.props.currency}{parseFloat(this.props.price).toFixed(2)}</Text>
 						</View>
 						<View
 							style={{

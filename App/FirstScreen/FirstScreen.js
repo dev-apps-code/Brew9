@@ -40,23 +40,19 @@ export default class FirstScreen extends React.Component {
     }
 
     componentWillMount() {
-        console.log("Starting")
         const { dispatch } = this.props
         dispatch(createAction('members/loadCurrentUserFromCache')({}))
     }
 
     componentDidMount() {
-        console.log("Did")
     }
 
     componentDidUpdate() {
-        console.log("Update")
         this.checkLoginStatus()
     }
 
     checkLoginStatus() {
         const { members } = this.props
-        console.log("Initial", members)
         if (typeof members === 'undefined'|| members === null) {
             this.props.navigation.navigate("AuthenticationStack")
         }
