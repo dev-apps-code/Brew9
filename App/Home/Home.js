@@ -77,9 +77,12 @@ export default class Home extends React.Component {
 			data: [],
 			cart: [],
 			cart_total: 0,
+			cart_total_quantity: 0,
+			product_category:[],
 			products:[],
 			loading: true,
 			isRefreshing: true,
+			selected_category: 0,
 			profile: [],
 			banners: [],
 			product_view_height: 0 * alpha,
@@ -129,6 +132,7 @@ export default class Home extends React.Component {
 					loading: false,
 					products: this.state.products.concat(eventObject.result.menu_banners)
 				}, function () {
+
 					this.loadStoreProducts()
 				})
 			}
@@ -159,12 +163,19 @@ export default class Home extends React.Component {
 					page: this.state.page + 1,
 				},function () {
 					var items = []
+					var index_length = this.state.products.length
 					for(var index in this.state.data) {
+
+						this.state.data[index].selected = index == 0 ? true : false
+						this.state.data[index].scroll_index = index_length
 						items = items.concat(this.state.data[index].products)
+						index_length = index_length + this.state.data[index].products.length
 					}
 					this.setState({
 						products: this.state.products.concat(items)
 
+					}, function () {
+						// console.log("data", this.state.data)
 					})
 				}.bind(this))
 			}
@@ -186,13 +197,16 @@ export default class Home extends React.Component {
 			data: [],
 			products: [],
 		})
-		this.loadShopBanners()
+		this.loadShops()
 	}
 
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
-
-		navigate("Checkout")
+		navigate("Checkout", {
+			cart: this.state.cart,
+			cart_total_quantity: this.state.cart_total_quantity,
+			cart_total: this.state.cart_total
+		})
 	}
 
 	onBannerPressed = (item,index) => {
@@ -207,6 +221,32 @@ export default class Home extends React.Component {
 		this.setState({
 			delivery_options: value
 		})
+	}
+
+	onSelectCategory = (scoll_index, selected_index) => {
+		this.flatListRef.scrollToIndex({animated: true, index: scoll_index})
+	}
+
+	reachProductIndex = ( viewableItems, changed ) => {
+
+		let viewable = viewableItems.viewableItems
+		let data = [...this.state.data]
+
+		var first_index = viewable[0].index
+		var last_index = viewable[viewable.length-1].index
+
+		for (var index in data) {
+			data[index].selected = false
+		}
+
+		for (var index in data) {
+			if ( data[index].scroll_index >= first_index && data[index].scroll_index <= last_index ) {
+				data[index].selected = true
+				break
+			}
+		}
+		this.setState( { data })
+
 	}
 
 	_toggleCart = (isUpdate) => {
@@ -257,8 +297,6 @@ export default class Home extends React.Component {
 	}
 
 	renderPopOutCartFlatListCell = ({ item, index }) => {
-
-		console.log("Item", item)
 		return <CartCell
 			navigation={this.props.navigation}
 			id={item.id}
@@ -273,16 +311,14 @@ export default class Home extends React.Component {
 		/>
 	}
 
-	renderCategorylistFlatListCell = ({ item }) => {
-
-		var selected = false
-		if(item.id == 1) {
-			selected = true
-		}
+	renderCategorylistFlatListCell = ({ item, index }) => {
 		return <CategoryCell
 			navigation={this.props.navigation}
 			categoryname={item.name}
-			selected={selected}
+			index={index}
+			scrollIndex={item.scroll_index}
+			onSelectCategory={this.onSelectCategory}
+			selected={item.selected}
 		/>
 	}
 
@@ -327,6 +363,7 @@ export default class Home extends React.Component {
 
 	onChangeQuantityPress = (item,index,operation,isCart) => {
 
+		console.log("Quantity", this.state.cart_total_quantity)
 		let cart = [...this.state.cart]
 
 		if (isCart) {
@@ -370,6 +407,7 @@ export default class Home extends React.Component {
 					})
 				}
 
+				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) + 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(cartItem.price)).toFixed(2)
 			} else {
 
@@ -394,6 +432,7 @@ export default class Home extends React.Component {
 					cart.splice(index, 1)
 				}
 				this.setState({ cart }, function(){this._toggleCart(true)})
+				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
 			}
 
@@ -436,7 +475,7 @@ export default class Home extends React.Component {
 						this._toggleCart(true)
 					})
 				}
-
+				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) + 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(item.price)).toFixed(2)
 			} else {
 				if (item.quantity > 1) {
@@ -457,6 +496,7 @@ export default class Home extends React.Component {
 					cart.splice(cart_index, 1)
 				}
 				this.setState({ cart }, function(){this._toggleCart(true)})
+				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(item.price)).toFixed(2)
 			}
 
@@ -477,8 +517,6 @@ export default class Home extends React.Component {
 		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
 
 		var search_cart = this.state.cart[search_cart_index]
-
-		console.log("Search", search_cart)
 
 		let cartItem = {
 			clazz: product.clazz,
@@ -507,7 +545,7 @@ export default class Home extends React.Component {
 				this._toggleCart(true)
 			})
 		}
-
+		this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) + parseInt(this.state.select_quantity))
 		this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
 	}
 
@@ -523,6 +561,7 @@ export default class Home extends React.Component {
 		this.state.cart = []
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
+			this.state.products[index].total_quantity = 0
 		}
 	}
 
@@ -565,12 +604,16 @@ export default class Home extends React.Component {
 
 		let select_quantity = this.state.select_quantity
 
+		let filtered = selected_product.selected_variants.filter(function(el) { return el })
+		let variant_array = filtered.map(a => a.value)
+
 		const variants = selected_product.variants.map((item, key) => {
 
 			let selected_variants = selected_product.selected_variants
 
 			return <View
-				style={styles.optionsTwoView}>
+				style={styles.optionsTwoView}
+				key={key}>
 				<Text
 					style={styles.optiontitleTwoText}>{item.display_name}</Text>
 				<View
@@ -581,6 +624,7 @@ export default class Home extends React.Component {
 							var selected = selected_variants.includes(value)
 
 							return <TouchableOpacity
+								key={value_key}
 								onPress={() => this.onVariantPressed(selected_product,selected_variants, key, value)}
 								style={ selected ? styles.selectedButton : styles.choiceFourButton}>
 								<Text
@@ -731,7 +775,7 @@ export default class Home extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.optionsText}>Without Peach Fruits, Standard (Recommended), Less…</Text>
+							style={styles.optionsText}>{variant_array.join(", ")}</Text>
 					</View>
 					<TouchableOpacity
 						onPress={() => this.onAddToCartPressed(selected_product)}
@@ -748,7 +792,7 @@ export default class Home extends React.Component {
 
 	render() {
 
-		const selected_product = this.get_product(this.state.selected_index)
+		let selected_product = this.get_product(this.state.selected_index)
 
 		return <View
 			style={styles.page1View}>
@@ -847,9 +891,11 @@ export default class Home extends React.Component {
 					<FlatList
 						renderItem={this.renderProductlistFlatListCell}
 						data={this.state.products}
+						ref={(ref) => { this.flatListRef = ref }}
 						style={styles.productlistFlatList}
 						refreshing={this.state.isRefreshing}
 						onRefresh={this.onRefresh.bind(this)}
+						onViewableItemsChanged={this.reachProductIndex}
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</View>
@@ -974,7 +1020,7 @@ export default class Home extends React.Component {
 						<View
 							style={styles.badgeView}>
 							<Text
-								style={styles.numberofitemText}>{this.state.cart.length}</Text>
+								style={styles.numberofitemText}>{this.state.cart_total_quantity}</Text>
 						</View>
 					</View>
 				</View>
@@ -985,9 +1031,9 @@ export default class Home extends React.Component {
 						style={styles.checkoutButtonText}>Checkout</Text>
 				</TouchableOpacity>
 			</View> : null }
-			<Modal isVisible={this.state.modalVisible} >
-				{ selected_product && (this.renderModalContent(selected_product))}
-			</Modal>
+			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
+				{this.renderModalContent(selected_product)}
+			</Modal> : null }
 		</View>
 
 	}
@@ -1412,7 +1458,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 130 * alpha,
-		alignItems: "flex-start",
 	},
 	productView: {
 		backgroundColor: "transparent",

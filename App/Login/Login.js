@@ -98,7 +98,6 @@ export default class Login extends React.Component {
 	}
 
 	onFacebookButtonPressed = () => {
-		console.log("Facebook")
 		this.logIn()
 	}
 
@@ -223,42 +222,40 @@ export default class Login extends React.Component {
 				<TouchableOpacity
 					onPress={this.onFacebookButtonPressed}
 					style={styles.facebookbuttonButton}>
-					<Text
-						style={styles.facebookbuttonButtonText}></Text>
-				</TouchableOpacity>
-				<View
-					pointerEvents="box-none"
-					style={{
-						position: "absolute",
-						left: 0 * alpha,
-						right: 0 * alpha,
-						top: 0 * alpha,
-						bottom: 0 * alpha,
-						justifyContent: "center",
-					}}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							height: 28 * alpha,
-							marginLeft: 19 * alpha,
-							marginRight: 189 * alpha,
-							flexDirection: "row",
-							alignItems: "center",
-						}}>
 						<View
-							style={styles.facebookiconView}>
-							<Image
-								source={require("./../../assets/images/group-3-8.png")}
-								style={styles.group3Image}/>
-						</View>
-						<View
+							pointerEvents="box-none"
 							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.facebookText}>Facebook</Text>
-					</View>
-				</View>
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 28 * alpha,
+									marginLeft: 19 * alpha,
+									marginRight: 189 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<View
+									style={styles.facebookiconView}>
+									<Image
+										source={require("./../../assets/images/group-3-8.png")}
+										style={styles.group3Image}/>
+								</View>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<Text
+									style={styles.facebookText}>Facebook</Text>
+							</View>
+						</View>
+				</TouchableOpacity>
 			</View>
 		</View>
 	}

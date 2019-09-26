@@ -9,7 +9,11 @@
 import React from "react"
 import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native"
 import { alpha, fontAlpha } from "../common/size";
+import {connect} from "react-redux";
 
+@connect(({ members }) => ({
+	members: members.profile
+}))
 export default class Transaction extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -70,9 +74,9 @@ export default class Transaction extends React.Component {
 					<View
 						style={styles.cartinfoView}>
 						<Text
-							style={styles.itemnameText}>{this.props.navigation.getParam("transaction_name","Transaction")}</Text>
+							style={styles.itemnameText}>{this.props.navigation.getParam("transaction_name","Payment")}</Text>
 						<Text
-							style={styles.carttotalText}>{this.props.navigation.getParam("amount","0.00")}</Text>
+							style={styles.carttotalText}>{this.props.members.currency}{this.props.navigation.getParam("amount",0.00)}</Text>
 					</View>
 					<View
 						style={styles.payeeView}>

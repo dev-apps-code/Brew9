@@ -17,6 +17,7 @@ import * as SecureStore from "expo-secure-store"
 import Modal from "react-native-modal"
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button'
 import {connect} from "react-redux"
+import PhoneInput from 'react-native-phone-input'
 import * as ImagePicker from "expo-image-picker"
 import Constants from "expo-constants"
 import * as Permissions from "expo-permissions"
@@ -54,13 +55,14 @@ export default class MemberProfile extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			country_code: "673",
+			country: "bn",
 			members:[],
 			modalVisible: false,
 			dob: "",
 			nickname: "",
 			image: null,
 			phone_no: "",
-			code: "",
 			gender_options: [
 				{label: 'Male', value: 0 },
 				{label: 'Female', value: 1 }
@@ -194,6 +196,15 @@ export default class MemberProfile extends React.Component {
 		this.setState({ modalVisible: false })
 	}
 
+	onUpdateCode(iso2){
+		var country_code = this.phone.getCountryCode()
+		this.setState({
+			country: iso2,
+			country_code: country_code,
+		})
+		console.log(country_code, iso2)
+	}
+
 	onSendCodePressed = () => {
 		console.log("Code")
 		const phoneFormData = {
@@ -208,7 +219,7 @@ export default class MemberProfile extends React.Component {
 
 	onConfirmButtonPressed = () => {
 		const phoneFormData = {
-			code: this.state.code,
+			code: this.state.country_code,
 			// phone_no: this.state.phone_no,
 			phone_no: this.state.phone_no,
 			// country_code: this.state.country_code,
@@ -276,15 +287,26 @@ export default class MemberProfile extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								width: 56 * alpha,
+								width: 106 * alpha,
 								height: 30 * alpha,
+								alignItems: "center",
+								justifyContent: "center"
 							}}>
-							<TouchableOpacity
+							{/* <TouchableOpacity
 								onPress={this.onButtonTwoPressed}
 								style={styles.countrycodeButton}>
 								<Text
 									style={styles.countrycodeButtonText}>+673</Text>
-							</TouchableOpacity>
+							</TouchableOpacity> */}
+							<PhoneInput
+								ref={(ref) => { this.phone = ref }}
+								initialCountry={this.state.country}
+								textStyle={styles.phoneCountryCodeText}
+								textProps={{keyboardType:"number-pad", editable:false}}
+								onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
+								offset={10}
+
+							/>
 							<View
 								style={styles.lineView}/>
 						</View>
@@ -971,7 +993,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(151, 151, 151)",
 		opacity: 0.29,
 		position: "absolute",
-		left: 55 * alpha,
+		left: 95 * alpha,
 		width: 1 * alpha,
 		top: 3 * alpha,
 		height: 25 * alpha,
@@ -985,9 +1007,9 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		width: 213 * alpha,
+		width: 193 * alpha,
 		height: 30 * alpha,
-		marginLeft: 10 * alpha,
+		marginLeft: 0 * alpha,
 	},
 	lineTwoView: {
 		backgroundColor: "rgb(151, 151, 151)",

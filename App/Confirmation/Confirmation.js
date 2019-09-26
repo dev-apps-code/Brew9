@@ -122,7 +122,7 @@ export default class Confirmation extends React.Component {
                     ref="codeInputRef2"
                     keyboardType="numeric"
                     codeLength={6}
-                    size={35 * alpha}
+                    size={40}
                     space={4 * alpha}
                     className='border-b'
                     autoFocus={true}
@@ -204,9 +204,9 @@ const styles = StyleSheet.create({
         marginTop: 24 * alpha,
     },
     codeText: {
+        backgroundColor: "transparent",
         fontFamily: "Helvetica",
         fontSize: 32 * fontAlpha,
-        paddingBottom: 10 * alpha,
         color: "black"
     },
     groupImage: {
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         padding: 0,
-        width: 38 * alpha,
+        width: 50 * alpha,
         height: 12 * alpha,
         marginTop: 15 * alpha,
     },

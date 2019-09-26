@@ -9,7 +9,11 @@
 import { TextInput, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
+import {connect} from "react-redux";
 
+@connect(({ members }) => ({
+	members: members.profile
+}))
 export default class Checkout extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -93,10 +97,66 @@ export default class Checkout extends React.Component {
 
 		const { navigate } = this.props.navigation
 
-		navigate("Transaction")
+		navigate("Transaction", {
+			amount: this.props.navigation.getParam("cart_total", 0.00)
+		})
 	}
 
 	render() {
+
+		let cart = this.props.navigation.getParam("cart", "")
+
+		const cart_items = cart.map((item, key) => {
+
+			if (item.selected_variants) {
+
+				let filtered = item.selected_variants.filter(function(el) { return el })
+				let variant_array = filtered.map(a => a.value)
+
+				return <View
+					style={styles.itemView}
+					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							alignSelf: "flex-start",
+							width: 257 * alpha,
+							height: 49 * alpha,
+							marginLeft: 16 * alpha,
+							marginTop: 10 * alpha,
+							alignItems: "flex-start",
+						}}>
+						<Text
+							style={styles.nameText}>{item.name}</Text>
+						<Text
+							style={styles.variantText}>{variant_array.join(", ")}</Text>
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.quantityText}>x{item.quantity}</Text>
+					<Text
+						style={styles.cartpriceText}>{this.props.members.currency}{parseFloat(item.price).toFixed(2)}</Text>
+				</View>
+			} else {
+				return <View
+					style={styles.itemTwoView}
+					key={key}>
+					<Text
+						style={styles.nameTwoText}>{item.name}</Text>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.quantityTwoText}>x{item.quantity}</Text>
+					<Text
+						style={styles.rm20TwoText}>{this.props.members.currency}{parseFloat(item.price).toFixed(2)}</Text>
+				</View>
+			}
+		})
 
 		return <View
 			style={styles.checkoutView}>
@@ -121,131 +181,131 @@ export default class Checkout extends React.Component {
 									source={require("./../../assets/images/group-4-5.png")}
 									style={styles.arrowImage2}/>
 							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Image
-								source={require("./../../assets/images/group-8-11.png")}
-								style={styles.group8Image}/>
+							{/*<View*/}
+							{/*	style={{*/}
+							{/*		flex: 1,*/}
+							{/*	}}/>*/}
+							{/*<Image*/}
+							{/*	source={require("./../../assets/images/group-8-11.png")}*/}
+							{/*	style={styles.group8Image}/>*/}
 						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.distance1kmPleaseText}>Distance 1km, please confirm your nearest branch</Text>
+						{/*<View*/}
+						{/*	style={{*/}
+						{/*		flex: 1,*/}
+						{/*	}}/>*/}
+						{/*<Text*/}
+						{/*	style={styles.distance1kmPleaseText}>Distance 1km, please confirm your nearest branch</Text>*/}
 					</View>
-					<View
-						pointerEvents="box-none"
-						style={{
-							height: 54 * alpha,
-							marginLeft: 15 * alpha,
-							marginRight: 15 * alpha,
-							marginTop: 23 * alpha,
-							flexDirection: "row",
-							alignItems: "flex-start",
-						}}>
-						<View
-							style={this.state.delivery_options == 'pickup' ? styles.selfPickUpView_selected : styles.selfPickUpView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 25 * alpha,
-									right: 0 * alpha,
-									bottom: 0 * alpha,
-									height: 54 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/pick-up-2.png")}
-									style={this.state.delivery_options == 'pickup' ? styles.pickUpImage_selected : styles.pickUpImage}/>
-								<Text
-									style={this.state.delivery_options == 'pickup' ? styles.selfPickUpText_selected : styles.selfPickUpText}>Self Pick-up</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								{this.state.delivery_options == 'pickup' ? <Image
-									source={require("./../../assets/images/fill-1-3.png")}
-									style={styles.tabTwoImage}/> : null}
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onPickUpButtonPressed}
-									style={styles.pickupbuttonButton}>
-									<Text
-										style={styles.pickupbuttonButtonText}></Text>
-								</TouchableOpacity>
-							</View>
-						</View>
+					{/*<View*/}
+					{/*	pointerEvents="box-none"*/}
+					{/*	style={{*/}
+					{/*		height: 54 * alpha,*/}
+					{/*		marginLeft: 15 * alpha,*/}
+					{/*		marginRight: 15 * alpha,*/}
+					{/*		marginTop: 23 * alpha,*/}
+					{/*		flexDirection: "row",*/}
+					{/*		alignItems: "flex-start",*/}
+					{/*	}}>*/}
+					{/*	<View*/}
+					{/*		style={this.state.delivery_options == 'pickup' ? styles.selfPickUpView_selected : styles.selfPickUpView}>*/}
+					{/*		<View*/}
+					{/*			pointerEvents="box-none"*/}
+					{/*			style={{*/}
+					{/*				position: "absolute",*/}
+					{/*				left: 25 * alpha,*/}
+					{/*				right: 0 * alpha,*/}
+					{/*				bottom: 0 * alpha,*/}
+					{/*				height: 54 * alpha,*/}
+					{/*				flexDirection: "row",*/}
+					{/*				alignItems: "center",*/}
+					{/*			}}>*/}
+					{/*			<Image*/}
+					{/*				source={require("./../../assets/images/pick-up-2.png")}*/}
+					{/*				style={this.state.delivery_options == 'pickup' ? styles.pickUpImage_selected : styles.pickUpImage}/>*/}
+					{/*			<Text*/}
+					{/*				style={this.state.delivery_options == 'pickup' ? styles.selfPickUpText_selected : styles.selfPickUpText}>Self Pick-up</Text>*/}
+					{/*			<View*/}
+					{/*				style={{*/}
+					{/*					flex: 1,*/}
+					{/*				}}/>*/}
+					{/*			{this.state.delivery_options == 'pickup' ? <Image*/}
+					{/*				source={require("./../../assets/images/fill-1-3.png")}*/}
+					{/*				style={styles.tabTwoImage}/> : null}*/}
+					{/*		</View>*/}
+					{/*		<View*/}
+					{/*			pointerEvents="box-none"*/}
+					{/*			style={{*/}
+					{/*				position: "absolute",*/}
+					{/*				alignSelf: "center",*/}
+					{/*				top: 0 * alpha,*/}
+					{/*				bottom: 0 * alpha,*/}
+					{/*				justifyContent: "center",*/}
+					{/*			}}>*/}
+					{/*			<TouchableOpacity*/}
+					{/*				onPress={this.onPickUpButtonPressed}*/}
+					{/*				style={styles.pickupbuttonButton}>*/}
+					{/*				<Text*/}
+					{/*					style={styles.pickupbuttonButtonText}></Text>*/}
+					{/*			</TouchableOpacity>*/}
+					{/*		</View>*/}
+					{/*	</View>*/}
 
 
-						<View
-							style={{
-								flex: 1,
-							}}/>
+					{/*	<View*/}
+					{/*		style={{*/}
+					{/*			flex: 1,*/}
+					{/*		}}/>*/}
 
-						<View
-							style={this.state.delivery_options == 'delivery' ? styles.deliveryView_selected : styles.deliveryView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 36 * alpha,
-									right: 0 * alpha,
-									bottom: 0 * alpha,
-									height: 54 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/delivery-2.png")}
-									style={this.state.delivery_options == 'delivery' ? styles.deliveryImage_selected : styles.deliveryImage}/>
-								<Text
-									style={this.state.delivery_options == 'delivery' ? styles.deliveryText_selected : styles.deliveryText}>Delivery</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								{this.state.delivery_options == 'delivery' ?
-									<Image
-										source={require("./../../assets/images/fill-1-3.png")}
-										style={styles.tabImage}/>
-									: null}
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onDeliveryButtonPressed}
-									style={styles.deliverybuttonButton}>
-									<Text
-										style={styles.deliverybuttonButtonText}></Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
+					{/*	<View*/}
+					{/*		style={this.state.delivery_options == 'delivery' ? styles.deliveryView_selected : styles.deliveryView}>*/}
+					{/*		<View*/}
+					{/*			pointerEvents="box-none"*/}
+					{/*			style={{*/}
+					{/*				position: "absolute",*/}
+					{/*				left: 36 * alpha,*/}
+					{/*				right: 0 * alpha,*/}
+					{/*				bottom: 0 * alpha,*/}
+					{/*				height: 54 * alpha,*/}
+					{/*				flexDirection: "row",*/}
+					{/*				alignItems: "center",*/}
+					{/*			}}>*/}
+					{/*			<Image*/}
+					{/*				source={require("./../../assets/images/delivery-2.png")}*/}
+					{/*				style={this.state.delivery_options == 'delivery' ? styles.deliveryImage_selected : styles.deliveryImage}/>*/}
+					{/*			<Text*/}
+					{/*				style={this.state.delivery_options == 'delivery' ? styles.deliveryText_selected : styles.deliveryText}>Delivery</Text>*/}
+					{/*			<View*/}
+					{/*				style={{*/}
+					{/*					flex: 1,*/}
+					{/*				}}/>*/}
+					{/*			{this.state.delivery_options == 'delivery' ?*/}
+					{/*				<Image*/}
+					{/*					source={require("./../../assets/images/fill-1-3.png")}*/}
+					{/*					style={styles.tabImage}/>*/}
+					{/*				: null}*/}
+					{/*		</View>*/}
+					{/*		<View*/}
+					{/*			pointerEvents="box-none"*/}
+					{/*			style={{*/}
+					{/*				position: "absolute",*/}
+					{/*				alignSelf: "center",*/}
+					{/*				top: 0 * alpha,*/}
+					{/*				bottom: 0 * alpha,*/}
+					{/*				justifyContent: "center",*/}
+					{/*			}}>*/}
+					{/*			<TouchableOpacity*/}
+					{/*				onPress={this.onDeliveryButtonPressed}*/}
+					{/*				style={styles.deliverybuttonButton}>*/}
+					{/*				<Text*/}
+					{/*					style={styles.deliverybuttonButtonText}></Text>*/}
+					{/*			</TouchableOpacity>*/}
+					{/*		</View>*/}
+					{/*	</View>*/}
+					{/*</View>*/}
+					{/*<View*/}
+					{/*	style={{*/}
+					{/*		flex: 1,*/}
+					{/*	}}/>*/}
 					<View
 						style={styles.contactView}>
 						<Text
@@ -292,32 +352,7 @@ export default class Checkout extends React.Component {
 					style={styles.ordersummaryView}>
 					<Text
 						style={styles.orderConfirmationText}>Order Confirmation</Text>
-					<View
-						style={styles.itemView}>
-						<Text
-							style={styles.nameText}>Espresso</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.quantityText}>x2</Text>
-						<Text
-							style={styles.rm20Text}>RM20</Text>
-					</View>
-					<View
-						style={styles.itemTwoView}>
-						<Text
-							style={styles.nameTwoText}>Espresso</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.quantityTwoText}>x2</Text>
-						<Text
-							style={styles.rm20TwoText}>RM20</Text>
-					</View>
+						{cart_items}
 					<View
 						style={styles.voucherView}>
 						<TouchableOpacity
@@ -363,7 +398,7 @@ export default class Checkout extends React.Component {
 							flex: 1,
 						}}/>
 					<Text
-						style={styles.summaryText}>Total 3 units:</Text>
+						style={styles.summaryText}>Total {this.props.navigation.getParam("cart_total_quantity",0)} items:</Text>
 				</View>
 				<View
 					style={styles.paymentMethodView}>
@@ -425,7 +460,7 @@ export default class Checkout extends React.Component {
 						</View>
 					</TouchableOpacity>
 				</View>
-				<View
+				{/* <View
 					style={styles.remarkView}>
 					<TouchableOpacity
 						onPress={this.onRemarkButtonPressed}
@@ -463,12 +498,12 @@ export default class Checkout extends React.Component {
 							</View>
 						</View>
 					</TouchableOpacity>
-				</View>
+				</View> */}
 			</ScrollView>
 			<View
 				style={styles.totalPayNowView}>
 				<Text
-					style={styles.priceText}>RM32</Text>
+					style={styles.priceText}>{this.props.members.currency}{this.props.navigation.getParam("cart_total", 0.00)}</Text>
 				<View
 					style={{
 						flex: 1,
@@ -512,7 +547,9 @@ const styles = StyleSheet.create({
 	},
 	branchView: {
 		backgroundColor: "white",
-		height: 173 * alpha,
+		// height: 173 * alpha,
+		width: "100%",
+		flex: 1,
 	},
 	branchTwoView: {
 		backgroundColor: "transparent",
@@ -741,12 +778,12 @@ const styles = StyleSheet.create({
 	phoneinputTextInput: {
 		backgroundColor: "transparent",
 		padding: 0,
-		color: "rgb(219, 212, 212)",
+		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		width: 212 * alpha,
 		height: 12 * alpha,
 		marginRight: 15 * alpha,
@@ -836,7 +873,7 @@ const styles = StyleSheet.create({
 	},
 	ordersummaryView: {
 		backgroundColor: "white",
-		height: 220 * alpha,
+		flex: 1,
 		marginTop: 10 * alpha,
 	},
 	orderConfirmationText: {
@@ -850,43 +887,6 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-start",
 		marginLeft: 16 * alpha,
 		marginTop: 13 * alpha,
-	},
-	itemView: {
-		backgroundColor: "transparent",
-		height: 50 * alpha,
-		marginTop: 5 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	nameText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 16 * alpha,
-	},
-	quantityText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "right",
-		backgroundColor: "transparent",
-		marginRight: 14 * alpha,
-	},
-	rm20Text: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginRight: 15 * alpha,
 	},
 	itemTwoView: {
 		backgroundColor: "transparent",
@@ -1153,5 +1153,53 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "left",
+	},
+	itemView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	variantText: {
+		color: "rgb(148, 148, 148)",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		lineHeight: 14 * alpha,
+		backgroundColor: "transparent",
+		width: 257 * alpha,
+		height: 28 * alpha,
+		marginTop: 2 * alpha,
+	},
+	quantityText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 16 * alpha,
+	},
+	cartpriceText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginRight: 15 * alpha,
 	},
 })

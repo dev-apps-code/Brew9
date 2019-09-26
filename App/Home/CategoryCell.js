@@ -21,11 +21,11 @@ export default class CategoryCell extends React.Component {
 	}
 
 	onCategoryCellPress = () => {
-	
+		this.props.onSelectCategory(this.props.scrollIndex, this.props.index)
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
 				onPress={this.onCategoryCellPress}>
 				<View
