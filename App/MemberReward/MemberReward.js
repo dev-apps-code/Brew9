@@ -473,14 +473,14 @@ export default class MemberReward extends React.Component {
 				{/*		style={styles.noRewardAvailableText}>No reward available</Text>*/}
 				{/*</View>*/}
 			</View>
-			{ this.state.valid_selected && (
+			{/* { this.state.valid_selected && (
 				<TouchableOpacity
 					onPress={this.onRedeemRewardPressed}
 					style={styles.redeemrewardButton}>
 					<Text
 						style={styles.redeemrewardButtonText}>Redeem Reward</Text>
 				</TouchableOpacity>
-			)}
+			)} */}
 
 		</View>
 	}

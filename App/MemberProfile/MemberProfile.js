@@ -22,6 +22,8 @@ import * as ImagePicker from "expo-image-picker"
 import Constants from "expo-constants"
 import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading"
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -74,7 +76,6 @@ export default class MemberProfile extends React.Component {
 
 	componentDidMount() {
 		this.loadMember()
-		this.getPermissionAsync()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -85,8 +86,9 @@ export default class MemberProfile extends React.Component {
 		if (Constants.platform.ios) {
 			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 			if (status !== 'granted') {
-				alert('Sorry, we need camera roll permissions to make this work!');
+				return false
 			}
+			return true
 		}
 	}
 
@@ -166,19 +168,40 @@ export default class MemberProfile extends React.Component {
 
 	_pickImage = async () => {
 
-		console.log("PickImage")
-		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [4, 3],
-		});
+		var get_permission = await this.getPermissionAsync()
+		
+		if (get_permission) {
+			let result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.All,
+				allowsEditing: true,
+				aspect: [4, 3],
+			});
+	
+			if (!result.cancelled) {
+				this.setState({
+					image: result.uri
+				})
+			}
+		} else {
+			this.refs.toast.show('Please enable camera roll permission in settings.')
+		}
+		
+	}
 
-		console.log(result);
-
-		if (!result.cancelled) {
-			this.setState({
-				image: result.uri
-			})
+	checkForm = () => {
+		if (!this.state.gender) {
+			this.refs.toast.show("Please select your gender")
+			return false
+		} else if (!this.state.nickname) {
+			this.refs.toast.show("Please select a nickname")
+			return false
+		}
+		else if (this.state.dob) {
+			this.refs.toast.show("Please select enter your birthdate")
+			return false
+		}
+		else {
+			return true
 		}
 	}
 
@@ -211,7 +234,7 @@ export default class MemberProfile extends React.Component {
 			// phone_no: this.state.phone_no,
 			phone_no: this.state.phone_no,
 			// country_code: this.state.country_code,
-			country_code: "+673",
+			country_code: this.state.country_code,
 		}
 
 		this.loadUpdatePhoneNumber(phoneFormData)
@@ -223,7 +246,7 @@ export default class MemberProfile extends React.Component {
 			// phone_no: this.state.phone_no,
 			phone_no: this.state.phone_no,
 			// country_code: this.state.country_code,
-			country_code: "+6",
+			country_code: this.state.country_code,
 		}
 
 		this.loadVerifyPhoneNumberUpdate(phoneFormData)
@@ -231,14 +254,17 @@ export default class MemberProfile extends React.Component {
 
 	onSavePressed = () => {
 
-		const profileFormData = {
-			dob: this.state.dob,
-			nickname: this.state.nickname,
-			image: this.state.image,
-			gender: this.state.gender,
-		}
+		let formcheck = this.checkForm()
 
-		this.loadUpdateProfile(profileFormData)
+		if (formcheck) {
+			const profileFormData = {
+				dob: this.state.dob,
+				nickname: this.state.nickname,
+				image: this.state.image,
+				gender: this.state.gender,
+			}
+			this.loadUpdateProfile(profileFormData)
+		}
 	}
 
 	renderModalContent = () => (
@@ -363,7 +389,6 @@ export default class MemberProfile extends React.Component {
 
 		const { members } = this.state;
 
-		console.log("Profile", members)
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
 			style={{ flex: 1 }}
@@ -380,7 +405,7 @@ export default class MemberProfile extends React.Component {
 							height: 80 * alpha,
 						}}>
 						<Image
-							source={{uri: this.state.image}}
+							source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
 							style={styles.avatarImage}/>
 						<TouchableOpacity
 							onPress={this._pickImage}
@@ -595,12 +620,13 @@ export default class MemberProfile extends React.Component {
 					<DatePicker
 						date={this.state.dob}
 						mode="date"
-						placeholder="select date"
+						placeholder="Select BirthDate"
 						format="YYYY-MM-DD"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
 						showIcon={false}
 						style={styles.birthdayDatePicker}
+						disabled={this.state.dob ? true : false}
 						customStyles={{
 							dateText: {
 								fontFamily: "DINPro-Medium",
@@ -613,6 +639,9 @@ export default class MemberProfile extends React.Component {
 								position: "absolute",
 								top: 0,
 								left: 61 * alpha,
+							},
+							disabled: {
+								backgroundColor: "transparent"
 							}
 
 						}}
@@ -639,6 +668,8 @@ export default class MemberProfile extends React.Component {
 				{this.renderModalContent()}
 			</Modal>
 		</View>
+		<Toast ref="toast"
+            position="center"/>
 		</KeyboardAvoidingView>
 
 	}

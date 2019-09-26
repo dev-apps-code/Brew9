@@ -15,31 +15,36 @@ import CodeInput from 'react-native-confirmation-code-input'
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object";
 import CountDown from 'react-native-countdown-component'
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading"
 
-@connect(({ members }) => ({}))
+@connect(({ members }) => ({
+
+}))
 export default class Confirmation extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
 
-        const { params = {} } = navigation.state
-        return {
-            headerTintColor: "black",
-            headerLeft: <View
-                style={styles.headerLeftContainer}>
-                <View
-                    style={styles.navigationBarItem}>
-                    <Image
-                        source={require("./../../assets/images/logo.png")}
-                        style={styles.navigationBarItemIcon}/>
-                </View>
-            </View>,
-            headerRight: null,
-            headerStyle: {
-                elevation: 0,
-                shadowOpacity: 0
-            },
-        }
-    }
+		const { params = {} } = navigation.state
+		return {
+			headerTintColor: "black",
+			headerLeft: <View
+				style={styles.headerLeftContainer}>
+				<TouchableOpacity
+					onPress={params.onBackPressed ? params.onBackPressed : () => null}
+					style={styles.navigationBarItem}>
+					<Image
+						source={require("./../../assets/images/back.png")}
+						style={styles.navigationBarItemIcon}/>
+				</TouchableOpacity>
+			</View>,
+			headerRight: null,
+			headerStyle: {
+				elevation: 0,
+				shadowOpacity: 0
+			},
+		}
+	}
 
     constructor(props) {
         super(props)
@@ -53,9 +58,17 @@ export default class Confirmation extends React.Component {
     }
 
     componentDidMount() {
-
+		this.props.navigation.setParams({
+			onBackPressed: this.onBackPressed,
+			onItemPressed: this.onItemPressed,
+		})
     }
+    
+    onBackPressed = () => {
 
+		this.props.navigation.goBack()
+    }
+    
     loadActivateAccount(){
         const { dispatch } = this.props
         this.setState({ loading: true })
@@ -66,7 +79,12 @@ export default class Confirmation extends React.Component {
                     dispatch(createAction('members/loadCurrentUserFromCache')({})),
                     this.props.navigation.navigate("TabGroupOne")
                 )
+            }else{
+                this.refs.toast.show(eventObject.message);
             }
+            this.setState({
+                loading: false,
+            })
         }
         const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
         dispatch(
@@ -82,10 +100,13 @@ export default class Confirmation extends React.Component {
         this.setState({ loading: true })
         const callback = eventObject => {
             if (eventObject.success) {
-                this.setState({
-                    loading: false,
-                })
+                
+            }else{
+                this.refs.toast.show(eventObject.message);
             }
+            this.setState({
+                loading: false,
+            })
         }
         const obj = new LoginWithSmsRequestObject(this.state.phone_no, this.state.country_code)
         dispatch(
@@ -158,6 +179,10 @@ export default class Confirmation extends React.Component {
                     style={styles.reSendButtonText}>Re-send</Text>
             </TouchableOpacity>
             }
+            <Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
+         
         </View>
     }
 }
@@ -273,7 +298,7 @@ const styles = StyleSheet.create({
     countdownText: {
         color: "rgb(98, 97, 97)",
         fontFamily: "Helvetica",
-        fontSize: 10 * fontAlpha,
+        fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
         textAlign: "center",

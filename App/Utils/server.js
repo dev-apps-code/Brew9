@@ -1,7 +1,7 @@
-// export const KSERVERURL ='http://139.162.16.119:3050/api'
-export const KSERVERURL ='https://e4e6c24f.ngrok.io/api'
-export const KURL_INFO = 'https://e4e6c24f.ngrok.io/info'
 
+// export const KSERVERURL ='http://139.162.16.119:3050/api'
+export const KSERVERURL ='https://8ae12608.ngrok.io/api'
+export const KURL_INFO = 'https://8ae12608.ngrok.io/info'
 
 export const KURL_TERMS_OF_SERVICE =
   'http://innogix.com/co3/privacy_policy.html'
@@ -26,4 +26,3 @@ export function encodeForFormData(details) {
   formBody = formBody.join('&')
   return formBody
 }
-

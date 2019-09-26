@@ -61,8 +61,7 @@ export default class Home extends React.Component {
 	
 		return {
 				tabBarLabel: "Order",
-				tabBarIcon: ({ iconTintColor }) => {
-				
+				tabBarIcon: ({ iconTintColor }) => {				
 					return <Image
 							source={require("./../../assets/images/group-8-18.png")}/>
 				},
@@ -91,7 +90,6 @@ export default class Home extends React.Component {
 			select_quantity: 1,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
-
 	}
 
 	componentWillMount() {
@@ -112,14 +110,18 @@ export default class Home extends React.Component {
 			this.setState({ isRefreshing: false })
 		  }
 		}
-		const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
-		obj.setUrlId(this.props.members.id)
-		dispatch(
-		  createAction('members/loadStorePushToken')({
-			object:obj,
-			callback,
-		  })
-		)
+
+		if (members) {
+			const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
+			obj.setUrlId(this.props.members.id)
+			dispatch(
+			  createAction('members/loadStorePushToken')({
+				object:obj,
+				callback,
+			  })
+			)
+		}
+
 	}
 
 	loadShops(){
@@ -140,14 +142,17 @@ export default class Home extends React.Component {
 		//Hardcoded
 		var latitude = 11.0
 		var longitude = 11.0
-		const obj = new NearestShopRequestObject(latitude, longitude)
-		obj.setUrlId(members.company_id)
-		dispatch(
-			createAction('shops/loadShops')({
-				object:obj,
-				callback,
-			}
-		))
+
+		if (members) {
+			const obj = new NearestShopRequestObject(latitude, longitude)
+			obj.setUrlId(members.company_id)
+			dispatch(
+				createAction('shops/loadShops')({
+					object:obj,
+					callback,
+				}
+			))
+		}
 	}
 
 	loadStoreProducts() {
@@ -181,14 +186,16 @@ export default class Home extends React.Component {
 			}
 		}
 
-		const obj = new ProductRequestObject()
-		obj.setUrlId(members.company_id)
-		dispatch(
-			createAction('products/loadStoreProducts')({
-				object: obj,
-				callback
-			})
-		)
+		if (members) {
+			const obj = new ProductRequestObject()
+			obj.setUrlId(members.company_id)
+			dispatch(
+				createAction('products/loadStoreProducts')({
+					object: obj,
+					callback
+				})
+			)
+		}
 	}
 
 	onRefresh() {
@@ -333,7 +340,7 @@ export default class Home extends React.Component {
 					item={item}
 					productname={item.name}
 					productprice={item.price}
-					productimage={item.image.url}
+					productimage={item.image.thumb.url}
 					productquantity={item.quantity}
 					productdescription={item.description}
 					productvariant={item.variants}

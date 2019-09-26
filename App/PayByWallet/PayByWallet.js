@@ -12,7 +12,7 @@ import {alpha, fontAlpha} from "../common/size";
 import {connect} from "react-redux";
 import QrCodeRequestObject from "../Requests/qr_code_request_object";
 import {createAction} from "../Utils";
-import QRCode from 'react-native-qrcode';
+import QRCode from 'react-native-qrcode-svg';
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -159,10 +159,15 @@ export default class PayByWallet extends React.Component {
 				<View
 					style={styles.walletBalanceView}>
 					<Image
-						source={{uri: members.image}}
+						source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
 						style={styles.profilePicImage}/>
 					<Text
-						style={styles.nicknameText}>Somebody</Text>
+						style={styles.nicknameText}>{
+							members.name ? members.name : 
+							members.nickname ? members.nickname :
+							members.phone_no ? members.phone_no : 
+							members.facebook_id 
+						}</Text>
 					<View
 						style={styles.payByWalletView}>
 						{members.wallet_enabled && (<TouchableOpacity
@@ -210,19 +215,15 @@ export default class PayByWallet extends React.Component {
 					style={styles.qrCodeViewView}>
 					<Text
 						style={styles.scanQrcodeToEarnText}>Scan QRCode to earn point (Payment not supported)</Text>
-					{ this.state.qr_code && (
-						<QRCode
+						{ this.state.qr_code ? <QRCode
 							value={this.state.qr_code}
 							size={161 * alpha}
 							bgColor='black'
 							fgColor='white'/>
-						)
-					}
-					{this.state.loading && (
-						<View style={[styles.container, styles.horizontal]}>
-							<ActivityIndicator size="large" />
-						</View>
-					)}
+						:	<View style={[styles.container, styles.horizontal]}>
+								<ActivityIndicator size="large" />
+							</View>
+						}
 					<Text
 						style={styles.autoText}>Auto refresh every 30 seconds</Text>
 				</View>

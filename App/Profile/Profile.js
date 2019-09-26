@@ -46,7 +46,7 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("Profile", this.props.members)
+
 	}
 
 	onLevelPressed = () => {
@@ -164,7 +164,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.topsectionView}>
 						<Image
-							source={{uri: members.image}}
+							source={ members.premium_membership ? {uri: members.premium_membership.membership_level.image} : {uri: members.free_membership.membership_level.image}}
 							style={styles.backgroundImage}/>
 						<View
 							pointerEvents="box-none"
@@ -185,7 +185,7 @@ export default class Profile extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Image
-									source={{uri: members.image}}
+									source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
 									style={styles.profilePicImage}/>
 								<View
 									pointerEvents="box-none"
@@ -197,7 +197,12 @@ export default class Profile extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.nameText}>{members.name}</Text>
+										style={styles.nameText}>{ 
+											members.name ? members.name : 
+											members.nickname ? members.nickname :
+											members.phone_no ? members.phone_no : 
+											members.facebook_id 
+											}</Text>
 									<TouchableOpacity
 										onPress={this.onLevelPressed}
 										style={styles.levelButton}>
@@ -209,7 +214,7 @@ export default class Profile extends React.Component {
 									style={{
 										flex: 1,
 									}}/>
-								<View
+								{/* <View
 									pointerEvents="box-none"
 									style={{
 										width: 105 * alpha,
@@ -228,7 +233,7 @@ export default class Profile extends React.Component {
 											source={require("./../../assets/images/arrow-2.png")}
 											style={styles.vipButtonImage}/>
 									</TouchableOpacity>
-								</View>
+								</View> */}
 							</View>
 							<View
 								style={styles.memberpointsinfoView}>
@@ -507,138 +512,132 @@ export default class Profile extends React.Component {
 						</TouchableOpacity>
 					</View>
 					<View
-						pointerEvents="box-none"
-						style={{
-							height: 98 * alpha,
-						}}>
-						<View
-							style={styles.qrCodeView}>
-							<TouchableOpacity
-								onPress={this.onQRButtonPressed}
-								style={styles.qrbuttonButton}>
+						style={styles.qrCodeView}>
+						<TouchableOpacity
+							onPress={this.onQRButtonPressed}
+							style={styles.qrbuttonButton}>
 
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										left: 0,
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
+										height: 18 * alpha,
+										marginLeft: 30 * alpha,
+										marginRight: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
 									}}>
 									<View
-										pointerEvents="box-none"
-										style={{
-											height: 18 * alpha,
-											marginLeft: 30 * alpha,
-											marginRight: 30 * alpha,
-											flexDirection: "row",
-											alignItems: "center",
-										}}>
+										style={styles.qriconView}>
+										<Image
+											source={require("./../../assets/images/group-3-3.png")}
+											style={styles.group3ThreeImage}/>
 										<View
-											style={styles.qriconView}>
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
 											<Image
-												source={require("./../../assets/images/group-3-3.png")}
-												style={styles.group3ThreeImage}/>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													bottom: 0,
-													justifyContent: "center",
-												}}>
-												<Image
-													source={require("./../../assets/images/clip-5-11.png")}
-													style={styles.clip5Image}/>
-											</View>
+												source={require("./../../assets/images/clip-5-11.png")}
+												style={styles.clip5Image}/>
 										</View>
-										<Text
-											style={styles.qrCodeText}>QR Code</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<Text
-											style={styles.qrDescriptionText}>Scan for reward or pay</Text>
 									</View>
+									<Text
+										style={styles.qrCodeText}>QR Code</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.qrDescriptionText}>Scan for reward or pay</Text>
 								</View>
+							</View>
 
-							</TouchableOpacity>
-						</View>
-						<View
-							style={styles.redeemStationView}>
-							<TouchableOpacity
-								onPress={this.onRedeemButtonPressed}
-								style={styles.redeembuttonButton}>
+						</TouchableOpacity>
+					</View>
+					{/* <View
+						style={styles.redeemStationView}>
+						<TouchableOpacity
+							onPress={this.onRedeemButtonPressed}
+							style={styles.redeembuttonButton}>
 
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									right: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										left: 0,
-										right: 0,
-										top: 0,
-										bottom: 0,
-										justifyContent: "center",
+										height: 17 * alpha,
+										marginLeft: 30 * alpha,
+										marginRight: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
 									}}>
 									<View
-										pointerEvents="box-none"
-										style={{
-											height: 17 * alpha,
-											marginLeft: 30 * alpha,
-											marginRight: 30 * alpha,
-											flexDirection: "row",
-											alignItems: "center",
-										}}>
+										style={styles.redeemiconView}>
 										<View
-											style={styles.redeemiconView}>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													bottom: 0,
-													justifyContent: "center",
-												}}>
-												<Image
-													source={require("./../../assets/images/group-5-5.png")}
-													style={styles.group5Image}/>
-											</View>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													bottom: 0,
-													justifyContent: "center",
-												}}>
-												<Image
-													source={require("./../../assets/images/stroke-6-2.png")}
-													style={styles.stroke6Image}/>
-											</View>
-										</View>
-										<Text
-											style={styles.redeemStationText}>Redeem Award</Text>
-										<View
+											pointerEvents="box-none"
 											style={{
-												flex: 1,
-											}}/>
-										<Text
-											style={styles.redeemDescriptionText}>Redeem voucher</Text>
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/group-5-5.png")}
+												style={styles.group5Image}/>
+										</View>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0,
+												right: 0,
+												top: 0,
+												bottom: 0,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/stroke-6-2.png")}
+												style={styles.stroke6Image}/>
+										</View>
 									</View>
+									<Text
+										style={styles.redeemStationText}>Redeem Award</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.redeemDescriptionText}>Redeem voucher</Text>
 								</View>
+							</View>
 
-							</TouchableOpacity>
-						</View>
-					</View>
+						</TouchableOpacity>
+					</View> */}
 					<View
 						style={styles.notificationView}>
 						<TouchableOpacity
@@ -697,7 +696,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Image
-										source={require("./../../assets/images/group-9-6.png")}
+										source={require("./../../assets/images/about.png")}
 										style={styles.abouticonImage}/>
 									<Text
 										style={styles.aboutText}>About Brew9</Text>
@@ -1080,13 +1079,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginTop: 8 * alpha,
 	},
-
 	bottomsectionView: {
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
+		flex: 1,
+		flexDirection: "column",
 		width: 375 * alpha,
-		height: 350 * alpha,
-		marginRight: 1,
 	},
 	memberStatusView: {
 		backgroundColor: "transparent",
@@ -1243,10 +1241,6 @@ const styles = StyleSheet.create({
 	},
 	qrCodeView: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		right: 1 * alpha,
-		top: 0,
 		height: 50 * alpha,
 	},
 	qrbuttonButton: {
@@ -1313,10 +1307,6 @@ const styles = StyleSheet.create({
 	},
 	redeemStationView: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 1,
-		right: 0,
-		top: 48 * alpha,
 		height: 50 * alpha,
 	},
 	redeembuttonButton: {
