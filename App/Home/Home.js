@@ -146,12 +146,8 @@ export default class Home extends React.Component {
 	}
 
 	loadStoreProducts() {
-<<<<<<< HEAD
-		const { dispatch } = this.props
-=======
 
 		const { dispatch, members } = this.props
->>>>>>> 61cb3a495d3e33f541982b34b8f915645f6d6e17
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({

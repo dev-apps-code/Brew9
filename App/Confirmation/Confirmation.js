@@ -15,7 +15,8 @@ import CodeInput from 'react-native-confirmation-code-input'
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object";
 import CountDown from 'react-native-countdown-component'
-
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading.js"
 @connect(({ members }) => ({}))
 export default class Confirmation extends React.Component {
 
@@ -29,7 +30,7 @@ export default class Confirmation extends React.Component {
                 <View
                     style={styles.navigationBarItem}>
                     <Image
-                        source={require("./../../assets/images/logo.png")}
+                        source={require("./../../assets/images/back.png")}
                         style={styles.navigationBarItemIcon}/>
                 </View>
             </View>,
@@ -52,10 +53,6 @@ export default class Confirmation extends React.Component {
         }
     }
 
-    componentDidMount() {
-
-    }
-
     loadActivateAccount(){
         const { dispatch } = this.props
         this.setState({ loading: true })
@@ -66,6 +63,8 @@ export default class Confirmation extends React.Component {
                     dispatch(createAction('members/loadCurrentUserFromCache')({})),
                     this.props.navigation.navigate("TabGroupOne")
                 )
+            }else{
+                this.refs.toast.show(eventObject.message);
             }
         }
         const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
@@ -85,6 +84,8 @@ export default class Confirmation extends React.Component {
                 this.setState({
                     loading: false,
                 })
+            }else{
+                this.refs.toast.show(eventObject.message);
             }
         }
         const obj = new LoginWithSmsRequestObject(this.state.phone_no, this.state.country_code)
@@ -158,6 +159,10 @@ export default class Confirmation extends React.Component {
                     style={styles.reSendButtonText}>Re-send</Text>
             </TouchableOpacity>
             }
+            <Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
+         
         </View>
     }
 }
@@ -273,7 +278,7 @@ const styles = StyleSheet.create({
     countdownText: {
         color: "rgb(98, 97, 97)",
         fontFamily: "Helvetica",
-        fontSize: 10 * fontAlpha,
+        fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
         textAlign: "center",

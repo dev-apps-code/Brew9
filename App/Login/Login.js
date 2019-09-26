@@ -15,7 +15,8 @@ import LoginWithFacebookRequestObject from "../Requests/login_with_facebook_requ
 import * as Facebook from 'expo-facebook'
 import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils";
-
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading.js"
 @connect(({ members }) => ({
 
 }))
@@ -58,6 +59,23 @@ export default class Login extends React.Component {
 
 	loadLogin(){
 		const { dispatch } = this.props
+		const {phone_no, country_code} = this.state
+
+		if (phone_no == null || phone_no == ''){
+			this.refs.toast.show('Please ensure you have enter your phone number!');
+			return
+		}
+
+		if (phone_no.length < 7){
+			this.refs.toast.show('Your phone number is too short');
+			return
+		}
+
+		if (country_code == null || country_code == ''){
+			this.refs.toast.show('Please ensure you have enter a country code!');
+			return
+		}
+
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
@@ -120,7 +138,7 @@ export default class Login extends React.Component {
 				var obj = await response.json()
 				console.log(obj)
 				this.loadLoginWithFacebook(obj.id, obj.picture.data.url, obj.name)
-				// Alert.alert('Logged in!', `Hi ${(await response.json())}!`);
+				Alert.alert('Logged in!', `Hi ${(await response.json())}!`);
 			} else {
 				// type === 'cancel'
 			}
@@ -260,6 +278,9 @@ export default class Login extends React.Component {
 					</View>
 				</View>
 			</View>
+			<Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
 		</View>
 	}
 }
