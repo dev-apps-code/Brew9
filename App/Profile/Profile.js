@@ -33,10 +33,14 @@ export default class Profile extends React.Component {
 
 		return {
 			tabBarLabel: "Profile",
-			tabBarIcon: ({ iconTintColor }) => {
+			tabBarIcon: ({ iconTintColor, focused }) => {
+				const image = focused 
+				? require('./../../assets/images/profile_selected.png') 
+				: require('./../../assets/images/profile.png')
 
 				return <Image
-					source={require("./../../assets/images/group-5-12.png")}/>
+					source={image}
+					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha }}/>
 			},
 		}
 	}
@@ -337,9 +341,9 @@ export default class Profile extends React.Component {
 									<View
 										style={styles.vipiconView}>
 										<Image
-											source={require("./../../assets/images/group-3-12.png")}
-											style={styles.group3Image}/>
-										<View
+											source={require("./../../assets/images/group-14-7.png")}
+											style={styles.group8Image}/>
+										{/* <View
 											pointerEvents="box-none"
 											style={{
 												position: "absolute",
@@ -352,7 +356,7 @@ export default class Profile extends React.Component {
 											<Image
 												source={require("./../../assets/images/group-8-13.png")}
 												style={styles.group8Image}/>
-										</View>
+										</View> */}
 									</View>
 									<Text
 										style={styles.vipClubText}>Member Center</Text>
@@ -1050,24 +1054,12 @@ const styles = StyleSheet.create({
 	},
 	vipiconView: {
 		backgroundColor: "transparent",
-		width: 20 * alpha,
 		height: 31 * alpha,
-	},
-	group3Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		position: "absolute",
-		left: 3 * alpha,
-		right: 4 * alpha,
-		top: 6 * alpha,
-		height: 13 * alpha,
 	},
 	group8Image: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
-		width: null,
-		height: 31 * alpha,
-		marginRight: 1 * alpha,
+		height: 44 * alpha,
 	},
 	vipClubText: {
 		color: "rgb(54, 54, 54)",

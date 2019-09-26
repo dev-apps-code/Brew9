@@ -43,6 +43,7 @@ export default class Checkout extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup'
 		}
 	}
@@ -176,10 +177,10 @@ export default class Checkout extends React.Component {
 							<View
 								style={styles.branchThreeView}>
 								<Text
-									style={styles.branchText}>Branch</Text>
-								<Image
+									style={styles.branchText}>{this.state.shop ? this.state.shop.name : ""}</Text>
+								{/* <Image
 									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.arrowImage2}/>
+									style={styles.arrowImage2}/> */}
 							</View>
 							{/*<View*/}
 							{/*	style={{*/}
@@ -534,6 +535,8 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
+		width: 18 * alpha,
+		height: 18 * alpha,
 		tintColor: "black",
 	},
 	checkoutView: {

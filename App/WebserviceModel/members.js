@@ -23,6 +23,10 @@ function getCurrentUser() {
   })
 }
 
+function saveCurrentUser(profile) {
+  console.log("Saving")
+  AsyncStorage.setItem("profile", JSON.stringify(profile))
+}
 export default {
 
   namespace: 'members',
@@ -43,6 +47,11 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
+      console.log("Load", payload)
+      return { ...state, profile: payload, isReady: true }
+    },
+    saveCurrentUser(state,{payload}) {
+      saveCurrentUser(payload)
       return { ...state, profile: payload, isReady: true }
     },
   },
@@ -172,7 +181,7 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
@@ -188,7 +197,11 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+
+        if (eventObject.success == true) {
+          console.log("Success")
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
@@ -197,7 +210,6 @@ export default {
       try{
 
         const { object, callback } = payload
-        console.log("Activate", object)
         const authtoken = yield select(state => state.userAuthToken)
         const json = yield call(
             activateAccount,
@@ -205,7 +217,10 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) {
+          console.log("Success Activate")
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },

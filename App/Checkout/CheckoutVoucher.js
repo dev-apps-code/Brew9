@@ -375,8 +375,10 @@ const styles = StyleSheet.create({
         fontSize: 16 * fontAlpha,
     },
     navigationBarItemIcon: {
-        tintColor: "black",
-    },
+		width: 18 * alpha,
+		height: 18 * alpha,
+		tintColor: "black",
+	},
     container: {
         flex: 1,
         justifyContent: 'center',

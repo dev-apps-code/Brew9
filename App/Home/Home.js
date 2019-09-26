@@ -61,9 +61,14 @@ export default class Home extends React.Component {
 	
 		return {
 				tabBarLabel: "Order",
-				tabBarIcon: ({ iconTintColor }) => {				
+				tabBarIcon: ({ iconTintColor, focused }) => {
+					const image = focused 
+					? require('./../../assets/images/menu_selected.png') 
+					: require('./../../assets/images/menu.png')
+	
 					return <Image
-							source={require("./../../assets/images/group-8-18.png")}/>
+						source={image}
+						style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha}}/>
 				},
 			}
 	}
@@ -88,13 +93,14 @@ export default class Home extends React.Component {
 			modalVisible: false,
 			selected_index: null,
 			select_quantity: 1,
+			shop: null,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
 
 	componentWillMount() {
-		const { dispatch } = this.props
-		dispatch(createAction('members/loadCurrentUserFromCache')({}))
+		// const { dispatch } = this.props
+		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	componentDidMount() {
@@ -110,18 +116,15 @@ export default class Home extends React.Component {
 			this.setState({ isRefreshing: false })
 		  }
 		}
-
-		if (members) {
-			const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
-			obj.setUrlId(this.props.members.id)
-			dispatch(
-			  createAction('members/loadStorePushToken')({
-				object:obj,
-				callback,
-			  })
-			)
-		}
-
+		const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
+		obj.setUrlId(this.props.members.id)
+		dispatch(
+			createAction('members/loadStorePushToken')({
+			object:obj,
+			callback,
+			})
+		)
+	
 	}
 
 	loadShops(){
@@ -132,6 +135,7 @@ export default class Home extends React.Component {
 			if (eventObject.success) {
 				this.setState({
 					loading: false,
+					shop: eventObject.result,
 					products: this.state.products.concat(eventObject.result.menu_banners)
 				}, function () {
 
@@ -143,7 +147,7 @@ export default class Home extends React.Component {
 		var latitude = 11.0
 		var longitude = 11.0
 
-		if (members) {
+		
 			const obj = new NearestShopRequestObject(latitude, longitude)
 			obj.setUrlId(members.company_id)
 			dispatch(
@@ -152,7 +156,7 @@ export default class Home extends React.Component {
 					callback,
 				}
 			))
-		}
+		
 	}
 
 	loadStoreProducts() {
@@ -186,7 +190,7 @@ export default class Home extends React.Component {
 			}
 		}
 
-		if (members) {
+		
 			const obj = new ProductRequestObject()
 			obj.setUrlId(members.company_id)
 			dispatch(
@@ -195,7 +199,7 @@ export default class Home extends React.Component {
 					callback
 				})
 			)
-		}
+		
 	}
 
 	onRefresh() {
@@ -212,7 +216,8 @@ export default class Home extends React.Component {
 		navigate("Checkout", {
 			cart: this.state.cart,
 			cart_total_quantity: this.state.cart_total_quantity,
-			cart_total: this.state.cart_total
+			cart_total: this.state.cart_total,
+			shop: this.state.shop,
 		})
 	}
 

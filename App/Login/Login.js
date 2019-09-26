@@ -19,7 +19,8 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 
 @connect(({ members }) => ({
-
+	members: members.profile,
+	isReady: members.isReady
 }))
 export default class Login extends React.Component {
 
@@ -42,6 +43,7 @@ export default class Login extends React.Component {
 			facebook_id: null,
 			image_url: null,
 			name: null,
+			isSuccess: false,
 		}
 	}
 
@@ -58,6 +60,12 @@ export default class Login extends React.Component {
 
 	}
 
+	componentDidUpdate() {
+        if(this.state.isSuccess && this.props.members) {
+			this.props.navigation.navigate("TabGroupOne")
+		}
+	}
+	
 	loadLogin(){
 		const { dispatch } = this.props
 		const {phone_no, country_code} = this.state
@@ -80,12 +88,12 @@ export default class Login extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({
-					loading: false,
-				})
 				// console.log("Result",eventObject)
 				this.onVerifyLogin()
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new LoginWithSmsRequestObject(this.state.phone_no, this.state.country_code)
 		dispatch(
@@ -101,11 +109,15 @@ export default class Login extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				Storage.set("profile", eventObject.result).then(() =>
-					dispatch(createAction('members/loadCurrentUserFromCache')({})),
-					this.props.navigation.navigate("TabGroupOne")
-				)
+				console.log("Success")
+				this.setState({
+					isSuccess: true,
+				})
+				// this.props.navigation.navigate("TabGroupOne")
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new LoginWithFacebookRequestObject(facebook_id, image_url, name)
 		dispatch(
@@ -138,12 +150,16 @@ export default class Login extends React.Component {
 				var obj = await response.json()
 				console.log(obj)
 				this.loadLoginWithFacebook(obj.id, obj.picture.data.url, obj.name)
-				Alert.alert('Logged in!', `Hi ${(await response.json())}!`);
+				// alert('Logged in!', `Hi ${(await response.json())}!`);
 			} else {
 				// type === 'cancel'
 			}
+			this.setState({
+				loading: false,
+			})
 		} catch ({ message }) {
-			alert(`Facebook Login Error: ${message}`);
+			console.log(`Facebook Login Error: ${message}`)
+			// alert(`Facebook Login Error: ${message}`);
 		}
 	}
 

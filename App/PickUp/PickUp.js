@@ -26,10 +26,14 @@ export default class PickUp extends React.Component {
 
 		return {
 			tabBarLabel: "Pickup",
-			tabBarIcon: ({ iconTintColor }) => {
+			tabBarIcon: ({ iconTintColor, focused }) => {
+				const image = focused 
+				? require('./../../assets/images/pickup_selected.png') 
+				: require('./../../assets/images/pickup.png')
 
 				return <Image
-					source={require("./../../assets/images/group-41-4.png")}/>
+					source={image}
+					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha }}/>
 			},
 		}
 	}

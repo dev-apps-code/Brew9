@@ -164,8 +164,8 @@ export default class MemberCenter extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.expText}>{membership_exp}/{membership_next_level_exp}</Text>
-									<ProgressBar style={styles.lineView} progress={membership_progress} color={"rgb(0, 178, 227)"} />
+										style={styles.expText}>{membership_exp ? membership_exp : "-" }/{membership_next_level_exp ? membership_next_level_exp : "-"}</Text>
+									<ProgressBar style={styles.lineView} progress={membership_progress ? membership_progress : 1} color={"rgb(0, 178, 227)"} />
 
 
 
@@ -395,6 +395,8 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
+		width: 18 * alpha,
+		height: 18 * alpha,
 		tintColor: "black",
 	},
 	memberCenterView: {

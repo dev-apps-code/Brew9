@@ -219,6 +219,8 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
+		width: 18 * alpha,
+		height: 18 * alpha,
 		tintColor: "black",
 	},
 	container: {

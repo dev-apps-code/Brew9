@@ -74,8 +74,10 @@ export default class BannerView extends React.Component {
 
 const styles = StyleSheet.create({
     navigationBarItemIcon: {
-        tintColor: "rgb(0, 194, 236)",
-    },
+		width: 18 * alpha,
+		height: 18 * alpha,
+		tintColor: "rgb(0, 194, 236)",
+	},
     headerLeftContainer: {
         flexDirection: "row",
         marginLeft: 8 * alpha,

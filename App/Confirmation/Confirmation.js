@@ -19,7 +19,8 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 
 @connect(({ members }) => ({
-
+    members: members.profile,
+	isReady: members.isReady
 }))
 export default class Confirmation extends React.Component {
 
@@ -65,7 +66,6 @@ export default class Confirmation extends React.Component {
     }
     
     onBackPressed = () => {
-
 		this.props.navigation.goBack()
     }
     
@@ -75,10 +75,7 @@ export default class Confirmation extends React.Component {
         const callback = eventObject => {
 
             if (eventObject.success) {
-                Storage.set("profile", eventObject.result).then(() =>
-                    dispatch(createAction('members/loadCurrentUserFromCache')({})),
-                    this.props.navigation.navigate("TabGroupOne")
-                )
+                this.props.navigation.navigate("TabGroupOne")
             }else{
                 this.refs.toast.show(eventObject.message);
             }
@@ -198,8 +195,9 @@ const styles = StyleSheet.create({
 	},
     navigationBarItemIcon: {
         tintColor: "rgb(0, 194, 236)",
-    },
-   
+        width: 18 * alpha,
+		height: 18 * alpha,
+	},
     confirmationView: {
         backgroundColor: "transparent",
         flex: 1,
