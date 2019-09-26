@@ -56,6 +56,7 @@ export default class WebCommon extends React.Component {
 
 	render() {
 
+		console.log("Web",this.props.navigation.getParam("web_url", ""))
 		return <View
 				style={styles.commonWebView}>
 				<WebView
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
 		tintColor: "black",
 	},
 	commonWebView: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		flex: 1,
 	},
 	webviewWebView: {

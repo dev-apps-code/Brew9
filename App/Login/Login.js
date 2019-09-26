@@ -88,7 +88,6 @@ export default class Login extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				// console.log("Result",eventObject)
 				this.onVerifyLogin()
 			}
 			this.setState({
@@ -109,7 +108,6 @@ export default class Login extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log("Success")
 				this.setState({
 					isSuccess: true,
 				})
@@ -148,7 +146,6 @@ export default class Login extends React.Component {
 				const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture`);
 				// login_with_facebook_request_object()
 				var obj = await response.json()
-				console.log(obj)
 				this.loadLoginWithFacebook(obj.id, obj.picture.data.url, obj.name)
 				// alert('Logged in!', `Hi ${(await response.json())}!`);
 			} else {
@@ -173,7 +170,6 @@ export default class Login extends React.Component {
 			country: iso2,
 			country_code: country_code,
 		})
-		console.log(country_code, iso2)
 	}
 
 	render() {

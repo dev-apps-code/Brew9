@@ -184,7 +184,6 @@ export default class Home extends React.Component {
 						products: this.state.products.concat(items)
 
 					}, function () {
-						// console.log("data", this.state.data)
 					})
 				}.bind(this))
 			}
@@ -278,7 +277,6 @@ export default class Home extends React.Component {
 		}
 
 		if (isUpdate) {
-			console.log(isUpdate, isCartToggle)
 			if(isCartToggle) {
 				Animated.spring(this.moveAnimation, {
 					toValue: {x: 0, y: this.state.cart.length == 0 ? windowHeight : finalheight},
@@ -375,7 +373,6 @@ export default class Home extends React.Component {
 
 	onChangeQuantityPress = (item,index,operation,isCart) => {
 
-		console.log("Quantity", this.state.cart_total_quantity)
 		let cart = [...this.state.cart]
 
 		if (isCart) {
@@ -423,7 +420,6 @@ export default class Home extends React.Component {
 				this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(cartItem.price)).toFixed(2)
 			} else {
 
-				console.log("Minus", cartItem.quantity, item.quantity)
 				if (cartItem.quantity > 1) {
 					if (item.quantity > 0) item.quantity = item.quantity - 1
 					cartItem.quantity = cartItem.quantity - 1

@@ -26,7 +26,6 @@ export default class NotificationsCell extends React.Component {
 
 	render() {
 
-		console.log("Item ID", this.props.id, this.props.last_read)
 		return <TouchableWithoutFeedback
 			onPress={this.onNotificationsCellPress}>
 			<View

@@ -21,8 +21,7 @@ export default class BannerCell extends React.Component {
     }
 
     onBannerCellPress = () => {
-
-        console.log("Banner", )
+        
         this.props.onPressItem(this.props.item,this.props.index)
     }
 

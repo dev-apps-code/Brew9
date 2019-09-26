@@ -138,7 +138,6 @@ export default class MemberProfile extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log("Member", eventObject.result)
 				this.setState({
 					loading: false,
 				})
@@ -156,7 +155,6 @@ export default class MemberProfile extends React.Component {
 
 	loadMember() {
 		const { members } = this.props
-		console.log('')
 		this.setState({
 			members: members,
 			image: members.image,
@@ -225,11 +223,9 @@ export default class MemberProfile extends React.Component {
 			country: iso2,
 			country_code: country_code,
 		})
-		console.log(country_code, iso2)
 	}
 
 	onSendCodePressed = () => {
-		console.log("Code")
 		const phoneFormData = {
 			// phone_no: this.state.phone_no,
 			phone_no: this.state.phone_no,

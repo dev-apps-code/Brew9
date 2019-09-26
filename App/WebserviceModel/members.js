@@ -24,7 +24,7 @@ function getCurrentUser() {
 }
 
 function saveCurrentUser(profile) {
-  console.log("Saving")
+  
   AsyncStorage.setItem("profile", JSON.stringify(profile))
 }
 export default {
@@ -47,7 +47,6 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      console.log("Load", payload)
       return { ...state, profile: payload, isReady: true }
     },
     saveCurrentUser(state,{payload}) {
@@ -199,7 +198,6 @@ export default {
         const eventObject = new EventObject(json)
 
         if (eventObject.success == true) {
-          console.log("Success")
           yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
@@ -218,7 +216,6 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          console.log("Success Activate")
           yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
@@ -226,7 +223,6 @@ export default {
     },
     *loadCurrentUserFromCache({ payload }, { call, put, select }) {
       try {
-        console.log("Loading from cache")
         const json = yield call(getCurrentUser)
         const currentUser = JSON.parse(json)
 
