@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Text, TouchableOpacity, View, StyleSheet, Image, FlatList } from "react-native"
+import { Text, TouchableOpacity, View, StyleSheet, Image, FlatList, ActivityIndicator } from "react-native"
 import Card from "./Card"
 import React from "react"
 import {alpha, fontAlpha} from "../common/size";
@@ -15,7 +15,7 @@ import {createAction} from "../Utils";
 import {connect} from "react-redux";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class TopUpWallet extends React.Component {
 
@@ -54,13 +54,12 @@ export default class TopUpWallet extends React.Component {
 	}
 
 	loadTopUpProducts(){
-		const { dispatch } = this.props
+		const { dispatch, members } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-					loading: false,
 					data: eventObject.result,
 				},function () {
 					if (eventObject.result.length > 0) {
@@ -70,9 +69,12 @@ export default class TopUpWallet extends React.Component {
 					}
 				}.bind(this))
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new TopUpProductsRequestObject()
-		obj.setUrlId(1) //Hardcoded
+		obj.setUrlId(members.company_id)
 		dispatch(
 			createAction('companies/loadTopUpProducts')({
 				object:obj,
@@ -118,6 +120,7 @@ export default class TopUpWallet extends React.Component {
 			image={item.image}
 			price={item.price}
 			index={index}
+			currency={this.props.members.currency}
 			selected={this.state.selected}
 			onPressItem={this.onTopUpCardPressed}
 		/>
@@ -132,6 +135,11 @@ export default class TopUpWallet extends React.Component {
 			{/*	<Text*/}
 			{/*		style={styles.messageText}>Please contact customer service for top up receipt, orders will no longer be issued.</Text>*/}
 			{/*</View>*/}
+			{ this.state.loading && (
+				<View style={[styles.container, styles.horizontal]}>
+					<ActivityIndicator size="large" />
+				</View>
+			)}
 			<View
 				style={styles.topuplistFlatListViewWrapper}>
 				<FlatList
@@ -144,7 +152,7 @@ export default class TopUpWallet extends React.Component {
 			<View
 				style={styles.topUpView}>
 				<Text
-					style={styles.selectedValueText}>{this.state.selected_price ? this.state.selected_price : '' }</Text>
+					style={styles.selectedValueText}>{this.props.members.currency}{this.state.selected_price ? this.state.selected_price : '' }</Text>
 				<View
 					style={{
 						flex: 1,
@@ -164,9 +172,10 @@ const styles = StyleSheet.create({
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
+		width: 70 * alpha,
 	},
 	navigationBarItem: {
-
+		width: "100%",
 	},
 	navigationBarItemTitle: {
 		color: "black",
@@ -175,6 +184,15 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemIcon: {
 		tintColor: "black",
+	},
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
 	},
 	topUpWalletView: {
 		backgroundColor: "rgb(248, 248, 248)",

@@ -68,12 +68,13 @@ export default class MissionCenter extends React.Component {
 
 const styles = StyleSheet.create({
     headerLeftContainer: {
-        flexDirection: "row",
-        marginLeft: 8 * alpha,
-    },
-    navigationBarItem: {
-
-    },
+		flexDirection: "row",
+		marginLeft: 8 * alpha,
+		width: 70 * alpha,
+	},
+	navigationBarItem: {
+		width: "100%",
+	},
     navigationBarItemTitle: {
         color: "black",
         fontFamily: "DINPro-Bold",

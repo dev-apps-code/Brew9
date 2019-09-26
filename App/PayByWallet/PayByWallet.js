@@ -25,7 +25,7 @@ export default class PayByWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Pay By Wallet",
+			title: "QR Code",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -236,9 +236,10 @@ const styles = StyleSheet.create({
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
+		width: 70 * alpha,
 	},
 	navigationBarItem: {
-
+		width: "100%",
 	},
 	navigationBarItemTitle: {
 		color: "black",

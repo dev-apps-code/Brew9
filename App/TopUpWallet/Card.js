@@ -77,7 +77,7 @@ export default class Card extends React.Component {
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.valueText}>{this.props.price}</Text>
+									style={styles.valueText}>{this.props.currency}{this.props.price}</Text>
 								<View
 									style={{
 										flex: 1,

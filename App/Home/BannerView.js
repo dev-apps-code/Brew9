@@ -73,14 +73,16 @@ export default class BannerView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    navigationBarItem: {
-    },
     navigationBarItemIcon: {
         tintColor: "rgb(0, 194, 236)",
     },
     headerLeftContainer: {
         flexDirection: "row",
         marginLeft: 8 * alpha,
+        width: 70 * alpha,
+    },
+    navigationBarItem: {
+        width: "100%"
     },
     page1View: {
         backgroundColor: "rgb(243, 243, 243)",

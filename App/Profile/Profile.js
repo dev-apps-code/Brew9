@@ -148,7 +148,7 @@ export default class Profile extends React.Component {
 		const { members } = this.props
 
 		navigate("WebCommon", {
-			title: 'FAQs',
+			title: 'About Brew9',
 			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
 		})
 	}
@@ -276,7 +276,7 @@ export default class Profile extends React.Component {
 										<Text
 											style={styles.rewardvalueText}>{members.voucher_items_count}</Text>
 										<Text
-											style={styles.rewardText}>Reward</Text>
+											style={styles.rewardText}>Voucher</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onRewardButtonPressed}
@@ -329,7 +329,7 @@ export default class Profile extends React.Component {
 									style={{
 										position: "absolute",
 										alignSelf: "center",
-										width: 54 * alpha,
+										flex: 1,
 										top: 17 * alpha,
 										height: 55 * alpha,
 										alignItems: "center",
@@ -355,7 +355,7 @@ export default class Profile extends React.Component {
 										</View>
 									</View>
 									<Text
-										style={styles.vipClubText}>VIP Club</Text>
+										style={styles.vipClubText}>Member Center</Text>
 								</View>
 
 							</TouchableOpacity>
@@ -374,7 +374,7 @@ export default class Profile extends React.Component {
 									style={{
 										position: "absolute",
 										alignSelf: "center",
-										width: 85 * alpha,
+										flex: 1,
 										top: 22 * alpha,
 										height: 50 * alpha,
 										alignItems: "center",

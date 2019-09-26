@@ -188,15 +188,18 @@ export default class Confirmation extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    navigationBarItem: {
-    },
+    headerLeftContainer: {
+		flexDirection: "row",
+		marginLeft: 8 * alpha,
+		width: 70 * alpha,
+	},
+	navigationBarItem: {
+		width: "100%",
+	},
     navigationBarItemIcon: {
         tintColor: "rgb(0, 194, 236)",
     },
-    headerLeftContainer: {
-        flexDirection: "row",
-        marginLeft: 8 * alpha,
-    },
+   
     confirmationView: {
         backgroundColor: "transparent",
         flex: 1,
