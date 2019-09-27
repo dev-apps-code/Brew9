@@ -384,7 +384,6 @@ const styles = StyleSheet.create({
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
-		width: 70 * alpha,
 	},
 	navigationBarItem: {
 		width: "100%",
@@ -395,6 +394,7 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
+		resizeMode: "contain",
 		width: 18 * alpha,
 		height: 18 * alpha,
 		tintColor: "black",
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	lineView: {
-		backgroundColor: "rgb(228, 228, 228)",
+		backgroundColor: "transparent",
 		width: 74 * alpha,
 		height: 2 * alpha,
 	},
