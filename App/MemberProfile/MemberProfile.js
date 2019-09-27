@@ -707,7 +707,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	avatarImage: {
-		backgroundColor: "rgba(164, 163, 163, 0.41)",
+		backgroundColor: "transparent",
 		borderRadius: 40 * alpha,
 		resizeMode: "contain",
 		position: "absolute",

@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 	avatarImage: {
-		backgroundColor: "rgba(164, 163, 163, 0.41)",
+		backgroundColor: "transparent",
 		borderRadius: 24 * alpha,
 		resizeMode: "center",
 		width: 48 * alpha,

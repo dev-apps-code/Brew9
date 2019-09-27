@@ -6,10 +6,10 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {View, WebView, StyleSheet, TouchableOpacity, Image} from "react-native"
+import {View, StyleSheet, TouchableOpacity, Image} from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../common/size";
-
+import { WebView } from 'react-native-webview';
 
 export default class WebCommon extends React.Component {
 
@@ -55,14 +55,8 @@ export default class WebCommon extends React.Component {
 
 
 	render() {
-
-		console.log("Web",this.props.navigation.getParam("web_url", ""))
-		return <View
-				style={styles.commonWebView}>
-				<WebView
-					style={styles.webviewWebView}
-					source={{uri: this.props.navigation.getParam("web_url", "")}}/>
-			</View>
+		return <WebView source={{uri: this.props.navigation.getParam("web_url", "")}}/>
+					
 	}
 }
 
@@ -86,7 +80,7 @@ const styles = StyleSheet.create({
 		tintColor: "black",
 	},
 	commonWebView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		flex: 1,
 	},
 	webviewWebView: {

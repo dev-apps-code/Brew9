@@ -58,45 +58,66 @@ export default class PickUp extends React.Component {
 	}
 
 	render() {
-
+	
 		return <View
-			style={styles.iphone8Copy2View}>
-			<View
-				style={styles.noOrderView}>
+				style={styles.iphone8Copy2View}>
 				<View
-					style={styles.group2View}>
-					<Image
-						source={require("./../../assets/images/brew9-doodle-09-3.png")}
-						style={styles.brew9Doodle09Image}/>
+					style={styles.noOrderView}>
 					<View
-						style={styles.groupView}>
-						<Text
-							style={styles.youHavenTMakeAnyText}>You haven’t make any order yet.</Text>
-						<Text
-							style={styles.grabYoursNowText}>Grab yours now!</Text>
+						style={styles.viewView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								alignSelf: "center",
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								style={styles.centerView}>
+								<Image
+									source={require("./../../assets/images/brew9-doodle-09-3.png")}
+									style={styles.logoImage}/>
+								<View
+									style={styles.messageView}>
+									<Text
+										style={styles.youHavenTMakeAnyText}>You haven’t make any order yet.</Text>
+									<Text
+										style={styles.grabYoursNowText}>Grab yours now!</Text>
+								</View>
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								alignSelf: "center",
+								width: 185 * alpha,
+								bottom: 23 * alpha,
+								height: 72 * alpha,
+								justifyContent: "flex-end",
+								alignItems: "center",
+							}}>
+							<TouchableOpacity
+								onPress={this.onOrderPressed}
+								style={styles.orderButton}>
+								<Text
+									style={styles.orderButtonText}>Order</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								onPress={this.onOrderHistoryPressed}
+								style={styles.orderHistoryButton}>
+								<Text
+									style={styles.orderHistoryButtonText}>Order History</Text>
+								<Image
+									source={require("./../../assets/images/group-2.png")}
+									style={styles.orderHistoryButtonImage}/>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</View>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-				<TouchableOpacity
-					onPress={this.onOrderPressed}
-					style={styles.orderButton}>
-					<Text
-						style={styles.orderButtonText}>Order</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={this.onOrderHistoryPressed}
-					style={styles.orderHistoryButton}>
-					<Text
-						style={styles.orderHistoryButtonText}>Order History</Text>
-					<Image
-						source={require("./../../assets/images/group-2.png")}
-						style={styles.orderHistoryButtonImage}/>
-				</TouchableOpacity>
 			</View>
-		</View>
 	}
 }
 
@@ -115,20 +136,24 @@ const styles = StyleSheet.create({
 		marginBottom: 70 * alpha,
 		alignItems: "center",
 	},
-	group2View: {
+	viewView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		width: 185 * alpha,
+	},
+	centerView: {
 		backgroundColor: "transparent",
 		width: 181 * alpha,
 		height: 140 * alpha,
-		marginTop: 173 * alpha,
 		alignItems: "center",
 	},
-	brew9Doodle09Image: {
+	logoImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: 65 * alpha,
 		height: 89 * alpha,
 	},
-	groupView: {
+	messageView: {
 		backgroundColor: "transparent",
 		width: 180 * alpha,
 		height: 35 * alpha,
@@ -136,13 +161,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	youHavenTMakeAnyText: {
-		backgroundColor: "transparent",
 		color: "rgb(134, 134, 134)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		backgroundColor: "transparent",
 	},
 	grabYoursNowText: {
 		backgroundColor: "transparent",
@@ -177,10 +202,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	orderHistoryButtonImage: {
-		resizeMode: "contain",
-		marginLeft: 10 * alpha,
-	},
 	orderHistoryButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
@@ -189,7 +210,6 @@ const styles = StyleSheet.create({
 		padding: 0,
 		width: 113 * alpha,
 		height: 16 * alpha,
-		marginBottom: 23 * alpha,
 	},
 	orderHistoryButtonText: {
 		color: "rgb(176, 176, 176)",
@@ -199,5 +219,8 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
+	orderHistoryButtonImage: {
+		resizeMode: "contain",
+		marginLeft: 10 * alpha,
+	},
 })
-

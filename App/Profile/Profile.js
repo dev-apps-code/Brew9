@@ -738,8 +738,8 @@ const styles = StyleSheet.create({
 		height: 213 * alpha,
 	},
 	profilePicImage: {
-		resizeMode: "center",
-		backgroundColor: "rgba(164, 163, 163, 0.41)",
+		resizeMode: "contain",
+		backgroundColor: "transparent",
 		borderRadius: 29 * alpha,
 		width: 58 * alpha,
 		height: 58 * alpha,
