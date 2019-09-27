@@ -129,7 +129,7 @@ export default class MemberCenter extends React.Component {
 					<View
 						style={styles.profileView}>
 						<Image
-							source={{uri: members.image}}
+							source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
 							style={styles.avatarImage}/>
 						<View
 							pointerEvents="box-none"
@@ -283,7 +283,7 @@ export default class MemberCenter extends React.Component {
 				</View>
 				<View
 					style={styles.lineTwoView}/>
-				<View
+				{/* <View
 					style={styles.nextLevelRewardView}>
 					<View
 						pointerEvents="box-none"
@@ -375,7 +375,7 @@ export default class MemberCenter extends React.Component {
 							</View>
 						</View>
 					</View>
-				</View>
+				</View> */}
 			</View>
 	}
 }
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
 	avatarImage: {
 		backgroundColor: "transparent",
 		borderRadius: 24 * alpha,
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 48 * alpha,
 		height: 48 * alpha,
 		marginLeft: 21 * alpha,
