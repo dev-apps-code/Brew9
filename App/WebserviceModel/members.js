@@ -44,14 +44,15 @@ export default {
           ...state,
           profile:null,
           isReady: false,
+          userAuthToken: "",
         }
      },
     loadCurrentUser(state, { payload }) {
-      return { ...state, profile: payload, isReady: true }
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     saveCurrentUser(state,{payload}) {
       saveCurrentUser(payload)
-      return { ...state, profile: payload, isReady: true }
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
   },
   effects: {
@@ -59,7 +60,7 @@ export default {
     {
       try {
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
           storePushToken,
           authtoken,
@@ -75,8 +76,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        // const authtoken = yield select(state => state.member.userAuthToken)
-        const authtoken = ""
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             qrCode,
             authtoken,
@@ -90,9 +90,8 @@ export default {
     *loadNotifications({ payload }, { call, put, select })
     {
       try{
-
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             notifications,
             authtoken,
@@ -107,8 +106,7 @@ export default {
     {
       try{
         const { object, callback } = payload
-        // const authtoken = yield select(state => state.userAuthToken)
-        const authtoken = ""
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             profile,
             authtoken,
@@ -125,14 +123,16 @@ export default {
       try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             updateProfile,
             authtoken,
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
@@ -141,7 +141,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             updatePhoneNumber,
             authtoken,
@@ -157,7 +157,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             verifyPhoneNumberUpdate,
             authtoken,
@@ -173,7 +173,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             login,
             authtoken,
@@ -189,7 +189,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             loginWithFacebook,
             authtoken,
@@ -208,7 +208,7 @@ export default {
       try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             activateAccount,
             authtoken,

@@ -98,10 +98,13 @@ export default class MemberProfile extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({
-					loading: false,
-				})
+				
+			} else {
+				this.refs.toast.show(eventObject.message);
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.image, formData.gender)
 		obj.setUrlId(this.state.members.id)
@@ -112,7 +115,7 @@ export default class MemberProfile extends React.Component {
 			})
 		)
 	}
-
+	
 	loadUpdatePhoneNumber(formData){
 		const { dispatch } = this.props
 		this.setState({ loading: true })
@@ -187,14 +190,15 @@ export default class MemberProfile extends React.Component {
 	}
 
 	checkForm = () => {
-		if (!this.state.gender) {
-			this.refs.toast.show("Please select your gender")
-			return false
-		} else if (!this.state.nickname) {
+		// if (!this.state.gender) {
+		// 	this.refs.toast.show("Please select your gender")
+		// 	return false
+		
+		if (!this.state.nickname) {
 			this.refs.toast.show("Please select a nickname")
 			return false
 		}
-		else if (this.state.dob) {
+		else if (!this.state.dob) {
 			this.refs.toast.show("Please select enter your birthdate")
 			return false
 		}
@@ -383,7 +387,7 @@ export default class MemberProfile extends React.Component {
 
 	render() {
 
-		const { members } = this.state;
+		const { members, image, dob, nickname, gender } = this.state;
 
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
@@ -401,7 +405,7 @@ export default class MemberProfile extends React.Component {
 							height: 80 * alpha,
 						}}>
 						<Image
-							source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
+							source={members.image ? {uri: image} : require("./../../assets/images/avatar.png")}
 							style={styles.avatarImage}/>
 						<TouchableOpacity
 							onPress={this._pickImage}
@@ -444,7 +448,7 @@ export default class MemberProfile extends React.Component {
 								placeholder="Nickname"
 								style={styles.usernameTextInput}
 								onChangeText={(nickname) => this.setState({nickname})}
-								defaultValue={members.nickname}
+								defaultValue={nickname}
 							/>
 						</View>
 					</View>
@@ -520,6 +524,7 @@ export default class MemberProfile extends React.Component {
 								<RadioForm formHorizontal={true} animation={true} >
 									{this.state.gender_options.map((obj, i) => {
 										var onPress = (value, index) => {
+											console.log("Gender",value)
 											this.setState({
 												gender: value,
 												genderIndex: index
@@ -666,6 +671,7 @@ export default class MemberProfile extends React.Component {
 		</View>
 		<Toast ref="toast"
             position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
 		</KeyboardAvoidingView>
 
 	}

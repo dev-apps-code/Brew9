@@ -21,7 +21,7 @@ export default class UsedVoucher extends React.Component {
 	}
 
 	onUsedVoucherPress = () => {
-	
+		
 	}
 
 	render() {

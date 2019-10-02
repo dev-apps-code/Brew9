@@ -325,7 +325,7 @@ export default class MemberReward extends React.Component {
 				display_value={item.voucher.display_value}
 				discount_type={item.voucher.discount_type}
 				used_date={item.used_date}
-				company_id={this.props.company_id}
+				company_id={this.props.members.company_id}
 				expiry_date={item.expiry_date}
 			/>
 		} else if (this.state.used_selected) {

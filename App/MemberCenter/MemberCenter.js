@@ -222,12 +222,12 @@ export default class MemberCenter extends React.Component {
 											flex: 1,
 										}}/>
 									{
-										members.isPremium ? null : <TouchableOpacity
-											onPress={this.onActivateButtonPressed}
-											style={styles.activateButtonButton}>
-											<Text
-												style={styles.activateButtonButtonText}>Activate</Text>
-										</TouchableOpacity>
+										// members.isPremium ? null : <TouchableOpacity
+										// 	onPress={this.onActivateButtonPressed}
+										// 	style={styles.activateButtonButton}>
+										// 	<Text
+										// 		style={styles.activateButtonButtonText}>Activate</Text>
+										// </TouchableOpacity>
 									}
 
 								</View>

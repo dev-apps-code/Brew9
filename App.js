@@ -17,6 +17,7 @@ import SplashScreen from "./App/SplashScreen/SplashScreen"
 import Login from "./App/Login/Login"
 import Checkout from "./App/Checkout/Checkout"
 import CheckoutVoucher from "./App/Checkout/CheckoutVoucher"
+import VoucherDetail from "./App/Checkout/VoucherDetail"
 import Profile from "./App/Profile/Profile"
 import MemberWallet from "./App/MemberWallet/MemberWallet"
 import MemberReward from "./App/MemberReward/MemberReward"
@@ -62,6 +63,9 @@ const PushRouteOne = createStackNavigator({
 	},
 	CheckoutVoucher: {
 		screen: CheckoutVoucher,
+	},
+	VoucherDetail: {
+		screen: VoucherDetail,
 	},
 	BannerView: {
 		screen: BannerView,
