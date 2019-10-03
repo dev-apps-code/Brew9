@@ -52,6 +52,7 @@ export default class Checkout extends React.Component {
 		this.state = {
 			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
+			cart_total: this.props.navigation.getParam("cart_total", 0.00)
 		}
 	}
 
@@ -106,7 +107,7 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const {cart_total} = this.state
+		const {cart_total} = this.state.cart_total
 		const {members } = this.props
 		// if (members.country_code === undefined || members.phone_no === undefined) { 
 		// 	this.refs.toast.show("Please setup your phone number before ordering");
@@ -143,7 +144,7 @@ export default class Checkout extends React.Component {
 		let cart = this.props.navigation.getParam("cart", "")
 		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
 		let members = this.props.members
-		let {cart_total} = this.state
+		let {cart_total} = this.state.cart_total
 
 		const cart_items = cart.map((item, key) => {
 
