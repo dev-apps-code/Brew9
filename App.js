@@ -78,6 +78,17 @@ const PushRouteOne = createStackNavigator({
 	Transaction: {
 		screen: Transaction,
 	},
+	
+	Register: {
+		screen: Register,
+		mode: 'modal',
+		header: 'none'
+	},
+}, {
+	initialRouteName: "Home",
+})
+
+const VerifyStack = createStackNavigator({
 	VerifyUser: {
 		screen: VerifyUser,
 		mode: 'modal',
@@ -88,9 +99,13 @@ const PushRouteOne = createStackNavigator({
 		mode: 'modal',
 		header: 'none'
 	},
+	WebCommon: {
+		screen: WebCommon,
+	},
 }, {
-	initialRouteName: "Home",
+	initialRouteName: "VerifyUser",
 })
+
 
 const PushRouteTwo = createStackNavigator({
 	PickUp: {
@@ -231,6 +246,7 @@ const TabGroupOne = createBottomTabNavigator({
 	PushRouteThree: {
 		screen: PushRouteThree,
 	},
+
 }, {
 	tabBarPosition: "bottom",
 	animationEnabled: true,
@@ -280,6 +296,9 @@ const RootNavigator = createSwitchNavigator({
 	},
 	TabGroupOne: {
 		screen: TabGroupOne,
+	},
+	VerifyStack: {
+		screen: VerifyStack,
 	},
 }, {
 	initialRouteName: "TabGroupOne",

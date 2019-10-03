@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://5f-b6g.jasonfoo.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.5f-b6g.jasonfoo.brew9-app.exp.direct",
-  "ngrokPid": 14322,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 14304
+  "packagerPort": 19003,
+  "packagerPid": 17917
 }

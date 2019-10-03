@@ -100,7 +100,7 @@ export default class ProductCell extends React.Component {
 										bottom: 0 * alpha,
 										justifyContent: "center",
 									}}>
-									<View
+									{/* <View
 										pointerEvents="box-none"
 										style={{
 											width: 74 * alpha,
@@ -145,7 +145,7 @@ export default class ProductCell extends React.Component {
 											</View>
 										}
 
-									</View>
+									</View> */}
 								</View>
 							</View>
 						</View>

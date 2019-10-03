@@ -36,6 +36,7 @@ export default {
     profile: null,
     isReady: false,
     company_id:1,
+    currency:'$',
   },
 
 
@@ -131,6 +132,7 @@ export default {
             authtoken,
             object,
         )
+        console.log("AuthToken", authtoken)
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('saveCurrentUser')(eventObject.result))
@@ -182,7 +184,9 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) { }
+        if (eventObject.success == true) { 
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
