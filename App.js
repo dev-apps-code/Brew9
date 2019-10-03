@@ -46,7 +46,7 @@ import MissionCenter from "./App/MissionCenter/MissionCenter"
 import Confirmation from "./App/Confirmation/Confirmation"
 import FirstScreen from "./App/FirstScreen/FirstScreen"
 import BannerView from "./App/Home/BannerView"
-import VoucherDetail from "./App/MemberReward/VoucherDetail"
+
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'

@@ -52,13 +52,8 @@ export default {
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     saveCurrentUser(state,{payload}) {
-<<<<<<< HEAD
       saveCurrentUserToStorage(payload)
-      return { ...state, profile: payload, userAuthToken:profile.auth_token, isReady: true }
-=======
-      saveCurrentUser(payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
->>>>>>> bef212c3cdf60264ac0230fe0a75a7be7a9a6dd0
     },
   },
   effects: {
@@ -83,10 +78,6 @@ export default {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
-<<<<<<< HEAD
-
-=======
->>>>>>> bef212c3cdf60264ac0230fe0a75a7be7a9a6dd0
         const json = yield call(
             qrCode,
             authtoken,
@@ -116,11 +107,7 @@ export default {
     {
       try{
         const { object, callback } = payload
-<<<<<<< HEAD
-        const authtoken = yield select(state => state.userAuthToken)
-=======
         const authtoken = yield select(state => state.members.userAuthToken)
->>>>>>> bef212c3cdf60264ac0230fe0a75a7be7a9a6dd0
         const json = yield call(
             profile,
             authtoken,

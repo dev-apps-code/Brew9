@@ -193,7 +193,6 @@ export default class Home extends React.Component {
 				}.bind(this))
 			}
 		}
-
 		
 			const obj = new ProductRequestObject()
 			obj.setUrlId(company_id)
