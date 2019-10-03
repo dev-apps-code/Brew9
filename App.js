@@ -90,9 +90,9 @@ const PushRouteOne = createStackNavigator({
 
 const VerifyStack = createStackNavigator({
 	VerifyUser: {
-		screen: VerifyUser,
+		screen: VerifyUser,	
 		mode: 'modal',
-		header: 'none'
+		headerMode: 'none',
 	},
 	Register: {
 		screen: Register,
@@ -103,6 +103,8 @@ const VerifyStack = createStackNavigator({
 		screen: WebCommon,
 	},
 }, {
+	mode: 'modal',
+	headerMode: 'none',
 	initialRouteName: "VerifyUser",
 })
 
@@ -287,21 +289,19 @@ const AuthenticationStack = createStackNavigator({
 	initialRouteName: "Login",
 })
 
-const RootNavigator = createSwitchNavigator({
+const RootNavigator = createStackNavigator({
 	FirstScreen: {
 		screen: FirstScreen,
-	},
-	AuthenticationStack: {
-		screen: AuthenticationStack,
 	},
 	TabGroupOne: {
 		screen: TabGroupOne,
 	},
 	VerifyStack: {
-		screen: VerifyStack,
+		screen: VerifyStack,	
 	},
 }, {
 	initialRouteName: "TabGroupOne",
+    headerMode: 'none',
 })
  
 const app = create(); // 创建dva实例，可传递配置参数。https://dvajs.com/api/#app-dva-opts

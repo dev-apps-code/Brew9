@@ -117,7 +117,7 @@ export default class Checkout extends React.Component {
 			})
 			return
 		} else {
-			navigate("VerifyUser")
+			navigate("VerifyStack")
 			return
 		}
 

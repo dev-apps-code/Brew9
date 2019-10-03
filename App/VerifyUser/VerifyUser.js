@@ -46,6 +46,7 @@ export default class VerifyUser extends React.Component {
 			code: "",
 			isCounting: false,
 		}
+
 	}
 
 	componentDidMount() {
@@ -61,7 +62,7 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onClosePressed = () => {
-		this.props.navigation.goBack()
+		this.props.navigation.navigate('TabGroupOne')
 	}
 
 	onSendPressed = () => {
