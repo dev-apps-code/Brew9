@@ -46,6 +46,8 @@ import MissionCenter from "./App/MissionCenter/MissionCenter"
 import Confirmation from "./App/Confirmation/Confirmation"
 import FirstScreen from "./App/FirstScreen/FirstScreen"
 import BannerView from "./App/Home/BannerView"
+import VerifyUser from "./App/VerifyUser/VerifyUser"
+import Register from "./App/Register/Register"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -75,6 +77,16 @@ const PushRouteOne = createStackNavigator({
 	},
 	Transaction: {
 		screen: Transaction,
+	},
+	VerifyUser: {
+		screen: VerifyUser,
+		mode: 'modal',
+		header: 'none'
+	},
+	Register: {
+		screen: Register,
+		mode: 'modal',
+		header: 'none'
 	},
 }, {
 	initialRouteName: "Home",
@@ -160,7 +172,7 @@ const PushRouteThree = createStackNavigator({
 	},
 	MissionCenter: {
 		screen: MissionCenter,
-	}
+	},
 }, {
 	initialRouteName: "Profile",
 })
@@ -267,23 +279,8 @@ const RootNavigator = createSwitchNavigator({
 		screen: TabGroupOne,
 	},
 }, {
-	mode: "modal",
-	headerMode: "none",
-	initialRouteName: "FirstScreen",
+	initialRouteName: "TabGroupOne",
 })
-//
-// const RootNavigator = createStackNavigator({
-// 	TabGroupOne: {
-// 		screen: TabGroupOne,
-// 	},
-// }, {
-// 	mode: "modal",
-// 	headerMode: "none",
-// 	initialRouteName: "TabGroupOne",
-// })
-
- 
-
  
 const app = create(); // 创建dva实例，可传递配置参数。https://dvajs.com/api/#app-dva-opts
  

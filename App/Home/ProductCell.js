@@ -70,7 +70,7 @@ export default class ProductCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								style={styles.priceText}>{this.props.currency}{parseFloat(this.props.productprice).toFixed(2)}</Text>
+								style={styles.priceText}>${parseFloat(this.props.productprice).toFixed(2)}</Text>
 							<View
 								style={{
 									flex: 1,

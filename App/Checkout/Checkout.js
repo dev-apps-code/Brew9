@@ -10,6 +10,13 @@ import { TextInput, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView 
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
 import {connect} from "react-redux";
+import Modal from "react-native-modal"
+import PhoneInput from 'react-native-phone-input'
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading"
+import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
+import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
+import {createAction, Storage} from "../Utils"
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -44,7 +51,9 @@ export default class Checkout extends React.Component {
 		super(props)
 		this.state = {
 			shop: this.props.navigation.getParam("shop", null),
-			delivery_options: 'pickup'
+			delivery_options: 'pickup',
+			modalVisible: false,
+			
 		}
 	}
 
@@ -94,15 +103,122 @@ export default class Checkout extends React.Component {
 
 	}
 
+	
+	
 	onPayNowPressed = () => {
-
 		const { navigate } = this.props.navigation
 
-		navigate("Transaction", {
-			amount: this.props.navigation.getParam("cart_total", 0.00)
+		if (this.props.members) {
+			navigate("Transaction", {
+				amount: this.props.navigation.getParam("cart_total", 0.00)
+			})
+		} else {
+			navigate("VerifyUser")
+		}
+	}
+
+	onClosePressed = () => {
+		this.setState({ 
+			loginModalVisible: false, 
+			registerModalVisible: false, 
 		})
 	}
 
+	renderRegisterModal = () => {
+		return <View
+				style={styles.registerView}>
+				<View
+					style={styles.modal2View}>
+					<TouchableOpacity
+						onPress={this.onClosePressed}
+						style={styles.close2Button}>
+						<Text
+							style={styles.close2ButtonText}>X</Text>
+					</TouchableOpacity>
+					<View
+						style={styles.nameView}>
+						<TextInput
+							autoCorrect={false}
+							placeholder="Name"
+							style={styles.nameTextInput}/>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<View
+							style={styles.seperatorView}/>
+					</View>
+					<View
+						style={styles.genderView}>
+						<View
+							style={styles.seperatorThreeView}/>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 23 * alpha,
+									marginLeft: 46 * alpha,
+									marginRight: 46 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<View
+									style={styles.ovalView}/>
+								<Text
+									style={styles.maleText}>Male</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<View
+									style={styles.viewView}>
+									<View
+										style={styles.ovalCopy3View}/>
+									<Text
+										style={styles.femaleText}>Female</Text>
+								</View>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.birthdayView}>
+						<View
+							style={styles.seperatorTwoView}/>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<TextInput
+								autoCorrect={false}
+								placeholder="Birthday"
+								style={styles.birthdayTextInput}/>
+						</View>
+					</View>
+					<TouchableOpacity
+						onPress={this.onContinuePressed}
+						style={styles.continueButton}>
+						<Text
+							style={styles.continueButtonText}>Continue</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+	}
+	
 	render() {
 
 		let cart = this.props.navigation.getParam("cart", "")
@@ -139,7 +255,7 @@ export default class Checkout extends React.Component {
 					<Text
 						style={styles.quantityText}>x{item.quantity}</Text>
 					<Text
-						style={styles.cartpriceText}>{this.props.members.currency}{parseFloat(item.price).toFixed(2)}</Text>
+						style={styles.cartpriceText}>${parseFloat(item.price).toFixed(2)}</Text>
 				</View>
 			} else {
 				return <View
@@ -154,7 +270,7 @@ export default class Checkout extends React.Component {
 					<Text
 						style={styles.quantityTwoText}>x{item.quantity}</Text>
 					<Text
-						style={styles.rm20TwoText}>{this.props.members.currency}{parseFloat(item.price).toFixed(2)}</Text>
+						style={styles.rm20TwoText}>${parseFloat(item.price).toFixed(2)}</Text>
 				</View>
 			}
 		})
@@ -504,7 +620,7 @@ export default class Checkout extends React.Component {
 			<View
 				style={styles.totalPayNowView}>
 				<Text
-					style={styles.priceText}>{this.props.members.currency}{this.props.navigation.getParam("cart_total", 0.00)}</Text>
+					style={styles.priceText}>${this.props.navigation.getParam("cart_total", 0.00)}</Text>
 				<View
 					style={{
 						flex: 1,
@@ -516,6 +632,13 @@ export default class Checkout extends React.Component {
 						style={styles.payNowButtonText}>Pay Now</Text>
 				</TouchableOpacity>
 			</View>
+			
+			<Modal isVisible={this.state.registerModalVisible} 
+			style={styles.verifyuserView}>
+				{this.renderRegisterModal()}
+			</Modal>
+			<Toast ref="toast"
+            position="center"/>
 		</View>
 	}
 }
@@ -546,7 +669,7 @@ const styles = StyleSheet.create({
 	scrollviewScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		top: 0,
+		top: 0 * alpha,
 		bottom: 57 * alpha,
 	},
 	branchView: {
@@ -564,7 +687,7 @@ const styles = StyleSheet.create({
 	},
 	branchThreeView: {
 		backgroundColor: "transparent",
-		width: 90 * alpha,
+		width: 120 * alpha,
 		height: 22 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -572,7 +695,7 @@ const styles = StyleSheet.create({
 	branchText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 18,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -595,7 +718,7 @@ const styles = StyleSheet.create({
 	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
 		fontFamily: "Helvetica",
-		fontSize: 10,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -604,7 +727,7 @@ const styles = StyleSheet.create({
 	},
 	selfPickUpView: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(151, 151, 151)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -612,7 +735,7 @@ const styles = StyleSheet.create({
 	},
 	selfPickUpView_selected: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -694,7 +817,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryView: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(151, 151, 151)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -702,7 +825,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryView_selected: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		width: 168 * alpha,
@@ -794,7 +917,7 @@ const styles = StyleSheet.create({
 	},
 	autoFillButton: {
 		backgroundColor: "transparent",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(0, 178, 227)",
 		borderStyle: "solid",
 		flexDirection: "row",
@@ -818,7 +941,7 @@ const styles = StyleSheet.create({
 	},
 	capacityView: {
 		backgroundColor: "white",
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "white",
 		borderStyle: "solid",
 		height: 134 * alpha,
@@ -1206,4 +1329,5 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginRight: 15 * alpha,
 	},
+
 })
