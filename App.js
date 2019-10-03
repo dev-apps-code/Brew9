@@ -94,9 +94,14 @@ const VerifyStack = createStackNavigator({
 		mode: 'modal',
 		headerMode: 'none',
 	},
-	Confirmation: {
-		screen: Confirmation,
-	}
+	Register: {
+		screen: Register,
+		mode: 'modal',
+		header: 'none'
+	},
+	WebCommon: {
+		screen: WebCommon,
+	},
 }, {
 	mode: 'modal',
 	headerMode: 'none',

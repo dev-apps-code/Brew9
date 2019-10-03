@@ -131,8 +131,6 @@ export default class Home extends React.Component {
 				})
 			)
 		}
-		
-	
 	}
 
 	loadShops(){
@@ -954,7 +952,7 @@ export default class Home extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</Animated.View>
-			{this.renderAlertBar(shop)}
+			{/* {this.renderAlertBar(shop)} */}
 			{this.renderBottomBar(cart)}			
 			<Toast ref="toast"
             position="center"/>
@@ -1925,5 +1923,14 @@ const styles = StyleSheet.create({
 		paddingTop: 10*alpha,
 		paddingBottom: 10*alpha,
 		alignSelf: "center",
-	}
+	},
+	container: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10 * alpha,
+    },
 })

@@ -16,9 +16,12 @@ import HudLoading from "../Components/HudLoading"
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
+import CountDown from 'react-native-countdown-component'
+import {KURL_INFO} from "../Utils/server"
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id
 }))
 export default class VerifyUser extends React.Component {
 
@@ -41,6 +44,7 @@ export default class VerifyUser extends React.Component {
 			country: "bn",
 			login_success: false,
 			code: "",
+			isCounting: false,
 		}
 
 	}
@@ -50,7 +54,11 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onTermsAndConditionsPressed = () => {
-	
+		const { navigate } = this.props.navigation
+		navigate("WebCommon", {
+            title: 'Terms and Conditions',
+            web_url: KURL_INFO + '?page=terms_conditions&id=' + this.props.company_id,
+        })
 	}
 
 	onClosePressed = () => {
@@ -93,6 +101,7 @@ export default class VerifyUser extends React.Component {
 			if (eventObject.success) {
 				this.setState({
 					login_success: true,
+					isCounting: true,
 				}, function(){
 					console.log("Login", this.state.login_success)
 				})
@@ -203,12 +212,23 @@ export default class VerifyUser extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-							{ !this.state.login_success  ? <TouchableOpacity
+							{ !this.state.login_success && !this.state.isCounting ? <TouchableOpacity
 								onPress={this.onSendPressed}
 								style={styles.sendButton}>
 								<Text
 									style={styles.sendButtonText}>Send</Text>
-							</TouchableOpacity> : null}
+							</TouchableOpacity> : <CountDown
+								until={120}
+								onFinish={() => this.setState({isCounting: false})}
+								style={styles.sendCountdown}
+								size={7}
+								digitStyle={{backgroundColor: 'transparent', padding: 0, width: 20 * alpha, height: 20 * alpha}}
+								digitTxtStyle={styles.countdownText}
+								separatorStyle={{color: '#000000'}}
+								timeToShow={['M', 'S']}
+								timeLabels={{m: null, s: null}}
+								showSeparator
+							/>}
 						</View>
 					</View>
 					{ this.state.login_success ? <View
@@ -289,7 +309,7 @@ const styles = StyleSheet.create({
 	closeButtonText: {
 		color: "white",
 		fontFamily: "Helvetica",
-		fontSize: 20 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -392,6 +412,24 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 	},
+	sendCountdown: {
+		backgroundColor: "white",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 72 * alpha,
+		height: 26 * alpha,
+		marginRight: 8 * alpha,
+	},
+	countdownText: {
+        color: "rgb(98, 97, 97)",
+        fontFamily: "Helvetica",
+        fontSize: 12 * fontAlpha,
+        fontStyle: "normal",
+        fontWeight: "normal",
+        textAlign: "center",
+    },
 	activationView: {
 		backgroundColor: "white",
 		borderRadius: 7,
@@ -490,4 +528,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		padding: 10 * alpha,
 	},
+	reSendButtonImage: {
+        resizeMode: "contain",
+        marginRight: 10 * alpha,
+    },
 })

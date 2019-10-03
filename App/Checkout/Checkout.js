@@ -53,6 +53,7 @@ export default class Checkout extends React.Component {
 		this.state = {
 			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
+			cart_total: this.props.navigation.getParam("cart_total", 0.00)
 		}
 	}
 
@@ -124,9 +125,6 @@ export default class Checkout extends React.Component {
 			this.refs.toast.show("Please setup your phone number before ordering");
 			return
 		}
-
-		
-		
 	}
 
 	onClosePressed = () => {
