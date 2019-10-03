@@ -108,10 +108,10 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
 		const {members } = this.props
-		if (members.country_code === undefined || members.phone_no === undefined) { 
-			this.refs.toast.show("Please setup your phone number before ordering");
-			return
-		}
+		// if (members.country_code === undefined || members.phone_no === undefined) { 
+		// 	this.refs.toast.show("Please setup your phone number before ordering");
+		// 	return
+		// }
 
 		if (this.props.members) {
 			navigate("Transaction", {
@@ -357,7 +357,7 @@ export default class Checkout extends React.Component {
 							keyboardType="number-pad"
 							autoCorrect={false}
 							placeholder=""
-							value={this.props.members.phone_no}
+							// value={this.props.members.phone_no}
 							style={styles.phoneinputTextInput}/>
 						<TouchableOpacity
 							onPress={this.onAutoFillPressed}
@@ -492,7 +492,7 @@ export default class Checkout extends React.Component {
 										style={styles.group6TwoImage}/> */}
 								</View>
 								<Text
-									style={styles.paymenttypeText}>Brew9 Credit ({members.currency} {parseFloat(members.credits).toFixed(2)})</Text>
+									style={styles.paymenttypeText}>Brew9 Credit (${members ? parseFloat(members.credits).toFixed(2) : 0.00})</Text>
 								{/* <Image
 									source={require("./../../assets/images/group-4-5.png")}
 									style={styles.arrowTwoImage}/> */}
@@ -545,7 +545,7 @@ export default class Checkout extends React.Component {
 			<View
 				style={styles.totalPayNowView}>
 				<Text
-					style={styles.priceText}>{this.props.members.currency}{cart_total}</Text>
+					style={styles.priceText}>${cart_total}</Text>
 				<View
 					style={{
 						flex: 1,
