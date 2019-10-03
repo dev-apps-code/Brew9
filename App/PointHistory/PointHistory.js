@@ -118,7 +118,7 @@ export default class PointHistory extends React.Component {
 		const { members } = this.props
 
 		navigate("WebCommon", {
-			title: 'FAQs',
+			title: 'Point Rules',
 			web_url: KURL_INFO + '?page=point_rules&id=' + members.company_id,
 		})
 	}
@@ -181,24 +181,29 @@ export default class PointHistory extends React.Component {
 						style={styles.transactionHistoryText}>Point History</Text>
 				</View>
 
-				{this.state.loading && (
+				{this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
 						<ActivityIndicator size="large" />
-					</View>
-				)}
-				<View
+					</View> : <View
 					style={styles.pointhistoryFlatListViewWrapper}>
-					<FlatList
-						renderItem={this.renderHistoryFlatListCell}
-						data={this.state.data}
-						style={styles.historyFlatList}
-						refreshing={this.state.isRefreshing}
-						onRefresh={this.onRefresh.bind(this)}
-						onEndReachedThreshold={0.1}
-						onEndReached={this.loadMore.bind(this)}
-						keyExtractor={(item, index) => index.toString()}
-					/>
-				</View>
+						{(!this.state.loading && this.state.data.length > 0) ?
+						<FlatList
+							renderItem={this.renderHistoryFlatListCell}
+							data={this.state.data}
+							style={styles.historyFlatList}
+							refreshing={this.state.isRefreshing}
+							onRefresh={this.onRefresh.bind(this)}
+							onEndReachedThreshold={0.1}
+							onEndReached={this.loadMore.bind(this)}
+							keyExtractor={(item, index) => index.toString()}
+						/> :<View
+						style={styles.blankView}>
+						<Text
+							style={styles.noLabelText}>No Point History</Text>
+					</View>
+						}
+				</View> 
+				}
 			</View>
 		</View>
 	}
@@ -328,5 +333,20 @@ const styles = StyleSheet.create({
 	pointhistoryFlatListViewWrapper: {
 		flex: 1,
 		marginRight: 1,
+	},
+	blankView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	noLabelText: {
+		color: "rgb(149, 149, 149)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
 	},
 })

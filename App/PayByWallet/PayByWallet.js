@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	profilePicImage: {
-		resizeMode: "center",
+		resizeMode: "cover",
 		backgroundColor: "rgb(164, 163, 163)",
 		borderRadius: 37 * alpha,
 		width: 74 * alpha,

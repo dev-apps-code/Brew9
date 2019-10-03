@@ -603,8 +603,13 @@ export default class Home extends React.Component {
 
 	}
 
-	onVariantPressed = (selected_product, selected_variants, key, selected_value) => {
-		selected_variants[key] = selected_value
+	onVariantPressed = (selected_product, selected_variants, key, selected_value, required) => {
+
+		let selected_item = selected_value
+		if (!required && selected_variants[key] === selected_value) {
+			selected_item = null
+		}
+		selected_variants[key] = selected_item
 		let filtered = selected_variants.filter(function(el) { return el })
 		let total = filtered.reduce((a, b) => +a + +b.price, 0)
 		selected_product.calculated_price = (parseFloat(selected_product.price) + parseFloat(total)).toFixed(2)
@@ -623,6 +628,7 @@ export default class Home extends React.Component {
 		const variants = selected_product.variants.map((item, key) => {
 
 			let selected_variants = selected_product.selected_variants
+			let required_variant = item.required
 
 			return <View
 				style={styles.optionsTwoView}
@@ -638,7 +644,7 @@ export default class Home extends React.Component {
 
 							return <TouchableOpacity
 								key={value_key}
-								onPress={() => this.onVariantPressed(selected_product,selected_variants, key, value)}
+								onPress={() => this.onVariantPressed(selected_product,selected_variants, key, value, required_variant)}
 								style={ selected ? styles.selectedButton : styles.choiceFourButton}>
 								<Text
 									style={selected ? styles.selectedButtonText : styles.choiceFourButtonText}>{value.value} { value.price > 0 && (`$${value.price}`)}</Text>

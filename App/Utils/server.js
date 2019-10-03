@@ -1,9 +1,17 @@
 
+<<<<<<< HEAD
 //export const KSERVERURL ='http://139.162.16.119:3050/api'
 export const KURL_INFO = 'http://139.162.16.119:3050/info'
 
 export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO = 'https://4ad4e7e5.ngrok.io/info'
+=======
+// export const KSERVERURL ='http://139.162.16.119:3050/api'
+// export const KURL_INFO = 'http://139.162.16.119:3050/info'
+
+export const KSERVERURL ='https://f7e36e4e.ngrok.io/api'
+export const KURL_INFO = 'https://f7e36e4e.ngrok.io/info'
+>>>>>>> bef212c3cdf60264ac0230fe0a75a7be7a9a6dd0
 
 export const KURL_TERMS_OF_SERVICE =
   'http://innogix.com/co3/privacy_policy.html'
