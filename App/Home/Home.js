@@ -135,13 +135,9 @@ export default class Home extends React.Component {
 	}
 
 	loadShops(){
-<<<<<<< HEAD
-		const { dispatch, members } = this.props
-=======
 		const { dispatch,company_id } = this.props
 
 		this.setState({ loading: true })
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -156,16 +152,9 @@ export default class Home extends React.Component {
 		//Hardcoded
 		var latitude = 11.0
 		var longitude = 11.0
-<<<<<<< HEAD
-
-		const obj = new NearestShopRequestObject(latitude, longitude)
-		// obj.setUrlId(members.company_id)
-		obj.setUrlId(1)
-=======
 	
 		const obj = new NearestShopRequestObject(latitude, longitude)
 		obj.setUrlId(company_id)
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 		dispatch(
 			createAction('shops/loadShops')({
 				object:obj,
@@ -207,17 +196,6 @@ export default class Home extends React.Component {
 			})
 		}
 
-<<<<<<< HEAD
-		const obj = new ProductRequestObject()
-		// obj.setUrlId(members.company_id)
-		obj.setUrlId(1)
-		dispatch(
-			createAction('products/loadStoreProducts')({
-				object: obj,
-				callback
-			})
-		)
-=======
 		
 			const obj = new ProductRequestObject()
 			obj.setUrlId(company_id)
@@ -228,7 +206,6 @@ export default class Home extends React.Component {
 				})
 			)
 		
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	}
 
 	onRefresh() {
@@ -838,8 +815,6 @@ export default class Home extends React.Component {
 
 	render() {
 
-		const { shop } = this.state
-
 		let selected_product = this.get_product(this.state.selected_index)
 		let {shop,cart} = this.state
 
@@ -1099,20 +1074,9 @@ export default class Home extends React.Component {
 					<Text
 						style={styles.checkoutButtonText}>Checkout</Text>
 				</TouchableOpacity>
-<<<<<<< HEAD
-			</View> : null }
-			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
-				{this.renderModalContent(selected_product)}
-			</Modal> : null }
-			<Toast ref="toast"
-            position="center"/>
-		</View>
-
-=======
 			</View>)
 		}
 		return undefined
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	}
 			
 }
@@ -1929,17 +1893,6 @@ const styles = StyleSheet.create({
 		height: 150 * alpha,
 		alignItems: "center",
 	},
-<<<<<<< HEAD
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	horizontal: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		padding: 10 * alpha,
-	},
-=======
 	bottomAlertView:{
 		backgroundColor: "rgb(0, 178, 227)",
 		position: "absolute",
@@ -1958,5 +1911,4 @@ const styles = StyleSheet.create({
 		paddingBottom: 10*alpha,
 		alignSelf: "center",
 	}
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 })

@@ -115,7 +115,6 @@ export default class Checkout extends React.Component {
 			return
 		}
 
-<<<<<<< HEAD
 		if (this.props.members) {
 			navigate("Transaction", {
 				amount: this.props.navigation.getParam("cart_total", 0.00)
@@ -123,6 +122,7 @@ export default class Checkout extends React.Component {
 		} else {
 			navigate("VerifyUser")
 		}
+		
 	}
 
 	onClosePressed = () => {
@@ -130,7 +130,6 @@ export default class Checkout extends React.Component {
 			loginModalVisible: false, 
 			registerModalVisible: false, 
 		})
-=======
 		if (cart_total < parseFloat(members.credits).toFixed(2)){
 			this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 			return
@@ -139,7 +138,6 @@ export default class Checkout extends React.Component {
 		// navigate("Transaction", {
 		// 	amount: cart_total
 		// })
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	}
 
 	renderRegisterModal = () => {
@@ -644,11 +642,7 @@ export default class Checkout extends React.Component {
 			<View
 				style={styles.totalPayNowView}>
 				<Text
-<<<<<<< HEAD
-					style={styles.priceText}>${this.props.navigation.getParam("cart_total", 0.00)}</Text>
-=======
 					style={styles.priceText}>{this.props.members.currency}{cart_total}</Text>
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 				<View
 					style={{
 						flex: 1,

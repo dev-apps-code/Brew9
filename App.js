@@ -48,7 +48,6 @@ import FirstScreen from "./App/FirstScreen/FirstScreen"
 import BannerView from "./App/Home/BannerView"
 import VerifyUser from "./App/VerifyUser/VerifyUser"
 import Register from "./App/Register/Register"
-import VoucherDetail from "./App/MemberReward/VoucherDetail"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -174,12 +173,9 @@ const PushRouteThree = createStackNavigator({
 	MissionCenter: {
 		screen: MissionCenter,
 	},
-<<<<<<< HEAD
-=======
 	VoucherDetail:{
 		screen: VoucherDetail,
 	}
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 }, {
 	initialRouteName: "Profile",
 })
@@ -286,11 +282,6 @@ const RootNavigator = createSwitchNavigator({
 		screen: TabGroupOne,
 	},
 }, {
-<<<<<<< HEAD
-=======
-	mode: "modal",
-	headerMode: "none",
->>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	initialRouteName: "TabGroupOne",
 })
  
