@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList} from "react-native"
+import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../common/size";
 import {connect} from "react-redux";
@@ -69,7 +69,6 @@ export default class Notification extends React.Component {
         const callback = eventObject => {
             if (eventObject.success) {
                 this.setState({
-                    loading: false,
                     data: eventObject.result
                 }, function(){
                     const maxValue = Math.max(...this.state.data.map(o => o.id), 0);
@@ -80,6 +79,9 @@ export default class Notification extends React.Component {
                     this.count_unread()
                 })
             }
+            this.setState({
+                loading: false,
+            })
         }
         const obj = new NotificationsRequestObject()
         obj.setUrlId(members.id)
@@ -161,21 +163,33 @@ export default class Notification extends React.Component {
                         style={{
                             flex: 1,
                         }}/>
+                    { this.state.unread > 0 ?
                     <TouchableOpacity
                         onPress={this.onReadAllPressed}
                         style={styles.readallButton}>
                         <Text
                             style={styles.readallButtonText}>Read All</Text>
                     </TouchableOpacity>
+                    : null
+                    }
                 </View>
-                <View
-                    style={styles.pointhistoryFlatListViewWrapper}>
-                    <FlatList
-                        renderItem={this.renderPointhistoryFlatListCell}
-                        data={this.state.data}
-                        style={styles.pointhistoryFlatList}
-                        keyExtractor={(item, index) => index.toString()}/>
+                    <View
+                        style={styles.pointhistoryFlatListViewWrapper}>
+                        {this.state.loading ?
+                        <View style={[styles.container, styles.horizontal]}>
+                            <ActivityIndicator size="large" />
+                        </View> : (!this.state.loading && this.state.data.length > 0) ?
+                            <FlatList
+                                renderItem={this.renderPointhistoryFlatListCell}
+                                data={this.state.data}
+                                style={styles.pointhistoryFlatList}
+                                keyExtractor={(item, index) => index.toString()}/>
+                            :  <View style={styles.blankView}>
+                                    <Text style={styles.noLabelText}>No Notifications</Text>
+                                </View>
+                     }
                 </View>
+                
             </View>
         </View>
     }
@@ -260,4 +274,28 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
         marginRight: 1,
     },
+    container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
+	},
+    blankView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	noLabelText: {
+		color: "rgb(149, 149, 149)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
 })

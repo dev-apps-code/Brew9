@@ -16,7 +16,9 @@ import {
 	Animated,
 	TouchableHighlight,
 	TextInput,
-	ScrollView, TouchableWithoutFeedback,
+	ScrollView, 
+	TouchableWithoutFeedback,
+	ActivityIndicator,
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -31,6 +33,7 @@ import { alpha, fontAlpha, windowHeight, windowWidth } from "../common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
 import SwitchSelector from "react-native-switch-selector"
+import Toast, {DURATION} from 'react-native-easy-toast'
 import _ from 'lodash'
 
 @connect(({ members }) => ({
@@ -86,7 +89,7 @@ export default class Home extends React.Component {
 			product_category:[],
 			products:[],
 			loading: true,
-			isRefreshing: true,
+			isRefreshing: false,
 			selected_category: 0,
 			profile: [],
 			banners: [],
@@ -106,16 +109,14 @@ export default class Home extends React.Component {
 
 	componentDidMount() {
 		this.loadShops()
-		this.loadStorePushToken()
+		// this.loadStorePushToken()
 	}
 
 	loadStorePushToken() {
 		const { dispatch, members } = this.props
-		this.setState({ isRefreshing: true });
-
 		const callback = eventObject => {
 		  if (eventObject.success) {
-			this.setState({ isRefreshing: false })
+			
 		  }
 		}
 
@@ -140,7 +141,6 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-					loading: false,
 					shop: eventObject.result,
 					products: this.state.products.concat(eventObject.result.menu_banners)
 				}, function () {
@@ -170,8 +170,6 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-					isRefreshing: false,
-					loading: false,
 					data: this.state.data.concat(eventObject.result),
 					total: eventObject.total,
 					page: this.state.page + 1,
@@ -192,6 +190,10 @@ export default class Home extends React.Component {
 					})
 				}.bind(this))
 			}
+			this.setState({
+				isRefreshing: false,
+				loading: false,
+			})
 		}
 		
 			const obj = new ProductRequestObject()
@@ -234,8 +236,11 @@ export default class Home extends React.Component {
 
 	_toggleDelivery = (value) => {
 		this.setState({
-			delivery_options: value
+			delivery_options: 0
 		})
+		if (value) {
+			this.refs.toast.show("Delivery Option Coming Soon");
+		}
 	}
 
 	onSelectCategory = (scoll_index, selected_index) => {
@@ -319,7 +324,7 @@ export default class Home extends React.Component {
 			item={item}
 			quantity={item.quantity}
 			variations={item.selected_variants}
-			currency={this.props.members.currency}
+			// currency={this.props.members.currency}
 			onChangeQuantity={this.onChangeQuantityPress}
 			price={item.price}
 		/>
@@ -561,7 +566,6 @@ export default class Home extends React.Component {
 		this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
 	}
 
-
 	onClosePressed = () => {
 		this.setState({ modalVisible: false })
 	}
@@ -736,7 +740,7 @@ export default class Home extends React.Component {
 								alignItems: "center",
 							}}>
 							<Text
-								style={styles.priceText}>{this.props.members.currency}{selected_product.calculated_price}</Text>
+								style={styles.priceText}>${selected_product.calculated_price}</Text>
 							<View
 								style={{
 									flex: 1,
@@ -815,81 +819,81 @@ export default class Home extends React.Component {
 
 		return <View
 			style={styles.page1View}>
-			{/*<View*/}
-			{/*	style={styles.topsectionView}>*/}
-			{/*	<View*/}
-			{/*		pointerEvents="box-none"*/}
-			{/*		style={{*/}
-			{/*			height: 31 * alpha,*/}
-			{/*			marginLeft: 14 * alpha,*/}
-			{/*			marginRight: 14 * alpha,*/}
-			{/*			marginTop: 4 * alpha,*/}
-			{/*			flexDirection: "row",*/}
-			{/*			alignItems: "flex-start",*/}
-			{/*		}}>*/}
-			{/*		<View*/}
-			{/*			style={styles.branchView}>*/}
-			{/*			<TouchableOpacity*/}
-			{/*				onPress={this.onBranchPressed}*/}
-			{/*				style={styles.branchButton}>*/}
-			{/*				<Text*/}
-			{/*					style={styles.branchButtonText}>Branch</Text>*/}
-			{/*				/!*<Image*!/*/}
-			{/*				/!*	source={require("./../../assets/images/group-22.png")}*!/*/}
-			{/*				/!*	style={styles.branchButtonImage}/>*!/*/}
-			{/*			</TouchableOpacity>*/}
-			{/*		</View>*/}
-			{/*		<View*/}
-			{/*			style={{*/}
-			{/*				flex: 1,*/}
-			{/*			}}/>*/}
-			{/*		<SwitchSelector*/}
-			{/*			options={[*/}
-			{/*				{ label: "PickUp", value: 0 },*/}
-			{/*				{ label: "Delivery", value: 1 }]}*/}
-			{/*			initial={0}*/}
-			{/*			textColor={"#4E4D4D"}*/}
-			{/*			selectedColor={"#FFFFFF"}*/}
-			{/*			buttonColor={"#2A2929"}*/}
-			{/*			borderColor={"#979797"}*/}
-			{/*			backgroundColor={"#D8D8D8"}*/}
-			{/*			style={styles.pickUpDeliveryView}*/}
-			{/*			textStyle={styles.optionText}*/}
-			{/*			fontSize={10 * alpha}*/}
-			{/*			height={32 * alpha}*/}
-			{/*			onPress={(value) => this._toggleDelivery(value)}*/}
-			{/*		/>*/}
-			{/*	</View>*/}
-			{/*	<View*/}
-			{/*		pointerEvents="box-none"*/}
-			{/*		style={{*/}
-			{/*			height: 14 * alpha,*/}
-			{/*			marginLeft: 14 * alpha,*/}
-			{/*			marginRight: 19 * alpha,*/}
-			{/*			marginTop: 7 * alpha,*/}
-			{/*			flexDirection: "row",*/}
-			{/*			alignItems: "flex-start",*/}
-			{/*		}}>*/}
-			{/*		<Text*/}
-			{/*			style={styles.distance1kmText}>Distance 1km</Text>*/}
-			{/*		<View*/}
-			{/*			style={{*/}
-			{/*				flex: 1,*/}
-			{/*			}}/>*/}
-			{/*		<View*/}
-			{/*			style={styles.moreView}>*/}
-			{/*			<TouchableOpacity*/}
-			{/*				onPress={this.onMorePressed}*/}
-			{/*				style={styles.moreButton}>*/}
-			{/*				<Text*/}
-			{/*					style={styles.moreButtonText}>More</Text>*/}
-			{/*			</TouchableOpacity>*/}
-			{/*			<Image*/}
-			{/*				source={require("./../../assets/images/bitmap-14.png")}*/}
-			{/*				style={styles.bitmapImage}/>*/}
-			{/*		</View>*/}
-			{/*	</View>*/}
-			{/*</View>*/}
+			<View
+			style={styles.topsectionView}>
+			<View
+				pointerEvents="box-none"
+				style={{
+					height: 31 * alpha,
+					marginLeft: 10 * alpha,
+					marginRight: 10 * alpha,
+					marginTop: 8 * alpha,
+					flexDirection: "row",
+					alignItems: "flex-start",
+				}}>
+				<View
+					style={styles.branchView}>
+					{/* <TouchableOpacity
+						onPress={this.onBranchPressed}
+						style={styles.branchButton}> */}
+						<Text
+							style={styles.branchButtonText}>{shop ? shop.name : ""}</Text>
+						{/* <Image
+						source={require("./../../assets/images/group-22.png")}
+						style={styles.branchButtonImage}/> */}
+					{/* </TouchableOpacity> */}
+				</View>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+					<SwitchSelector
+						options={[
+							{ label: "PickUp", value: 0 },
+							{ label: "Delivery", value: 1 }]}
+						initial={0}
+						textColor={"#4E4D4D"}
+						selectedColor={"#FFFFFF"}
+						buttonColor={"#2A2929"}
+						borderColor={"#979797"}
+						backgroundColor={"#D8D8D8"}
+						style={styles.pickUpDeliveryView}
+						textStyle={styles.optionText}
+						fontSize={10 * alpha}
+						height={32 * alpha}
+						onPress={(value) => this._toggleDelivery(value)}
+					/>
+				</View>
+				<View
+					pointerEvents="box-none"
+					style={{
+						height: 14 * alpha,
+						marginLeft: 14 * alpha,
+						marginRight: 19 * alpha,
+						marginTop: 7 * alpha,
+						flexDirection: "row",
+						alignItems: "flex-start",
+					}}>
+					{/* <Text
+						style={styles.distance1kmText}>Distance 1km</Text> */}
+					{/* <View
+						style={{
+							flex: 1,
+						}}/>
+					<View
+						style={styles.moreView}>
+						<TouchableOpacity
+							onPress={this.onMorePressed}
+							style={styles.moreButton}>
+							<Text
+								style={styles.moreButtonText}>More</Text>
+						</TouchableOpacity>
+						<Image
+							source={require("./../../assets/images/bitmap-14.png")}
+							style={styles.bitmapImage}/>
+					</View> */}
+				</View>
+			</View>
 			<View
 				style={styles.productsectionView}
 				onLayout={(event) => this.measureView(event)}>
@@ -907,6 +911,11 @@ export default class Home extends React.Component {
 					}}/>
 				<View
 					style={styles.productlistFlatListViewWrapper}>
+					{this.state.loading ?
+						<View style={[styles.container, styles.horizontal]}>
+							<ActivityIndicator size="large" />
+						</View>
+						:
 					<FlatList
 						renderItem={this.renderProductlistFlatListCell}
 						data={this.state.products}
@@ -916,6 +925,7 @@ export default class Home extends React.Component {
 						onRefresh={this.onRefresh.bind(this)}
 						onViewableItemsChanged={this.reachProductIndex}
 						keyExtractor={(item, index) => index.toString()}/>
+					}
 				</View>
 			</View>
 
@@ -1048,7 +1058,7 @@ export default class Home extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.totalpriceText}>{this.props.members.currency}{this.state.cart_total}</Text>
+								style={styles.totalpriceText}>${this.state.cart_total}</Text>
 						</View>
 						<View
 							style={styles.badgeView}>
@@ -1092,11 +1102,12 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		height: 67 * alpha,
+		// height: 67 * alpha,
+		height: 50 * alpha,
 	},
 	branchView: {
 		backgroundColor: "transparent",
-		width: 64 * alpha,
+		width: 200 * alpha,
 		height: 19 * alpha,
 		marginTop: 6 * alpha,
 		flexDirection: "row",
@@ -1123,6 +1134,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		marginRight: 10 * alpha,
 	},
 	groupImage: {
 		resizeMode: "center",
@@ -1224,8 +1236,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		// top: 67 * alpha,
-		top: 0 * alpha,
+		top: 50 * alpha,
+		// top: 0 * alpha,
 		bottom: 0 * alpha,
 		flexDirection: "row",
 	},

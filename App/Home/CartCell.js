@@ -77,7 +77,7 @@ export default class CartCell extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.priceText}>{this.props.currency}{parseFloat(this.props.price).toFixed(2)}</Text>
+								style={styles.priceText}>${parseFloat(this.props.price).toFixed(2)}</Text>
 						</View>
 						<View
 							style={{
