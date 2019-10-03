@@ -98,6 +98,7 @@ export default class Home extends React.Component {
 			selected_index: null,
 			select_quantity: 1,
 			shop: null,
+			delivery:1,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
@@ -235,12 +236,14 @@ export default class Home extends React.Component {
 	}
 
 	_toggleDelivery = (value) => {
-		this.setState({
-			delivery_options: 0
-		})
-		if (value) {
+		
+		if (value === 1) {
 			this.refs.toast.show("Delivery Option Coming Soon");
 		}
+
+		setTimeout(() => {
+			this.setState({delivery: 0})
+			}, 3000);
 	}
 
 	onSelectCategory = (scoll_index, selected_index) => {
@@ -660,21 +663,6 @@ export default class Home extends React.Component {
 
 		return <View
 			style={styles.popOutView}>
-			<View
-				style={styles.imageblockView}>
-				<Image
-					source={{uri : selected_product.image.url}}
-					style={styles.productimageImage}/>
-			</View>
-			<View
-				pointerEvents="box-none"
-				style={{
-					position: "absolute",
-					left: 0 * alpha,
-					right: 0 * alpha,
-					top: 13 * alpha,
-					bottom: 0 * alpha,
-				}}>
 				<View
 					style={styles.topbuttonView}>
 					{/*<TouchableOpacity*/}
@@ -692,6 +680,14 @@ export default class Home extends React.Component {
 					</TouchableOpacity>
 
 				</View>
+			<View
+				style={styles.imageblockView}>
+				<Image
+					source={{uri : selected_product.image.url}}
+					style={styles.productimageImage}/>
+			</View>
+			<View
+				pointerEvents="box-none">				
 				<ScrollView
 					style={styles.contentScrollView}>
 					<View
@@ -740,7 +736,7 @@ export default class Home extends React.Component {
 								alignItems: "center",
 							}}>
 							<Text
-								style={styles.priceText}>${selected_product.calculated_price}</Text>
+								style={styles.priceText}>${ parseFloat(selected_product.calculated_price).toFixed(2)}</Text>
 							<View
 								style={{
 									flex: 1,
@@ -815,7 +811,7 @@ export default class Home extends React.Component {
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,cart} = this.state
+		let {shop,cart,delivery} = this.state
 
 		return <View
 			style={styles.page1View}>
@@ -852,6 +848,7 @@ export default class Home extends React.Component {
 							{ label: "PickUp", value: 0 },
 							{ label: "Delivery", value: 1 }]}
 						initial={0}
+						value={delivery}
 						textColor={"#4E4D4D"}
 						selectedColor={"#FFFFFF"}
 						buttonColor={"#2A2929"}
@@ -894,40 +891,44 @@ export default class Home extends React.Component {
 					</View> */}
 				</View>
 			</View>
-			<View
-				style={styles.productsectionView}
-				onLayout={(event) => this.measureView(event)}>
+			{this.state.loading ?
+						<View style={[styles.loadingIndicator]}>
+						<ActivityIndicator size="large" />
+					</View>
+					:
 				<View
-					style={styles.categorylistFlatListViewWrapper}>
-					<FlatList
-						renderItem={this.renderCategorylistFlatListCell}
-						data={this.state.data}
-						style={styles.categorylistFlatList}
-						keyExtractor={(item, index) => index.toString()}/>
+					style={styles.productsectionView}
+					onLayout={(event) => this.measureView(event)}>
+					<View
+						style={styles.categorylistFlatListViewWrapper}>
+						<FlatList
+							renderItem={this.renderCategorylistFlatListCell}
+							data={this.state.data}
+							style={styles.categorylistFlatList}
+							keyExtractor={(item, index) => index.toString()}/>
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<View
+						style={styles.productlistFlatListViewWrapper}>
+						{this.state.loading ?
+							undefined
+							:
+						<FlatList
+							renderItem={this.renderProductlistFlatListCell}
+							data={this.state.products}
+							ref={(ref) => { this.flatListRef = ref }}
+							style={styles.productlistFlatList}
+							refreshing={this.state.isRefreshing}
+							onRefresh={this.onRefresh.bind(this)}
+							onViewableItemsChanged={this.reachProductIndex}
+							keyExtractor={(item, index) => index.toString()}/>
+						}
+					</View>
 				</View>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-				<View
-					style={styles.productlistFlatListViewWrapper}>
-					{this.state.loading ?
-						<View style={[styles.container, styles.horizontal]}>
-							<ActivityIndicator size="large" />
-						</View>
-						:
-					<FlatList
-						renderItem={this.renderProductlistFlatListCell}
-						data={this.state.products}
-						ref={(ref) => { this.flatListRef = ref }}
-						style={styles.productlistFlatList}
-						refreshing={this.state.isRefreshing}
-						onRefresh={this.onRefresh.bind(this)}
-						onViewableItemsChanged={this.reachProductIndex}
-						keyExtractor={(item, index) => index.toString()}/>
-					}
-				</View>
-			</View>
+			}
 
 			<Animated.View
 				style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]}
@@ -1073,12 +1074,14 @@ export default class Home extends React.Component {
 						</View>
 					</View>
 				</View>
-				<TouchableOpacity
+				<TouchableHighlight
 					onPress={this.onCheckoutPressed}
-					style={styles.checkoutButton}>
+					style={styles.checkoutButton}
+					underlayColor='cyan'
+					>
 					<Text
-						style={styles.checkoutButtonText}>Checkout</Text>
-				</TouchableOpacity>
+						style={styles.checkoutButtonText}>Check Out</Text>
+				</TouchableHighlight>
 			</View>)
 		}
 		return undefined
@@ -1088,6 +1091,9 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
 	navigationBarItem: {
+	},
+	loadingIndicator:{
+		marginTop:100*alpha,
 	},
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
@@ -1331,7 +1337,7 @@ const styles = StyleSheet.create({
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
 		fontFamily: "Helvetica-Bold",
-		fontSize: 11 * alpha,
+		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
@@ -1448,17 +1454,17 @@ const styles = StyleSheet.create({
 		borderRadius: 11 * alpha,
 		position: "absolute",
 		width: "100%",
-		height: "70%",
+		flex: 1,
 	},
 	topbuttonView: {
 		backgroundColor: "transparent",
-		alignSelf: "flex-end",
+		position: 'absolute',
 		width: 67 * alpha,
 		height: 28 * alpha,
-		marginRight: 14 * alpha,
-		flexDirection: "row",
-		justifyContent: "flex-end",
-		alignItems: "flex-start",
+		top: 14 * alpha,
+		right: 14 * alpha,
+		alignItems: "flex-end",
+		zIndex: 999
 	},
 	favouriteButtonImage: {
 		resizeMode: "contain",
@@ -1506,7 +1512,8 @@ const styles = StyleSheet.create({
 	contentScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginTop: 130 * alpha,
+		marginTop: 5 * alpha,
+		maxHeight:250 * alpha,
 	},
 	productView: {
 		backgroundColor: "transparent",
@@ -1562,10 +1569,10 @@ const styles = StyleSheet.create({
 	},
 	optionsTwoView: {
 		backgroundColor: "transparent",
-		width: 334 * alpha,
-		flex: 1,
 		marginTop: 10 * alpha,
 		alignItems: "flex-start",
+		borderRadius:7.0,
+		overflow: "hidden",
 	},
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
@@ -1579,8 +1586,6 @@ const styles = StyleSheet.create({
 	},
 	optionchoiceView: {
 		backgroundColor: "transparent",
-		alignSelf: "stretch",
-		flex: 1,
 		flexWrap: 'wrap',
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
@@ -1591,13 +1596,13 @@ const styles = StyleSheet.create({
 	choiceFourButton: {
 		backgroundColor: "rgb(238, 238, 238)",
 		borderRadius: 2 * alpha,
+		overflow: "hidden",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		flex: 1,
 		height: 28 * alpha,
-		marginRight: 9 * alpha,
+		marginRight: 9* alpha,
 		marginBottom: 4 * alpha,
 		marginTop: 1 * alpha,
 	},
@@ -1608,19 +1613,21 @@ const styles = StyleSheet.create({
 	choiceFourButtonText: {
 		color: "rgb(82, 80, 80)",
 		fontFamily: "Helvetica",
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		marginLeft: 10*alpha,
+		marginRight: 10*alpha,
 	},
 	selectedButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 2 * alpha,
+		overflow: "hidden",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		flex: 1,
 		height: 28 * alpha,
 		marginRight: 9 * alpha,
 		marginBottom: 4 * alpha,
@@ -1633,10 +1640,12 @@ const styles = StyleSheet.create({
 	selectedButtonText: {
 		color: "white",
 		fontFamily: "Helvetica",
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
+		marginLeft: 10*alpha,
+		marginRight: 10*alpha,
 	},
 	optionsView: {
 		backgroundColor: "transparent",
@@ -1662,6 +1671,7 @@ const styles = StyleSheet.create({
 	recommendedButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 2 * alpha,
+		overflow: "hidden",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -1729,7 +1739,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 84 * alpha,
+		marginRight: 10 * alpha,
+		marginLeft: 10 * alpha,
 		height: 27 * alpha,
 	},
 	choiceTwoButtonImage: {
@@ -1892,9 +1903,8 @@ const styles = StyleSheet.create({
 	},
 	imageblockView: {
 		backgroundColor: "white",
-		position: "absolute",
 		width: "100%",
-		top: 21 * alpha,
+		marginTop: 21 * alpha,
 		height: 150 * alpha,
 		alignItems: "center",
 	},

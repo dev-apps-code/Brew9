@@ -189,7 +189,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.topsectionView}>
 						<Image
-							source={ members.premium_membership ? {uri: members.premium_membership.membership_level.image} : {uri: members.free_membership.membership_level.image}}
+							source={ members ? {uri: members.premium_membership.membership_level.image} : {uri: members.free_membership.membership_level.image}}
 							style={styles.backgroundImage}/>
 						<View
 							pointerEvents="box-none"
