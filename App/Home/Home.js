@@ -347,7 +347,7 @@ export default class Home extends React.Component {
 			if (item.clazz == "product") {
 				return <ProductCell
 					navigation={this.props.navigation}
-					currency={"BND"}
+					currency={"$"}
 					index={index}
 					item={item}
 					productname={item.name}
@@ -953,21 +953,27 @@ export default class Home extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</Animated.View>
-			{this.renderBottomBar(shop,cart)}			
-			
+			{this.renderAlertBar(shop)}
+			{this.renderBottomBar(cart)}			
+			<Toast ref="toast"
+            position="center"/>
 			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
 				{this.renderModalContent(selected_product)}
 			</Modal> : null }
 		</View>
 	}
 
-	renderBottomBar(shop,cart){
+	renderAlertBar(shop){
 		if (shop !== null && shop.is_opened === false)  {
-		return (
-			<View style={styles.bottomAlertView}>
-				<Text style={styles.alertViewText}>{shop.alert_message}</Text>
-			</View>)
-		}
+			return (
+				<View style={styles.bottomAlertView}>
+					<Text style={styles.alertViewText}>{shop.alert_message}</Text>
+				</View>)
+			}
+			return undefined
+	}
+	renderBottomBar(cart){
+		
 		if (cart.length > 0) 
 		{
 			return(<View

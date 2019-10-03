@@ -36,6 +36,7 @@ export default {
     profile: null,
     isReady: false,
     company_id:1,
+    currency:'$',
   },
 
 

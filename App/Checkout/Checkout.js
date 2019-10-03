@@ -19,7 +19,8 @@ import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object
 import {createAction, Storage} from "../Utils"
 
 @connect(({ members }) => ({
-	members: members.profile
+	currentMember: members.profile,
+	members: members
 }))
 export default class Checkout extends React.Component {
 
@@ -109,28 +110,35 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
-		const {members } = this.props
-		if (members.country_code === undefined || members.phone_no === undefined) { 
+		const {currentMember } = this.props
+
+		if (currentMember) {
+			navigate("Transaction", {
+				amount: this.props.navigation.getParam("cart_total", 0.00)
+			})
+			return
+		} else {
+			navigate("VerifyUser")
+			return
+		}
+
+		if (currentMember.country_code === undefined || currentMember.phone_no === undefined) { 
 			this.refs.toast.show("Please setup your phone number before ordering");
 			return
 		}
 
-		if (this.props.members) {
-			navigate("Transaction", {
-				amount: this.props.navigation.getParam("cart_total", 0.00)
-			})
-		} else {
-			navigate("VerifyUser")
-		}
+		
 		
 	}
 
 	onClosePressed = () => {
+
+		const {currentMember} = this.props
 		this.setState({ 
 			loginModalVisible: false, 
 			registerModalVisible: false, 
 		})
-		if (cart_total < parseFloat(members.credits).toFixed(2)){
+		if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
 			this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 			return
 		}
@@ -239,9 +247,10 @@ export default class Checkout extends React.Component {
 
 		let cart = this.props.navigation.getParam("cart", "")
 		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
-		let members = this.props.members
+		let currentMember = this.props.member
 		let {cart_total} = this.state
-
+		let phone_no = (currentMember == undefined) ? '' :  currentMember.phone_no  
+		let credits = (currentMember == undefined) ? 0 : parseFloat(currentMember.credits).toFixed(2)
 		const cart_items = cart.map((item, key) => {
 
 			if (item.selected_variants) {
@@ -454,7 +463,7 @@ export default class Checkout extends React.Component {
 							keyboardType="number-pad"
 							autoCorrect={false}
 							placeholder=""
-							value={this.props.members.phone_no}
+							value={phone_no}
 							style={styles.phoneinputTextInput}/>
 						<TouchableOpacity
 							onPress={this.onAutoFillPressed}
@@ -589,7 +598,7 @@ export default class Checkout extends React.Component {
 										style={styles.group6TwoImage}/> */}
 								</View>
 								<Text
-									style={styles.paymenttypeText}>Brew9 Credit ({members.currency} {parseFloat(members.credits).toFixed(2)})</Text>
+									style={styles.paymenttypeText}>Brew9 Credit ({this.props.members.currency} {credits}</Text>
 								{/* <Image
 									source={require("./../../assets/images/group-4-5.png")}
 									style={styles.arrowTwoImage}/> */}

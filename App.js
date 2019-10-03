@@ -46,12 +46,8 @@ import MissionCenter from "./App/MissionCenter/MissionCenter"
 import Confirmation from "./App/Confirmation/Confirmation"
 import FirstScreen from "./App/FirstScreen/FirstScreen"
 import BannerView from "./App/Home/BannerView"
-<<<<<<< HEAD
-
-=======
 import VerifyUser from "./App/VerifyUser/VerifyUser"
 import Register from "./App/Register/Register"
->>>>>>> e8b104d67859be876da718aaf267e81427801597
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -82,11 +78,7 @@ const PushRouteOne = createStackNavigator({
 	Transaction: {
 		screen: Transaction,
 	},
-	VerifyUser: {
-		screen: VerifyUser,
-		mode: 'modal',
-		header: 'none'
-	},
+	
 	Register: {
 		screen: Register,
 		mode: 'modal',
@@ -95,6 +87,17 @@ const PushRouteOne = createStackNavigator({
 }, {
 	initialRouteName: "Home",
 })
+
+const VerifyStack = createStackNavigator({
+	VerifyUser: {
+		screen: VerifyUser,
+		mode: 'modal',
+		header: 'none'
+	},
+}, {
+	initialRouteName: "VerifyUser",
+})
+
 
 const PushRouteTwo = createStackNavigator({
 	PickUp: {
@@ -235,6 +238,7 @@ const TabGroupOne = createBottomTabNavigator({
 	PushRouteThree: {
 		screen: PushRouteThree,
 	},
+
 }, {
 	tabBarPosition: "bottom",
 	animationEnabled: true,
@@ -284,6 +288,9 @@ const RootNavigator = createSwitchNavigator({
 	},
 	TabGroupOne: {
 		screen: TabGroupOne,
+	},
+	VerifyStack: {
+		screen: VerifyStack,
 	},
 }, {
 	initialRouteName: "TabGroupOne",
