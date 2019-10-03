@@ -8,7 +8,7 @@
 
 import { Text, View, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha} from "../common/size"
+import { alpha, fontAlpha, windowHeight} from "../common/size"
 import PhoneInput from 'react-native-phone-input'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import LoginWithFacebookRequestObject from "../Requests/login_with_facebook_request_object"
@@ -87,12 +87,13 @@ export default class Login extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			if (eventObject.success) {
-				this.onVerifyLogin()
-			}
 			this.setState({
 				loading: false,
 			})
+
+			if (eventObject.success) {
+				this.onVerifyLogin()
+			}			
 		}
 		const obj = new LoginWithSmsRequestObject(this.state.phone_no, this.state.country_code)
 		dispatch(
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
-		height: 571 * alpha,
+		height: windowHeight - 100,
 	},
 	logoImage: {
 		resizeMode: "center",

@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
 
 @connect(({ members }) => ({
-    members: members
+    members: members.profile
 }))
 export default class PointShopFullList extends React.Component {
 

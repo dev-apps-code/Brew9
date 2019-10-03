@@ -22,7 +22,9 @@ export default class ValidVoucher extends React.Component {
 	}
 
 	onValidVoucherPress = () => {
-	
+		const { navigate } = this.props.navigation
+		navigate("VoucherDetail",{voucher:this.props.item})
+		console.log("done");
 	}
 
 	onTermsPressed = () => {
@@ -36,7 +38,6 @@ export default class ValidVoucher extends React.Component {
 	}
 
 	render() {
-	
 		return <TouchableWithoutFeedback
 				onPress={this.onValidVoucherPress}>
 				<View
@@ -115,7 +116,7 @@ export default class ValidVoucher extends React.Component {
 									alignItems: "flex-end",
 								}}>
 								<Text
-									style={styles.dateText}>{this.props.expiry_date}</Text>
+									style={styles.dateText}>{this.props.available_date}</Text>
 								<View
 									style={{
 										flex: 1,

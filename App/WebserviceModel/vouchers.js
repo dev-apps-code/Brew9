@@ -20,8 +20,7 @@ export default {
 
                 const { object, callback } = payload
 
-                // const authtoken = yield select(state => state.member.userAuthToken)
-                const authtoken = ""
+                const authtoken = yield select(state => state.members.userAuthToken)
 
                 const json = yield call(
                     getValidVoucher,
@@ -39,8 +38,7 @@ export default {
 
                 const { object, callback } = payload
 
-                // const authtoken = yield select(state => state.member.userAuthToken)
-                const authtoken = ""
+                const authtoken = yield select(state => state.members.userAuthToken)
 
                 const json = yield call(
                     getValidVoucher,
@@ -58,8 +56,8 @@ export default {
 
                 const { object, callback } = payload
 
-                // const authtoken = yield select(state => state.member.userAuthToken)
-                const authtoken = ""
+                const authtoken = yield select(state => state.members.userAuthToken)
+
                 const json = yield call(
                     getValidVoucher,
                     authtoken,

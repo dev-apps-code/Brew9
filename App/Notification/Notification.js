@@ -16,7 +16,7 @@ import NotificationsCell from "./NotificationsCell"
 import * as SecureStore from 'expo-secure-store';
 
 @connect(({ members }) => ({
-    members: members
+    members: members.profile
 }))
 export default class Notification extends React.Component {
 
@@ -84,7 +84,7 @@ export default class Notification extends React.Component {
             })
         }
         const obj = new NotificationsRequestObject()
-        obj.setUrlId(members.member_id)
+        obj.setUrlId(members.id)
         dispatch(
             createAction('members/loadNotifications')({
                 object:obj,

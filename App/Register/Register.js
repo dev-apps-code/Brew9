@@ -54,8 +54,9 @@ export default class Register extends React.Component {
 	}
 
 	onClosePressed = () => {
-	
+		this.props.navigation.goBack()
 	}
+
 
 	render() {
 	

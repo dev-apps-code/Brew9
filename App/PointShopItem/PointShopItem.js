@@ -14,7 +14,7 @@ import {createAction, toTitleCase} from "../Utils";
 import {connect} from "react-redux";
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 
 export default class PointShopItem extends React.Component {

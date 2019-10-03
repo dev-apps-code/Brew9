@@ -52,8 +52,6 @@ export default class Checkout extends React.Component {
 		this.state = {
 			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
-			modalVisible: false,
-			
 		}
 	}
 
@@ -100,14 +98,24 @@ export default class Checkout extends React.Component {
 	}
 
 	onPaymentButtonPressed = () => {
+		
+		// if not enough credit ...
 
+		// if no phone no, ask to update
 	}
 
 	
 	
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
+		const {cart_total} = this.state
+		const {members } = this.props
+		if (members.country_code === undefined || members.phone_no === undefined) { 
+			this.refs.toast.show("Please setup your phone number before ordering");
+			return
+		}
 
+<<<<<<< HEAD
 		if (this.props.members) {
 			navigate("Transaction", {
 				amount: this.props.navigation.getParam("cart_total", 0.00)
@@ -122,6 +130,16 @@ export default class Checkout extends React.Component {
 			loginModalVisible: false, 
 			registerModalVisible: false, 
 		})
+=======
+		if (cart_total < parseFloat(members.credits).toFixed(2)){
+			this.refs.toast.show("You do not have enough credit. Please top up at our counter");
+			return
+		}
+
+		// navigate("Transaction", {
+		// 	amount: cart_total
+		// })
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	}
 
 	renderRegisterModal = () => {
@@ -222,6 +240,9 @@ export default class Checkout extends React.Component {
 	render() {
 
 		let cart = this.props.navigation.getParam("cart", "")
+		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
+		let members = this.props.members
+		let {cart_total} = this.state
 
 		const cart_items = cart.map((item, key) => {
 
@@ -434,13 +455,14 @@ export default class Checkout extends React.Component {
 						<TextInput
 							keyboardType="number-pad"
 							autoCorrect={false}
-							placeholder="Drop your contact, so we can contact you"
+							placeholder=""
+							value={this.props.members.phone_no}
 							style={styles.phoneinputTextInput}/>
 						<TouchableOpacity
 							onPress={this.onAutoFillPressed}
 							style={styles.autoFillButton}>
 							<Text
-								style={styles.autoFillButtonText}>Auto-fill</Text>
+								style={styles.autoFillButtonText}>Update Phone No.</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -495,13 +517,13 @@ export default class Checkout extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.promoCodeText}>Promo Code</Text>
+										style={styles.promoCodeText}>Available Voucher</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.statusText}>No</Text>
+										style={styles.statusText}>-</Text>
 									<Image
 										source={require("./../../assets/images/group-4-5.png")}
 										style={styles.arrowImage}/>
@@ -515,7 +537,7 @@ export default class Checkout extends React.Component {
 							flex: 1,
 						}}/>
 					<Text
-						style={styles.summaryText}>Total {this.props.navigation.getParam("cart_total_quantity",0)} items:</Text>
+						style={styles.summaryText}>Total {cart_total_quantity} {cart_total_quantity>1 ? 'items' : 'item'}</Text>
 				</View>
 				<View
 					style={styles.paymentMethodView}>
@@ -561,16 +583,18 @@ export default class Checkout extends React.Component {
 										<Image
 											source={require("./../../assets/images/group-3-11.png")}
 											style={styles.group3TwoImage}/>
+											
 									</View>
-									<Image
+
+									{/* <Image
 										source={require("./../../assets/images/group-6-6.png")}
-										style={styles.group6TwoImage}/>
+										style={styles.group6TwoImage}/> */}
 								</View>
 								<Text
-									style={styles.paymenttypeText}>C</Text>
-								<Image
+									style={styles.paymenttypeText}>Brew9 Credit ({members.currency} {parseFloat(members.credits).toFixed(2)})</Text>
+								{/* <Image
 									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.arrowTwoImage}/>
+									style={styles.arrowTwoImage}/> */}
 							</View>
 
 
@@ -620,7 +644,11 @@ export default class Checkout extends React.Component {
 			<View
 				style={styles.totalPayNowView}>
 				<Text
+<<<<<<< HEAD
 					style={styles.priceText}>${this.props.navigation.getParam("cart_total", 0.00)}</Text>
+=======
+					style={styles.priceText}>{this.props.members.currency}{cart_total}</Text>
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 				<View
 					style={{
 						flex: 1,
@@ -911,9 +939,9 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
-		width: 212 * alpha,
+		width: 150 * alpha,
 		height: 12 * alpha,
-		marginRight: 15 * alpha,
+		marginRight: 5 * alpha,
 	},
 	autoFillButton: {
 		backgroundColor: "transparent",
@@ -923,8 +951,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		padding: 0,
-		width: 45 * alpha,
+		padding: 5*alpha,
 		height: 24 * alpha,
 	},
 	autoFillButtonImage: {
@@ -1129,7 +1156,7 @@ const styles = StyleSheet.create({
 	},
 	paymenticonView: {
 		backgroundColor: "transparent",
-		width: 26 * alpha,
+		width: 28 * alpha,
 		height: 27 * alpha,
 		marginRight: 1 * alpha,
 	},
@@ -1149,7 +1176,7 @@ const styles = StyleSheet.create({
 		height: 24 * alpha,
 	},
 	paymenttypeText: {
-		color: "white",
+		color: 'rgb(85,85,85)',
 		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",

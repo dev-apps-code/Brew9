@@ -73,9 +73,9 @@ export default class FirstScreen extends React.Component {
             }
         }
         const obj = new ProfileRequestObject()
-
-        if(members.member_id) {
-            obj.setUrlId(members.member_id)
+        
+        if(members.id) {
+            obj.setUrlId(members.id)
             dispatch(
                 createAction('members/loadProfile')({
                     object:obj,
@@ -83,7 +83,6 @@ export default class FirstScreen extends React.Component {
                 })
             )
         }
-
     }
 
     render() {

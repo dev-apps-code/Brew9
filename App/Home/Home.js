@@ -29,7 +29,7 @@ import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
 import BannerCell from "./BannerCell"
 import CartCell from "./CartCell"
-import { alpha, fontAlpha, windowHeight } from "../common/size"
+import { alpha, fontAlpha, windowHeight, windowWidth } from "../common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
 import SwitchSelector from "react-native-switch-selector"
@@ -37,7 +37,8 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import _ from 'lodash'
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id
 }))
 export default class Home extends React.Component {
 
@@ -118,19 +119,29 @@ export default class Home extends React.Component {
 			
 		  }
 		}
-		const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
-		obj.setUrlId(this.props.members.id)
-		dispatch(
-			createAction('members/loadStorePushToken')({
-			object:obj,
-			callback,
-			})
-		)
+
+		if (members != null){
+			const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
+			obj.setUrlId(members.id)
+			dispatch(
+				createAction('members/loadStorePushToken')({
+				object:obj,
+				callback,
+				})
+			)
+		}
+		
 	
 	}
 
 	loadShops(){
+<<<<<<< HEAD
 		const { dispatch, members } = this.props
+=======
+		const { dispatch,company_id } = this.props
+
+		this.setState({ loading: true })
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -145,10 +156,16 @@ export default class Home extends React.Component {
 		//Hardcoded
 		var latitude = 11.0
 		var longitude = 11.0
+<<<<<<< HEAD
 
 		const obj = new NearestShopRequestObject(latitude, longitude)
 		// obj.setUrlId(members.company_id)
 		obj.setUrlId(1)
+=======
+	
+		const obj = new NearestShopRequestObject(latitude, longitude)
+		obj.setUrlId(company_id)
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 		dispatch(
 			createAction('shops/loadShops')({
 				object:obj,
@@ -160,7 +177,7 @@ export default class Home extends React.Component {
 
 	loadStoreProducts() {
 
-		const { dispatch, members } = this.props
+		const { dispatch, company_id } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -190,6 +207,7 @@ export default class Home extends React.Component {
 			})
 		}
 
+<<<<<<< HEAD
 		const obj = new ProductRequestObject()
 		// obj.setUrlId(members.company_id)
 		obj.setUrlId(1)
@@ -199,6 +217,18 @@ export default class Home extends React.Component {
 				callback
 			})
 		)
+=======
+		
+			const obj = new ProductRequestObject()
+			obj.setUrlId(company_id)
+			dispatch(
+				createAction('products/loadStoreProducts')({
+					object: obj,
+					callback
+				})
+			)
+		
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	}
 
 	onRefresh() {
@@ -811,6 +841,7 @@ export default class Home extends React.Component {
 		const { shop } = this.state
 
 		let selected_product = this.get_product(this.state.selected_index)
+		let {shop,cart} = this.state
 
 		return <View
 			style={styles.page1View}>
@@ -948,10 +979,24 @@ export default class Home extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</Animated.View>
+			{this.renderBottomBar(shop,cart)}			
+			
+			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
+				{this.renderModalContent(selected_product)}
+			</Modal> : null }
+		</View>
+	}
 
-			{ this.state.cart.length > 0 ?
-
-			<View
+	renderBottomBar(shop,cart){
+		if (shop !== null && shop.is_opened === false)  {
+		return (
+			<View style={styles.bottomAlertView}>
+				<Text style={styles.alertViewText}>{shop.alert_message}</Text>
+			</View>)
+		}
+		if (cart.length > 0) 
+		{
+			return(<View
 				style={styles.cartView}>
 				<View
 					pointerEvents="box-none"
@@ -1054,6 +1099,7 @@ export default class Home extends React.Component {
 					<Text
 						style={styles.checkoutButtonText}>Checkout</Text>
 				</TouchableOpacity>
+<<<<<<< HEAD
 			</View> : null }
 			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
 				{this.renderModalContent(selected_product)}
@@ -1062,7 +1108,13 @@ export default class Home extends React.Component {
             position="center"/>
 		</View>
 
+=======
+			</View>)
+		}
+		return undefined
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 	}
+			
 }
 
 const styles = StyleSheet.create({
@@ -1877,6 +1929,7 @@ const styles = StyleSheet.create({
 		height: 150 * alpha,
 		alignItems: "center",
 	},
+<<<<<<< HEAD
 	container: {
 		flex: 1,
 		justifyContent: 'center',
@@ -1886,4 +1939,24 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		padding: 10 * alpha,
 	},
+=======
+	bottomAlertView:{
+		backgroundColor: "rgb(0, 178, 227)",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,	
+		width:windowWidth
+	},
+	alertViewText:{
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		paddingTop: 10*alpha,
+		paddingBottom: 10*alpha,
+		alignSelf: "center",
+	}
+>>>>>>> 5f67ff4130904f95e3f513d762472b30aec22393
 })
