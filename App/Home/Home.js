@@ -963,12 +963,12 @@ export default class Home extends React.Component {
 	}
 
 	renderBottomBar(shop,cart){
-		if (shop !== null && shop.is_opened === false)  {
-		return (
-			<View style={styles.bottomAlertView}>
-				<Text style={styles.alertViewText}>{shop.alert_message}</Text>
-			</View>)
-		}
+		// if (shop !== null && shop.is_opened === false)  {
+		// return (
+		// 	<View style={styles.bottomAlertView}>
+		// 		<Text style={styles.alertViewText}>{shop.alert_message}</Text>
+		// 	</View>)
+		// }
 		if (cart.length > 0) 
 		{
 			return(<View

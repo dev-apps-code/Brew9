@@ -104,8 +104,6 @@ export default class Checkout extends React.Component {
 		// if no phone no, ask to update
 	}
 
-	
-	
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
@@ -140,101 +138,6 @@ export default class Checkout extends React.Component {
 		// })
 	}
 
-	renderRegisterModal = () => {
-		return <View
-				style={styles.registerView}>
-				<View
-					style={styles.modal2View}>
-					<TouchableOpacity
-						onPress={this.onClosePressed}
-						style={styles.close2Button}>
-						<Text
-							style={styles.close2ButtonText}>X</Text>
-					</TouchableOpacity>
-					<View
-						style={styles.nameView}>
-						<TextInput
-							autoCorrect={false}
-							placeholder="Name"
-							style={styles.nameTextInput}/>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<View
-							style={styles.seperatorView}/>
-					</View>
-					<View
-						style={styles.genderView}>
-						<View
-							style={styles.seperatorThreeView}/>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 23 * alpha,
-									marginLeft: 46 * alpha,
-									marginRight: 46 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<View
-									style={styles.ovalView}/>
-								<Text
-									style={styles.maleText}>Male</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.viewView}>
-									<View
-										style={styles.ovalCopy3View}/>
-									<Text
-										style={styles.femaleText}>Female</Text>
-								</View>
-							</View>
-						</View>
-					</View>
-					<View
-						style={styles.birthdayView}>
-						<View
-							style={styles.seperatorTwoView}/>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<TextInput
-								autoCorrect={false}
-								placeholder="Birthday"
-								style={styles.birthdayTextInput}/>
-						</View>
-					</View>
-					<TouchableOpacity
-						onPress={this.onContinuePressed}
-						style={styles.continueButton}>
-						<Text
-							style={styles.continueButtonText}>Continue</Text>
-					</TouchableOpacity>
-				</View>
-			</View>
-	}
-	
 	render() {
 
 		let cart = this.props.navigation.getParam("cart", "")
@@ -654,11 +557,6 @@ export default class Checkout extends React.Component {
 						style={styles.payNowButtonText}>Pay Now</Text>
 				</TouchableOpacity>
 			</View>
-			
-			<Modal isVisible={this.state.registerModalVisible} 
-			style={styles.verifyuserView}>
-				{this.renderRegisterModal()}
-			</Modal>
 			<Toast ref="toast"
             position="center"/>
 		</View>
