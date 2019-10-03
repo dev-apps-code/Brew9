@@ -11,7 +11,8 @@ import React from "react"
 import { alpha, fontAlpha } from "../common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
-
+import {createAction} from '../Utils'
+import ProfileRequestObject from '../Requests/profile_request_object.js'
 @connect(({ members }) => ({
 	members: members.profile,
 	free_membership: members.free_membership,
@@ -50,7 +51,27 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
+		this.loadProfile()	
+	}
 
+	loadProfile(){
+		const { dispatch, members } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+					loading: false,
+				})
+			}
+		}
+		const obj = new ProfileRequestObject()
+		obj.setUrlId(members.id)
+		dispatch(
+			createAction('members/loadProfile')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	onLevelPressed = () => {

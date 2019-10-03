@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import Carousel, {Pagination} from 'react-native-snap-carousel'
 
 @connect(({ members }) => ({
-	members: members
+	members: members.profile
 }))
 export default class MembershipInfo extends React.Component {
 

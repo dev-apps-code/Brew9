@@ -166,7 +166,6 @@ export default class MemberReward extends React.Component {
 		this.onAvailablePressed()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
-			onItemPressed: this.onItemPressed,
 		})
 	}
 
@@ -175,9 +174,6 @@ export default class MemberReward extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	onItemPressed = () => {
-
-	}
 
 	onAvailablePressed = () => {
 		const { valid_initial, valid_data, valid_page } = this.state
@@ -320,29 +316,32 @@ export default class MemberReward extends React.Component {
 		if (this.state.valid_selected) {
 			return <ValidVoucher
 				navigation={this.props.navigation}
+				item={item}
 				title={item.voucher.name}
 				description={item.voucher.description}
 				display_value={item.voucher.display_value}
 				discount_type={item.voucher.discount_type}
 				used_date={item.used_date}
 				company_id={this.props.company_id}
-				expiry_date={item.expiry_date}
+				available_date={item.available_date}
 			/>
 		} else if (this.state.used_selected) {
 			return <UsedVoucher
 				navigation={this.props.navigation}
+				item={item}
 				title={item.voucher.name}
 				description={item.voucher.description}
 				used_date={item.used_date}
-				expiry_date={item.expiry_date}
+				available_date={item.available_date}
 			/>
 		} else {
 			return <ExpiredVoucher
 				navigation={this.props.navigation}
+				item={item}
 				title={item.voucher.name}
 				description={item.voucher.description}
 				used_date={item.used_date}
-				expiry_date={item.expiry_date}
+				available_date={item.available_date}
 			/>
 		}
 

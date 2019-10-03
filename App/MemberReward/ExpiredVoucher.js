@@ -57,7 +57,7 @@ export default class ExpiredVoucher extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.dateText}>{this.props.expiry_date}</Text>
+							style={styles.dateText}>{this.props.available_date}</Text>
 					</View>
 					<View
 						pointerEvents="box-none"

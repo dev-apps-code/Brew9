@@ -1,6 +1,6 @@
 // import { btoa } from './node_modules/Base64'
 import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER } from './server'
-
+import Constants from 'expo-constants';
 export class WebserviceHelper {
   // static b64EncodeUnicode(str) {
   //   return btoa(
@@ -17,12 +17,16 @@ export function getBasicAuthentication(authToken) {
 
 export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
-  // console.log(urlString)
+  console.log(urlString)
+  console.log(authtoken)
   return fetch(urlString, {
     method: 'GET',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
+      'Version': Constants.nativeAppVersion,
+      'BuildVersion': Constants.nativeBuildVersion,
+      'Platform': Constants.platform,
       Authorization: getBasicAuthentication(authtoken),
     }
   })
@@ -42,6 +46,9 @@ export function postMethod(authtoken,object) {
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
+      'Version': Constants.nativeAppVersion,
+      'BuildVersion': Constants.nativeBuildVersion,
+      'Platform': Constants.platform,
       Authorization: getBasicAuthentication(authtoken),
     }, body: object.getFormData()
   })
@@ -61,6 +68,9 @@ export function postMultipartMethod(authtoken, object) {
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'multipart/form-data',
+      'Version': Constants.nativeAppVersion,
+      'BuildVersion': Constants.nativeBuildVersion,
+      'Platform': Constants.platform,
       Authorization: getBasicAuthentication(authtoken),
     }, body: object.getFormData()
   })

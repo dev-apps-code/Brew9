@@ -13,7 +13,7 @@ import React from "react"
 import { createBottomTabNavigator } from "react-navigation"
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation"
 
-import SplashScreen from "./App/SplashScreen/SplashScreen"
+
 import Login from "./App/Login/Login"
 import Checkout from "./App/Checkout/Checkout"
 import CheckoutVoucher from "./App/Checkout/CheckoutVoucher"
@@ -45,6 +45,7 @@ import MissionCenter from "./App/MissionCenter/MissionCenter"
 import Confirmation from "./App/Confirmation/Confirmation"
 import FirstScreen from "./App/FirstScreen/FirstScreen"
 import BannerView from "./App/Home/BannerView"
+import VoucherDetail from "./App/MemberReward/VoucherDetail"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -156,6 +157,9 @@ const PushRouteThree = createStackNavigator({
 	},
 	MissionCenter: {
 		screen: MissionCenter,
+	},
+	VoucherDetail:{
+		screen: VoucherDetail,
 	}
 }, {
 	initialRouteName: "Profile",
@@ -265,7 +269,7 @@ const RootNavigator = createSwitchNavigator({
 }, {
 	mode: "modal",
 	headerMode: "none",
-	initialRouteName: "FirstScreen",
+	initialRouteName: "TabGroupOne",
 })
 //
 // const RootNavigator = createStackNavigator({

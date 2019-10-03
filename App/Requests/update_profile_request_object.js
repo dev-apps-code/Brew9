@@ -37,7 +37,7 @@ export function updateProfile(authtoken,object) {
     try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.member.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             updateProfile,
             authtoken,

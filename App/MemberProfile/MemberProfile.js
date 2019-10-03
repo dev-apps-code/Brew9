@@ -64,12 +64,12 @@ export default class MemberProfile extends React.Component {
 			dob: "",
 			nickname: "",
 			image: null,
-			phone_no: "",
+			phone_no:  "",
 			gender_options: [
 				{label: 'Male', value: 0 },
 				{label: 'Female', value: 1 }
 			],
-			gender: 0,
+			gender: -1,
 			genderIndex: 0,
 		}
 	}
@@ -187,7 +187,7 @@ export default class MemberProfile extends React.Component {
 	}
 
 	checkForm = () => {
-		if (!this.state.gender) {
+		if (this.state.gender === -1) {
 			this.refs.toast.show("Please select your gender")
 			return false
 		} else if (!this.state.nickname) {

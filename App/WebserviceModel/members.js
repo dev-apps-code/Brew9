@@ -23,7 +23,7 @@ function getCurrentUser() {
   })
 }
 
-function saveCurrentUser(profile) {
+function saveCurrentUserToStorage(profile) {
   
   AsyncStorage.setItem("profile", JSON.stringify(profile))
 }
@@ -35,6 +35,7 @@ export default {
     userAuthToken: "",
     profile: null,
     isReady: false,
+    company_id:1,
   },
 
 
@@ -50,8 +51,8 @@ export default {
       return { ...state, profile: payload, isReady: true }
     },
     saveCurrentUser(state,{payload}) {
-      saveCurrentUser(payload)
-      return { ...state, profile: payload, isReady: true }
+      saveCurrentUserToStorage(payload)
+      return { ...state, profile: payload, userAuthToken:profile.auth_token, isReady: true }
     },
   },
   effects: {
@@ -75,8 +76,8 @@ export default {
       try{
 
         const { object, callback } = payload
-        // const authtoken = yield select(state => state.member.userAuthToken)
-        const authtoken = ""
+        const authtoken = yield select(state => state.members.userAuthToken)
+
         const json = yield call(
             qrCode,
             authtoken,
@@ -107,8 +108,7 @@ export default {
     {
       try{
         const { object, callback } = payload
-        // const authtoken = yield select(state => state.userAuthToken)
-        const authtoken = ""
+        const authtoken = yield select(state => state.userAuthToken)
         const json = yield call(
             profile,
             authtoken,
@@ -116,6 +116,7 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }

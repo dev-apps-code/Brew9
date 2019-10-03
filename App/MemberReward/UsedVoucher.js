@@ -21,7 +21,8 @@ export default class UsedVoucher extends React.Component {
 	}
 
 	onUsedVoucherPress = () => {
-	
+		const { navigate } = this.props.navigation
+        navigate("VoucherDetail",{voucher:this.props.item})
 	}
 
 	render() {
