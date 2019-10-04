@@ -14,7 +14,9 @@ import {KURL_INFO} from "../Utils/server";
 import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object.js'
 @connect(({ members }) => ({
-	members: members.profile,
+	members:members,
+	company_id:members.company_id,
+	currentMember: members.profile,
 	free_membership: members.free_membership,
 	premium_membership: members.premium_membership
 }))
@@ -55,7 +57,7 @@ export default class Profile extends React.Component {
 	}
 
 	loadProfile(){
-		const { dispatch, members } = this.props
+		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
@@ -65,7 +67,10 @@ export default class Profile extends React.Component {
 			}
 		}
 		const obj = new ProfileRequestObject()
-		obj.setUrlId(members.id)
+		if (currentMember != null){
+			obj.setUrlId(currentMember.id)
+		}
+		
 		dispatch(
 			createAction('members/loadProfile')({
 				object:obj,
@@ -82,8 +87,9 @@ export default class Profile extends React.Component {
 	}
 
 	onVIPPressed = () => {
+		const {  currentMember } = this.props
 
-		if (this.props.members.premium_membership) {
+		if (currentMember.premium_membership) {
 			const { navigate } = this.props.navigation
 
 			navigate("MemberCenter")
@@ -170,26 +176,51 @@ export default class Profile extends React.Component {
 
 	onAboutButtonPressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const {  company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'About Brew9',
-			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
 		})
 	}
 
 	render() {
 
-		const { members } = this.props
+		const { currentMember ,members} = this.props
 
-		return <View
+		var background_photo;
+		var level_name;
+		var display_name;
+		var points;
+		var avatar;
+		var vouchers_count;
+		if (currentMember != null){
+			background_photo =    {uri:currentMember.free_membership.membership_level.image}
+			level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.name : currentMember.free_membership.membership_level.name
+			display_name = currentMember.name ? currentMember.name : currentMember.phone_no
+			points = currentMember.points
+			avatar = {uri: currentMember.image}
+			vouchers_count = currentMember.voucher_items_count
+			credits = parseFloat(currentMember.credits).toFixed(2)
+		}else{
+			background_photo =  {uri:''}
+			level_name = ''
+			display_name = 'Brew 9'
+			points = 0
+			avatar = require("./../../assets/images/avatar.png")
+			vouchers_count = 0
+			credits = 0
+		}
+
+
+		return (<View
 			style={styles.profileView}>
 				<ScrollView
 					style={styles.scrollScrollView}>
 					<View
 						style={styles.topsectionView}>
 						<Image
-							source={ members ? {uri: members.premium_membership.membership_level.image} : {uri: members.free_membership.membership_level.image}}
+							source={ background_photo }
 							style={styles.backgroundImage}/>
 						<View
 							pointerEvents="box-none"
@@ -210,7 +241,7 @@ export default class Profile extends React.Component {
 									alignItems: "flex-start",
 								}}>
 								<Image
-									source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
+									source={avatar} 
 									style={styles.profilePicImage}/>
 								<View
 									pointerEvents="box-none"
@@ -222,17 +253,12 @@ export default class Profile extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.nameText}>{ 
-											members.name ? members.name : 
-											members.nickname ? members.nickname :
-											members.phone_no ? members.phone_no : 
-											members.facebook_id 
-											}</Text>
+										style={styles.nameText}>{ display_name}</Text>
 									<TouchableOpacity
 										onPress={this.onLevelPressed}
 										style={styles.levelButton}>
 										<Text
-											style={styles.levelButtonText}>{members.premium_membership ? members.premium_membership.membership_level.name : members.free_membership.membership_level.name}</Text>
+											style={styles.levelButtonText}>{level_name}</Text>
 									</TouchableOpacity>
 								</View>
 								<View
@@ -275,7 +301,7 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.pointvalueText}>{members.points}</Text>
+											style={styles.pointvalueText}>{points}</Text>
 										<Text
 											style={styles.pointText}>Point</Text>
 									</View>
@@ -299,7 +325,7 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.rewardvalueText}>{members.voucher_items_count}</Text>
+											style={styles.rewardvalueText}>{vouchers_count}</Text>
 										<Text
 											style={styles.rewardText}>Voucher</Text>
 									</View>
@@ -327,7 +353,7 @@ export default class Profile extends React.Component {
 											<Text
 												style={styles.currencyText}>{members.currency}</Text>
 											<Text
-												style={styles.userCreditText}>{parseFloat(members.credits).toFixed(2)}</Text>
+												style={styles.userCreditText}>{credits}</Text>
 										</View>
 										<Text
 											style={styles.walletText}>Wallet</Text>
@@ -731,7 +757,7 @@ export default class Profile extends React.Component {
 					</View>
 				</View>
 			</ScrollView>
-		</View>
+		</View>)
 	}
 }
 
