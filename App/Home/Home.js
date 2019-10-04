@@ -628,6 +628,7 @@ export default class Home extends React.Component {
 
 		let filtered = selected_product.selected_variants.filter(function(el) { return el })
 		let variant_array = filtered.map(a => a.value)
+		let enabled = selected_product.enabled
 
 		const variants = selected_product.variants.map((item, key) => {
 
@@ -794,8 +795,9 @@ export default class Home extends React.Component {
 							style={styles.optionsText}>{variant_array.join(", ")}</Text>
 					</View>
 					<TouchableOpacity
+						disabled={enabled}
 						onPress={() => this.onAddToCartPressed(selected_product)}
-						style={styles.addToCartButton}>
+						style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
 						<Text
 							style={styles.addToCartButtonText}>Add to Cart</Text>
 					</TouchableOpacity>
@@ -1868,8 +1870,14 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-start",
 		marginLeft: 1 * alpha,
 	},
-	addToCartButton: {
+	normal:{
 		backgroundColor: "rgb(0, 178, 227)",
+	},
+	disabled:{
+		backgroundColor: "rgba(0, 178, 227, 0.3)",
+	},
+	addToCartButton: {
+		
 		borderRadius: 4 * alpha,
 		flexDirection: "row",
 		alignItems: "center",

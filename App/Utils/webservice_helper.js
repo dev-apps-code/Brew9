@@ -84,7 +84,7 @@ export function postMultipartMethod(authtoken, object) {
 export function logResponse(description) {
   return function(res) {
       // console.log("Description")
-      // console.log(description, res)
+      console.log(description, res)
       return res
   }
 }
