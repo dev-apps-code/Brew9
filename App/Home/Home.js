@@ -34,7 +34,9 @@ import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
 import SwitchSelector from "react-native-switch-selector"
 import Toast, {DURATION} from 'react-native-easy-toast'
+import ImageViewer from 'react-native-image-zoom-viewer'
 import _ from 'lodash'
+import AutoHeightImage from 'react-native-auto-height-image'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -99,6 +101,9 @@ export default class Home extends React.Component {
 			select_quantity: 1,
 			shop: null,
 			delivery:1,
+			modalGalleryVisible: true,
+			selected_promotion: "",
+			isPromoToggle: false
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
@@ -228,8 +233,12 @@ export default class Home extends React.Component {
 	onBannerPressed = (item,index) => {
 		const { navigate } = this.props.navigation
 
-		navigate("BannerView", {
-			image_url: item.banner_detail_image
+		this.setState({
+			selected_promotion: item.banner_detail_image
+		}, function(){
+			this.setState({
+				isPromoToggle: true
+			})
 		})
 	}
 
@@ -367,6 +376,7 @@ export default class Home extends React.Component {
 					item={item}
 					navigation={this.props.navigation}
 					bannerImage={item.image}
+					detailImage={item.banner_detail_image}
 					onPressItem={this.onBannerPressed}
 				/>
 			}
@@ -568,7 +578,7 @@ export default class Home extends React.Component {
 	}
 
 	onClosePressed = () => {
-		this.setState({ modalVisible: false })
+		this.setState({ modalVisible: false , isPromoToggle: false})
 	}
 
 	onClearPress = () => {
@@ -959,6 +969,8 @@ export default class Home extends React.Component {
 			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
 				{this.renderModalContent(selected_product)}
 			</Modal> : null }
+			
+			{this.renderGallery()}
 		</View>
 	}
 
@@ -1083,6 +1095,28 @@ export default class Home extends React.Component {
 			</View>)
 		}
 		return undefined
+	}
+
+	renderGallery() {
+		const images = [{
+			// Simplest usage.
+			url: this.state.selected_promotion,
+		}]	 
+		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>
+			<TouchableOpacity
+					onPress={this.onClosePressed}
+					style={styles.closeButton}>
+					<Text style={styles.closeButtonText}>X</Text>
+				</TouchableOpacity>
+				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
+				<ScrollView
+            style={{}}>
+            <AutoHeightImage
+                source={{uri:  this.state.selected_promotion}}
+                width={windowWidth}
+                style={styles.bannerImage}/>
+        </ScrollView>
+			</Modal>
 	}
 			
 }
@@ -1486,14 +1520,17 @@ const styles = StyleSheet.create({
 		marginRight: 11 * alpha,
 	},
 	closeButton: {
-		backgroundColor: "rgb(193, 191, 191)",
-		borderRadius: 14 * alpha,
+		backgroundColor: "transparent",
+		borderRadius: 12.5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 28 * alpha,
-		height: 28 * alpha,
+		position: "absolute",
+		width: 25 * alpha,
+		height: 25 * alpha,
+		top: 51 * alpha,
+		right: 23 * alpha,
 	},
 	closeButtonImage: {
 		resizeMode: "contain",
@@ -1502,10 +1539,10 @@ const styles = StyleSheet.create({
 	closeButtonText: {
 		color: "white",
 		fontFamily: "Helvetica",
-		fontSize: 13 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 	},
 	contentScrollView: {
 		backgroundColor: "transparent",
@@ -1932,5 +1969,30 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10 * alpha,
-    },
+	},
+	closeButton: {
+		backgroundColor: "transparent",
+		borderRadius: 12.5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		alignSelf: "flex-end",
+		width: 25 * alpha,
+		height: 25 * alpha,
+		marginRight: 11 * alpha,
+		marginTop: 40 * alpha,
+	},
+	closeButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	closeButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 18 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
 })

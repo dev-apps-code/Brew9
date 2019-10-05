@@ -36,6 +36,7 @@ import PointShopHistory from "./App/PointShopHistory/PointShopHistory"
 import PayByWallet from "./App/PayByWallet/PayByWallet"
 import MemberCenter from "./App/MemberCenter/MemberCenter"
 import WebCommon from "./App/WebCommon/WebCommon"
+import WebCommonModal from "./App/WebCommonModal/WebCommonModal"
 import TopUpWallet from "./App/TopUpWallet/TopUpWallet"
 import OrderReceipt from "./App/OrderReceipt/OrderReceipt"
 import OrderReview from "./App/OrderReview/OrderReview"
@@ -78,7 +79,9 @@ const PushRouteOne = createStackNavigator({
 	Transaction: {
 		screen: Transaction,
 	},
-	
+	WebCommonModal: {
+		screen: WebCommonModal,
+	},
 	Register: {
 		screen: Register,
 		mode: 'modal',
@@ -99,8 +102,8 @@ const VerifyStack = createStackNavigator({
 		mode: 'modal',
 		header: 'none'
 	},
-	WebCommon: {
-		screen: WebCommon,
+	WebCommonModal: {
+		screen: WebCommonModal,
 	},
 }, {
 	mode: 'modal',
