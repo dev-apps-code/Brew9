@@ -5,7 +5,7 @@ export default {
     namespace: 'companies',
 
     state: {
-
+        
     },
 
     reducers: {
@@ -13,7 +13,7 @@ export default {
             return {
                 ...state,
             }
-        }
+        },        
     },
     effects: {
         *loadTopUpProducts({ payload }, { call, put, select })

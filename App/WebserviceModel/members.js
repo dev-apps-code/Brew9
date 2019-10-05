@@ -37,6 +37,7 @@ export default {
     isReady: false,
     company_id:1,
     currency:'$',
+    location:null,
   },
 
 
@@ -51,6 +52,9 @@ export default {
      },
     loadCurrentUser(state, { payload }) {
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
+    },
+    setLocation(state, { payload }) {
+      return { ...state, location: payload}
     },
     saveCurrentUser(state,{payload}) {
       saveCurrentUserToStorage(payload)

@@ -19,12 +19,13 @@ import {
 	ScrollView, 
 	TouchableWithoutFeedback,
 	ActivityIndicator,
+	Platform
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
 import PushRequestObject from '../Requests/push_request_object'
 import { connect } from 'react-redux'
-import { createAction } from '../Utils/index'
+import { createAction, dispatch } from '../Utils/index'
 import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
 import BannerCell from "./BannerCell"
@@ -37,13 +38,18 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import _ from 'lodash'
 import AutoHeightImage from 'react-native-auto-height-image'
+import * as Location from 'expo-location'
+import * as Permissions from 'expo-permissions'
 
-@connect(({ members }) => ({
-	members: members.profile,
-	company_id: members.company_id
+@connect(({ members, shops }) => ({
+	currentMember: members.profile,
+	company_id: members.company_id,
+	location: members.location,
+	selectedShop: shops.selectedShop
 }))
 export default class Home extends React.Component {
 
+	
 	static navigationOptions = ({ navigation }) => {
 
 		const { params = {} } = navigation.state
@@ -94,7 +100,7 @@ export default class Home extends React.Component {
 			isRefreshing: false,
 			selected_category: 0,
 			profile: [],
-			banners: [],
+			menu_banners: [],
 			product_view_height: 0 * alpha,
 			modalVisible: false,
 			selected_index: null,
@@ -108,7 +114,34 @@ export default class Home extends React.Component {
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
 
+	_getLocationAsync = async () => {
+
+		const {dispatch} = this.props
+
+		let { status } = await Permissions.askAsync(Permissions.LOCATION);
+		if (status !== 'granted') {
+			 this.refs.toast.show('Permission to access location was denied')
+		}
+	
+		let location = await Location.getCurrentPositionAsync({});
+
+		dispatch(createAction("members/setLocation")(location));
+	  };
+	
+	  componentDidUpdate(prevProps, prevState) {
+
+		if (prevProps.location != this.props.location) {
+		  this.loadShops()
+		}
+	  }
 	componentWillMount() {
+		if (Platform.OS === 'android' && !Constants.isDevice) {
+			this.setState({
+			  errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+			});
+		  } else {
+			this._getLocationAsync();
+		  }
 		// const { dispatch } = this.props
 		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
@@ -119,16 +152,16 @@ export default class Home extends React.Component {
 	}
 
 	loadStorePushToken() {
-		const { dispatch, members } = this.props
+		const { dispatch, currentMember } = this.props
 		const callback = eventObject => {
 		  if (eventObject.success) {
 			
 		  }
 		}
 
-		if (members != null){
+		if (currentMember != null){
 			const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
-			obj.setUrlId(members.id)
+			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadStorePushToken')({
 				object:obj,
@@ -139,23 +172,22 @@ export default class Home extends React.Component {
 	}
 
 	loadShops(){
-		const { dispatch,company_id } = this.props
+		const { dispatch,company_id,location } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
 					shop: eventObject.result,
-					products: this.state.products.concat(eventObject.result.menu_banners)
+					menu_banners: eventObject.result.menu_banners
 				}, function () {
-
 					this.loadStoreProducts()
 				})
 			}
 		}
-		//Hardcoded
-		var latitude = 11.0
-		var longitude = 11.0
+
+		var latitude = location != null ? location.coords.latitude : null
+		var longitude = location != null ? location.coords.longitude  : null
 	
 		const obj = new NearestShopRequestObject(latitude, longitude)
 		obj.setUrlId(company_id)
@@ -174,7 +206,7 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-					data: this.state.data.concat(eventObject.result),
+					data: eventObject.result,
 					total: eventObject.total,
 					page: this.state.page + 1,
 				},function () {
@@ -188,8 +220,7 @@ export default class Home extends React.Component {
 						index_length = index_length + this.state.data[index].products.length
 					}
 					this.setState({
-						products: this.state.products.concat(items)
-
+						products: this.state.menu_banners.concat(items)
 					}, function () {
 					})
 				}.bind(this))
@@ -573,8 +604,12 @@ export default class Home extends React.Component {
 				this._toggleCart(true)
 			})
 		}
-		this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) + parseInt(this.state.select_quantity))
-		this.state.cart_total = (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
+
+		this.setState({
+			cart_total_quantity: (parseInt(this.state.cart_total_quantity) + parseInt(this.state.select_quantity)),
+			cart_total: (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
+		})
+		
 	}
 
 	onClosePressed = () => {
@@ -638,6 +673,16 @@ export default class Home extends React.Component {
 
 		let filtered = selected_product.selected_variants.filter(function(el) { return el })
 		let variant_array = filtered.map(a => a.value)
+		
+		const {selectedShop} = this.props
+
+		var enabled = selected_product.enabled
+
+		if (selectedShop != null){
+			if (selectedShop.can_order == false){
+				enabled = false
+			}
+		}
 
 		const variants = selected_product.variants.map((item, key) => {
 
@@ -804,8 +849,9 @@ export default class Home extends React.Component {
 							style={styles.optionsText}>{variant_array.join(", ")}</Text>
 					</View>
 					<TouchableOpacity
+						disabled={!enabled}
 						onPress={() => this.onAddToCartPressed(selected_product)}
-						style={styles.addToCartButton}>
+						style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
 						<Text
 							style={styles.addToCartButtonText}>Add to Cart</Text>
 					</TouchableOpacity>
@@ -822,7 +868,7 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery} = this.state
 
 		return <View
-			style={styles.page1View}>
+			style={styles.page1View}>				
 			<View
 			style={styles.topsectionView}>
 			<View
@@ -962,8 +1008,10 @@ export default class Home extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
 			</Animated.View>
-			{/* {this.renderAlertBar(shop)} */}
-			{this.renderBottomBar(cart)}			
+			<View style={styles.bottomAlertView}>
+			{this.renderAlertBar(shop)}
+			{this.renderBottomBar(cart,shop)}			
+			</View>
 			<Toast ref="toast"
             position="center"/>
 			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
@@ -974,16 +1022,33 @@ export default class Home extends React.Component {
 		</View>
 	}
 
-	renderAlertBar(shop){
-		if (shop !== null && shop.is_opened === false)  {
-			return (
-				<View style={styles.bottomAlertView}>
-					<Text style={styles.alertViewText}>{shop.alert_message}</Text>
-				</View>)
+	renderAlertBar(shop){	
+		
+		if (shop !== null)  {
+			if ( shop.is_opened === false){
+				return (
+					<View style={styles.alertView}>
+						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
+					</View>)
 			}
+
+			if (shop.shop_busy_template_message != null){
+
+				const title = shop.shop_busy_template_message.title
+				const template = shop.shop_busy_template_message.template
+
+				return (
+					<View style={styles.alertView}>
+						{/* {title != null && title.length > 0 ?  <Text style={styles.alertViewTitle}>{title}</Text> : undefined} */}
+						<Text style={styles.alertViewText}>{template}</Text>
+					</View>)
+			}
+		}
+		
 			return undefined
 	}
-	renderBottomBar(cart){
+
+	renderBottomBar(cart,shop){
 		
 		if (cart.length > 0) 
 		{
@@ -1305,11 +1370,11 @@ const styles = StyleSheet.create({
 	},
 	cartView: {
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		bottom: 0 * alpha,
-		height: 61 * alpha,
+		// position: "absolute",
+		// left: 0 * alpha,
+		// right: 0 * alpha,
+		// bottom: 0 * alpha,
+		height: 50 * alpha,
 	},
 	totalAmountView: {
 		backgroundColor: "transparent",
@@ -1420,7 +1485,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 10 * alpha,
+		top: 5 * alpha,
 		height: 51 * alpha,
 	},
 	checkoutButtonText: {
@@ -1905,8 +1970,14 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-start",
 		marginLeft: 1 * alpha,
 	},
-	addToCartButton: {
+	normal:{
 		backgroundColor: "rgb(0, 178, 227)",
+	},
+	disabled:{
+		backgroundColor: "rgba(0, 178, 227, 0.3)",
+	},
+	addToCartButton: {
+		
 		borderRadius: 4 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -1943,13 +2014,26 @@ const styles = StyleSheet.create({
 		height: 150 * alpha,
 		alignItems: "center",
 	},
-	bottomAlertView:{
-		backgroundColor: "rgb(0, 178, 227)",
+	bottomAlertView:{	
+		backgroundColor: "darkgray",	
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
 		bottom: 0 * alpha,	
 		width:windowWidth
+	},
+	alertView:{
+		backgroundColor: "darkgray",
+	},
+	alertViewTitle:{
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		paddingTop: 10*alpha,
+		paddingBottom: 5*alpha,
+		alignSelf: "center",
 	},
 	alertViewText:{
 		color: "white",
@@ -1957,8 +2041,8 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		paddingTop: 10*alpha,
-		paddingBottom: 10*alpha,
+		paddingTop: 7*alpha,
+		paddingBottom: 7*alpha,
 		alignSelf: "center",
 	},
 	container: {

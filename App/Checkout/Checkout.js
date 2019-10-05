@@ -18,9 +18,10 @@ import ActivateAccountRequestObject from '../Requests/activate_account_request_o
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
 
-@connect(({ members }) => ({
+@connect(({ members,shops }) => ({
 	currentMember: members.profile,
-	members: members
+	members: members,
+	selectedShop: shops.selectedShop
 }))
 export default class Checkout extends React.Component {
 
@@ -148,9 +149,10 @@ export default class Checkout extends React.Component {
 
 		let cart = this.props.navigation.getParam("cart", "")
 		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
-		let currentMember = this.props.member
+		
 		let {cart_total} = this.state
-		let phone_no = (currentMember == undefined) ? '' :  currentMember.phone_no  
+		let {currentMember, selectedShop} = this.props
+
 		let credits = (currentMember == undefined) ? 0 : parseFloat(currentMember.credits).toFixed(2)
 		const cart_items = cart.map((item, key) => {
 
@@ -223,9 +225,9 @@ export default class Checkout extends React.Component {
 								style={styles.branchThreeView}>
 								<Text
 									style={styles.branchText}>{this.state.shop ? this.state.shop.name : ""}</Text>
-								{/* <Image
+								<Image
 									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.arrowImage2}/> */}
+									style={styles.arrowImage2}/>
 							</View>
 							{/*<View*/}
 							{/*	style={{*/}
@@ -235,124 +237,124 @@ export default class Checkout extends React.Component {
 							{/*	source={require("./../../assets/images/group-8-11.png")}*/}
 							{/*	style={styles.group8Image}/>*/}
 						</View>
-						{/*<View*/}
-						{/*	style={{*/}
-						{/*		flex: 1,*/}
-						{/*	}}/>*/}
-						{/*<Text*/}
-						{/*	style={styles.distance1kmPleaseText}>Distance 1km, please confirm your nearest branch</Text>*/}
+						<View style={{
+								flex: 1,
+						}}/>
+						<Text
+							style={styles.distance1kmPleaseText}>Distance {selectedShop.distance} km, please confirm your nearest branch
+						</Text>
 					</View>
-					{/*<View*/}
-					{/*	pointerEvents="box-none"*/}
-					{/*	style={{*/}
-					{/*		height: 54 * alpha,*/}
-					{/*		marginLeft: 15 * alpha,*/}
-					{/*		marginRight: 15 * alpha,*/}
-					{/*		marginTop: 23 * alpha,*/}
-					{/*		flexDirection: "row",*/}
-					{/*		alignItems: "flex-start",*/}
-					{/*	}}>*/}
-					{/*	<View*/}
-					{/*		style={this.state.delivery_options == 'pickup' ? styles.selfPickUpView_selected : styles.selfPickUpView}>*/}
-					{/*		<View*/}
-					{/*			pointerEvents="box-none"*/}
-					{/*			style={{*/}
-					{/*				position: "absolute",*/}
-					{/*				left: 25 * alpha,*/}
-					{/*				right: 0 * alpha,*/}
-					{/*				bottom: 0 * alpha,*/}
-					{/*				height: 54 * alpha,*/}
-					{/*				flexDirection: "row",*/}
-					{/*				alignItems: "center",*/}
-					{/*			}}>*/}
-					{/*			<Image*/}
-					{/*				source={require("./../../assets/images/pick-up-2.png")}*/}
-					{/*				style={this.state.delivery_options == 'pickup' ? styles.pickUpImage_selected : styles.pickUpImage}/>*/}
-					{/*			<Text*/}
-					{/*				style={this.state.delivery_options == 'pickup' ? styles.selfPickUpText_selected : styles.selfPickUpText}>Self Pick-up</Text>*/}
-					{/*			<View*/}
-					{/*				style={{*/}
-					{/*					flex: 1,*/}
-					{/*				}}/>*/}
-					{/*			{this.state.delivery_options == 'pickup' ? <Image*/}
-					{/*				source={require("./../../assets/images/fill-1-3.png")}*/}
-					{/*				style={styles.tabTwoImage}/> : null}*/}
-					{/*		</View>*/}
-					{/*		<View*/}
-					{/*			pointerEvents="box-none"*/}
-					{/*			style={{*/}
-					{/*				position: "absolute",*/}
-					{/*				alignSelf: "center",*/}
-					{/*				top: 0 * alpha,*/}
-					{/*				bottom: 0 * alpha,*/}
-					{/*				justifyContent: "center",*/}
-					{/*			}}>*/}
-					{/*			<TouchableOpacity*/}
-					{/*				onPress={this.onPickUpButtonPressed}*/}
-					{/*				style={styles.pickupbuttonButton}>*/}
-					{/*				<Text*/}
-					{/*					style={styles.pickupbuttonButtonText}></Text>*/}
-					{/*			</TouchableOpacity>*/}
-					{/*		</View>*/}
-					{/*	</View>*/}
+				{/*	<View
+						pointerEvents="box-none"
+						style={{
+							height: 54 * alpha,
+							marginLeft: 15 * alpha,
+							marginRight: 15 * alpha,
+							marginTop: 23 * alpha,
+							flexDirection: "row",
+							alignItems: "flex-start",
+						}}>
+						<View
+							style={this.state.delivery_options == 'pickup' ? styles.selfPickUpView_selected : styles.selfPickUpView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 25 * alpha,
+									right: 0 * alpha,
+									bottom: 0 * alpha,
+									height: 54 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/pick-up-2.png")}
+									style={this.state.delivery_options == 'pickup' ? styles.pickUpImage_selected : styles.pickUpImage}/>
+								<Text
+									style={this.state.delivery_options == 'pickup' ? styles.selfPickUpText_selected : styles.selfPickUpText}>Self Pick-up</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								{this.state.delivery_options == 'pickup' ? <Image
+									source={require("./../../assets/images/fill-1-3.png")}
+									style={styles.tabTwoImage}/> : null}
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									alignSelf: "center",
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<TouchableOpacity
+									onPress={this.onPickUpButtonPressed}
+									style={styles.pickupbuttonButton}>
+									<Text
+										style={styles.pickupbuttonButtonText}></Text>
+								</TouchableOpacity>
+							</View>
+						</View>
 
 
-					{/*	<View*/}
-					{/*		style={{*/}
-					{/*			flex: 1,*/}
-					{/*		}}/>*/}
+						<View
+							style={{
+								flex: 1,
+							}}/>
 
-					{/*	<View*/}
-					{/*		style={this.state.delivery_options == 'delivery' ? styles.deliveryView_selected : styles.deliveryView}>*/}
-					{/*		<View*/}
-					{/*			pointerEvents="box-none"*/}
-					{/*			style={{*/}
-					{/*				position: "absolute",*/}
-					{/*				left: 36 * alpha,*/}
-					{/*				right: 0 * alpha,*/}
-					{/*				bottom: 0 * alpha,*/}
-					{/*				height: 54 * alpha,*/}
-					{/*				flexDirection: "row",*/}
-					{/*				alignItems: "center",*/}
-					{/*			}}>*/}
-					{/*			<Image*/}
-					{/*				source={require("./../../assets/images/delivery-2.png")}*/}
-					{/*				style={this.state.delivery_options == 'delivery' ? styles.deliveryImage_selected : styles.deliveryImage}/>*/}
-					{/*			<Text*/}
-					{/*				style={this.state.delivery_options == 'delivery' ? styles.deliveryText_selected : styles.deliveryText}>Delivery</Text>*/}
-					{/*			<View*/}
-					{/*				style={{*/}
-					{/*					flex: 1,*/}
-					{/*				}}/>*/}
-					{/*			{this.state.delivery_options == 'delivery' ?*/}
-					{/*				<Image*/}
-					{/*					source={require("./../../assets/images/fill-1-3.png")}*/}
-					{/*					style={styles.tabImage}/>*/}
-					{/*				: null}*/}
-					{/*		</View>*/}
-					{/*		<View*/}
-					{/*			pointerEvents="box-none"*/}
-					{/*			style={{*/}
-					{/*				position: "absolute",*/}
-					{/*				alignSelf: "center",*/}
-					{/*				top: 0 * alpha,*/}
-					{/*				bottom: 0 * alpha,*/}
-					{/*				justifyContent: "center",*/}
-					{/*			}}>*/}
-					{/*			<TouchableOpacity*/}
-					{/*				onPress={this.onDeliveryButtonPressed}*/}
-					{/*				style={styles.deliverybuttonButton}>*/}
-					{/*				<Text*/}
-					{/*					style={styles.deliverybuttonButtonText}></Text>*/}
-					{/*			</TouchableOpacity>*/}
-					{/*		</View>*/}
-					{/*	</View>*/}
-					{/*</View>*/}
-					{/*<View*/}
-					{/*	style={{*/}
-					{/*		flex: 1,*/}
-					{/*	}}/>*/}
+						<View
+							style={this.state.delivery_options == 'delivery' ? styles.deliveryView_selected : styles.deliveryView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 36 * alpha,
+									right: 0 * alpha,
+									bottom: 0 * alpha,
+									height: 54 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Image
+									source={require("./../../assets/images/delivery-2.png")}
+									style={this.state.delivery_options == 'delivery' ? styles.deliveryImage_selected : styles.deliveryImage}/>
+								<Text
+									style={this.state.delivery_options == 'delivery' ? styles.deliveryText_selected : styles.deliveryText}>Delivery</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								{this.state.delivery_options == 'delivery' ?
+									<Image
+										source={require("./../../assets/images/fill-1-3.png")}
+										style={styles.tabImage}/>
+									: null}
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									alignSelf: "center",
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<TouchableOpacity
+									onPress={this.onDeliveryButtonPressed}
+									style={styles.deliverybuttonButton}>
+									<Text
+										style={styles.deliverybuttonButtonText}></Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
 					<View
+						style={{
+							flex: 1,
+						}}/>
+					 <View>
 						style={styles.contactView}>
 						<Text
 							style={styles.contactText}>Contact</Text>
@@ -372,7 +374,7 @@ export default class Checkout extends React.Component {
 							<Text
 								style={styles.autoFillButtonText}>Update Phone No.</Text>
 						</TouchableOpacity>
-					</View>
+					</View> */}
 				</View>
 				{/*<View*/}
 				{/*	style={styles.capacityView}>*/}
@@ -499,7 +501,7 @@ export default class Checkout extends React.Component {
 										style={styles.group6TwoImage}/> */}
 								</View>
 								<Text
-									style={styles.paymenttypeText}>Brew9 Credit ({this.props.members.currency} {credits}</Text>
+									style={styles.paymenttypeText}>Brew9 Credit ({this.props.members.currency} {credits})</Text>
 								{/* <Image
 									source={require("./../../assets/images/group-4-5.png")}
 									style={styles.arrowTwoImage}/> */}
