@@ -8,7 +8,7 @@
 
 import { TouchableOpacity, StyleSheet, Image, Text, View } from "react-native"
 import React from "react"
-import { alpha, fontAlpha} from "../common/size"
+import { alpha, fontAlpha} from "../Common/size"
 import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils"
 import CodeInput from 'react-native-confirmation-code-input'

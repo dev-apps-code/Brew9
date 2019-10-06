@@ -8,7 +8,7 @@
 
 import { Text, TouchableWithoutFeedback, View, TouchableOpacity, Image, StyleSheet } from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 
 
 export default class CartCell extends React.Component {

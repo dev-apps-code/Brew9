@@ -8,7 +8,7 @@
 
 import { Image, Text, View, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 
 export default class Cell extends React.Component {
 

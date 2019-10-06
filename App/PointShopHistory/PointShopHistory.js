@@ -9,7 +9,7 @@
 import {FlatList, View, StyleSheet, TouchableOpacity, Image} from "react-native"
 import Cell from "./Cell"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 
 
 export default class PointShopHistory extends React.Component {

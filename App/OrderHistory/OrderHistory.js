@@ -9,7 +9,7 @@
 import OrderCell from "./OrderCell.js"
 import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
 
 @connect(({ members }) => ({

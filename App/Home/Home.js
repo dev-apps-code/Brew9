@@ -30,7 +30,7 @@ import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
 import BannerCell from "./BannerCell"
 import CartCell from "./CartCell"
-import { alpha, fontAlpha, windowHeight, windowWidth } from "../common/size"
+import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
 import SwitchSelector from "react-native-switch-selector"
@@ -136,8 +136,8 @@ export default class Home extends React.Component {
 		  } else {
 			this._getLocationAsync();
 		  }
-		// const { dispatch } = this.props
-		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
+		const { dispatch } = this.props
+		dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	componentDidMount() {

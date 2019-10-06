@@ -29,6 +29,7 @@ export function verifyPhoneNumberUpdate(authtoken,object) {
 }
 
 export function login(authtoken,object) {
+   console.log("return yes")
    return postMethod(authtoken,object)
 }
 

@@ -8,7 +8,7 @@
 
 import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 import {createAction} from "../Utils";
 import NotificationsRequestObject from "../Requests/notifications_request_object"

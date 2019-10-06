@@ -8,7 +8,7 @@
 
 import {StyleSheet, Image, Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 import {connect} from "react-redux";
 import QrCodeRequestObject from "../Requests/qr_code_request_object";
 import {createAction} from "../Utils";

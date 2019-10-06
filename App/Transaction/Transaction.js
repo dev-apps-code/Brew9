@@ -8,7 +8,7 @@
 
 import React from "react"
 import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 
 @connect(({ members }) => ({

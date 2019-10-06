@@ -80,8 +80,7 @@ const PushRouteOne = createStackNavigator({
 	},
 	
 	Register: {
-		screen: Register,
-		mode: 'modal',
+		screen: Register,		
 		header: 'none'
 	},
 }, {
@@ -91,20 +90,17 @@ const PushRouteOne = createStackNavigator({
 const VerifyStack = createStackNavigator({
 	VerifyUser: {
 		screen: VerifyUser,	
-		mode: 'modal',
-		headerMode: 'none',
+	
 	},
 	Register: {
 		screen: Register,
-		mode: 'modal',
-		header: 'none'
+		
 	},
 	WebCommon: {
 		screen: WebCommon,
 	},
 }, {
-	mode: 'modal',
-	headerMode: 'none',
+
 	initialRouteName: "VerifyUser",
 })
 
@@ -301,6 +297,7 @@ const RootNavigator = createStackNavigator({
 	},
 }, {
 	initialRouteName: "TabGroupOne",
+	mode: 'modal',
     headerMode: 'none',
 })
  

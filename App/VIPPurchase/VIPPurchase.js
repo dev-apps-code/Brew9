@@ -8,7 +8,7 @@
 
 import React from "react"
 import { StyleSheet, Image, View, TouchableOpacity, Text, ScrollView } from "react-native"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 
 
 export default class VIPPurchase extends React.Component {

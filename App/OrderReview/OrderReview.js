@@ -8,7 +8,7 @@
 
 import React from "react"
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image} from "react-native"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 
 
 export default class OrderReview extends React.Component {

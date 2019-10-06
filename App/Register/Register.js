@@ -8,7 +8,7 @@
 
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
 import React from "react"
-import { alpha, fontAlpha} from "../common/size"
+import { alpha, fontAlpha} from "../Common/size"
 import { createAction } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
@@ -125,8 +125,8 @@ export default class Register extends React.Component {
 	}
 
 	onClosePressed = () => {
-		console.log("close")
-		this.props.navigation.goBack()
+		const { navigate } = this.props.navigation
+		navigate('TabGroupOne')
 	}
 
 	onUpdateCode(iso2){

@@ -9,7 +9,7 @@
 import React from "react"
 import { FlatList, StyleSheet, Text, Image, View, TouchableOpacity, ActivityIndicator } from "react-native"
 import PointsCell from "./PointsCell"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"

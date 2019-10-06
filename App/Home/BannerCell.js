@@ -8,7 +8,7 @@
 
 import React from "react"
 import { TouchableWithoutFeedback, Image, View, StyleSheet } from "react-native"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 
 export default class BannerCell extends React.Component {
 

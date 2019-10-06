@@ -187,8 +187,10 @@ export default {
             authtoken,
             object,
         )
+        console.log("return")
         const eventObject = new EventObject(json)
         if (eventObject.success == true) { 
+          console.log("return yes",eventObject.result)
           yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)

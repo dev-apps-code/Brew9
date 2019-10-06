@@ -8,7 +8,7 @@
 
 import { Image, Text, StyleSheet, TouchableWithoutFeedback, View } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 
 export default class PointsCell extends React.Component {
 

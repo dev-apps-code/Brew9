@@ -8,7 +8,7 @@
 
 import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import VoucherRequestObject from "../Requests/voucher_request_object";

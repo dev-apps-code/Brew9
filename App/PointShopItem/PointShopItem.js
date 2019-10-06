@@ -8,7 +8,7 @@
 
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import PointProductsItemRequestObject from "../Requests/point_products_item_request_object"
 import {createAction, toTitleCase} from "../Utils";
 import {connect} from "react-redux";

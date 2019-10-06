@@ -8,7 +8,7 @@
 
 import { Text, StyleSheet, Image, TouchableOpacity, View , ScrollView } from "react-native"
 import React from "react"
-import { alpha, windowWidth } from "../common/size"
+import { alpha, windowWidth } from "../Common/size"
 import AutoHeightImage from 'react-native-auto-height-image'
 
 export default class BannerView extends React.Component {

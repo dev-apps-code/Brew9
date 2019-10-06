@@ -8,7 +8,7 @@
 
 import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 

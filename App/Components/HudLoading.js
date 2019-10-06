@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import SpinnerKit from 'react-native-loading-spinner-overlay'
-import { barHeight, windowWidth, windowHeight, alpha } from '../common/size.js'
+import { barHeight, windowWidth, windowHeight, alpha } from '../Common/size.js'
 // import Spinner from 'react-native-spinkit'
 
 import PropTypes from 'prop-types'

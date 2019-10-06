@@ -9,7 +9,7 @@
 import { Text, TouchableOpacity, View, StyleSheet, Image, FlatList, ActivityIndicator } from "react-native"
 import Card from "./Card"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
 import {createAction} from "../Utils";
 import {connect} from "react-redux";

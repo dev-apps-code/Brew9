@@ -9,7 +9,7 @@
 import {Text, View, StyleSheet, FlatList, TouchableOpacity, Image} from "react-native"
 import React from "react"
 import PointProductNoHeaderCell from "./PointProductNoHeaderCell"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import { KURL_INFO } from "../Utils/server.js"
 import {createAction} from "../Utils";
 import {connect} from "react-redux";

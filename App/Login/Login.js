@@ -8,7 +8,7 @@
 
 import { Text, View, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha, windowHeight} from "../common/size"
+import { alpha, fontAlpha, windowHeight} from "../Common/size"
 import PhoneInput from 'react-native-phone-input'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import LoginWithFacebookRequestObject from "../Requests/login_with_facebook_request_object"

@@ -8,7 +8,7 @@
 
 import { View, TouchableWithoutFeedback, StyleSheet, TouchableOpacity, Image, Text } from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 
 
 export default class ExpiredVoucher extends React.Component {

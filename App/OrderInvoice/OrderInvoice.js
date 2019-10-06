@@ -8,7 +8,7 @@
 
 import { Image, TouchableOpacity, View, Text, StyleSheet, ScrollView } from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 
 
 export default class OrderInvoice extends React.Component {

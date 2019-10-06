@@ -6,9 +6,9 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { TextInput, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
+import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 import Modal from "react-native-modal"
 import PhoneInput from 'react-native-phone-input'
@@ -17,6 +17,7 @@ import HudLoading from "../Components/HudLoading"
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
+import { commonStyles } from "../Common/common_style"
 
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
@@ -113,9 +114,21 @@ export default class Checkout extends React.Component {
 		const {currentMember } = this.props
 
 		if (currentMember) {
-			navigate("Transaction", {
-				amount: this.props.navigation.getParam("cart_total", 0.00)
-			})
+			Alert.alert(
+				'Confirmation',
+				'Are you sure you want to confirm the order?',
+				[
+				  { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+				  {
+					text: 'Cancel',
+					onPress: () => console.log('Cancel Pressed'),
+					style: 'cancel',
+				  },
+				  { text: 'OK', onPress: () => console.log('OK Pressed') },
+				],
+				{ cancelable: false }
+			  );
+
 			return
 		} else {
 			navigate("VerifyStack")
@@ -229,19 +242,18 @@ export default class Checkout extends React.Component {
 									source={require("./../../assets/images/group-4-5.png")}
 									style={styles.arrowImage2}/>
 							</View>
-							{/*<View*/}
-							{/*	style={{*/}
-							{/*		flex: 1,*/}
-							{/*	}}/>*/}
-							{/*<Image*/}
-							{/*	source={require("./../../assets/images/group-8-11.png")}*/}
-							{/*	style={styles.group8Image}/>*/}
-						</View>
-						<View style={{
-								flex: 1,
-						}}/>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+								<TouchableOpacity>
+									<Image
+										source={require("./../../assets/images/group-8-11.png")}
+										style={styles.group8Image}/>
+								</TouchableOpacity>
+						</View>					
 						<Text
-							style={styles.distance1kmPleaseText}>Distance {selectedShop.distance} km, please confirm your nearest branch
+							style={styles.distance1kmPleaseText}>Distance {selectedShop.distance} km
 						</Text>
 					</View>
 				{/*	<View
@@ -603,9 +615,10 @@ const styles = StyleSheet.create({
 	},
 	branchView: {
 		backgroundColor: "white",
-		// height: 173 * alpha,
+		height: 73 * alpha,
 		width: "100%",
 		flex: 1,
+		marginBottom:10*alpha,
 	},
 	branchTwoView: {
 		backgroundColor: "transparent",
@@ -638,11 +651,11 @@ const styles = StyleSheet.create({
 		marginLeft: 21 * alpha,
 	},
 	group8Image: {
-		resizeMode: "center",
+		resizeMode: "cover",
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 23 * alpha,
-		height: 23 * alpha,
+		width: 26 * alpha,
+		height: 26 * alpha,
 	},
 	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
@@ -929,7 +942,7 @@ const styles = StyleSheet.create({
 	ordersummaryView: {
 		backgroundColor: "white",
 		flex: 1,
-		marginTop: 10 * alpha,
+		paddingTop: 0 * alpha,
 	},
 	orderConfirmationText: {
 		color: "rgb(54, 54, 54)",
@@ -940,6 +953,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
+
 		marginLeft: 16 * alpha,
 		marginTop: 13 * alpha,
 	},

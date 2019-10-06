@@ -8,7 +8,7 @@
 
 import { Image, Text, StyleSheet, TouchableOpacity, View } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
 import { ProgressBar, Colors } from 'react-native-paper';
 import {KURL_INFO} from "../Utils/server";

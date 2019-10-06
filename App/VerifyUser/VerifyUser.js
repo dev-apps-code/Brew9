@@ -8,7 +8,7 @@
 
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -44,7 +44,8 @@ export default class VerifyUser extends React.Component {
 			country: "bn",
 			login_success: false,
 			code: "",
-			isCounting: false,
+			code_from_server:"",
+			is_counting: false,
 		}
 
 	}
@@ -98,19 +99,21 @@ export default class VerifyUser extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			console.log("callbakc done")
 			if (eventObject.success) {
+				console.log("callbakc done set state")
 				this.setState({
 					login_success: true,
-					isCounting: true,
-				}, function(){
-					console.log("Login", this.state.login_success)
+					is_counting: true,
+					code_from_server: eventObject.result.code,
+					code:eventObject.result.code
 				})
 			}
 			this.setState({
 				loading: false,
 			})
 		}
-		const obj = new LoginWithSmsRequestObject(this.state.phone_no, this.state.country_code)
+		const obj = new LoginWithSmsRequestObject(phone_no, country_code)
 		dispatch(
 			createAction('members/loadLogin')({
 				object:obj,
@@ -128,20 +131,16 @@ export default class VerifyUser extends React.Component {
         this.setState({ loading: true })
         const callback = eventObject => {
 
-			console.log("Activate", eventObject)
             if (eventObject.success) {
 
 				var obj = eventObject.result
 				if (obj.name == "" || obj.name == null) {
 					const { navigate } = this.props.navigation
-
 					navigate("Register")
 				} else {
 					const { navigate } = this.props.navigation
-					navigate.goBack()
-				}
-
-                
+					navigate('TabGroupOne')
+				}                
             }else{
 				this.refs.toast.show(eventObject.message)
             }
@@ -205,21 +204,21 @@ export default class VerifyUser extends React.Component {
 							<TextInput
 								autoCorrect={false}
 								keyboardType="phone-pad"
-								placeholder="123456789"
+								placeholder="123456789"								
 								style={styles.textInputTextInput}
 								onChangeText={(phone_no) => this.setState({phone_no})}/>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							{ !this.state.login_success && !this.state.isCounting ? <TouchableOpacity
+							{ !this.state.login_success && !this.state.is_counting ? <TouchableOpacity
 								onPress={this.onSendPressed}
 								style={styles.sendButton}>
 								<Text
 									style={styles.sendButtonText}>Send</Text>
 							</TouchableOpacity> : <CountDown
 								until={120}
-								onFinish={() => this.setState({isCounting: false})}
+								onFinish={() => this.setState({is_counting: false})}
 								style={styles.sendCountdown}
 								size={7}
 								digitStyle={{backgroundColor: 'transparent', padding: 0, width: 20 * alpha, height: 20 * alpha}}
@@ -237,6 +236,7 @@ export default class VerifyUser extends React.Component {
 							autoCorrect={false}
 							placeholder="Activation Code"
 							keyboardType="phone-pad"
+							value={this.state.code}
 							style={styles.activationCodeTextInput}
 							onChangeText={(code) => this.setState({code: code})}/>
 						<View

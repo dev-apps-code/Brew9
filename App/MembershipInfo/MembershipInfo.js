@@ -9,7 +9,7 @@
 import {Image, FlatList, ScrollView, Text, View, StyleSheet, TouchableOpacity} from "react-native"
 import React from "react"
 import BenefitCell from "./BenefitCell"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 import MembershipRequestObject from "../Requests/membership_request_object.js";
 import {createAction} from "../Utils";
 import {connect} from "react-redux";

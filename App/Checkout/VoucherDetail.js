@@ -8,7 +8,7 @@
 
 import { Image, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size"
+import { alpha, fontAlpha } from "../Common/size"
 
 export default class VoucherDetail extends React.Component {
 

@@ -8,7 +8,7 @@
 
 import {TouchableWithoutFeedback, TouchableOpacity, Image, StyleSheet, View, Text, ScrollView} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../common/size";
+import { alpha, fontAlpha } from "../Common/size";
 
 export default class PointProductCell extends React.Component {
 
