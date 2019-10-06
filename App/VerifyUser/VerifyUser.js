@@ -17,7 +17,8 @@ import ActivateAccountRequestObject from '../Requests/activate_account_request_o
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
 import CountDown from 'react-native-countdown-component'
-import {KURL_INFO} from "../Utils/server"
+import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
+import Hyperlink from 'react-native-hyperlink'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -54,11 +55,11 @@ export default class VerifyUser extends React.Component {
 	
 	}
 
-	onTermsAndConditionsPressed = () => {
+	onTermsAndConditionsPressed = (url) => {
 		const { navigate } = this.props.navigation
-		navigate("WebCommon", {
+		navigate("WebCommonModal", {
             title: 'Terms and Conditions',
-            web_url: KURL_INFO + '?page=terms_conditions&id=' + this.props.company_id,
+            web_url: url + '&id=' + this.props.company_id,
         })
 	}
 
@@ -260,12 +261,38 @@ export default class VerifyUser extends React.Component {
 					style={{
 						flex: 1,
 					}}/>
-					<TouchableOpacity
+					
+					{/* <TouchableOpacity
 						onPress={this.onTermsAndConditionsPressed}
 						style={styles.termsAndConditionsButton}>
 						<Text
 							style={styles.termsAndConditionsButtonText}>Terms and Conditions</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
+					<Hyperlink
+						onPress={url => this.onTermsAndConditionsPressed(url)}
+						linkStyle={[{ color: '#0000EE' }, styles.description_text]}
+						linkText={url =>
+							url === KURL_TERMS_OF_SERVICE
+							? 'Terms of Service'
+							: url === KURL_PRIVACY_POLICY
+								? 'Privacy Policy'
+								: url === KURL_EULA ? 'End User License Agreement' : url
+						}
+						>
+						<Text style={styles.description_text}>
+							By using this app, you agree to our{' '}
+							<Text style={{ textDecorationLine: 'underline' }}>
+							{KURL_TERMS_OF_SERVICE}
+							</Text>,{' '}
+							<Text style={{ textDecorationLine: 'underline' }}>
+							{KURL_PRIVACY_POLICY}
+							</Text>{' '}
+							and{' '}
+							<Text style={{ textDecorationLine: 'underline' }}>
+							{KURL_EULA}
+							</Text>.
+						</Text>
+						</Hyperlink>
 			</View>
 			<Toast ref="toast" position="center"/>
 		</View>
@@ -503,6 +530,19 @@ const styles = StyleSheet.create({
 	termsAndConditionsButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
+	},
+	description_text: {
+		width: "100%",
+		height: 30 * alpha,
+		marginBottom: 40 * alpha,
+		color: "white",
+		fontFamily: "Helvetica-Bold",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		paddingLeft: 15 * alpha,
+		paddingRight: 15 * alpha,
 	},
 	phoneCountryCodeText: {
 		marginLeft: 0 * alpha,

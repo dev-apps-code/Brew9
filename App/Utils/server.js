@@ -5,11 +5,11 @@ export const KURL_INFO = 'http://139.162.16.119:3050/info'
 // export const KSERVERURL ='https://3358a428.ngrok.io/api'
 // export const KURL_INFO = 'https://3358a428.ngrok.io/info'
 
-export const KURL_TERMS_OF_SERVICE =
-  'http://innogix.com/co3/privacy_policy.html'
-export const KURL_PRIVACY_POLICY =
-  'http://innogix.com/co3/privacy_policy.html#privacy'
-export const KURL_EULA = 'http://www.innogix.com/co3/eula.html'
+
+
+export const KURL_TERMS_OF_SERVICE = KURL_INFO + '?page=terms_conditions'
+export const KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy'
+export const KURL_EULA = KURL_INFO + '?page=eula'
 
 export const KURL_CREDIT = 'http://www.innogix.com/co3/credit_policy.html'
 export const KURL_TERMS_CO3_GO = 'http://www.innogix.com/co3/co3_go_agreement.html'
