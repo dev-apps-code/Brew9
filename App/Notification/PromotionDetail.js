@@ -60,7 +60,7 @@ console.log("Promo Detail", promo)
 				<Text
 					style={styles.titleText}>{promo.title}</Text>
 				<Text
-					style={styles.timeText}>{promo.created_at}</Text>
+					style={styles.timeText}>{promo.updated_at}</Text>
 				<Image
 					source={{uri: promo.notification_image.url}}
 					style={styles.promoimageImage}/>

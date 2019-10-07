@@ -596,10 +596,6 @@ export default class Home extends React.Component {
 
 		let cart = [...this.state.cart]
 
-		this.setState({
-			modalVisible: false,
-		})
-
 		const clone_variants = _.cloneDeep(product.selected_variants)
 		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
 
@@ -634,6 +630,7 @@ export default class Home extends React.Component {
 		}
 
 		this.setState({
+			modalVisible: false,
 			cart_total_quantity: (parseInt(this.state.cart_total_quantity) + parseInt(this.state.select_quantity)),
 			cart_total: (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
 		})
@@ -693,6 +690,10 @@ export default class Home extends React.Component {
 		this.setState({
 			products: this.state.products
 		})
+	}
+
+	dismissProduct() {
+		this.setState({ modalVisible: false})
 	}
 
 	renderModalContent = (selected_product) => {
@@ -1098,7 +1099,7 @@ export default class Home extends React.Component {
 			</View>
 			<Toast ref="toast"
 				position="center"/>
-				{ selected_product ? <Modal isVisible={this.state.modalVisible} >
+				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
 					{this.renderModalContent(selected_product)}
 				</Modal> : null }
 			

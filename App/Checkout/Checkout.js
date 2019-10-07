@@ -76,7 +76,11 @@ export default class Checkout extends React.Component {
 	}
 
 	onLocationButtonPressed = () => {
+		const { navigate } = this.props.navigation
 
+		navigate("DirectionMap", {
+			shop: this.state.shop
+		})
 	}
 
 	onDeliveryButtonPressed = () => {
@@ -246,7 +250,7 @@ export default class Checkout extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-								<TouchableOpacity>
+								<TouchableOpacity onPress={this.onLocationButtonPressed}>
 									<Image
 										source={require("./../../assets/images/group-8-11.png")}
 										style={styles.group8Image}/>
