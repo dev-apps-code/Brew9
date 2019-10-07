@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { TouchableWithoutFeedback, StyleSheet, Text, View } from "react-native"
+import { TouchableWithoutFeedback, StyleSheet, Text, View, Image } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 
@@ -33,6 +33,8 @@ export default class CategoryCell extends React.Component {
 					style={this.props.selected ? styles.categorycell_selected :styles.categorycell}>
 					{this.props.selected ? <View
 						style={styles.selectbarView}/> : null}
+					<Image
+						style={styles.imageImage}/>
 					<Text
 						style={this.props.selected ? styles.labelText_selected : styles.labelText}>{this.props.categoryname}</Text>
 				</View>
@@ -64,24 +66,31 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
 		fontFamily: "Helvetica",
-		fontSize: 13 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		flex: 1,
-		marginLeft: 13 * alpha,
+		marginLeft: 7 * alpha,
 		marginRight: 14 * alpha,
 	},
 	labelText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
 		fontFamily: "Helvetica",
-		fontSize: 13 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		flex: 1,
-		marginLeft: 10 * alpha,
-		marginRight: 14 * alpha,
+		marginLeft: 7 * alpha,
+		marginRight: 14*  alpha,
+	},
+	imageImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 20 * alpha,
+		height: 20 * alpha,
+		marginLeft: 6 * alpha,
 	},
 })

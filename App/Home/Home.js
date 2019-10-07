@@ -113,7 +113,6 @@ export default class Home extends React.Component {
 			isToggleLocation: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
-		this.moveLocationAnimation = new Animated.ValueXY({ x: 0, y: -windowHeight })
 	}
 
 	_getLocationAsync = async () => {
@@ -318,26 +317,16 @@ export default class Home extends React.Component {
 		if (toggle) {
 			this.setState({
 				isToggleLocation: false,
-			}, function () {
-				this.setState({})
-				Animated.spring(this.moveLocationAnimation, {
-					toValue: {x: 0, y: -windowHeight},
-				}).start()
 			})
 		} else {
 			this.setState({
 				isToggleLocation: true,
-			}, function () {
-				this.setState({})
-				Animated.spring(this.moveLocationAnimation, {
-					toValue: {x: 0, y: 67 * alpha},
-				}).start()
 			})
 		}
 		
 	}
 
-	_toggleCart = (isUpdate) => {
+	toogleCart = (isUpdate) => {
 
 		const { isCartToggle, product_view_height } = this.state
 
@@ -444,7 +433,7 @@ export default class Home extends React.Component {
 
 	onCellPress = (item, index) => {
 		if (this.state.isCartToggle) {
-			this._toggleCart(false)
+			this.toogleCart(false)
 		}
 		this.setState({ modalVisible: true, selected_index: index })
 	}
@@ -486,12 +475,12 @@ export default class Home extends React.Component {
 
 				if (index >= 0) {
 					cart[index] = cartItem
-					this.setState({ cart }, function(){this._toggleCart(true)})
+					this.setState({ cart }, function(){this.toogleCart(true)})
 				} else {
 					this.setState({
 						cart: this.state.cart.concat(cartItem)
 					}, function(){
-						this._toggleCart(true)
+						this.toogleCart(true)
 					})
 				}
 
@@ -518,7 +507,7 @@ export default class Home extends React.Component {
 				if (cartItem.quantity === null) {
 					cart.splice(index, 1)
 				}
-				this.setState({ cart }, function(){this._toggleCart(true)})
+				this.setState({ cart }, function(){this.toogleCart(true)})
 				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
 			}
@@ -554,12 +543,12 @@ export default class Home extends React.Component {
 
 				if (cart_index >= 0) {
 					cart[cart_index] = cartItem
-					this.setState({ cart }, function(){this._toggleCart(true)})
+					this.setState({ cart }, function(){this.toogleCart(true)})
 				} else {
 					this.setState({
 						cart: this.state.cart.concat(cartItem)
 					}, function(){
-						this._toggleCart(true)
+						this.toogleCart(true)
 					})
 				}
 				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) + 1)
@@ -582,7 +571,7 @@ export default class Home extends React.Component {
 				if (item.quantity === null) {
 					cart.splice(cart_index, 1)
 				}
-				this.setState({ cart }, function(){this._toggleCart(true)})
+				this.setState({ cart }, function(){this.toogleCart(true)})
 				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(item.price)).toFixed(2)
 			}
@@ -625,7 +614,7 @@ export default class Home extends React.Component {
 				products: this.state.products,
 				select_quantity: 1,
 			}, function(){
-				this._toggleCart(true)
+				this.toogleCart(true)
 			})
 		}
 
@@ -643,7 +632,7 @@ export default class Home extends React.Component {
 
 	onClearPress = () => {
 		if (this.state.isCartToggle) {
-			this._toggleCart(false)
+			this.toogleCart(false)
 		}
 		this.state.cart = []
 		for (var index in this.state.products) {
@@ -1013,8 +1002,9 @@ export default class Home extends React.Component {
 						</View>
 					</View>
 				}
-				<Animated.View
-					style={[styles.showLocationView,this.moveLocationAnimation.getLayout()]}>
+				{ this.state.isToggleLocation && (
+					<View
+					style={styles.showLocationView}>
 					{/* <View
 						style={styles.deliveryView}>
 						<View
@@ -1068,7 +1058,9 @@ export default class Home extends React.Component {
 						<Text
 							style={styles.businessHour1000Text}>Business Hour: {shop ? shop.opening_hour.start_time : ""} ~ {shop ? shop.opening_hour.end_time : ""}</Text>
 					</View>
-				</Animated.View>
+				</View>
+				)}
+				
 				<Animated.View
 					style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]} >
 					<View
@@ -1166,7 +1158,7 @@ export default class Home extends React.Component {
 							<View
 								style={styles.shopppingCartView}>
 								<TouchableOpacity
-									onPress={() => this._toggleCart(false)}
+									onPress={() => this.toogleCart(false)}
 									style={styles.shopppingCartButton}>
 									<View
 										style={styles.group5View}>
@@ -1304,7 +1296,6 @@ const styles = StyleSheet.create({
 		width: 200 * alpha,
 		height: 19 * alpha,
 		marginTop: 6 * alpha,
-		zIndex: 2,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -2169,7 +2160,7 @@ const styles = StyleSheet.create({
 	showLocationView: {
 		backgroundColor: "white",
 		flex: 1,
-		zIndex: 1,
+		marginTop: 67 * alpha,
 		alignItems: "flex-start",
 	},
 	deliveryView: {
