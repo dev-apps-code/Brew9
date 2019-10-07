@@ -44,6 +44,21 @@ export default class Notification extends React.Component {
         }
     }
 
+    static tabBarItemOptions = ({ navigation }) => {
+
+		return {
+			tabBarLabel: "Inbox",
+			tabBarIcon: ({ iconTintColor, focused }) => {
+				const image = focused 
+				? require('./../../assets/images/profile_selected.png') 
+				: require('./../../assets/images/profile.png')
+
+				return <Image
+					source={image}
+					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha }}/>
+			},
+		}
+	}
     constructor(props) {
         super(props)
         this.state = {
@@ -134,10 +149,12 @@ export default class Notification extends React.Component {
 
         return <NotificationsCell
             navigation={this.props.navigation}
+            item={item}
             id={item.id}
             title={item.title}
             text={item.text}
             time={item.created_at}
+            type={item.notification_type}
             last_read={this.state.last_read}
         />
     }

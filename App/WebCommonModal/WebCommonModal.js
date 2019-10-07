@@ -8,7 +8,7 @@
 
 import {View, StyleSheet, TouchableOpacity, Image, Text} from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../common/size";
+import {alpha, fontAlpha} from "../Common/size";
 import { WebView } from 'react-native-webview';
 
 export default class WebCommonModal extends React.Component {

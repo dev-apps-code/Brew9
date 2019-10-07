@@ -38,21 +38,40 @@ export default class ProductCell extends React.Component {
 	}
 
 	render() {
-
-		let noVariant = this.props.productvariant.length == 0 ? true : false
-
+	
 		return <TouchableWithoutFeedback
 				onPress={this.onProductCellPress}>
 				<View
 					navigation={this.props.navigation}
 					style={styles.productcell}>
-					<Image
-						source={{uri: this.props.productimage}}
-						style={styles.productimageImage}/>
 					<View
+						pointerEvents="box-none"
 						style={{
-							flex: 1,
-						}}/>
+							width: 87 * alpha,
+							height: 84 * alpha,
+							marginLeft: 3 * alpha,
+							marginTop: 4 * alpha,
+						}}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<Image
+								source={{uri: this.props.productimage}}
+								style={styles.productimageImage}/>
+						</View>
+						{ !this.props.productenable && (<View
+							style={styles.soldView}>
+							<Text
+								style={styles.soldtextText}>Sold Out</Text>
+						</View>)}
+						
+					</View>
 					<View
 						style={styles.detailsView}>
 						<Text
@@ -62,10 +81,10 @@ export default class ProductCell extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
+								flex: 1,
 								alignSelf: "stretch",
-								height: 22 * alpha,
-								marginRight: 8 * alpha,
-								marginTop: 12 * alpha,
+								marginRight: 1 * alpha,
+								marginTop: 8 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
 							}}>
@@ -76,77 +95,34 @@ export default class ProductCell extends React.Component {
 									flex: 1,
 								}}/>
 							<View
-								style={styles.optionsView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										alignSelf: "center",
-										top: 0 * alpha,
-										bottom: 0 * alpha,
-										justifyContent: "center",
-									}}>
-                                    {this.props.productquantity && noVariant ?
-                                        <Text
-                                            style={styles.quantityText}>{this.props.productquantity ? this.props.productquantity : 1}</Text> : null
-                                    }
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0 * alpha,
-										justifyContent: "center",
-									}}>
-									{/* <View
-										pointerEvents="box-none"
-										style={{
-											width: 74 * alpha,
-											height: 23 * alpha,
-											flexDirection: "row",
-											justifyContent: "flex-end",
-											alignItems: "center",
-										}}>
-										{ (this.props.productquantity && noVariant) ? <TouchableOpacity
-											onPress={this.onRemovePressed}
-											style={styles.minusButton}>
-											<Image
-												source={require("./../../assets/images/button-4.png")}
-												style={styles.minusButtonImage}/>
-										</TouchableOpacity> : null }
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										{
-											noVariant ? <TouchableOpacity
-												onPress={this.onAddPressed}
-												style={styles.addButton}>
-												<Image
-													source={require("./../../assets/images/add-17.png")}
-													style={styles.addButtonImage}/>
-											</TouchableOpacity> : <View
-												style={styles.selectoptionView}>
-												<TouchableOpacity
-													onPress={this.onSelectOptionPressed}
-													style={styles.optionButton}>
-													<Text
-														style={styles.optionButtonText}>Option</Text>
-												</TouchableOpacity>
-												{
-													this.props.producttotalquantity ? <View
-														style={styles.badgeView}>
-														<Text
-															style={styles.numberofitemText}>{parseInt(this.props.producttotalquantity)}</Text>
-													</View> : null
-												}
-											</View>
-										}
-
-									</View> */}
-								</View>
+								pointerEvents="box-none"
+								style={{
+									alignSelf: "flex-end",
+									width: 61 * alpha,
+									height: 28 * alpha,
+									marginBottom: 2 * alpha,
+								}}>
+								{/* <TouchableOpacity
+									onPress={this.onAddPressed}
+									style={styles.addButton}>
+									<Image
+										source={require("./../../assets/images/add-5.png")}
+										style={styles.addButtonImage}/>
+								</TouchableOpacity> */}
+								{/* <View
+									style={styles.selectoptionView}>
+									<TouchableOpacity
+										onPress={this.onButtonPressed}
+										style={styles.optionButton}>
+										<Text
+											style={styles.optionButtonText}>Option</Text>
+									</TouchableOpacity>
+									<View
+										style={styles.badgeView}>
+										<Text
+											style={styles.numberofitemText}>2</Text>
+									</View>
+								</View> */}
 							</View>
 						</View>
 					</View>
@@ -164,18 +140,36 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 	productimageImage: {
-		resizeMode: "cover",
 		backgroundColor: "transparent",
+		resizeMode: "contain",
 		width: 86 * alpha,
 		height: 84 * alpha,
-		marginLeft: 4 * alpha,
-		marginTop: 4 * alpha,
+		marginLeft: 1 * alpha,
+	},
+	soldView: {
+		backgroundColor: "rgba(0, 0, 0, 0.7)",
+		position: "absolute",
+		left: 0,
+		width: 86 * alpha,
+		top: 62 * alpha,
+		height: 22 * alpha,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	soldtextText: {
+		backgroundColor: "transparent",
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
 	},
 	detailsView: {
 		backgroundColor: "transparent",
 		width: 174 * alpha,
 		height: 89 * alpha,
-		marginRight: 11 * alpha,
+		marginLeft: 10 * alpha,
 		alignItems: "flex-start",
 	},
 	titleText: {
@@ -189,14 +183,16 @@ const styles = StyleSheet.create({
 		marginLeft: 1 * alpha,
 	},
 	descriptionText: {
+		backgroundColor: "transparent",
+		opacity: 0.39,
 		color: "black",
 		fontFamily: "Helvetica",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		opacity: 0.39,
+		width: 165 * alpha,
+		height: 31 * alpha,
 		marginLeft: 1 * alpha,
 		marginTop: 11 * alpha,
 	},
@@ -209,57 +205,28 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "left",
 	},
-	optionsView: {
-		backgroundColor: "transparent",
-		width: 74 * alpha,
-		height: 23 * alpha,
-	},
-	quantityText: {
-		backgroundColor: "transparent",
-		color: "rgb(85, 83, 81)",
-		fontFamily: "Helvetica",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	minusButtonText: {
-		color: "black",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	minusButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		width: 23 * alpha,
-		height: 23 * alpha,
-	},
-	minusButtonImage: {
-		resizeMode: "contain",
-	},
 	addButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 23 * alpha,
-		height: 23 * alpha,
-	},
-	addButtonImage: {
-		resizeMode: "contain",
+		position: "absolute",
+		right: 7 * alpha,
+		width: 20 * alpha,
+		bottom: 1 * alpha,
+		height: 20 * alpha,
 	},
 	addButtonText: {
 		color: "black",
+		fontFamily: ".SFNSText",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+	},
+	addButtonImage: {
+		resizeMode: "contain",
 	},
 	selectoptionView: {
 		backgroundColor: "transparent",
@@ -271,19 +238,20 @@ const styles = StyleSheet.create({
 	},
 	optionButton: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 13 * alpha,
+		borderRadius: 10 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		right: 0 * alpha,
-		width: 60 * alpha,
+		right: 6 * alpha,
+		width: 55 * alpha,
 		bottom: 0 * alpha,
-		height: 23 * alpha,
+		height: 20 * alpha,
 	},
 	optionButtonText: {
 		color: "white",
+		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -300,20 +268,20 @@ const styles = StyleSheet.create({
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
-		right: -6 * alpha,
+		right: 0 * alpha,
 		width: 14 * alpha,
 		bottom: 13 * alpha,
-		height: 14 * alpha,
+		height: 15 * alpha,
 		justifyContent: "center",
 		alignItems: "center",
 	},
 	numberofitemText: {
-		backgroundColor: "transparent",
 		color: "rgb(255, 251, 251)",
-		fontFamily: "Helvetica",
+		fontFamily: "Helvetica-Bold",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
+		backgroundColor: "transparent",
 	},
 })

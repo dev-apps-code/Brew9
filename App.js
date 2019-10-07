@@ -43,6 +43,7 @@ import OrderReview from "./App/OrderReview/OrderReview"
 import OrderInvoice from "./App/OrderInvoice/OrderInvoice"
 import RedeemPromotion from "./App/RedeemPromotion/RedeemPromotion"
 import Notification from "./App/Notification/Notification"
+import PromotionDetail from "./App/Notification/PromotionDetail"
 import MissionCenter from "./App/MissionCenter/MissionCenter"
 import Confirmation from "./App/Confirmation/Confirmation"
 import FirstScreen from "./App/FirstScreen/FirstScreen"
@@ -54,7 +55,7 @@ import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
 import {registerModels} from './App/Model/index'
 
-const PushRouteOne = createStackNavigator({
+const PushOrder = createStackNavigator({
 	Home: {
 		screen: Home,
 	},
@@ -108,7 +109,7 @@ const VerifyStack = createStackNavigator({
 })
 
 
-const PushRouteTwo = createStackNavigator({
+const PushPickup = createStackNavigator({
 	PickUp: {
 		screen: PickUp,
 	},
@@ -119,7 +120,18 @@ const PushRouteTwo = createStackNavigator({
 	initialRouteName: "PickUp",
 })
 
-const PushRouteThree = createStackNavigator({
+const PushInbox = createStackNavigator({
+	Notification: {
+		screen: Notification,
+	},
+	PromotionDetail: {
+		screen: PromotionDetail,
+	}
+}, {
+	initialRouteName: "Notification",
+})
+
+const PushProfile = createStackNavigator({
 	Profile: {
 		screen: Profile,
 	},
@@ -180,9 +192,6 @@ const PushRouteThree = createStackNavigator({
 	RedeemPromotion: {
 		screen: RedeemPromotion,
 	},
-	Notification: {
-		screen: Notification,
-	},
 	PayByWallet: {
 		screen: PayByWallet,
 	},
@@ -196,7 +205,7 @@ const PushRouteThree = createStackNavigator({
 	initialRouteName: "Profile",
 })
 
-PushRouteOne.navigationOptions = ({ navigation }) => {
+PushOrder.navigationOptions = ({ navigation }) => {
 	let tabBarVisible = true;
 	for (let i = 0; i < navigation.state.routes.length; i++) {
 		if (navigation.state.routes[i].routeName != "Home") {
@@ -208,7 +217,7 @@ PushRouteOne.navigationOptions = ({ navigation }) => {
 	};
 };
 
-PushRouteTwo.navigationOptions = ({ navigation }) => {
+PushPickup.navigationOptions = ({ navigation }) => {
 	let tabBarVisible = true;
 	for (let i = 0; i < navigation.state.routes.length; i++) {
 		if (navigation.state.routes[i].routeName != "PickUp") {
@@ -220,7 +229,19 @@ PushRouteTwo.navigationOptions = ({ navigation }) => {
 	};
 };
 
-PushRouteThree.navigationOptions = ({ navigation }) => {
+PushInbox.navigationOptions = ({ navigation }) => {
+	let tabBarVisible = true;
+	for (let i = 0; i < navigation.state.routes.length; i++) {
+		if (navigation.state.routes[i].routeName != "Notification") {
+			tabBarVisible = false;
+		}
+	}
+	return {
+		tabBarVisible
+	};
+};
+
+PushProfile.navigationOptions = ({ navigation }) => {
 
 	let tabBarVisible = true;
 
@@ -238,14 +259,17 @@ PushRouteThree.navigationOptions = ({ navigation }) => {
 
 
 const TabGroupOne = createBottomTabNavigator({
-	PushRouteOne: {
-		screen: PushRouteOne,
+	PushOrder: {
+		screen: PushOrder,
 	},
-	PushRouteTwo: {
-		screen: PushRouteTwo,
+	PushPickup: {
+		screen: PushPickup,
 	},
-	PushRouteThree: {
-		screen: PushRouteThree,
+	PushInbox: {
+		screen: PushInbox,
+	},
+	PushProfile: {
+		screen: PushProfile,
 	},
 
 }, {
@@ -267,11 +291,13 @@ const TabGroupOne = createBottomTabNavigator({
 		const { routeName } = navigation.state
 		
 		switch (routeName) {
-			case "PushRouteOne":
+			case "PushOrder":
 				return Home.tabBarItemOptions(navigation)
-			case "PushRouteTwo":
+			case "PushPickup":
 				return PickUp.tabBarItemOptions(navigation)
-			case "PushRouteThree":
+			case "PushInbox":
+				return Notification.tabBarItemOptions(navigation)
+			case "PushProfile":
 				return Profile.tabBarItemOptions(navigation)
 		}
 	},

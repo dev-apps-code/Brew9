@@ -109,9 +109,11 @@ export default class Home extends React.Component {
 			delivery:1,
 			modalGalleryVisible: true,
 			selected_promotion: "",
-			isPromoToggle: false
+			isPromoToggle: false,
+			isToggleLocation: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
+		this.moveLocationAnimation = new Animated.ValueXY({ x: 0, y: -windowHeight })
 	}
 
 	_getLocationAsync = async () => {
@@ -309,6 +311,31 @@ export default class Home extends React.Component {
 		this.setState( { data })
 
 	}
+	onMorePressed = () => {
+
+		let toggle = this.state.isToggleLocation
+
+		if (toggle) {
+			this.setState({
+				isToggleLocation: false,
+			}, function () {
+				this.setState({})
+				Animated.spring(this.moveLocationAnimation, {
+					toValue: {x: 0, y: -windowHeight},
+				}).start()
+			})
+		} else {
+			this.setState({
+				isToggleLocation: true,
+			}, function () {
+				this.setState({})
+				Animated.spring(this.moveLocationAnimation, {
+					toValue: {x: 0, y: 67 * alpha},
+				}).start()
+			})
+		}
+		
+	}
 
 	_toggleCart = (isUpdate) => {
 
@@ -397,6 +424,7 @@ export default class Home extends React.Component {
 					productquantity={item.quantity}
 					productdescription={item.description}
 					productvariant={item.variants}
+					productenable={item.enabled}
 					producttotalquantity={item.total_quantity}
 					onChangeQuantity={this.onChangeQuantityPress}
 					onCellPress={this.onCellPress}
@@ -867,156 +895,212 @@ export default class Home extends React.Component {
 		let selected_product = this.get_product(this.state.selected_index)
 		let {shop,cart,delivery} = this.state
 
-		return <View
-			style={styles.page1View}>				
-			<View
-			style={styles.topsectionView}>
-			<View
-				pointerEvents="box-none"
-				style={{
-					height: 31 * alpha,
-					marginLeft: 10 * alpha,
-					marginRight: 10 * alpha,
-					marginTop: 8 * alpha,
-					flexDirection: "row",
-					alignItems: "flex-start",
-				}}>
-				<View
-					style={styles.branchView}>
-					{/* <TouchableOpacity
-						onPress={this.onBranchPressed}
-						style={styles.branchButton}> */}
-						<Text
-							style={styles.branchButtonText}>{shop ? shop.name : ""}</Text>
-						{/* <Image
-						source={require("./../../assets/images/group-22.png")}
-						style={styles.branchButtonImage}/> */}
-					{/* </TouchableOpacity> */}
-				</View>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-					<SwitchSelector
-						options={[
-							{ label: "PickUp", value: 0 },
-							{ label: "Delivery", value: 1 }]}
-						initial={0}
-						value={delivery}
-						textColor={"#4E4D4D"}
-						selectedColor={"#FFFFFF"}
-						buttonColor={"#2A2929"}
-						borderColor={"#979797"}
-						backgroundColor={"#D8D8D8"}
-						style={styles.pickUpDeliveryView}
-						textStyle={styles.optionText}
-						fontSize={10 * alpha}
-						height={32 * alpha}
-						onPress={(value) => this._toggleDelivery(value)}
-					/>
-				</View>
+		return <View style={styles.page1View}>	
+						
+			<View style={styles.topsectionView}>
+				
 				<View
 					pointerEvents="box-none"
 					style={{
-						height: 14 * alpha,
-						marginLeft: 14 * alpha,
-						marginRight: 19 * alpha,
-						marginTop: 7 * alpha,
+						height: 31 * alpha,
+						marginLeft: 10 * alpha,
+						marginRight: 10 * alpha,
+						marginTop: 8 * alpha,
 						flexDirection: "row",
 						alignItems: "flex-start",
 					}}>
-					{/* <Text
-						style={styles.distance1kmText}>Distance 1km</Text> */}
-					{/* <View
-						style={{
-							flex: 1,
-						}}/>
+						
 					<View
-						style={styles.moreView}>
-						<TouchableOpacity
-							onPress={this.onMorePressed}
-							style={styles.moreButton}>
+						style={styles.branchView}>
+						{/* <TouchableOpacity
+							onPress={this.onBranchPressed}
+							style={styles.branchButton}> */}
 							<Text
-								style={styles.moreButtonText}>More</Text>
-						</TouchableOpacity>
-						<Image
-							source={require("./../../assets/images/bitmap-14.png")}
-							style={styles.bitmapImage}/>
-					</View> */}
-				</View>
-			</View>
-			{this.state.loading ?
-						<View style={[styles.loadingIndicator]}>
-						<ActivityIndicator size="large" />
+								style={styles.branchButtonText}>{shop ? shop.name : ""}</Text>
+							{/* <Image
+							source={require("./../../assets/images/group-22.png")}
+							style={styles.branchButtonImage}/> */}
+						{/* </TouchableOpacity> */}
 					</View>
-					:
-				<View
-					style={styles.productsectionView}
-					onLayout={(event) => this.measureView(event)}>
-					<View
-						style={styles.categorylistFlatListViewWrapper}>
-						<FlatList
-							renderItem={this.renderCategorylistFlatListCell}
-							data={this.state.data}
-							style={styles.categorylistFlatList}
-							keyExtractor={(item, index) => index.toString()}/>
-					</View>
+					
 					<View
 						style={{
 							flex: 1,
 						}}/>
-					<View
-						style={styles.productlistFlatListViewWrapper}>
-						{this.state.loading ?
-							undefined
-							:
-						<FlatList
-							renderItem={this.renderProductlistFlatListCell}
-							data={this.state.products}
-							ref={(ref) => { this.flatListRef = ref }}
-							style={styles.productlistFlatList}
-							refreshing={this.state.isRefreshing}
-							onRefresh={this.onRefresh.bind(this)}
-							onViewableItemsChanged={this.reachProductIndex}
-							keyExtractor={(item, index) => index.toString()}/>
-						}
+						<SwitchSelector
+							options={[
+								{ label: "PickUp", value: 0 },
+								{ label: "Delivery", value: 1 }]}
+							initial={0}
+							value={delivery}
+							textColor={"#4E4D4D"}
+							selectedColor={"#FFFFFF"}
+							buttonColor={"#2A2929"}
+							borderColor={"#979797"}
+							backgroundColor={"#D8D8D8"}
+							style={styles.pickUpDeliveryView}
+							textStyle={styles.optionText}
+							fontSize={10 * alpha}
+							height={32 * alpha}
+							onPress={(value) => this._toggleDelivery(value)}
+						/>
 					</View>
-				</View>
-			}
-
-			<Animated.View
-				style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]}
-			>
-				<View
-					style={styles.clearAllView}>
-					<TouchableOpacity
-						onPress={this.onClearPress}
-						style={styles.clearButton}>
-						<Image
-							source={require("./../../assets/images/group-14-13.png")}
-							style={styles.clearButtonImage}/>
+					<View
+						pointerEvents="box-none"
+						style={{
+							height: 14 * alpha,
+							marginLeft: 14 * alpha,
+							marginRight: 19 * alpha,
+							marginTop: 7 * alpha,
+							flexDirection: "row",
+							alignItems: "flex-start",
+						}}>
 						<Text
-							style={styles.clearButtonText}>Clear</Text>
-					</TouchableOpacity>
+							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}m</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<View
+							style={styles.moreView}>
+							<TouchableOpacity
+								onPress={this.onMorePressed}
+								style={styles.moreButton}>
+								<Text
+									style={styles.moreButtonText}>More</Text>
+							</TouchableOpacity>
+							<Image
+								source={require("./../../assets/images/bitmap-14.png")}
+								style={styles.bitmapImage}/>
+						</View>
+					</View>
+					
 				</View>
-				<View
-					style={styles.popOutCartFlatListViewWrapper}>
-					<FlatList
-						renderItem={this.renderPopOutCartFlatListCell}
-						data={this.state.cart}
-						style={styles.popOutCartFlatList}
-						keyExtractor={(item, index) => index.toString()}/>
-				</View>
-			</Animated.View>
+				
+				{this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>
+					:
+					<View
+						style={styles.productsectionView}
+						onLayout={(event) => this.measureView(event)}>
+						<View
+							style={styles.categorylistFlatListViewWrapper}>
+							<FlatList
+								renderItem={this.renderCategorylistFlatListCell}
+								data={this.state.data}
+								style={styles.categorylistFlatList}
+								keyExtractor={(item, index) => index.toString()}/>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<View
+							style={styles.productlistFlatListViewWrapper}>
+							{this.state.loading ?
+								undefined
+								:
+							<FlatList
+								renderItem={this.renderProductlistFlatListCell}
+								data={this.state.products}
+								ref={(ref) => { this.flatListRef = ref }}
+								style={styles.productlistFlatList}
+								refreshing={this.state.isRefreshing}
+								onRefresh={this.onRefresh.bind(this)}
+								onViewableItemsChanged={this.reachProductIndex}
+								keyExtractor={(item, index) => index.toString()}/>
+							}
+						</View>
+					</View>
+				}
+				<Animated.View
+					style={[styles.showLocationView,this.moveLocationAnimation.getLayout()]}>
+					{/* <View
+						style={styles.deliveryView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								alignItems: "flex-start",
+							}}>
+							<Text
+								style={styles.deliveryTwoText}>Delivery</Text>
+							<Text
+								style={styles.freeWithRm40SpendText}>Free with RM40 spend</Text>
+							<Text
+								style={styles.deliveredByBrew9Text}>Delivered by Brew9, deliver within 3000m from branch</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Text
+								style={styles.deliverAreaAffectText}>(Deliver area affected by location, weather and other factors,{"\n"}based on the actual distance)</Text>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<Text
+								style={styles.deliveryRm5ExtraText}>Delivery RM5 (Extra charge delivery after 21:14)</Text>
+						</View>
+					</View> */}
+					<View
+						style={styles.branchInfoView}>
+						<Text
+							style={styles.branchInfoText}>Branch Info</Text>
+						<Text
+							style={styles.branchAddress}>Address: {shop ? shop.address : ""}</Text>
+						<Text
+							style={styles.branchContact}>Contact: {shop ? shop.phone_no : ""}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.businessHour1000Text}>Business Hour: {shop ? shop.opening_hour.start_time : ""} ~ {shop ? shop.opening_hour.end_time : ""}</Text>
+					</View>
+				</Animated.View>
+				<Animated.View
+					style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]} >
+					<View
+						style={styles.clearAllView}>
+						<TouchableOpacity
+							onPress={this.onClearPress}
+							style={styles.clearButton}>
+							<Image
+								source={require("./../../assets/images/group-14-13.png")}
+								style={styles.clearButtonImage}/>
+							<Text
+								style={styles.clearButtonText}>Clear</Text>
+						</TouchableOpacity>
+					</View>
+					<View
+						style={styles.popOutCartFlatListViewWrapper}>
+						<FlatList
+							renderItem={this.renderPopOutCartFlatListCell}
+							data={this.state.cart}
+							style={styles.popOutCartFlatList}
+							keyExtractor={(item, index) => index.toString()}/>
+					</View>
+				</Animated.View>
+			
 			<View style={styles.bottomAlertView}>
-			{this.renderAlertBar(shop)}
-			{this.renderBottomBar(cart,shop)}			
+				{this.renderAlertBar(shop)}
+				{this.renderBottomBar(cart,shop)}			
 			</View>
 			<Toast ref="toast"
-            position="center"/>
-			{ selected_product ? <Modal isVisible={this.state.modalVisible} >
-				{this.renderModalContent(selected_product)}
-			</Modal> : null }
+				position="center"/>
+				{ selected_product ? <Modal isVisible={this.state.modalVisible} >
+					{this.renderModalContent(selected_product)}
+				</Modal> : null }
 			
 			{this.renderGallery()}
 		</View>
@@ -1211,14 +1295,15 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		// height: 67 * alpha,
-		height: 50 * alpha,
+		height: 67 * alpha,
+		// height: 50 * alpha,
 	},
 	branchView: {
 		backgroundColor: "transparent",
 		width: 200 * alpha,
 		height: 19 * alpha,
 		marginTop: 6 * alpha,
+		zIndex: 2,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -1345,8 +1430,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		top: 50 * alpha,
-		// top: 0 * alpha,
+		// top: 50 * alpha,
+		top: 67 * alpha,
 		bottom: 0 * alpha,
 		flexDirection: "row",
 	},
@@ -2078,5 +2163,116 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+	},
+
+	showLocationView: {
+		backgroundColor: "white",
+		flex: 1,
+		zIndex: 1,
+		alignItems: "flex-start",
+	},
+	deliveryView: {
+		backgroundColor: "transparent",
+		width: 322 * alpha,
+		height: 105 * alpha,
+		marginLeft: 14 * alpha,
+		marginTop: 7 * alpha,
+	},
+	deliveryTwoText: {
+		backgroundColor: "transparent",
+		color: "rgb(55, 55, 55)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	freeWithRm40SpendText: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 9 * alpha,
+	},
+	deliveredByBrew9Text: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 19 * alpha,
+	},
+	deliverAreaAffectText: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		alignSelf: "stretch",
+	},
+	deliveryRm5ExtraText: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	branchInfoView: {
+		backgroundColor: "transparent",
+		width: 159 * alpha,
+		height: 76 * alpha,
+		marginLeft: 14 * alpha,
+		marginTop: 25 * alpha,
+		alignItems: "flex-start",
+	},
+	branchInfoText: {
+		backgroundColor: "transparent",
+		color: "rgb(55, 55, 55)",
+		fontFamily: "Helvetica",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	branchAddress: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		width: 300 * alpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 9 * alpha,
+	},
+	branchContact: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 3 * alpha,
+		width: 300 * alpha,
+	},
+	businessHour1000Text: {
+		backgroundColor: "transparent",
+		color: "rgb(160, 160, 160)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		alignSelf: "stretch",
 	},
 })

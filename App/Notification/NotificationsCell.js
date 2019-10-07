@@ -20,65 +20,97 @@ export default class NotificationsCell extends React.Component {
 	
 	}
 
-	onNotificationsCellPress = () => {
-	
+	onNotificationsCellPress = (item, type) => {
+
+		if (type == "promo") {
+			const { navigate } = this.props.navigation
+
+			navigate("PromotionDetail", {
+				details: item,
+			})
+		}
+		
 	}
 
 	render() {
-
+	
 		return <TouchableWithoutFeedback
-			onPress={this.onNotificationsCellPress}>
-			<View
-				navigation={this.props.navigation}
-				style={styles.notificationcell}>
+				onPress={() => this.onNotificationsCellPress(this.props.item, this.props.type)}>
 				<View
-					pointerEvents="box-none"
-					style={{
-						height: 19 * alpha,
-						marginLeft: 20 * alpha,
-						marginRight: 20 * alpha,
-						marginTop: 20 * alpha,
-						flexDirection: "row",
-						alignItems: "flex-start",
-					}}>
-					<Text
-						style={styles.titleText}>{this.props.title}</Text>
+					navigation={this.props.navigation}
+					style={styles.notificationcell}>
 					<View
+						pointerEvents="box-none"
 						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.timeText}>{this.props.time}</Text>
-				</View>
-				<View
-					pointerEvents="box-none"
-					style={{
-						height: 16 * alpha,
-						marginLeft: 20 * alpha,
-						marginRight: 25 * alpha,
-						marginTop: 1 * alpha,
-						flexDirection: "row",
-						alignItems: "flex-start",
-					}}>
-					<Text
-						style={styles.messageText}>{this.props.text}</Text>
+							position: "absolute",
+							left: 13 * alpha,
+							right: 13 * alpha,
+							top: 20 * alpha,
+							bottom: 1 * alpha,
+						}}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								height: 19 * alpha,
+								marginLeft: 8 * alpha,
+								marginRight: 28 * alpha,
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
+							<Text
+								style={styles.titleText}>{this.props.title}</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<Text
+								style={styles.timeText}>{this.props.time}</Text>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								height: 16 * alpha,
+								marginLeft: 8 * alpha,
+								marginRight: 28 * alpha,
+								marginTop: 1 * alpha,
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
+							<Text
+								style={styles.messageText}>{this.props.text}</Text>
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							{ this.props.id > this.props.last_read && (
+							<View
+								style={styles.circleView}/>)}
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Image
+							source={require("./../../assets/images/line-7.png")}
+							style={styles.seperatorImage}/>
+					</View>
 					<View
+						pointerEvents="box-none"
 						style={{
-							flex: 1,
-						}}/>
-					{ this.props.id > this.props.last_read && (
-					<View
-						style={styles.circleView}/>)}
+							position: "absolute",
+							right: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
+						{ this.props.type == "promo" && (
+							<Image
+							source={require("./../../assets/images/group-2.png")}
+							style={styles.arrowImage}/>
+						)}
+					</View>
 				</View>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-				<Image
-					source={require("./../../assets/images/line-7.png")}
-					style={styles.seperatorImage}/>
-			</View>
-		</TouchableWithoutFeedback>
+			</TouchableWithoutFeedback>
 	}
 }
 
@@ -130,5 +162,12 @@ const styles = StyleSheet.create({
 		width: 350 * alpha,
 		height: 3 * alpha,
 		marginBottom: 1 * alpha,
+	},
+	arrowImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 9 * alpha,
+		height: 10 * alpha,
+		marginRight: 20 * alpha,
 	},
 })

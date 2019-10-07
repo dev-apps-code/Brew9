@@ -156,12 +156,6 @@ export default class Profile extends React.Component {
 		navigate("RedeemPromotion")
 	}
 
-	onNotificationButtonPressed = () => {
-		const { navigate } = this.props.navigation
-
-		navigate("Notification")
-	}
-
 	onPointShopPressed = () => {
 		const { navigate } = this.props.navigation
 
@@ -689,7 +683,7 @@ export default class Profile extends React.Component {
 
 						</TouchableOpacity>
 					</View> */}
-					<View
+					{/* <View
 						style={styles.notificationView}>
 						<TouchableOpacity
 							onPress={this.onNotificationButtonPressed}
@@ -721,7 +715,7 @@ export default class Profile extends React.Component {
 								</View>
 							</View>
 						</TouchableOpacity>
-					</View>
+					</View> */}
 
 					<View
 						style={styles.aboutView}>
