@@ -76,40 +76,42 @@ export default class ProductCell extends React.Component {
 						style={styles.detailsView}>
 						<Text
 							style={styles.titleText}>{this.props.productname}</Text>
-						<Text
-							style={styles.descriptionText}>{this.props.productdescription}</Text>
+						<Text numberOfLines={1}
+              				style={styles.descriptionText}>{this.props.productdescription}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
 						<View
 							pointerEvents="box-none"
 							style={{
-								flex: 1,
 								alignSelf: "stretch",
-								marginRight: 1 * alpha,
-								marginTop: 8 * alpha,
+								height: 29,
+								marginRight: 1,
 								flexDirection: "row",
-								alignItems: "flex-start",
+								alignItems: "flex-end",
 							}}>
 							<Text
-								style={styles.priceText}>${parseFloat(this.props.productprice).toFixed(2)}</Text>
+                				style={styles.priceText}>${parseFloat(this.props.productprice).toFixed(2)}</Text>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<View
+							{/* <View
 								pointerEvents="box-none"
 								style={{
-									alignSelf: "flex-end",
-									width: 61 * alpha,
-									height: 28 * alpha,
-									marginBottom: 2 * alpha,
+									width: 61,
+									height: 28,
+									marginBottom: 2,
 								}}>
-								{/* <TouchableOpacity
+								<TouchableOpacity
 									onPress={this.onAddPressed}
 									style={styles.addButton}>
 									<Image
 										source={require("./../../assets/images/add-5.png")}
 										style={styles.addButtonImage}/>
-								</TouchableOpacity> */}
-								{/* <View
+								</TouchableOpacity>
+								<View
 									style={styles.selectoptionView}>
 									<TouchableOpacity
 										onPress={this.onButtonPressed}
@@ -122,8 +124,8 @@ export default class ProductCell extends React.Component {
 										<Text
 											style={styles.numberofitemText}>2</Text>
 									</View>
-								</View> */}
-							</View>
+								</View>
+							</View> */}
 						</View>
 					</View>
 				</View>
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		width: 165 * alpha,
-		height: 31 * alpha,
+		height: 16 * alpha,
 		marginLeft: 1 * alpha,
 		marginTop: 11 * alpha,
 	},

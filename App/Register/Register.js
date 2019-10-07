@@ -19,7 +19,7 @@ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-
 import {connect} from "react-redux"
 import PhoneInput from 'react-native-phone-input'
 import * as ImagePicker from "expo-image-picker"
-import Constants from "expo-constants"
+// import Constants from "expo-constants"
 import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -65,13 +65,13 @@ export default class Register extends React.Component {
 	}
 
 	getPermissionAsync = async () => {
-		if (Constants.platform.ios) {
+		// if (Constants.platform.ios) {
 			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 			if (status !== 'granted') {
 				return false
 			}
 			return true
-		}
+		// }
 	}
 
 	loadUpdateProfile(formData){

@@ -115,7 +115,7 @@ export default class Home extends React.Component {
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
 
-	_getLocationAsync = async () => {
+	getLocationAsync = async () => {
 
 		const {dispatch} = this.props
 
@@ -136,12 +136,12 @@ export default class Home extends React.Component {
 		}
 	  }
 	componentWillMount() {
-		if (Platform.OS === 'android' && !Constants.isDevice) {
+		if (Platform.OS === 'android') {
 			this.setState({
 			  errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
 			});
 		  } else {
-			this._getLocationAsync();
+			this.getLocationAsync();
 		  }
 		const { dispatch } = this.props
 		dispatch(createAction('members/loadCurrentUserFromCache')({}))
@@ -211,18 +211,21 @@ export default class Home extends React.Component {
 					total: eventObject.total,
 					page: this.state.page + 1,
 				},function () {
+					let data = [...this.state.data]
 					var items = []
-					var index_length = this.state.products.length
-					for(var index in this.state.data) {
-
-						this.state.data[index].selected = index == 0 ? true : false
-						this.state.data[index].scroll_index = index_length
-						items = items.concat(this.state.data[index].products)
-						index_length = index_length + this.state.data[index].products.length
+					var index_length = 0
+					for(var index in data) {
+						data[index].selected = index == 0 ? true : false
+						data[index].scroll_index = index_length
+						items = items.concat(data[index].products)
+						console.log("Length", data[index].products.length, "index", index_length)
+						index_length = index_length + data[index].products.length
 					}
 					this.setState({
-						products: this.state.menu_banners.concat(items)
+						products: this.state.menu_banners.concat(items),
+						data: data
 					}, function () {
+						
 					})
 				}.bind(this))
 			}
@@ -285,8 +288,9 @@ export default class Home extends React.Component {
 			}, 3000);
 	}
 
-	onSelectCategory = (scoll_index, selected_index) => {
-		this.flatListRef.scrollToIndex({animated: true, index: scoll_index})
+	onSelectCategory = (scroll_index, selected_index) => {
+		console.log("Scroll Index", scroll_index)
+		this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
 	}
 
 	reachProductIndex = ( viewableItems, changed ) => {
@@ -391,6 +395,7 @@ export default class Home extends React.Component {
 		return <CategoryCell
 			navigation={this.props.navigation}
 			categoryname={item.name}
+			categoryImage={item.image.url}
 			index={index}
 			scrollIndex={item.scroll_index}
 			onSelectCategory={this.onSelectCategory}
