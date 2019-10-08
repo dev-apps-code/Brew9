@@ -66,6 +66,8 @@ export default class DirectionMap extends React.Component {
 		openMap({ latitude: latitude, longitude: longitude });
 	}
 
+	
+
 	render() {
 	
 		const {shop} = this.state
@@ -77,9 +79,22 @@ export default class DirectionMap extends React.Component {
 					initialRegion={{
 						latitude: shop ? parseFloat(shop.latitude) : 0.0,
 						longitude: shop ? parseFloat(shop.longitude) : 0.0,
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
-					  }}/>
+						latitudeDelta:0.1,
+						longitudeDelta:0.1,
+					  }}					
+					  onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}			  
+					  >
+						     <MapView.Marker
+								ref={marker => (this.marker = marker)}
+								coordinate={{
+									latitude: shop ? parseFloat(shop.latitude) : 0.0,
+									longitude: shop ? parseFloat(shop.longitude) : 0.0,
+								}
+								}
+								title={shop.name}
+								description={shop.location}
+								/>
+						  </MapView>
 				<View
 					style={styles.branchView}>
 					<View

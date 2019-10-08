@@ -8,7 +8,7 @@
 
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
 import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -279,8 +279,9 @@ export default class VerifyUser extends React.Component {
 								: url === KURL_EULA ? 'End User License Agreement' : url
 						}
 						>
-						<Text style={styles.description_text}>
-							By using this app, you agree to our{' '}
+						<Text style={styles.description_text}
+						numberOfLines={2}>
+							By using this app, you agree to our{' '}							
 							<Text style={{ textDecorationLine: 'underline' }}>
 							{KURL_TERMS_OF_SERVICE}
 							</Text>,{' '}
@@ -350,7 +351,7 @@ const styles = StyleSheet.create({
 	},
 	welcomeText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -521,7 +522,7 @@ const styles = StyleSheet.create({
 	},
 	termsAndConditionsButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -532,11 +533,10 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	description_text: {
-		width: "100%",
-		height: 30 * alpha,
+		width: windowWidth,
 		marginBottom: 40 * alpha,
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
 	},
 	phoneCountryCodeText: {
 		marginLeft: 0 * alpha,
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 	},
 	errorMessageText: {

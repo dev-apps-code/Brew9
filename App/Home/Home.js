@@ -113,6 +113,7 @@ export default class Home extends React.Component {
 			isToggleLocation: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
+
 	}
 
 	getLocationAsync = async () => {
@@ -204,6 +205,8 @@ export default class Home extends React.Component {
 	loadStoreProducts() {
 
 		const { dispatch, company_id } = this.props
+		const { menu_banners } =  this.state
+
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -216,9 +219,8 @@ export default class Home extends React.Component {
 					var index_length = 0
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
-						data[index].scroll_index = index_length
-						items = items.concat(data[index].products)
-						console.log("Length", data[index].products.length, "index", index_length)
+						data[index].scroll_index = index_length + menu_banners.length
+						items = items.concat(data[index].products)						
 						index_length = index_length + data[index].products.length
 					}
 					this.setState({
@@ -1472,6 +1474,9 @@ const styles = StyleSheet.create({
 		// bottom: 0 * alpha,
 		height: 50 * alpha,
 	},
+	bannerImage:{
+		height:windowHeight * alpha,
+	},
 	totalAmountView: {
 		backgroundColor: "transparent",
 		width: 280 * alpha,
@@ -1529,7 +1534,7 @@ const styles = StyleSheet.create({
 	},
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1540,7 +1545,7 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1563,7 +1568,7 @@ const styles = StyleSheet.create({
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1586,7 +1591,7 @@ const styles = StyleSheet.create({
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -2103,7 +2108,7 @@ const styles = StyleSheet.create({
 	optionsText: {
 		backgroundColor: "transparent",
 		color: "rgb(141, 141, 141)",
-		fontFamily: "Helvetica-Oblique",
+		fontFamily: "Helvetica-LightOblique",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
 	},
 	iText: {
 		color: "rgb(110, 110, 110)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

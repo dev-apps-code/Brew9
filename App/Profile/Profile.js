@@ -788,7 +788,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 49, 49)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -820,7 +820,7 @@ const styles = StyleSheet.create({
 	memberText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 49, 49)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
 	},
 	vipButtonText: {
 		color: "rgb(108, 108, 108)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1086,7 +1086,7 @@ const styles = StyleSheet.create({
 	pointRewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1104,7 +1104,7 @@ const styles = StyleSheet.create({
 	},
 	vipClubText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1155,7 +1155,7 @@ const styles = StyleSheet.create({
 	memberStatusText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1165,7 +1165,7 @@ const styles = StyleSheet.create({
 	upgradeMemberText: {
 		backgroundColor: "transparent",
 		color: "rgb(184, 180, 180)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1207,7 +1207,7 @@ const styles = StyleSheet.create({
 	orderHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1265,7 +1265,7 @@ const styles = StyleSheet.create({
 	personalInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1322,7 +1322,7 @@ const styles = StyleSheet.create({
 	qrCodeText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1331,7 +1331,7 @@ const styles = StyleSheet.create({
 	},
 	qrDescriptionText: {
 		color: "rgb(184, 180, 180)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1387,7 +1387,7 @@ const styles = StyleSheet.create({
 	redeemStationText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1396,7 +1396,7 @@ const styles = StyleSheet.create({
 	},
 	redeemDescriptionText: {
 		color: "rgb(184, 180, 180)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1438,7 +1438,7 @@ const styles = StyleSheet.create({
 	},
 	notificationText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1481,7 +1481,7 @@ const styles = StyleSheet.create({
 	},
 	aboutText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

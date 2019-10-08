@@ -369,6 +369,17 @@ export default class App extends React.Component {
 			"DINPro-Bold": require("./assets/fonts/DINProBold.otf"),
 			"Helvetica-Light": require("./assets/fonts/HelveticaLight.ttf"),
 			"Helvetica-Oblique": require("./assets/fonts/HelveticaOblique.ttf"),
+			"SFProText-Bold": require("./assets/fonts/SFProText-Bold.ttf"),
+			"SFProText-BoldItalic": require("./assets/fonts/SFProText-BoldItalic.ttf"),
+			"SFProText-Heavy": require("./assets/fonts/SFProText-Heavy.ttf"),
+			"SFProText-HeavyItalic": require("./assets/fonts/SFProText-HeavyItalic.ttf"),
+			"SFProText-LightItalic": require("./assets/fonts/SFProText-LightItalic.ttf"),
+			"SFProText-Medium": require("./assets/fonts/SFProText-Medium.ttf"),
+			"SFProText-MediumItalic": require("./assets/fonts/SFProText-MediumItalic.ttf"),
+			"SFProText-Regular": require("./assets/fonts/SFProText-Regular.ttf"),
+			"SFProText-RegularItalic": require("./assets/fonts/SFProText-RegularItalic.ttf"),
+			"SFProText-Semibold": require("./assets/fonts/SFProText-Semibold.ttf"),
+			"SFProText-SemiboldItalic": require("./assets/fonts/SFProText-SemiboldItalic.ttf"),
 		})
 		this.setState({
 			fontsReady: true,

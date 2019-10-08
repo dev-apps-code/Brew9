@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
 	},
 	timeText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "Helvetica-Oblique",
+		fontFamily: "Helvetica-LightOblique",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

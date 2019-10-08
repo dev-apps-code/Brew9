@@ -739,7 +739,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(10, 10, 10)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -767,7 +767,7 @@ const styles = StyleSheet.create({
 	nicknameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
 	},
 	phoneNumberText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -860,7 +860,7 @@ const styles = StyleSheet.create({
 	},
 	genderText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -884,7 +884,7 @@ const styles = StyleSheet.create({
 	birthdayText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -910,7 +910,7 @@ const styles = StyleSheet.create({
 	},
 	saveButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
 	welcomeGiftPackText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -700,7 +700,7 @@ const styles = StyleSheet.create({
 	},
 	detailsText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -861,7 +861,7 @@ const styles = StyleSheet.create({
 	},
 	payButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
