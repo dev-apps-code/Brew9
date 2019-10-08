@@ -1520,7 +1520,7 @@ const styles = StyleSheet.create({
 	},
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1531,7 +1531,7 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1554,7 +1554,7 @@ const styles = StyleSheet.create({
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1577,7 +1577,7 @@ const styles = StyleSheet.create({
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -2049,7 +2049,7 @@ const styles = StyleSheet.create({
 	optionsText: {
 		backgroundColor: "transparent",
 		color: "rgb(141, 141, 141)",
-		fontFamily: "Helvetica-Oblique",
+		fontFamily: "Helvetica-LightOblique",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -755,7 +755,7 @@ const styles = StyleSheet.create({
 	},
 	pickupbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -824,7 +824,7 @@ const styles = StyleSheet.create({
 	},
 	deliverybuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1191,14 +1191,14 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 0 * alpha,
+		bottom: 40 * alpha,
 		height: 47 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
 	priceText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1221,7 +1221,7 @@ const styles = StyleSheet.create({
 	},
 	payNowButtonText: {
 		color: "white",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

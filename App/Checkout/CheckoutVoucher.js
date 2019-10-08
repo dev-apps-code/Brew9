@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
     },
     usedButtonText: {
         color: "rgb(118, 118, 118)",
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "SFProText-Medium",
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "bold",
@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
     },
     redeemrewardButtonText: {
         color: "rgb(82, 82, 82)",
-        fontFamily: "Helvetica-Bold",
+        fontFamily: "SFProText-Medium",
         fontSize: 15 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "bold",

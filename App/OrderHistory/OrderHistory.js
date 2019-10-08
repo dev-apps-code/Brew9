@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
 	purchaseHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
 	seeAllText: {
 		backgroundColor: "transparent",
 		color: "rgb(102, 101, 101)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
