@@ -26,6 +26,8 @@ export default class CategoryCell extends React.Component {
 
 	render() {
 
+		const {categoryImage, categoryname } = this.props
+
 		return <TouchableWithoutFeedback
 				onPress={this.onCategoryCellPress}>
 				<View
@@ -33,10 +35,13 @@ export default class CategoryCell extends React.Component {
 					style={this.props.selected ? styles.categorycell_selected :styles.categorycell}>
 					{this.props.selected ? <View
 						style={styles.selectbarView}/> : null}
-					<Image
-						style={styles.imageImage}/>
+						{ categoryImage && (
+							<Image
+								style={styles.imageImage}
+							source={{uri: categoryImage}}/>
+						)}
 					<Text
-						style={this.props.selected ? styles.labelText_selected : styles.labelText}>{this.props.categoryname}</Text>
+						style={this.props.selected ? styles.labelText_selected : styles.labelText}>{categoryname}</Text>
 				</View>
 			</TouchableWithoutFeedback>
 	}
@@ -66,31 +71,33 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
 		fontFamily: "Helvetica",
-		fontSize: 11 * fontAlpha,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		flex: 1,
 		marginLeft: 7 * alpha,
-		marginRight: 14 * alpha,
+		marginRight: 7 * alpha,
+		flexWrap: 'wrap'
 	},
 	labelText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
 		fontFamily: "Helvetica",
-		fontSize: 11 * fontAlpha,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		flex: 1,
 		marginLeft: 7 * alpha,
-		marginRight: 14*  alpha,
+		marginRight: 7 *  alpha,
+		flexWrap: 'wrap'
 	},
 	imageImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: 20 * alpha,
 		height: 20 * alpha,
-		marginLeft: 6 * alpha,
+		marginLeft: 7 * alpha,
 	},
 })

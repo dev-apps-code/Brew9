@@ -17,8 +17,8 @@ export function getBasicAuthentication(authToken) {
 
 export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
-  console.log(urlString)
-  console.log(authtoken)
+  // console.log(urlString)
+  // console.log(authtoken)
   return fetch(urlString, {
     method: 'GET',
     headers: {
@@ -84,7 +84,7 @@ export function postMultipartMethod(authtoken, object) {
 export function logResponse(description) {
   return function(res) {
       // console.log("Description")
-      console.log(description, res)
+      // console.log(description, res)
       return res
   }
 }
