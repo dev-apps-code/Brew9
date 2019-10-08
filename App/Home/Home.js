@@ -113,6 +113,7 @@ export default class Home extends React.Component {
 			isToggleLocation: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
+
 	}
 
 	getLocationAsync = async () => {
@@ -204,6 +205,8 @@ export default class Home extends React.Component {
 	loadStoreProducts() {
 
 		const { dispatch, company_id } = this.props
+		const { menu_banners } =  this.state
+
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -216,9 +219,8 @@ export default class Home extends React.Component {
 					var index_length = 0
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
-						data[index].scroll_index = index_length
-						items = items.concat(data[index].products)
-						console.log("Length", data[index].products.length, "index", index_length)
+						data[index].scroll_index = index_length + menu_banners.length
+						items = items.concat(data[index].products)						
 						index_length = index_length + data[index].products.length
 					}
 					this.setState({
