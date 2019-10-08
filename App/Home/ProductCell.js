@@ -47,7 +47,7 @@ export default class ProductCell extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							width: 87 * alpha,
+							width: 74 * alpha,
 							height: 84 * alpha,
 							marginLeft: 3 * alpha,
 							marginTop: 4 * alpha,
@@ -76,8 +76,8 @@ export default class ProductCell extends React.Component {
 						style={styles.detailsView}>
 						<Text
 							style={styles.titleText}>{this.props.productname}</Text>
-						<Text numberOfLines={1}
-              				style={styles.descriptionText}>{this.props.productdescription}</Text>
+						<Text numberOfLines={2}
+              				style={styles.descriptionText}>{this.props.productsummary}</Text>
 						<View
 							style={{
 								flex: 1,
@@ -86,8 +86,8 @@ export default class ProductCell extends React.Component {
 							pointerEvents="box-none"
 							style={{
 								alignSelf: "stretch",
-								height: 29,
-								marginRight: 1,
+								height: 29 * alpha,
+								marginRight: 1 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-end",
 							}}>
@@ -143,16 +143,16 @@ const styles = StyleSheet.create({
 	},
 	productimageImage: {
 		backgroundColor: "transparent",
-		resizeMode: "contain",
-		width: 86 * alpha,
+		resizeMode: "cover",
+		width: 74 * alpha,
 		height: 84 * alpha,
-		marginLeft: 1 * alpha,
+		marginLeft: 5 * alpha,
 	},
 	soldView: {
 		backgroundColor: "rgba(0, 0, 0, 0.7)",
 		position: "absolute",
-		left: 0,
-		width: 86 * alpha,
+		left: 5,
+		width: 74 * alpha,
 		top: 62 * alpha,
 		height: 22 * alpha,
 		justifyContent: "center",
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
 	},
 	detailsView: {
 		backgroundColor: "transparent",
-		width: 174 * alpha,
+		width: 180 * alpha,
 		height: 89 * alpha,
 		marginLeft: 10 * alpha,
 		alignItems: "flex-start",
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "Helvetica",
-		fontSize: 15 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -193,10 +193,9 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		width: 165 * alpha,
-		height: 16 * alpha,
+		width: 180 * alpha,
 		marginLeft: 1 * alpha,
-		marginTop: 11 * alpha,
+		marginTop: 5 * alpha,
 	},
 	priceText: {
 		backgroundColor: "transparent",

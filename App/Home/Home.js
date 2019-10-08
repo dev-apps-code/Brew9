@@ -289,7 +289,7 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-		console.log("Scroll Index", scroll_index)
+		// console.log("Scroll Index", scroll_index)
 		this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
 	}
 
@@ -416,7 +416,7 @@ export default class Home extends React.Component {
 					productprice={item.price}
 					productimage={item.image.thumb.url}
 					productquantity={item.quantity}
-					productdescription={item.description}
+					productsummary={item.summary}
 					productvariant={item.variants}
 					productenable={item.enabled}
 					producttotalquantity={item.total_quantity}
@@ -698,7 +698,7 @@ export default class Home extends React.Component {
 		let variant_array = filtered.map(a => a.value)
 		
 		const {selectedShop} = this.props
-
+		
 		var enabled = selected_product.enabled
 
 		if (selectedShop != null){
@@ -706,6 +706,16 @@ export default class Home extends React.Component {
 				enabled = false
 			}
 		}
+
+		const ingredients = selected_product.ingredients.map((item, key) => {
+
+			return <View
+				style={styles.ingredientView}
+				key={key}>
+				<Text
+					style={styles.ingredientText}>{item.name}</Text>
+			</View>
+		})
 
 		const variants = selected_product.variants.map((item, key) => {
 
@@ -727,9 +737,12 @@ export default class Home extends React.Component {
 							return <TouchableOpacity
 								key={value_key}
 								onPress={() => this.onVariantPressed(selected_product,selected_variants, key, value, required_variant)}
-								style={ selected ? styles.selectedButton : styles.choiceFourButton}>
+								style={ selected ? styles.selectedButton : styles.unselectedButton}>
+								{ value.recommended && (<Image
+									source={require("./../../assets/images/star.png")}
+									style={styles.recommendedStarImage}/>)}
 								<Text
-									style={selected ? styles.selectedButtonText : styles.choiceFourButtonText}>{value.value} { value.price > 0 && (`$${value.price}`)}</Text>
+									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} { value.price > 0 && (`$${value.price}`)}</Text>
 							</TouchableOpacity>
 						})
 					}
@@ -741,13 +754,13 @@ export default class Home extends React.Component {
 			style={styles.popOutView}>
 				<View
 					style={styles.topbuttonView}>
-					{/*<TouchableOpacity*/}
-					{/*	onPress={this.onFavouritePressed}*/}
-					{/*	style={styles.favouriteButton}>*/}
-					{/*	<Image*/}
-					{/*		source={require("./../../assets/images/group-9-11.png")}*/}
-					{/*		style={styles.favouriteButtonImage}/>*/}
-					{/*</TouchableOpacity>*/}
+					{/* <TouchableOpacity
+						onPress={this.onFavouritePressed}
+						style={styles.favouriteButton}>
+						<Image
+							source={require("./../../assets/images/group-9-11.png")}
+							style={styles.favouriteButtonImage}/>
+					</TouchableOpacity> */}
 					<TouchableOpacity
 						onPress={this.onClosePressed}
 						style={styles.closeButton}>
@@ -774,28 +787,29 @@ export default class Home extends React.Component {
 							style={{
 								flex: 1,
 							}}/>
-						{/*<View*/}
-						{/*	pointerEvents="box-none"*/}
-						{/*	style={{*/}
-						{/*		alignSelf: "flex-start",*/}
-						{/*		width: 76 * alpha,*/}
-						{/*		height: 14 * alpha,*/}
-						{/*		marginLeft: 1 * alpha,*/}
-						{/*		flexDirection: "row",*/}
-						{/*		alignItems: "flex-end",*/}
-						{/*	}}>*/}
-						{/*	<View*/}
-						{/*		style={styles.ingredientView}>*/}
-						{/*		<Text*/}
-						{/*			style={styles.alcoholText}>Alcohol</Text>*/}
-						{/*	</View>*/}
-						{/*	<View*/}
-						{/*		style={styles.ingredientTwoView}>*/}
-						{/*		<Text*/}
-						{/*			style={styles.milkText}>Milk</Text>*/}
-						{/*	</View>*/}
-						{/*</View>*/}
-					</View>
+							{
+								selected_product.ingredients && (
+									<View
+										pointerEvents="box-none"
+										style={{
+											alignSelf: "flex-start",
+											flex: 1,
+											marginLeft: 1 * alpha,
+											flexDirection: "row",
+											flexWrap: "wrap"
+										}}>
+										{ingredients}
+									</View>
+								)
+							}
+
+							{ selected_product.description && (
+								<Text style={styles.descriptionHeaderText}>Product Description</Text>
+							)}
+							{ selected_product.description && (
+								<Text style={styles.descriptionText}>{selected_product.description}</Text>
+							)}
+						</View>
 					{variants}
 				</ScrollView>
 				<View
@@ -1252,8 +1266,8 @@ export default class Home extends React.Component {
 		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>
 			<TouchableOpacity
 					onPress={this.onClosePressed}
-					style={styles.closeButton}>
-					<Text style={styles.closeButtonText}>X</Text>
+					style={styles.closeGalleryButton}>
+					<Text style={styles.closeGalleryButtonText}>X</Text>
 				</TouchableOpacity>
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<ScrollView
@@ -1272,7 +1286,7 @@ const styles = StyleSheet.create({
 	navigationBarItem: {
 	},
 	loadingIndicator:{
-		marginTop:100*alpha,
+		marginTop:100 * alpha,
 	},
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
@@ -1667,6 +1681,29 @@ const styles = StyleSheet.create({
 		marginRight: 11 * alpha,
 	},
 	closeButton: {
+		backgroundColor: "rgb(193, 191, 191)",
+		borderRadius: 12.5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 25 * alpha,
+		height: 25 * alpha,
+	},
+	closeButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	closeButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 18 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+
+	closeGalleryButton: {
 		backgroundColor: "transparent",
 		borderRadius: 12.5 * alpha,
 		flexDirection: "row",
@@ -1679,11 +1716,11 @@ const styles = StyleSheet.create({
 		top: 51 * alpha,
 		right: 23 * alpha,
 	},
-	closeButtonImage: {
+	closeGalleryButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
-	closeButtonText: {
+	closeGalleryButtonText: {
 		color: "white",
 		fontFamily: "Helvetica",
 		fontSize: 18 * fontAlpha,
@@ -1700,7 +1737,7 @@ const styles = StyleSheet.create({
 	productView: {
 		backgroundColor: "transparent",
 		width: "100%",
-		height: 22 * alpha,
+		flex: 1,
 		marginLeft: 19 * alpha,
 		marginTop: 25 * alpha,
 	},
@@ -1714,13 +1751,35 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginRight: 28 * alpha,
 	},
+	descriptionHeaderText: {
+		color: "rgb(167, 167, 167)",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginRight: 28 * alpha,
+		marginTop: 10 * alpha,
+	},
+	descriptionText: {
+		color: "rgb(167, 167, 167)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginRight: 28 * alpha,
+	},
 	ingredientView: {
 		backgroundColor: "rgb(245, 245, 245)",
-		width: 39 * alpha,
 		height: 14 * alpha,
 		justifyContent: "center",
+		marginRight: 5 * alpha,
+		marginTop: 3 * alpha,
 	},
-	alcoholText: {
+	ingredientText: {
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
 		fontFamily: "Helvetica",
@@ -1775,7 +1834,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
-	choiceFourButton: {
+	unselectedButton: {
 		backgroundColor: "rgb(238, 238, 238)",
 		borderRadius: 2 * alpha,
 		overflow: "hidden",
@@ -1784,23 +1843,23 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		height: 28 * alpha,
-		marginRight: 9* alpha,
+		marginRight: 9 * alpha,
 		marginBottom: 4 * alpha,
 		marginTop: 1 * alpha,
 	},
-	choiceFourButtonImage: {
+	recommendedStarImage: {
 		resizeMode: "contain",
-		marginRight: 10 * alpha,
+		marginLeft: 7 * alpha,
 	},
-	choiceFourButtonText: {
+	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		marginLeft: 10*alpha,
-		marginRight: 10*alpha,
+		marginRight: 7 * alpha,
+		marginLeft: 7 * alpha,
 	},
 	selectedButton: {
 		backgroundColor: "rgb(0, 178, 227)",
@@ -1826,8 +1885,8 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		marginLeft: 10*alpha,
-		marginRight: 10*alpha,
+		marginRight: 7 * alpha,
+		marginLeft: 7 * alpha,
 	},
 	optionsView: {
 		backgroundColor: "transparent",
@@ -2136,32 +2195,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         padding: 10 * alpha,
 	},
-	closeButton: {
-		backgroundColor: "transparent",
-		borderRadius: 12.5 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		alignSelf: "flex-end",
-		width: 25 * alpha,
-		height: 25 * alpha,
-		marginRight: 11 * alpha,
-		marginTop: 40 * alpha,
-	},
-	closeButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
-	closeButtonText: {
-		color: "white",
-		fontFamily: "Helvetica",
-		fontSize: 18 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-
 	showLocationView: {
 		backgroundColor: "white",
 		flex: 1,

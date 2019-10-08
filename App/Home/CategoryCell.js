@@ -41,7 +41,12 @@ export default class CategoryCell extends React.Component {
 							source={{uri: categoryImage}}/>
 						)}
 					<Text
-						style={this.props.selected ? styles.labelText_selected : styles.labelText}>{categoryname}</Text>
+						style={
+							this.props.selected && categoryImage ? styles.labelImageText_selected 
+							: !this.props.selected && categoryImage ? styles.labelImageText
+							: this.props.selected ? styles.labelText_selected
+							: styles.labelText
+						}>{categoryname}</Text>
 				</View>
 			</TouchableWithoutFeedback>
 	}
@@ -76,7 +81,20 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		flex: 1,
-		marginLeft: 7 * alpha,
+		marginLeft: 14 * alpha,
+		marginRight: 7 * alpha,
+		flexWrap: 'wrap'
+	},
+	labelImageText: {
+		backgroundColor: "transparent",
+		color: "rgb(78, 77, 77)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		flex: 1,
+		marginLeft: 2 * alpha,
 		marginRight: 7 * alpha,
 		flexWrap: 'wrap'
 	},
@@ -89,7 +107,20 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		flex: 1,
-		marginLeft: 7 * alpha,
+		marginLeft: 14 * alpha,
+		marginRight: 7 *  alpha,
+		flexWrap: 'wrap'
+	},
+	labelImageText_selected: {
+		backgroundColor: "transparent",
+		color: "rgb(78, 77, 77)",
+		fontFamily: "Helvetica",
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		flex: 1,
+		marginLeft: 2 * alpha,
 		marginRight: 7 *  alpha,
 		flexWrap: 'wrap'
 	},
