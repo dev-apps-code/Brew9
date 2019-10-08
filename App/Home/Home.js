@@ -710,7 +710,6 @@ export default class Home extends React.Component {
 		}
 
 		const ingredients = selected_product.ingredients.map((item, key) => {
-
 			return <View
 				style={styles.ingredientView}
 				key={key}>
@@ -781,8 +780,7 @@ export default class Home extends React.Component {
 				pointerEvents="box-none">				
 				<ScrollView
 					style={styles.contentScrollView}>
-					<View
-						style={styles.productView}>
+					<View style={styles.productView}>
 						<Text
 							style={styles.nameText}>{selected_product.name}</Text>
 						<View
@@ -804,11 +802,11 @@ export default class Home extends React.Component {
 									</View>
 								)
 							}
-
-							{ selected_product.description && (
+							{ (selected_product.description!=null && selected_product.description != '') && (
 								<Text style={styles.descriptionHeaderText}>Product Description</Text>
-							)}
-							{ selected_product.description && (
+								)
+							}
+							{ (selected_product.description!=null && selected_product.description != '') && (
 								<Text style={styles.descriptionText}>{selected_product.description}</Text>
 							)}
 						</View>
