@@ -71,7 +71,12 @@ export default class Notification extends React.Component {
 
     componentDidMount() {
         this.loadLocalStore()
-        this.loadNotifications()
+        const {members} = this.props
+
+        if (members !=null){
+            this.loadNotifications()
+        }
+        
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
             onItemPressed: this.onItemPressed,

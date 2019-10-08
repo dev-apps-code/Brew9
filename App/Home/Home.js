@@ -1453,6 +1453,9 @@ const styles = StyleSheet.create({
 		// bottom: 0 * alpha,
 		height: 50 * alpha,
 	},
+	bannerImage:{
+		height:windowHeight * alpha,
+	},
 	totalAmountView: {
 		backgroundColor: "transparent",
 		width: 280 * alpha,
