@@ -133,8 +133,9 @@ export default class Home extends React.Component {
 	  componentDidUpdate(prevProps, prevState) {
 
 		if (prevProps.location != this.props.location) {
-		  this.loadShops()
+		  this.loadShops(false)
 		}
+
 	  }
 	componentWillMount() {
 		if (Platform.OS === 'android') {
@@ -149,7 +150,7 @@ export default class Home extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadShops()
+		this.loadShops(true)
 		// this.loadStorePushToken()
 	}
 
@@ -173,7 +174,7 @@ export default class Home extends React.Component {
 		}
 	}
 
-	loadShops(){
+	loadShops(loadProducts){
 		const { dispatch,company_id,location } = this.props
 
 		this.setState({ loading: true })
@@ -183,7 +184,9 @@ export default class Home extends React.Component {
 					shop: eventObject.result,
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
-					this.loadStoreProducts()
+					if (loadProducts){
+						this.loadStoreProducts()
+					}					
 				})
 			}
 		}
@@ -254,7 +257,7 @@ export default class Home extends React.Component {
 			data: [],
 			products: [],
 		})
-		this.loadShops()
+		this.loadShops(true)
 	}
 
 	onCheckoutPressed = () => {
