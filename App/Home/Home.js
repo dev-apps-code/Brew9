@@ -1776,6 +1776,8 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginRight: 28 * alpha,
+		marginTop: 5 * alpha,
+		marginBottom: 5 * alpha
 	},
 	ingredientView: {
 		backgroundColor: "rgb(245, 245, 245)",
@@ -1815,7 +1817,7 @@ const styles = StyleSheet.create({
 	},
 	optionsTwoView: {
 		backgroundColor: "transparent",
-		marginTop: 10 * alpha,
+		marginTop: 5 * alpha,
 		alignItems: "flex-start",
 		borderRadius:7.0,
 		overflow: "hidden",
