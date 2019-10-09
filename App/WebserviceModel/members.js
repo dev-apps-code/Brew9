@@ -38,6 +38,7 @@ export default {
     company_id:1,
     currency:'$',
     location:null,
+
   },
 
 
@@ -51,6 +52,7 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
+      console.log("load profiel",profile)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     setLocation(state, { payload }) {
