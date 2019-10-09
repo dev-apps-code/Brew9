@@ -132,8 +132,9 @@ export default class Home extends React.Component {
 	  componentDidUpdate(prevProps, prevState) {
 
 		if (prevProps.location != this.props.location) {
-		  this.loadShops()
+		  this.loadShops(false)
 		}
+
 	  }
 	componentWillMount() {
 		if (Platform.OS === 'android') {
@@ -148,7 +149,7 @@ export default class Home extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadShops()
+		this.loadShops(true)
 		// this.loadStorePushToken()
 	}
 
@@ -172,7 +173,7 @@ export default class Home extends React.Component {
 		}
 	}
 
-	loadShops(){
+	loadShops(loadProducts){
 		const { dispatch,company_id,location } = this.props
 
 		this.setState({ loading: true })
@@ -182,7 +183,9 @@ export default class Home extends React.Component {
 					shop: eventObject.result,
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
-					this.loadStoreProducts()
+					if (loadProducts){
+						this.loadStoreProducts()
+					}					
 				})
 			}
 		}
@@ -253,7 +256,7 @@ export default class Home extends React.Component {
 			data: [],
 			products: [],
 		})
-		this.loadShops()
+		this.loadShops(true)
 	}
 
 	onCheckoutPressed = () => {
@@ -732,7 +735,6 @@ export default class Home extends React.Component {
 		}
 
 		const ingredients = selected_product.ingredients.map((item, key) => {
-
 			return <View
 				style={styles.ingredientView}
 				key={key}>
@@ -803,8 +805,7 @@ export default class Home extends React.Component {
 				pointerEvents="box-none">				
 				<ScrollView
 					style={styles.contentScrollView}>
-					<View
-						style={styles.productView}>
+					<View style={styles.productView}>
 						<Text
 							style={styles.nameText}>{selected_product.name}</Text>
 						<View
@@ -826,11 +827,11 @@ export default class Home extends React.Component {
 									</View>
 								)
 							}
-
-							{ selected_product.description.length > 0 && (
+							{ (selected_product.description!=null && selected_product.description != '') && (
 								<Text style={styles.descriptionHeaderText}>Product Description</Text>
-							)}
-							{ selected_product.description.length > 0 && (
+								)
+							}
+							{ (selected_product.description!=null && selected_product.description != '') && (
 								<Text style={styles.descriptionText}>{selected_product.description}</Text>
 							)}
 						</View>

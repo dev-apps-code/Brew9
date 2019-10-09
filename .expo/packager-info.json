@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://cq-ici.anonymous.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.cq-ici.anonymous.brew9-app.exp.direct",
-  "ngrokPid": 18219,
-  "devToolsPort": 19003,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "devToolsPort": 19002,
   "packagerPort": 19002,
-  "packagerPid": 18196
+  "packagerPid": 42478
 }

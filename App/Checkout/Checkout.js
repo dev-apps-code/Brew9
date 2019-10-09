@@ -107,9 +107,32 @@ export default class Checkout extends React.Component {
 
 	onPaymentButtonPressed = () => {
 		
+		
 		// if not enough credit ...
 
 		// if no phone no, ask to update
+	}
+
+	loadMakeOrder(){
+		const { dispatch, selectedShop } = this.props
+
+		const {cart} = this.state
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.setState({
+				loading: false,
+				})        
+			}
+		}
+		const obj = new MakeOrderRequestObj(cart, voucher_item_ids)
+		obj.setUrlId(selectedShop.id) 
+		dispatch(
+			createAction('shops/loadMakeOrder')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	onPayNowPressed = () => {
@@ -118,6 +141,11 @@ export default class Checkout extends React.Component {
 		const {currentMember } = this.props
 
 		if (currentMember) {
+			if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
+				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
+				return
+			}
+
 			Alert.alert(
 				'Confirmation',
 				'Are you sure you want to confirm the order?',
@@ -139,23 +167,18 @@ export default class Checkout extends React.Component {
 			return
 		}
 
-		if (currentMember.country_code === undefined || currentMember.phone_no === undefined) { 
-			this.refs.toast.show("Please setup your phone number before ordering");
-			return
-		}
+	
 	}
 
 	onClosePressed = () => {
 
 		const {currentMember} = this.props
+		const {cart_total }= this.state
 		this.setState({ 
 			loginModalVisible: false, 
 			registerModalVisible: false, 
 		})
-		if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
-			this.refs.toast.show("You do not have enough credit. Please top up at our counter");
-			return
-		}
+		
 
 		// navigate("Transaction", {
 		// 	amount: cart_total
@@ -170,7 +193,7 @@ export default class Checkout extends React.Component {
 		let {cart_total} = this.state
 		let {currentMember, selectedShop} = this.props
 
-		let credits = (currentMember == undefined) ? 0 : parseFloat(currentMember.credits).toFixed(2)
+		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 		const cart_items = cart.map((item, key) => {
 
 			if (item.selected_variants) {
@@ -508,8 +531,7 @@ export default class Checkout extends React.Component {
 										}}>
 										<Image
 											source={require("./../../assets/images/group-3-11.png")}
-											style={styles.group3TwoImage}/>
-											
+											style={styles.group3TwoImage}/>											
 									</View>
 
 									{/* <Image
