@@ -302,7 +302,7 @@ export default class VerifyUser extends React.Component {
 
 const styles = StyleSheet.create({
 	verifyuserView: {
-		backgroundColor: "rgb(0, 178, 227)",
+		backgroundColor: "white", 
 		flex: 1,
 	},
 	modalView: {
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	closeButtonText: {
-		color: "white",
+		color: "black",
 		fontFamily: "Helvetica",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
@@ -344,13 +344,14 @@ const styles = StyleSheet.create({
 	},
 	logoImage: {
 		resizeMode: "center",
+		tintColor: "rgb(0, 178, 227)",
 		backgroundColor: "transparent",
 		width: 110 * alpha,
 		height: 54 * alpha,
 		marginLeft: 23 * alpha,
 	},
 	welcomeText: {
-		color: "white",
+		color: "black",
 		fontFamily: "SFProText-Medium",
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
 		marginLeft: 23 * alpha,
 	},
 	messageText: {
-		color: "white",
+		color: "black", 
 		fontFamily: "Helvetica",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
@@ -381,9 +382,10 @@ const styles = StyleSheet.create({
 	countryCodeView: {
 		backgroundColor: "white",
 		borderRadius: 7 * alpha,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+		borderColor: "rgb(140, 140, 140)",
+		borderWidth: 0.5,
+		shadowRadius: 10,
+		shadowOpacity: 10,
 		width: 102 * alpha,
 		height: 41 * alpha,
 		flexDirection: "row",
@@ -391,9 +393,10 @@ const styles = StyleSheet.create({
 	},
 
 	numberView: {
-		backgroundColor: "white",
+		backgroundColor: "white", 
 		borderRadius: 7 * alpha,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
+		borderColor: "rgb(140, 140, 140)",
+		borderWidth: 0.5,
 		shadowRadius: 1,
 		shadowOpacity: 1,
 		width: 214 * alpha,
@@ -535,11 +538,10 @@ const styles = StyleSheet.create({
 	description_text: {
 		width: windowWidth,
 		marginBottom: 40 * alpha,
-		color: "white",
+		color: "rgb(90, 90, 90)", 
 		fontFamily: "SFProText-Medium",
-		fontSize: 13 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "center",
 		paddingLeft: 15 * alpha,
 		paddingRight: 15 * alpha,
@@ -548,6 +550,7 @@ const styles = StyleSheet.create({
 		marginLeft: 0 * alpha,
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
+		color: "black",
 	},
 	errorMessageText: {
 		color: "white",
