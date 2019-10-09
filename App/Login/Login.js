@@ -14,7 +14,7 @@ import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object
 import LoginWithFacebookRequestObject from "../Requests/login_with_facebook_request_object"
 import * as Facebook from 'expo-facebook'
 import {connect} from "react-redux"
-import {createAction, Storage} from "../Utils";
+import {createAction, Storage} from "../Utils"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 
