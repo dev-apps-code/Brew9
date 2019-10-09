@@ -705,7 +705,7 @@ export default class Home extends React.Component {
 
 	renderFeaturedPromo(shop, cart) {
 
-		if (shop !== null) {
+		if (shop !== null && shop.featured_promotion != null) {
 			
 			return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
