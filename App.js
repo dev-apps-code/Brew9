@@ -51,6 +51,7 @@ import BannerView from "./App/Home/BannerView"
 import VerifyUser from "./App/VerifyUser/VerifyUser"
 import Register from "./App/Register/Register"
 import DirectionMap from "./App/DirectionMap/DirectionMap"
+import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -65,6 +66,9 @@ const PushOrder = createStackNavigator({
 		navigationOptions: {
 			tabBarVisible: false
 		}
+	},
+	FeaturedPromotionDetail: {
+		screen: FeaturedPromotionDetail
 	},
 	DirectionMap: {
 		screen: DirectionMap,

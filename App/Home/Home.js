@@ -48,7 +48,6 @@ import * as Permissions from 'expo-permissions'
 	selectedShop: shops.selectedShop
 }))
 export default class Home extends React.Component {
-
 	
 	static navigationOptions = ({ navigation }) => {
 
@@ -648,6 +647,14 @@ export default class Home extends React.Component {
 		}
 	}
 
+	onFeaturedPromotionPressed (item) {
+		const { navigate } = this.props.navigation
+
+		navigate("FeaturedPromotionDetail", {
+			details: item,
+		})
+	}
+
 	get_product(index) {
 
 		if (index) {
@@ -692,6 +699,21 @@ export default class Home extends React.Component {
 		this.setState({ modalVisible: false})
 	}
 
+	renderFeaturedPromo(shop, cart) {
+
+		if (shop !== null) {
+			
+			return <TouchableOpacity
+					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
+					style={shop.is_opened ? styles.featuredpromoButton1 ? cart.length > 0 : styles.featuredpromoButton3 : styles.featuredpromoButton2}>
+					<Image
+						source={{uri: shop.featured_promotion.icon.url}}
+						style={styles.featuredpromoButtonImage}/>
+				</TouchableOpacity>
+		}
+		
+		return undefined
+	}
 	renderModalContent = (selected_product) => {
 
 		let select_quantity = this.state.select_quantity
@@ -805,10 +827,10 @@ export default class Home extends React.Component {
 								)
 							}
 
-							{ selected_product.description && (
+							{ selected_product.description.length > 0 && (
 								<Text style={styles.descriptionHeaderText}>Product Description</Text>
 							)}
-							{ selected_product.description && (
+							{ selected_product.description.length > 0 && (
 								<Text style={styles.descriptionText}>{selected_product.description}</Text>
 							)}
 						</View>
@@ -906,6 +928,8 @@ export default class Home extends React.Component {
 		let selected_product = this.get_product(this.state.selected_index)
 		let {shop,cart,delivery} = this.state
 
+		let show_promo = false
+		
 		return <View style={styles.page1View}>	
 						
 			<View style={styles.topsectionView}>
@@ -1021,6 +1045,7 @@ export default class Home extends React.Component {
 								keyExtractor={(item, index) => index.toString()}/>
 							}
 						</View>
+						{this.renderFeaturedPromo(shop,cart)}
 					</View>
 				}
 				{ this.state.isToggleLocation && (
@@ -1105,6 +1130,8 @@ export default class Home extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 					</View>
 				</Animated.View>
+				
+				
 			
 			<View style={styles.bottomAlertView}>
 				{this.renderAlertBar(shop)}
@@ -1279,7 +1306,7 @@ export default class Home extends React.Component {
                 width={windowWidth}
                 style={styles.bannerImage}/>
         </ScrollView>
-			</Modal>
+		</Modal>
 	}
 			
 }
@@ -2311,5 +2338,46 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		alignSelf: "stretch",
+	},
+	featuredpromoButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		width: 100 * alpha,
+		height: 50 * alpha,
+		bottom: 10 * alpha,
+		left: 10 * alpha
+	},
+	featuredpromoButton2: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		width: 100 * alpha,
+		height: 50 * alpha,
+		bottom: 40 * alpha,
+		left: 10 * alpha
+	},
+	featuredpromoButton3: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		width: 100 * alpha,
+		height: 50 * alpha,
+		bottom: 60 * alpha,
+		left: 10 * alpha
+	},
+	featuredpromoButtonImage: {
+		resizeMode: "cover",
+		width: "100%",
+		height: "100%"
 	},
 })
