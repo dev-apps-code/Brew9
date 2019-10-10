@@ -122,10 +122,13 @@ export default class Checkout extends React.Component {
 		const {cart,voucher_item_ids} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			if (eventObject.success) {
-				this.setState({
+			this.setState({
 				loading: false,
-				})        
+			})
+			if (eventObject.success) {
+				        
+			}else{
+				this.refs.toast.show(eventObject.message);
 			}
 		}
 		const obj = new MakeOrderRequestObj(cart, voucher_item_ids)
