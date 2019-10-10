@@ -153,7 +153,7 @@ export default class Home extends React.Component {
 	}
 
 	componentDidMount() {
-		// this.loadShops(true)
+		this.loadShops(true)
 		// this.loadStorePushToken()
 	}
 
@@ -176,7 +176,6 @@ export default class Home extends React.Component {
 			)
 		}
 	}
-
 	loadShops(loadProducts){
 
 		console.log("Status", loadProducts)
@@ -186,7 +185,6 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			this.setState({ loading: false })
 			if (eventObject.success) {
-
 				if (eventObject.result.force_upgrade) {
 
 					Alert.alert(
@@ -202,8 +200,6 @@ export default class Home extends React.Component {
 					);
 					
 				} else {
-
-					console.log("Normal")
 					this.setState({
 						shop: eventObject.result,
 						menu_banners: eventObject.result.menu_banners
@@ -212,7 +208,7 @@ export default class Home extends React.Component {
 							this.loadStoreProducts()
 						}					
 					})
-				}
+				}				
 			}
 		}
 
