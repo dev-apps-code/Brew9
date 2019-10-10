@@ -2,8 +2,8 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://t4-nsc.anonymous.brew9-app.exp.direct",
   "packagerNgrokUrl": "https://packager.t4-nsc.anonymous.brew9-app.exp.direct",
-  "ngrokPid": 2000,
+  "ngrokPid": 4567,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 6372
+  "packagerPid": 4526
 }

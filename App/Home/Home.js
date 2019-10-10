@@ -2360,9 +2360,9 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 100 * alpha,
-		height: 50 * alpha,
-		bottom: 40 * alpha,
+		width: 60 * alpha,
+		height: 30 * alpha,
+		bottom: 20 * alpha,
 		left: 10 * alpha
 	},
 	featuredpromoButton3: {
@@ -2372,8 +2372,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 100 * alpha,
-		height: 50 * alpha,
+		width: 60 * alpha,
+		height: 30 * alpha,
 		bottom: 60 * alpha,
 		left: 10 * alpha
 	},

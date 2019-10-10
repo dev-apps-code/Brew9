@@ -166,7 +166,7 @@ export default class VerifyUser extends React.Component {
 				<TouchableOpacity
 					onPress={this.onClosePressed}
 					style={styles.closeButton}>
-					<Text style={styles.closeButtonText}>X</Text>
+					<Text style={styles.closeButtonText}>Skip</Text>
 				</TouchableOpacity>
 				<Image
 					source={require("./../../assets/images/group-24-4.png")}
@@ -325,7 +325,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		alignSelf: "flex-end",
-		width: 25 * alpha,
 		height: 25 * alpha,
 		marginRight: 11 * alpha,
 		marginTop: 11 * alpha,
@@ -335,7 +334,7 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	closeButtonText: {
-		color: "black",
+		color: "rgb(0, 178, 227)",
 		fontFamily: "Helvetica",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
@@ -380,12 +379,9 @@ const styles = StyleSheet.create({
 		marginTop: 16 * alpha,
 	},
 	countryCodeView: {
-		backgroundColor: "white",
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
-		borderWidth: 0.5,
-		shadowRadius: 10,
-		shadowOpacity: 10,
+		borderWidth: 0.5,	
 		width: 102 * alpha,
 		height: 41 * alpha,
 		flexDirection: "row",
@@ -397,8 +393,6 @@ const styles = StyleSheet.create({
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
 		borderWidth: 0.5,
-		shadowRadius: 1,
-		shadowOpacity: 1,
 		width: 214 * alpha,
 		height: 42 * alpha,
 		flexDirection: "row",

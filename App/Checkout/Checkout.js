@@ -18,6 +18,7 @@ import ActivateAccountRequestObject from '../Requests/activate_account_request_o
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
 import { commonStyles } from "../Common/common_style"
+import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
@@ -55,7 +56,9 @@ export default class Checkout extends React.Component {
 		this.state = {
 			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
-			cart_total: this.props.navigation.getParam("cart_total", 0.00)
+			cart_total: this.props.navigation.getParam("cart_total", 0.00),
+			voucher_item_ids:[],
+			cart:this.props.navigation.getParam("cart", [])
 		}
 	}
 
@@ -116,7 +119,7 @@ export default class Checkout extends React.Component {
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 
-		const {cart} = this.state
+		const {cart,voucher_item_ids} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
@@ -153,10 +156,10 @@ export default class Checkout extends React.Component {
 				  { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
 				  {
 					text: 'Cancel',
-					onPress: () => console.log('Cancel Pressed'),
+					onPress: () => console.log('OK Pressed'),
 					style: 'cancel',
 				  },
-				  { text: 'OK', onPress: () => console.log('OK Pressed') },
+				  { text: 'OK', onPress: () =>   this.loadMakeOrder()},
 				],
 				{ cancelable: false }
 			  );
@@ -172,8 +175,7 @@ export default class Checkout extends React.Component {
 
 	onClosePressed = () => {
 
-		const {currentMember} = this.props
-		const {cart_total }= this.state
+	
 		this.setState({ 
 			loginModalVisible: false, 
 			registerModalVisible: false, 
@@ -187,10 +189,10 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let cart = this.props.navigation.getParam("cart", "")
-		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
 		
-		let {cart_total} = this.state
+		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
+
+		let {cart,cart_total} = this.state
 		let {currentMember, selectedShop} = this.props
 
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
@@ -604,6 +606,7 @@ export default class Checkout extends React.Component {
 						style={styles.payNowButtonText}>Pay Now</Text>
 				</TouchableOpacity>
 			</View>
+			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast"
             position="center"/>
 		</View>

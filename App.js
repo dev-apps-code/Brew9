@@ -322,7 +322,7 @@ const AuthenticationStack = createStackNavigator({
 	initialRouteName: "Login",
 })
 
-const RootNavigator = createStackNavigator({
+const RootNavigator = createSwitchNavigator({
 	FirstScreen: {
 		screen: FirstScreen,
 	},
@@ -333,7 +333,7 @@ const RootNavigator = createStackNavigator({
 		screen: VerifyStack,	
 	},
 }, {
-	initialRouteName: "TabGroupOne",
+	initialRouteName: "FirstScreen",
 	mode: 'modal',
     headerMode: 'none',
 })

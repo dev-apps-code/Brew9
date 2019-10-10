@@ -19,12 +19,13 @@ export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
   // console.log(urlString)
   // console.log(authtoken)
+
   return fetch(urlString, {
     method: 'GET',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Version': Constants.nativeAppVersion,
+      'AppVersion': Constants.nativeAppVersion,
       'BuildVersion': Constants.nativeBuildVersion,
       'Platform': Constants.platform,
       Authorization: getBasicAuthentication(authtoken),
@@ -40,13 +41,13 @@ export function getMethod(authtoken,object) {
 export function postMethod(authtoken,object) {
 
     const urlString = `${KSERVERURL}/${object.getUrlString()}`
-    // console.log(urlString)
+
     return fetch(urlString, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Version': Constants.nativeAppVersion,
+      'AppVersion': Constants.nativeAppVersion,
       'BuildVersion': Constants.nativeBuildVersion,
       'Platform': Constants.platform,
       Authorization: getBasicAuthentication(authtoken),
@@ -57,6 +58,29 @@ export function postMethod(authtoken,object) {
     .catch(error => {
       console.error(error);
     });
+}
+
+
+export function postJsonMethod(authtoken,object) {
+
+  const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  console.log(urlString)
+  return fetch(urlString, {
+  method: 'POST',
+  headers: {
+    Accept: KCURRENT_API_VERSION_HEADER,
+    'Content-Type': 'application/json',
+    'Version': Constants.nativeAppVersion,
+    'BuildVersion': Constants.nativeBuildVersion,
+    'Platform': Constants.platform,
+    Authorization: getBasicAuthentication(authtoken),
+  }, body: object.getFormData()
+})
+  .then(logResponse('json'))
+  .then(response => _parseJSON(response))
+  .catch(error => {
+    console.error(error);
+  });
 }
 
 export function postMultipartMethod(authtoken, object) {
