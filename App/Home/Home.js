@@ -19,7 +19,9 @@ import {
 	ScrollView, 
 	TouchableWithoutFeedback,
 	ActivityIndicator,
-	Platform
+	Platform,
+	Alert,
+	Linking
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -72,17 +74,17 @@ export default class Home extends React.Component {
 	static tabBarItemOptions = ({ navigation }) => {
 	
 		return {
-				tabBarLabel: "Order",
-				tabBarIcon: ({ iconTintColor, focused }) => {
-					const image = focused 
-					? require('./../../assets/images/menu_selected.png') 
-					: require('./../../assets/images/menu.png')
-	
-					return <Image
-						source={image}
-						style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha}}/>
-				},
-			}
+			tabBarLabel: "Order",
+			tabBarIcon: ({ iconTintColor, focused }) => {
+				const image = focused 
+				? require('./../../assets/images/menu_selected.png') 
+				: require('./../../assets/images/menu.png')
+
+				return <Image
+					source={image}
+					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha}}/>
+			},
+		}
 	}
 
 	constructor(props) {
@@ -111,6 +113,7 @@ export default class Home extends React.Component {
 			selected_promotion: "",
 			isPromoToggle: false,
 			isToggleLocation: false,
+			ignoreVersion: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -150,7 +153,7 @@ export default class Home extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadShops(true)
+		// this.loadShops(true)
 		// this.loadStorePushToken()
 	}
 
@@ -175,20 +178,41 @@ export default class Home extends React.Component {
 	}
 
 	loadShops(loadProducts){
+
+		console.log("Status", loadProducts)
 		const { dispatch,company_id,location } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
 			if (eventObject.success) {
-				this.setState({
-					shop: eventObject.result,
-					menu_banners: eventObject.result.menu_banners
-				}, function () {
-					if (loadProducts){
-						this.loadStoreProducts()
-					}					
-				})
+
+				if (eventObject.result.force_upgrade) {
+
+					Alert.alert(
+						'Brew9',
+						eventObject.message,
+						eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
+							[ 
+								{ text: 'Cancel', style: 'cancel', onPress: () => {
+									this.loadStoreProducts()
+								}}, 
+								{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
+						{cancelable: eventObject.result.force_upgrade},
+					);
+					
+				} else {
+
+					console.log("Normal")
+					this.setState({
+						shop: eventObject.result,
+						menu_banners: eventObject.result.menu_banners
+					}, function () {
+						if (loadProducts){
+							this.loadStoreProducts()
+						}					
+					})
+				}
 			}
 		}
 
