@@ -119,6 +119,33 @@ export default class Home extends React.Component {
 
 	}
 
+	registerForPushNotificationsAsync = async() => {
+		const { status: existingStatus } = await Permissions.getAsync(
+		  Permissions.NOTIFICATIONS
+		);
+		let finalStatus = existingStatus;
+	  
+		// only ask if permissions have not already been determined, because
+		// iOS won't necessarily prompt the user a second time.
+		if (existingStatus !== 'granted') {
+		  // Android remote notification permissions are granted during the app
+		  // install, so this will only ask on iOS
+		  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		  finalStatus = status;
+		}
+	  
+		// Stop here if the user did not grant permissions
+		if (finalStatus !== 'granted') {
+		  return;
+		}
+	  
+		// Get the token that uniquely identifies this device
+		let token = await Notifications.getExpoPushTokenAsync();
+	  
+		// POST the token to your backend server from where you can retrieve it to send push notifications.
+		this.loadStorePushToken(token)
+	  }
+
 	getLocationAsync = async () => {
 
 		const {dispatch} = this.props
@@ -152,12 +179,13 @@ export default class Home extends React.Component {
 		dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		// this.loadShops(true)
 		// this.loadStorePushToken()
+		await this.registerForPushNotificationsAsync()
 	}
 
-	loadStorePushToken() {
+	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => {
 		  if (eventObject.success) {
@@ -166,7 +194,7 @@ export default class Home extends React.Component {
 		}
 
 		if (currentMember != null){
-			const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
+			const obj = new PushRequestObject('device_key', 'device_type', token, Platform.OS)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadStorePushToken')({
@@ -203,7 +231,6 @@ export default class Home extends React.Component {
 					
 				} else {
 
-					console.log("Normal")
 					this.setState({
 						shop: eventObject.result,
 						menu_banners: eventObject.result.menu_banners
