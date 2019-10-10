@@ -40,6 +40,7 @@ import _ from 'lodash'
 import AutoHeightImage from 'react-native-auto-height-image'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
+import MapView from 'react-native-maps';
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -705,7 +706,7 @@ export default class Home extends React.Component {
 
 	renderFeaturedPromo(shop, cart) {
 
-		if (shop !== null && shop.featured_promotion != null) {
+		if (shop !== null && shop.featured_promotion !== null) {
 			
 			return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
@@ -928,7 +929,7 @@ export default class Home extends React.Component {
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,cart,delivery} = this.state
+		let {shop,cart,delivery,isToggleLocation} = this.state
 
 		let show_promo = false
 		
@@ -1004,11 +1005,17 @@ export default class Home extends React.Component {
 								onPress={this.onMorePressed}
 								style={styles.moreButton}>
 								<Text
-									style={styles.moreButtonText}>More</Text>
+									style={styles.moreButtonText}>{isToggleLocation ? "Hide" : "More"}</Text>
 							</TouchableOpacity>
-							<Image
-								source={require("./../../assets/images/bitmap-14.png")}
-								style={styles.bitmapImage}/>
+							{ isToggleLocation ? 
+								<Image
+									source={require("./../../assets/images/bitmap-15.png")}
+									style={styles.bitmapImage}/> :
+								<Image
+									source={require("./../../assets/images/bitmap-14.png")}
+									style={styles.bitmapImage}/>
+							}
+							
 						</View>
 					</View>
 					
@@ -1053,6 +1060,28 @@ export default class Home extends React.Component {
 				{ this.state.isToggleLocation && (
 					<View
 					style={styles.showLocationView}>
+						
+						<MapView
+						style={styles.mapImage}
+						initialRegion={{
+							latitude: shop ? parseFloat(shop.latitude) : 0.0,
+							longitude: shop ? parseFloat(shop.longitude) : 0.0,
+							latitudeDelta:0.1,
+							longitudeDelta:0.1,
+						}}					
+						onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}			  
+						>
+								<MapView.Marker
+									ref={marker => (this.marker = marker)}
+									coordinate={{
+										latitude: shop ? parseFloat(shop.latitude) : 0.0,
+										longitude: shop ? parseFloat(shop.longitude) : 0.0,
+									}
+									}
+									title={shop.name}
+									description={shop.location}
+									/>
+							</MapView>
 					{/* <View
 						style={styles.deliveryView}>
 						<View
@@ -2381,5 +2410,10 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		width: "100%",
 		height: "100%"
+	},
+	mapImage: {
+		backgroundColor: "blue",
+		height: 200 * alpha,
+		width: "100%",
 	},
 })

@@ -27,6 +27,12 @@ function saveCurrentUserToStorage(profile) {
   
   AsyncStorage.setItem("profile", JSON.stringify(profile))
 }
+
+function clearCurrentUser() {
+  
+  AsyncStorage.setItem("profile", null)
+}
+
 export default {
 
   namespace: 'members',
@@ -54,6 +60,10 @@ export default {
     loadCurrentUser(state, { payload }) {
       console.log("load profiel",payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
+    },
+    clearCurrentUser(state, {payload}) {
+      clearCurrentUser()
+      return { ...state, profile: null, isReady: true, userAuthToken: "" }
     },
     setLocation(state, { payload }) {
       return { ...state, location: payload}
@@ -244,6 +254,15 @@ export default {
 
       } catch (err) {
         console.log('loadingCurrentUser', err)
+      }
+    },
+    *loadLogoutUser({ payload }, { call, put, select }) {
+      try {
+        
+        yield put(createAction('clearCurrentUser'))
+
+      } catch (err) {
+        console.log('clearUser', err)
       }
     },
   },
