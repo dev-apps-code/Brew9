@@ -178,6 +178,14 @@ export default class Profile extends React.Component {
 		})
 	}
 
+	onLogoutButtonPress = () => {
+		const { dispatch } = this.props
+		dispatch(createAction('members/loadLogoutUser')({}))
+		const { navigate } = this.props.navigation
+
+		navigate("Home")
+	}
+
 	render() {
 
 		const { currentMember ,members} = this.props
@@ -718,7 +726,7 @@ export default class Profile extends React.Component {
 					</View> */}
 
 					<View
-						style={styles.aboutView}>
+						style={styles.logoutView}>
 						<TouchableOpacity
 							onPress={this.onAboutButtonPressed}
 							style={styles.aboutbuttonButton}>
@@ -749,7 +757,40 @@ export default class Profile extends React.Component {
 							</View>
 						</TouchableOpacity>
 					</View>
+					<View
+						style={styles.aboutView}>
+						<TouchableOpacity
+							onPress={this.onLogoutButtonPress}
+							style={styles.logoutbuttonButton}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0,
+									top: 0,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										width: 97 * alpha,
+										height: 20 * alpha,
+										marginLeft: 30 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Image
+										source={require("./../../assets/images/about.png")}
+										style={styles.logouticonImage}/>
+									<Text
+										style={styles.logoutText}>Logout</Text>
+								</View>
+							</View>
+						</TouchableOpacity>
+					</View>
 				</View>
+				
 			</ScrollView>
 		</View>)
 	}
@@ -1480,6 +1521,49 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	aboutText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginLeft: 11 * alpha,
+	},
+	logoutView: {
+		backgroundColor: "transparent",
+		height: 50 * alpha,
+	},
+	logoutbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 1 * alpha,
+		right: 0,
+		top: 0,
+		height: 50 * alpha,
+	},
+	logoutbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	logoutbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	abouticonImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 20 * alpha,
+	},
+	logoutText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
