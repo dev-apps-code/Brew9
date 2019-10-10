@@ -179,6 +179,7 @@ export default class Home extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			this.setState({ loading: false })
 			if (eventObject.success) {
 				this.setState({
 					shop: eventObject.result,
@@ -986,7 +987,7 @@ export default class Home extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							height: 14 * alpha,
-							marginLeft: 14 * alpha,
+							marginLeft: 10 * alpha,
 							marginRight: 19 * alpha,
 							marginTop: 7 * alpha,
 							flexDirection: "row",
@@ -1398,7 +1399,6 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginRight: 10 * alpha,
 	},
 	groupImage: {
 		resizeMode: "center",
@@ -2247,6 +2247,8 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		paddingTop: 7*alpha,
+		paddingLeft: 7 *alpha,
+		paddingRight: 7 *alpha,
 		paddingBottom: 7*alpha,
 		alignSelf: "center",
 	},
@@ -2322,9 +2324,9 @@ const styles = StyleSheet.create({
 	},
 	branchInfoView: {
 		backgroundColor: "transparent",
-		width: 159 * alpha,
+		width: windowWidth - 100 *alpha,
 		height: 76 * alpha,
-		marginLeft: 14 * alpha,
+		marginLeft: 10 * alpha,
 		marginTop: 25 * alpha,
 		alignItems: "flex-start",
 	},
@@ -2342,10 +2344,10 @@ const styles = StyleSheet.create({
 		color: "rgb(160, 160, 160)",
 		fontFamily: "Helvetica",
 		fontSize: 12 * fontAlpha,
-		width: 300 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		lineHeight: 16*alpha,
 		marginTop: 9 * alpha,
 	},
 	branchContact: {
@@ -2357,7 +2359,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		marginTop: 3 * alpha,
-		width: 300 * alpha,
 	},
 	businessHour1000Text: {
 		backgroundColor: "transparent",

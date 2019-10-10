@@ -196,7 +196,8 @@ export default class Profile extends React.Component {
 		var points;
 		var avatar;
 		var vouchers_count;
-		if (currentMember != null){
+		if (currentMember != null ){
+			console.log("current mem",currentMember.id)
 			background_photo =    {uri:currentMember.free_membership.membership_level.image}
 			level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.name : currentMember.free_membership.membership_level.name
 			display_name = currentMember.name ? currentMember.name : currentMember.phone_no
