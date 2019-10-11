@@ -10,7 +10,7 @@ import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityInd
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
-import PhoneInput from 'react-native-phone-input'
+import PhoneInput from 'react-native-phone-input' // react-native-phone-input@0.2.2
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
@@ -187,14 +187,13 @@ export default class VerifyUser extends React.Component {
 						<View
 							style={styles.countryCodeView}>
 								<PhoneInput
-							ref={(ref) => { this.phone = ref }}
-							initialCountry={this.state.country}
-							style={{marginLeft: 10 * alpha}}
-							onPressFlag={() => {}}
-							textStyle={styles.phoneCountryCodeText}
-							textProps={{keyboardType:"number-pad", editable:false}}
-							onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
-							offset={10}/>
+									ref={(ref) => { this.phone = ref }}
+									initialCountry={this.state.country}
+									style={{marginLeft: 10 * alpha}}
+									textStyle={styles.phoneCountryCodeText}
+									textProps={{keyboardType:"number-pad", editable:false}}
+									onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
+									offset={10}/>
 							</View>
 						<View
 							style={{
@@ -568,5 +567,6 @@ const styles = StyleSheet.create({
 	reSendButtonImage: {
         resizeMode: "contain",
         marginRight: 10 * alpha,
-    },
+	},
+	
 })

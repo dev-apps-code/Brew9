@@ -165,8 +165,8 @@ export default class Home extends React.Component {
 		if (prevProps.location != this.props.location) {
 		  this.loadShops(false)
 		}
-
 	  }
+	  
 	componentWillMount() {
 		if (Platform.OS === 'android') {
 			this.setState({
@@ -180,6 +180,7 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
+		this.loadShops(true)
 		// this.loadShops(true)
 		// this.loadStorePushToken()
 		await this.registerForPushNotificationsAsync()
@@ -204,7 +205,6 @@ export default class Home extends React.Component {
 			)
 		}
 	}
-
 	loadShops(loadProducts){
 
 		console.log("Status", loadProducts)
@@ -213,24 +213,7 @@ export default class Home extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
-			if (eventObject.success) {
-
-				if (eventObject.result.force_upgrade) {
-
-					Alert.alert(
-						'Brew9',
-						eventObject.message,
-						eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
-							[ 
-								{ text: 'Cancel', style: 'cancel', onPress: () => {
-									this.loadStoreProducts()
-								}}, 
-								{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
-						{cancelable: eventObject.result.force_upgrade},
-					);
-					
-				} else {
-
+			if (eventObject.success) {			
 					this.setState({
 						shop: eventObject.result,
 						menu_banners: eventObject.result.menu_banners
@@ -238,8 +221,7 @@ export default class Home extends React.Component {
 						if (loadProducts){
 							this.loadStoreProducts()
 						}					
-					})
-				}
+					})		
 			}
 		}
 
@@ -264,6 +246,21 @@ export default class Home extends React.Component {
 
 		const callback = eventObject => {
 			if (eventObject.success) {
+				if (eventObject.result.force_upgrade) {
+
+					Alert.alert(
+						'Brew9',
+						eventObject.message,
+						eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
+							[ 
+								{ text: 'Cancel', style: 'cancel', onPress: () => {
+									this.loadStoreProducts()
+								}}, 
+								{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
+						{cancelable: eventObject.result.force_upgrade},
+					);
+					
+				} else {
 				this.setState({
 					data: eventObject.result,
 					total: eventObject.total,
@@ -285,6 +282,7 @@ export default class Home extends React.Component {
 						
 					})
 				}.bind(this))
+			}
 			}
 			this.setState({
 				isRefreshing: false,
