@@ -22,7 +22,7 @@ export default class MemberCenter extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Member Center",
+			title: "Order History",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
