@@ -789,7 +789,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.logoutView}>
 						<TouchableOpacity
-							onPress={this.onAboutButtonPressed}
+							onPress={() => this.onAboutButtonPressed()}
 							style={styles.aboutbuttonButton}>
 							<View
 								pointerEvents="box-none"
@@ -821,7 +821,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.aboutView}>
 						<TouchableOpacity
-							onPress={this.onLogoutButtonPress}
+							onPress={() => this.onLogoutButtonPress()}
 							style={styles.logoutbuttonButton}>
 							<View
 								pointerEvents="box-none"

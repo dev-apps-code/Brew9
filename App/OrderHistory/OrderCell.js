@@ -28,7 +28,7 @@ export default class OrderCell extends React.Component {
 		const { navigate } = this.props.navigation
 
 		navigate("OrderReceipt", {
-			order_id: order.id
+			order: order
 		})
 	}
 
@@ -76,7 +76,7 @@ export default class OrderCell extends React.Component {
 								flex: 1,
 							}}/>
 						<TouchableOpacity
-							onPress={() => this.onCompletePressed(this.props.order_id)}
+							onPress={() => this.onCompletePressed(this.props.item)}
 							style={styles.completeButton}>
 							<Text
 								style={styles.completeButtonText}>{this.props.status}</Text>
