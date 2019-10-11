@@ -52,7 +52,7 @@ export default class OrderCell extends React.Component {
 
 			<Image
 				key={key}
-				source={{uri: item.product_image}}
+				source={{uri: item.thumb}}
 				style={styles.productimageImage}/>
 
 		)
@@ -79,7 +79,7 @@ export default class OrderCell extends React.Component {
 							onPress={() => this.onCompletePressed(this.props.order_id)}
 							style={styles.completeButton}>
 							<Text
-								style={styles.completeButtonText}>Completed</Text>
+								style={styles.completeButtonText}>{this.props.status}</Text>
 							<Image
 								source={require("./../../assets/images/group-2.png")}
 								style={styles.completeButtonImage}/>

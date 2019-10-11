@@ -9,7 +9,8 @@ import {
   login,
   loginWithFacebook,
   activateAccount,
-  destroy
+  destroy,
+  orders
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -141,7 +142,6 @@ export default {
     *loadUpdateProfile({ payload }, { call, put, select })
     {
       try{
-
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
@@ -149,7 +149,6 @@ export default {
             authtoken,
             object,
         )
-        console.log("AuthToken", authtoken)
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('saveCurrentUser')(eventObject.result))
@@ -275,5 +274,22 @@ export default {
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     }, 
+    *loadOrders({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            orders,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+      },
   },
 }

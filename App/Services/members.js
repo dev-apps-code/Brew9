@@ -44,3 +44,7 @@ export function activateAccount(authtoken,object) {
 export function destroy(authtoken,object) {
    return deleteMethod(authtoken,object)
 }
+
+export function orders(authtoken,object) {
+   return getMethod(authtoken,object)
+}

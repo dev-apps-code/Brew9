@@ -43,7 +43,7 @@ import AutoHeightImage from 'react-native-auto-height-image'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps';
-
+import openMap from 'react-native-open-maps';
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -166,7 +166,7 @@ export default class Home extends React.Component {
 		  this.loadShops(false)
 		}
 	  }
-	  
+
 	componentWillMount() {
 		if (Platform.OS === 'android') {
 			this.setState({

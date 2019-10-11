@@ -1,5 +1,5 @@
-// export const KSERVERURL = "http://139.162.16.119:3050/api";
-export const KURL_INFO = "http://139.162.16.119:3050/info";
+// export const KSERVERURL = "http://brew9.dreamcode.solutions:3050/api";
+export const KURL_INFO = "http://brew9.dreamcode.solutions:3050/info";
 export const KSERVERURL ='http://localhost:3000/api'
 //export const KURL_INFO ='http://localhost:3000/info'
 // export const KSERVERURL ='https://3358a428.ngrok.io/api'

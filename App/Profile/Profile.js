@@ -169,12 +169,12 @@ export default class Profile extends React.Component {
 	}
 
 	onOrderButtonPressed = () => {
-		// const {  currentMember } = this.props
-		// if (currentMember !== null) {
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
 			navigate("OrderHistory")
-		// }
+	}
 	}
 
 	onPersonalButtonPressed = () => {
@@ -233,10 +233,11 @@ export default class Profile extends React.Component {
 	}
 
 	onLogoutButtonPress = () => {
-		const {  currentMember } = this.props
-		if (currentMember !== null) {
-			this.loadDestroy()
-		}
+		const { dispatch } = this.props
+		dispatch(createAction('members/loadLogoutUser')({}))
+		const { navigate } = this.props.navigation
+
+		navigate("Login")
 	}
 
 	render() {
