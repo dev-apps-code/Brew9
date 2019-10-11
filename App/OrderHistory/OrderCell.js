@@ -52,7 +52,7 @@ export default class OrderCell extends React.Component {
 
 			<Image
 				key={key}
-				source={{uri: item.image}}
+				source={{uri: item.product_image}}
 				style={styles.productimageImage}/>
 
 		)
@@ -131,7 +131,7 @@ export default class OrderCell extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.priceText}>{this.props.currency}{this.props.total}</Text>
+							style={styles.priceText}>${this.props.total}</Text>
 					</View>
 				</View>
 				<View

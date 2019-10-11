@@ -8,11 +8,14 @@
 
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 import {createAction} from '../Utils'
-import ProfileRequestObject from '../Requests/profile_request_object.js'
+import ProfileRequestObject from '../Requests/profile_request_object'
+import LogoutRequestObject from "../Requests/logout_request_object"
+import Constants from 'expo-constants';
+
 @connect(({ members }) => ({
 	members:members,
 	company_id:members.company_id,
@@ -79,15 +82,40 @@ export default class Profile extends React.Component {
 		)
 	}
 
+	loadDestroy(){
+		const { dispatch } = this.props
+		const { navigate } = this.props.navigation
+		this.setState({ loading: true })
+
+		const callback = eventObject => {
+			if (eventObject.success) {
+				navigate("Home")
+			}
+			this.setState({
+				loading: false,
+			}) 
+		}
+		const obj = new LogoutRequestObject(Constants.installationId)
+		dispatch(
+			createAction('members/loadDestroy')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
 	onLevelPressed = () => {
 
-		const { navigate } = this.props.navigation
+		const {  currentMember } = this.props
+		if (currentMember !== null && currentMember.premium_membership) {
+			const { navigate } = this.props.navigation
 
-		navigate("MemberProfile")
+			navigate("MemberProfile")
+		}
 	}
 
 	onVIPPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 
 		if (currentMember.premium_membership) {
 			const { navigate } = this.props.navigation
@@ -103,69 +131,95 @@ export default class Profile extends React.Component {
 	}
 
 	onRewardButtonPressed = () => {
+		const {  currentMember } = this.props
 
-		const { navigate } = this.props.navigation
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		navigate("MemberReward")
+			navigate("MemberReward")
+		}
+		
 	}
 
 	onPointButtonPressed = () => {
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		const { navigate } = this.props.navigation
-
-		navigate("PointHistory")
+			navigate("PointHistory")
+		}
 	}
 
 	onWalletButtonPressed = () => {
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		const { navigate } = this.props.navigation
-
-		navigate("MemberWallet")
+			navigate("MemberWallet")
+		}
 	}
 
 	onMemberButtonPressed = () => {
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		const { navigate } = this.props.navigation
-
-		navigate("MemberProfile")
+			navigate("MemberProfile")
+		}
 	}
 
 	onOrderButtonPressed = () => {
+		// const {  currentMember } = this.props
+		// if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		const { navigate } = this.props.navigation
-
-		navigate("OrderHistory")
+			navigate("OrderHistory")
+		// }
 	}
 
 	onPersonalButtonPressed = () => {
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		const { navigate } = this.props.navigation
-
-		navigate("MemberProfile")
+			navigate("MemberProfile")
+		}
 	}
 
 	onQRButtonPressed = () => {
-		const { navigate } = this.props.navigation
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		navigate("PayByWallet")
+			navigate("PayByWallet")
+		}
 	}
 
 	onRedeemButtonPressed = () => {
-		const { navigate } = this.props.navigation
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		navigate("RedeemPromotion")
+			navigate("RedeemPromotion")
+		}
 	}
 
 	onPointShopPressed = () => {
-		const { navigate } = this.props.navigation
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		navigate("PointShop")
+			navigate("PointShop")
+		}
 	}
 
 	onClubPressed = () => {
-		const { navigate } = this.props.navigation
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			const { navigate } = this.props.navigation
 
-		navigate("MemberCenter")
+			navigate("MemberCenter")
+		}
 	}
 
 	onAboutButtonPressed = () => {
@@ -179,11 +233,10 @@ export default class Profile extends React.Component {
 	}
 
 	onLogoutButtonPress = () => {
-		const { dispatch } = this.props
-		dispatch(createAction('members/loadLogoutUser')({}))
-		const { navigate } = this.props.navigation
-
-		navigate("Home")
+		const {  currentMember } = this.props
+		if (currentMember !== null) {
+			this.loadDestroy()
+		}
 	}
 
 	render() {
@@ -195,6 +248,8 @@ export default class Profile extends React.Component {
 		var display_name;
 		var points;
 		var avatar;
+		var isLogin = true;
+
 		var vouchers_count;
 		if (currentMember != null ){
 			background_photo =    {uri:currentMember.free_membership.membership_level.image}
@@ -214,9 +269,14 @@ export default class Profile extends React.Component {
 			credits = 0
 		}
 
+		if (currentMember === null) {
+			isLogin = false
+		}
 
-		return (<View
+		return (
+		<View
 			style={styles.profileView}>
+				
 				<ScrollView
 					style={styles.scrollScrollView}>
 					<View
@@ -303,9 +363,9 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.pointvalueText}>{points}</Text>
+											style={isLogin ? styles.pointvalueText : styles.pointvalueDisableText}>{points}</Text>
 										<Text
-											style={styles.pointText}>Point</Text>
+											style={isLogin ? styles.pointText : styles.pointDisableText}>Point</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onPointButtonPressed}
@@ -327,9 +387,9 @@ export default class Profile extends React.Component {
 											alignItems: "center",
 										}}>
 										<Text
-											style={styles.rewardvalueText}>{vouchers_count}</Text>
+											style={isLogin ? styles.rewardvalueText : styles.rewardvalueDisableText}>{vouchers_count}</Text>
 										<Text
-											style={styles.rewardText}>Voucher</Text>
+											style={isLogin ? styles.rewardText : styles.rewardDisableText}>Voucher</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onRewardButtonPressed}
@@ -353,12 +413,12 @@ export default class Profile extends React.Component {
 										<View
 											style={styles.walletvalueView}>
 											<Text
-												style={styles.currencyText}>{members.currency}</Text>
+												style={isLogin ? styles.currencyText : styles.currencyDisableText}>{members.currency}</Text>
 											<Text
-												style={styles.userCreditText}>{credits}</Text>
+												style={isLogin ? styles.userCreditText : styles.userCreditDisableText}>{credits}</Text>
 										</View>
 										<Text
-											style={styles.walletText}>Wallet</Text>
+											style={isLogin ? styles.walletText : styles.walletDisableText}>Wallet</Text>
 									</View>
 									<TouchableOpacity
 										onPress={this.onWalletButtonPressed}
@@ -391,7 +451,7 @@ export default class Profile extends React.Component {
 										style={styles.vipiconView}>
 										<Image
 											source={require("./../../assets/images/group-14-7.png")}
-											style={styles.group8Image}/>
+											style={isLogin ? styles.centerImage : styles.centerDisableImage}/>
 										{/* <View
 											pointerEvents="box-none"
 											style={{
@@ -404,11 +464,11 @@ export default class Profile extends React.Component {
 											}}>
 											<Image
 												source={require("./../../assets/images/group-8-13.png")}
-												style={styles.group8Image}/>
+												style={styles.centerImage}/>
 										</View> */}
 									</View>
 									<Text
-										style={styles.vipClubText}>Member Center</Text>
+										style={isLogin ? styles.vipClubText : styles.vipClubDisableText}>Member Center</Text>
 								</View>
 
 							</TouchableOpacity>
@@ -434,9 +494,9 @@ export default class Profile extends React.Component {
 									}}>
 									<Image
 										source={require("./../../assets/images/group-7-2.png")}
-										style={styles.pointiconImage}/>
+										style={isLogin ? styles.pointiconImage : styles.pointiconDisableImage}/>
 									<Text
-										style={styles.pointRewardText}>Point Reward</Text>
+										style={isLogin ? styles.pointRewardText : styles.pointRewardDisableText}>Point Reward</Text>
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -469,9 +529,9 @@ export default class Profile extends React.Component {
 									}}>
 									<Image
 										source={require("./../../assets/images/group-5-4.png")}
-										style={styles.membericonImage}/>
+										style={isLogin ? styles.membericonImage : styles.membericonDisableImage}/>
 									<Text
-										style={styles.memberStatusText}>Member Status</Text>
+										style={isLogin ? styles.memberStatusText : styles.memberStatusDisableText}>Member Status</Text>
 									<View
 										style={{
 											flex: 1,
@@ -508,9 +568,9 @@ export default class Profile extends React.Component {
 									}}>
 									<Image
 										source={require("./../../assets/images/group-9-5.png")}
-										style={styles.ordericonImage}/>
+										style={isLogin ? styles.ordericonImage : styles.ordericonDisableImage}/>
 									<Text
-										style={styles.orderHistoryText}>Order History</Text>
+										style={isLogin ? styles.orderHistoryText : styles.orderHistoryDisableText}>Order History</Text>
 								</View>
 							</View>
 						</TouchableOpacity>
@@ -556,10 +616,10 @@ export default class Profile extends React.Component {
 										</View>
 										<Image
 											source={require("./../../assets/images/group-6-7.png")}
-											style={styles.group6Image}/>
+											style={isLogin ? styles.personalInfoImage : styles.personalInfoDisableImage}/>
 									</View>
 									<Text
-										style={styles.personalInfoText}>Personal Info</Text>
+										style={isLogin ? styles.personalInfoText : styles.personalInfoDisableText}>Personal Info</Text>
 								</View>
 							</View>
 						</TouchableOpacity>
@@ -606,17 +666,17 @@ export default class Profile extends React.Component {
 											}}>
 											<Image
 												source={require("./../../assets/images/clip-5-11.png")}
-												style={styles.clip5Image}/>
+												style={isLogin ? styles.qrCodeImage : styles.qrCodeDisableImage}/>
 										</View>
 									</View>
 									<Text
-										style={styles.qrCodeText}>QR Code</Text>
+										style={isLogin ? styles.qrCodeText : styles.qrCodeDisableText}>QR Code</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.qrDescriptionText}>Scan for reward or pay</Text>
+										style={isLogin ? styles.qrDescriptionText : styles.qrDescriptionDisableText}>Scan for reward or pay</Text>
 								</View>
 							</View>
 
@@ -750,9 +810,9 @@ export default class Profile extends React.Component {
 									}}>
 									<Image
 										source={require("./../../assets/images/about.png")}
-										style={styles.abouticonImage}/>
+										style={isLogin ? styles.abouticonImage : styles.abouticonDisableImage}/>
 									<Text
-										style={styles.aboutText}>About Brew9</Text>
+										style={isLogin ? styles.aboutText : styles.aboutDisableText}>About Brew9</Text>
 								</View>
 							</View>
 						</TouchableOpacity>
@@ -782,9 +842,9 @@ export default class Profile extends React.Component {
 									}}>
 									<Image
 										source={require("./../../assets/images/about.png")}
-										style={styles.logouticonImage}/>
+										style={isLogin ? styles.logouticonImage : styles.logouticonDisableImage}/>
 									<Text
-										style={styles.logoutText}>Logout</Text>
+										style={isLogin ? styles.logoutText : styles.logoutDisableText}>Logout</Text>
 								</View>
 							</View>
 						</TouchableOpacity>
@@ -804,6 +864,13 @@ const styles = StyleSheet.create({
 	scrollScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
+	},
+	coverView: {
+		position: "absolute",
+		backgroundColor: "blue",
+		top: 0,
+		height: windowHeight,
+		width: "100%",
 	},
 	topsectionView: {
 		backgroundColor: "#EEEEEE",
@@ -920,6 +987,24 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginTop: 7 * alpha,
 	},
+	pointvalueDisableText: {
+		color: "rgb(180, 180, 180)",
+		fontSize: 20 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	pointDisableText: {
+		color: "rgb(180, 180, 180)",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginTop: 7 * alpha,
+	},
 	pointbuttonButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
@@ -959,6 +1044,24 @@ const styles = StyleSheet.create({
 	rewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		marginTop: 7 * alpha,
+	},
+	rewardvalueDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
+		fontSize: 20 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
+	rewardDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1026,6 +1129,37 @@ const styles = StyleSheet.create({
 	walletText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
+		fontFamily: "Helvetica",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		marginTop: 7 * alpha,
+	},
+	currencyDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
+		fontFamily: "Helvetica",
+		fontSize: 8 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		marginTop: 12 * alpha,
+	},
+	userCreditDisableText: {
+		color: "rgb(180, 180, 180)",
+		fontSize: 20 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		flex: 1,
+		alignSelf: "center",
+		marginLeft: 3 * alpha,
+	},
+	walletDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
 		fontFamily: "Helvetica",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1124,9 +1258,26 @@ const styles = StyleSheet.create({
 		width: 28 * alpha,
 		height: 27 * alpha,
 	},
+	pointiconDisableImage: {
+		opacity: 0.6,
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 28 * alpha,
+		height: 27 * alpha,
+	},
 	pointRewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginTop: 7 * alpha,
+	},
+	pointRewardDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1138,13 +1289,29 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		height: 31 * alpha,
 	},
-	group8Image: {
+	centerImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		height: 44 * alpha,
 	},
 	vipClubText: {
 		color: "rgb(54, 54, 54)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginTop: 8 * alpha,
+	},
+	centerDisableImage: {
+		opacity: 0.6,
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		height: 44 * alpha,
+	},
+	vipClubDisableText: {
+		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1196,6 +1363,23 @@ const styles = StyleSheet.create({
 	memberStatusText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 11 * alpha,
+	},
+	membericonDisableImage: {
+		opacity: 0.6,
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 19 * alpha,
+	},
+	memberStatusDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
@@ -1256,6 +1440,24 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 15 * alpha,
 	},
+	ordericonDisableImage: {
+		opacity: 0.6,
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 15 * alpha,
+		height: 22 * alpha,
+	},
+	orderHistoryDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		flex: 1,
+		marginLeft: 15 * alpha,
+	},
 	personalInfoView: {
 		backgroundColor: "transparent",
 		height: 50 * alpha,
@@ -1294,7 +1496,7 @@ const styles = StyleSheet.create({
 		width: null,
 		height: 17 * alpha,
 	},
-	group6Image: {
+	personalInfoImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		position: "absolute",
@@ -1306,6 +1508,26 @@ const styles = StyleSheet.create({
 	personalInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 10 * alpha,
+	},
+	personalInfoDisableImage: {
+		opacity: 0.6,
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		position: "absolute",
+		left: 3 * alpha,
+		right: 4 * alpha,
+		top: 1 * alpha,
+		height: 6 * alpha,
+	},
+	personalInfoDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
@@ -1354,7 +1576,7 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 9 * alpha,
 	},
-	clip5Image: {
+	qrCodeImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		width: null,
@@ -1372,6 +1594,32 @@ const styles = StyleSheet.create({
 	},
 	qrDescriptionText: {
 		color: "rgb(184, 180, 180)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	qrCodeDisableImage: {
+		opacity: 0.6,
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: null,
+		height: 19 * alpha,
+	},
+	qrCodeDisableText: {
+		backgroundColor: "transparent",
+		color: "rgb(180, 180, 180)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		marginLeft: 12 * alpha,
+	},
+	qrDescriptionDisableText: {
+		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
@@ -1530,6 +1778,23 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,
 	},
+	abouticonDisableImage: {
+		opacity: 0.6,
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 20 * alpha,
+	},
+	aboutDisableText: {
+		color: "rgb(180, 180, 180)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginLeft: 11 * alpha,
+	},
 	logoutView: {
 		backgroundColor: "transparent",
 		height: 50 * alpha,
@@ -1572,5 +1837,28 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,
+	},
+	logouticonImage: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 20 * alpha,
+	},
+	logoutDisableText: {
+		color: "rgb(180, 180, 180)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginLeft: 11 * alpha,
+	},
+	logouticonDisableImage: {
+		opacity: 0.6,
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: 19 * alpha,
+		height: 20 * alpha,
 	},
 })

@@ -1,4 +1,4 @@
-import { getMethod,postMethod,postMultipartMethod } from '../Utils/webservice_helper'
+import { getMethod,postMethod,postMultipartMethod,deleteMethod } from '../Utils/webservice_helper'
 
 export function storePushToken(authtoken,object) {
    return postMethod(authtoken,object)
@@ -39,4 +39,8 @@ export function loginWithFacebook(authtoken,object) {
 
 export function activateAccount(authtoken,object) {
    return postMethod(authtoken,object)
+}
+
+export function destroy(authtoken,object) {
+   return deleteMethod(authtoken,object)
 }

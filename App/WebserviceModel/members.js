@@ -9,6 +9,7 @@ import {
   login,
   loginWithFacebook,
   activateAccount,
+  destroy
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -25,7 +26,7 @@ function getCurrentUser() {
 
 function saveCurrentUserToStorage(profile) {
   
-  AsyncStorage.setItem("profile", JSON.stringify(profile))
+  AsyncStorage.clear()
 }
 
 function clearCurrentUser() {
@@ -256,14 +257,23 @@ export default {
         console.log('loadingCurrentUser', err)
       }
     },
-    *loadLogoutUser({ payload }, { call, put, select }) {
-      try {
-        
-        yield put(createAction('clearCurrentUser'))
+    *loadDestroy({ payload }, { call, put, select }) 
+    {
+    try{
 
-      } catch (err) {
-        console.log('clearUser', err)
-      }
-    },
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            destroy,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('clearCurrentUser'))
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
   },
 }
