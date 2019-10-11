@@ -208,7 +208,7 @@ export default class PointShop extends React.Component {
 								onPress={this.onTransactionHistoryPressed}
 								style={styles.transactionHistoryButton}>
 								<Text
-									style={styles.transactionHistoryButtonText}>Point History</Text>
+									style={styles.transactionHistoryButtonText}>Purchase History</Text>
 							</TouchableOpacity>
 						</View>
 					</View>

@@ -20,24 +20,29 @@ export default class PointProductNoHeaderCell extends React.Component {
 
     }
 
-    onPointProductCellPress = () => {
-
-    }
+    onPointProductCellPress = (item_id, item_name) => {
+		const { navigate } = this.props.navigation
+		navigate("PointShopItem", {
+			item_id: item_id,
+			item_name: item_name,
+		})
+	}
 
     render() {
+        const {item} = this.props
 
         return <TouchableWithoutFeedback
-            onPress={this.onPointProductCellPress}>
+            onPress={() => this.onPointProductCellPress(item.id, item.name)}>
             <View
                 navigation={this.props.navigation}
                 style={styles.pointproductcell}>
                 <Image
-                    source={require("./../../assets/images/bg-03.png")}
-                    style={styles.imageImage}/>
+						source={{uri:item.image}}
+						style={styles.imageImage}/>
                 <View
                     style={styles.viewView}>
                     <Text
-                        style={styles.titleText}>Voucher A</Text>
+                        style={styles.titleText}>{item.name}</Text>
                     <View
                         pointerEvents="box-none"
                         style={{
@@ -48,7 +53,7 @@ export default class PointProductNoHeaderCell extends React.Component {
                             alignItems: "flex-start",
                         }}>
                         <Text
-                            style={styles.valueText}>1000</Text>
+                            style={styles.valueText}>{item.points}</Text>
                         <Text
                             style={styles.pointsText}>Points</Text>
                     </View>
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
     },
     imageImage: {
         resizeMode: "cover",
-        backgroundColor: "transparent",
+        backgroundColor: "#f6f4f5",
         width: 170 * alpha,
         height: 170 * alpha,
         alignSelf: "center",

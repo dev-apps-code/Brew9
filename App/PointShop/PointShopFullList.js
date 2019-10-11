@@ -13,7 +13,7 @@ import { alpha, fontAlpha } from "../Common/size";
 import { KURL_INFO } from "../Utils/server.js"
 import {createAction} from "../Utils";
 import {connect} from "react-redux";
-import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
+import MembershipPointsProductRequestObject from "../Requests/membership_points_product_request_object.js"
 
 @connect(({ members }) => ({
     members: members.profile
@@ -66,25 +66,25 @@ export default class PointShopFullList extends React.Component {
     }
 
     loadPointsProducts(){
-        const { dispatch, members } = this.props
-        this.setState({ loading: true })
-        const callback = eventObject => {
-            if (eventObject.success) {
+        const { dispatch } = this.props
+
+            this.setState({ loading: true })
+            const callback = eventObject => {
+                if (eventObject.success) {
+                    this.setState({ data:eventObject.result})
+                }
                 this.setState({
                     loading: false,
-                    data: eventObject.result,
-                })
+                    })   
             }
-
-        }
-        const obj = new PointsProductsRequestObject()
-        obj.setUrlId(members.company_id)
-        dispatch(
-            createAction('companies/loadPointsProducts')({
-                object:obj,
-                callback,
-            })
-        )
+            const obj = new MembershipPointsProductRequestObject()
+            obj.setUrlId( this.props.navigation.getParam("plan_id", null),)
+            dispatch(
+                createAction('memberships/loadPointsProducts')({
+                    object:obj,
+                    callback,
+                })
+            )
     }
 
     onPointHistoryPressed = () => {
@@ -111,24 +111,10 @@ export default class PointShopFullList extends React.Component {
 
         return <PointProductNoHeaderCell
             navigation={this.props.navigation}
+            item={item}
             index={index}/>
     }
-
-    tableViewFlatListMockData = [{
-        key: "1",
-    }, {
-        key: "2",
-    }, {
-        key: "3",
-    }, {
-        key: "4",
-    }, {
-        key: "5",
-    }, {
-        key: "6",
-    }, {
-        key: "7",
-    }]
+    
 
     render() {
 
@@ -140,7 +126,7 @@ export default class PointShopFullList extends React.Component {
                     style={styles.pointproductlistFlatListViewWrapper}>
                     <FlatList
                         renderItem={this.renderPointproductlistFlatListCell}
-                        data={this.tableViewFlatListMockData}
+                        data={this.state.data}
                         numColumns={2}
                         style={styles.pointproductlistFlatList}
                         keyExtractor={(item, index) => index.toString()}/>
@@ -184,7 +170,8 @@ const styles = StyleSheet.create({
         height: 20 * alpha,
     },
     pointproductlistFlatList: {
-        backgroundColor: "rgb(244, 244, 244)",
+        marginTop: 10 *alpha,
+        backgroundColor: "white",
         width: "100%",
         height: "100%",
     },
