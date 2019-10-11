@@ -233,7 +233,11 @@ export default class Profile extends React.Component {
 	}
 
 	onLogoutButtonPress = () => {
-		this.loadDestroy()
+		const {  currentMember } = this.props
+
+		if (currentMember !== null) {
+			this.loadDestroy()
+		}
 	}
 
 	render() {
@@ -317,7 +321,7 @@ export default class Profile extends React.Component {
 										onPress={this.onLevelPressed}
 										style={styles.levelButton}>
 										<Text
-											style={styles.levelButtonText}>{level_name}</Text>
+											style={styles.levelButtonText}>{level_name ? level_name : "Level -"}</Text>
 									</TouchableOpacity>
 								</View>
 								<View
@@ -409,10 +413,10 @@ export default class Profile extends React.Component {
 										}}>
 										<View
 											style={styles.walletvalueView}>
+											{/* <Text
+												style={isLogin ? styles.currencyText : styles.currencyDisableText}>{members.currency}</Text> */}
 											<Text
-												style={isLogin ? styles.currencyText : styles.currencyDisableText}>{members.currency}</Text>
-											<Text
-												style={isLogin ? styles.userCreditText : styles.userCreditDisableText}>{credits}</Text>
+												style={isLogin ? styles.userCreditText : styles.userCreditDisableText}>${parseFloat(credits).toFixed(2)}</Text>
 										</View>
 										<Text
 											style={isLogin ? styles.walletText : styles.walletDisableText}>Wallet</Text>
@@ -838,7 +842,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Image
-										source={require("./../../assets/images/about.png")}
+										source={require("./../../assets/images/logout.png")}
 										style={isLogin ? styles.logouticonImage : styles.logouticonDisableImage}/>
 									<Text
 										style={isLogin ? styles.logoutText : styles.logoutDisableText}>Logout</Text>
@@ -1837,9 +1841,10 @@ const styles = StyleSheet.create({
 	},
 	logouticonImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 19 * alpha,
 		height: 20 * alpha,
+		marginLeft: 3 * alpha,
 	},
 	logoutDisableText: {
 		color: "rgb(180, 180, 180)",
@@ -1857,5 +1862,6 @@ const styles = StyleSheet.create({
 		resizeMode: "center",
 		width: 19 * alpha,
 		height: 20 * alpha,
+		marginLeft: 3 * alpha,
 	},
 })
