@@ -105,6 +105,29 @@ export function postMultipartMethod(authtoken, object) {
     });
 }
 
+export function deleteMethod(authtoken,object) {
+  const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
+  // console.log(urlString)
+  // console.log(authtoken)
+
+  return fetch(urlString, {
+    method: 'DELETE',
+    headers: {
+      Accept: KCURRENT_API_VERSION_HEADER,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'AppVersion': Constants.nativeAppVersion,
+      'BuildVersion': Constants.nativeBuildVersion,
+      'Platform': Constants.platform,
+      Authorization: getBasicAuthentication(authtoken),
+    }
+  })
+    .then(response => _parseJSON(response))
+    .then(logResponse('json'))
+    .catch(error => {
+      console.error(error);
+    });
+}
+
 export function logResponse(description) {
   return function(res) {
       // console.log("Description")

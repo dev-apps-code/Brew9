@@ -9,6 +9,7 @@ import {
   login,
   loginWithFacebook,
   activateAccount,
+  destroy,
   orders
 } from '../Services/members'
 import EventObject from './event_object'
@@ -255,15 +256,24 @@ export default {
         console.log('loadingCurrentUser', err)
       }
     },
-    *loadLogoutUser({ payload }, { call, put, select }) {
-      try {
-        
-        yield put(createAction('clearCurrentUser'))
+    *loadDestroy({ payload }, { call, put, select }) 
+    {
+    try{
 
-      } catch (err) {
-        console.log('clearUser', err)
-      }
-    },
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            destroy,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('clearCurrentUser'))
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
     *loadOrders({ payload }, { call, put, select }) 
     {
     try{
@@ -276,9 +286,10 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) {
+        }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
-    }, 
+      },
   },
 }

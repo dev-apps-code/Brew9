@@ -220,11 +220,11 @@ export default class Login extends React.Component {
 								offset={10}
 
 							/>
-							{/*<TextInput*/}
-							{/*	autoCorrect={false}*/}
-							{/*	keyboardType="phone-pad"*/}
-							{/*	style={styles.textInputTextInput}*/}
-							{/*	onChangeText={(code) => this.setState({code})}/>*/}
+							{/* <TextInput
+							autoCorrect={false}
+							keyboardType="phone-pad"
+							style={styles.textInputTextInput}
+							onChangeText={(code) => this.setState({code})}/> */}
 						</View>
 						<View
 							style={{
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	countryCodeView: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		borderRadius: 7 * alpha,
 		shadowColor: "rgba(140, 140, 140, 0.5)",
 		shadowRadius: 1 * alpha,
@@ -369,8 +369,9 @@ const styles = StyleSheet.create({
 	},
 	phoneCountryCodeText: {
 		marginLeft: 0 * alpha,
-		fontFamily: "SFProText-Medium",
+		fontFamily: "Helvetica",
 		fontSize: 14 * fontAlpha,
+		backgroundColor: "blue"
 	},
 	bitmapImage: {
 		resizeMode: "center",

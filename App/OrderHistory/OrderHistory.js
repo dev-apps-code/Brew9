@@ -11,11 +11,13 @@ import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-n
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
-import {createAction} from "../Utils"
-import GetOrdersRequestObject from "../Requests/get_orders_request_object"
-@connect(({ members }) => ({
-	currentMember:members.profile,
-	members:members
+import GetOrdersRequestObject from '../Requests/get_orders_request_object'
+import {createAction} from '../Utils'
+@connect(({ members, shops }) => ({
+	currentMember: members.profile,
+	company_id: members.company_id,
+	location: members.location,
+	selectedShop: shops.selectedShop
 }))
 export default class OrderHistory extends React.Component {
 
@@ -70,6 +72,7 @@ export default class OrderHistory extends React.Component {
 		}
 		const obj = new GetOrdersRequestObject(page)
 		obj.setUrlId(currentMember.id) 
+		// obj.setUrlId(1) 
 		obj.setPage(page)
 		dispatch(
 			createAction('members/loadOrders')({
@@ -96,101 +99,39 @@ export default class OrderHistory extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
-		this.loadOrders(0)
+		this.loadOrders(this.state.orders_page)
 	}
 
+	loadGetOrders(){
+		const { dispatch, currentMember } = this.props
+		if (currentMember !== null) {
+			this.setState({ loading: true })
+			const callback = eventObject => {
+				if (eventObject.success) {
+					this.setState({
+						orders: this.state.orders.concat(eventObject.result)
+					})
+				}
+				this.setState({
+					loading: false,
+				})        
+			}
+			const obj = new GetOrderRequestObject()
+			obj.setUrlId(currentMember.id)
+			// obj.setUrlId(1)
+			dispatch(
+				createAction('orders/loadGetOrders')({
+					object:obj,
+					callback,
+				})
+			)
+		}
+	}
+	
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
 	}
-
-	temp_data = [
-		{
-			id: 1,
-			total: 10,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		},
-		{
-			id: 2,
-			total: 20,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		},
-		{
-			id: 3,
-			total: 40,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		}
-	]
-
-
 
 	renderOrderHistoryFlatListCell = ({ item }) => {
 	
@@ -203,7 +144,6 @@ export default class OrderHistory extends React.Component {
 				shop_name={item.shop.name}
 				products={item.order_items}
 				status={item.status}
-				currency={this.props.members.currency}
 		/>
 	}
 
