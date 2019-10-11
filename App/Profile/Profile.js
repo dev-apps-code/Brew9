@@ -88,8 +88,9 @@ export default class Profile extends React.Component {
 		this.setState({ loading: true })
 
 		const callback = eventObject => {
+			console.log("Object", eventObject)
 			if (eventObject.success) {
-				navigate("Home")
+				navigate("VerifyStack")
 			}
 			this.setState({
 				loading: false,
@@ -233,11 +234,7 @@ export default class Profile extends React.Component {
 	}
 
 	onLogoutButtonPress = () => {
-		const { dispatch } = this.props
-		dispatch(createAction('members/loadLogoutUser')({}))
-		const { navigate } = this.props.navigation
-
-		navigate("Login")
+		this.loadDestroy()
 	}
 
 	render() {
@@ -789,7 +786,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.logoutView}>
 						<TouchableOpacity
-							onPress={this.onAboutButtonPressed}
+							onPress={() => this.onAboutButtonPressed()}
 							style={styles.aboutbuttonButton}>
 							<View
 								pointerEvents="box-none"
@@ -821,7 +818,7 @@ export default class Profile extends React.Component {
 					<View
 						style={styles.aboutView}>
 						<TouchableOpacity
-							onPress={this.onLogoutButtonPress}
+							onPress={() => this.onLogoutButtonPress()}
 							style={styles.logoutbuttonButton}>
 							<View
 								pointerEvents="box-none"

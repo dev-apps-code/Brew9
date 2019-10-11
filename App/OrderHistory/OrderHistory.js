@@ -137,6 +137,7 @@ export default class OrderHistory extends React.Component {
 	
 		return <OrderCell
 				navigation={this.props.navigation}
+				item={item}
 				order_id={item.id}
 				total={item.total}
 				receipt_no={item.receipt_no}

@@ -32,7 +32,7 @@ function saveCurrentUserToStorage(profile) {
 
 function clearCurrentUser() {
   
-  AsyncStorage.setItem("profile", null)
+  AsyncStorage.clear()
 }
 
 export default {
@@ -60,10 +60,11 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      console.log("load profiel",payload)
+      console.log("load profile",payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
-    clearCurrentUser(state, {payload}) {
+    destroyCurrentUser(state, {payload}) {
+      console.log("Destroy")
       clearCurrentUser()
       return { ...state, profile: null, isReady: true, userAuthToken: "" }
     },
@@ -268,8 +269,9 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
+        console.log("Destroy", eventObject)
         if (eventObject.success == true) {
-          yield put(createAction('clearCurrentUser'))
+          yield put(createAction('destroyCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }

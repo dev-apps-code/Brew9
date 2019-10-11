@@ -12,7 +12,9 @@ import {alpha, fontAlpha} from "../Common/size";
 import {connect} from "react-redux";
 
 @connect(({ members }) => ({
-	members:members
+	currentMember: members.profile,
+	company_id: members.company_id,
+	location: members.location,
 }))
 export default class OrderReceipt extends React.Component {
 
@@ -42,6 +44,9 @@ export default class OrderReceipt extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			order: this.props.navigation.getParam("order", null),
+		}
 	}
 
 	componentDidMount() {
@@ -68,46 +73,93 @@ export default class OrderReceipt extends React.Component {
 	
 	}
 
+	renderOrderItems(items) {
+
+		const order_items = items.map((item, key) => {
+
+			if (item.variants != null && item.variants != "") {
+				return <View
+					style={styles.itemView}
+					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							alignSelf: "stretch",
+							width: 179 * alpha,
+							marginTop: 14 * alpha,
+							marginBottom: 17,
+							alignItems: "flex-start",
+						}}>
+						<Text
+							style={styles.nameText}>{item.product_name}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.descriptionText}>{item.variants}</Text>
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.quantityText}>x{item.quantity}</Text>
+					<Text
+						style={styles.priceText}>{item.total_price}</Text>
+				</View>
+			} else {
+				return <View
+					style={styles.item2View}
+					key={key}>
+					<Text
+						style={styles.nameThreeText}>{item.product_name}</Text>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.quantityThreeText}>x{item.quantity}</Text>
+					<Text
+						style={styles.priceThreeText}>{item.total_price}</Text>
+				</View>
+			}
+		})
+
+		return <View style={styles.orderitemsView}>
+			{order_items}
+		</View>
+	}
+	
 	render() {
 	
+		const { order } = this.state
+
 		return <View
 				style={styles.orderReceiptView}>
 				<ScrollView
 					style={styles.orderScrollView}>
-					{/*<TouchableOpacity*/}
-					{/*	onPress={this.onCustomerServicePressed}*/}
-					{/*	style={styles.customerServiceButton}>*/}
-					{/*	<Image*/}
-					{/*		source={require("./../../assets/images/group-3-22.png")}*/}
-					{/*		style={styles.customerServiceButtonImage}/>*/}
-					{/*	<Text*/}
-					{/*		style={styles.customerServiceButtonText}>Customer Service</Text>*/}
-					{/*</TouchableOpacity>*/}
+					{/* <TouchableOpacity
+						onPress={this.onCustomerServicePressed}
+						style={styles.customerServiceButton}>
+						<Image
+							source={require("./../../assets/images/group-3-22.png")}
+							style={styles.customerServiceButtonImage}/>
+						<Text
+							style={styles.customerServiceButtonText}>Customer Service</Text>
+					</TouchableOpacity> */}
 					<View
 						style={styles.orderCartView}>
+						<View
+							style={styles.whiteboxView}/>
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
 								left: 0 * alpha,
 								width: 338 * alpha,
-								top: 0 * alpha,
-								height: 662 * alpha,
-								alignItems: "flex-start",
-							}}>
-							<View
-								style={styles.whiteboxView}/>
-							<View
-								style={styles.viewView}/>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
 								top: 24 * alpha,
-								bottom: 61 * alpha,
+								flex: 1,
 								alignItems: "center",
 							}}>
 							<View
@@ -125,19 +177,29 @@ export default class OrderReceipt extends React.Component {
 									style={styles.thankMessageText}>Thank you for your support, welcome again.</Text>
 							</View>
 							<View
+								style={styles.viewView}/>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								marginTop: 167 * alpha,
+								flex: 1,
+							}}>
+							<View
 								style={styles.lineView}/>
 							<View
 								style={styles.locationView}>
 								<View
 									style={styles.branchView}>
 									<Text
-										style={styles.kualaLumpurBranchText}>Kuala Lumpur Branch</Text>
+										style={styles.shopBranchText}>{order.shop.name}</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.firstFloorBlockBText}>First Floor, Block B, ABC Mall</Text>
+										numberOfLines={3}
+										style={styles.shopBranchAddressText}>{order.shop.address}</Text>
 								</View>
 								<View
 									style={{
@@ -178,53 +240,8 @@ export default class OrderReceipt extends React.Component {
 							</View>
 							<View
 								style={styles.lineTwoView}/>
-							<View
-								style={styles.itemTwoView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										alignSelf: "stretch",
-										width: 179 * alpha,
-										marginTop: 14 * alpha,
-										marginBottom: 17 * alpha,
-										alignItems: "flex-start",
-									}}>
-									<Text
-										style={styles.nameTwoText}>Grapes</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.descriptionTwoText}>Sugar level, Rose, Cheese{"\n"}Ice blended, Less Sugar, Normal Ice</Text>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.quantityTwoText}>x1</Text>
-								<Text
-									style={styles.priceTwoText}>29</Text>
-							</View>
-							<View
-								style={styles.item2View}>
-								<Text
-									style={styles.nameThreeText}>Potato</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.quantityThreeText}>x1</Text>
-								<Text
-									style={styles.priceThreeText}>9</Text>
-							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<View
+							{this.renderOrderItems(order.order_items)}
+							{/* <View
 								style={styles.voucherView}>
 								<Text
 									style={styles.nameFourText}>Buy 2 Free 1</Text>
@@ -245,7 +262,7 @@ export default class OrderReceipt extends React.Component {
 									}}/>
 								<Text
 									style={styles.descriptionFourText}>Prior Made</Text>
-							</View>
+							</View> */}
 							<View
 								style={styles.totalView}>
 								<Text
@@ -262,35 +279,7 @@ export default class OrderReceipt extends React.Component {
 							<Text
 								style={styles.callrefundText}>Please call for refund.</Text>
 						</View>
-						<View
-							style={styles.itemView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									alignSelf: "stretch",
-									width: 179 * alpha,
-									marginTop: 14 * alpha,
-									marginBottom: 17 * alpha,
-									alignItems: "flex-start",
-								}}>
-								<Text
-									style={styles.nameText}>Grapes</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.descriptionText}>Sugar level, Rose, Cheese{"\n"}Ice blended, Less Sugar, Normal Ice</Text>
-							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.quantityText}>x1</Text>
-							<Text
-								style={styles.priceText}>29</Text>
-						</View>
+						
 					</View>
 				</ScrollView>
 			</View>
@@ -332,10 +321,6 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "left",
 	},
-	customerServiceButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
 	customerServiceButton: {
 		backgroundColor: "white",
 		borderRadius: 14.5 * alpha,
@@ -343,28 +328,31 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		alignSelf: "flex-end",
 		width: 119 * alpha,
 		height: 29 * alpha,
 		marginRight: 19 * alpha,
 		marginTop: 13 * alpha,
 	},
+	customerServiceButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
 	orderCartView: {
-		backgroundColor: "transparent",
-		height: 706 * alpha,
+		backgroundColor: "rgb(248, 248, 248)",
+		alignSelf: "stretch",
 		marginLeft: 18 * alpha,
 		marginRight: 19 * alpha,
 		marginTop: 13 * alpha,
+		marginBottom: 20,
+		flex: 1,
 	},
 	whiteboxView: {
 		backgroundColor: "white",
-		width: 338 * alpha,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
 		height: 168 * alpha,
-	},
-	viewView: {
-		backgroundColor: "rgb(248, 248, 248)",
-		width: 338 * alpha,
-		height: 495 * alpha,
 	},
 	completeOrderView: {
 		backgroundColor: "transparent",
@@ -379,13 +367,13 @@ const styles = StyleSheet.create({
 		height: 46 * alpha,
 	},
 	completedOrderText: {
-		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
+		backgroundColor: "transparent",
 		marginTop: 2 * alpha,
 	},
 	thankMessageText: {
@@ -402,14 +390,13 @@ const styles = StyleSheet.create({
 	},
 	lineView: {
 		backgroundColor: "rgb(234, 234, 234)",
-		alignSelf: "stretch",
 		height: 2 * alpha,
-		marginTop: 55 * alpha,
 	},
 	locationView: {
 		backgroundColor: "transparent",
-		width: 289 * alpha,
 		height: 64 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 26 * alpha,
 		marginTop: 18 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -418,25 +405,25 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 		width: 162 * alpha,
-		height: 39 * alpha,
+		height: 50 * alpha,
 	},
-	kualaLumpurBranchText: {
+	shopBranchText: {
+		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
-		textAlign: "center",
-		backgroundColor: "transparent",
+		textAlign: "left",
 		marginRight: 12 * alpha,
 	},
-	firstFloorBlockBText: {
+	shopBranchAddressText: {
 		color: "rgb(146, 146, 146)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
-		textAlign: "center",
+		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 1 * alpha,
 	},
@@ -449,7 +436,7 @@ const styles = StyleSheet.create({
 	callIconButton: {
 		backgroundColor: "transparent",
 		borderRadius: 17.5 * alpha,
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(180, 179, 179)",
 		borderStyle: "solid",
 		flexDirection: "row",
@@ -458,24 +445,25 @@ const styles = StyleSheet.create({
 		padding: 0,
 		height: 35 * alpha,
 	},
+	callIconButtonImage: {
+		resizeMode: "contain",
+	},
 	callIconButtonText: {
 		color: "black",
+		fontFamily: ".SFNSText",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	callIconButtonImage: {
-		resizeMode: "contain",
-	},
 	callText: {
+		backgroundColor: "transparent",
 		color: "rgb(163, 163, 163)",
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
-		backgroundColor: "transparent",
 		marginLeft: 6 * alpha,
 		marginRight: 7 * alpha,
 	},
@@ -484,10 +472,18 @@ const styles = StyleSheet.create({
 		width: 50 * alpha,
 		height: 62 * alpha,
 	},
+	directionIconButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
 	directionIconButton: {
 		backgroundColor: "transparent",
 		borderRadius: 17.5 * alpha,
-		borderWidth: 1,
+		borderWidth: 1 * alpha,
 		borderColor: "rgb(180, 179, 179)",
 		borderStyle: "solid",
 		flexDirection: "row",
@@ -501,13 +497,6 @@ const styles = StyleSheet.create({
 	directionIconButtonImage: {
 		resizeMode: "contain",
 	},
-	directionIconButtonText: {
-		color: "black",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
 	directionText: {
 		color: "rgb(163, 163, 163)",
 		fontFamily: "DINPro-Bold",
@@ -519,15 +508,168 @@ const styles = StyleSheet.create({
 	},
 	lineTwoView: {
 		backgroundColor: "rgb(234, 234, 234)",
-		width: 291 * alpha,
 		height: 1 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 24 * alpha,
 		marginTop: 12 * alpha,
+	},
+	voucherView: {
+		backgroundColor: "transparent",
+		height: 18 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 42 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameFourText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	descriptionThreeText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	voucher2View: {
+		backgroundColor: "transparent",
+		height: 17 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 17 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameFiveText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	descriptionFourText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	totalView: {
+		backgroundColor: "transparent",
+		height: 21 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 24 * alpha,
+		marginTop: 23 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	totallabelText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	totalText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	lineThreeView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		height: 1 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 24 * alpha,
+		marginTop: 14 * alpha,
+	},
+	callrefundText: {
+		backgroundColor: "transparent",
+		color: "rgb(152, 149, 149)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		alignSelf: "flex-start",
+		marginLeft: 26 * alpha,
+		marginTop: 13 * alpha,
+		marginBottom: 13,
+	},
+	orderitemsView: {
+		backgroundColor: "transparent",
+		marginLeft: 24 * alpha,
+		marginRight: 24 * alpha,
+		flex: 1,
+	},
+	itemView: {
+		backgroundColor: "transparent",
+		height: 90 * alpha,
+		marginLeft: 1 * alpha,
+		flexDirection: "row",
+		alignItems: "flex-start",
+	},
+	nameText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	descriptionText: {
+		backgroundColor: "transparent",
+		color: "rgb(146, 146, 146)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	quantityText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 52 * alpha,
+		marginTop: 26 * alpha,
+	},
+	priceText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginTop: 26 * alpha,
 	},
 	itemTwoView: {
 		backgroundColor: "transparent",
-		width: 289 * alpha,
 		height: 90 * alpha,
-		marginTop: 89 * alpha,
+		marginRight: 1 * alpha,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
@@ -572,8 +714,8 @@ const styles = StyleSheet.create({
 	},
 	item2View: {
 		backgroundColor: "transparent",
-		width: 289 * alpha,
 		height: 46 * alpha,
+		marginRight: 1 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -587,167 +729,23 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	quantityThreeText: {
+		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginRight: 56 * alpha,
 	},
 	priceThreeText: {
+		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginRight: 3 * alpha,
-	},
-	voucherView: {
-		backgroundColor: "transparent",
-		width: 289 * alpha,
-		height: 18 * alpha,
-		marginBottom: 17 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	nameFourText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	descriptionThreeText: {
-		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	voucher2View: {
-		backgroundColor: "transparent",
-		width: 289 * alpha,
-		height: 17 * alpha,
-		marginBottom: 23 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	nameFiveText: {
-		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "center",
-	},
-	descriptionFourText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	totalView: {
-		backgroundColor: "transparent",
-		width: 290 * alpha,
-		height: 21 * alpha,
-		marginBottom: 14 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	totallabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	totalText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	lineThreeView: {
-		backgroundColor: "rgb(234, 234, 234)",
-		width: 291 * alpha,
-		height: 1 * alpha,
-		marginBottom: 13 * alpha,
-	},
-	callrefundText: {
-		color: "rgb(152, 149, 149)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		alignSelf: "flex-start",
-		marginLeft: 26 * alpha,
-	},
-	itemView: {
-		backgroundColor: "transparent",
-		position: "absolute",
-		alignSelf: "center",
-		width: 289 * alpha,
-		top: 262 * alpha,
-		height: 90 * alpha,
-		flexDirection: "row",
-		alignItems: "flex-start",
-	},
-	nameText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 15 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	descriptionText: {
-		color: "rgb(146, 146, 146)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	quantityText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginRight: 52 * alpha,
-		marginTop: 26 * alpha,
-	},
-	priceText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginTop: 26 * alpha,
 	},
 })
