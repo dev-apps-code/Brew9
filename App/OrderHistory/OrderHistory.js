@@ -11,7 +11,7 @@ import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-n
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
-import GetOrderRequestObject from '../Requests/get_order_request_object'
+import GetOrdersRequestObject from '../Requests/get_orders_request_object'
 import {createAction} from '../Utils'
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -72,6 +72,7 @@ export default class OrderHistory extends React.Component {
 		}
 		const obj = new GetOrdersRequestObject(page)
 		obj.setUrlId(currentMember.id) 
+		// obj.setUrlId(1) 
 		obj.setPage(page)
 		dispatch(
 			createAction('members/loadOrders')({
@@ -98,7 +99,7 @@ export default class OrderHistory extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
-		this.loadGetOrders()
+		this.loadOrders(this.state.orders_page)
 	}
 
 	loadGetOrders(){

@@ -170,11 +170,11 @@ export default class Profile extends React.Component {
 
 	onOrderButtonPressed = () => {
 		const {  currentMember } = this.props
-		if (currentMember !== null) {
+		// if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
 			navigate("OrderHistory")
-	}
+	// }
 	}
 
 	onPersonalButtonPressed = () => {
