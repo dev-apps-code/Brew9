@@ -28,13 +28,13 @@ export default class Notification extends React.Component {
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={params.onBackPressed ? params.onBackPressed : () => null}
                     style={styles.navigationBarItem}>
                     <Image
                         source={require("./../../assets/images/back.png")}
                         style={styles.navigationBarItemIcon}/>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>,
             headerRight: null,
             headerStyle: {
@@ -50,8 +50,8 @@ export default class Notification extends React.Component {
 			tabBarLabel: "Inbox",
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
-				? require('./../../assets/images/profile_selected.png') 
-				: require('./../../assets/images/profile.png')
+				? require('./../../assets/images/inbox_selected.png') 
+				: require('./../../assets/images/inbox.png')
 
 				return <Image
 					source={image}
