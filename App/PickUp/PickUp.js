@@ -82,7 +82,7 @@ export default class PickUp extends React.Component {
 						<Text
 							style={styles.customerServiceButtonText}>Customer {"\n"}Service</Text>
 					</TouchableOpacity> */}
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						onPress={this.onSaySomethingPressed}
 						style={styles.saySomethingButton}>
 						<Image
@@ -90,7 +90,7 @@ export default class PickUp extends React.Component {
 							style={styles.saySomethingButtonImage}/>
 						<Text
 							style={styles.saySomethingButtonText}>Say{"\n"}Something</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 				<View
 					style={styles.queueView}>

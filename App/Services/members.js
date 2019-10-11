@@ -40,3 +40,7 @@ export function loginWithFacebook(authtoken,object) {
 export function activateAccount(authtoken,object) {
    return postMethod(authtoken,object)
 }
+
+export function orders(authtoken,object) {
+   return getMethod(authtoken,object)
+}

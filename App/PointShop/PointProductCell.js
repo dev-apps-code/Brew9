@@ -47,7 +47,7 @@ export default class PointProductCell extends React.Component {
 				<View
 					style={styles.itemView}>
 					<Image
-						source={require("./../../assets/images/bg-03.png")}
+						source={{uri:item.image}}
 						style={styles.imageImage}/>
 					<View
 						style={styles.viewView}>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
 	},
 	imageImage: {
 		resizeMode: "cover",
-		backgroundColor: "transparent",
+		backgroundColor: "#f6f4f5",
 		width: 170 * alpha,
 		height: 170 * alpha,
 	},
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
 	},
 	pointsText: {
 		backgroundColor: "transparent",
-		color: "black",
+		color: "rgb(142, 142, 142)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",

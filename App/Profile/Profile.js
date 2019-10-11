@@ -183,7 +183,7 @@ export default class Profile extends React.Component {
 		dispatch(createAction('members/loadLogoutUser')({}))
 		const { navigate } = this.props.navigation
 
-		navigate("Home")
+		navigate("Login")
 	}
 
 	render() {
