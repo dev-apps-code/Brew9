@@ -22,7 +22,7 @@ export default class MemberCenter extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Order History",
+			title: "Member Center",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 74 * alpha,
 		height: 2 * alpha,
+		paddingTop: 0,
 	},
 	memberServiceView: {
 		backgroundColor: "transparent",
