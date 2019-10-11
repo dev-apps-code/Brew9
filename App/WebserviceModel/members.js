@@ -27,7 +27,7 @@ function getCurrentUser() {
 
 function saveCurrentUserToStorage(profile) {
   
-  AsyncStorage.clear()
+  AsyncStorage.setItem("profile", JSON.stringify(profile))
 }
 
 function clearCurrentUser() {

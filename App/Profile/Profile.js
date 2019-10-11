@@ -178,7 +178,7 @@ export default class Profile extends React.Component {
 	}
 
 	onPersonalButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
