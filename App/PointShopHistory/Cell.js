@@ -41,6 +41,7 @@ export default class Cell extends React.Component {
 						justifyContent: "center",
 					}}>
 					<Image
+						url={{uri: this.props.product_image ? this.props.product_image : ""}}
 						style={styles.imageImage}/>
 				</View>
 				<View
@@ -64,18 +65,18 @@ export default class Cell extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.nameText}>Voucher RM3 Delivery</Text>
+							style={styles.nameText}>{this.props.redeem_name}</Text>
 						<View
 							style={{
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.pointsText}>300 Points </Text>
+							style={styles.pointsText}>{this.props.redeem_points} Points</Text>
 					</View>
 					<Text
-						style={styles.dateText}>2019.08.08 - 2019.08.08 </Text>
+						style={styles.dateText}>{this.props.updated_at} - {this.props.updated_at} </Text>
 					<Text
-						style={styles.redeemTimeText}>Redeem Date:  2019.09.03</Text>
+						style={styles.redeemTimeText}>Redeem Date: {this.props.redeem_at}</Text>
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -89,7 +90,7 @@ export default class Cell extends React.Component {
 						<Text
 							style={styles.redeemText}>Redeemed at</Text>
 						<Text
-							style={styles.shopText}>Redeemed at</Text>
+							style={styles.shopText}>{this.props.redeem_shop}</Text>
 					</View>
 					<View
 						style={{

@@ -88,7 +88,6 @@ export default class Profile extends React.Component {
 		this.setState({ loading: true })
 
 		const callback = eventObject => {
-			console.log("Object", eventObject)
 			if (eventObject.success) {
 				navigate("VerifyStack")
 			}

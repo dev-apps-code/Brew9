@@ -10,7 +10,8 @@ import {
   loginWithFacebook,
   activateAccount,
   destroy,
-  orders
+  orders,
+  pointProductRedemption,
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -292,6 +293,22 @@ export default {
         }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
-      },
+    },
+    *loadPointProductRedemption({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            pointProductRedemption,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
   },
 }

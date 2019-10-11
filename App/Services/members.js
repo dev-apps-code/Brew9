@@ -48,3 +48,7 @@ export function destroy(authtoken,object) {
 export function orders(authtoken,object) {
    return getMethod(authtoken,object)
 }
+
+export function pointProductRedemption(authtoken,object) {
+   return getMethod(authtoken,object)
+}
