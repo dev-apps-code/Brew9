@@ -11,7 +11,6 @@ import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-n
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
-<<<<<<< HEAD
 import GetOrderRequestObject from '../Requests/get_order_request_object'
 import {createAction} from '../Utils'
 @connect(({ members, shops }) => ({
@@ -19,13 +18,6 @@ import {createAction} from '../Utils'
 	company_id: members.company_id,
 	location: members.location,
 	selectedShop: shops.selectedShop
-=======
-import {createAction} from "../Utils"
-import GetOrdersRequestObject from "../Requests/get_orders_request_object"
-@connect(({ members }) => ({
-	currentMember:members.profile,
-	members:members
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 }))
 export default class OrderHistory extends React.Component {
 
@@ -56,11 +48,6 @@ export default class OrderHistory extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-<<<<<<< HEAD
-			loading: false,
-			orders: []
-		}
-=======
 			loading_list: true,
 			orders_initial: true,
 			orders_data: [],
@@ -92,7 +79,6 @@ export default class OrderHistory extends React.Component {
 				callback,
 			})
 		)
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 	}
 
 
@@ -112,11 +98,7 @@ export default class OrderHistory extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
-<<<<<<< HEAD
 		this.loadGetOrders()
-=======
-		this.loadOrders(0)
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 	}
 
 	loadGetOrders(){
@@ -150,97 +132,6 @@ export default class OrderHistory extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-<<<<<<< HEAD
-=======
-	temp_data = [
-		{
-			id: 1,
-			total: 10,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		},
-		{
-			id: 2,
-			total: 20,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		},
-		{
-			id: 3,
-			total: 40,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		}
-	]
-
-
-
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 	renderOrderHistoryFlatListCell = ({ item }) => {
 	
 		return <OrderCell
@@ -251,21 +142,12 @@ export default class OrderHistory extends React.Component {
 				payment_time={item.payment_time}
 				shop_name={item.shop.name}
 				products={item.order_items}
-<<<<<<< HEAD
-=======
 				status={item.status}
-				currency={this.props.members.currency}
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 		/>
 	}
 
 	render() {
-<<<<<<< HEAD
-	
-		const { orders } = this.state
-=======
 		const {orders_data} = this.state
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 		return <View
 				style={styles.OrderHistoryView}>
 				<View
@@ -287,11 +169,7 @@ export default class OrderHistory extends React.Component {
 					<FlatList
 						onEndReached={this.loadMore.bind(this)}
 						renderItem={this.renderOrderHistoryFlatListCell}
-<<<<<<< HEAD
-						data={orders}
-=======
 						data={orders_data}
->>>>>>> dea141b22943d9f6f8beb3d3bf6844ec08cf82c0
 						style={styles.orderHistoryFlatList}
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
