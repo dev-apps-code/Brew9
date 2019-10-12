@@ -100,14 +100,14 @@ export default class VerifyUser extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log("callbakc done")
+
 			if (eventObject.success) {
-				console.log("callbakc done set state")
+
 				this.setState({
 					login_success: true,
 					is_counting: true,
 					code_from_server: eventObject.result.code,
-					code:eventObject.result.code
+					// code:eventObject.result.code
 				})
 			}
 			this.setState({
