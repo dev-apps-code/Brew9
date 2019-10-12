@@ -14,3 +14,8 @@ export function getExpiredVoucher(authtoken,object) {
 
     return getMethod(authtoken,object)
 }
+
+export function validVouchers(authtoken,object) {
+    return getMethod(authtoken,object)
+}
+ 

@@ -185,8 +185,6 @@ export default class Home extends React.Component {
 		this.loadShops(true)
 		AppState.addEventListener('change', this._handleAppStateChange);
 
-		
-		// this.loadShops(true)
 		// this.loadStorePushToken()
 		await this.registerForPushNotificationsAsync()
 	}

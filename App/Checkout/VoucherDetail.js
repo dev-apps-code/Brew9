@@ -60,7 +60,7 @@ export default class VoucherDetail extends React.Component {
 	}
 
 	render() {
-	
+		const {voucher} =  this.props.navigation.getParam("voucher", null)
 		return <View
 				style={styles.voucherDetailView}>
 				<ScrollView

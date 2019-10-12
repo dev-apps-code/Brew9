@@ -1,5 +1,5 @@
 //
-//  MemberReward
+//  MemberVoucher
 //  Brew9
 //
 //  Created by [Author].

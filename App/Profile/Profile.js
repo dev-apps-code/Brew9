@@ -132,13 +132,14 @@ export default class Profile extends React.Component {
 
 	onRewardButtonPressed = () => {
 		const {  currentMember } = this.props
+		const {validVouchers} = this.state
 
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
-			navigate("MemberReward")
-		}
-		
+			navigate("MemberVoucher",{validVouchers:validVouchers})
+			
+		}		
 	}
 
 	onPointButtonPressed = () => {
@@ -257,8 +258,9 @@ export default class Profile extends React.Component {
 
 		var vouchers_count;
 		if (currentMember != null ){
-			background_photo =    {uri:currentMember.free_membership.membership_level.image}
-			level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.name : currentMember.free_membership.membership_level.name
+			background_photo =    {uri: currentMember.free_membership != null ? currentMember.free_membership.membership_level.image : ''}
+			// level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.name : currentMember.free_membership.membership_level.name
+			level_name = ''
 			display_name = currentMember.name ? currentMember.name : currentMember.phone_no
 			points = currentMember.points
 			avatar = {uri: currentMember.image}

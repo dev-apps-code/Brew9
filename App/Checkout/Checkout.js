@@ -19,6 +19,7 @@ import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object
 import {createAction, Storage} from "../Utils"
 import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
+import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
@@ -58,6 +59,7 @@ export default class Checkout extends React.Component {
 			delivery_options: 'pickup',
 			cart_total: this.props.navigation.getParam("cart_total", 0.00),
 			voucher_item_ids:[],
+			valid_vouchers:[],
 			cart:this.props.navigation.getParam("cart", [])
 		}
 	}
@@ -67,7 +69,37 @@ export default class Checkout extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+		this.loadValidVouchers()
 	}
+
+	loadValidVouchers(){
+		const { dispatch,currentMember } = this.props
+
+		if (currentMember != null ){
+			this.setState({ loading: true })
+			const callback = eventObject => {
+				if (eventObject.success) {
+					this.setState({ 
+						valid_vouchers:eventObject.result
+					})	
+				}
+				this.setState({
+					loading: false,
+					})        
+				}
+
+			const obj = new ValidVouchersRequestObject()
+			obj.setUrlId(currentMember.id)
+			dispatch(
+				createAction('vouchers/loadValidVouchers')({
+					object:obj,
+					callback,
+				})
+			)
+		}
+	
+	}
+	
 
 	onBackPressed = () => {
 
@@ -105,7 +137,7 @@ export default class Checkout extends React.Component {
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("CheckoutVoucher")
+		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers})
 	}
 
 	onPaymentButtonPressed = () => {
@@ -144,9 +176,14 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
-		const {currentMember } = this.props
-
+		const {currentMember,selectedShop } = this.props
+	
 		if (currentMember) {
+			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+				this.refs.toast.show("You are too far away");
+				return
+			}
+
 			if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
 				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 				return
@@ -169,7 +206,7 @@ export default class Checkout extends React.Component {
 
 			return
 		} else {
-			navigate("VerifyStack")
+			navigate("VerifyUserStack")
 			return
 		}
 
@@ -477,7 +514,7 @@ export default class Checkout extends React.Component {
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.statusText}>-</Text>
+										style={styles.statusText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'}</Text>
 									<Image
 										source={require("./../../assets/images/group-4-5.png")}
 										style={styles.arrowImage}/>

@@ -13,14 +13,13 @@ import React from "react"
 import { createBottomTabNavigator } from "react-navigation"
 import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation"
 
-
 import Login from "./App/Login/Login"
 import Checkout from "./App/Checkout/Checkout"
 import CheckoutVoucher from "./App/Checkout/CheckoutVoucher"
 import VoucherDetail from "./App/Checkout/VoucherDetail"
 import Profile from "./App/Profile/Profile"
 import MemberWallet from "./App/MemberWallet/MemberWallet"
-import MemberReward from "./App/MemberReward/MemberReward"
+import MemberVoucher from "./App/MemberVoucher/MemberVoucher"
 import MembershipInfo from "./App/MembershipInfo/MembershipInfo"
 import PickUp from "./App/PickUp/PickUp"
 import MemberProfile from "./App/MemberProfile/MemberProfile"
@@ -102,6 +101,26 @@ const PushOrder = createStackNavigator({
 	initialRouteName: "Home",
 })
 
+
+const VerifyUserStack = createStackNavigator({
+	VerifyUser: {
+		screen: VerifyUser,		
+	},
+	Register: {
+		screen: Register,
+		
+	},
+	WebCommonModal: {
+		screen: WebCommonModal,
+	},
+	WebCommon: {
+		screen: WebCommon,
+	},
+}, {
+	initialRouteName: "VerifyUser",
+	mode: 'modal',
+})
+
 const VerifyStack = createStackNavigator({
 	VerifyUser: {
 		screen: VerifyUser,	
@@ -158,8 +177,8 @@ const PushProfile = createStackNavigator({
 	MembershipInfo: {
 		screen: MembershipInfo,
 	},
-	MemberReward: {
-		screen: MemberReward,
+	MemberVoucher: {
+		screen: MemberVoucher,
 	},
 	PointHistory: {
 		screen: PointHistory,
@@ -214,7 +233,7 @@ const PushProfile = createStackNavigator({
 	},
 	VoucherDetail:{
 		screen: VoucherDetail,
-	}
+	},
 }, {
 	initialRouteName: "Profile",
 })
@@ -337,6 +356,9 @@ const RootNavigator = createSwitchNavigator({
 	},
 	VerifyStack: {
 		screen: VerifyStack,	
+	},
+	VerifyUserStack: {
+		screen: VerifyUserStack,	
 	},
 }, {
 	initialRouteName: "FirstScreen",

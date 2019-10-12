@@ -24,7 +24,7 @@ export default class ValidVoucher extends React.Component {
 	onValidVoucherPress = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("VoucherDetail")
+		navigate("VoucherDetail",{voucher:this.props.item})
 	}
 
 	onTermsPressed = () => {

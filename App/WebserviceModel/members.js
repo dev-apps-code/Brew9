@@ -272,6 +272,8 @@ export default {
         console.log("Destroy", eventObject)
         if (eventObject.success == true) {
           yield put(createAction('destroyCurrentUser')(eventObject.result))
+        }else{
+          yield put(createAction('destroyCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
