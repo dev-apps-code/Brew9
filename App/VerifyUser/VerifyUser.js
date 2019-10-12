@@ -57,7 +57,7 @@ export default class VerifyUser extends React.Component {
 
 	onTermsAndConditionsPressed = (url) => {
 		const { navigate } = this.props.navigation
-		navigate("WebCommonModal", {
+		navigate("WebCommon", {
             title: 'Terms and Conditions',
             web_url: url + '&id=' + this.props.company_id,
         })
@@ -160,6 +160,7 @@ export default class VerifyUser extends React.Component {
 	}
 
 	render() {
+		const { members } = this.props
 		return <View
 			style={styles.verifyuserView}>
 			<View

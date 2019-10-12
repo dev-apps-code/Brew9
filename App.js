@@ -91,6 +91,9 @@ const PushOrder = createStackNavigator({
 	WebCommonModal: {
 		screen: WebCommonModal,
 	},
+	WebCommon: {
+		screen: WebCommon,
+	},
 	Register: {
 		screen: Register,		
 		header: 'none'
@@ -110,6 +113,9 @@ const VerifyStack = createStackNavigator({
 	},
 	WebCommonModal: {
 		screen: WebCommonModal,
+	},
+	WebCommon: {
+		screen: WebCommon,
 	},
 }, {
 
