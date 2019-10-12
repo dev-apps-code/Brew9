@@ -79,25 +79,28 @@ export default class PickUp extends React.Component {
 
 	loadCurrentOrder(){
 		const { dispatch, currentMember } = this.props
-		this.setState({ loading: true })
-		const callback = eventObject => {
-			if (eventObject.success) {
+
+		if (currentMember != null){
+			this.setState({ loading: true })
+			const callback = eventObject => {
+				if (eventObject.success) {
+					this.setState({
+						current_order: eventObject.result
+					})
+				}
 				this.setState({
-					current_order: eventObject.result
+					loading: false,
 				})
 			}
-			this.setState({
-				loading: false,
-			})
+			const obj = new GetCurrentOrderRequestObject()
+			obj.setUrlId(currentMember.id)
+			dispatch(
+				createAction('members/loadCurrentOrder')({
+					object:obj,
+					callback,
+				})
+			)
 		}
-		const obj = new GetCurrentOrderRequestObject()
-		obj.setUrlId(currentMember.id)
-		dispatch(
-			createAction('members/loadCurrentOrder')({
-				object:obj,
-				callback,
-			})
-		)
 	}
 
 	renderQueueView(current_order) {
