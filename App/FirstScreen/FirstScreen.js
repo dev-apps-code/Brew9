@@ -54,6 +54,7 @@ export default class FirstScreen extends React.Component {
 
     checkLoginStatus() {
         const { members } = this.props
+        console.log("Members", members)
         if (typeof members === 'undefined'|| members === null) {
             this.props.navigation.navigate("VerifyStack")
         }

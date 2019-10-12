@@ -51,6 +51,7 @@ import VerifyUser from "./App/VerifyUser/VerifyUser"
 import Register from "./App/Register/Register"
 import DirectionMap from "./App/DirectionMap/DirectionMap"
 import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail"
+import ScanQr from "./App/Home/ScanQr"
 
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
@@ -97,6 +98,9 @@ const PushOrder = createStackNavigator({
 		screen: Register,		
 		header: 'none'
 	},
+	ScanQr: {
+		screen: ScanQr,
+	}
 }, {
 	initialRouteName: "Home",
 })

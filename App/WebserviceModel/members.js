@@ -12,7 +12,8 @@ import {
   destroy,
   orders,
   pointProductRedemption,
-  currentOrder
+  currentOrder,
+  qrCodeScan
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -204,7 +205,7 @@ export default {
         const eventObject = new EventObject(json)
         if (eventObject.success == true) { 
           console.log("return yes",eventObject.result)
-          yield put(createAction('saveCurrentUser')(eventObject.result))
+          // yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
@@ -327,6 +328,23 @@ export default {
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     }, 
+    *loadQrCodeScan({ payload }, { call, put, select })
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        console.log("Authtoken", authtoken)
+        const json = yield call(
+            qrCodeScan,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    },
 
   },
 }

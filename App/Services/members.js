@@ -56,3 +56,7 @@ export function pointProductRedemption(authtoken,object) {
 export function currentOrder(authtoken,object) {
    return getMethod(authtoken,object)
 }
+
+export function qrCodeScan(authtoken,object) {
+   return postMethod(authtoken,object)
+}
