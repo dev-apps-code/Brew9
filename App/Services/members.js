@@ -52,3 +52,7 @@ export function orders(authtoken,object) {
 export function pointProductRedemption(authtoken,object) {
    return getMethod(authtoken,object)
 }
+
+export function currentOrder(authtoken,object) {
+   return getMethod(authtoken,object)
+}

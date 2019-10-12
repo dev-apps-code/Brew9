@@ -12,6 +12,7 @@ import {
   destroy,
   orders,
   pointProductRedemption,
+  currentOrder
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -310,5 +311,22 @@ export default {
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     }, 
+    *loadCurrentOrder({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            currentOrder,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
+
   },
 }
