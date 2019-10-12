@@ -105,7 +105,7 @@ export default class PointShopHistory extends React.Component {
 				redeem_at = {item.redeemed_at}
 				updated_at = {item.updated_at}
 				redeem_points = {item.points}
-				product_image = {item.points_product.image.thumb.url}
+				product_image = {item.points_product.thumb}
 				navigation={this.props.navigation}/>
 	}
 

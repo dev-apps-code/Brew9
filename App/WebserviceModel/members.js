@@ -61,11 +61,9 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      console.log("load profile",payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     destroyCurrentUser(state, {payload}) {
-      console.log("Destroy")
       clearCurrentUser()
       return { ...state, profile: null, isReady: true, userAuthToken: "" }
     },

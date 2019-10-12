@@ -55,7 +55,7 @@ export default class PickUp extends React.Component {
 	}
 
 	onOrderPressed = () => {
-
+		
 	}
 
 	renderQueueView() {

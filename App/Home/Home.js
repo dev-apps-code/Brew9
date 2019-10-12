@@ -376,8 +376,7 @@ export default class Home extends React.Component {
 
 		if (scroll_index < this.state.products.length){
 			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
-		}
-		
+		}		
 	}
 
 	reachProductIndex = ( viewableItems, changed ) => {

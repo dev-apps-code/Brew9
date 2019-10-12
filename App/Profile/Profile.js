@@ -237,6 +237,10 @@ export default class Profile extends React.Component {
 
 		if (currentMember !== null) {
 			this.loadDestroy()
+		}else{
+			const { navigate } = this.props.navigation
+			navigate("VerifyStack")
+			return
 		}
 	}
 
@@ -504,7 +508,7 @@ export default class Profile extends React.Component {
 					</View>
 				<View
 					style={styles.bottomsectionView}>
-					<View
+					{/* <View
 						style={styles.memberStatusView}>
 						<TouchableOpacity
 							onPress={this.onMemberButtonPressed}
@@ -542,7 +546,7 @@ export default class Profile extends React.Component {
 								</View>
 							</View>
 						</TouchableOpacity>
-					</View>
+					</View> */}
 					<View
 						style={styles.orderhistoryView}>
 						<TouchableOpacity
@@ -811,9 +815,9 @@ export default class Profile extends React.Component {
 									}}>
 									<Image
 										source={require("./../../assets/images/about.png")}
-										style={isLogin ? styles.abouticonImage : styles.abouticonDisableImage}/>
+										style={styles.abouticonImage }/>
 									<Text
-										style={isLogin ? styles.aboutText : styles.aboutDisableText}>About Brew9</Text>
+										style={styles.aboutText}>About Brew9</Text>
 								</View>
 							</View>
 						</TouchableOpacity>
@@ -845,7 +849,7 @@ export default class Profile extends React.Component {
 										source={require("./../../assets/images/logout.png")}
 										style={isLogin ? styles.logouticonImage : styles.logouticonDisableImage}/>
 									<Text
-										style={isLogin ? styles.logoutText : styles.logoutDisableText}>Logout</Text>
+										style={styles.logoutText}>{isLogin ? "Logout" : "Signup/Login"}</Text>
 								</View>
 							</View>
 						</TouchableOpacity>

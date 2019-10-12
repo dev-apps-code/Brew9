@@ -143,11 +143,12 @@ export default class VerifyUser extends React.Component {
 					navigate('TabGroupOne')
 				}                
             }else{
+				this.setState({
+					loading: false,
+				})
 				this.refs.toast.show(eventObject.message)
             }
-            this.setState({
-                loading: false,
-            })
+           
         }
         const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
         dispatch(

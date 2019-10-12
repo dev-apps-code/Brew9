@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Image, Text, TouchableOpacity,Alert } from "react-native"
 import React from "react"
 import {commonStyles} from "../Common/common_style"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
@@ -15,9 +15,11 @@ import {createAction, toTitleCase} from "../Utils";
 import {connect} from "react-redux";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
+import RedeemRequestObject from "../Requests/redeem_request_object"
 
-@connect(({ members }) => ({
-	members: members.profile
+@connect(({ members,shops }) => ({
+	members: members.profile,
+	selectedShop:shops.selectedShop
 }))
 
 export default class PointShopItem extends React.Component {
@@ -49,7 +51,7 @@ export default class PointShopItem extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: true,
+			loading: false,
 			data: []
 		}
 	}
@@ -59,7 +61,7 @@ export default class PointShopItem extends React.Component {
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
-		})
+		})	
 	}
 
 	onBackPressed = () => {
@@ -69,7 +71,7 @@ export default class PointShopItem extends React.Component {
 
 	loadPointsProducts(){
 	const { dispatch } = this.props
-		this.setState({ loading: true })
+		// this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -88,8 +90,40 @@ export default class PointShopItem extends React.Component {
 		)
 }
 
-	onRedeemRewardPressed = () => {
-		
+
+
+	loadRedeem(){
+		const { dispatch, selectedShop } = this.props
+		const { data } = this.state
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			this.setState({
+				loading: false,
+			}) 
+
+			if (eventObject.success) {
+				Alert.alert(
+					'Successful',
+					eventObject.message,
+					[					 
+					  { text: 'OK',style: 'cancel', onPress: () =>  this.props.navigation.goBack()},
+					],
+					{ cancelable: false }
+				  )
+				  
+			}else{
+				this.refs.toast.show(eventObject.message);
+			}		
+		}
+		const obj = new RedeemRequestObject(selectedShop.id)
+		obj.setUrlId(data.id) 
+		dispatch(
+			createAction('point_products/loadRedeem')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	render() {
@@ -147,7 +181,7 @@ export default class PointShopItem extends React.Component {
 			
 				<TouchableOpacity
 					disabled={!data.can_purchase}
-					onPress={data.can_purchase && this.onRedeemRewardPressed}
+					onPress={()=>this.loadRedeem()}
 					style={data.can_purchase ? [styles.purchaseButton,commonStyles.normal] : [styles.purchaseButton,commonStyles.disabled] }
 					>
 					<Text
