@@ -21,7 +21,8 @@ import {
 	ActivityIndicator,
 	Platform,
 	Alert,
-	Linking
+	Linking,
+	AppState	
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -114,6 +115,7 @@ export default class Home extends React.Component {
 			isPromoToggle: false,
 			isToggleLocation: false,
 			ignoreVersion: false,
+			appState: AppState.currentState,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -162,7 +164,7 @@ export default class Home extends React.Component {
 	
 	  componentDidUpdate(prevProps, prevState) {
 
-		if (prevProps.location != this.props.location) {
+		if (prevProps.location != this.props.location && prevProps.location != null) {
 		  this.loadShops(false)
 		}
 	  }
@@ -181,10 +183,25 @@ export default class Home extends React.Component {
 
 	async componentDidMount() {
 		this.loadShops(true)
+		AppState.addEventListener('change', this._handleAppStateChange);
+
+		
 		// this.loadShops(true)
 		// this.loadStorePushToken()
 		await this.registerForPushNotificationsAsync()
 	}
+
+	componentWillUnmount() {
+		AppState.removeEventListener('change', this._handleAppStateChange);
+	}
+
+	_handleAppStateChange = nextAppState => {
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			this.getLocationAsync();
+		}
+		this.setState({ appState: nextAppState });
+	  };
+
 
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
@@ -271,12 +288,12 @@ export default class Home extends React.Component {
 					var index_length = 0
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
-						data[index].scroll_index = index_length + menu_banners.length
+						data[index].scroll_index = index_length
 						items = items.concat(data[index].products)						
 						index_length = index_length + data[index].products.length
 					}
 					this.setState({
-						products: this.state.menu_banners.concat(items),
+						products: menu_banners.concat(items),
 						data: data
 					}, function () {
 						
@@ -345,7 +362,21 @@ export default class Home extends React.Component {
 
 	onSelectCategory = (scroll_index, selected_index) => {
 		// console.log("Scroll Index", scroll_index)
-		this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
+
+		let data = [...this.state.data]
+
+		for (var index in data) {
+			if ( index == selected_index ) {
+				data[index].selected = true				
+			}else{
+				data[index].selected = false
+			}
+		}
+		this.setState( { data })
+
+		if (scroll_index < this.state.products.length){
+			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
+		}		
 	}
 
 	reachProductIndex = ( viewableItems, changed ) => {
@@ -773,17 +804,9 @@ export default class Home extends React.Component {
 		let select_quantity = this.state.select_quantity
 
 		let filtered = selected_product.selected_variants.filter(function(el) { return el })
-		let variant_array = filtered.map(a => a.value)
+		let variant_array = filtered.map(a => a.value)	
 		
-		const {selectedShop} = this.props
-		
-		var enabled = selected_product.enabled
-
-		if (selectedShop != null){
-			if (selectedShop.can_order == false){
-				enabled = false
-			}
-		}
+		var enabled = selected_product.enabled		
 
 		const ingredients = selected_product.ingredients.map((item, key) => {
 			return <View
@@ -1372,12 +1395,7 @@ export default class Home extends React.Component {
 			// Simplest usage.
 			url: this.state.selected_promotion,
 		}]	 
-		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>
-			<TouchableOpacity
-					onPress={this.onClosePressed}
-					style={styles.closeGalleryButton}>
-					<Text style={styles.closeGalleryButtonText}>X</Text>
-				</TouchableOpacity>
+		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<ScrollView
             style={{}}>
@@ -1385,7 +1403,12 @@ export default class Home extends React.Component {
                 source={{uri:  this.state.selected_promotion}}
                 width={windowWidth}
                 style={styles.bannerImage}/>
-        </ScrollView>
+        </ScrollView>		
+		<TouchableOpacity
+					onPress={this.onClosePressed}
+					style={styles.closeGalleryButton}>
+					<Text style={styles.closeGalleryButtonText}>X</Text>
+				</TouchableOpacity>
 		</Modal>
 	}
 			
@@ -1822,10 +1845,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 25 * alpha,
-		height: 25 * alpha,
-		top: 51 * alpha,
-		right: 23 * alpha,
+		width: 40 * alpha,
+		height: 50 * alpha,
+		top: 25 * alpha,
+		right: 25 * alpha,
 	},
 	closeGalleryButtonImage: {
 		resizeMode: "contain",

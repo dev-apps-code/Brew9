@@ -134,7 +134,7 @@ export default class MemberCenter extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								width: 110 * alpha,
+								// width: 110 * alpha,
 								height: 45 * alpha,
 								marginLeft: 19 * alpha,
 								marginTop: 13 * alpha,

@@ -224,13 +224,13 @@ export default class PickUp extends React.Component {
 									style={styles.orderedView}>
 									<Image
 										source={require("./../../assets/images/group-9-copy-13.png")}
-										style={styles.orderedImage}/>
+										style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage}/>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.orderedText}>Ordered</Text>
+										style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
 								</View>
 								<Image
 									source={require("./../../assets/images/group-11-copy-5.png")}
@@ -243,13 +243,13 @@ export default class PickUp extends React.Component {
 									style={styles.pickUpView}>
 									<Image
 										source={require("./../../assets/images/group-7-copy-8.png")}
-										style={styles.pickupImage}/>
+										style={item.status === "completed" ? styles.pickupSelectedImage  : styles.pickupImage}/>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.pickUpText}>Pick Up</Text>
+										style={item.status === "completed" ? styles.pickUpSelectedText : styles.pickUpText}>Pick Up</Text>
 								</View>
 							</View>
 						</View>
@@ -266,7 +266,7 @@ export default class PickUp extends React.Component {
 								pointerEvents="box-none"
 								style={{
 									width: 87 * alpha,
-									height: 53 * alpha,
+									height: 50 * alpha,
 									marginRight: 54 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
@@ -275,13 +275,13 @@ export default class PickUp extends React.Component {
 									style={styles.processingView}>
 									<Image
 										source={require("./../../assets/images/group-13-11.png")}
-										style={styles.processingImage}/>
+										style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage}/>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.processingText}>Processing</Text>
+										style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Processing</Text>
 								</View>
 								<View
 									style={{
@@ -722,6 +722,16 @@ const styles = StyleSheet.create({
 		height: 50 * alpha,
 	},
 	orderedImage: {
+		tintColor: "rgb(205, 207, 208)",
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		width: null,
+		height: 26 * alpha,
+		marginLeft: 14 * alpha,
+		marginRight: 11 * alpha,
+	},
+	orderedSelectedImage: {
+		tintColor: "rgb(35, 31, 32)",
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		width: null,
@@ -731,6 +741,15 @@ const styles = StyleSheet.create({
 	},
 	orderedText: {
 		color: "rgb(205, 207, 208)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	orderedSelectedText: {
+		color: "rgb(35, 31, 32)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -751,6 +770,16 @@ const styles = StyleSheet.create({
 		height: 49 * alpha,
 	},
 	pickupImage: {
+		tintColor: "rgb(205, 207, 208)",
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 25 * alpha,
+		marginLeft: 9 * alpha,
+		marginRight: 10 * alpha,
+	},
+	pickupSelectedImage: {
+		tintColor: "rgb(35, 31, 32)",
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: null,
@@ -767,20 +796,47 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
+	pickUpSelectedText: {
+		color: "rgb(35, 31, 32)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
 	processingView: {
 		backgroundColor: "transparent",
 		width: 65 * alpha,
-		height: 53 * alpha,
+		height: 50 * alpha,
 	},
 	processingImage: {
-		resizeMode: "center",
+		tintColor: "rgb(205, 207, 208)",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 		width: 27 * alpha,
-		height: 28 * alpha,
+		height: 26 * alpha,
+		marginLeft: 18 * alpha,
+	},
+	processingSelectedImage: {
+		resizeMode: "contain",
+		backgroundColor: "transparent",
+		alignSelf: "flex-start",
+		width: 27 * alpha,
+		height: 26 * alpha,
 		marginLeft: 18 * alpha,
 	},
 	processingText: {
+		color: "rgb(205, 207, 208)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	processingSelectedText: {
 		color: "rgb(35, 31, 32)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 13 * fontAlpha,

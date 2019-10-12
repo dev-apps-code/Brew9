@@ -8,4 +8,3 @@ export function pointsProducts(authtoken,object) {
     return getMethod(authtoken,object)
  }
  
- 

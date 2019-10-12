@@ -46,6 +46,6 @@ export default {
             if (eventObject.success == true) {}
             typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
-        }, 
+        },         
     },
 }
