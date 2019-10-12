@@ -54,7 +54,7 @@ import openMap from 'react-native-open-maps';
 export default class Home extends React.Component {
 	
 	static navigationOptions = ({ navigation }) => {
-
+		
 		const { params = {} } = navigation.state
 		return {
 			headerTintColor: "black",
@@ -68,7 +68,16 @@ export default class Home extends React.Component {
 						style={styles.navigationBarItemIcon}/>
 				</TouchableOpacity>
 			</View>,
-			headerRight: null,
+			headerRight: <View
+				style={styles.headerRightContainer}>
+				<TouchableOpacity
+					onPress={params.onQrScanPressed ? params.onQrScanPressed : () => null}
+					style={styles.navigationBarItem}>
+					<Image
+						source={require("./../../assets/images/scan_qr_button.png")}
+						style={styles.navigationBarRightItemIcon}/>
+				</TouchableOpacity>
+			</View>,
 		}
 	}
 
@@ -119,6 +128,12 @@ export default class Home extends React.Component {
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
+	}
+
+	onQrScanPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("ScanQr")
 	}
 
 	registerForPushNotificationsAsync = async() => {
@@ -182,6 +197,9 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
+		this.props.navigation.setParams({
+			onQrScanPressed: this.onQrScanPressed,
+		})
 		this.loadShops(true)
 		AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -1423,9 +1441,19 @@ const styles = StyleSheet.create({
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
 	},
+	navigationBarRightItemIcon: {
+		resizeMode: "contain",
+		width: 30 * alpha,
+		height: 30 * alpha,
+		tintColor: "black",
+	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
+	},
+	headerRightContainer: {
+		flexDirection: "row",
+		marginRight: 8 * alpha,
 	},
 	page1View: {
 		backgroundColor: "rgb(243, 243, 243)",
