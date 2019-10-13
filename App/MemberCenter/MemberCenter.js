@@ -80,7 +80,7 @@ export default class MemberCenter extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'Brew9',
-			web_url: KURL_INFO + '?page=level_infos&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
 		})
 	}
 
