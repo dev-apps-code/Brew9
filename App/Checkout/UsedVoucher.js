@@ -9,7 +9,11 @@
 import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Text } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
-
+import { connect } from "react-redux";
+import {KURL_INFO} from "../Utils/server";
+@connect(({ members }) => ({
+    company_id: members.company_id,
+}))
 export default class UsedVoucher extends React.Component {
 
 	constructor(props) {
@@ -20,14 +24,25 @@ export default class UsedVoucher extends React.Component {
 	
 	}
 
-	onUsedVoucherPress = () => {
-		
+	onVoucherPress = () => {
+		const { navigate } = this.props.navigation
+		navigate("VoucherDetail",{item:this.props.item})
+	}
+
+	onTermsPressed = () => {
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+
+		navigate("WebCommon", {
+			title: 'Terms & Condition',
+			web_url: KURL_INFO + '?page=voucher_terms&id=' + company_id,
+		})
 	}
 
 	render() {
 	
 		return <TouchableWithoutFeedback
-			onPress={this.onUsedVoucherPress}>
+			onPress={this.onVoucherPress}>
 			<View
 				navigation={this.props.navigation}
 				style={styles.usedvoucher}>
@@ -81,7 +96,7 @@ export default class UsedVoucher extends React.Component {
 							<View
 								style={styles.termsView}>
 								<TouchableOpacity
-									onPress={this.onTermsTwoPressed}
+									onPress={this.onTermsPressed}
 									style={styles.termsButton}>
 									<Text
 										style={styles.termsButtonText}>Terms & Conditions</Text>

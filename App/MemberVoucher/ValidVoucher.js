@@ -10,7 +10,12 @@ import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Te
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import {KURL_INFO} from "../Utils/server";
+import { connect } from "react-redux";
 
+@connect(({ members }) => ({
+	company_id: members.company_id,
+	members:members
+}))
 export default class ValidVoucher extends React.Component {
 
 	constructor(props) {
@@ -21,10 +26,9 @@ export default class ValidVoucher extends React.Component {
 	
 	}
 
-	onValidVoucherPress = () => {
+	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
-		navigate("VoucherDetail",{voucher:this.props.item})
-		console.log("done");
+		navigate("VoucherDetail",{item:this.props.item})
 	}
 
 	onTermsPressed = () => {
@@ -37,9 +41,86 @@ export default class ValidVoucher extends React.Component {
 		})
 	}
 
+	renderPrice(){
+
+		const {item,members} = this.props
+		const display_value = item.voucher.display_value
+		const discount_type = item.voucher.discount_type
+		const discount_price = item.voucher.discount_price
+		if (display_value != null  && display_value !==''){
+
+			return (
+				<View
+				style={styles.valueView}>
+					<Text
+						style={styles.currencyText}>{members.currency}</Text> 			
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
+						<Text
+							style={styles.valueText}>{display_value}</Text>
+					</View>
+				</View>
+			)
+		}else if (discount_type != null && discount_type != '' && discount_price != null && discount_price != ''){
+			if (discount_type == 'fixed'){
+				return (
+					<View
+					style={styles.valueView}>
+						<Text
+							style={styles.currencyText}>{members.currency}</Text> 			
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<Text
+								style={styles.valueText}>{discount_price}</Text>
+						</View>
+					</View>
+				)
+			}else {
+
+				return (
+					<View
+					style={styles.valueView}>
+					 			
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<Text
+								style={styles.percentvalueText}>{discount_price}</Text>
+							<Text
+								style={styles.percentText}>%</Text> 
+						</View>
+					</View>
+				)
+			}
+		}
+	}
+
 	render() {
 		return <TouchableWithoutFeedback
-				onPress={this.onValidVoucherPress}>
+				onPress={this.onVoucherPress}>
 				<View
 					navigation={this.props.navigation}
 					style={styles.validvoucher}>
@@ -71,33 +152,7 @@ export default class ValidVoucher extends React.Component {
 									style={{
 										flex: 1,
 									}}/>
-								{ this.props.display_value ?
-								<View
-									style={styles.valueView}>
-									{ this.props.discount_type == 'fixed' ?
-										<Text
-											style={styles.currencyText}>$</Text> : null
-									}
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0,
-											right: 0,
-											top: 0,
-											bottom: 0,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={this.props.discount_type == 'fixed' ? styles.valueText : styles.percentvalueText}>{this.props.display_value}</Text>
-									</View>
-									{ this.props.discount_type == 'percent' ?
-										<Text
-											style={styles.percentText}>%</Text> : null
-									}
-
-								</View> : null
-								}
+								{this.renderPrice()}
 							</View>
 							<Text
 								style={styles.descriptionText}>{this.props.description}</Text>
@@ -200,7 +255,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 14 * alpha,
+		marginLeft: 16 * alpha,
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
@@ -222,8 +277,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 5 * alpha,
-		marginRight: 9 * alpha,
+		marginRight: 15 * alpha,
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",

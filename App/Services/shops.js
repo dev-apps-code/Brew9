@@ -9,7 +9,7 @@ export function shop_banner(authtoken,object) {
 }
 
 export function makeOrder(authtoken,object) {
-   console.log("tst12")
+
    return postJsonMethod(authtoken,object)
 }
 

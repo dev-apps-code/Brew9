@@ -7,10 +7,10 @@
 //
 
 import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
+import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
-import Modal from "react-native-modal"
 import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
@@ -19,6 +19,7 @@ import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object
 import {createAction, Storage} from "../Utils"
 import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
+import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
@@ -58,7 +59,11 @@ export default class Checkout extends React.Component {
 			delivery_options: 'pickup',
 			cart_total: this.props.navigation.getParam("cart_total", 0.00),
 			voucher_item_ids:[],
-			cart:this.props.navigation.getParam("cart", [])
+			valid_vouchers:[],
+			cart:this.props.navigation.getParam("cart", []),
+			modal_title:'Success',
+			modal_description:'',
+			modal_visible:false
 		}
 	}
 
@@ -67,7 +72,47 @@ export default class Checkout extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+		this.loadValidVouchers()
 	}
+
+	renderModal(){
+		
+		return (
+			<Brew9Modal
+				title={this.state.modal_title}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.goBack()
+				}}
+			/>
+		)
+	}
+
+	loadValidVouchers(){
+		const { dispatch,currentMember } = this.props
+		const {cart} = this.state
+		if (currentMember != null ){
+			const callback = eventObject => {
+				if (eventObject.success) {
+					this.setState({ 
+						valid_vouchers:eventObject.result
+					})	
+					}			      
+				}
+
+			const obj = new ValidVouchersRequestObject(cart)
+			obj.setUrlId(currentMember.id)
+			dispatch(
+				createAction('vouchers/loadVouchersForCart')({
+					object:obj,
+					callback,
+				})
+			)
+		}	
+	}
+	
 
 	onBackPressed = () => {
 
@@ -105,15 +150,12 @@ export default class Checkout extends React.Component {
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("CheckoutVoucher")
+		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers})
 	}
 
 	onPaymentButtonPressed = () => {
 		
-		
-		// if not enough credit ...
-
-		// if no phone no, ask to update
+			
 	}
 
 	loadMakeOrder(){
@@ -126,7 +168,11 @@ export default class Checkout extends React.Component {
 				loading: false,
 			})
 			if (eventObject.success) {
-				        
+				this.setState({
+					modal_title:'Success',
+					modal_description:eventObject.message,
+					modal_visible:true
+				})
 			}else{
 				this.refs.toast.show(eventObject.message);
 			}
@@ -144,10 +190,15 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
-		const {currentMember } = this.props
+		const {currentMember,selectedShop } = this.props
 
 		if (currentMember) {
-			if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
+			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away");
+			// 	return
+			// }
+
+			if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
 				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 				return
 			}
@@ -155,8 +206,7 @@ export default class Checkout extends React.Component {
 			Alert.alert(
 				'Confirmation',
 				'Are you sure you want to confirm the order?',
-				[
-				  { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+				[				 
 				  {
 					text: 'Cancel',
 					onPress: () => console.log('OK Pressed'),
@@ -169,7 +219,7 @@ export default class Checkout extends React.Component {
 
 			return
 		} else {
-			navigate("VerifyStack")
+			navigate("VerifyUserStack")
 			return
 		}
 
@@ -477,7 +527,7 @@ export default class Checkout extends React.Component {
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.statusText}>-</Text>
+										style={styles.statusText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'}</Text>
 									<Image
 										source={require("./../../assets/images/group-4-5.png")}
 										style={styles.arrowImage}/>
@@ -594,6 +644,7 @@ export default class Checkout extends React.Component {
 					</TouchableOpacity>
 				</View> */}
 			</ScrollView>
+			{this.renderModal()}
 			<View
 				style={styles.totalPayNowView}>
 				<Text
@@ -612,6 +663,7 @@ export default class Checkout extends React.Component {
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast"
             position="center"/>
+			
 		</View>
 	}
 }

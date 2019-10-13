@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, Image, Text, TouchableOpacity,Alert } from "react-native"
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
 import {commonStyles} from "../Common/common_style"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
@@ -16,7 +16,7 @@ import {connect} from "react-redux";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import RedeemRequestObject from "../Requests/redeem_request_object"
-
+import Brew9Modal from "../Components/Brew9Modal"
 @connect(({ members,shops }) => ({
 	members: members.profile,
 	selectedShop:shops.selectedShop
@@ -52,7 +52,10 @@ export default class PointShopItem extends React.Component {
 		super(props)
 		this.state = {
 			loading: false,
-			data: []
+			data: [],
+			modal_title:'',
+			modal_description:'',
+			modal_visible:false
 		}
 	}
 
@@ -62,6 +65,21 @@ export default class PointShopItem extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})	
+	}
+
+	renderModal(){
+		
+		return (
+			<Brew9Modal
+				title={this.state.modal_title}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.goBack()
+				}}
+			/>
+		)
 	}
 
 	onBackPressed = () => {
@@ -90,8 +108,6 @@ export default class PointShopItem extends React.Component {
 		)
 }
 
-
-
 	loadRedeem(){
 		const { dispatch, selectedShop } = this.props
 		const { data } = this.state
@@ -103,15 +119,11 @@ export default class PointShopItem extends React.Component {
 			}) 
 
 			if (eventObject.success) {
-				Alert.alert(
-					'Successful',
-					eventObject.message,
-					[					 
-					  { text: 'OK',style: 'cancel', onPress: () =>  this.props.navigation.goBack()},
-					],
-					{ cancelable: false }
-				  )
-				  
+				this.setState({
+					modal_title:'Successful',
+					modal_description:eventObject.message,
+					modal_visible:true
+				})		
 			}else{
 				this.refs.toast.show(eventObject.message);
 			}		
@@ -187,6 +199,7 @@ export default class PointShopItem extends React.Component {
 					<Text
 						style={styles.purchaseButtonText}>Purchase</Text>
 				</TouchableOpacity>
+				{this.renderModal()}
 				<Toast ref="toast"
             position="center"/>
 			<HudLoading isLoading={this.state.loading}/>

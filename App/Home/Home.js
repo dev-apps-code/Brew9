@@ -203,8 +203,6 @@ export default class Home extends React.Component {
 		this.loadShops(true)
 		AppState.addEventListener('change', this._handleAppStateChange);
 
-		
-		// this.loadShops(true)
 		// this.loadStorePushToken()
 		await this.registerForPushNotificationsAsync()
 	}
@@ -1095,7 +1093,7 @@ export default class Home extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}m</Text>
+							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}km</Text>
 						<View
 							style={{
 								flex: 1,

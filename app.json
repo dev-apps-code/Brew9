@@ -2,6 +2,7 @@
   "expo": {
     "name": "Brew9",
     "privacy": "public",
+    "icon": "./assets/images/brew9-icon.png",
     "sdkVersion": "34.0.0",
     "platforms": [
       "ios",
@@ -11,13 +12,21 @@
     "orientation": "portrait",
     "updates": {
       "fallbackToCacheTimeout": 0
-    },
+    },    
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.brew9.brew9",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan qr code to allow you to pay or redeem for vouchers.",
+        "NSLocationWhenInUseUsageDescription": "This app requires you to provide your location to suggest you the nearest shop"
+      }
     },
+    "android": {
+      "package": "com.brew9.brew9"
+    },   
     "slug": "brew9",
     "description": ""
   }

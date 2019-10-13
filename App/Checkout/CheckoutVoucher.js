@@ -1,5 +1,5 @@
 //
-//  MemberReward
+//  MemberVoucher
 //  Brew9
 //
 //  Created by [Author].
@@ -12,12 +12,14 @@ import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import VoucherRequestObject from "../Requests/voucher_request_object";
+import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import UsedVoucher from "./UsedVoucher"
 import ValidVoucher from "./ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
 
 @connect(({ members }) => ({
-    members: members.profile
+    currentMember: members.profile
+    
 }))
 export default class CheckoutVoucher extends React.Component {
 
@@ -57,47 +59,49 @@ export default class CheckoutVoucher extends React.Component {
             used_page: 1,
             valid_total: 0,
             used_total: 0,
-            current_data: [],
+            current_data:  this.props.navigation.getParam("valid_vouchers", null),
             valid_data: [],
             used_data: [],
-            loading: true,
+            loading: false,
             isRefreshing: false,
             voucher_button: 1
         }
     }
 
     loadValidVoucher(page_no) {
-        const { dispatch, members } = this.props
-        const callback = eventObject => {
-            if (eventObject.success) {
+        const { dispatch,currentMember } = this.props
+
+		if (currentMember != null ){
+			this.setState({ loading: true })
+			const callback = eventObject => {
                 this.setState({
-                    isRefreshing: false,
                     loading: false,
-                    valid_initial: false,
-                    valid_data: this.state.valid_data.concat(eventObject.result),
-                    valid_total: eventObject.total,
-                    valid_page: this.state.valid_page + 1,
-                },function () {
-                    this.setState({
-                        current_data: this.state.valid_data,
-                    });
-                }.bind(this))
+                    valid_initial:false
+                    })  
+				if (eventObject.success) {
+					this.setState({ 
+						valid_data:eventObject.result
+					},function () {
+                        this.setState({
+                            current_data: this.state.valid_data,
+                        });
+                    }.bind(this))	
+				}
+		      
             }
-        }
-        const obj = new VoucherRequestObject()
-        obj.setUrlId(members.id)
-        obj.setPage(page_no)
-        obj.setStatus(2) //Hardcoded
-        dispatch(
-            createAction('vouchers/loadValidVoucher')({
-                object: obj,
-                callback
-            })
-        )
+			const obj = new ValidVouchersRequestObject()
+			obj.setUrlId(currentMember.id)
+			dispatch(
+				createAction('vouchers/loadValidVouchers')({
+					object:obj,
+					callback,
+				})
+			)
+		}
     }
 
     loadUsedVoucher(page_no) {
-        const { dispatch, members } = this.props
+        const { dispatch, currentMember } = this.props
         const callback = eventObject => {
             if (eventObject.success) {
                 this.setState({
@@ -115,11 +119,11 @@ export default class CheckoutVoucher extends React.Component {
             }
         }
         const obj = new VoucherRequestObject()
-        obj.setUrlId(members.id)
+        obj.setUrlId(currentMember.id)
         obj.setPage(page_no)
         obj.setStatus(1)
         dispatch(
-            createAction('vouchers/loadUsedVoucher')({
+            createAction('vouchers/loadVouchersForCart')({
                 object: obj,
                 callback
             })
@@ -147,10 +151,7 @@ export default class CheckoutVoucher extends React.Component {
         const { valid_initial, valid_data, valid_page } = this.state
 
         if (valid_initial) {
-            this.loadValidVoucher(valid_page)
-            this.setState({
-                loading: true,
-            })
+            this.loadValidVoucher(valid_page)            
         }
 
         this.setState({
@@ -187,11 +188,11 @@ export default class CheckoutVoucher extends React.Component {
 
     onHowToUsePressed = () => {
         const { navigate } = this.props.navigation
-        const { members } = this.props
+        const { currentMember } = this.props
 
         navigate("WebCommon", {
             title: 'How To Use',
-            web_url: KURL_INFO + '?page=voucher_uses&id=' + members.company_id,
+            web_url: KURL_INFO + '?page=voucher_uses&id=' + currentMember.company_id,
         })
     }
 
@@ -248,6 +249,7 @@ export default class CheckoutVoucher extends React.Component {
             return <ValidVoucher
                 navigation={this.props.navigation}
                 title={item.voucher.name}
+                item={item}
                 description={item.voucher.description}
                 display_value={item.voucher.display_value}
                 discount_type={item.voucher.discount_type}

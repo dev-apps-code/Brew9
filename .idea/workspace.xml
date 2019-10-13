@@ -185,7 +185,7 @@
         <option value="$PROJECT_DIR$/App/SplashScreen/SplashScreen.js" />
         <option value="$PROJECT_DIR$/App/Utils/storage.js" />
         <option value="$PROJECT_DIR$/App/PointHistory/PointHistory.js" />
-        <option value="$PROJECT_DIR$/App/MemberReward/MemberReward.js" />
+        <option value="$PROJECT_DIR$/App/MemberVoucher/MemberVoucher.js" />
         <option value="$PROJECT_DIR$/App/MissionCenter/MissionCenter.js" />
         <option value="$PROJECT_DIR$/App/Model/index.js" />
         <option value="$PROJECT_DIR$/App/Services/shops.js" />
@@ -423,7 +423,7 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/UsedVoucher.js">
+    <entry file="file://$PROJECT_DIR$/App/MemberVoucher/UsedVoucher.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-51">
           <folding>
@@ -441,7 +441,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/ExpiredVoucher.js">
+    <entry file="file://$PROJECT_DIR$/App/MemberVoucher/ExpiredVoucher.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -577,7 +577,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/ValidVoucher.js">
+    <entry file="file://$PROJECT_DIR$/App/MemberVoucher/ValidVoucher.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
           <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
@@ -723,7 +723,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/MemberReward/MemberReward.js">
+    <entry file="file://$PROJECT_DIR$/App/MemberVoucher/MemberVoucher.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-61">
           <caret line="92" column="35" selection-start-line="92" selection-start-column="35" selection-end-line="92" selection-end-column="35" />

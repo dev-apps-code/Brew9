@@ -6,11 +6,11 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Text, TouchableOpacity, View, StyleSheet, Image, ScrollView } from "react-native"
+import { Text, TouchableOpacity, View, StyleSheet, Image, ScrollView,Linking } from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
 import {connect} from "react-redux";
-
+import openMap from 'react-native-open-maps';
 @connect(({ members }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -65,12 +65,16 @@ export default class OrderReceipt extends React.Component {
 	
 	}
 
-	onDirectionIconPressed = () => {
-	
+	onDirectionPressed(shop) {
+		let latitude = shop ? parseFloat(shop.latitude) : 0.0
+		let longitude = shop ? parseFloat(shop.longitude) : 0.0
+
+		openMap({ latitude: latitude, longitude: longitude });
 	}
 
-	onCallIconPressed = () => {
 	
+	onCallPressed = (phone_no) => {
+		Linking.openURL(`tel:${phone_no}`)
 	}
 
 	renderOrderItems(items) {
@@ -208,7 +212,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.callView}>
 									<TouchableOpacity
-										onPress={this.onCallIconPressed}
+										onPress={this.onCallPressed(item.shop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-23.png")}
@@ -224,7 +228,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.directionView}>
 									<TouchableOpacity
-										onPress={this.onDirectionIconPressed}
+										onPress={ () => this.onDirectionPressed(order.shop)}
 										style={styles.directionIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-17.png")}

@@ -1,5 +1,5 @@
 //
-//  MemberReward
+//  MemberVoucher
 //  Brew9
 //
 //  Created by [Author].
@@ -20,7 +20,7 @@ import {KURL_INFO} from "../Utils/server";
 @connect(({ members }) => ({
 	members: members.profile
 }))
-export default class MemberReward extends React.Component {
+export default class MemberVoucher extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
@@ -95,7 +95,7 @@ export default class MemberReward extends React.Component {
 		obj.setPage(page_no)
 		obj.setStatus(2) //Hardcoded
 		dispatch(
-			createAction('vouchers/loadValidVoucher')({
+			createAction('vouchers/loadValidVouchers')({
 				object: obj,
 				callback
 			})
