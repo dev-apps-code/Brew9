@@ -769,7 +769,18 @@ export default class Home extends React.Component {
 					var selected = []
 					for (var index in product.variants) {
 						var variant = product.variants[index]
-						var value = variant.required ? variant.variant_values[0] : null
+						var hasRecommended = false
+						var value = null
+						for (var index in variant.variant_values) {
+							if (hasRecommended == false) {
+								value = variant.variant_values[index]
+								hasRecommended = variant.variant_values[index].recommended
+							}
+						}
+						if (hasRecommended == false) {
+							value = variant.variant_values[0]
+						}
+						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price)).toFixed(2)
 						selected.push(value)
 					}
 					product.selected_variants = selected

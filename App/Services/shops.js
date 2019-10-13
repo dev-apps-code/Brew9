@@ -12,3 +12,7 @@ export function makeOrder(authtoken,object) {
 
    return postJsonMethod(authtoken,object)
 }
+
+export function missions(authtoken,object) {
+   return getMethod(authtoken,object)
+}

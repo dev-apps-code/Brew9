@@ -6,14 +6,18 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
+import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
-import {connect} from "react-redux";
-import {KURL_INFO} from "../Utils/server";
+import MissionRequestObject from '../Requests/mission_request_object'
+import { connect } from 'react-redux'
+import { createAction, dispatch } from '../Utils/index'
+import MissionCell from "./MissionCell"
 
 @connect(({ members }) => ({
-    members: members.profile
+    currentMember: members.profile,
+	company_id: members.company_id,
+	location: members.location,
 }))
 export default class MissionCenter extends React.Component {
 
@@ -43,13 +47,17 @@ export default class MissionCenter extends React.Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            loading: false,
+            missions: [],
+        }
     }
 
     componentDidMount() {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
-            onItemPressed: this.onItemPressed,
         })
+        this.loadMissions()
     }
 
     onBackPressed = () => {
@@ -57,10 +65,50 @@ export default class MissionCenter extends React.Component {
         this.props.navigation.goBack()
     }
 
+    loadMissions(){
+        const { dispatch, selectedShop } = this.props
+        this.setState({ loading: true })
+        const callback = eventObject => {
+            if (eventObject.success) {
+                this.setState({
+                    missions: eventObject.result,
+                })     
+            }
+            this.setState({
+                loading: false,
+            })  
+        }
+        const obj = new MissionRequestObject(1)
+        obj.setUrlId(1)
+        dispatch(
+            createAction('shops/loadMissions')({
+                object:obj,
+                callback,
+            })
+        )
+    }
+
+	renderMissionlistFlatListCell = ({ item }) => {
+	
+		return <MissionCell
+            item={item}
+            title={item.name}
+            point={item.points}
+				navigation={this.props.navigation}/>
+    }
+    
     render() {
 
         return <View
             style={styles.missionCenterView}>
+                <View
+					style={styles.missionlistFlatListViewWrapper}>
+					<FlatList
+						renderItem={this.renderMissionlistFlatListCell}
+						data={this.state.missions}
+						style={styles.missionlistFlatList}
+                        keyExtractor={(item, index) => index.toString()}/>
+				</View>
         </View>
     }
 }
