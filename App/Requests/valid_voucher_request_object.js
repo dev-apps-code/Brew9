@@ -1,9 +1,21 @@
 import BaseRequestObject from "./base_request_object";
 
 class ValidVouchersRequestObject extends BaseRequestObject{
+    
+    constructor(order_items){
+        super();
+        this.order_items = order_items
+    }
+
 
    getUrlString() {
        return `members/${this.url_id}/valid_vouchers`
+   }
+
+   getFormData(){
+    var string =  JSON.stringify({'order_items': this.order_items});
+
+    return string
    }
 }
 export default ValidVouchersRequestObject

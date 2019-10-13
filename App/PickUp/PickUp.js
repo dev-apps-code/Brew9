@@ -8,7 +8,7 @@
 
 import { StyleSheet, View, Image, TouchableOpacity, Text, Linking } from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../Common/size";
+import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
@@ -326,7 +326,7 @@ export default class PickUp extends React.Component {
 								style={{
 									height: 50 * alpha,
 									marginLeft: 25 * alpha,
-									marginRight: 21 * alpha,
+									marginRight: 5 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
 								}}>
@@ -338,7 +338,6 @@ export default class PickUp extends React.Component {
 										pointerEvents="box-none"
 										style={{
 											flex: 1,
-											marginRight: 55 * alpha,
 											marginTop: 2 * alpha,
 										}}>
 										<Text
@@ -388,6 +387,8 @@ export default class PickUp extends React.Component {
 						<Image
 							source={require("./../../assets/images/bottom-fill.png")}
 							style={styles.bottomFillImage}/>
+							<View
+								style={styles.lineTwoView}/>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -397,14 +398,13 @@ export default class PickUp extends React.Component {
 								bottom: 11 * alpha,
 								alignItems: "flex-start",
 							}}>
-							<View
-								style={styles.lineTwoView}/>
+							
 							<Text
 								style={styles.pleaseCallBranchFText}>Please call branch for refund</Text>
 							<View
 								pointerEvents="box-none"
 								style={{
-									alignSelf: "stretch",
+									alignSelf: "stretch", 
 									height: 19 * alpha,
 									marginLeft: 3 * alpha,
 									marginRight: 4 * alpha,
@@ -905,8 +905,8 @@ const styles = StyleSheet.create({
 	},
 	topFillImage: {
 		resizeMode: "cover",
-		backgroundColor: "transparent",
 		position: "absolute",
+		width: windowWidth-40*alpha,
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
@@ -1000,9 +1000,15 @@ const styles = StyleSheet.create({
 	lineView: {
 		backgroundColor: "rgb(231, 231, 231)",
 		height: 2 * alpha,
-		marginLeft: 22 * alpha,
-		marginRight: 22 * alpha,
+		width: windowWidth - 80 *alpha,
 		marginTop: 26 * alpha,
+		alignSelf: "center",
+	},
+	lineTwoView: {
+		backgroundColor: "rgb(231, 231, 231)",	
+		width: windowWidth - 80 *alpha,
+		height: 2* alpha,
+		alignSelf: "center",
 	},
 	cartView: {
 		backgroundColor: "rgb(245, 245, 245)",
@@ -1059,7 +1065,7 @@ const styles = StyleSheet.create({
 	dottedLineImage: {
 		backgroundColor: "transparent",
 		resizeMode: "cover",
-		width: null,
+		width: 280*alpha,
 		height: 2 * alpha,
 		marginTop: 22 * alpha,
 	},
@@ -1108,11 +1114,7 @@ const styles = StyleSheet.create({
 		top: 0 * alpha,
 		height: 116 * alpha,
 	},
-	lineTwoView: {
-		backgroundColor: "rgb(231, 231, 231)",
-		alignSelf: "stretch",
-		height: 2 * alpha,
-	},
+
 	pleaseCallBranchFText: {
 		color: "rgb(164, 164, 164)",
 		fontFamily: "DINPro-Medium",

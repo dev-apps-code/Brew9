@@ -5,10 +5,7 @@ class MakeOrderRequestObj extends BaseRequestObject{
     constructor(order_items, voucher_item_ids){
         super();
         this.order_items = order_items
-        this.voucher_item_ids = voucher_item_ids
-
-        console.log("irder",order_items)
-        console.log("irder",voucher_item_ids)
+        this.voucher_item_ids = voucher_item_ids    
     }
 
    getUrlString() {

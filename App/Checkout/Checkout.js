@@ -92,7 +92,7 @@ export default class Checkout extends React.Component {
 
 	loadValidVouchers(){
 		const { dispatch,currentMember } = this.props
-
+		const {cart} = this.state
 		if (currentMember != null ){
 			// this.setState({ loading: true })
 			const callback = eventObject => {
@@ -106,7 +106,7 @@ export default class Checkout extends React.Component {
 				// 	})        
 				}
 
-			const obj = new ValidVouchersRequestObject()
+			const obj = new ValidVouchersRequestObject(cart)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('vouchers/loadVouchersForCart')({
@@ -202,7 +202,7 @@ export default class Checkout extends React.Component {
 			// 	return
 			// }
 
-			if (cart_total > parseFloat(currentMember.credits).toFixed(2)){
+			if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
 				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 				return
 			}

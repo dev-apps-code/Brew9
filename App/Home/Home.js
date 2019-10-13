@@ -1082,7 +1082,7 @@ export default class Home extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}m</Text>
+							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}km</Text>
 						<View
 							style={{
 								flex: 1,
