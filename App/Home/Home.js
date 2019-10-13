@@ -959,7 +959,6 @@ export default class Home extends React.Component {
 									}}>
 									<Text
 										style={styles.quantityText}>{select_quantity}</Text>
-
 								</View>
 								<View
 									pointerEvents="box-none"
@@ -1018,8 +1017,6 @@ export default class Home extends React.Component {
 
 		let selected_product = this.get_product(this.state.selected_index)
 		let {shop,cart,delivery,isToggleLocation} = this.state
-
-		let show_promo = false
 		
 		return <View style={styles.page1View}>	
 						

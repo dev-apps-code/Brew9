@@ -1,4 +1,4 @@
-import { getMethod,postMethod,postMultipartMethod } from '../Utils/webservice_helper'
+import { getMethod,postMethod,postMultipartMethod,postJsonMethod } from '../Utils/webservice_helper'
 
 export function getValidVoucher(authtoken,object) {
 

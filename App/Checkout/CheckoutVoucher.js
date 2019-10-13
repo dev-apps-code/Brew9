@@ -87,7 +87,6 @@ export default class CheckoutVoucher extends React.Component {
                         });
                     }.bind(this))	
 				}
-		      
             }
 			const obj = new ValidVouchersRequestObject()
 			obj.setUrlId(currentMember.id)
