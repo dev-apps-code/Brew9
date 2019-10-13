@@ -95,7 +95,7 @@ export default class MemberVoucher extends React.Component {
 		obj.setPage(page_no)
 		obj.setStatus(2) //Hardcoded
 		dispatch(
-			createAction('vouchers/loadValidVoucher')({
+			createAction('vouchers/loadValidVouchers')({
 				object: obj,
 				callback
 			})

@@ -13,7 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
 import { createAction } from '../Utils/index'
-
+import openMap from 'react-native-open-maps';
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -360,7 +360,7 @@ export default class PickUp extends React.Component {
 										style={styles.callButtonImage}/>
 								</TouchableOpacity>
 								<TouchableOpacity
-									onPress={this.onDirectionPressed}
+									onPress={() => this.onDirectionPressed(item.shop)}
 									style={styles.directionButton}>
 									<Image
 										source={require("./../../assets/images/group-3-30.png")}
@@ -437,6 +437,14 @@ export default class PickUp extends React.Component {
 		return <ScrollView style={{flex: 1}}>
 			{queues}
 		</ScrollView>
+	}
+
+	onDirectionPressed(shop) {
+
+		let latitude = shop ? parseFloat(shop.latitude) : 0.0
+		let longitude = shop ? parseFloat(shop.longitude) : 0.0
+
+		openMap({ latitude: latitude, longitude: longitude });
 	}
 
 	renderEmpty() {

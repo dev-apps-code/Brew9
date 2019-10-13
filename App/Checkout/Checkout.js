@@ -7,10 +7,10 @@
 //
 
 import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
+import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
-import Modal from "react-native-modal"
 import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
@@ -60,7 +60,10 @@ export default class Checkout extends React.Component {
 			cart_total: this.props.navigation.getParam("cart_total", 0.00),
 			voucher_item_ids:[],
 			valid_vouchers:[],
-			cart:this.props.navigation.getParam("cart", [])
+			cart:this.props.navigation.getParam("cart", []),
+			modal_title:'Success',
+			modal_description:'',
+			modal_visible:false
 		}
 	}
 
@@ -72,32 +75,46 @@ export default class Checkout extends React.Component {
 		this.loadValidVouchers()
 	}
 
+	renderModal(){
+		
+		return (
+			<Brew9Modal
+				title={this.state.modal_title}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.goBack()
+				}}
+			/>
+		)
+	}
+
 	loadValidVouchers(){
 		const { dispatch,currentMember } = this.props
 
 		if (currentMember != null ){
-			this.setState({ loading: true })
+			// this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
 					this.setState({ 
 						valid_vouchers:eventObject.result
 					})	
 				}
-				this.setState({
-					loading: false,
-					})        
+				// this.setState({
+				// 	loading: false,
+				// 	})        
 				}
 
 			const obj = new ValidVouchersRequestObject()
 			obj.setUrlId(currentMember.id)
 			dispatch(
-				createAction('vouchers/loadValidVouchers')({
+				createAction('vouchers/loadVouchersForCart')({
 					object:obj,
 					callback,
 				})
 			)
-		}
-	
+		}	
 	}
 	
 
@@ -142,10 +159,7 @@ export default class Checkout extends React.Component {
 
 	onPaymentButtonPressed = () => {
 		
-		
-		// if not enough credit ...
-
-		// if no phone no, ask to update
+			
 	}
 
 	loadMakeOrder(){
@@ -158,7 +172,11 @@ export default class Checkout extends React.Component {
 				loading: false,
 			})
 			if (eventObject.success) {
-				        
+				this.setState({
+					modal_title:'Success',
+					modal_description:eventObject.message,
+					modal_visible:true
+				})
 			}else{
 				this.refs.toast.show(eventObject.message);
 			}
@@ -177,14 +195,14 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
 		const {currentMember,selectedShop } = this.props
-	
-		if (currentMember) {
-			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-				this.refs.toast.show("You are too far away");
-				return
-			}
 
-			if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
+		if (currentMember) {
+			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away");
+			// 	return
+			// }
+
+			if (cart_total > parseFloat(currentMember.credits).toFixed(2)){
 				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 				return
 			}
@@ -192,8 +210,7 @@ export default class Checkout extends React.Component {
 			Alert.alert(
 				'Confirmation',
 				'Are you sure you want to confirm the order?',
-				[
-				  { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+				[				 
 				  {
 					text: 'Cancel',
 					onPress: () => console.log('OK Pressed'),
@@ -631,6 +648,7 @@ export default class Checkout extends React.Component {
 					</TouchableOpacity>
 				</View> */}
 			</ScrollView>
+			{this.renderModal()}
 			<View
 				style={styles.totalPayNowView}>
 				<Text
@@ -649,6 +667,7 @@ export default class Checkout extends React.Component {
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast"
             position="center"/>
+			
 		</View>
 	}
 }

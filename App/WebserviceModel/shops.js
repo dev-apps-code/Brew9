@@ -50,7 +50,10 @@ export default {
             )
 
             const eventObject = new EventObject(json)
-            if (eventObject.success == true) {}
+            if (eventObject.success == true) {
+
+                yield put(createAction('members/saveCurrentUser')(eventObject.result.member))
+            }
             typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         }, 

@@ -201,10 +201,9 @@ export default {
             authtoken,
             object,
         )
-        console.log("return")
+
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) { 
-          console.log("return yes",eventObject.result)
+        if (eventObject.success == true) {           
           // yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
@@ -341,7 +340,9 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result.member))
+        }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     },

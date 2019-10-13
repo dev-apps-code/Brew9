@@ -55,6 +55,7 @@ export default class WebCommon extends React.Component {
 
 
 	render() {
+		console.log("log", this.props.navigation.getParam("web_url", ""))
 		return <WebView source={{uri: this.props.navigation.getParam("web_url", "")}}/>
 					
 	}

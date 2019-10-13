@@ -68,6 +68,10 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onSendPressed = () => {
+		if (this.state.is_counting){
+			this.refs.toast.show("Please wait for 2 minutes before trying to resend.");
+			return
+		}
 		this.loadLogin()
 	}
 
@@ -184,7 +188,7 @@ export default class VerifyUser extends React.Component {
 						style={{
 							height: 42 * alpha,
 							flexDirection: "row",
-							alignItems: "flex-start",
+							alignItems: "space-between",
 						}}>
 						<View
 							style={styles.countryCodeView}>
@@ -213,25 +217,14 @@ export default class VerifyUser extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-							{ !this.state.login_success && !this.state.is_counting ? <TouchableOpacity
+							 <TouchableOpacity
 								onPress={this.onSendPressed}
 								style={styles.sendButton}>
 								<Text
 									style={styles.sendButtonText}>Send</Text>
-							</TouchableOpacity> : <CountDown
-								until={120}
-								onFinish={() => this.setState({is_counting: false})}
-								style={styles.sendCountdown}
-								size={7}
-								digitStyle={{backgroundColor: 'transparent', padding: 0, width: 20 * alpha, height: 20 * alpha}}
-								digitTxtStyle={styles.countdownText}
-								separatorStyle={{color: '#000000'}}
-								timeToShow={['M', 'S']}
-								timeLabels={{m: null, s: null}}
-								showSeparator
-							/>}
+							</TouchableOpacity> 
 						</View>
-					</View>
+					</View>										
 					{ this.state.login_success ? <View
 						style={styles.activationView}>
 						<TextInput
@@ -252,6 +245,22 @@ export default class VerifyUser extends React.Component {
 								style={styles.verifyButtonText}>Verify</Text>
 						</TouchableOpacity>
 					</View> : null }
+					{this.state.is_counting ? 
+					<View style={styles.countDownContainer}>
+						<CountDown
+							until={120}
+							onFinish={() => this.setState({is_counting: false})}
+							style={styles.sendCountdown}
+							size={7}
+							digitStyle={{backgroundColor: 'transparent'}}
+							digitTxtStyle={styles.countdownText}
+							separatorStyle={{color: '#000000'}}
+							timeToShow={['M', 'S']}
+							timeLabels={{m: null, s: null}}
+							showSeparator
+						/>
+						</View>
+						: undefined}				
 				</View>
 				{this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
@@ -375,7 +384,9 @@ const styles = StyleSheet.create({
 	formView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 329 * alpha,
+		width: 330 * alpha,
+		marginLeft: 10*alpha,
+		marginRight: 10*alpha,
 		height: 100 * alpha,
 		marginTop: 16 * alpha,
 	},
@@ -412,12 +423,15 @@ const styles = StyleSheet.create({
 		height: 25 * alpha,
 		marginLeft: 15 * alpha,
 	},
+	countDownContainer:{
+		marginTop: 20*alpha,
+		width: 330 * alpha,
+		alignItems: "center",
+	},
 	sendButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 4,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+	
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -439,14 +453,12 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	sendCountdown: {
-		backgroundColor: "white",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
 		width: 72 * alpha,
 		height: 26 * alpha,
-		marginRight: 8 * alpha,
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
@@ -458,10 +470,9 @@ const styles = StyleSheet.create({
     },
 	activationView: {
 		backgroundColor: "white",
-		borderRadius: 7,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+		borderRadius: 7 * alpha,
+		borderColor: "rgb(140, 140, 140)",
+		borderWidth: 0.5,
 		height: 41 * alpha,
 		marginTop: 17 * alpha,
 		flexDirection: "row",
@@ -484,9 +495,7 @@ const styles = StyleSheet.create({
 	verifyButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 4 * alpha,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+	
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
