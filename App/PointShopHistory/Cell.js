@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
 	pointsText: {
 		backgroundColor: "transparent",
 		color: "rgb(148, 148, 148)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 	dateText: {
 		backgroundColor: "transparent",
 		color: "rgb(148, 148, 148)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
 	},
 	redeemTimeText: {
 		color: "rgb(189, 186, 186)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 	},
 	redeemText: {
 		color: "rgb(189, 186, 186)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 	},
 	shopText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

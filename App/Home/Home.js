@@ -1500,7 +1500,7 @@ const styles = StyleSheet.create({
 	},
 	branchButtonText: {
 		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1533,12 +1533,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	optionText: {
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 	},
 	pickUpText: {
 		color: "rgb(253, 253, 253)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1549,7 +1549,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(78, 77, 77)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1559,7 +1559,7 @@ const styles = StyleSheet.create({
 	distance1kmText: {
 		backgroundColor: "transparent",
 		color: "rgb(188, 181, 181)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1585,7 +1585,7 @@ const styles = StyleSheet.create({
 	},
 	moreButtonText: {
 		color: "rgb(162, 162, 162)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1782,7 +1782,7 @@ const styles = StyleSheet.create({
 	},
 	clearButtonText: {
 		color: "rgb(144, 141, 141)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1864,7 +1864,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1890,7 +1890,7 @@ const styles = StyleSheet.create({
 	},
 	closeGalleryButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1911,7 +1911,7 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1921,7 +1921,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionHeaderText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1932,7 +1932,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1952,7 +1952,7 @@ const styles = StyleSheet.create({
 	ingredientText: {
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1969,7 +1969,7 @@ const styles = StyleSheet.create({
 	},
 	milkText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1987,7 +1987,7 @@ const styles = StyleSheet.create({
 	},
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2023,7 +2023,7 @@ const styles = StyleSheet.create({
 	},
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2050,7 +2050,7 @@ const styles = StyleSheet.create({
 	},
 	selectedButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2068,7 +2068,7 @@ const styles = StyleSheet.create({
 	},
 	optiontitleText: {
 		color: "rgb(141, 141, 141)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2092,7 +2092,7 @@ const styles = StyleSheet.create({
 	},
 	recommendedButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2104,7 +2104,7 @@ const styles = StyleSheet.create({
 	},
 	unavailableButtonText: {
 		color: "rgb(201, 201, 201)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2137,7 +2137,7 @@ const styles = StyleSheet.create({
 	},
 	choiceThreeButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2160,7 +2160,7 @@ const styles = StyleSheet.create({
 	},
 	choiceTwoButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2183,7 +2183,7 @@ const styles = StyleSheet.create({
 	},
 	choiceButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2210,7 +2210,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2225,7 +2225,7 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2305,7 +2305,7 @@ const styles = StyleSheet.create({
 	},
 	addToCartButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2338,7 +2338,7 @@ const styles = StyleSheet.create({
 	},
 	alertViewTitle:{
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2348,7 +2348,7 @@ const styles = StyleSheet.create({
 	},
 	alertViewText:{
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2383,7 +2383,7 @@ const styles = StyleSheet.create({
 	deliveryTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2392,7 +2392,7 @@ const styles = StyleSheet.create({
 	freeWithRm40SpendText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2402,7 +2402,7 @@ const styles = StyleSheet.create({
 	deliveredByBrew9Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2412,7 +2412,7 @@ const styles = StyleSheet.create({
 	deliverAreaAffectText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2422,7 +2422,7 @@ const styles = StyleSheet.create({
 	deliveryRm5ExtraText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2439,7 +2439,7 @@ const styles = StyleSheet.create({
 	branchInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2448,7 +2448,7 @@ const styles = StyleSheet.create({
 	branchAddress: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2459,7 +2459,7 @@ const styles = StyleSheet.create({
 	branchContact: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2469,7 +2469,7 @@ const styles = StyleSheet.create({
 	businessHour1000Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

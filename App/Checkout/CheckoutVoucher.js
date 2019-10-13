@@ -17,9 +17,9 @@ import UsedVoucher from "./UsedVoucher"
 import ValidVoucher from "./ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
 
-@connect(({ members }) => ({
-    currentMember: members.profile
-    
+@connect(({ members,shops }) => ({
+    currentMember: members.profile,
+    selectedShop: shops.selectedShop
 }))
 export default class CheckoutVoucher extends React.Component {
 
@@ -49,6 +49,7 @@ export default class CheckoutVoucher extends React.Component {
 
     constructor(props) {
         super(props)
+        const data = this.props.navigation.getParam("valid_vouchers", [])
         this.state = {
             valid_initial: true,
             used_initial: true,
@@ -57,10 +58,11 @@ export default class CheckoutVoucher extends React.Component {
             used_selected: false,
             valid_page: 1,
             used_page: 1,
-            valid_total: 0,
+            valid_total: data.length,
             used_total: 0,
-            current_data:  this.props.navigation.getParam("valid_vouchers", null),
-            valid_data: [],
+            current_data:  data,
+            cart:  this.props.navigation.getParam("cart", null),
+            valid_data: data,
             used_data: [],
             loading: false,
             isRefreshing: false,
@@ -69,7 +71,12 @@ export default class CheckoutVoucher extends React.Component {
     }
 
     loadValidVoucher(page_no) {
-        const { dispatch,currentMember } = this.props
+        const { dispatch,currentMember,selectedShop } = this.props
+        const {cart,valid_data} = this.state
+
+        if (valid_data.length > 0){
+            return
+        }
 
 		if (currentMember != null ){
 			this.setState({ loading: true })
@@ -88,10 +95,10 @@ export default class CheckoutVoucher extends React.Component {
                     }.bind(this))	
 				}
             }
-			const obj = new ValidVouchersRequestObject()
+			const obj = new ValidVouchersRequestObject(cart,selectedShop.id)
 			obj.setUrlId(currentMember.id)
 			dispatch(
-				createAction('vouchers/loadValidVouchers')({
+				createAction('vouchers/loadVouchersForCart')({
 					object:obj,
 					callback,
 				})
@@ -496,7 +503,7 @@ const styles = StyleSheet.create({
     },
     howToUseButtonText: {
         color: "rgb(151, 151, 151)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 11 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -529,7 +536,7 @@ const styles = StyleSheet.create({
     noRewardAvailableText: {
         backgroundColor: "transparent",
         color: "rgb(190, 190, 190)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",

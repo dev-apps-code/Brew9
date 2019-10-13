@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
 	},
 	labelText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -2,8 +2,9 @@ import BaseRequestObject from "./base_request_object";
 
 class ValidVouchersRequestObject extends BaseRequestObject{
     
-    constructor(order_items){
+    constructor(shop_id,order_items){
         super();
+        this.shop_id = shop_id
         this.order_items = order_items
     }
 

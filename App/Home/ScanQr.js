@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     },
     noLabelText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

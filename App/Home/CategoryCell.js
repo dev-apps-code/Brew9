@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 	labelText: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 	labelImageText: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 	labelText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 	labelImageText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
