@@ -94,16 +94,12 @@ export default class Checkout extends React.Component {
 		const { dispatch,currentMember } = this.props
 		const {cart} = this.state
 		if (currentMember != null ){
-			// this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
 					this.setState({ 
 						valid_vouchers:eventObject.result
 					})	
-				}
-				// this.setState({
-				// 	loading: false,
-				// 	})        
+					}			      
 				}
 
 			const obj = new ValidVouchersRequestObject(cart)

@@ -89,7 +89,6 @@ export default class CheckoutVoucher extends React.Component {
 				}
 		      
             }
-            console.log("get valifd voucher")
 			const obj = new ValidVouchersRequestObject()
 			obj.setUrlId(currentMember.id)
 			dispatch(

@@ -108,8 +108,6 @@ export default class PointShopItem extends React.Component {
 		)
 }
 
-
-
 	loadRedeem(){
 		const { dispatch, selectedShop } = this.props
 		const { data } = this.state

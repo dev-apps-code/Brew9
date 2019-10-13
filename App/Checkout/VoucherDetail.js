@@ -398,6 +398,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		shadowColor: "rgba(224, 222, 222, 0.5)",
 		shadowRadius: 2,
+		width: 348 * alpha,
 		shadowOpacity: 1,
 		position: "absolute",
 		left: 14 * alpha,

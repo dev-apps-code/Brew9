@@ -16,6 +16,6 @@ export function getExpiredVoucher(authtoken,object) {
 }
 
 export function validVouchers(authtoken,object) {
-    return getMethod(authtoken,object)
+    return postJsonMethod(authtoken,object)
 }
  

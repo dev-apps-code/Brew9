@@ -27,7 +27,7 @@ export default {
                 object,
             )
             const eventObject = new EventObject(json)
-            console.log("response---- ")
+
             if (eventObject.success == true) {}
             typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
