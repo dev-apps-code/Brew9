@@ -64,8 +64,10 @@ export default class PickUp extends React.Component {
 	onOrderHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
-
-		navigate("OrderHistory")
+		const { currentMember } = this.props
+		if (currentMember !== null) {
+			navigate("OrderHistory")
+		}
 	}
 
 	onCallPressed = (phone_no) => {

@@ -229,11 +229,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.callView}>
 									<TouchableOpacity
-<<<<<<< HEAD
 										onPress={() => this.onCallPressed(order.shop.phone_no)}
-=======
-										onPress={this.onCallPressed(order.shop.phone_no)}
->>>>>>> 68c2b1588a9ba929c101e4caee7496aeab482895
 										style={styles.callIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-23.png")}
