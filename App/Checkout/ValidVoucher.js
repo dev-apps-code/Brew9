@@ -171,7 +171,7 @@ export default class ValidVoucher extends React.Component {
 									alignItems: "flex-end",
 								}}>
 								<Text
-									style={styles.dateText}>{this.props.available_date}</Text>
+									style={styles.dateText}>{this.props.item.available_date}</Text>
 								<View
 									style={{
 										flex: 1,
