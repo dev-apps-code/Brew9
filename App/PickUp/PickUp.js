@@ -26,7 +26,8 @@ export default class PickUp extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			header: null,
+			title: "PickUp",
+            headerTintColor: "black",          
 			headerLeft: null,
 			headerRight: null,
 		}

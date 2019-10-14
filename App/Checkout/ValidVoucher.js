@@ -29,7 +29,7 @@ export default class ValidVoucher extends React.Component {
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("VoucherDetail",{item:this.props.item,valid:true})
+		navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
 	}
 
 	onTermsPressed = () => {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 40 * alpha,
+		width: 60 * alpha,
 		height: 31 * alpha,
 	},
 	currencyText: {

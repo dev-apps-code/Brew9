@@ -61,7 +61,7 @@ export default class CheckoutVoucher extends React.Component {
             valid_total: data.length,
             used_total: 0,
             current_data:  data,
-            cart:  this.props.navigation.getParam("cart", null),
+            cart:  this.props.navigation.getParam("cart", []),
             valid_data: data,
             used_data: [],
             loading: false,
@@ -95,7 +95,7 @@ export default class CheckoutVoucher extends React.Component {
                     }.bind(this))	
 				}
             }
-			const obj = new ValidVouchersRequestObject(cart,selectedShop.id)
+			const obj = new ValidVouchersRequestObject(selectedShop.id,cart)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('vouchers/loadVouchersForCart')({
@@ -129,7 +129,7 @@ export default class CheckoutVoucher extends React.Component {
         obj.setPage(page_no)
         obj.setStatus(1)
         dispatch(
-            createAction('vouchers/loadVouchersForCart')({
+            createAction('vouchers/loadValidVoucher')({
                 object: obj,
                 callback
             })
@@ -260,6 +260,7 @@ export default class CheckoutVoucher extends React.Component {
                 display_value={item.voucher.display_value}
                 discount_type={item.voucher.discount_type}
                 used_date={item.used_date}
+                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null) }
                 company_id={this.props.company_id}
                 expiry_date={item.expiry_date}
             />
@@ -267,6 +268,7 @@ export default class CheckoutVoucher extends React.Component {
             return <UsedVoucher
                 navigation={this.props.navigation}
                 title={item.voucher.name}
+                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null) }
                 description={item.voucher.description}
                 used_date={item.used_date}
                 expiry_date={item.expiry_date}

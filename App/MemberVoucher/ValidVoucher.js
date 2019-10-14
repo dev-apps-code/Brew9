@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 40 * alpha,
+		width: 60 * alpha,
 		height: 31 * alpha,
 	},
 	currencyText: {

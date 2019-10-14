@@ -72,7 +72,9 @@ export default class VoucherDetail extends React.Component {
 	}
 
 	onUsePessed = () => {
-	
+		const addVoucherAction = this.props.navigation.getParam("addVoucherAction", false) 		
+		this.props.navigation.pop(2)		
+		addVoucherAction(this.state.item)
 	}
 
 	renderPrice(){
