@@ -1745,7 +1745,7 @@ const styles = StyleSheet.create({
 	},
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1756,7 +1756,7 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1779,7 +1779,7 @@ const styles = StyleSheet.create({
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1802,7 +1802,7 @@ const styles = StyleSheet.create({
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

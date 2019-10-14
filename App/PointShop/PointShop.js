@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
 	},
 	pointHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
 	},
 	transactionHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

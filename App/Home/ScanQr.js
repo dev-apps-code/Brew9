@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     },
     noLabelText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

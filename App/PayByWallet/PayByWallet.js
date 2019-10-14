@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
 	},
 	nicknameText: {
 		color: "rgb(69, 67, 67)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
 	},
 	selectwalletButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
 	},
 	payByBrew9WalletText: {
 		color: "rgb(69, 67, 67)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
 	},
 	payByBrew9WalletTextDisabled: {
 		color: "rgb(186, 179, 179)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
 	},
 	scanQrcodeToEarnText: {
 		color: "rgb(62, 61, 61)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

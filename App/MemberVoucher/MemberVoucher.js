@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
 	},
 	expiredButtonText: {
 		color: "rgb(118, 118, 118)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
 	},
 	usedButtonText: {
 		color: "rgb(118, 118, 118)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
 	},
 	redeemrewardButtonText: {
 		color: "rgb(82, 82, 82)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

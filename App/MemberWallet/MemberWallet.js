@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
 	},
 	availableBalanceText: {
 		color: "rgb(58, 58, 58)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
 	currencyText: {
 		backgroundColor: "transparent",
 		color: "rgb(58, 58, 58)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
 	},
 	topUpButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
 	transactionHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
 	},
 	faqButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -528,7 +528,7 @@ const styles = StyleSheet.create({
 	},
 	faqText: {
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
 	},
 	changePasswordText: {
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
 	resetPasswordText: {
 		backgroundColor: "transparent",
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

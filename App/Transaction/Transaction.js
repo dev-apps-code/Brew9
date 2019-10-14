@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(69, 67, 67)",
 		fontFamily: "ClanPro-Book",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 35 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

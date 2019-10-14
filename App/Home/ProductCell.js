@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 	soldtextText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		opacity: 0.39,
 		color: "black",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
 	},
 	optionButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		backgroundColor: "transparent",
 		color: "rgb(68, 68, 68)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 	},
 	termsButtonText: {
 		color: "rgb(136, 133, 133)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
