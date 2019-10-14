@@ -29,7 +29,7 @@ export default class ValidVoucher extends React.Component {
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("VoucherDetail",{item:this.props.item,valid:true})
+		navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
 	}
 
 	onTermsPressed = () => {
@@ -233,12 +233,12 @@ const styles = StyleSheet.create({
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 40 * alpha,
+		width: 60 * alpha,
 		height: 31 * alpha,
 	},
 	currencyText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

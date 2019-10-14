@@ -17,9 +17,9 @@ import UsedVoucher from "./UsedVoucher"
 import ValidVoucher from "./ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
 
-@connect(({ members }) => ({
-    currentMember: members.profile
-    
+@connect(({ members,shops }) => ({
+    currentMember: members.profile,
+    selectedShop: shops.selectedShop
 }))
 export default class CheckoutVoucher extends React.Component {
 
@@ -49,6 +49,7 @@ export default class CheckoutVoucher extends React.Component {
 
     constructor(props) {
         super(props)
+        const data = this.props.navigation.getParam("valid_vouchers", [])
         this.state = {
             valid_initial: true,
             used_initial: true,
@@ -57,10 +58,11 @@ export default class CheckoutVoucher extends React.Component {
             used_selected: false,
             valid_page: 1,
             used_page: 1,
-            valid_total: 0,
+            valid_total: data.length,
             used_total: 0,
-            current_data:  this.props.navigation.getParam("valid_vouchers", null),
-            valid_data: [],
+            current_data:  data,
+            cart:  this.props.navigation.getParam("cart", []),
+            valid_data: data,
             used_data: [],
             loading: false,
             isRefreshing: false,
@@ -69,7 +71,12 @@ export default class CheckoutVoucher extends React.Component {
     }
 
     loadValidVoucher(page_no) {
-        const { dispatch,currentMember } = this.props
+        const { dispatch,currentMember,selectedShop } = this.props
+        const {cart,valid_data} = this.state
+
+        if (valid_data.length > 0){
+            return
+        }
 
 		if (currentMember != null ){
 			this.setState({ loading: true })
@@ -87,12 +94,11 @@ export default class CheckoutVoucher extends React.Component {
                         });
                     }.bind(this))	
 				}
-		      
             }
-			const obj = new ValidVouchersRequestObject()
+			const obj = new ValidVouchersRequestObject(selectedShop.id,cart)
 			obj.setUrlId(currentMember.id)
 			dispatch(
-				createAction('vouchers/loadValidVouchers')({
+				createAction('vouchers/loadVouchersForCart')({
 					object:obj,
 					callback,
 				})
@@ -123,7 +129,7 @@ export default class CheckoutVoucher extends React.Component {
         obj.setPage(page_no)
         obj.setStatus(1)
         dispatch(
-            createAction('vouchers/loadVouchersForCart')({
+            createAction('vouchers/loadValidVoucher')({
                 object: obj,
                 callback
             })
@@ -254,6 +260,7 @@ export default class CheckoutVoucher extends React.Component {
                 display_value={item.voucher.display_value}
                 discount_type={item.voucher.discount_type}
                 used_date={item.used_date}
+                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null) }
                 company_id={this.props.company_id}
                 expiry_date={item.expiry_date}
             />
@@ -261,6 +268,7 @@ export default class CheckoutVoucher extends React.Component {
             return <UsedVoucher
                 navigation={this.props.navigation}
                 title={item.voucher.name}
+                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null) }
                 description={item.voucher.description}
                 used_date={item.used_date}
                 expiry_date={item.expiry_date}
@@ -497,7 +505,7 @@ const styles = StyleSheet.create({
     },
     howToUseButtonText: {
         color: "rgb(151, 151, 151)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 11 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -530,7 +538,7 @@ const styles = StyleSheet.create({
     noRewardAvailableText: {
         backgroundColor: "transparent",
         color: "rgb(190, 190, 190)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",

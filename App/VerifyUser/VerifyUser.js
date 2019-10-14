@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "black", 
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(46, 46, 46)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
 	},
 	sendButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
 	activationCodeTextInput: {
 
 		color: "rgb(46, 46, 46)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
 	errorMessageText: {
 		color: "white",
 		fontSize: 12 * fontAlpha,
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",

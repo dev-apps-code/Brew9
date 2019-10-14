@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     noticeText: {
         backgroundColor: "transparent",
         color: "rgb(107, 109, 108)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 13 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     },
     readallButtonText: {
         color: "rgb(107, 109, 108)",
-        fontFamily: "Helvetica",
+        fontFamily: "SFProText-Medium",
         fontSize: 13 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
 	},
 	noLabelText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

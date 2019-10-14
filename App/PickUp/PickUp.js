@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, Linking } from "react-native"
+import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator } from "react-native"
 import React from "react"
 import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { ScrollView } from "react-native-gesture-handler";
@@ -26,7 +26,8 @@ export default class PickUp extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			header: null,
+			title: "PickUp",
+            headerTintColor: "black",          
 			headerLeft: null,
 			headerRight: null,
 		}
@@ -529,7 +530,7 @@ export default class PickUp extends React.Component {
 		const { current_order } = this.state
 		return <View
 				style={styles.pickUpMainView}>
-				{ current_order.length > 0 ? this.renderQueueView(current_order) : this.renderEmpty() }
+				{ this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>  : current_order.length > 0 ? this.renderQueueView(current_order) : this.renderEmpty() }
 			</View>
 	}
 }
@@ -580,7 +581,7 @@ const styles = StyleSheet.create({
 	},
 	youHavenTMakeAnyText: {
 		color: "rgb(134, 134, 134)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -590,7 +591,7 @@ const styles = StyleSheet.create({
 	grabYoursNowText: {
 		backgroundColor: "transparent",
 		color: "rgb(134, 134, 134)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -614,7 +615,7 @@ const styles = StyleSheet.create({
 	},
 	orderButtonText: {
 		color: "rgb(254, 254, 254)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -631,7 +632,7 @@ const styles = StyleSheet.create({
 	},
 	orderHistoryButtonText: {
 		color: "rgb(176, 176, 176)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -641,7 +642,9 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginLeft: 10 * alpha,
 	},
-
+	loadingIndicator:{
+		marginTop:100 * alpha,
+	},
 
 
 

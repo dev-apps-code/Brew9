@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
 	},
 	rulesButtonText: {
 		color: "rgb(42, 42, 42)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

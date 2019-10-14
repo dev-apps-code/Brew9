@@ -20,7 +20,7 @@ import {createAction, Storage} from "../Utils"
 import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
-
+import _ from 'lodash'
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -58,8 +58,9 @@ export default class Checkout extends React.Component {
 			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
 			cart_total: this.props.navigation.getParam("cart_total", 0.00),
-			voucher_item_ids:[],
+			vouchers_to_use:[],
 			valid_vouchers:[],
+			discount:0,
 			cart:this.props.navigation.getParam("cart", []),
 			modal_title:'Success',
 			modal_description:'',
@@ -91,7 +92,7 @@ export default class Checkout extends React.Component {
 	}
 
 	loadValidVouchers(){
-		const { dispatch,currentMember } = this.props
+		const { dispatch,currentMember,selectedShop } = this.props
 		const {cart} = this.state
 		if (currentMember != null ){
 			const callback = eventObject => {
@@ -102,7 +103,7 @@ export default class Checkout extends React.Component {
 					}			      
 				}
 
-			const obj = new ValidVouchersRequestObject(cart)
+			const obj = new ValidVouchersRequestObject(selectedShop.id,cart)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('vouchers/loadVouchersForCart')({
@@ -150,7 +151,62 @@ export default class Checkout extends React.Component {
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers})
+		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.state.cart,addVoucherAction:this.addVoucherItemsToCart})
+	}
+
+	addVoucherItemsToCart =(voucher_item) => {
+
+		const {vouchers_to_use} = this.state
+	
+		if (vouchers_to_use.length == 0){
+			this.setState({vouchers_to_use:[voucher_item]})
+			this.calculateVoucherDiscount([voucher_item])
+		}else{
+			let array = []
+			
+			
+			for (var index in vouchers_to_use){
+				var v = vouchers_to_use[index]
+				// let existing_voucher_types = array.map(a => a.voucher.voucher_type)
+				console.log("vocuher yype exitint",v.voucher.voucher_type)
+				console.log("vocuher yype new",voucher_item.voucher.voucher_type)
+				if (voucher_item.voucher_type == "SkipQueue" && v.voucher.voucher_type !== "SkipQueue"){
+					array.push(v)	
+					
+					continue
+				}
+				if (voucher_item.voucher_type !== "SkipQueue" && v.voucher.voucher_type == "SkipQueue"){
+					array.push(v)	
+					continue
+				}						
+			}
+			array.push(voucher_item)
+			
+			this.setState({vouchers_to_use:array})
+			this.calculateVoucherDiscount(array)
+		}		
+	}
+
+	calculateVoucherDiscount(vouchers_to_use){
+		const {cart_total} = this.state
+		var discount = 0
+		for (var index in vouchers_to_use){
+			var item = vouchers_to_use[index]
+			let voucher = item.voucher
+			if (item.voucher.voucher_type == "Cash Voucher"){
+				discount = item.voucher.display_value
+			}else{
+				
+				if (voucher.discount_type != null && voucher.discount_type != '' && voucher.discount_price != null && voucher.discount_price != 0){
+					if (voucher.discount_type == "fixed"){
+						discount = voucher.discount_price
+					}else if(voucher.discount_type == "percent"){
+						discount = cart_total * voucher.discount_price/100.0						
+					}
+				}
+			}
+		}
+		this.setState({discount:discount})
 	}
 
 	onPaymentButtonPressed = () => {
@@ -161,7 +217,7 @@ export default class Checkout extends React.Component {
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 
-		const {cart,voucher_item_ids} = this.state
+		const {cart,vouchers_to_use} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({
@@ -177,6 +233,8 @@ export default class Checkout extends React.Component {
 				this.refs.toast.show(eventObject.message);
 			}
 		}
+
+		const voucher_item_ids = vouchers_to_use.map(item => item.id)
 		const obj = new MakeOrderRequestObj(cart, voucher_item_ids)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
@@ -245,10 +303,32 @@ export default class Checkout extends React.Component {
 		
 		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
 
-		let {cart,cart_total} = this.state
+		let {cart,cart_total,vouchers_to_use,discount} = this.state
 		let {currentMember, selectedShop} = this.props
-
+		var final_price = cart_total - discount 
+		if (final_price < 0){
+			final_price = 0
+		}
+		final_price = final_price.toFixed(2)
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
+
+		const renderVouchers = vouchers_to_use.map((item,key) => {
+			return (
+				<View
+					key={key}
+					pointerEvents="box-none"
+					style={{
+						height: 18 * alpha,
+						marginLeft: 16 * alpha,
+						marginRight: 16 * alpha,
+						flexDirection: "row",
+						alignItems: "center",
+					}}>
+					<Text
+						style={styles.promoCodeText}>{item.voucher.name}</Text>
+				</View>				
+				)
+		})
 		const cart_items = cart.map((item, key) => {
 
 			if (item.selected_variants) {
@@ -528,10 +608,31 @@ export default class Checkout extends React.Component {
 										}}/>
 									<Text
 										style={styles.statusText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'}</Text>
+										
 									<Image
 										source={require("./../../assets/images/group-4-5.png")}
 										style={styles.arrowImage}/>
 								</View>
+								{renderVouchers}
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 16 * alpha,
+										marginRight: 16 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.promoCodeText}>Discount</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.statusText}>{this.state.discount}</Text>																	
+								</View>
+							
 							</View>
 						</TouchableOpacity>
 
@@ -542,6 +643,7 @@ export default class Checkout extends React.Component {
 						}}/>
 					<Text
 						style={styles.summaryText}>Total {cart_total_quantity} {cart_total_quantity>1 ? 'items' : 'item'}</Text>
+
 				</View>
 				<View
 					style={styles.paymentMethodView}>
@@ -648,7 +750,7 @@ export default class Checkout extends React.Component {
 			<View
 				style={styles.totalPayNowView}>
 				<Text
-					style={styles.priceText}>${cart_total}</Text>
+					style={styles.priceText}>${final_price}</Text>
 				<View
 					style={{
 						flex: 1,
@@ -720,7 +822,7 @@ const styles = StyleSheet.create({
 	},
 	branchText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -743,7 +845,7 @@ const styles = StyleSheet.create({
 	},
 	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -783,7 +885,7 @@ const styles = StyleSheet.create({
 	selfPickUpText: {
 		backgroundColor: "transparent",
 		color: "rgb(70, 76, 84)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -793,7 +895,7 @@ const styles = StyleSheet.create({
 	selfPickUpText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -872,7 +974,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(70, 76, 84)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -882,7 +984,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText_selected: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -921,7 +1023,7 @@ const styles = StyleSheet.create({
 	},
 	contactText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -932,7 +1034,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -958,7 +1060,7 @@ const styles = StyleSheet.create({
 	},
 	autoFillButtonText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -982,7 +1084,7 @@ const styles = StyleSheet.create({
 	},
 	orderCapacityText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1006,7 +1108,7 @@ const styles = StyleSheet.create({
 	},
 	orders34CupsText: {
 		color: "rgb(55, 56, 57)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1016,7 +1118,7 @@ const styles = StyleSheet.create({
 	},
 	estimated15MinsToText: {
 		color: "rgb(79, 76, 76)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1030,7 +1132,7 @@ const styles = StyleSheet.create({
 	},
 	orderConfirmationText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1049,7 +1151,7 @@ const styles = StyleSheet.create({
 	},
 	nameTwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1059,7 +1161,7 @@ const styles = StyleSheet.create({
 	},
 	quantityTwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1069,7 +1171,7 @@ const styles = StyleSheet.create({
 	},
 	rm20TwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1079,11 +1181,10 @@ const styles = StyleSheet.create({
 	},
 	voucherView: {
 		backgroundColor: "transparent",
-		height: 50 * alpha,
 	},
 	promoCodeText: {
 		color: "rgb(99, 97, 97)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1092,7 +1193,7 @@ const styles = StyleSheet.create({
 	},
 	statusText: {
 		color: "rgb(181, 181, 181)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1121,7 +1222,7 @@ const styles = StyleSheet.create({
 	},
 	voucherButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1129,7 +1230,7 @@ const styles = StyleSheet.create({
 	},
 	summaryText: {
 		color: "rgb(135, 135, 135)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1146,7 +1247,7 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1176,7 +1277,7 @@ const styles = StyleSheet.create({
 	},
 	paymenttypeText: {
 		color: 'rgb(85,85,85)',
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1205,7 +1306,7 @@ const styles = StyleSheet.create({
 	},
 	paymentButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1220,7 +1321,7 @@ const styles = StyleSheet.create({
 	},
 	remarkText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1229,7 +1330,7 @@ const styles = StyleSheet.create({
 	},
 	remarksText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1260,7 +1361,7 @@ const styles = StyleSheet.create({
 	},
 	remarkButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1315,7 +1416,7 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1324,7 +1425,7 @@ const styles = StyleSheet.create({
 	},
 	variantText: {
 		color: "rgb(148, 148, 148)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1338,7 +1439,7 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1347,7 +1448,7 @@ const styles = StyleSheet.create({
 	},
 	cartpriceText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

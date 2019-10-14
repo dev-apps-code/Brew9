@@ -229,7 +229,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.callView}>
 									<TouchableOpacity
-										onPress={this.onCallPressed(order.shop.phone_no)}
+										onPress={() => this.onCallPressed(order.shop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-23.png")}
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
 		height: 21 * alpha,
 		marginLeft: 26 * alpha,
 		marginRight: 24 * alpha,
-		marginTop: 23 * alpha,
+		marginTop: 10 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},

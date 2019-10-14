@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
 	},
 	pointRuleButtonText: {
 		color: "rgb(30, 29, 29)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
 	},
 	noLabelText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

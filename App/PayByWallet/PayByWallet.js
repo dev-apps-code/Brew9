@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
 	balanceText: {
 		backgroundColor: "transparent",
 		color: "rgb(186, 179, 179)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
 	autoText: {
 		backgroundColor: "transparent",
 		color: "rgb(192, 192, 192)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

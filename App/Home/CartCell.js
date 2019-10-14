@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(57, 57, 57)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

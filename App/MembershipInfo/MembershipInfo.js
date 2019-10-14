@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
 	memberRightsText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
 	membershiptitleText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
 	exprangeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
 	},
 	benefitsText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

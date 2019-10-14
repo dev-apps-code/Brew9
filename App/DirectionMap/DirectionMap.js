@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
 	},
 	addressText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "Helvetica",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
