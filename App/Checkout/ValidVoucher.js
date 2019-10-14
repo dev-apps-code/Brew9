@@ -28,7 +28,6 @@ export default class ValidVoucher extends React.Component {
 
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
-
 		navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
 	}
 
@@ -48,7 +47,7 @@ export default class ValidVoucher extends React.Component {
 		const display_value = item.voucher.display_value
 		const discount_type = item.voucher.discount_type
 		const discount_price = item.voucher.discount_price
-		if (display_value != null && display_value !==''){
+		if (display_value != null  && display_value !==''){
 
 			return (
 				<View
@@ -106,6 +105,7 @@ export default class ValidVoucher extends React.Component {
 								right: 0,
 								top: 0,
 								bottom: 0,
+								justifyContent: "center",
 							}}>
 							<Text
 								style={styles.percentvalueText}>{discount_price}</Text>
@@ -119,7 +119,6 @@ export default class ValidVoucher extends React.Component {
 	}
 
 	render() {
-	
 		return <TouchableWithoutFeedback
 				onPress={this.onVoucherPress}>
 				<View
@@ -153,7 +152,7 @@ export default class ValidVoucher extends React.Component {
 									style={{
 										flex: 1,
 									}}/>
-								{this.renderPrice()}							
+								{this.renderPrice()}
 							</View>
 							<Text
 								style={styles.descriptionText}>{this.props.description}</Text>
@@ -172,7 +171,7 @@ export default class ValidVoucher extends React.Component {
 									alignItems: "flex-end",
 								}}>
 								<Text
-									style={styles.dateText}>{this.props.expiry_date}</Text>
+									style={styles.dateText}>{this.props.item.available_date}</Text>
 								<View
 									style={{
 										flex: 1,
@@ -256,7 +255,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 0 * alpha,
+		marginLeft: 16 * alpha,
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
