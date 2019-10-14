@@ -416,15 +416,7 @@ const styles = StyleSheet.create({
 	},
 	memberCardText: {
 		color: "rgb(82, 46, 30)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -467,15 +459,7 @@ const styles = StyleSheet.create({
 	},
 	noNeedQueueText: {
 		color: "white",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -525,15 +509,7 @@ const styles = StyleSheet.create({
 	},
 	priorityText: {
 		color: "rgb(51, 51, 51)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -602,15 +578,7 @@ const styles = StyleSheet.create({
 	freeDeliveryText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -662,15 +630,7 @@ const styles = StyleSheet.create({
 	},
 	buy1Free1Text: {
 		color: "rgb(51, 51, 51)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -725,15 +685,7 @@ const styles = StyleSheet.create({
 	buy2Free1Text: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -768,15 +720,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(59, 59, 59)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -785,15 +729,7 @@ const styles = StyleSheet.create({
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -811,15 +747,7 @@ const styles = StyleSheet.create({
 	descriptionTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -827,15 +755,7 @@ const styles = StyleSheet.create({
 	},
 	valueTwoText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -844,15 +764,7 @@ const styles = StyleSheet.create({
 	},
 	otherdetailsButtonText: {
 		color: "rgb(176, 176, 176)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -897,15 +809,7 @@ const styles = StyleSheet.create({
 	agreeWithBrew9MemText: {
 		backgroundColor: "transparent",
 		color: "rgb(148, 147, 147)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -915,15 +819,7 @@ const styles = StyleSheet.create({
 	agreeWithBrew9MemTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -943,15 +839,7 @@ const styles = StyleSheet.create({
 	totalRm15012MontText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

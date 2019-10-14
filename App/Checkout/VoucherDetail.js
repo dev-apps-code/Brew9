@@ -425,11 +425,7 @@ const styles = StyleSheet.create({
 	},
 	currenrcyText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -451,11 +447,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -529,11 +521,7 @@ const styles = StyleSheet.create({
 	},
 	textText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -698,13 +686,8 @@ const styles = StyleSheet.create({
 	},
 	useButtonText: {
 		color: "white",
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
-=======
-		fontFamily: "SFProText-Medium",
-		fontSize: 14 * fontAlpha,
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

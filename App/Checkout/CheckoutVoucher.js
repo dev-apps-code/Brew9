@@ -505,11 +505,7 @@ const styles = StyleSheet.create({
     },
     howToUseButtonText: {
         color: "rgb(151, 151, 151)",
-<<<<<<< HEAD
         fontFamily: "ClanPro-Book",
-=======
-        fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         fontSize: 11 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -542,11 +538,7 @@ const styles = StyleSheet.create({
     noRewardAvailableText: {
         backgroundColor: "transparent",
         color: "rgb(190, 190, 190)",
-<<<<<<< HEAD
         fontFamily: "ClanPro-Book",
-=======
-        fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",

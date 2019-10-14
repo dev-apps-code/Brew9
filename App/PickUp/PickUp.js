@@ -583,15 +583,7 @@ const styles = StyleSheet.create({
 	},
 	youHavenTMakeAnyText: {
 		color: "rgb(134, 134, 134)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -601,15 +593,7 @@ const styles = StyleSheet.create({
 	grabYoursNowText: {
 		backgroundColor: "transparent",
 		color: "rgb(134, 134, 134)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -633,15 +617,7 @@ const styles = StyleSheet.create({
 	},
 	orderButtonText: {
 		color: "rgb(254, 254, 254)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -658,15 +634,7 @@ const styles = StyleSheet.create({
 	},
 	orderHistoryButtonText: {
 		color: "rgb(176, 176, 176)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

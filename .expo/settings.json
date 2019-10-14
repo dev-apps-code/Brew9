@@ -1,14 +1,8 @@
 {
-  "hostType": "localhost",
+  "hostType": "lan",
   "lanType": "ip",
-<<<<<<< HEAD
-  "dev": false,
-  "minify": true,
-  "urlRandomness": "dw-7nd",
-=======
   "dev": true,
   "minify": false,
-  "urlRandomness": "2i-qag",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+  "urlRandomness": "ag-zsv",
   "https": false
 }

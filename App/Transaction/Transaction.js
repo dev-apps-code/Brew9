@@ -175,15 +175,7 @@ const styles = StyleSheet.create({
 	},
 	itemnameText: {
 		color: "rgb(55, 55, 55)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -194,15 +186,8 @@ const styles = StyleSheet.create({
 	carttotalText: {
 		backgroundColor: "transparent",
 		color: "rgb(69, 67, 67)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
 		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 35 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -224,15 +209,7 @@ const styles = StyleSheet.create({
 	},
 	payeeText: {
 		color: "rgb(165, 165, 165)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -242,15 +219,7 @@ const styles = StyleSheet.create({
 	},
 	brew9Text: {
 		color: "rgb(78, 78, 78)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -272,15 +241,7 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(165, 165, 165)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -295,15 +256,7 @@ const styles = StyleSheet.create({
 	},
 	addBankCardToPayText: {
 		color: "rgb(34, 34, 34)",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -331,15 +284,7 @@ const styles = StyleSheet.create({
 	},
 	payNowButtonText: {
 		color: "white",
-<<<<<<< HEAD
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
