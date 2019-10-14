@@ -426,16 +426,16 @@ export default class Home extends React.Component {
 	onSelectCategory = (scroll_index, selected_index) => {
 		// console.log("Scroll Index", scroll_index)
 
-		let data = [...this.state.data]
+		// let data = [...this.state.data]
 
-		for (var index in data) {
-			if ( index == selected_index ) {
-				data[index].selected = true				
-			}else{
-				data[index].selected = false
-			}
-		}
-		this.setState( { data })
+		// for (var index in data) {
+		// 	if ( index == selected_index ) {
+		// 		data[index].selected = true				
+		// 	}else{
+		// 		data[index].selected = false
+		// 	}
+		// }
+		// this.setState( { data })
 
 		if (scroll_index < this.state.products.length){
 			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
