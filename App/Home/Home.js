@@ -255,14 +255,14 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			this.setState({ loading: false })
 			if (eventObject.success) {			
-					this.setState({
-						shop: eventObject.result,
-						menu_banners: eventObject.result.menu_banners
-					}, function () {
-						if (loadProducts){
-							this.loadStoreProducts()
-						}					
-					})		
+				this.setState({
+					shop: eventObject.result,
+					menu_banners: eventObject.result.menu_banners
+				}, function () {
+					if (loadProducts){
+						this.loadStoreProducts()
+					}					
+				})		
 			}
 		}
 
@@ -827,7 +827,7 @@ export default class Home extends React.Component {
 						if (hasRecommended == false) {
 							value = variant.variant_values[0]
 						}
-						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price)).toFixed(2)
+						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price ? value.price : 0.00)).toFixed(2)
 						selected.push(value)
 					}
 					product.selected_variants = selected
