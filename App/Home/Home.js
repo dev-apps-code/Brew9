@@ -1136,7 +1136,7 @@ export default class Home extends React.Component {
 							selectedColor={"#FFFFFF"}
 							buttonColor={"#2A2929"}
 							borderColor={"#979797"}
-							backgroundColor={"#D8D8D8"}
+							backgroundColor={"#F1F1F1"}
 							style={styles.pickUpDeliveryView}
 							textStyle={styles.optionText}
 							fontSize={10 * alpha}
