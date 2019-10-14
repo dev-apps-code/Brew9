@@ -425,11 +425,7 @@ const styles = StyleSheet.create({
 	},
 	currenrcyText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

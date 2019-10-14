@@ -237,15 +237,7 @@ const styles = StyleSheet.create({
 	},
 	currencyText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD:App/MemberVoucher/ValidVoucher.js
-<<<<<<< HEAD:App/MemberReward/ValidVoucher.js
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ValidVoucher.js
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ValidVoucher.js
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -267,15 +259,7 @@ const styles = StyleSheet.create({
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
-<<<<<<< HEAD:App/MemberVoucher/ValidVoucher.js
-<<<<<<< HEAD:App/MemberReward/ValidVoucher.js
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ValidVoucher.js
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ValidVoucher.js
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -297,15 +281,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
-<<<<<<< HEAD:App/MemberVoucher/ValidVoucher.js
-<<<<<<< HEAD:App/MemberReward/ValidVoucher.js
 		fontFamily: "ClanPro-Book",
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ValidVoucher.js
-=======
-		fontFamily: "SFProText-Medium",
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ValidVoucher.js
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
