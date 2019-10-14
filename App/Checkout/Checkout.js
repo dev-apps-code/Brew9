@@ -248,19 +248,6 @@ export default class Checkout extends React.Component {
 				return
 			}
 
-			// Alert.alert(
-			// 	'Confirmation',
-			// 	'Are you sure you want to confirm the order?',
-			// 	[				 
-			// 	  {
-			// 		text: 'Cancel',
-			// 		onPress: () => console.log('OK Pressed'),
-			// 		style: 'cancel',
-			// 	  },
-			// 	  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
-			// 	],
-			// 	{ cancelable: false }
-			// );
 			this.setState({modal_visible:true})
 			return
 		} else {
@@ -283,6 +270,26 @@ export default class Checkout extends React.Component {
 		// navigate("Transaction", {
 		// 	amount: cart_total
 		// })
+	}
+
+	clearCart() {
+		const { navigation } = this.props
+
+		const { routeName, key } = navigation.getParam('returnToRoute')
+		navigation.navigate({ routeName, key, params: { clearCart: true } })
+	}
+
+	renderSuccessfulPurchaseModal() {
+		return <Brew9Modal
+				title={this.state.modal_title}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				cancelable={false}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.clearCart()
+				}}
+			/>
 	}
 
 	renderConfirmPaymentModal() {
@@ -387,6 +394,7 @@ export default class Checkout extends React.Component {
 		return <View
 			style={styles.checkoutView}>
 			{this.renderConfirmPaymentModal()}
+			{this.renderSuccessfulPurchaseModal()}
 			<ScrollView
 				style={styles.scrollviewScrollView}>
 				<View
