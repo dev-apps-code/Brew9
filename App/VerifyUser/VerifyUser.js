@@ -10,7 +10,7 @@ import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityInd
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
-import PhoneInput from 'react-native-phone-input'
+import PhoneInput from 'react-native-phone-input' // react-native-phone-input@0.2.2
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
@@ -57,7 +57,7 @@ export default class VerifyUser extends React.Component {
 
 	onTermsAndConditionsPressed = (url) => {
 		const { navigate } = this.props.navigation
-		navigate("WebCommonModal", {
+		navigate("WebCommon", {
             title: 'Terms and Conditions',
             web_url: url + '&id=' + this.props.company_id,
         })
@@ -68,6 +68,10 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onSendPressed = () => {
+		if (this.state.is_counting){
+			this.refs.toast.show("Please wait for 2 minutes before trying to resend.");
+			return
+		}
 		this.loadLogin()
 	}
 
@@ -100,14 +104,14 @@ export default class VerifyUser extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log("callbakc done")
+
 			if (eventObject.success) {
-				console.log("callbakc done set state")
+
 				this.setState({
 					login_success: true,
 					is_counting: true,
 					code_from_server: eventObject.result.code,
-					code:eventObject.result.code
+					// code:eventObject.result.code
 				})
 			}
 			this.setState({
@@ -143,11 +147,12 @@ export default class VerifyUser extends React.Component {
 					navigate('TabGroupOne')
 				}                
             }else{
+				this.setState({
+					loading: false,
+				})
 				this.refs.toast.show(eventObject.message)
             }
-            this.setState({
-                loading: false,
-            })
+           
         }
         const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
         dispatch(
@@ -159,6 +164,7 @@ export default class VerifyUser extends React.Component {
 	}
 
 	render() {
+		const { members } = this.props
 		return <View
 			style={styles.verifyuserView}>
 			<View
@@ -166,7 +172,7 @@ export default class VerifyUser extends React.Component {
 				<TouchableOpacity
 					onPress={this.onClosePressed}
 					style={styles.closeButton}>
-					<Text style={styles.closeButtonText}>X</Text>
+					<Text style={styles.closeButtonText}>Skip</Text>
 				</TouchableOpacity>
 				<Image
 					source={require("./../../assets/images/group-24-4.png")}
@@ -182,19 +188,18 @@ export default class VerifyUser extends React.Component {
 						style={{
 							height: 42 * alpha,
 							flexDirection: "row",
-							alignItems: "flex-start",
+							alignItems: "space-between",
 						}}>
 						<View
 							style={styles.countryCodeView}>
 								<PhoneInput
-							ref={(ref) => { this.phone = ref }}
-							initialCountry={this.state.country}
-							style={{marginLeft: 10 * alpha}}
-							onPressFlag={() => {}}
-							textStyle={styles.phoneCountryCodeText}
-							textProps={{keyboardType:"number-pad", editable:false}}
-							onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
-							offset={10}/>
+									ref={(ref) => { this.phone = ref }}
+									initialCountry={this.state.country}
+									style={{marginLeft: 10 * alpha}}
+									textStyle={styles.phoneCountryCodeText}
+									textProps={{keyboardType:"number-pad", editable:false}}
+									onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
+									offset={10}/>
 							</View>
 						<View
 							style={{
@@ -212,25 +217,14 @@ export default class VerifyUser extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-							{ !this.state.login_success && !this.state.is_counting ? <TouchableOpacity
+							 <TouchableOpacity
 								onPress={this.onSendPressed}
 								style={styles.sendButton}>
 								<Text
 									style={styles.sendButtonText}>Send</Text>
-							</TouchableOpacity> : <CountDown
-								until={120}
-								onFinish={() => this.setState({is_counting: false})}
-								style={styles.sendCountdown}
-								size={7}
-								digitStyle={{backgroundColor: 'transparent', padding: 0, width: 20 * alpha, height: 20 * alpha}}
-								digitTxtStyle={styles.countdownText}
-								separatorStyle={{color: '#000000'}}
-								timeToShow={['M', 'S']}
-								timeLabels={{m: null, s: null}}
-								showSeparator
-							/>}
+							</TouchableOpacity> 
 						</View>
-					</View>
+					</View>										
 					{ this.state.login_success ? <View
 						style={styles.activationView}>
 						<TextInput
@@ -251,6 +245,22 @@ export default class VerifyUser extends React.Component {
 								style={styles.verifyButtonText}>Verify</Text>
 						</TouchableOpacity>
 					</View> : null }
+					{this.state.is_counting ? 
+					<View style={styles.countDownContainer}>
+						<CountDown
+							until={120}
+							onFinish={() => this.setState({is_counting: false})}
+							style={styles.sendCountdown}
+							size={7}
+							digitStyle={{backgroundColor: 'transparent'}}
+							digitTxtStyle={styles.countdownText}
+							separatorStyle={{color: '#000000'}}
+							timeToShow={['M', 'S']}
+							timeLabels={{m: null, s: null}}
+							showSeparator
+						/>
+						</View>
+						: undefined}				
 				</View>
 				{this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
@@ -325,7 +335,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		alignSelf: "flex-end",
-		width: 25 * alpha,
 		height: 25 * alpha,
 		marginRight: 11 * alpha,
 		marginTop: 11 * alpha,
@@ -335,8 +344,13 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	closeButtonText: {
+<<<<<<< HEAD
 		color: "black",
 		fontFamily: "ClanPro-Book",
+=======
+		color: "rgb(0, 178, 227)",
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -363,7 +377,11 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "black", 
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -375,17 +393,16 @@ const styles = StyleSheet.create({
 	formView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 329 * alpha,
+		width: 330 * alpha,
+		marginLeft: 10*alpha,
+		marginRight: 10*alpha,
 		height: 100 * alpha,
 		marginTop: 16 * alpha,
 	},
 	countryCodeView: {
-		backgroundColor: "white",
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
-		borderWidth: 0.5,
-		shadowRadius: 10,
-		shadowOpacity: 10,
+		borderWidth: 0.5,	
 		width: 102 * alpha,
 		height: 41 * alpha,
 		flexDirection: "row",
@@ -397,8 +414,6 @@ const styles = StyleSheet.create({
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
 		borderWidth: 0.5,
-		shadowRadius: 1,
-		shadowOpacity: 1,
 		width: 214 * alpha,
 		height: 42 * alpha,
 		flexDirection: "row",
@@ -406,7 +421,11 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(46, 46, 46)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -417,12 +436,15 @@ const styles = StyleSheet.create({
 		height: 25 * alpha,
 		marginLeft: 15 * alpha,
 	},
+	countDownContainer:{
+		marginTop: 20*alpha,
+		width: 330 * alpha,
+		alignItems: "center",
+	},
 	sendButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 4,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+	
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -437,25 +459,31 @@ const styles = StyleSheet.create({
 	},
 	sendButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 	},
 	sendCountdown: {
-		backgroundColor: "white",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
 		width: 72 * alpha,
 		height: 26 * alpha,
-		marginRight: 8 * alpha,
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
+<<<<<<< HEAD
         fontFamily: "ClanPro-Book",
+=======
+        fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -463,10 +491,9 @@ const styles = StyleSheet.create({
     },
 	activationView: {
 		backgroundColor: "white",
-		borderRadius: 7,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+		borderRadius: 7 * alpha,
+		borderColor: "rgb(140, 140, 140)",
+		borderWidth: 0.5,
 		height: 41 * alpha,
 		marginTop: 17 * alpha,
 		flexDirection: "row",
@@ -475,7 +502,11 @@ const styles = StyleSheet.create({
 	activationCodeTextInput: {
 
 		color: "rgb(46, 46, 46)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -489,9 +520,7 @@ const styles = StyleSheet.create({
 	verifyButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 4 * alpha,
-		shadowColor: "rgba(140, 140, 140, 0.5)",
-		shadowRadius: 1,
-		shadowOpacity: 1,
+	
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -502,7 +531,11 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -555,7 +588,11 @@ const styles = StyleSheet.create({
 	errorMessageText: {
 		color: "white",
 		fontSize: 12 * fontAlpha,
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -574,5 +611,6 @@ const styles = StyleSheet.create({
 	reSendButtonImage: {
         resizeMode: "contain",
         marginRight: 10 * alpha,
-    },
+	},
+	
 })

@@ -47,7 +47,7 @@ export default class PointProductCell extends React.Component {
 				<View
 					style={styles.itemView}>
 					<Image
-						source={require("./../../assets/images/bg-03.png")}
+						source={{uri:item.image}}
 						style={styles.imageImage}/>
 					<View
 						style={styles.viewView}>
@@ -141,7 +141,11 @@ const styles = StyleSheet.create({
 	},
 	sectionheadertitleText: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -151,7 +155,11 @@ const styles = StyleSheet.create({
 	},
 	viewmoreButtonText: {
 		color: "rgb(164, 164, 164)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -178,7 +186,7 @@ const styles = StyleSheet.create({
 	},
 	imageImage: {
 		resizeMode: "cover",
-		backgroundColor: "transparent",
+		backgroundColor: "#f6f4f5",
 		width: 170 * alpha,
 		height: 170 * alpha,
 	},
@@ -210,7 +218,7 @@ const styles = StyleSheet.create({
 	},
 	pointsText: {
 		backgroundColor: "transparent",
-		color: "black",
+		color: "rgb(142, 142, 142)",
 		fontFamily: "DINPro-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",

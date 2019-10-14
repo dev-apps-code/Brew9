@@ -9,6 +9,11 @@ import {
   login,
   loginWithFacebook,
   activateAccount,
+  destroy,
+  orders,
+  pointProductRedemption,
+  currentOrder,
+  qrCodeScan
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -27,6 +32,12 @@ function saveCurrentUserToStorage(profile) {
   
   AsyncStorage.setItem("profile", JSON.stringify(profile))
 }
+
+function clearCurrentUser() {
+  
+  AsyncStorage.clear()
+}
+
 export default {
 
   namespace: 'members',
@@ -52,8 +63,11 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      console.log("load profiel",profile)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
+    },
+    destroyCurrentUser(state, {payload}) {
+      clearCurrentUser()
+      return { ...state, profile: null, isReady: true, userAuthToken: "" }
     },
     setLocation(state, { payload }) {
       return { ...state, location: payload}
@@ -130,7 +144,6 @@ export default {
     *loadUpdateProfile({ payload }, { call, put, select })
     {
       try{
-
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
@@ -138,7 +151,6 @@ export default {
             authtoken,
             object,
         )
-        console.log("AuthToken", authtoken)
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('saveCurrentUser')(eventObject.result))
@@ -189,11 +201,10 @@ export default {
             authtoken,
             object,
         )
-        console.log("return")
+
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) { 
-          console.log("return yes",eventObject.result)
-          yield put(createAction('saveCurrentUser')(eventObject.result))
+        if (eventObject.success == true) {           
+          // yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
@@ -246,5 +257,95 @@ export default {
         console.log('loadingCurrentUser', err)
       }
     },
+    *loadDestroy({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            destroy,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        console.log("Destroy", eventObject)
+        if (eventObject.success == true) {
+          yield put(createAction('destroyCurrentUser')(eventObject.result))
+        }else{
+          yield put(createAction('destroyCurrentUser')(eventObject.result))
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
+    *loadOrders({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            orders,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    },
+    *loadPointProductRedemption({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            pointProductRedemption,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
+    *loadCurrentOrder({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            currentOrder,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
+    *loadQrCodeScan({ payload }, { call, put, select })
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        console.log("Authtoken", authtoken)
+        const json = yield call(
+            qrCodeScan,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result.member))
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    },
+
   },
 }

@@ -8,13 +8,18 @@
 
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import {commonStyles} from "../Common/common_style"
+import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import PointProductsItemRequestObject from "../Requests/point_products_item_request_object"
 import {createAction, toTitleCase} from "../Utils";
 import {connect} from "react-redux";
-
-@connect(({ members }) => ({
-	members: members.profile
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading"
+import RedeemRequestObject from "../Requests/redeem_request_object"
+import Brew9Modal from "../Components/Brew9Modal"
+@connect(({ members,shops }) => ({
+	members: members.profile,
+	selectedShop:shops.selectedShop
 }))
 
 export default class PointShopItem extends React.Component {
@@ -46,8 +51,11 @@ export default class PointShopItem extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: true,
-			data: []
+			loading: false,
+			data: [],
+			modal_title:'',
+			modal_description:'',
+			modal_visible:false
 		}
 	}
 
@@ -56,7 +64,22 @@ export default class PointShopItem extends React.Component {
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
-		})
+		})	
+	}
+
+	renderModal(){
+		
+		return (
+			<Brew9Modal
+				title={this.state.modal_title}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.goBack()
+				}}
+			/>
+		)
 	}
 
 	onBackPressed = () => {
@@ -66,7 +89,7 @@ export default class PointShopItem extends React.Component {
 
 	loadPointsProducts(){
 	const { dispatch } = this.props
-		this.setState({ loading: true })
+		// this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -85,8 +108,34 @@ export default class PointShopItem extends React.Component {
 		)
 }
 
-	onRedeemRewardPressed = () => {
-	
+	loadRedeem(){
+		const { dispatch, selectedShop } = this.props
+		const { data } = this.state
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			this.setState({
+				loading: false,
+			}) 
+
+			if (eventObject.success) {
+				this.setState({
+					modal_title:'Successful',
+					modal_description:eventObject.message,
+					modal_visible:true
+				})		
+			}else{
+				this.refs.toast.show(eventObject.message);
+			}		
+		}
+		const obj = new RedeemRequestObject(selectedShop.id)
+		obj.setUrlId(data.id) 
+		dispatch(
+			createAction('point_products/loadRedeem')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	render() {
@@ -96,66 +145,64 @@ export default class PointShopItem extends React.Component {
 		return <View
 				style={styles.pointItemView}>
 				<Image
-					source={require("./../../assets/images/card-04.png")}
+					source={{uri: data.image}}
 					style={styles.productimageImage}/>
 				<View
 					pointerEvents="box-none"
 					style={{
-						height: 50 * alpha,
-					}}>
-					<View
-						style={styles.viewView}/>
-					<View
-						style={styles.viewTwoView}>
+						marginLeft:13 * alpha,	
+						marginTop: 5 * alpha
+					}}>				
+					
 						<View
 							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 13 * alpha,
-								width: 250 * alpha,
-								top: 5 * alpha,
-								height: 40 * alpha,
+							style={{	
+													
 							}}>
 							<Text
-								style={styles.titleText}>{data.name}</Text>
+								style={styles.titleText}>{data.name} </Text>
 							<Text
-								style={styles.valueText}>{data.points}</Text>
+								style={styles.valueText}>{data.points}
+								<Text
+							style={styles.pointsText}> Points</Text></Text>
 						</View>
-						<Text
-							style={styles.pointsText}>Points</Text>
-					</View>
-				</View>
-				<View
+						
+						<View
 					style={styles.viewThreeView}>
 					<Text
 						style={styles.titleTwoText}>Product Type</Text>
 					<Text
-						style={styles.pointsTwoText}> - {toTitleCase(`${data.product_type}`)}</Text>
+						style={styles.pointsText}> - {toTitleCase(`${data.product_type}`)}</Text>
 				</View>
 				<View
 					style={styles.viewFourView}>
 					<Text
 						style={styles.titleThreeText}>Valid Date</Text>
 					<Text
-						style={styles.pointsThreeText}> - {data.expired_in} {data.expired_in_type} from date of purchase</Text>
+						style={styles.pointsText}> - {data.expired_in} {data.expired_in_type} from date of purchase</Text>
 				</View>
 				<View
 					style={styles.viewFiveView}>
 					<Text
 						style={styles.titleFourText}>Time of use</Text>
 					<Text
-						style={styles.pointsFourText}> - {toTitleCase(`${data.can_use_time}`)}</Text>
+						style={styles.pointsText}> - {toTitleCase(`${data.can_use_time}`)}</Text>
 				</View>
-				<View
-					style={{
-						flex: 1,
-					}}/>
+
+				</View>
+			
 				<TouchableOpacity
-					onPress={this.onRedeemRewardPressed}
-					style={styles.purchaseButton}>
+					disabled={!data.can_purchase}
+					onPress={()=>this.loadRedeem()}
+					style={data.can_purchase ? [styles.purchaseButton,commonStyles.normal] : [styles.purchaseButton,commonStyles.disabled] }
+					>
 					<Text
 						style={styles.purchaseButtonText}>Purchase</Text>
 				</TouchableOpacity>
+				{this.renderModal()}
+				<Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}
 }
@@ -184,10 +231,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	productimageImage: {
-		backgroundColor: "transparent",
+		backgroundColor: "#f6f4f5",
 		resizeMode: "center",
-		width: null,
-		height: 200 * alpha,
+		width: windowWidth ,
+		height: 250 * alpha,
 	},
 	viewView: {
 		backgroundColor: "white",
@@ -213,9 +260,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		top: 0,
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
@@ -224,10 +268,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0,
-		top: 17 * alpha,
+		backgroundColor: "transparent",	
 	},
 	pointsText: {
 		color: "rgb(142, 142, 142)",
@@ -237,9 +278,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 52 * alpha,
-		top: 25 * alpha,
+
 	},
 	viewThreeView: {
 		backgroundColor: "transparent",
@@ -254,7 +293,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 13 * alpha,
 		marginTop: 5 * alpha,
 	},
 	pointsTwoText: {
@@ -265,8 +303,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		width: 124 * alpha,
-		marginLeft: 13 * alpha,
 		marginTop: 1 * alpha,
 	},
 	viewFourView: {
@@ -282,7 +318,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 13 * alpha,
 		marginTop: 5 * alpha,
 	},
 	pointsThreeText: {
@@ -295,7 +330,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 324 * alpha,
 		height: 19 * alpha,
-		marginLeft: 13 * alpha,
 	},
 	viewFiveView: {
 		backgroundColor: "transparent",
@@ -310,7 +344,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 13 * alpha,
 		marginTop: 5 * alpha,
 	},
 	pointsFourText: {
@@ -322,18 +355,19 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		width: 324 * alpha,
-		height: 19 * alpha,
-		marginLeft: 13 * alpha,
 	},
 	purchaseButton: {
-		backgroundColor: "rgb(0, 178, 227)",
+		position: "absolute",
+		bottom: 40 *alpha,
+		left:0,
+		width:windowWidth,
 		borderWidth: 0.5,
 		borderColor: "rgb(215, 215, 215)",
 		borderStyle: "solid",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		padding: 0,
+		padding: 0,		
 		height: 51 * alpha,
 	},
 	purchaseButtonText: {

@@ -220,11 +220,11 @@ export default class Login extends React.Component {
 								offset={10}
 
 							/>
-							{/*<TextInput*/}
-							{/*	autoCorrect={false}*/}
-							{/*	keyboardType="phone-pad"*/}
-							{/*	style={styles.textInputTextInput}*/}
-							{/*	onChangeText={(code) => this.setState({code})}/>*/}
+							{/* <TextInput
+							autoCorrect={false}
+							keyboardType="phone-pad"
+							style={styles.textInputTextInput}
+							onChangeText={(code) => this.setState({code})}/> */}
 						</View>
 						<View
 							style={{
@@ -338,7 +338,11 @@ const styles = StyleSheet.create({
 	instructionText: {
 		backgroundColor: "transparent",
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -356,7 +360,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	countryCodeView: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		borderRadius: 7 * alpha,
 		shadowColor: "rgba(140, 140, 140, 0.5)",
 		shadowRadius: 1 * alpha,
@@ -371,6 +375,7 @@ const styles = StyleSheet.create({
 		marginLeft: 0 * alpha,
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
+		backgroundColor: "blue"
 	},
 	bitmapImage: {
 		resizeMode: "center",
@@ -440,7 +445,11 @@ const styles = StyleSheet.create({
 	},
 	facebookbuttonButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

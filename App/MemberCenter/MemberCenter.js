@@ -80,7 +80,7 @@ export default class MemberCenter extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'Brew9',
-			web_url: KURL_INFO + '?page=level_infos&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
 		})
 	}
 
@@ -134,7 +134,7 @@ export default class MemberCenter extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								width: 110 * alpha,
+								// width: 110 * alpha,
 								height: 45 * alpha,
 								marginLeft: 19 * alpha,
 								marginTop: 13 * alpha,
@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: 74 * alpha,
 		height: 2 * alpha,
+		paddingTop: 0,
 	},
 	memberServiceView: {
 		backgroundColor: "transparent",
@@ -497,7 +498,11 @@ const styles = StyleSheet.create({
 	},
 	memberServiceButtonText: {
 		color: "rgb(84, 81, 81)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -526,7 +531,11 @@ const styles = StyleSheet.create({
 	},
 	membershipText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -549,7 +558,11 @@ const styles = StyleSheet.create({
 	},
 	activateButtonButtonText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -565,7 +578,11 @@ const styles = StyleSheet.create({
 	},
 	upgradeButtonText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -592,7 +609,11 @@ const styles = StyleSheet.create({
 	},
 	missionCentreButtonText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -618,7 +639,11 @@ const styles = StyleSheet.create({
 	},
 	walletButtonText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -637,7 +662,11 @@ const styles = StyleSheet.create({
 	nextLevelRewardsText: {
 		backgroundColor: "transparent",
 		color: "rgb(23, 22, 22)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -645,7 +674,11 @@ const styles = StyleSheet.create({
 	},
 	otherLevelRewardButtonText: {
 		color: "rgb(118, 118, 118)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -681,7 +714,11 @@ const styles = StyleSheet.create({
 	discount3Text: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 58, 58)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -690,7 +727,11 @@ const styles = StyleSheet.create({
 	},
 	rm5OffWithRm120SText: {
 		color: "rgb(80, 79, 79)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -713,7 +754,11 @@ const styles = StyleSheet.create({
 	},
 	free2Text: {
 		color: "rgb(59, 58, 58)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -723,7 +768,11 @@ const styles = StyleSheet.create({
 	},
 	buy6Free1Text: {
 		color: "rgb(80, 79, 79)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

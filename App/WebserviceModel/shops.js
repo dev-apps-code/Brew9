@@ -1,4 +1,4 @@
-import { shops, shop_banner } from '../Services/shops'
+import { shops, shop_banner,makeOrder,missions } from '../Services/shops'
 import EventObject from './event_object'
 import {createAction} from  '../Utils/index'
 export default {
@@ -36,6 +36,27 @@ export default {
             typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
+        *loadMakeOrder({ payload }, { call, put, select }) 
+        {
+        try{
+            const { object, callback } = payload
+
+            const authtoken = yield select(state => state.members.userAuthToken)
+
+            const json = yield call(
+                makeOrder,
+                authtoken,
+                object,
+            )
+
+            const eventObject = new EventObject(json)
+            if (eventObject.success == true) {
+
+                yield put(createAction('members/saveCurrentUser')(eventObject.result.member))
+            }
+            typeof callback === 'function' && callback(eventObject)
+            } catch (err) { }
+        }, 
         *loadShopBanners({ payload }, { call, put, select })
         {
             try{
@@ -50,6 +71,22 @@ export default {
                 const eventObject = new EventObject(json)
                 if (eventObject.success == true) {}
                 typeof callback === 'function' && callback(eventObject)
+            } catch (err) { }
+        },
+        *loadMissions({ payload }, { call, put, select }) 
+        {
+        try{
+
+            const { object, callback } = payload
+            const authtoken = yield select(state => state.members.userAuthToken)
+            const json = yield call(
+                missions,
+                authtoken,
+                object,
+            )
+            const eventObject = new EventObject(json)
+            if (eventObject.success == true) {}
+            typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
     },

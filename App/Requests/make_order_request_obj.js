@@ -5,11 +5,17 @@ class MakeOrderRequestObj extends BaseRequestObject{
     constructor(order_items, voucher_item_ids){
         super();
         this.order_items = order_items
-        this.voucher_item_ids = voucher_item_ids
+        this.voucher_item_ids = voucher_item_ids    
     }
 
    getUrlString() {
        return `shops/${this.url_id}/make_order`
+   }
+
+   getFormData(){
+    var string =  JSON.stringify({'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids});
+
+    return string
    }
 }
 export default MakeOrderRequestObj

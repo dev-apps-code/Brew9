@@ -40,11 +40,12 @@ export default class FirstScreen extends React.Component {
     }
 
     componentWillMount() {
-        const { dispatch } = this.props
-        dispatch(createAction('members/loadCurrentUserFromCache')({}))
+     
     }
 
     componentDidMount() {
+        const { dispatch } = this.props
+        dispatch(createAction('members/loadCurrentUserFromCache')({}))
     }
 
     componentDidUpdate() {
@@ -53,13 +54,15 @@ export default class FirstScreen extends React.Component {
 
     checkLoginStatus() {
         const { members } = this.props
+        // console.log("Members", members)
         if (typeof members === 'undefined'|| members === null) {
-            this.props.navigation.navigate("AuthenticationStack")
+            this.props.navigation.navigate("VerifyStack")
         }
         else {
             this.props.navigation.navigate("TabGroupOne")
             this.loadProfile()
         }
+        // this.props.navigation.navigate("VerifyStack")
     }
 
     loadProfile(){
@@ -67,9 +70,7 @@ export default class FirstScreen extends React.Component {
         this.setState({ loading: true })
         const callback = eventObject => {
             if (eventObject.success) {
-                this.setState({
-                    loading: false,
-                })
+              
             }
         }
         const obj = new ProfileRequestObject()

@@ -190,7 +190,11 @@ const styles = StyleSheet.create({
 	commentText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -199,7 +203,11 @@ const styles = StyleSheet.create({
 	},
 	satisfactionText: {
 		color: "rgb(158, 157, 157)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -241,7 +249,11 @@ const styles = StyleSheet.create({
 	},
 	levelText: {
 		color: "rgb(158, 157, 157)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -277,7 +289,11 @@ const styles = StyleSheet.create({
 	dateText: {
 		backgroundColor: "transparent",
 		color: "rgb(200, 200, 200)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -287,7 +303,11 @@ const styles = StyleSheet.create({
 	messageText: {
 		backgroundColor: "transparent",
 		color: "rgb(158, 157, 157)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

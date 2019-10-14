@@ -453,7 +453,11 @@ const styles = StyleSheet.create({
 	balanceText: {
 		backgroundColor: "transparent",
 		color: "rgb(186, 179, 179)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -492,7 +496,11 @@ const styles = StyleSheet.create({
 	autoText: {
 		backgroundColor: "transparent",
 		color: "rgb(192, 192, 192)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -11,9 +11,13 @@ import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-n
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
-
-@connect(({ members }) => ({
-	members:members
+import GetOrdersRequestObject from '../Requests/get_orders_request_object'
+import {createAction} from '../Utils'
+@connect(({ members, shops }) => ({
+	currentMember: members.profile,
+	company_id: members.company_id,
+	location: members.location,
+	selectedShop: shops.selectedShop
 }))
 export default class OrderHistory extends React.Component {
 
@@ -43,145 +47,109 @@ export default class OrderHistory extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			loading_list: true,
+			orders_initial: true,
+			orders_data: [],
+			orders_page: 1,
+		 }
 	}
+
+	loadOrders(page){
+		const { dispatch ,currentMember} = this.props	
+		this.setState({ loading_list: true })
+		const callback = eventObject => {
+			this.setState({loading_list: false,})
+			if (eventObject.success) {
+				this.setState({
+				orders_initial: false,
+				orders_data: this.state.orders_data.concat(eventObject.result),
+				orders_total: eventObject.total,
+				orders_page: this.state.orders_page + 1,				
+				})        				
+			}
+			
+		}
+		const obj = new GetOrdersRequestObject(page)
+		obj.setUrlId(currentMember.id) 
+		// obj.setUrlId(1) 
+		obj.setPage(page)
+		dispatch(
+			createAction('members/loadOrders')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
+
+	loadMore(){
+		const { loading_list , orders_data , orders_total , orders_page} = this.state
+		if (!loading_list){
+			if (orders_total > orders_data.length) {
+				this.loadOrders(orders_page)
+			}
+		}
+	}
+
+
 
 	componentDidMount() {
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+		this.loadOrders(this.state.orders_page)
 	}
 
+	loadGetOrders(){
+		const { dispatch, currentMember } = this.props
+		if (currentMember !== null) {
+			this.setState({ loading: true })
+			const callback = eventObject => {
+				if (eventObject.success) {
+					this.setState({
+						orders: this.state.orders.concat(eventObject.result)
+					})
+				}
+				this.setState({
+					loading: false,
+				})        
+			}
+			const obj = new GetOrderRequestObject()
+			obj.setUrlId(currentMember.id)
+			// obj.setUrlId(1)
+			dispatch(
+				createAction('orders/loadGetOrders')({
+					object:obj,
+					callback,
+				})
+			)
+		}
+	}
+	
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
 	}
 
-	temp_data = [
-		{
-			id: 1,
-			total: 10,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		},
-		{
-			id: 2,
-			total: 20,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		},
-		{
-			id: 3,
-			total: 40,
-			receipt_no: "bw201922112311",
-			payment_time: "2019-11-03 10:10:30",
-			shop_name: "Brew9 Beribi",
-			products: [
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				},
-				{
-					name: "Double Chocolate",
-					image: "http://localhost:3000/uploads/product/image/1/Hot-Chocolate-Recipe-Fifteen-Spatulas-1-640x640.jpg",
-				},
-				{
-					name: "Pineapple Lemonade",
-					image: "http://localhost:3000/uploads/product/image/2/Pineapple-Lemonade-300.jpg",
-				}
-			]
-		}
-	]
-
-
-	orderHistoryFlatListMockData = [{
-		key: "1",
-	}, {
-		key: "2",
-	}, {
-		key: "3",
-	}, {
-		key: "4",
-	}, {
-		key: "5",
-	}, {
-		key: "6",
-	}, {
-		key: "7",
-	}, {
-		key: "8",
-	}, {
-		key: "9",
-	}, {
-		key: "10",
-	}]
-
 	renderOrderHistoryFlatListCell = ({ item }) => {
 	
 		return <OrderCell
 				navigation={this.props.navigation}
+				item={item}
 				order_id={item.id}
 				total={item.total}
 				receipt_no={item.receipt_no}
 				payment_time={item.payment_time}
-				shop_name={item.shop_name}
-				products={item.products}
-				currency={this.props.members.currency}
+				shop_name={item.shop.name}
+				products={item.order_items}
+				status={item.status}
 		/>
 	}
 
 	render() {
-	
+		const {orders_data} = this.state
 		return <View
 				style={styles.OrderHistoryView}>
 				<View
@@ -201,8 +169,9 @@ export default class OrderHistory extends React.Component {
 				<View
 					style={styles.orderHistoryFlatListViewWrapper}>
 					<FlatList
+						onEndReached={this.loadMore.bind(this)}
 						renderItem={this.renderOrderHistoryFlatListCell}
-						data={this.temp_data}
+						data={orders_data}
 						style={styles.orderHistoryFlatList}
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>

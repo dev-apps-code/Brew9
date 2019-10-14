@@ -28,13 +28,13 @@ export default class Notification extends React.Component {
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={params.onBackPressed ? params.onBackPressed : () => null}
                     style={styles.navigationBarItem}>
                     <Image
                         source={require("./../../assets/images/back.png")}
                         style={styles.navigationBarItemIcon}/>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>,
             headerRight: null,
             headerStyle: {
@@ -50,8 +50,8 @@ export default class Notification extends React.Component {
 			tabBarLabel: "Inbox",
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
-				? require('./../../assets/images/profile_selected.png') 
-				: require('./../../assets/images/profile.png')
+				? require('./../../assets/images/inbox_selected.png') 
+				: require('./../../assets/images/inbox.png')
 
 				return <Image
 					source={image}
@@ -256,7 +256,11 @@ const styles = StyleSheet.create({
     noticeText: {
         backgroundColor: "transparent",
         color: "rgb(107, 109, 108)",
+<<<<<<< HEAD
         fontFamily: "ClanPro-Book",
+=======
+        fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         fontSize: 13 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -276,7 +280,11 @@ const styles = StyleSheet.create({
     },
     readallButtonText: {
         color: "rgb(107, 109, 108)",
+<<<<<<< HEAD
         fontFamily: "ClanPro-Book",
+=======
+        fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         fontSize: 13 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -313,7 +321,11 @@ const styles = StyleSheet.create({
 	},
 	noLabelText: {
 		color: "rgb(149, 149, 149)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

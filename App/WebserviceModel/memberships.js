@@ -1,4 +1,4 @@
-import { getMembershipPlan } from '../Services/memberships.js'
+import { getMembershipPlan,pointsProducts } from '../Services/memberships.js'
 import EventObject from './event_object'
 
 export default {
@@ -31,5 +31,21 @@ export default {
                 typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
+        *loadPointsProducts({ payload }, { call, put, select }) 
+    {
+        try{
+
+            const { object, callback } = payload
+            const authtoken = yield select(state => state.members.userAuthToken)
+            const json = yield call(
+                pointsProducts,
+                authtoken,
+                object,
+            )
+            const eventObject = new EventObject(json)
+            if (eventObject.success == true) {}
+            typeof callback === 'function' && callback(eventObject)
+            } catch (err) { }
+        },         
     },
 }

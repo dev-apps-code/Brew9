@@ -1,42 +1,58 @@
 //
-//  UsedVoucher
+//  ExpiredVoucher
 //  Brew9
 //
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Text } from "react-native"
+import { View, TouchableWithoutFeedback, StyleSheet, TouchableOpacity, Image, Text } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import {alpha, fontAlpha} from "../Common/size";
+import {KURL_INFO} from "../Utils/server";
+import { connect } from "react-redux";
+@connect(({ members }) => ({
+    company_id: members.company_id,
+}))
 
-export default class UsedVoucher extends React.Component {
+export default class ExpiredVoucher extends React.Component {
 
 	constructor(props) {
 		super(props)
 	}
 
 	componentDidMount() {
-	
+
 	}
 
-	onUsedVoucherPress = () => {
+	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
-        navigate("VoucherDetail",{voucher:this.props.item})
+		navigate("VoucherDetail",{item:this.props.item})
+	}
+
+	onTermsPressed = () => {
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+
+		navigate("WebCommon", {
+			title: 'Terms & Condition',
+			web_url: KURL_INFO + '?page=voucher_terms&id=' + company_id,
+		})
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
-			onPress={this.onUsedVoucherPress}>
+			onPress={this.onVoucherPress}>
 			<View
 				navigation={this.props.navigation}
-				style={styles.usedvoucher}>
+				style={styles.expiredvoucher}>
 				<View
 					style={styles.cellcontentView}>
 					<Image
 						source={require("./../../assets/images/group-5-copy-3-2.png")}
 						style={styles.backgroundImage}/>
+
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -56,7 +72,7 @@ export default class UsedVoucher extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.dateText}>{this.props.used_date}</Text>
+							style={styles.dateText}>{this.props.available_date}</Text>
 					</View>
 					<View
 						pointerEvents="box-none"
@@ -82,7 +98,7 @@ export default class UsedVoucher extends React.Component {
 							<View
 								style={styles.termsView}>
 								<TouchableOpacity
-									onPress={this.onTermsTwoPressed}
+									onPress={this.onTermsPressed}
 									style={styles.termsButton}>
 									<Text
 										style={styles.termsButtonText}>Terms & Conditions</Text>
@@ -93,8 +109,9 @@ export default class UsedVoucher extends React.Component {
 							</View>
 						</View>
 						<Image
-							source={require("./../../assets/images/bitmap-8.png")}
-							style={styles.usedImage}/>
+							source={require("./../../assets/images/bitmap-9.png")}
+							style={styles.expiredImage}/>
+
 					</View>
 				</View>
 			</View>
@@ -103,7 +120,7 @@ export default class UsedVoucher extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	usedvoucher: {
+	expiredvoucher: {
 		backgroundColor: "transparent",
 		width: "100%",
 		height: 140 * alpha,
@@ -138,7 +155,11 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
+<<<<<<< HEAD:App/MemberReward/ExpiredVoucher.js
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91:App/MemberVoucher/ExpiredVoucher.js
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -202,13 +223,14 @@ const styles = StyleSheet.create({
 		marginLeft: 4 * alpha,
 		marginBottom: 2 * alpha,
 	},
-	usedImage: {
+	expiredImage: {
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		position: "absolute",
-		width: 75 * alpha,
 		right: 0,
+		width: 75 * alpha,
 		top: 0,
-		height: 88 * alpha,
+		height: 86 * alpha,
 	},
+
 })

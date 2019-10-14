@@ -28,7 +28,7 @@ export default class OrderCell extends React.Component {
 		const { navigate } = this.props.navigation
 
 		navigate("OrderReceipt", {
-			order_id: order.id
+			order: order
 		})
 	}
 
@@ -52,7 +52,7 @@ export default class OrderCell extends React.Component {
 
 			<Image
 				key={key}
-				source={{uri: item.image}}
+				source={{uri: item.thumb}}
 				style={styles.productimageImage}/>
 
 		)
@@ -76,10 +76,10 @@ export default class OrderCell extends React.Component {
 								flex: 1,
 							}}/>
 						<TouchableOpacity
-							onPress={() => this.onCompletePressed(this.props.order_id)}
+							onPress={() => this.onCompletePressed(this.props.item)}
 							style={styles.completeButton}>
 							<Text
-								style={styles.completeButtonText}>Completed</Text>
+								style={styles.completeButtonText}>{this.props.status}</Text>
 							<Image
 								source={require("./../../assets/images/group-2.png")}
 								style={styles.completeButtonImage}/>
@@ -131,7 +131,7 @@ export default class OrderCell extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.priceText}>{this.props.currency}{this.props.total}</Text>
+							style={styles.priceText}>${this.props.total}</Text>
 					</View>
 				</View>
 				<View

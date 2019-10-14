@@ -24,7 +24,7 @@ export default class PointShop extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Point Shop",
+			title: "Point Reward",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -86,28 +86,6 @@ export default class PointShop extends React.Component {
 			})
 		)
 	}
-
-	sectionData = [
-
-		{
-			title: 'Main dishes',
-			data: ['Pizza', 'Burger', 'Risotto'],
-		},
-		{
-			title: 'Sides',
-			data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
-		},
-		{
-			title: 'Drinks',
-			data: ['Water', 'Coke', 'Beer'],
-		},
-		{
-			title: 'Desserts',
-			data: ['Cheese Cake', 'Ice Cream'],
-		},
-
-
-	]
 
 	onPointHistoryPressed = () => {
 
@@ -208,7 +186,7 @@ export default class PointShop extends React.Component {
 								onPress={this.onTransactionHistoryPressed}
 								style={styles.transactionHistoryButton}>
 								<Text
-									style={styles.transactionHistoryButtonText}>Point History</Text>
+									style={styles.transactionHistoryButtonText}>Purchase History</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -302,7 +280,11 @@ const styles = StyleSheet.create({
 	},
 	rulesButtonText: {
 		color: "rgb(42, 42, 42)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -21,11 +21,11 @@ export default class PointsCell extends React.Component {
 	}
 
 	onPointsCellPress = () => {
-		if (this.props.shop) {
-			const { navigate } = this.props.navigation
+		// if (this.props.shop) {
+		// 	const { navigate } = this.props.navigation
 
-			navigate("OrderReceipt")
-		}
+		// 	navigate("OrderReceipt")
+		// }
 	}
 
 	render() {
