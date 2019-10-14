@@ -1076,7 +1076,7 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery,isToggleLocation} = this.state
 		
 		return <View style={styles.page1View}>	
-			{this.renderForceUpgradeModal()}	
+			
 			<View style={styles.topsectionView}>
 				
 				<View
@@ -1303,7 +1303,7 @@ export default class Home extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 					</View>
 				</Animated.View>
-				
+				{this.renderForceUpgradeModal()}	
 				
 			
 			<View style={styles.bottomAlertView}>
