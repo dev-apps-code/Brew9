@@ -129,8 +129,12 @@ export default class Home extends React.Component {
 			ignoreVersion: false,
 			appState: AppState.currentState,
 			modal_visible: false,
-			force_upgrade: false,
-			app_url: ''
+			modal_description: "",
+			modal_title: "",
+			modal_cancelable: false,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
+			app_url: '',
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -280,21 +284,16 @@ export default class Home extends React.Component {
 		
 	}
 
-	renderForceUpgradeModal() {
+	renderPopup(){
 		return <Brew9Modal
-				title={"Brew9"}
-				description={this.state.modal_description}
-				visible={this.state.modal_visible}
-				cancelable={this.state.force_upgrade}
-				okayButtonAction={()=> {
-					this.setState({modal_visible:false})
-					Linking.openURL(this.state.app_url)
-				}}
-				cancelButtonAction={()=> {
-					this.setState({modal_visible:false})
-					this.loadStoreProducts()
-				}}
-			/>
+			title={this.state.modal_title}
+			description={this.state.modal_description}
+			visible={this.state.modal_visible}
+			cancelable={this.state.modal_cancelable}
+			okayButtonAction={this.state.modal_ok_action}
+			cancelButtonAction={this.state.modal_cancel_action}
+		/>
+
 	}
 
 	loadStoreProducts() {
@@ -306,7 +305,21 @@ export default class Home extends React.Component {
 			if (eventObject.success) {
 				if (eventObject.result.force_upgrade) {
 
-					this.setState({modal_visible: true, modal_description: eventObject.message, force_upgrade: eventObject.result.force_upgrade, app_url:eventObject.result.url})
+					this.setState({
+						modal_visible: true, 
+						modal_title: "Brew9",
+						modal_description: eventObject.message, 
+						modal_cancelable: eventObject.result.force_upgrade, 
+						modal_ok_action: ()=> {
+							this.setState({modal_visible:false})
+							Linking.openURL(this.state.app_url)
+						},
+						modal_cancel_action: ()=> {
+							this.setState({modal_visible:false})
+							this.loadStoreProducts()
+						},
+						app_url:eventObject.result.url})
+
 					// Alert.alert(
 					// 	'Brew9',
 					// 	eventObject.message,
@@ -415,12 +428,17 @@ export default class Home extends React.Component {
 	_toggleDelivery = (value) => {
 		
 		if (value === 1) {
-			this.refs.toast.show("Delivery Option Coming Soon");
+			this.setState({
+				modal_visible: true, 
+				modal_title: "Brew9",
+				modal_description: "Delivery Option Coming Soon", 
+				modal_cancelable: false, 
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+					this.setState({delivery: 0})
+				},
+			})
 		}
-
-		setTimeout(() => {
-			this.setState({delivery: 0})
-			}, 3000);
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
@@ -1202,7 +1220,7 @@ export default class Home extends React.Component {
 				}
 				{ this.state.isToggleLocation && (
 					<View
-					style={styles.showLocationView}>
+						style={styles.showLocationView}>
 						
 						<MapView
 						style={styles.mapImage}
@@ -1304,8 +1322,8 @@ export default class Home extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 					</View>
 				</Animated.View>
-				{this.renderForceUpgradeModal()}	
-				
+				{/* {this.renderForceUpgradeModal()}	 */}
+				{this.renderPopup()}
 			
 			<View style={styles.bottomAlertView}>
 				{this.renderAlertBar(shop)}
