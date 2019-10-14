@@ -4,44 +4,7 @@
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.expo-shared/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-109-copy@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-109-copy@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-109-copy@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-109-copy@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-109-copy@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-109-copy@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-11-copy-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-copy-5@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-11-copy-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-copy-5@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-11-copy-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-copy-5@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-11@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-11@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-11@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-30@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-30@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-30@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-30@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-30@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-30@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-23@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-23@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-23@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-23@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-23@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-23@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-7-copy-8@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7-copy-8@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-7-copy-8@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7-copy-8@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-7-copy-8@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7-copy-8@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-22@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-22@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-22@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-22@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-22@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-22@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-12@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-12@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-12@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-12@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-12@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-12@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-copy-13@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-copy-13@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-copy-13@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-copy-13@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-copy-13@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-copy-13@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/top-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/top-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/top-fill@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@3x.png" afterDir="false" />
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

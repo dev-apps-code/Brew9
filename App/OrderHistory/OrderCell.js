@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
 	puchongBranchText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 	},
 	completeButtonText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
 	},
 	reviewButtonText: {
 		color: "rgb(94, 94, 94)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
 	},
 	receiptButtonText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

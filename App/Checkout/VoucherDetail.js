@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
 	},
 	currencyText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(68, 68, 68)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
 	},
 	termsButtonText: {
 		color: "rgb(136, 133, 133)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		opacity: 0.39,
 		color: "black",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
 	completeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "ClanPro-Thin",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
