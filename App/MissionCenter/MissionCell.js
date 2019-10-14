@@ -66,7 +66,7 @@ export default class MissionCell extends React.Component {
 						<View
 							style={styles.statusView}>
 							<Text
-								style={styles.completeText}>Complete</Text>
+								style={styles.completeText}>Incomplete</Text>
 						</View>
 					</View>
 				</View>

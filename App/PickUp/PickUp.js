@@ -157,6 +157,22 @@ export default class PickUp extends React.Component {
 				
 			})
 
+			const voucher_items = item.voucher_items.map((item, key) => {
+
+				return <View
+					style={styles.voucherView}
+					key={key}>
+					<Text
+						style={styles.nameFourText}>{item.voucher.name}</Text>
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<Text
+						style={styles.descriptionThreeText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+				</View>
+			})
+
 			return <View
 				style={styles.pickUpQueueView}
 				key={key}>
@@ -380,6 +396,7 @@ export default class PickUp extends React.Component {
 							style={styles.cartView}>
 							
 							{order_items}
+							{voucher_items}
 						</View>
 					</View>
 					<View
@@ -1216,5 +1233,33 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 24 * alpha,
+	},
+
+	voucherView: {
+		backgroundColor: "transparent",
+		height: 18 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 25 * alpha,
+		marginBottom: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameFourText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 12* fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	descriptionThreeText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
 	},
 })

@@ -77,7 +77,7 @@ export default class OrderReceipt extends React.Component {
 		Linking.openURL(`tel:${phone_no}`)
 	}
 
-	renderOrderItems(items) {
+	renderOrderItems(items, vouchers) {
 
 		const order_items = items.map((item, key) => {
 
@@ -130,8 +130,25 @@ export default class OrderReceipt extends React.Component {
 			}
 		})
 
+		const voucher_items = vouchers.map((item, key) => {
+
+			return <View
+				style={styles.voucherView}
+				key={key}>
+				<Text
+					style={styles.nameFourText}>{item.voucher.name}</Text>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+				<Text
+					style={styles.descriptionThreeText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+			</View>
+		})
+
 		return <View style={styles.orderitemsView}>
 			{order_items}
+			{voucher_items}
 		</View>
 	}
 	
@@ -212,7 +229,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.callView}>
 									<TouchableOpacity
-										onPress={this.onCallPressed(item.shop.phone_no)}
+										onPress={this.onCallPressed(order.shop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-23.png")}
@@ -244,7 +261,7 @@ export default class OrderReceipt extends React.Component {
 							</View>
 							<View
 								style={styles.lineTwoView}/>
-							{this.renderOrderItems(order.order_items)}
+							{this.renderOrderItems(order.order_items, order.voucher_items)}
 							{/* <View
 								style={styles.voucherView}>
 								<Text
@@ -751,5 +768,31 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		marginRight: 3 * alpha,
+	},
+
+	voucherView: {
+		backgroundColor: "transparent",
+		height: 18 * alpha,
+		marginBottom: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameFourText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Bold",
+		fontSize: 12* fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+	},
+	descriptionThreeText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
 	},
 })
