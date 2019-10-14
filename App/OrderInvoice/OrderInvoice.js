@@ -306,7 +306,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -320,7 +324,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -337,7 +345,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -354,7 +366,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -381,7 +397,11 @@ const styles = StyleSheet.create({
 	receiptAmountText: {
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -413,7 +433,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -444,7 +468,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -475,7 +503,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -502,7 +534,11 @@ const styles = StyleSheet.create({
 	personalButtonText: {
 		color: "rgb(76, 76, 76)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -533,7 +569,11 @@ const styles = StyleSheet.create({
 	enterpriseButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -565,7 +605,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -579,7 +623,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -613,7 +661,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -627,7 +679,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -654,7 +710,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -668,7 +728,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -695,7 +759,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -709,7 +777,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -736,7 +808,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -750,7 +826,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -776,7 +856,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -790,7 +874,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91

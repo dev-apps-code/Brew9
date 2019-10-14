@@ -911,7 +911,11 @@ const styles = StyleSheet.create({
 	levelButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -990,8 +994,11 @@ const styles = StyleSheet.create({
 	pointText: {
 		color: "rgb(32, 32, 32)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 =======
+=======
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1011,6 +1018,9 @@ const styles = StyleSheet.create({
 	pointDisableText: {
 		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
+<<<<<<< HEAD
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1037,7 +1047,11 @@ const styles = StyleSheet.create({
 	pointbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1063,8 +1077,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 =======
+=======
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1084,6 +1101,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
+<<<<<<< HEAD
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1094,7 +1114,11 @@ const styles = StyleSheet.create({
 	rewardbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1135,7 +1159,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1160,8 +1188,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 =======
+=======
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1194,6 +1225,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
 		fontFamily: "SFProText-Medium",
+<<<<<<< HEAD
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1216,7 +1250,11 @@ const styles = StyleSheet.create({
 	buttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1262,7 +1300,11 @@ const styles = StyleSheet.create({
 	pointshopbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1289,7 +1331,11 @@ const styles = StyleSheet.create({
 	clubbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1380,7 +1426,11 @@ const styles = StyleSheet.create({
 	memberbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1465,7 +1515,11 @@ const styles = StyleSheet.create({
 	orderbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1531,7 +1585,11 @@ const styles = StyleSheet.create({
 	personalbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1612,7 +1670,11 @@ const styles = StyleSheet.create({
 	qrbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1711,7 +1773,11 @@ const styles = StyleSheet.create({
 	redeembuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1780,7 +1846,11 @@ const styles = StyleSheet.create({
 	notificationbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -1827,7 +1897,11 @@ const styles = StyleSheet.create({
 	aboutbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91

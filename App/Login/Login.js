@@ -339,7 +339,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -446,7 +450,11 @@ const styles = StyleSheet.create({
 	facebookbuttonButtonText: {
 		color: "white",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91

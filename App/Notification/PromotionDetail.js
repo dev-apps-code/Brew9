@@ -97,7 +97,11 @@ const styles = StyleSheet.create({
 	labelText: {
 		color: "black",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -111,7 +115,11 @@ const styles = StyleSheet.create({
 	titleText: {
 		color: "black",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -148,7 +156,11 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "black",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91

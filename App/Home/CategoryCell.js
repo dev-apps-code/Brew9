@@ -75,7 +75,11 @@ const styles = StyleSheet.create({
 	labelText: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -88,7 +92,11 @@ const styles = StyleSheet.create({
 	labelImageText: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -101,7 +109,11 @@ const styles = StyleSheet.create({
 	labelText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -114,7 +126,11 @@ const styles = StyleSheet.create({
 	labelImageText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

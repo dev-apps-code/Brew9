@@ -121,7 +121,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -134,7 +138,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(148, 148, 148)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -147,7 +155,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(148, 148, 148)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -162,7 +174,11 @@ const styles = StyleSheet.create({
 	redeemTimeText: {
 		color: "rgb(189, 186, 186)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -178,7 +194,11 @@ const styles = StyleSheet.create({
 	redeemText: {
 		color: "rgb(189, 186, 186)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
@@ -191,7 +211,11 @@ const styles = StyleSheet.create({
 	shopText: {
 		color: "rgb(0, 178, 227)",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 =======
 		fontFamily: "SFProText-Medium",
 >>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91

@@ -19,7 +19,10 @@ import {
 	ScrollView, 
 	TouchableWithoutFeedback,
 	ActivityIndicator,
-	Platform
+	Platform,
+	Alert,
+	Linking,
+	AppState	
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -40,7 +43,8 @@ import _ from 'lodash'
 import AutoHeightImage from 'react-native-auto-height-image'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
-
+import MapView from 'react-native-maps';
+import openMap from 'react-native-open-maps';
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -50,7 +54,7 @@ import * as Permissions from 'expo-permissions'
 export default class Home extends React.Component {
 	
 	static navigationOptions = ({ navigation }) => {
-
+		
 		const { params = {} } = navigation.state
 		return {
 			headerTintColor: "black",
@@ -64,24 +68,33 @@ export default class Home extends React.Component {
 						style={styles.navigationBarItemIcon}/>
 				</TouchableOpacity>
 			</View>,
-			headerRight: null,
+			headerRight: <View
+				style={styles.headerRightContainer}>
+				<TouchableOpacity
+					onPress={params.onQrScanPressed ? params.onQrScanPressed : () => null}
+					style={styles.navigationBarItem}>
+					<Image
+						source={require("./../../assets/images/scan_qr_button.png")}
+						style={styles.navigationBarRightItemIcon}/>
+				</TouchableOpacity>
+			</View>,
 		}
 	}
 
 	static tabBarItemOptions = ({ navigation }) => {
 	
 		return {
-				tabBarLabel: "Order",
-				tabBarIcon: ({ iconTintColor, focused }) => {
-					const image = focused 
-					? require('./../../assets/images/menu_selected.png') 
-					: require('./../../assets/images/menu.png')
-	
-					return <Image
-						source={image}
-						style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha}}/>
-				},
-			}
+			tabBarLabel: "Order",
+			tabBarIcon: ({ iconTintColor, focused }) => {
+				const image = focused 
+				? require('./../../assets/images/menu_selected.png') 
+				: require('./../../assets/images/menu.png')
+
+				return <Image
+					source={image}
+					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha}}/>
+			},
+		}
 	}
 
 	constructor(props) {
@@ -110,10 +123,45 @@ export default class Home extends React.Component {
 			selected_promotion: "",
 			isPromoToggle: false,
 			isToggleLocation: false,
+			ignoreVersion: false,
+			appState: AppState.currentState,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
 	}
+
+	onQrScanPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("ScanQr")
+	}
+
+	registerForPushNotificationsAsync = async() => {
+		const { status: existingStatus } = await Permissions.getAsync(
+		  Permissions.NOTIFICATIONS
+		);
+		let finalStatus = existingStatus;
+	  
+		// only ask if permissions have not already been determined, because
+		// iOS won't necessarily prompt the user a second time.
+		if (existingStatus !== 'granted') {
+		  // Android remote notification permissions are granted during the app
+		  // install, so this will only ask on iOS
+		  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		  finalStatus = status;
+		}
+	  
+		// Stop here if the user did not grant permissions
+		if (finalStatus !== 'granted') {
+		  return;
+		}
+	  
+		// Get the token that uniquely identifies this device
+		let token = await Notifications.getExpoPushTokenAsync();
+	  
+		// POST the token to your backend server from where you can retrieve it to send push notifications.
+		this.loadStorePushToken(token)
+	  }
 
 	getLocationAsync = async () => {
 
@@ -131,11 +179,11 @@ export default class Home extends React.Component {
 	
 	  componentDidUpdate(prevProps, prevState) {
 
-		if (prevProps.location != this.props.location) {
+		if (prevProps.location != this.props.location && prevProps.location != null) {
 		  this.loadShops(false)
 		}
-
 	  }
+
 	componentWillMount() {
 		if (Platform.OS === 'android') {
 			this.setState({
@@ -148,12 +196,32 @@ export default class Home extends React.Component {
 		dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+
+		this.props.navigation.setParams({
+			onQrScanPressed: this.onQrScanPressed,
+		})
 		this.loadShops(true)
+		AppState.addEventListener('change', this._handleAppStateChange);
+
 		// this.loadStorePushToken()
+		await this.registerForPushNotificationsAsync()
 	}
 
-	loadStorePushToken() {
+	componentWillUnmount() {
+		this.removeNavigationListener()
+		AppState.removeEventListener('change', this._handleAppStateChange);
+	}
+
+	_handleAppStateChange = nextAppState => {
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			this.getLocationAsync();
+		}
+		this.setState({ appState: nextAppState });
+	  };
+
+
+	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => {
 		  if (eventObject.success) {
@@ -162,7 +230,7 @@ export default class Home extends React.Component {
 		}
 
 		if (currentMember != null){
-			const obj = new PushRequestObject('device_key', 'device_type', 'push_identifier', "os")
+			const obj = new PushRequestObject('device_key', 'device_type', token, Platform.OS)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadStorePushToken')({
@@ -172,22 +240,23 @@ export default class Home extends React.Component {
 			)
 		}
 	}
-
 	loadShops(loadProducts){
+
+		console.log("Status", loadProducts)
 		const { dispatch,company_id,location } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
-			if (eventObject.success) {
-				this.setState({
-					shop: eventObject.result,
-					menu_banners: eventObject.result.menu_banners
-				}, function () {
-					if (loadProducts){
-						this.loadStoreProducts()
-					}					
-				})
+			if (eventObject.success) {			
+					this.setState({
+						shop: eventObject.result,
+						menu_banners: eventObject.result.menu_banners
+					}, function () {
+						if (loadProducts){
+							this.loadStoreProducts()
+						}					
+					})		
 			}
 		}
 
@@ -212,6 +281,21 @@ export default class Home extends React.Component {
 
 		const callback = eventObject => {
 			if (eventObject.success) {
+				if (eventObject.result.force_upgrade) {
+
+					Alert.alert(
+						'Brew9',
+						eventObject.message,
+						eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
+							[ 
+								{ text: 'Cancel', style: 'cancel', onPress: () => {
+									this.loadStoreProducts()
+								}}, 
+								{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
+						{cancelable: eventObject.result.force_upgrade},
+					);
+					
+				} else {
 				this.setState({
 					data: eventObject.result,
 					total: eventObject.total,
@@ -222,17 +306,18 @@ export default class Home extends React.Component {
 					var index_length = 0
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
-						data[index].scroll_index = index_length + menu_banners.length
+						data[index].scroll_index = index_length
 						items = items.concat(data[index].products)						
 						index_length = index_length + data[index].products.length
 					}
 					this.setState({
-						products: this.state.menu_banners.concat(items),
+						products: menu_banners.concat(items),
 						data: data
 					}, function () {
 						
 					})
 				}.bind(this))
+			}
 			}
 			this.setState({
 				isRefreshing: false,
@@ -262,12 +347,33 @@ export default class Home extends React.Component {
 
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
+		const { navigation } = this.props
+		this.navigationListener = navigation.addListener('willFocus', payload => {
+			this.removeNavigationListener()
+			const { state } = payload
+    		const { params } = state
+			const { clearCart } = params
+			
+			if (clearCart) {
+				this.onClearPress()
+			}
+		})
+
 		navigate("Checkout", {
 			cart: this.state.cart,
 			cart_total_quantity: this.state.cart_total_quantity,
 			cart_total: this.state.cart_total,
 			shop: this.state.shop,
+			returnToRoute: navigation.state,
+			clearCart: false
 		})
+	}
+
+	removeNavigationListener() {
+		if (this.navigationListener) {
+		  this.navigationListener.remove()
+		  this.navigationListener = null
+		}
 	}
 
 	onBannerPressed = (item,index) => {
@@ -295,7 +401,21 @@ export default class Home extends React.Component {
 
 	onSelectCategory = (scroll_index, selected_index) => {
 		// console.log("Scroll Index", scroll_index)
-		this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
+
+		let data = [...this.state.data]
+
+		for (var index in data) {
+			if ( index == selected_index ) {
+				data[index].selected = true				
+			}else{
+				data[index].selected = false
+			}
+		}
+		this.setState( { data })
+
+		if (scroll_index < this.state.products.length){
+			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
+		}		
 	}
 
 	reachProductIndex = ( viewableItems, changed ) => {
@@ -672,7 +792,18 @@ export default class Home extends React.Component {
 					var selected = []
 					for (var index in product.variants) {
 						var variant = product.variants[index]
-						var value = variant.required ? variant.variant_values[0] : null
+						var hasRecommended = false
+						var value = null
+						for (var index in variant.variant_values) {
+							if (hasRecommended == false) {
+								value = variant.variant_values[index]
+								hasRecommended = variant.variant_values[index].recommended
+							}
+						}
+						if (hasRecommended == false) {
+							value = variant.variant_values[0]
+						}
+						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price)).toFixed(2)
 						selected.push(value)
 					}
 					product.selected_variants = selected
@@ -705,7 +836,7 @@ export default class Home extends React.Component {
 
 	renderFeaturedPromo(shop, cart) {
 
-		if (shop !== null && shop.featured_promotion != null) {
+		if (shop !== null && shop.featured_promotion !== null) {
 			
 			return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
@@ -723,17 +854,9 @@ export default class Home extends React.Component {
 		let select_quantity = this.state.select_quantity
 
 		let filtered = selected_product.selected_variants.filter(function(el) { return el })
-		let variant_array = filtered.map(a => a.value)
+		let variant_array = filtered.map(a => a.value)	
 		
-		const {selectedShop} = this.props
-		
-		var enabled = selected_product.enabled
-
-		if (selectedShop != null){
-			if (selectedShop.can_order == false){
-				enabled = false
-			}
-		}
+		var enabled = selected_product.enabled		
 
 		const ingredients = selected_product.ingredients.map((item, key) => {
 			return <View
@@ -870,7 +993,6 @@ export default class Home extends React.Component {
 									}}>
 									<Text
 										style={styles.quantityText}>{select_quantity}</Text>
-
 								</View>
 								<View
 									pointerEvents="box-none"
@@ -928,9 +1050,7 @@ export default class Home extends React.Component {
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,cart,delivery} = this.state
-
-		let show_promo = false
+		let {shop,cart,delivery,isToggleLocation} = this.state
 		
 		return <View style={styles.page1View}>	
 						
@@ -993,7 +1113,7 @@ export default class Home extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}m</Text>
+							style={styles.distance1kmText}>Distance {shop ? shop.distance : "0"}km</Text>
 						<View
 							style={{
 								flex: 1,
@@ -1004,11 +1124,17 @@ export default class Home extends React.Component {
 								onPress={this.onMorePressed}
 								style={styles.moreButton}>
 								<Text
-									style={styles.moreButtonText}>More</Text>
+									style={styles.moreButtonText}>{isToggleLocation ? "Hide" : "More"}</Text>
 							</TouchableOpacity>
-							<Image
-								source={require("./../../assets/images/bitmap-14.png")}
-								style={styles.bitmapImage}/>
+							{ isToggleLocation ? 
+								<Image
+									source={require("./../../assets/images/bitmap-15.png")}
+									style={styles.bitmapImage}/> :
+								<Image
+									source={require("./../../assets/images/bitmap-14.png")}
+									style={styles.bitmapImage}/>
+							}
+							
 						</View>
 					</View>
 					
@@ -1053,6 +1179,28 @@ export default class Home extends React.Component {
 				{ this.state.isToggleLocation && (
 					<View
 					style={styles.showLocationView}>
+						
+						<MapView
+						style={styles.mapImage}
+						initialRegion={{
+							latitude: shop ? parseFloat(shop.latitude) : 0.0,
+							longitude: shop ? parseFloat(shop.longitude) : 0.0,
+							latitudeDelta:0.1,
+							longitudeDelta:0.1,
+						}}					
+						onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}			  
+						>
+								<MapView.Marker
+									ref={marker => (this.marker = marker)}
+									coordinate={{
+										latitude: shop ? parseFloat(shop.latitude) : 0.0,
+										longitude: shop ? parseFloat(shop.longitude) : 0.0,
+									}
+									}
+									title={shop.name}
+									description={shop.location}
+									/>
+							</MapView>
 					{/* <View
 						style={styles.deliveryView}>
 						<View
@@ -1294,12 +1442,7 @@ export default class Home extends React.Component {
 			// Simplest usage.
 			url: this.state.selected_promotion,
 		}]	 
-		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>
-			<TouchableOpacity
-					onPress={this.onClosePressed}
-					style={styles.closeGalleryButton}>
-					<Text style={styles.closeGalleryButtonText}>X</Text>
-				</TouchableOpacity>
+		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<ScrollView
             style={{}}>
@@ -1307,7 +1450,12 @@ export default class Home extends React.Component {
                 source={{uri:  this.state.selected_promotion}}
                 width={windowWidth}
                 style={styles.bannerImage}/>
-        </ScrollView>
+        </ScrollView>		
+		<TouchableOpacity
+					onPress={this.onClosePressed}
+					style={styles.closeGalleryButton}>
+					<Text style={styles.closeGalleryButtonText}>X</Text>
+				</TouchableOpacity>
 		</Modal>
 	}
 			
@@ -1322,9 +1470,19 @@ const styles = StyleSheet.create({
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
 	},
+	navigationBarRightItemIcon: {
+		resizeMode: "contain",
+		width: 30 * alpha,
+		height: 30 * alpha,
+		tintColor: "black",
+	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
+	},
+	headerRightContainer: {
+		flexDirection: "row",
+		marginRight: 8 * alpha,
 	},
 	page1View: {
 		backgroundColor: "rgb(243, 243, 243)",
@@ -1359,14 +1517,19 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 73 * alpha,
+		width: 190 * alpha,
 		height: 19 * alpha,
 		marginTop: 6 * alpha,
 	},
 	branchButtonText: {
 		color: "rgb(99, 97, 97)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 		fontSize: 16 * fontAlpha,
+=======
+		fontFamily: "SFProText-Medium",
+		fontSize: 15 * fontAlpha,
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -1398,12 +1561,20 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	optionText: {
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 	},
 	pickUpText: {
 		color: "rgb(253, 253, 253)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1414,7 +1585,11 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1424,7 +1599,11 @@ const styles = StyleSheet.create({
 	distance1kmText: {
 		backgroundColor: "transparent",
 		color: "rgb(188, 181, 181)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1450,7 +1629,11 @@ const styles = StyleSheet.create({
 	},
 	moreButtonText: {
 		color: "rgb(162, 162, 162)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1647,7 +1830,11 @@ const styles = StyleSheet.create({
 	},
 	clearButtonText: {
 		color: "rgb(144, 141, 141)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1729,7 +1916,11 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1744,10 +1935,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 25 * alpha,
-		height: 25 * alpha,
-		top: 51 * alpha,
-		right: 23 * alpha,
+		width: 40 * alpha,
+		height: 50 * alpha,
+		top: 25 * alpha,
+		right: 25 * alpha,
 	},
 	closeGalleryButtonImage: {
 		resizeMode: "contain",
@@ -1755,7 +1946,11 @@ const styles = StyleSheet.create({
 	},
 	closeGalleryButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1776,7 +1971,11 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1786,7 +1985,11 @@ const styles = StyleSheet.create({
 	},
 	descriptionHeaderText: {
 		color: "rgb(167, 167, 167)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1797,7 +2000,11 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(167, 167, 167)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1817,7 +2024,11 @@ const styles = StyleSheet.create({
 	ingredientText: {
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1834,7 +2045,11 @@ const styles = StyleSheet.create({
 	},
 	milkText: {
 		color: "rgb(167, 167, 167)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1852,7 +2067,11 @@ const styles = StyleSheet.create({
 	},
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1888,7 +2107,11 @@ const styles = StyleSheet.create({
 	},
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1915,7 +2138,11 @@ const styles = StyleSheet.create({
 	},
 	selectedButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1933,7 +2160,11 @@ const styles = StyleSheet.create({
 	},
 	optiontitleText: {
 		color: "rgb(141, 141, 141)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1957,7 +2188,11 @@ const styles = StyleSheet.create({
 	},
 	recommendedButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1969,7 +2204,11 @@ const styles = StyleSheet.create({
 	},
 	unavailableButtonText: {
 		color: "rgb(201, 201, 201)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2002,7 +2241,11 @@ const styles = StyleSheet.create({
 	},
 	choiceThreeButtonText: {
 		color: "rgb(82, 80, 80)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2025,7 +2268,11 @@ const styles = StyleSheet.create({
 	},
 	choiceTwoButtonText: {
 		color: "rgb(82, 80, 80)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2048,7 +2295,11 @@ const styles = StyleSheet.create({
 	},
 	choiceButtonText: {
 		color: "rgb(82, 80, 80)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2075,7 +2326,11 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2090,7 +2345,11 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2170,7 +2429,11 @@ const styles = StyleSheet.create({
 	},
 	addToCartButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2203,7 +2466,11 @@ const styles = StyleSheet.create({
 	},
 	alertViewTitle:{
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2213,7 +2480,11 @@ const styles = StyleSheet.create({
 	},
 	alertViewText:{
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2248,7 +2519,11 @@ const styles = StyleSheet.create({
 	deliveryTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2257,7 +2532,11 @@ const styles = StyleSheet.create({
 	freeWithRm40SpendText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2267,7 +2546,11 @@ const styles = StyleSheet.create({
 	deliveredByBrew9Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2277,7 +2560,11 @@ const styles = StyleSheet.create({
 	deliverAreaAffectText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2287,7 +2574,11 @@ const styles = StyleSheet.create({
 	deliveryRm5ExtraText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2304,7 +2595,11 @@ const styles = StyleSheet.create({
 	branchInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2313,7 +2608,11 @@ const styles = StyleSheet.create({
 	branchAddress: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2324,7 +2623,11 @@ const styles = StyleSheet.create({
 	branchContact: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2334,7 +2637,11 @@ const styles = StyleSheet.create({
 	businessHour1000Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2360,9 +2667,9 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 100 * alpha,
-		height: 50 * alpha,
-		bottom: 40 * alpha,
+		width: 60 * alpha,
+		height: 30 * alpha,
+		bottom: 20 * alpha,
 		left: 10 * alpha
 	},
 	featuredpromoButton3: {
@@ -2372,8 +2679,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 100 * alpha,
-		height: 50 * alpha,
+		width: 60 * alpha,
+		height: 30 * alpha,
 		bottom: 60 * alpha,
 		left: 10 * alpha
 	},
@@ -2381,5 +2688,10 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		width: "100%",
 		height: "100%"
+	},
+	mapImage: {
+		backgroundColor: "blue",
+		height: 200 * alpha,
+		width: "100%",
 	},
 })

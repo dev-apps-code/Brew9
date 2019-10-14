@@ -7,10 +7,10 @@
 //
 
 import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
+import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
-import Modal from "react-native-modal"
 import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
@@ -18,7 +18,9 @@ import ActivateAccountRequestObject from '../Requests/activate_account_request_o
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
 import { commonStyles } from "../Common/common_style"
-
+import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
+import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
+import _ from 'lodash'
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -55,7 +57,14 @@ export default class Checkout extends React.Component {
 		this.state = {
 			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
-			cart_total: this.props.navigation.getParam("cart_total", 0.00)
+			cart_total: this.props.navigation.getParam("cart_total", 0.00),
+			vouchers_to_use:[],
+			valid_vouchers:[],
+			discount:0,
+			cart:this.props.navigation.getParam("cart", []),
+			modal_title:'Success',
+			modal_description:'',
+			modal_visible:false
 		}
 	}
 
@@ -64,8 +73,47 @@ export default class Checkout extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+		this.loadValidVouchers()
 	}
 
+	renderModal(){
+		
+		return (
+			<Brew9Modal
+				title={this.state.modal_title}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.goBack()
+				}}
+			/>
+		)
+	}
+
+	loadValidVouchers(){
+		const { dispatch,currentMember,selectedShop } = this.props
+		const {cart} = this.state
+		if (currentMember != null ){
+			const callback = eventObject => {
+				if (eventObject.success) {
+					this.setState({ 
+						valid_vouchers:eventObject.result
+					})	
+					}			      
+				}
+
+			const obj = new ValidVouchersRequestObject(selectedShop.id,cart)
+			obj.setUrlId(currentMember.id)
+			dispatch(
+				createAction('vouchers/loadVouchersForCart')({
+					object:obj,
+					callback,
+				})
+			)
+		}	
+	}
+	
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
@@ -102,29 +150,90 @@ export default class Checkout extends React.Component {
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("CheckoutVoucher")
+		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.state.cart,addVoucherAction:this.addVoucherItemsToCart})
+	}
+
+	addVoucherItemsToCart =(voucher_item) => {
+
+		const {vouchers_to_use} = this.state
+	
+		if (vouchers_to_use.length == 0){
+			this.setState({vouchers_to_use:[voucher_item]})
+			this.calculateVoucherDiscount([voucher_item])
+		}else{
+			let array = []
+			
+			
+			for (var index in vouchers_to_use){
+				var v = vouchers_to_use[index]
+				// let existing_voucher_types = array.map(a => a.voucher.voucher_type)
+				console.log("vocuher yype exitint",v.voucher.voucher_type)
+				console.log("vocuher yype new",voucher_item.voucher.voucher_type)
+				if (voucher_item.voucher_type == "SkipQueue" && v.voucher.voucher_type !== "SkipQueue"){
+					array.push(v)	
+					
+					continue
+				}
+				if (voucher_item.voucher_type !== "SkipQueue" && v.voucher.voucher_type == "SkipQueue"){
+					array.push(v)	
+					continue
+				}						
+			}
+			array.push(voucher_item)
+			
+			this.setState({vouchers_to_use:array})
+			this.calculateVoucherDiscount(array)
+		}		
+	}
+
+	calculateVoucherDiscount(vouchers_to_use){
+		const {cart_total} = this.state
+		var discount = 0
+		for (var index in vouchers_to_use){
+			var item = vouchers_to_use[index]
+			let voucher = item.voucher
+			if (item.voucher.voucher_type == "Cash Voucher"){
+				discount = item.voucher.display_value
+			}else{
+				
+				if (voucher.discount_type != null && voucher.discount_type != '' && voucher.discount_price != null && voucher.discount_price != 0){
+					if (voucher.discount_type == "fixed"){
+						discount = voucher.discount_price
+					}else if(voucher.discount_type == "percent"){
+						discount = cart_total * voucher.discount_price/100.0						
+					}
+				}
+			}
+		}
+		this.setState({discount:discount})
 	}
 
 	onPaymentButtonPressed = () => {
 		
-		
-		// if not enough credit ...
-
-		// if no phone no, ask to update
+			
 	}
 
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 
-		const {cart} = this.state
+		const {cart,vouchers_to_use} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			this.setState({
+				loading: false,
+			})
 			if (eventObject.success) {
 				this.setState({
-				loading: false,
-				})        
+					modal_title:'Success',
+					modal_description:eventObject.message,
+					modal_visible:true
+				})
+			}else{
+				this.refs.toast.show(eventObject.message);
 			}
 		}
+
+		const voucher_item_ids = vouchers_to_use.map(item => item.id)
 		const obj = new MakeOrderRequestObj(cart, voucher_item_ids)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
@@ -138,10 +247,18 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total} = this.state
-		const {currentMember } = this.props
+		const {currentMember,selectedShop, navigation } = this.props
+
+		// const { routeName, key } = navigation.getParam('returnToRoute')
+		// navigation.navigate({ routeName, key, params: { clearCart: true } })
 
 		if (currentMember) {
-			if (cart_total < parseFloat(currentMember.credits).toFixed(2)){
+			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away");
+			// 	return
+			// }
+
+			if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
 				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 				return
 			}
@@ -149,21 +266,20 @@ export default class Checkout extends React.Component {
 			Alert.alert(
 				'Confirmation',
 				'Are you sure you want to confirm the order?',
-				[
-				  { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+				[				 
 				  {
 					text: 'Cancel',
-					onPress: () => console.log('Cancel Pressed'),
+					onPress: () => console.log('OK Pressed'),
 					style: 'cancel',
 				  },
-				  { text: 'OK', onPress: () => console.log('OK Pressed') },
+				  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
 				],
 				{ cancelable: false }
 			  );
 
 			return
 		} else {
-			navigate("VerifyStack")
+			navigate("VerifyUserStack")
 			return
 		}
 
@@ -172,8 +288,7 @@ export default class Checkout extends React.Component {
 
 	onClosePressed = () => {
 
-		const {currentMember} = this.props
-		const {cart_total }= this.state
+	
 		this.setState({ 
 			loginModalVisible: false, 
 			registerModalVisible: false, 
@@ -187,13 +302,35 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let cart = this.props.navigation.getParam("cart", "")
-		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
 		
-		let {cart_total} = this.state
-		let {currentMember, selectedShop} = this.props
+		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
 
+		let {cart,cart_total,vouchers_to_use,discount} = this.state
+		let {currentMember, selectedShop} = this.props
+		var final_price = cart_total - discount 
+		if (final_price < 0){
+			final_price = 0
+		}
+		final_price = final_price.toFixed(2)
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
+
+		const renderVouchers = vouchers_to_use.map((item,key) => {
+			return (
+				<View
+					key={key}
+					pointerEvents="box-none"
+					style={{
+						height: 18 * alpha,
+						marginLeft: 16 * alpha,
+						marginRight: 16 * alpha,
+						flexDirection: "row",
+						alignItems: "center",
+					}}>
+					<Text
+						style={styles.promoCodeText}>{item.voucher.name}</Text>
+				</View>				
+				)
+		})
 		const cart_items = cart.map((item, key) => {
 
 			if (item.selected_variants) {
@@ -472,11 +609,32 @@ export default class Checkout extends React.Component {
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.statusText}>-</Text>
+										style={styles.statusText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'}</Text>
+										
 									<Image
 										source={require("./../../assets/images/group-4-5.png")}
 										style={styles.arrowImage}/>
 								</View>
+								{renderVouchers}
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 16 * alpha,
+										marginRight: 16 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.promoCodeText}>Discount</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.statusText}>{this.state.discount}</Text>																	
+								</View>
+							
 							</View>
 						</TouchableOpacity>
 
@@ -487,6 +645,7 @@ export default class Checkout extends React.Component {
 						}}/>
 					<Text
 						style={styles.summaryText}>Total {cart_total_quantity} {cart_total_quantity>1 ? 'items' : 'item'}</Text>
+
 				</View>
 				<View
 					style={styles.paymentMethodView}>
@@ -589,10 +748,11 @@ export default class Checkout extends React.Component {
 					</TouchableOpacity>
 				</View> */}
 			</ScrollView>
+			{this.renderModal()}
 			<View
 				style={styles.totalPayNowView}>
 				<Text
-					style={styles.priceText}>${cart_total}</Text>
+					style={styles.priceText}>${final_price}</Text>
 				<View
 					style={{
 						flex: 1,
@@ -604,8 +764,10 @@ export default class Checkout extends React.Component {
 						style={styles.payNowButtonText}>Pay Now</Text>
 				</TouchableOpacity>
 			</View>
+			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast"
             position="center"/>
+			
 		</View>
 	}
 }
@@ -655,15 +817,20 @@ const styles = StyleSheet.create({
 	},
 	branchThreeView: {
 		backgroundColor: "transparent",
-		width: 120 * alpha,
+		width: 210 * alpha,
 		height: 22 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
 	branchText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 		fontSize: 18 * fontAlpha,
+=======
+		fontFamily: "SFProText-Medium",
+		fontSize: 15 * fontAlpha,
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -685,7 +852,11 @@ const styles = StyleSheet.create({
 	},
 	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -725,7 +896,11 @@ const styles = StyleSheet.create({
 	selfPickUpText: {
 		backgroundColor: "transparent",
 		color: "rgb(70, 76, 84)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -735,7 +910,11 @@ const styles = StyleSheet.create({
 	selfPickUpText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -814,7 +993,11 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(70, 76, 84)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -824,7 +1007,11 @@ const styles = StyleSheet.create({
 	},
 	deliveryText_selected: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -863,7 +1050,11 @@ const styles = StyleSheet.create({
 	},
 	contactText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -874,7 +1065,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -900,7 +1095,11 @@ const styles = StyleSheet.create({
 	},
 	autoFillButtonText: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -924,7 +1123,11 @@ const styles = StyleSheet.create({
 	},
 	orderCapacityText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -948,7 +1151,11 @@ const styles = StyleSheet.create({
 	},
 	orders34CupsText: {
 		color: "rgb(55, 56, 57)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -958,7 +1165,11 @@ const styles = StyleSheet.create({
 	},
 	estimated15MinsToText: {
 		color: "rgb(79, 76, 76)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -972,7 +1183,11 @@ const styles = StyleSheet.create({
 	},
 	orderConfirmationText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -991,7 +1206,11 @@ const styles = StyleSheet.create({
 	},
 	nameTwoText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1001,7 +1220,11 @@ const styles = StyleSheet.create({
 	},
 	quantityTwoText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1011,7 +1234,11 @@ const styles = StyleSheet.create({
 	},
 	rm20TwoText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1021,11 +1248,14 @@ const styles = StyleSheet.create({
 	},
 	voucherView: {
 		backgroundColor: "transparent",
-		height: 50 * alpha,
 	},
 	promoCodeText: {
 		color: "rgb(99, 97, 97)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1034,7 +1264,11 @@ const styles = StyleSheet.create({
 	},
 	statusText: {
 		color: "rgb(181, 181, 181)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1063,7 +1297,11 @@ const styles = StyleSheet.create({
 	},
 	voucherButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1071,7 +1309,11 @@ const styles = StyleSheet.create({
 	},
 	summaryText: {
 		color: "rgb(135, 135, 135)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1088,7 +1330,11 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1118,7 +1364,11 @@ const styles = StyleSheet.create({
 	},
 	paymenttypeText: {
 		color: 'rgb(85,85,85)',
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1147,7 +1397,11 @@ const styles = StyleSheet.create({
 	},
 	paymentButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1162,7 +1416,11 @@ const styles = StyleSheet.create({
 	},
 	remarkText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1171,7 +1429,11 @@ const styles = StyleSheet.create({
 	},
 	remarksText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1202,7 +1464,11 @@ const styles = StyleSheet.create({
 	},
 	remarkButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1257,7 +1523,11 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1266,7 +1536,11 @@ const styles = StyleSheet.create({
 	},
 	variantText: {
 		color: "rgb(148, 148, 148)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1280,7 +1554,11 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1289,7 +1567,11 @@ const styles = StyleSheet.create({
 	},
 	cartpriceText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

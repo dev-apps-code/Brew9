@@ -9,7 +9,13 @@
 import { Image, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size"
-
+import { connect } from "react-redux";
+import {KURL_INFO} from "../Utils/server";
+@connect(({ members }) => ({
+	currentMember: members.profile,
+	members:members,
+	company_id: members.company_id,
+}))
 export default class VoucherDetail extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -38,6 +44,10 @@ export default class VoucherDetail extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			item: this.props.navigation.getParam("item",null),
+			valid : this.props.navigation.getParam("valid", false) 
+		}
 	}
 
 	componentDidMount() {
@@ -52,15 +62,103 @@ export default class VoucherDetail extends React.Component {
     }
 
 	onTermsPressed = () => {
-	
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+
+		navigate("WebCommon", {
+			title: 'Terms & Condition',
+			web_url: KURL_INFO + '?page=voucher_terms&id=' + company_id,
+		})
 	}
 
 	onUsePessed = () => {
-	
+		const addVoucherAction = this.props.navigation.getParam("addVoucherAction", false) 		
+		this.props.navigation.pop(2)		
+		addVoucherAction(this.state.item)
+	}
+
+	renderPrice(){
+
+		const { members } = this.props
+		const {item} = this.state
+		const display_value = item.voucher.display_value
+		const discount_type = item.voucher.discount_type
+		const discount_price = item.voucher.discount_price
+		if (display_value != null  && display_value !==''){
+
+			return (
+				<View
+				style={styles.valueView}>
+					<Text
+						style={styles.currencyText}>{members.currency}</Text> 			
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
+						<Text
+							style={styles.valueText}>{display_value}</Text>
+					</View>
+				</View>
+			)
+		}else if (discount_type != null && discount_type != '' && discount_price != null && discount_price != ''){
+			if (discount_type == 'fixed'){
+				return (
+					<View
+					style={styles.valueView}>
+						<Text
+							style={styles.currencyText}>{members.currency}</Text> 			
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<Text
+								style={styles.valueText}>{discount_price}</Text>
+						</View>
+					</View>
+				)
+			}else {
+
+				return (
+					<View
+					style={styles.valueView}>
+					 			
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0,
+								right: 0,
+								top: 0,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<Text
+								style={styles.percentvalueText}>{discount_price}</Text>
+							<Text
+								style={styles.percentText}>%</Text> 
+						</View>
+					</View>
+				)
+			}
+		}
 	}
 
 	render() {
-	
+
+		const { members } = this.props
+		const {item} = this.state
 		return <View
 				style={styles.voucherDetailView}>
 				<ScrollView
@@ -100,32 +198,15 @@ export default class VoucherDetail extends React.Component {
 											alignItems: "flex-start",
 										}}>
 										<Text
-											style={styles.titleText}>RM10 off</Text>
+											style={styles.titleText}>{item.voucher.name}</Text>
 										<View
 											style={{
 												flex: 1,
 											}}/>
-										<View
-											style={styles.valueView}>
-											<Text
-												style={styles.currenrcyText}>RM</Text>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0 * alpha,
-													right: 0 * alpha,
-													top: 0 * alpha,
-													bottom: 0 * alpha,
-													justifyContent: "center",
-												}}>
-												<Text
-													style={styles.valueText}>10</Text>
-											</View>
-										</View>
+											{this.renderPrice()}
 									</View>
 									<Text
-										style={styles.descriptionText}>with RM150 spend</Text>
+										style={styles.descriptionText}>{item.voucher.description}</Text>
 									<Image
 										source={require("./../../assets/images/line-16-copy-5.png")}
 										style={styles.lineImage}/>
@@ -141,7 +222,7 @@ export default class VoucherDetail extends React.Component {
 											alignItems: "flex-end",
 										}}>
 										<Text
-											style={styles.dateText}>2019.07.19-2019.08.19</Text>
+											style={styles.dateText}>{item.available_date}</Text>
 										<View
 											style={{
 												flex: 1,
@@ -187,37 +268,48 @@ export default class VoucherDetail extends React.Component {
 							style={styles.conditionsView}>
 							<Text
 								style={styles.titleTwoText}>Voucher Limitation</Text>
-							<Text
+							{/* <Text
 								style={styles.usableshopText}>Shop</Text>
 							<Text
-								style={styles.usableshopcontentText}>- Usable on all Brew9 Shop in Brunei</Text>
+								style={styles.usableshopcontentText}>- Usable on all Brew9 Shop in Brunei</Text> */}
 							<Text
 								style={styles.usabletimeText}>Time</Text>
 							<Text
-								style={styles.usabletimecontentText}>- Whiole Day</Text>
-							<Text
+								style={styles.usabletimecontentText}>- {item.voucher.when_use}</Text>
+							{/* <Text
 								style={styles.usableitemText}>Applicable Items</Text>
 							<Text
-								style={styles.usableitemcontentText}>- All Hot Drinks</Text>
-							<Text
-								style={styles.usablescenarioText}>How to Use</Text>
-							<Text
-								style={styles.usablescenariocontentText}>- Usable when view voucher on order menu{"\n"}
-								- When ordering from shop, show QRcode to cashier to scan before using voucher</Text>
-							<Text
-								style={styles.usableconditionText}>Terms and Conditions</Text>
-							<Text
-								style={styles.usableconditioncontentText}>- Voucher cannot be used to cash voucher, buy 1 free x voucher and other discount voucher{"\n"}
-								- Cannot be used on promotion items</Text>
+								style={styles.usableitemcontentText}>- All Hot Drinks</Text> */}
+							{ (item.voucher.how_to_use != null && item.voucher.how_to_use != '') ? 
+							<View> 
+								<Text style={styles.usablescenarioText}>How to Use</Text>
+								<Text style={styles.usablescenariocontentText}> 
+									{item.voucher.how_to_use}
+								</Text>
+								</View>
+							: undefined}	
+							{ (item.voucher.terms != null && item.voucher.terms != '') ?
+								<View> 
+									<Text style={styles.usablescenarioText}>
+										Terms and Conditions
+									</Text>
+									<Text style={styles.usablescenariocontentText}>
+										{item.voucher.terms}
+									</Text>
+								</View>
+							: undefined}								
 						</View>
 					</View>
 				</ScrollView>
-				<TouchableOpacity
-						onPress={this.onUsePessed}
-						style={styles.useButton}>
-						<Text
-							style={styles.useButtonText}>Apply Voucher</Text>
-					</TouchableOpacity>
+				{ this.state.valid ? 
+					<TouchableOpacity
+					onPress={this.onUsePessed}
+					style={styles.useButton}>
+					<Text
+						style={styles.useButtonText}>Apply Voucher</Text>
+				</TouchableOpacity>
+				: undefined}
+			
 			</View>
 	}
 }
@@ -242,6 +334,50 @@ const styles = StyleSheet.create({
 		height: 18 * alpha,
 		tintColor: "black",
 	},
+	currencyText: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0,
+		top: 6 * alpha,
+	},
+	valueText: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 24 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 16 * alpha,
+	},
+	percentText: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "SFProText-Medium",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		position: "absolute",
+		right: 0,
+		top: 16 * alpha,
+	},
+	percentvalueText: {
+		color: "rgb(0, 178, 227)",
+		fontFamily: "DINPro-Medium",
+		fontSize: 24 * alpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginRight: 15 * alpha,
+	},
 	voucherDetailView: {
 		backgroundColor: "white",
 		flex: 1,
@@ -264,6 +400,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		shadowColor: "rgba(224, 222, 222, 0.5)",
 		shadowRadius: 2,
+		width: 348 * alpha,
 		shadowOpacity: 1,
 		position: "absolute",
 		left: 14 * alpha,
@@ -288,7 +425,11 @@ const styles = StyleSheet.create({
 	},
 	currenrcyText: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -310,7 +451,11 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -384,7 +529,11 @@ const styles = StyleSheet.create({
 	},
 	textText: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -540,7 +689,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		alignSelf: "center",
 		width: 321 * alpha,
-		bottom: 14 * alpha,
+		bottom: 30 * alpha,
 		height: 41 * alpha,
 	},
 	useButtonImage: {
@@ -549,8 +698,13 @@ const styles = StyleSheet.create({
 	},
 	useButtonText: {
 		color: "white",
+<<<<<<< HEAD
 		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
+=======
+		fontFamily: "SFProText-Medium",
+		fontSize: 14 * fontAlpha,
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
