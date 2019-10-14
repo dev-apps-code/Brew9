@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
 import { createAction, dispatch } from '../Utils/index'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
+import Brew9Modal from "../Components/Brew9Modal"
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -55,6 +56,8 @@ export default class ScanQr extends React.Component {
             loading: false,
             hasCameraPermission: null,
             scanned: false,
+            modal_visible: false,
+            message: "",
         }
     }
 
@@ -65,10 +68,19 @@ export default class ScanQr extends React.Component {
         })
     }
 
-    closeSuccessAlert = () => {
-
+    renderSuccessModal() {
+		return <Brew9Modal
+				title={"Brew9"}
+				description={this.state.message}
+				visible={this.state.modal_visible}
+				cancelable={false}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+				}}
+			/>
     }
 
+ 
     loadQrCodeScan(qr_code){
         const { dispatch, currentMember } = this.props
 
@@ -79,15 +91,7 @@ export default class ScanQr extends React.Component {
             })  
             if (eventObject.success) {
                 console.log("Scan", eventObject)
-                Alert.alert(
-                    'Brew9',
-                    eventObject.message,
-                    [
-                      { text: 'OK', onPress: () =>   this.closeSuccessAlert()},
-                    ],
-                    { cancelable: false }
-                  );
-    
+                this.setState({ modal_visible: true, message: eventObject.message})
             }
             else {
                 this.refs.toast.show(eventObject.message)

@@ -13,14 +13,23 @@ class Brew9Modal extends Component {
             width={windowWidth*0.8}
             visible={this.props.visible}
             footer={
-            <ModalFooter>               
-                <ModalButton
-                text="OK"
-                onPress={this.props.okayButtonAction}
-                />
-            </ModalFooter>
-            }
-        >
+              this.props.cancelable ?
+              <ModalFooter>               
+                  <ModalButton
+                    text="OK"
+                    onPress={this.props.okayButtonAction}
+                  />
+                  <ModalButton
+                        text="Cancel"
+                        onPress={this.props.cancelButtonAction}
+                  />
+              </ModalFooter> : <ModalFooter>               
+                  <ModalButton
+                    text="OK"
+                    onPress={this.props.okayButtonAction}
+                  />
+              </ModalFooter>
+            }>
             <ModalContent>
                 <Text style={styles.title}>
                     {this.props.title}

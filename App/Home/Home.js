@@ -45,6 +45,8 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
+import Brew9Modal from "../Components/Brew9Modal"
+
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -125,6 +127,9 @@ export default class Home extends React.Component {
 			isToggleLocation: false,
 			ignoreVersion: false,
 			appState: AppState.currentState,
+			modal_visible: false,
+			force_upgrade: false,
+			app_url: ''
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -274,6 +279,23 @@ export default class Home extends React.Component {
 		
 	}
 
+	renderForceUpgradeModal() {
+		return <Brew9Modal
+				title={"Brew9"}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				cancelable={this.state.force_upgrade}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					Linking.openURL(this.state.app_url)
+				}}
+				cancelButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.loadStoreProducts()
+				}}
+			/>
+	}
+
 	loadStoreProducts() {
 
 		const { dispatch, company_id } = this.props
@@ -283,17 +305,18 @@ export default class Home extends React.Component {
 			if (eventObject.success) {
 				if (eventObject.result.force_upgrade) {
 
-					Alert.alert(
-						'Brew9',
-						eventObject.message,
-						eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
-							[ 
-								{ text: 'Cancel', style: 'cancel', onPress: () => {
-									this.loadStoreProducts()
-								}}, 
-								{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
-						{cancelable: eventObject.result.force_upgrade},
-					);
+					this.setState({modal_visible: true, modal_description: eventObject.message, force_upgrade: eventObject.result.force_upgrade, app_url:eventObject.result.url})
+					// Alert.alert(
+					// 	'Brew9',
+					// 	eventObject.message,
+					// 	eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
+					// 		[ 
+					// 			{ text: 'Cancel', style: 'cancel', onPress: () => {
+					// 				this.loadStoreProducts()
+					// 			}}, 
+					// 			{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
+					// 	{cancelable: eventObject.result.force_upgrade},
+					// );
 					
 				} else {
 				this.setState({
@@ -1053,7 +1076,7 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery,isToggleLocation} = this.state
 		
 		return <View style={styles.page1View}>	
-						
+			{this.renderForceUpgradeModal()}	
 			<View style={styles.topsectionView}>
 				
 				<View
@@ -1294,6 +1317,7 @@ export default class Home extends React.Component {
 				</Modal> : null }
 			
 			{this.renderGallery()}
+			
 		</View>
 	}
 
