@@ -8,7 +8,6 @@ class Brew9Modal extends Component {
   render() {
   
     return (
-        <View style={styles.container}>
         <Modal
             width={windowWidth*0.8}
             visible={this.props.visible}
@@ -39,7 +38,6 @@ class Brew9Modal extends Component {
                 </Text>
             </ModalContent>
         </Modal>
-        </View>
     )
   }
 }
@@ -51,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: windowWidth * 0.8,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   title: {
     color: "rgb(57, 57, 57)",
