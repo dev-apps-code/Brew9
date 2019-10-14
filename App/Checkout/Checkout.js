@@ -76,21 +76,6 @@ export default class Checkout extends React.Component {
 		this.loadValidVouchers()
 	}
 
-	renderModal(){
-		
-		return (
-			<Brew9Modal
-				title={this.state.modal_title}
-				description={this.state.modal_description}
-				visible={this.state.modal_visible}
-				okayButtonAction={()=> {
-					this.setState({modal_visible:false})
-					this.props.navigation.goBack()
-				}}
-			/>
-		)
-	}
-
 	loadValidVouchers(){
 		const { dispatch,currentMember,selectedShop } = this.props
 		const {cart} = this.state
@@ -263,20 +248,20 @@ export default class Checkout extends React.Component {
 				return
 			}
 
-			Alert.alert(
-				'Confirmation',
-				'Are you sure you want to confirm the order?',
-				[				 
-				  {
-					text: 'Cancel',
-					onPress: () => console.log('OK Pressed'),
-					style: 'cancel',
-				  },
-				  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
-				],
-				{ cancelable: false }
-			  );
-
+			// Alert.alert(
+			// 	'Confirmation',
+			// 	'Are you sure you want to confirm the order?',
+			// 	[				 
+			// 	  {
+			// 		text: 'Cancel',
+			// 		onPress: () => console.log('OK Pressed'),
+			// 		style: 'cancel',
+			// 	  },
+			// 	  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
+			// 	],
+			// 	{ cancelable: false }
+			// );
+			this.setState({modal_visible:true})
 			return
 		} else {
 			navigate("VerifyUserStack")
@@ -298,6 +283,22 @@ export default class Checkout extends React.Component {
 		// navigate("Transaction", {
 		// 	amount: cart_total
 		// })
+	}
+
+	renderConfirmPaymentModal() {
+		return <Brew9Modal
+				title={"Confirmation"}
+				description={"Are you sure you want to confirm the order?"}
+				visible={this.state.modal_visible}
+				cancelable={true}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.loadMakeOrder()
+				}}
+				cancelButtonAction={()=> {
+					this.setState({modal_visible:false})
+				}}
+			/>
 	}
 
 	render() {
@@ -385,6 +386,7 @@ export default class Checkout extends React.Component {
 
 		return <View
 			style={styles.checkoutView}>
+			{this.renderConfirmPaymentModal()}
 			<ScrollView
 				style={styles.scrollviewScrollView}>
 				<View
@@ -748,7 +750,7 @@ export default class Checkout extends React.Component {
 					</TouchableOpacity>
 				</View> */}
 			</ScrollView>
-			{this.renderModal()}
+			{this.renderConfirmPaymentModal()}
 			<View
 				style={styles.totalPayNowView}>
 				<Text
