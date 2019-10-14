@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 	soldtextText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		opacity: 0.39,
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
 	},
 	optionButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

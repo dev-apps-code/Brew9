@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 	},
 	sectionheadertitleText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 	},
 	viewmoreButtonText: {
 		color: "rgb(164, 164, 164)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

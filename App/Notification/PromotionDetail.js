@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
 	},
 	labelText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
 	},
 	timeText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "Helvetica-LightOblique",
+		fontFamily: "ClanPro-NarrBook",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

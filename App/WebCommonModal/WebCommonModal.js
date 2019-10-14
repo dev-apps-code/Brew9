@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

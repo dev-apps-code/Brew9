@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
 	},
 	itemnameText: {
 		color: "rgb(55, 55, 55)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
 	carttotalText: {
 		backgroundColor: "transparent",
 		color: "rgb(69, 67, 67)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 35 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
 	},
 	payeeText: {
 		color: "rgb(165, 165, 165)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
 	},
 	brew9Text: {
 		color: "rgb(78, 78, 78)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(165, 165, 165)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
 	},
 	addBankCardToPayText: {
 		color: "rgb(34, 34, 34)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
 	},
 	payNowButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

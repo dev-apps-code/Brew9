@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     },
     messageText: {
         color: "rgb(145, 145, 145)",
-        fontFamily: "Helvetica",
+        fontFamily: "ClanPro-Book",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     },
     codeText: {
         backgroundColor: "transparent",
-        fontFamily: "Helvetica",
+        fontFamily: "ClanPro-Book",
         fontSize: 32 * fontAlpha,
         color: "black"
     },
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     },
     instructionText: {
         color: "rgb(98, 97, 97)",
-        fontFamily: "Helvetica",
+        fontFamily: "ClanPro-Book",
         fontSize: 13 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     },
     reSendButtonText: {
         color: "rgb(0, 178, 227)",
-        fontFamily: "Helvetica",
+        fontFamily: "ClanPro-Book",
         fontSize: 10 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     },
     countdownText: {
         color: "rgb(98, 97, 97)",
-        fontFamily: "Helvetica",
+        fontFamily: "ClanPro-Book",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",

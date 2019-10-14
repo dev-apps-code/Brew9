@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
 	},
 	memberServiceButtonText: {
 		color: "rgb(84, 81, 81)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
 	},
 	membershipText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
 	},
 	activateButtonButtonText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
 	},
 	upgradeButtonText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
 	},
 	missionCentreButtonText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
 	},
 	walletButtonText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
 	nextLevelRewardsText: {
 		backgroundColor: "transparent",
 		color: "rgb(23, 22, 22)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
 	},
 	otherLevelRewardButtonText: {
 		color: "rgb(118, 118, 118)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -681,7 +681,7 @@ const styles = StyleSheet.create({
 	discount3Text: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 58, 58)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -690,7 +690,7 @@ const styles = StyleSheet.create({
 	},
 	rm5OffWithRm120SText: {
 		color: "rgb(80, 79, 79)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -713,7 +713,7 @@ const styles = StyleSheet.create({
 	},
 	free2Text: {
 		color: "rgb(59, 58, 58)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -723,7 +723,7 @@ const styles = StyleSheet.create({
 	},
 	buy6Free1Text: {
 		color: "rgb(80, 79, 79)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

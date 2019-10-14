@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
 	instructionText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
 	},
 	facebookbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

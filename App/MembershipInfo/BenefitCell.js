@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		backgroundColor: "transparent",
 		color: "rgb(68, 67, 67)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 	amountText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 15,
 		fontStyle: "normal",
 		fontWeight: "normal",

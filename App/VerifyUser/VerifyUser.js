@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "black",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "black", 
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(46, 46, 46)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
 	},
 	sendButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
-        fontFamily: "Helvetica",
+        fontFamily: "ClanPro-Book",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
 	activationCodeTextInput: {
 
 		color: "rgb(46, 46, 46)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
 	errorMessageText: {
 		color: "white",
 		fontSize: 12 * fontAlpha,
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",

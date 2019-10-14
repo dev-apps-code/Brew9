@@ -797,7 +797,7 @@ const styles = StyleSheet.create({
 	},
 	levelButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -872,7 +872,7 @@ const styles = StyleSheet.create({
 	},
 	pointText: {
 		color: "rgb(32, 32, 32)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -897,7 +897,7 @@ const styles = StyleSheet.create({
 	},
 	pointbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -919,7 +919,7 @@ const styles = StyleSheet.create({
 	rewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -928,7 +928,7 @@ const styles = StyleSheet.create({
 	},
 	rewardbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -965,7 +965,7 @@ const styles = StyleSheet.create({
 	currencyText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -986,7 +986,7 @@ const styles = StyleSheet.create({
 	walletText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1007,7 +1007,7 @@ const styles = StyleSheet.create({
 	},
 	buttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1049,7 +1049,7 @@ const styles = StyleSheet.create({
 	},
 	pointshopbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1072,7 +1072,7 @@ const styles = StyleSheet.create({
 	},
 	clubbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1126,7 +1126,7 @@ const styles = StyleSheet.create({
 	},
 	memberbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1190,7 +1190,7 @@ const styles = StyleSheet.create({
 	},
 	orderbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1234,7 +1234,7 @@ const styles = StyleSheet.create({
 	},
 	personalbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1291,7 +1291,7 @@ const styles = StyleSheet.create({
 	},
 	qrbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1360,7 +1360,7 @@ const styles = StyleSheet.create({
 	},
 	redeembuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1425,7 +1425,7 @@ const styles = StyleSheet.create({
 	},
 	notificationbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1468,7 +1468,7 @@ const styles = StyleSheet.create({
 	},
 	aboutbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
