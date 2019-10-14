@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "ClanPro-News",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
