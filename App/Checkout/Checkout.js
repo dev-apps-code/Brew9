@@ -114,7 +114,6 @@ export default class Checkout extends React.Component {
 		}	
 	}
 	
-
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
@@ -815,7 +814,7 @@ const styles = StyleSheet.create({
 	},
 	branchThreeView: {
 		backgroundColor: "transparent",
-		width: 120 * alpha,
+		width: 190 * alpha,
 		height: 22 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -823,7 +822,7 @@ const styles = StyleSheet.create({
 	branchText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "SFProText-Medium",
-		fontSize: 18 * fontAlpha,
+		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
