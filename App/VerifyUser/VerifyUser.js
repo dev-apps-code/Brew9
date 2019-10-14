@@ -344,8 +344,18 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	closeButtonText: {
+<<<<<<< HEAD
+<<<<<<< HEAD
+		color: "black",
+		fontFamily: "ClanPro-Book",
+=======
 		color: "rgb(0, 178, 227)",
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		color: "rgb(0, 178, 227)",
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -372,7 +382,15 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "black", 
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -412,7 +430,15 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(46, 46, 46)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -446,7 +472,15 @@ const styles = StyleSheet.create({
 	},
 	sendButtonText: {
 		color: "white",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -462,7 +496,15 @@ const styles = StyleSheet.create({
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+        fontFamily: "ClanPro-Book",
+=======
         fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+        fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -481,7 +523,15 @@ const styles = StyleSheet.create({
 	activationCodeTextInput: {
 
 		color: "rgb(46, 46, 46)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -506,7 +556,15 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		color: "white",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -559,7 +617,15 @@ const styles = StyleSheet.create({
 	errorMessageText: {
 		color: "white",
 		fontSize: 12 * fontAlpha,
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",

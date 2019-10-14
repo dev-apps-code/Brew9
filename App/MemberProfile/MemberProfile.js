@@ -777,7 +777,15 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(135, 135, 135)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -835,7 +843,15 @@ const styles = StyleSheet.create({
 	},
 	updateButtonText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -944,7 +960,15 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "rgb(113, 113, 113)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -975,7 +999,15 @@ const styles = StyleSheet.create({
 	titleText: {
 		backgroundColor: "transparent",
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -985,7 +1017,15 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		opacity: 0.39,
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1002,7 +1042,15 @@ const styles = StyleSheet.create({
 	},
 	countrycodeButtonText: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1037,7 +1085,15 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "black",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1058,7 +1114,15 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "black",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1068,7 +1132,15 @@ const styles = StyleSheet.create({
 	},
 	verificationcodeButtonText: {
 		color: "rgb(78, 77, 77)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1097,7 +1169,15 @@ const styles = StyleSheet.create({
 	},
 	confirmButtonText: {
 		color: "white",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

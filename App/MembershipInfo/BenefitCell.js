@@ -65,7 +65,15 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		backgroundColor: "transparent",
 		color: "rgb(68, 67, 67)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -75,7 +83,15 @@ const styles = StyleSheet.create({
 	amountText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 15,
 		fontStyle: "normal",
 		fontWeight: "normal",

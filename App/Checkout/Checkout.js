@@ -826,8 +826,13 @@ const styles = StyleSheet.create({
 	},
 	branchText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+		fontSize: 18 * fontAlpha,
+=======
 		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -849,7 +854,11 @@ const styles = StyleSheet.create({
 	},
 	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -889,7 +898,11 @@ const styles = StyleSheet.create({
 	selfPickUpText: {
 		backgroundColor: "transparent",
 		color: "rgb(70, 76, 84)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -899,7 +912,11 @@ const styles = StyleSheet.create({
 	selfPickUpText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -978,7 +995,11 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(70, 76, 84)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -988,7 +1009,11 @@ const styles = StyleSheet.create({
 	},
 	deliveryText_selected: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1027,7 +1052,11 @@ const styles = StyleSheet.create({
 	},
 	contactText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1038,7 +1067,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1064,7 +1097,11 @@ const styles = StyleSheet.create({
 	},
 	autoFillButtonText: {
 		color: "rgb(0, 178, 227)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1088,7 +1125,11 @@ const styles = StyleSheet.create({
 	},
 	orderCapacityText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1112,7 +1153,11 @@ const styles = StyleSheet.create({
 	},
 	orders34CupsText: {
 		color: "rgb(55, 56, 57)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1122,7 +1167,11 @@ const styles = StyleSheet.create({
 	},
 	estimated15MinsToText: {
 		color: "rgb(79, 76, 76)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1136,7 +1185,11 @@ const styles = StyleSheet.create({
 	},
 	orderConfirmationText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1155,7 +1208,11 @@ const styles = StyleSheet.create({
 	},
 	nameTwoText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1165,7 +1222,11 @@ const styles = StyleSheet.create({
 	},
 	quantityTwoText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1175,7 +1236,11 @@ const styles = StyleSheet.create({
 	},
 	rm20TwoText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1188,7 +1253,11 @@ const styles = StyleSheet.create({
 	},
 	promoCodeText: {
 		color: "rgb(99, 97, 97)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1197,7 +1266,11 @@ const styles = StyleSheet.create({
 	},
 	statusText: {
 		color: "rgb(181, 181, 181)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1226,7 +1299,11 @@ const styles = StyleSheet.create({
 	},
 	voucherButtonText: {
 		color: "white",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1234,7 +1311,11 @@ const styles = StyleSheet.create({
 	},
 	summaryText: {
 		color: "rgb(135, 135, 135)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1251,7 +1332,11 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1281,7 +1366,11 @@ const styles = StyleSheet.create({
 	},
 	paymenttypeText: {
 		color: 'rgb(85,85,85)',
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1310,7 +1399,11 @@ const styles = StyleSheet.create({
 	},
 	paymentButtonText: {
 		color: "white",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1325,7 +1418,11 @@ const styles = StyleSheet.create({
 	},
 	remarkText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1334,7 +1431,11 @@ const styles = StyleSheet.create({
 	},
 	remarksText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1365,7 +1466,11 @@ const styles = StyleSheet.create({
 	},
 	remarkButtonText: {
 		color: "white",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1420,7 +1525,11 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1429,7 +1538,11 @@ const styles = StyleSheet.create({
 	},
 	variantText: {
 		color: "rgb(148, 148, 148)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1443,7 +1556,11 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1452,7 +1569,11 @@ const styles = StyleSheet.create({
 	},
 	cartpriceText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

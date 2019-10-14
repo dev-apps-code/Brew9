@@ -266,7 +266,15 @@ const styles = StyleSheet.create({
 	memberRightsText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -292,7 +300,15 @@ const styles = StyleSheet.create({
 	membershiptitleText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -301,7 +317,15 @@ const styles = StyleSheet.create({
 	exprangeText: {
 		backgroundColor: "transparent",
 		color: "white",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -314,7 +338,15 @@ const styles = StyleSheet.create({
 	},
 	benefitsText: {
 		color: "rgb(54, 54, 54)",
+<<<<<<< HEAD
+<<<<<<< HEAD
+		fontFamily: "ClanPro-Book",
+=======
 		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
+=======
+		fontFamily: "SFProText-Medium",
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

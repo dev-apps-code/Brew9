@@ -4,6 +4,9 @@
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.expo-shared/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+=======
       <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" afterDir="false" />
@@ -38,6 +41,7 @@
       <change beforePath="$PROJECT_DIR$/assets/images/top-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@1x.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/top-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@2x.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/top-fill@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@3x.png" afterDir="false" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -81,8 +85,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state relative-caret-position="42">
+              <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+=======
             <state relative-caret-position="393">
               <caret line="911" column="27" lean-forward="true" selection-start-line="911" selection-start-column="27" selection-end-line="911" selection-end-column="27" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
             </state>
           </provider>
         </entry>
@@ -219,17 +228,28 @@
       </list>
     </option>
   </component>
+<<<<<<< HEAD
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="252" />
+    <option name="y" value="345" />
+    <option name="width" value="1280" />
+    <option name="height" value="570" />
+=======
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1680" />
     <option name="height" value="952" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
+=======
       <pane id="PackagesPane" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -258,6 +278,10 @@
           <select />
         </subPane>
       </pane>
+<<<<<<< HEAD
+      <pane id="PackagesPane" />
+=======
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
       <pane id="Scope" />
     </panes>
   </component>
@@ -355,7 +379,11 @@
     <option name="totallyTimeSpent" value="438959000" />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
+    <frame x="252" y="345" width="1280" height="570" extended-state="1" />
+=======
     <frame x="0" y="23" width="1680" height="952" extended-state="0" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23443224" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -374,7 +402,11 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
+<<<<<<< HEAD
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.5936073" />
+=======
       <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31744185" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -874,8 +906,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="42">
+          <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+=======
         <state relative-caret-position="393">
           <caret line="911" column="27" lean-forward="true" selection-start-line="911" selection-start-column="27" selection-end-line="911" selection-end-column="27" />
+>>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
         </state>
       </provider>
     </entry>
