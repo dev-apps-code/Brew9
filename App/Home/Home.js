@@ -197,6 +197,7 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
+
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
@@ -208,6 +209,7 @@ export default class Home extends React.Component {
 	}
 
 	componentWillUnmount() {
+		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
@@ -345,12 +347,33 @@ export default class Home extends React.Component {
 
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
+		const { navigation } = this.props
+		this.navigationListener = navigation.addListener('willFocus', payload => {
+			this.removeNavigationListener()
+			const { state } = payload
+    		const { params } = state
+			const { clearCart } = params
+			
+			if (clearCart) {
+				this.onClearPress()
+			}
+		})
+
 		navigate("Checkout", {
 			cart: this.state.cart,
 			cart_total_quantity: this.state.cart_total_quantity,
 			cart_total: this.state.cart_total,
 			shop: this.state.shop,
+			returnToRoute: navigation.state,
+			clearCart: false
 		})
+	}
+
+	removeNavigationListener() {
+		if (this.navigationListener) {
+		  this.navigationListener.remove()
+		  this.navigationListener = null
+		}
 	}
 
 	onBannerPressed = (item,index) => {
