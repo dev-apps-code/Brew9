@@ -334,10 +334,7 @@ const TabGroupOne = createBottomTabNavigator(
       },
       style: {
         backgroundColor: "rgb(224, 224, 224)"
-      },
-      labelStyle: {
-        fontFamily: "ClanPro-Book"
-      },
+      }
     },
     defaultNavigationOptions: ({ navigation }) => {
       const { routeName } = navigation.state;

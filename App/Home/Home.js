@@ -95,7 +95,7 @@ export default class Home extends React.Component {
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha}}/>
+					style={{resizeMode: "contain", width: 30, height: 30 * alpha}}/>
 			},
 		}
 	}
@@ -129,12 +129,8 @@ export default class Home extends React.Component {
 			ignoreVersion: false,
 			appState: AppState.currentState,
 			modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
-			app_url: '',
+			force_upgrade: false,
+			app_url: ''
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -259,14 +255,14 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			this.setState({ loading: false })
 			if (eventObject.success) {			
-				this.setState({
-					shop: eventObject.result,
-					menu_banners: eventObject.result.menu_banners
-				}, function () {
-					if (loadProducts){
-						this.loadStoreProducts()
-					}					
-				})		
+					this.setState({
+						shop: eventObject.result,
+						menu_banners: eventObject.result.menu_banners
+					}, function () {
+						if (loadProducts){
+							this.loadStoreProducts()
+						}					
+					})		
 			}
 		}
 
@@ -284,16 +280,21 @@ export default class Home extends React.Component {
 		
 	}
 
-	renderPopup(){
+	renderForceUpgradeModal() {
 		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-
+				title={"Brew9"}
+				description={this.state.modal_description}
+				visible={this.state.modal_visible}
+				cancelable={this.state.force_upgrade}
+				okayButtonAction={()=> {
+					this.setState({modal_visible:false})
+					Linking.openURL(this.state.app_url)
+				}}
+				cancelButtonAction={()=> {
+					this.setState({modal_visible:false})
+					this.loadStoreProducts()
+				}}
+			/>
 	}
 
 	loadStoreProducts() {
@@ -305,21 +306,7 @@ export default class Home extends React.Component {
 			if (eventObject.success) {
 				if (eventObject.result.force_upgrade) {
 
-					this.setState({
-						modal_visible: true, 
-						modal_title: "Brew9",
-						modal_description: eventObject.message, 
-						modal_cancelable: eventObject.result.force_upgrade, 
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-							Linking.openURL(this.state.app_url)
-						},
-						modal_cancel_action: ()=> {
-							this.setState({modal_visible:false})
-							this.loadStoreProducts()
-						},
-						app_url:eventObject.result.url})
-
+					this.setState({modal_visible: true, modal_description: eventObject.message, force_upgrade: eventObject.result.force_upgrade, app_url:eventObject.result.url})
 					// Alert.alert(
 					// 	'Brew9',
 					// 	eventObject.message,
@@ -428,32 +415,27 @@ export default class Home extends React.Component {
 	_toggleDelivery = (value) => {
 		
 		if (value === 1) {
-			this.setState({
-				modal_visible: true, 
-				modal_title: "Brew9",
-				modal_description: "Delivery Option Coming Soon", 
-				modal_cancelable: false, 
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-					this.setState({delivery: 0})
-				},
-			})
+			this.refs.toast.show("Delivery Option Coming Soon");
 		}
+
+		setTimeout(() => {
+			this.setState({delivery: 0})
+			}, 3000);
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
 		// console.log("Scroll Index", scroll_index)
 
-		// let data = [...this.state.data]
+		let data = [...this.state.data]
 
-		// for (var index in data) {
-		// 	if ( index == selected_index ) {
-		// 		data[index].selected = true				
-		// 	}else{
-		// 		data[index].selected = false
-		// 	}
-		// }
-		// this.setState( { data })
+		for (var index in data) {
+			if ( index == selected_index ) {
+				data[index].selected = true				
+			}else{
+				data[index].selected = false
+			}
+		}
+		this.setState( { data })
 
 		if (scroll_index < this.state.products.length){
 			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
@@ -845,7 +827,7 @@ export default class Home extends React.Component {
 						if (hasRecommended == false) {
 							value = variant.variant_values[0]
 						}
-						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price ? value.price : 0.00)).toFixed(2)
+						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price)).toFixed(2)
 						selected.push(value)
 					}
 					product.selected_variants = selected
@@ -1136,7 +1118,7 @@ export default class Home extends React.Component {
 							selectedColor={"#FFFFFF"}
 							buttonColor={"#2A2929"}
 							borderColor={"#979797"}
-							backgroundColor={"#F1F1F1"}
+							backgroundColor={"#D8D8D8"}
 							style={styles.pickUpDeliveryView}
 							textStyle={styles.optionText}
 							fontSize={10 * alpha}
@@ -1220,7 +1202,7 @@ export default class Home extends React.Component {
 				}
 				{ this.state.isToggleLocation && (
 					<View
-						style={styles.showLocationView}>
+					style={styles.showLocationView}>
 						
 						<MapView
 						style={styles.mapImage}
@@ -1322,8 +1304,8 @@ export default class Home extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 					</View>
 				</Animated.View>
-				{/* {this.renderForceUpgradeModal()}	 */}
-				{this.renderPopup()}
+				{this.renderForceUpgradeModal()}	
+				
 			
 			<View style={styles.bottomAlertView}>
 				{this.renderAlertBar(shop)}
@@ -1489,10 +1471,13 @@ export default class Home extends React.Component {
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<ScrollView
             style={{}}>
-            <AutoHeightImage
-                source={{uri:  this.state.selected_promotion}}
-                width={windowWidth}
-                style={styles.bannerImage}/>
+				
+				<View style={[styles.loading]}><ActivityIndicator size="large" color="black" /></View>
+				{/* <AutoHeightImage
+						source={{uri:  this.state.selected_promotion}}
+						width={windowWidth}
+						style={styles.bannerImage}/> */}
+				
         </ScrollView>		
 		<TouchableOpacity
 					onPress={this.onClosePressed}
@@ -1509,6 +1494,14 @@ const styles = StyleSheet.create({
 	},
 	loadingIndicator:{
 		marginTop:100 * alpha,
+	},
+	loading: {
+		position: 'absolute',
+		left: 0,
+		bottom: 0,
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
@@ -1763,7 +1756,7 @@ const styles = StyleSheet.create({
 	},
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1774,7 +1767,7 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1797,7 +1790,7 @@ const styles = StyleSheet.create({
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1820,7 +1813,7 @@ const styles = StyleSheet.create({
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

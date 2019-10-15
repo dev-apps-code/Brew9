@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
 	},
 	purchaseButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

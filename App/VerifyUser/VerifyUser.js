@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
 	},
 	welcomeText: {
 		color: "black",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
 	},
 	termsAndConditionsButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
 		width: windowWidth,
 		marginBottom: 40 * alpha,
 		color: "rgb(90, 90, 90)", 
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
 	},
 	phoneCountryCodeText: {
 		marginLeft: 0 * alpha,
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		color: "black",
 	},

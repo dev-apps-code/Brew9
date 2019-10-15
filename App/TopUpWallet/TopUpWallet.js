@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
 	},
 	topupButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
