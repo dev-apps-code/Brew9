@@ -15,6 +15,7 @@ import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members:members,
@@ -902,15 +903,15 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 49, 49)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	levelButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -934,18 +935,18 @@ const styles = StyleSheet.create({
 	memberText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 49, 49)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	vipButtonText: {
 		color: "rgb(108, 108, 108)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	vipButton: {
@@ -985,7 +986,7 @@ const styles = StyleSheet.create({
 	},
 	pointText: {
 		color: "rgb(32, 32, 32)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1003,7 +1004,7 @@ const styles = StyleSheet.create({
 	},
 	pointDisableText: {
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1028,7 +1029,7 @@ const styles = StyleSheet.create({
 	},
 	pointbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1050,7 +1051,7 @@ const styles = StyleSheet.create({
 	rewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1068,7 +1069,7 @@ const styles = StyleSheet.create({
 	rewardDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1077,7 +1078,7 @@ const styles = StyleSheet.create({
 	},
 	rewardbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1114,7 +1115,7 @@ const styles = StyleSheet.create({
 	currencyText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1135,7 +1136,7 @@ const styles = StyleSheet.create({
 	walletText: {
 		backgroundColor: "transparent",
 		color: "rgb(32, 32, 32)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1145,7 +1146,7 @@ const styles = StyleSheet.create({
 	currencyDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1166,7 +1167,7 @@ const styles = StyleSheet.create({
 	walletDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1187,7 +1188,7 @@ const styles = StyleSheet.create({
 	},
 	buttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1229,7 +1230,7 @@ const styles = StyleSheet.create({
 	},
 	pointshopbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1252,7 +1253,7 @@ const styles = StyleSheet.create({
 	},
 	clubbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1274,20 +1275,20 @@ const styles = StyleSheet.create({
 	pointRewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginTop: 7 * alpha,
 	},
 	pointRewardDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginTop: 7 * alpha,
 	},
@@ -1302,10 +1303,10 @@ const styles = StyleSheet.create({
 	},
 	vipClubText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 8 * alpha,
@@ -1318,10 +1319,10 @@ const styles = StyleSheet.create({
 	},
 	vipClubDisableText: {
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 8 * alpha,
@@ -1339,7 +1340,7 @@ const styles = StyleSheet.create({
 	},
 	memberbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1369,10 +1370,10 @@ const styles = StyleSheet.create({
 	memberStatusText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 11 * alpha,
 	},
@@ -1386,20 +1387,20 @@ const styles = StyleSheet.create({
 	memberStatusDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 11 * alpha,
 	},
 	upgradeMemberText: {
 		backgroundColor: "transparent",
 		color: "rgb(184, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	orderhistoryView: {
@@ -1420,7 +1421,7 @@ const styles = StyleSheet.create({
 	},
 	orderbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1438,10 +1439,10 @@ const styles = StyleSheet.create({
 	orderHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		flex: 1,
 		marginLeft: 15 * alpha,
@@ -1456,10 +1457,10 @@ const styles = StyleSheet.create({
 	orderHistoryDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		flex: 1,
 		marginLeft: 15 * alpha,
@@ -1482,7 +1483,7 @@ const styles = StyleSheet.create({
 	},
 	personalbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1514,10 +1515,10 @@ const styles = StyleSheet.create({
 	personalInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 	},
@@ -1534,10 +1535,10 @@ const styles = StyleSheet.create({
 	personalInfoDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 	},
@@ -1559,7 +1560,7 @@ const styles = StyleSheet.create({
 	},
 	qrbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1591,19 +1592,19 @@ const styles = StyleSheet.create({
 	qrCodeText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 12 * alpha,
 	},
 	qrDescriptionText: {
 		color: "rgb(184, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -1617,19 +1618,19 @@ const styles = StyleSheet.create({
 	qrCodeDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 12 * alpha,
 	},
 	qrDescriptionDisableText: {
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -1654,7 +1655,7 @@ const styles = StyleSheet.create({
 	},
 	redeembuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1682,19 +1683,19 @@ const styles = StyleSheet.create({
 	redeemStationText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 	},
 	redeemDescriptionText: {
 		color: "rgb(184, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -1719,7 +1720,7 @@ const styles = StyleSheet.create({
 	},
 	notificationbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1733,10 +1734,10 @@ const styles = StyleSheet.create({
 	},
 	notificationText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,
@@ -1762,7 +1763,7 @@ const styles = StyleSheet.create({
 	},
 	aboutbuttonButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1776,10 +1777,10 @@ const styles = StyleSheet.create({
 	},
 	aboutText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,
@@ -1793,10 +1794,10 @@ const styles = StyleSheet.create({
 	},
 	aboutDisableText: {
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,
@@ -1822,7 +1823,7 @@ const styles = StyleSheet.create({
 	},
 	logoutbuttonButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1836,7 +1837,7 @@ const styles = StyleSheet.create({
 	},
 	logoutText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
@@ -1852,10 +1853,10 @@ const styles = StyleSheet.create({
 	},
 	logoutDisableText: {
 		color: "rgb(180, 180, 180)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,

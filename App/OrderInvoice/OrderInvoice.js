@@ -9,6 +9,7 @@
 import { Image, TouchableOpacity, View, Text, StyleSheet, ScrollView } from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 
 export default class OrderInvoice extends React.Component {
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
 	tipsText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
 	loremIpsumDolorText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
 	loremIpsumDolorThreeText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
 	loremIpsumDolorTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
 	},
 	receiptAmountText: {
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
 	orderDateText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
 	orderNoText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
 	companyTypeText: {
 		backgroundColor: "transparent",
 		color: "rgb(156, 155, 155)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
 	},
 	personalButtonText: {
 		color: "rgb(76, 76, 76)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -496,7 +497,7 @@ const styles = StyleSheet.create({
 	},
 	enterpriseButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
 	receiptNameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
 	pleaseFillInNameText: {
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -564,7 +565,7 @@ const styles = StyleSheet.create({
 	numberText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
 	pleaseFillInNumbText: {
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -597,7 +598,7 @@ const styles = StyleSheet.create({
 	openAcountText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -607,7 +608,7 @@ const styles = StyleSheet.create({
 	pleaseFillInOpenText: {
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -630,7 +631,7 @@ const styles = StyleSheet.create({
 	accountNumberText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -640,7 +641,7 @@ const styles = StyleSheet.create({
 	pleaseFillInAccouCopyText: {
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -663,7 +664,7 @@ const styles = StyleSheet.create({
 	addressText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -673,7 +674,7 @@ const styles = StyleSheet.create({
 	pleaseFillInAddreText: {
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -695,7 +696,7 @@ const styles = StyleSheet.create({
 	phoneText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -705,7 +706,7 @@ const styles = StyleSheet.create({
 	pleaseFillInAddreCopyText: {
 		backgroundColor: "transparent",
 		color: "rgb(182, 182, 182)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

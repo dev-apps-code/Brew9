@@ -10,6 +10,7 @@ import React from "react"
 import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native"
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
 	},
 	itemnameText: {
 		color: "rgb(55, 55, 55)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
 	carttotalText: {
 		backgroundColor: "transparent",
 		color: "rgb(69, 67, 67)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontFamily: "SFProText-Medium",
 		fontSize: 35 * fontAlpha,
 		fontStyle: "normal",
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
 	},
 	payeeText: {
 		color: "rgb(165, 165, 165)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
 	},
 	brew9Text: {
 		color: "rgb(78, 78, 78)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(165, 165, 165)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
 	},
 	addBankCardToPayText: {
 		color: "rgb(34, 34, 34)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
 	},
 	payNowButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

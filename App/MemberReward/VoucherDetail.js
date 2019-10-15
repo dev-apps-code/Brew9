@@ -16,6 +16,7 @@ import UsedVoucher from "./UsedVoucher"
 import ExpiredVoucher from "./ExpiredVoucher"
 import ValidVoucher from "./ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	expiredView: {
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	usedView: {
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	voucherviewView: {
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
 	},
 	howToUseButtonText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
 	noRewardAvailableText: {
 		backgroundColor: "transparent",
 		color: "rgb(190, 190, 190)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "right",
 	},
 })

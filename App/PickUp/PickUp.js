@@ -14,6 +14,8 @@ import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -587,7 +589,7 @@ const styles = StyleSheet.create({
 	},
 	youHavenTMakeAnyText: {
 		color: "rgb(134, 134, 134)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -597,7 +599,7 @@ const styles = StyleSheet.create({
 	grabYoursNowText: {
 		backgroundColor: "transparent",
 		color: "rgb(134, 134, 134)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -621,7 +623,7 @@ const styles = StyleSheet.create({
 	},
 	orderButtonText: {
 		color: "rgb(254, 254, 254)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -638,7 +640,7 @@ const styles = StyleSheet.create({
 	},
 	orderHistoryButtonText: {
 		color: "rgb(176, 176, 176)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -948,7 +950,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginRight: 35 * alpha,
@@ -1054,7 +1056,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		alignSelf: "flex-start",
 	},
@@ -1110,7 +1112,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	rm1100Text: {
@@ -1217,7 +1219,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 20 * alpha,
@@ -1259,7 +1261,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12* fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	descriptionThreeText: {
