@@ -117,7 +117,7 @@ export default class ProductCell extends React.Component {
 								marginTop: 2 * alpha, 
 								marginBottom: 2 * alpha, 
 								flexDirection: "row",
-								flexWrap: "wrap",
+								// flexWrap: "wrap",
 							}}>
 							{ingredients}
 						</View>
@@ -187,7 +187,8 @@ const styles = StyleSheet.create({
 	productcell: {
 		backgroundColor: "transparent",
 		width: "100%",
-		height: 123 * alpha,
+		height: 143 * alpha,
+		// flex: 1,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
@@ -248,6 +249,7 @@ const styles = StyleSheet.create({
 		color: "rgb(54, 54, 54)",
 		fontFamily: "ClanPro-Book",
 		fontSize: 18 * fontAlpha,
+		marginBottom: 20 * alpha,
 		fontStyle: "normal",
 		textAlign: "left",
 	},
@@ -334,6 +336,8 @@ const styles = StyleSheet.create({
 	ingredientView: {
 		backgroundColor: "rgb(245, 245, 245)",
 		justifyContent: "center",
+		marginRight: 5 * alpha,
+		marginBottom: 3 * alpha,
 	},
 	ingredientText: {
 		backgroundColor: "transparent",
