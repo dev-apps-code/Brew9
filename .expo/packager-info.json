@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://hv-ifu.jasonfoo.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.hv-ifu.jasonfoo.brew9-app.exp.direct",
-  "ngrokPid": 31350,
+  "expoServerNgrokUrl": "https://hv-ifu.tonyvoon.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.hv-ifu.tonyvoon.brew9-app.exp.direct",
+  "ngrokPid": 41545,
   "devToolsPort": 19006,
   "packagerPort": 19005,
-  "packagerPid": 31314
+  "packagerPid": 41527
 }

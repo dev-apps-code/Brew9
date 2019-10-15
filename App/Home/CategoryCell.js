@@ -42,7 +42,7 @@ export default class CategoryCell extends React.Component {
         >
           {this.props.selected ? <View style={styles.selectbarView} /> : null}
           <View style={{flex: 1, padding: 7 * alpha}}>
-          <Text style={styles.textWrapper}>
+          {/* <Text style={styles.textWrapper}> */}
             {categoryImage && (
               <Image style={styles.categoryIconImage} source={{ uri: categoryImage }} />
             )}
@@ -59,7 +59,7 @@ export default class CategoryCell extends React.Component {
             >
               {categoryname}
             </Text>
-          </Text>
+          {/* </Text> */}
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   labelText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
-    fontSize: 11 * fontAlpha,
+    fontFamily: "ClanPro-News",
+    fontSize: 12 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "center",
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
   labelImageText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
-    fontSize: 11 * fontAlpha,
+    fontFamily: "ClanPro-News",
+    fontSize: 12 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
   labelText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
-    fontSize: 11 * fontAlpha,
+    fontFamily: "ClanPro-News",
+    fontSize: 12 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
   labelImageText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
-    fontSize: 11 * fontAlpha,
+    fontFamily: "ClanPro-News",
+    fontSize: 12 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   categoryIconImage: {
     resizeMode: "center",
     backgroundColor: "transparent",
-    width: 18 * alpha,
-    height: 18 * alpha,
+    width: 19 * alpha,
+    height: 19 * alpha,
   }
 });

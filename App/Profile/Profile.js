@@ -1836,10 +1836,9 @@ const styles = StyleSheet.create({
 	},
 	logoutText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 11 * alpha,

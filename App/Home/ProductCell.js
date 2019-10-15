@@ -39,6 +39,15 @@ export default class ProductCell extends React.Component {
 
 	render() {
 	
+		const ingredients = this.props.productingredient.map((item, key) => {
+			return <View
+					style={styles.ingredientView}
+					key={key}>
+				<Text
+					style={styles.ingredientText}>{item.name}</Text>
+			</View>
+		})
+
 		return <TouchableWithoutFeedback
 				onPress={this.onProductCellPress}>
 				<View
@@ -75,14 +84,30 @@ export default class ProductCell extends React.Component {
 					<View
 						style={styles.detailsView}>
 						<Text
+							numberOfLines={1}
 							style={styles.titleText}>{this.props.productname}</Text>
-						<Text numberOfLines={2}
+						<View
+							pointerEvents="box-none"
+							style={{
+								marginTop: 2 * alpha, 
+								marginBottom: 2 * alpha, 
+								flexDirection: "row",
+								flexWrap: "wrap",
+							}}>
+							{ingredients}
+						</View>
+
+						<Text numberOfLines={3}
               				style={styles.descriptionText}>{this.props.productsummary}</Text>
 						<View
-							style={{
-								flex: 1,
-							}}/>
-						<View
+						style={{
+							flex: 1,
+						}}/>
+						<Text
+                			style={styles.priceText}>${parseFloat(this.props.productprice).toFixed(2)}</Text>
+
+
+						{/* <View
 							pointerEvents="box-none"
 							style={{
 								alignSelf: "stretch",
@@ -96,7 +121,7 @@ export default class ProductCell extends React.Component {
 							<View
 								style={{
 									flex: 1,
-								}}/>
+								}}/> */}
 							{/* <View
 								pointerEvents="box-none"
 								style={{
@@ -126,7 +151,7 @@ export default class ProductCell extends React.Component {
 									</View>
 								</View>
 							</View> */}
-						</View>
+						{/* </View> */}
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -169,10 +194,9 @@ const styles = StyleSheet.create({
 	},
 	detailsView: {
 		backgroundColor: "transparent",
-		width: 180 * alpha,
-		height: 89 * alpha,
+		width: 200 * alpha,
+		height: 105 * alpha,
 		marginLeft: 10 * alpha,
-		alignItems: "flex-start",
 	},
 	titleText: {
 		color: "rgb(54, 54, 54)",
@@ -182,28 +206,24 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 1 * alpha,
 	},
 	descriptionText: {
 		backgroundColor: "transparent",
-		opacity: 0.39,
+		opacity: 0.8,
 		color: "black",
-		fontFamily: "ClanPro-Thin",
-		fontSize: 11 * fontAlpha,
+		fontFamily: "ClanPro-Book",
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		width: 180 * alpha,
-		marginLeft: 1 * alpha,
-		marginTop: 5 * alpha,
+		width: "100%",
 	},
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "ClanPro-Book",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "left",
 	},
 	addButton: {
@@ -252,7 +272,7 @@ const styles = StyleSheet.create({
 	},
 	optionButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "ClanPro-Book",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -284,5 +304,30 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		textAlign: "center",
 		backgroundColor: "transparent",
+	},
+
+	ingredientView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		justifyContent: "center",
+	},
+	ingredientText: {
+		backgroundColor: "transparent",
+		color: "rgb(167, 167, 167)",
+		fontFamily: "ClanPro-Book",
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginRight: 4 * alpha,
+		marginLeft: 4 * alpha,
+		marginTop: 4 * alpha,
+		marginBottom: 4 * alpha,
+	},
+	ingredientTwoView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		width: 27 * alpha,
+		height: 14 * alpha,
+		marginLeft: 10 * alpha,
+		justifyContent: "center",
 	},
 })

@@ -586,6 +586,7 @@ export default class Home extends React.Component {
 					productsummary={item.summary}
 					productvariant={item.variants}
 					productenable={item.enabled}
+					productingredient={item.ingredients}
 					producttotalquantity={item.total_quantity}
 					onChangeQuantity={this.onChangeQuantityPress}
 					onCellPress={this.onCellPress}
@@ -1508,7 +1509,7 @@ const styles = StyleSheet.create({
 	navigationBarItem: {
 	},
 	loadingIndicator:{
-		marginTop:100 * alpha,
+		marginTop: 100 * alpha,
 	},
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
@@ -1683,7 +1684,7 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	categorylistFlatListViewWrapper: {
-		width: 90 * alpha,
+		width: 80 * alpha,
 	},
 	productlistFlatList: {
 		backgroundColor: "white",
@@ -1692,7 +1693,7 @@ const styles = StyleSheet.create({
 	},
 	productlistFlatListViewWrapper: {
 
-		width: 285 * alpha,
+		width: 295 * alpha,
 		marginBottom: 1 * alpha,
 	},
 	cartView: {
