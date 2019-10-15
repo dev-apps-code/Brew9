@@ -132,6 +132,8 @@ export default class Home extends React.Component {
 			appState: AppState.currentState,
 			modal_visible: false,
 			force_upgrade: false,
+			image_contain: false,
+			image_check: false,
 			app_url: ''
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -411,6 +413,7 @@ export default class Home extends React.Component {
 		this.setState({
 			selected_promotion: item.banner_detail_image
 		}, function(){
+			console.log(item.banner_detail_image)
 			this.setState({
 				isPromoToggle: true
 			})
@@ -794,7 +797,7 @@ export default class Home extends React.Component {
 	}
 
 	onClosePressed = () => {
-		this.setState({ modalVisible: false , isPromoToggle: false})
+		this.setState({ modalVisible: false , isPromoToggle: false, image_check: false})
 	}
 
 	onClearPress = () => {
@@ -1477,28 +1480,50 @@ export default class Home extends React.Component {
 
 	renderGallery() {
 		const images = [{
-			// Simplest usage.
 			url: this.state.selected_promotion,
 		}]	 
-		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
+		
+		if (this.state.selected_promotion) {
+			let image_width = 0
+			let image_height = 0
+		
+			if (this.state.isPromoToggle &&  !this.state.image_check) {
+				Image.getSize(this.state.selected_promotion, (width, height) => {
+					image_width = width, image_height = height
+				
+					console.log (image_width, image_height)
+					if (image_width > image_height) {
+						this.setState({image_contain:true, image_check: true})
+					} else {
+						this.setState({image_contain:false, image_check: true})
+					}
+					
+				});
+			}
+			
+
+			return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
-				<View style={[styles.loading]}><ActivityIndicator size="large" color="white" /></View>
+				<View style={styles.loading}>
+					<ActivityIndicator size="large" color="white" />
+					</View>
 				<ScrollView
-            style={{}}>
+            		style={{ horizontal: true, flex: 1}}>
+					<AutoHeightImage
+							source={{uri:  this.state.selected_promotion}}
+							width={windowWidth}
+							style={this.state.image_contain ? styles.bannerContainImage : styles.bannerImage}/>
 				
-				
-				<AutoHeightImage
-						source={{uri:  this.state.selected_promotion}}
-						width={windowWidth}
-						style={styles.bannerImage}/>
-				
-        </ScrollView>		
-		<TouchableOpacity
-					onPress={this.onClosePressed}
-					style={styles.closeGalleryButton}>
-					<Text style={styles.closeGalleryButtonText}>X</Text>
-				</TouchableOpacity>
-		</Modal>
+						</ScrollView>		
+						<TouchableOpacity
+							onPress={this.onClosePressed}
+							style={styles.closeGalleryButton}>
+							<Text style={styles.closeGalleryButtonText}>X</Text>
+						</TouchableOpacity>
+				</Modal>
+		}
+		
+		
 	}
 			
 }
@@ -1510,6 +1535,8 @@ const styles = StyleSheet.create({
 		marginTop: 100 * alpha,
 	},
 	loading: {
+		position: "absolute",
+		width: "100%",
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -1708,7 +1735,11 @@ const styles = StyleSheet.create({
 		height: 50 * alpha,
 	},
 	bannerImage:{
-		height:windowHeight * alpha,
+		height: windowHeight * alpha,
+	},
+	bannerContainImage: {
+		height: windowHeight * alpha,
+		resizeMode: "contain"
 	},
 	totalAmountView: {
 		backgroundColor: "transparent",
@@ -1950,8 +1981,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		width: 40 * alpha,
 		height: 40 * alpha,
-		top: 25 * alpha,
-		right: 25 * alpha,
+		top: 30 * alpha,
+		right: 10 * alpha,
 	},
 	closeGalleryButtonImage: {
 		resizeMode: "contain",
