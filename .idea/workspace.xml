@@ -4,9 +4,6 @@
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.expo-shared/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-=======
       <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" afterDir="false" />
@@ -41,7 +38,6 @@
       <change beforePath="$PROJECT_DIR$/assets/images/top-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@1x.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/top-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@2x.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/images/top-fill@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@3x.png" afterDir="false" />
->>>>>>> 2c9887aa617ddb429c23e3c5dc84611740205d91
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
