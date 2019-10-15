@@ -9,6 +9,7 @@
 import React from "react"
 import { StyleSheet, Image, View, TouchableOpacity, Text, ScrollView } from "react-native"
 import {alpha, fontAlpha} from "../Common/size";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 
 export default class VIPPurchase extends React.Component {
@@ -416,7 +417,7 @@ const styles = StyleSheet.create({
 	},
 	memberCardText: {
 		color: "rgb(82, 46, 30)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	prioritydescriptionView: {
@@ -459,7 +460,7 @@ const styles = StyleSheet.create({
 	},
 	noNeedQueueText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 3 * alpha,
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
 	},
 	priorityText: {
 		color: "rgb(51, 51, 51)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -569,7 +570,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 3 * alpha,
@@ -578,7 +579,7 @@ const styles = StyleSheet.create({
 	freeDeliveryText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -623,14 +624,14 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		marginLeft: 4 * alpha,
 		marginRight: 3 * alpha,
 	},
 	buy1Free1Text: {
 		color: "rgb(51, 51, 51)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -676,7 +677,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 4 * alpha,
@@ -685,7 +686,7 @@ const styles = StyleSheet.create({
 	buy2Free1Text: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 51, 51)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -703,7 +704,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
@@ -720,7 +721,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -729,7 +730,7 @@ const styles = StyleSheet.create({
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -747,7 +748,7 @@ const styles = StyleSheet.create({
 	descriptionTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -755,7 +756,7 @@ const styles = StyleSheet.create({
 	},
 	valueTwoText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -764,7 +765,7 @@ const styles = StyleSheet.create({
 	},
 	otherdetailsButtonText: {
 		color: "rgb(176, 176, 176)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
 	agreeWithBrew9MemText: {
 		backgroundColor: "transparent",
 		color: "rgb(148, 147, 147)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
 	agreeWithBrew9MemTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -839,7 +840,7 @@ const styles = StyleSheet.create({
 	totalRm15012MontText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -864,7 +865,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	lineView: {

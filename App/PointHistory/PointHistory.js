@@ -14,6 +14,7 @@ import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
 import {KURL_INFO} from "../Utils/server";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		position: "absolute",
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
 	},
 	pointRuleButtonText: {
 		color: "rgb(30, 29, 29)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		marginLeft: 26 * alpha,
 	},
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
 	},
 	noLabelText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

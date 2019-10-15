@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 export default class CategoryCell extends React.Component {
   constructor(props) {
@@ -41,10 +42,13 @@ export default class CategoryCell extends React.Component {
           }
         >
           {this.props.selected ? <View style={styles.selectbarView} /> : null}
-          <View style={{flex: 1, padding: 7 * alpha}}>
-          {/* <Text style={styles.textWrapper}> */}
+          <View style={{ flex: 1, padding: 7 * alpha }}>
+            {/* <Text style={styles.textWrapper}> */}
             {categoryImage && (
-              <Image style={styles.categoryIconImage} source={{ uri: categoryImage }} />
+              <Image
+                style={styles.categoryIconImage}
+                source={{ uri: categoryImage }}
+              />
             )}
             <Text
               style={
@@ -59,7 +63,7 @@ export default class CategoryCell extends React.Component {
             >
               {categoryname}
             </Text>
-          {/* </Text> */}
+            {/* </Text> */}
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   categorycell_selected: {
     backgroundColor: "white",
@@ -84,21 +88,21 @@ const styles = StyleSheet.create({
     // height: 54 * alpha,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   selectbarView: {
     backgroundColor: "rgb(0, 178, 227)",
     width: 3 * alpha,
-    height: "100%",
+    height: "100%"
   },
   textWrapper: {
     flex: 1,
-    width: "100%",
+    width: "100%"
   },
   labelText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
   labelImageText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
   labelText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -138,7 +142,7 @@ const styles = StyleSheet.create({
   labelImageText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-Book",
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -146,12 +150,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 2 * alpha,
     marginRight: 7 * alpha,
-    flexWrap: "wrap",
+    flexWrap: "wrap"
   },
   categoryIconImage: {
     resizeMode: "center",
     backgroundColor: "transparent",
     width: 18 * alpha,
-    height: 18 * alpha,
+    height: 18 * alpha
   }
 });

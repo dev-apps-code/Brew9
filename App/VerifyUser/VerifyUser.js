@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from "react-native"
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -19,6 +19,7 @@ import {createAction, Storage} from "../Utils"
 import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -51,8 +52,12 @@ export default class VerifyUser extends React.Component {
 
 	}
 
-	componentDidMount() {
 	
+
+	componentDidMount() {
+	}
+
+	componentWillMount() {
 	}
 
 	onTermsAndConditionsPressed = (url) => {
@@ -246,19 +251,21 @@ export default class VerifyUser extends React.Component {
 						</TouchableOpacity>
 					</View> : null }
 					{this.state.is_counting ? 
-					<View style={styles.countDownContainer}>
-						<CountDown
-							until={120}
-							onFinish={() => this.setState({is_counting: false})}
-							style={styles.sendCountdown}
-							size={7}
-							digitStyle={{backgroundColor: 'transparent'}}
-							digitTxtStyle={styles.countdownText}
-							separatorStyle={{color: '#000000'}}
-							timeToShow={['M', 'S']}
-							timeLabels={{m: null, s: null}}
-							showSeparator
-						/>
+					<View style={styles.countDownContainer} >
+						<View style={styles.countDownWrapper}>
+							<CountDown
+								until={120}
+								onFinish={() => this.setState({is_counting: false})}
+								style={styles.sendCountdown}
+								size={7}
+								digitStyle={{backgroundColor: 'transparent'}}
+								digitTxtStyle={styles.countdownText}
+								separatorStyle={{color: '#FFFFFF'}}
+								timeToShow={['M', 'S']}
+								timeLabels={{m: null, s: null}}
+								showSeparator
+							/>
+							</View>
 						</View>
 						: undefined}				
 				</View>
@@ -345,7 +352,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "black",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		color: "rgb(0, 178, 227)",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
@@ -365,7 +372,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 83 * alpha,
@@ -373,7 +380,7 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "black", 
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -413,7 +420,7 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(46, 46, 46)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -425,13 +432,17 @@ const styles = StyleSheet.create({
 		marginLeft: 15 * alpha,
 	},
 	countDownContainer:{
-		marginTop: 20*alpha,
+		marginTop: 20 * alpha,
 		width: 330 * alpha,
 		alignItems: "center",
 	},
+	countDownWrapper: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 4 * alpha,
+	},
 	sendButton: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 4,
+		borderRadius: 4 * alpha,
 	
 		flexDirection: "row",
 		alignItems: "center",
@@ -447,7 +458,7 @@ const styles = StyleSheet.create({
 	},
 	sendButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -463,7 +474,7 @@ const styles = StyleSheet.create({
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
-        fontFamily: "ClanPro-Book",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -482,7 +493,7 @@ const styles = StyleSheet.create({
 	activationCodeTextInput: {
 
 		color: "rgb(46, 46, 46)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -507,7 +518,7 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -533,7 +544,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	termsAndConditionsButtonImage: {
@@ -560,7 +571,7 @@ const styles = StyleSheet.create({
 	errorMessageText: {
 		color: "white",
 		fontSize: 12 * fontAlpha,
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",

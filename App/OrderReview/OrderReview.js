@@ -9,6 +9,7 @@
 import React from "react"
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image} from "react-native"
 import {alpha, fontAlpha} from "../Common/size";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 
 export default class OrderReview extends React.Component {
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		alignSelf: "center",
 	},
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
 	commentText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
 	},
 	satisfactionText: {
 		color: "rgb(158, 157, 157)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 15 * alpha,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
 	},
 	levelText: {
 		color: "rgb(158, 157, 157)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -271,13 +272,13 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	dateText: {
 		backgroundColor: "transparent",
 		color: "rgb(200, 200, 200)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
 	messageText: {
 		backgroundColor: "transparent",
 		color: "rgb(158, 157, 157)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

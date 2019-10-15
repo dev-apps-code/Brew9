@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		alignSelf: "flex-start",
 		marginTop: 7 * alpha,
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 27 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	topUpButton: {
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	optionsView: {
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		marginLeft: 20 * alpha,
 	},
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 20 * alpha,
@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 20 * alpha,
@@ -588,7 +588,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		marginLeft: 20 * alpha,
 	},

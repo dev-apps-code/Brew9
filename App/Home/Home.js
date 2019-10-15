@@ -47,6 +47,8 @@ import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
+import CategoryHeaderCell from "./CategoryHeaderCell"
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -331,6 +333,9 @@ export default class Home extends React.Component {
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
 						data[index].scroll_index = index_length
+						console.log("Index",data[index])
+						items = items.concat(data[index])
+						index_length = index_length + 1
 						items = items.concat(data[index].products)						
 						index_length = index_length + data[index].products.length
 					}
@@ -582,6 +587,13 @@ export default class Home extends React.Component {
 					detailImage={item.banner_detail_image}
 					onPressItem={this.onBannerPressed}
 				/>
+			} else if (item.clazz == "product_category") {
+				return <CategoryHeaderCell
+					index={index}
+					item={item}
+					navigation={this.props.navigation}
+					categoryName={item.name}
+				/>
 			}
 		}
 	}
@@ -828,7 +840,7 @@ export default class Home extends React.Component {
 						if (hasRecommended == false) {
 							value = variant.variant_values[0]
 						}
-						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price)).toFixed(2)
+						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price ? value.price : 0.00)).toFixed(2)
 						selected.push(value)
 					}
 					product.selected_variants = selected
@@ -1558,7 +1570,7 @@ const styles = StyleSheet.create({
 	},
 	branchButtonText: {
 		color: "rgb(99, 97, 97)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1591,12 +1603,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	optionText: {
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 	},
 	pickUpText: {
 		color: "rgb(253, 253, 253)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1607,7 +1619,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(78, 77, 77)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1617,7 +1629,7 @@ const styles = StyleSheet.create({
 	distance1kmText: {
 		backgroundColor: "transparent",
 		color: "rgb(188, 181, 181)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1643,7 +1655,7 @@ const styles = StyleSheet.create({
 	},
 	moreButtonText: {
 		color: "rgb(162, 162, 162)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1755,10 +1767,10 @@ const styles = StyleSheet.create({
 	},
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 		backgroundColor: "transparent",
@@ -1766,10 +1778,10 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 20 * alpha,
@@ -1789,10 +1801,10 @@ const styles = StyleSheet.create({
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 6 * alpha,
@@ -1812,10 +1824,10 @@ const styles = StyleSheet.create({
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	checkoutButtonImage: {
@@ -1840,7 +1852,7 @@ const styles = StyleSheet.create({
 	},
 	clearButtonText: {
 		color: "rgb(144, 141, 141)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1922,7 +1934,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1947,7 +1959,7 @@ const styles = StyleSheet.create({
 	},
 	closeGalleryButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1968,7 +1980,7 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1978,7 +1990,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionHeaderText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1989,7 +2001,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2009,7 +2021,7 @@ const styles = StyleSheet.create({
 	ingredientText: {
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2026,7 +2038,7 @@ const styles = StyleSheet.create({
 	},
 	milkText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2044,7 +2056,7 @@ const styles = StyleSheet.create({
 	},
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2080,7 +2092,7 @@ const styles = StyleSheet.create({
 	},
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2107,7 +2119,7 @@ const styles = StyleSheet.create({
 	},
 	selectedButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2125,7 +2137,7 @@ const styles = StyleSheet.create({
 	},
 	optiontitleText: {
 		color: "rgb(141, 141, 141)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2149,7 +2161,7 @@ const styles = StyleSheet.create({
 	},
 	recommendedButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2161,7 +2173,7 @@ const styles = StyleSheet.create({
 	},
 	unavailableButtonText: {
 		color: "rgb(201, 201, 201)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2194,7 +2206,7 @@ const styles = StyleSheet.create({
 	},
 	choiceThreeButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2217,7 +2229,7 @@ const styles = StyleSheet.create({
 	},
 	choiceTwoButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2240,7 +2252,7 @@ const styles = StyleSheet.create({
 	},
 	choiceButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2267,7 +2279,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2282,7 +2294,7 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2330,7 +2342,7 @@ const styles = StyleSheet.create({
 	optionsText: {
 		backgroundColor: "transparent",
 		color: "rgb(141, 141, 141)",
-		fontFamily: "ClanPro-NarrBook",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2362,7 +2374,7 @@ const styles = StyleSheet.create({
 	},
 	addToCartButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2395,7 +2407,7 @@ const styles = StyleSheet.create({
 	},
 	alertViewTitle:{
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2405,7 +2417,7 @@ const styles = StyleSheet.create({
 	},
 	alertViewText:{
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2440,7 +2452,7 @@ const styles = StyleSheet.create({
 	deliveryTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2449,7 +2461,7 @@ const styles = StyleSheet.create({
 	freeWithRm40SpendText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2459,7 +2471,7 @@ const styles = StyleSheet.create({
 	deliveredByBrew9Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2469,7 +2481,7 @@ const styles = StyleSheet.create({
 	deliverAreaAffectText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2479,7 +2491,7 @@ const styles = StyleSheet.create({
 	deliveryRm5ExtraText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2496,7 +2508,7 @@ const styles = StyleSheet.create({
 	branchInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2505,7 +2517,7 @@ const styles = StyleSheet.create({
 	branchAddress: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2516,7 +2528,7 @@ const styles = StyleSheet.create({
 	branchContact: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2526,7 +2538,7 @@ const styles = StyleSheet.create({
 	businessHour1000Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily: "ClanPro-Book",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

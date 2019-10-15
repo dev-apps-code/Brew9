@@ -13,6 +13,7 @@ import {connect} from "react-redux";
 import QrCodeRequestObject from "../Requests/qr_code_request_object";
 import {createAction} from "../Utils";
 import QRCode from 'react-native-qrcode-svg';
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 10 * alpha,
@@ -418,7 +419,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	selectView: {
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 10 * alpha,
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 10 * alpha,
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
 	balanceText: {
 		backgroundColor: "transparent",
 		color: "rgb(186, 179, 179)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 44 * alpha,
@@ -492,7 +493,7 @@ const styles = StyleSheet.create({
 	autoText: {
 		backgroundColor: "transparent",
 		color: "rgb(192, 192, 192)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
