@@ -30,6 +30,10 @@ export default class PickUp extends React.Component {
             headerTintColor: "black",          
 			headerLeft: null,
 			headerRight: null,
+			headerTitleStyle: { 
+				textAlign:"center", 
+				flex:1 
+			},
 		}
 	}
 
