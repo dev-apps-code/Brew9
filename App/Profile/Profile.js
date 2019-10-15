@@ -46,7 +46,7 @@ export default class Profile extends React.Component {
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha }}/>
+					style={{resizeMode: "contain", width: 30, height: 30 * alpha }}/>
 			},
 		}
 	}
