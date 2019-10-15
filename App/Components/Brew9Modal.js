@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: "rgb(57, 57, 57)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * alpha,
 		fontStyle: "normal",
 		textAlign: "center",

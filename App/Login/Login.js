@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
 	welcomeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
 	},
 	phoneCountryCodeText: {
 		marginLeft: 0 * alpha,
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		backgroundColor: "blue"
 	},
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "black",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(46, 46, 46)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
 	instructionTwoText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
 	facebookText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",

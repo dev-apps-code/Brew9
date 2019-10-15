@@ -91,13 +91,9 @@ export default class DirectionMap extends React.Component {
 									longitude: shop ? parseFloat(shop.longitude) : 0.0,
 								}
 								}
-								// title={shop.name}
+								title={shop.name}
 								description={shop.location}
-								>
-									{/* <MapView.Marker.Callout>
-                						<Text style={styles}>{shop.name}</Text>
-            						</MapView.Marker.Callout> */}
-									</MapView.Marker>
+								/>
 						  </MapView>
 				<View
 					style={styles.branchView}>

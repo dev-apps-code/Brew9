@@ -86,7 +86,6 @@ export default class CheckoutVoucher extends React.Component {
                     valid_initial:false
                     })  
 				if (eventObject.success) {
-                    console.log("Valid", eventObject.result)
 					this.setState({ 
 						valid_data:eventObject.result
 					},function () {
@@ -108,11 +107,9 @@ export default class CheckoutVoucher extends React.Component {
     }
 
     loadUsedVoucher(page_no) {
-        console.log("Used")
         const { dispatch, currentMember } = this.props
         const callback = eventObject => {
             if (eventObject.success) {
-                console.log("Used", eventObject.result)
                 this.setState({
                     isRefreshing: false,
                     loading: false,
@@ -132,7 +129,7 @@ export default class CheckoutVoucher extends React.Component {
         obj.setPage(page_no)
         obj.setStatus(1)
         dispatch(
-            createAction('vouchers/loadUsedVoucher')({
+            createAction('vouchers/loadValidVoucher')({
                 object: obj,
                 callback
             })
@@ -167,7 +164,6 @@ export default class CheckoutVoucher extends React.Component {
             valid_selected: true,
             used_selected: false,
             current_data: valid_data,
-            loading: false,
         })
 
     }
@@ -348,28 +344,18 @@ export default class CheckoutVoucher extends React.Component {
                             <ActivityIndicator size="large" />
                         </View>
                     )}
-
-                    { this.state.current_data.length == 0 && !this.state.loading ?
-						<View
-							style={styles.novoucherviewView}> 
-							<Image 
-								source={require("./../../assets/images/brew9-doodle-03.png")} 
-								style={styles.storeimageImage}/> 
-							<Text 
-								style={styles.noRewardAvailableText}>No voucher available</Text> 
-						</View> :
-                        <View
-                            style={styles.voucherlistviewFlatListViewWrapper}>
-                            <FlatList
-                                renderItem={this.renderVouchertableFlatListCell}
-                                data={this.state.current_data}
-                                style={styles.voucherlistviewFlatList}
-                                refreshing={this.state.isRefreshing}
-                                onRefresh={this.onRefresh.bind(this)}
-                                onEndReachedThreshold={0.1}
-                                onEndReached={this.loadMore.bind(this)}
-                                keyExtractor={(item, index) => index.toString()}/>
-                        </View> }
+                    <View
+                        style={styles.voucherlistviewFlatListViewWrapper}>
+                        <FlatList
+                            renderItem={this.renderVouchertableFlatListCell}
+                            data={this.state.current_data}
+                            style={styles.voucherlistviewFlatList}
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this.onRefresh.bind(this)}
+                            onEndReachedThreshold={0.1}
+                            onEndReached={this.loadMore.bind(this)}
+                            keyExtractor={(item, index) => index.toString()}/>
+                    </View>
                 </View>
                 {/*<View*/}
                 {/*	style={styles.novoucherviewView}>*/}
@@ -483,7 +469,7 @@ const styles = StyleSheet.create({
     },
     usedButtonText: {
         color: "rgb(118, 118, 118)",
-        fontFamily: "ClanPro-Thin",
+        fontFamily: "SFProText-Medium",
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "bold",
@@ -577,7 +563,7 @@ const styles = StyleSheet.create({
     },
     redeemrewardButtonText: {
         color: "rgb(82, 82, 82)",
-        fontFamily: "ClanPro-Thin",
+        fontFamily: "SFProText-Medium",
         fontSize: 15 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "bold",

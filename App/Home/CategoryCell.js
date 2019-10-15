@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   labelText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-News",
-    fontSize: 12 * fontAlpha,
+    fontFamily: "ClanPro-Book",
+    fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "center",
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
   labelImageText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-News",
-    fontSize: 12 * fontAlpha,
+    fontFamily: "ClanPro-Book",
+    fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
   labelText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-News",
-    fontSize: 12 * fontAlpha,
+    fontFamily: "ClanPro-Book",
+    fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
   labelImageText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: "ClanPro-News",
-    fontSize: 12 * fontAlpha,
+    fontFamily: "ClanPro-Book",
+    fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   categoryIconImage: {
     resizeMode: "center",
     backgroundColor: "transparent",
-    width: 19 * alpha,
-    height: 19 * alpha,
+    width: 18 * alpha,
+    height: 18 * alpha,
   }
 });

@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
 	},
 	iText: {
 		color: "rgb(110, 110, 110)",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
 	upgradeButtonText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: "ClanPro-Book",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
 	otherLevelRewardButtonText: {
 		color: "rgb(118, 118, 118)",
 		fontFamily: "ClanPro-Book",
-		fontFamily: "ClanPro-Thin",
+		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

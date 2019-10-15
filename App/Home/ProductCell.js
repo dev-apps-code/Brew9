@@ -6,24 +6,49 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, TouchableWithoutFeedback, StyleSheet, TouchableOpacity } from "react-native"
-import React from "react"
+import {
+  View,
+  Text,
+  Image,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  TouchableOpacity
+} from "react-native";
+import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 
 export default class ProductCell extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-	constructor(props) {
-		super(props)
+  componentDidMount() {}
 
-	}
+  onProductCellPress = () => {
+    this.props.onCellPress(this.props.item, this.props.index);
+  };
 
-	componentDidMount() {
+  onAddPressed = () => {
+    this.props.onChangeQuantity(
+      this.props.item,
+      this.props.index,
+      "add",
+      false
+    );
+  };
 
-	}
+  onRemovePressed = () => {
+    this.props.onChangeQuantity(
+      this.props.item,
+      this.props.index,
+      "remove",
+      false
+    );
+  };
 
-	onProductCellPress = () => {
-		this.props.onCellPress(this.props.item,this.props.index);
-	}
+  onSelectOptionPressed = () => {
+    this.props.onCellPress(this.props.item, this.props.index);
+  };
 
 	onAddPressed = () => {
 		this.props.onChangeQuantity(this.props.item,this.props.index, "add", false);
