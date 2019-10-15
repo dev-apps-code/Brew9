@@ -1471,10 +1471,13 @@ export default class Home extends React.Component {
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<ScrollView
             style={{}}>
-            <AutoHeightImage
-                source={{uri:  this.state.selected_promotion}}
-                width={windowWidth}
-                style={styles.bannerImage}/>
+				
+				<View style={[styles.loading]}><ActivityIndicator size="large" color="black" /></View>
+				{/* <AutoHeightImage
+						source={{uri:  this.state.selected_promotion}}
+						width={windowWidth}
+						style={styles.bannerImage}/> */}
+				
         </ScrollView>		
 		<TouchableOpacity
 					onPress={this.onClosePressed}
@@ -1491,6 +1494,14 @@ const styles = StyleSheet.create({
 	},
 	loadingIndicator:{
 		marginTop:100 * alpha,
+	},
+	loading: {
+		position: 'absolute',
+		left: 0,
+		bottom: 0,
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	navigationBarItemIcon: {
 		tintColor: "rgb(0, 194, 236)",
