@@ -47,6 +47,7 @@ import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
+import CategoryHeaderCell from "./CategoryHeaderCell"
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -331,6 +332,9 @@ export default class Home extends React.Component {
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
 						data[index].scroll_index = index_length
+						console.log("Index",data[index])
+						items = items.concat(data[index])
+						index_length = index_length + 1
 						items = items.concat(data[index].products)						
 						index_length = index_length + data[index].products.length
 					}
@@ -581,6 +585,13 @@ export default class Home extends React.Component {
 					bannerImage={item.image}
 					detailImage={item.banner_detail_image}
 					onPressItem={this.onBannerPressed}
+				/>
+			} else if (item.clazz == "product_category") {
+				return <CategoryHeaderCell
+					index={index}
+					item={item}
+					navigation={this.props.navigation}
+					categoryName={item.name}
 				/>
 			}
 		}
