@@ -1475,10 +1475,10 @@ export default class Home extends React.Component {
             style={{}}>
 				
 				
-				{/* <AutoHeightImage
+				<AutoHeightImage
 						source={{uri:  this.state.selected_promotion}}
 						width={windowWidth}
-						style={styles.bannerImage}/> */}
+						style={styles.bannerImage}/>
 				
         </ScrollView>		
 		<TouchableOpacity
