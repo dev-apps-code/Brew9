@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   detailsView: {
     backgroundColor: "transparent",
-    width: 200 * alpha,
+    width: 190 * alpha,
     height: 105 * alpha,
     marginLeft: 10 * alpha
   },
