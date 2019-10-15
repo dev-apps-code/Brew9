@@ -10,6 +10,7 @@ import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import { WebView } from "react-native-webview";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 export default class WebCommonModal extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "black",
-    fontFamily: "ClanPro-Book",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 18 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",

@@ -14,6 +14,7 @@ import MembershipRequestObject from "../Requests/membership_request_object.js";
 import {createAction} from "../Utils";
 import {connect} from "react-redux";
 import Carousel, {Pagination} from 'react-native-snap-carousel'
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
 	memberRightsText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
 	membershiptitleText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
 	exprangeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
 	},
 	benefitsText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	customerServiceButton: {
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 2 * alpha,
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "stretch",
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		marginRight: 12 * alpha,
 	},
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 1 * alpha,
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		marginLeft: 6 * alpha,
 		marginRight: 7 * alpha,
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	descriptionThreeText: {
@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	totalView: {
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	totalText: {
@@ -611,7 +611,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -628,7 +628,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		alignSelf: "flex-start",
 		marginLeft: 26 * alpha,
@@ -654,7 +654,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	descriptionText: {
@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	quantityText: {
@@ -699,7 +699,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -783,7 +783,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 12* fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	descriptionThreeText: {

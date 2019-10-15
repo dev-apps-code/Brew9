@@ -22,6 +22,7 @@ import { createAction } from "../Utils";
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import NotificationsCell from "./NotificationsCell";
 import * as SecureStore from "expo-secure-store";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
   members: members.profile
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
   noticeText: {
     backgroundColor: "transparent",
     color: "rgb(107, 109, 108)",
-    fontFamily: "ClanPro-Book",
+    fontFamily:  NON_TITLE_FONT,
     fontSize: 13 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
   },
   readallButtonText: {
     color: "rgb(107, 109, 108)",
-    fontFamily: "ClanPro-Book",
+    fontFamily:  NON_TITLE_FONT,
     fontSize: 13 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
   },
   noLabelText: {
     color: "rgb(149, 149, 149)",
-    fontFamily: "ClanPro-Book",
+    fontFamily:  NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",

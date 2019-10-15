@@ -11,6 +11,7 @@ import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
 import {KURL_INFO} from "../Utils/server";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 @connect(({ members }) => ({
     company_id: members.company_id,
 }))
@@ -147,12 +148,12 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	termsButtonImage: {

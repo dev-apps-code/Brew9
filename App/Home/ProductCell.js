@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 export default class ProductCell extends React.Component {
   constructor(props) {
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		opacity: 0.8,
 		color: "black",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		marginBottom: 20 * alpha,
 		fontStyle: "normal",
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
 	},
 	optionButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
 		fontFamily: "ClanPro-Thin",
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
 	ingredientText: {
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

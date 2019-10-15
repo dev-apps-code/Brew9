@@ -21,6 +21,7 @@ import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -826,7 +827,7 @@ const styles = StyleSheet.create({
 	},
 	branchText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 
 		fontStyle: "normal",
@@ -850,7 +851,7 @@ const styles = StyleSheet.create({
 	},
 	distance1kmPleaseText: {
 		color: "rgb(163, 163, 163)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -890,7 +891,7 @@ const styles = StyleSheet.create({
 	selfPickUpText: {
 		backgroundColor: "transparent",
 		color: "rgb(70, 76, 84)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -900,7 +901,7 @@ const styles = StyleSheet.create({
 	selfPickUpText_selected: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -945,7 +946,6 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "left",
 	},
 	deliveryView: {
@@ -979,7 +979,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(70, 76, 84)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -989,7 +989,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText_selected: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1014,7 +1014,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	contactView: {
@@ -1028,7 +1028,7 @@ const styles = StyleSheet.create({
 	},
 	contactText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1065,7 +1065,7 @@ const styles = StyleSheet.create({
 	},
 	autoFillButtonText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1089,7 +1089,7 @@ const styles = StyleSheet.create({
 	},
 	orderCapacityText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1113,7 +1113,7 @@ const styles = StyleSheet.create({
 	},
 	orders34CupsText: {
 		color: "rgb(55, 56, 57)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1123,7 +1123,7 @@ const styles = StyleSheet.create({
 	},
 	estimated15MinsToText: {
 		color: "rgb(79, 76, 76)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1137,7 +1137,7 @@ const styles = StyleSheet.create({
 	},
 	orderConfirmationText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1156,7 +1156,7 @@ const styles = StyleSheet.create({
 	},
 	nameTwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1166,7 +1166,7 @@ const styles = StyleSheet.create({
 	},
 	quantityTwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1176,7 +1176,7 @@ const styles = StyleSheet.create({
 	},
 	rm20TwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1189,7 +1189,7 @@ const styles = StyleSheet.create({
 	},
 	promoCodeText: {
 		color: "rgb(99, 97, 97)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1198,7 +1198,7 @@ const styles = StyleSheet.create({
 	},
 	statusText: {
 		color: "rgb(181, 181, 181)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1227,7 +1227,7 @@ const styles = StyleSheet.create({
 	},
 	voucherButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1235,7 +1235,7 @@ const styles = StyleSheet.create({
 	},
 	summaryText: {
 		color: "rgb(135, 135, 135)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1252,7 +1252,7 @@ const styles = StyleSheet.create({
 	},
 	paymentMethodText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1282,7 +1282,7 @@ const styles = StyleSheet.create({
 	},
 	paymenttypeText: {
 		color: 'rgb(85,85,85)',
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1311,7 +1311,7 @@ const styles = StyleSheet.create({
 	},
 	paymentButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1326,7 +1326,7 @@ const styles = StyleSheet.create({
 	},
 	remarkText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1335,7 +1335,7 @@ const styles = StyleSheet.create({
 	},
 	remarksText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1366,7 +1366,7 @@ const styles = StyleSheet.create({
 	},
 	remarkButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1387,7 +1387,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 16 * alpha,
@@ -1410,7 +1410,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 	},
 	itemView: {
@@ -1421,7 +1421,7 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1430,7 +1430,7 @@ const styles = StyleSheet.create({
 	},
 	variantText: {
 		color: "rgb(148, 148, 148)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1444,7 +1444,7 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1453,7 +1453,7 @@ const styles = StyleSheet.create({
 	},
 	cartpriceText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

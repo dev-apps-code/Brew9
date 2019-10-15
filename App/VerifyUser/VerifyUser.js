@@ -19,6 +19,7 @@ import {createAction, Storage} from "../Utils"
 import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "black",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		color: "rgb(0, 178, 227)",
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 83 * alpha,
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "black", 
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(46, 46, 46)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
 	},
 	sendButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -463,7 +464,7 @@ const styles = StyleSheet.create({
 	},
 	countdownText: {
         color: "rgb(98, 97, 97)",
-        fontFamily: "ClanPro-Book",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
 	activationCodeTextInput: {
 
 		color: "rgb(46, 46, 46)",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -507,7 +508,7 @@ const styles = StyleSheet.create({
 	},
 	verifyButtonText: {
 		color: "white",
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
 		fontFamily: "SFProText-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
+		
 		textAlign: "center",
 	},
 	termsAndConditionsButtonImage: {
@@ -560,7 +561,7 @@ const styles = StyleSheet.create({
 	errorMessageText: {
 		color: "white",
 		fontSize: 12 * fontAlpha,
-		fontFamily: "ClanPro-Book",
+		fontFamily: NON_TITLE_FONT,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
