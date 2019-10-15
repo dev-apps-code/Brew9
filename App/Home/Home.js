@@ -2539,7 +2539,7 @@ const styles = StyleSheet.create({
 	branchInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily:  TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

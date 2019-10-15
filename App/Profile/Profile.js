@@ -903,7 +903,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(51, 49, 49)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -1275,7 +1275,7 @@ const styles = StyleSheet.create({
 	pointRewardText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -1285,7 +1285,7 @@ const styles = StyleSheet.create({
 	pointRewardDisableText: {
 		backgroundColor: "transparent",
 		color: "rgb(180, 180, 180)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -1460,7 +1460,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		flex: 1,
 		marginLeft: 15 * alpha,
@@ -1538,7 +1537,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 	},

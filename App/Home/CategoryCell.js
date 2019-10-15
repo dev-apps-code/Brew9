@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   labelImageText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   labelText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   labelImageText_selected: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",

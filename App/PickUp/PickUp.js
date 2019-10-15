@@ -58,7 +58,7 @@ export default class PickUp extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: true,
+			loading: false,
 			current_order: [],
 		}
 	}
