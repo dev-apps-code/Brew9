@@ -1,6 +1,10 @@
 import { windowWidth, alpha } from "./size";
 import { StyleSheet } from "react-native";
 
+export const COLOR_BTN_LIGHTGRAY = "rgb(148, 148, 148)";
+export const COLOR_BREW9 = "rgb(148, 148, 148)";
+
+
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: "blue",
