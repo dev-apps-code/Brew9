@@ -1470,14 +1470,15 @@ export default class Home extends React.Component {
 		}]	 
 		return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
+				<View style={[styles.loading]}><ActivityIndicator size="large" color="white" /></View>
 				<ScrollView
             style={{}}>
 				
-				<View style={[styles.loading]}><ActivityIndicator size="large" color="black" /></View>
-				{/* <AutoHeightImage
+				
+				<AutoHeightImage
 						source={{uri:  this.state.selected_promotion}}
 						width={windowWidth}
-						style={styles.bannerImage}/> */}
+						style={styles.bannerImage}/>
 				
         </ScrollView>		
 		<TouchableOpacity
@@ -1497,9 +1498,6 @@ const styles = StyleSheet.create({
 		marginTop: 100 * alpha,
 	},
 	loading: {
-		position: 'absolute',
-		left: 0,
-		bottom: 0,
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -1930,17 +1928,16 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-
 	closeGalleryButton: {
-		backgroundColor: "transparent",
-		borderRadius: 12.5 * alpha,
+		backgroundColor: "black",
+		borderRadius: 20 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
 		width: 40 * alpha,
-		height: 50 * alpha,
+		height: 40 * alpha,
 		top: 25 * alpha,
 		right: 25 * alpha,
 	},
