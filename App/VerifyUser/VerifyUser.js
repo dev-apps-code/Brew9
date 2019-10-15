@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from "react-native"
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -51,8 +51,12 @@ export default class VerifyUser extends React.Component {
 
 	}
 
-	componentDidMount() {
 	
+
+	componentDidMount() {
+	}
+
+	componentWillMount() {
 	}
 
 	onTermsAndConditionsPressed = (url) => {
@@ -246,19 +250,21 @@ export default class VerifyUser extends React.Component {
 						</TouchableOpacity>
 					</View> : null }
 					{this.state.is_counting ? 
-					<View style={styles.countDownContainer}>
-						<CountDown
-							until={120}
-							onFinish={() => this.setState({is_counting: false})}
-							style={styles.sendCountdown}
-							size={7}
-							digitStyle={{backgroundColor: 'transparent'}}
-							digitTxtStyle={styles.countdownText}
-							separatorStyle={{color: '#000000'}}
-							timeToShow={['M', 'S']}
-							timeLabels={{m: null, s: null}}
-							showSeparator
-						/>
+					<View style={styles.countDownContainer} >
+						<View style={styles.countDownWrapper}>
+							<CountDown
+								until={120}
+								onFinish={() => this.setState({is_counting: false})}
+								style={styles.sendCountdown}
+								size={7}
+								digitStyle={{backgroundColor: 'transparent'}}
+								digitTxtStyle={styles.countdownText}
+								separatorStyle={{color: '#FFFFFF'}}
+								timeToShow={['M', 'S']}
+								timeLabels={{m: null, s: null}}
+								showSeparator
+							/>
+							</View>
 						</View>
 						: undefined}				
 				</View>
@@ -425,13 +431,17 @@ const styles = StyleSheet.create({
 		marginLeft: 15 * alpha,
 	},
 	countDownContainer:{
-		marginTop: 20*alpha,
+		marginTop: 20 * alpha,
 		width: 330 * alpha,
 		alignItems: "center",
 	},
+	countDownWrapper: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 4 * alpha,
+	},
 	sendButton: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 4,
+		borderRadius: 4 * alpha,
 	
 		flexDirection: "row",
 		alignItems: "center",
@@ -462,7 +472,7 @@ const styles = StyleSheet.create({
 		height: 26 * alpha,
 	},
 	countdownText: {
-        color: "rgb(98, 97, 97)",
+        color: "white",
         fontFamily: "ClanPro-Book",
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",

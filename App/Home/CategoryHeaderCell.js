@@ -24,7 +24,7 @@ import {
     componentDidMount() {}
   
     onCategoryCellPress = () => {
-      this.props.onSelectCategory(this.props.scrollIndex, this.props.index);
+      
     };
   
     render() {
