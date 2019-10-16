@@ -102,14 +102,13 @@ const styles = StyleSheet.create({
   labelText: {
     backgroundColor: "transparent",
     color: "rgb(78, 77, 77)",
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
-    textAlign: "center",
+    textAlign: "left",
     width: "100%",
     flex: 1,
-    marginLeft: 14 * alpha,
     marginRight: 7 * alpha,
     flexWrap: "wrap"
   },
@@ -135,7 +134,6 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     textAlign: "left",
     flex: 1,
-    marginLeft: 14 * alpha,
     marginRight: 7 * alpha,
     flexWrap: "wrap"
   },
