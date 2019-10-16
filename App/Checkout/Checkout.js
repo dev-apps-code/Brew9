@@ -63,9 +63,13 @@ export default class Checkout extends React.Component {
 			valid_vouchers:[],
 			discount:0,
 			cart:this.props.navigation.getParam("cart", []),
-			modal_title:'Success',
-			modal_description:'',
-			modal_visible:false,
+			modal_visible: false,
+			modal_description: "",
+			modal_title: "",
+			modal_cancelable: false,
+			modal_ok_text: null,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 			payment_toggle: false,
 			payment_model_visible: false,
 			payment_view_height: 0 * alpha,
@@ -81,6 +85,17 @@ export default class Checkout extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 		this.loadValidVouchers()
+
+		// this.setState({
+		// 	modal_title: "Brew9",
+		// 	modal_description: `Mocha Coffee \n Chocolate`,
+		// 	modal_cancelable: false,
+		// 	modal_ok_text: "Remove from Cart",
+		// 	modal_ok_action: ()=> {
+		// 		this.setState({modal_visible:false})
+		// 	},
+		// 	modal_visible:true,
+		// })
 	}
 
 	loadValidVouchers(){
@@ -215,9 +230,15 @@ export default class Checkout extends React.Component {
 			})
 			if (eventObject.success) {
 				this.setState({
-					modal_title:'Success',
+					modal_title:'Brew9',
 					modal_description:eventObject.message,
-					modal_visible:true
+					modal_ok_text: null,
+					modal_cancelable: false,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+						this.clearCart()
+					},
+					modal_visible:true,
 				})
 			}else{
 				this.refs.toast.show(eventObject.message);
@@ -282,7 +303,20 @@ export default class Checkout extends React.Component {
 				// 	],
 				// 	{ cancelable: false }
 				// );
-				this.setState({modal_visible:true})
+				this.setState({
+					modal_visible:true,
+					modal_title: "Brew9",
+					modal_description: "Are you sure you want to confirm the order?",
+					modal_ok_text: null,
+					modal_cancelable: true,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+						this.loadMakeOrder()
+					},
+					modal_cancel_action: ()=> {
+						this.setState({modal_visible:false})
+					}
+				})
 				return
 			} else if ( selected_payment == "credit") {
 				navigate("PayByCard" , {
@@ -319,20 +353,16 @@ export default class Checkout extends React.Component {
 		// })
 	}
 
-	renderConfirmPaymentModal() {
+	renderPopup() {
 		return <Brew9Modal
-				title={"Confirmation"}
-				description={"Are you sure you want to confirm the order?"}
-				visible={this.state.modal_visible}
-				cancelable={true}
-				okayButtonAction={()=> {
-					this.setState({modal_visible:false})
-					this.loadMakeOrder()
-				}}
-				cancelButtonAction={()=> {
-					this.setState({modal_visible:false})
-				}}
-			/>
+			title={this.state.modal_title}
+			description={this.state.modal_description}
+			visible={this.state.modal_visible}
+			confirm_text={this.state.modal_ok_text}
+			cancelable={this.state.modal_cancelable}
+			okayButtonAction={this.state.modal_ok_action}
+			cancelButtonAction={this.state.modal_cancel_action}
+		/>
 	}
 
 	tooglePayment = () => {
@@ -681,7 +711,6 @@ export default class Checkout extends React.Component {
 
 		return <View
 			style={styles.checkoutView}>
-			{this.renderConfirmPaymentModal()}
 			<ScrollView
 				style={styles.scrollviewScrollView}
 				onLayout={(event) => this.measureView(event)}>
@@ -1052,7 +1081,7 @@ export default class Checkout extends React.Component {
 
 				{this.renderPaymentMethod()}
 			</ScrollView>
-			{this.renderConfirmPaymentModal()}
+			{this.renderPopup()}
 			<View
 				style={styles.totalPayNowView}>
 				<Text

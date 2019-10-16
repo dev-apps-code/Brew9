@@ -15,16 +15,16 @@ class Brew9Modal extends Component {
               this.props.cancelable ?
               <ModalFooter>               
                   <ModalButton
-                    text="OK"
+                    text={this.props.confirm_text ? this.props.confirm_text : "OK"}
                     onPress={this.props.okayButtonAction}
                   />
                   <ModalButton
-                        text="Cancel"
+                        text={this.props.cancel_text ? this.props.cancel_text : "Cancel"}
                         onPress={this.props.cancelButtonAction}
                   />
               </ModalFooter> : <ModalFooter>               
                   <ModalButton
-                    text="OK"
+                    text={this.props.confirm_text ? this.props.confirm_text : "OK"}
                     onPress={this.props.okayButtonAction}
                   />
               </ModalFooter>
