@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "devToolsPort": 19004,
   "expoServerPort": 19000,
   "packagerPort": 19004,
@@ -6,4 +7,13 @@
   "expoServerNgrokUrl": "https://pw-y73.tonyvoon.brew9-app.exp.direct",
   "packagerNgrokUrl": "https://packager.pw-y73.tonyvoon.brew9-app.exp.direct",
   "ngrokPid": 57619
+=======
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 3920,
+  "expoServerNgrokUrl": "https://bb-3fg.tonyvoon.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.bb-3fg.tonyvoon.brew9-app.exp.direct",
+  "ngrokPid": 3939
+>>>>>>> 989dd4f2f52daf5f9c5923b4d2b279841301317b
 }
