@@ -197,9 +197,9 @@ export default class ProductCell extends React.Component {
 
 const styles = StyleSheet.create({
   productcell: {
-    backgroundColor: "transparent",
     width: "100%",
-    height: 143 * alpha,
+    marginTop: 5 * alpha,
+    // marginBottom: 5 * alpha,
     // flex: 1,
     flexDirection: "row",
     alignItems: "flex-start"
@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
   detailsView: {
     backgroundColor: "transparent",
     width: 190 * alpha,
-    height: 105 * alpha,
     marginLeft: 10 * alpha
   },
   titleText: {
@@ -261,7 +260,8 @@ const styles = StyleSheet.create({
     color: "rgb(54, 54, 54)",
     fontFamily: TITLE_FONT,
     fontSize: 18 * fontAlpha,
-    marginBottom: 20 * alpha,
+    marginTop: 10 * alpha,
+    marginBottom: 10 * alpha,
     fontStyle: "normal",
     textAlign: "left"
   },

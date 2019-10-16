@@ -562,7 +562,7 @@ export default class Home extends React.Component {
 					item={item}
 					productname={item.name}
 					productprice={item.price}
-					productimage={item.image.thumb.url}
+					productimage={item.middle}
 					productquantity={item.quantity}
 					productsummary={item.summary}
 					productvariant={item.variants}
