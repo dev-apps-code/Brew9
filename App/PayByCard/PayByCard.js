@@ -44,10 +44,10 @@ export default class PayByCard extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			card_name = "",
-			card_number = "",
-			card_expiry = "",
-			cart_csv = ""
+			card_name: "",
+			card_number: "",
+			card_expiry: "",
+			cart_csv: ""
 		}
 	}
 
