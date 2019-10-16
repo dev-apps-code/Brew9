@@ -77,7 +77,7 @@ export default class ProductCell extends React.Component {
     const ingredients = this.props.productingredient.map((item, key) => {
       return (
         <View style={styles.ingredientView} key={key}>
-          <Text style={styles.ingredientText}>{item.name}</Text>
+          <Text numberOfLines={1} style={styles.ingredientText}>{item.name}</Text>
         </View>
       );
     });

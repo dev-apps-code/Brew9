@@ -55,7 +55,7 @@ import Register from "./App/Register/Register";
 import DirectionMap from "./App/DirectionMap/DirectionMap";
 import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail";
 import ScanQr from "./App/Home/ScanQr";
-
+import PayByCard from "./App/PayByCard/PayByCard"
 import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
 import { registerModels } from "./App/Model/index";
@@ -88,6 +88,9 @@ const PushOrder = createStackNavigator(
     },
     PayByWallet: {
       screen: PayByWallet
+    },
+    PayByCard: {
+      screen: PayByCard
     },
     Transaction: {
       screen: Transaction

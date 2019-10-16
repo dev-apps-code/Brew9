@@ -6,10 +6,10 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
+import { Animated, Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
 import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
 import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -65,8 +65,14 @@ export default class Checkout extends React.Component {
 			cart:this.props.navigation.getParam("cart", []),
 			modal_title:'Success',
 			modal_description:'',
-			modal_visible:false
+			modal_visible:false,
+			payment_toggle: false,
+			payment_model_visible: false,
+			payment_view_height: 0 * alpha,
+			selected_payment: 'wallet'
 		}
+
+		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
 
 	componentDidMount() {
@@ -195,8 +201,7 @@ export default class Checkout extends React.Component {
 	}
 
 	onPaymentButtonPressed = () => {
-		
-			
+		this.tooglePayment()
 	}
 
 	loadMakeOrder(){
@@ -230,9 +235,23 @@ export default class Checkout extends React.Component {
 		)
 	}
 
+	onWalletButtonPressed = () => {
+		this.setState({
+			selected_payment: "wallet"
+		})
+		this.tooglePayment()
+	}
+
+	onCreditButtonPressed = () => {
+		this.setState({
+			selected_payment: "credit"
+		})
+		this.tooglePayment()
+	}
+
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const {cart_total} = this.state
+		const {cart_total, selected_payment} = this.state
 		const {currentMember,selectedShop, navigation } = this.props
 
 		// const { routeName, key } = navigation.getParam('returnToRoute')
@@ -244,32 +263,46 @@ export default class Checkout extends React.Component {
 			// 	return
 			// }
 
-			if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
-				this.refs.toast.show("You do not have enough credit. Please top up at our counter");
+			if ( selected_payment == "wallet") {
+				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
+					this.refs.toast.show("You do not have enough credit. Please top up at our counter");
+					return
+				}
+	
+				// Alert.alert(
+				// 	'Confirmation',
+				// 	'Are you sure you want to confirm the order?',
+				// 	[				 
+				// 	  {
+				// 		text: 'Cancel',
+				// 		onPress: () => console.log('OK Pressed'),
+				// 		style: 'cancel',
+				// 	  },
+				// 	  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
+				// 	],
+				// 	{ cancelable: false }
+				// );
+				this.setState({modal_visible:true})
+				return
+			} else if ( selected_payment == "credit") {
+				navigate("PayByCard" , {
+					cart_total: this.props.navigation.getParam("cart_total", 0.00)
+				})
 				return
 			}
-
-			// Alert.alert(
-			// 	'Confirmation',
-			// 	'Are you sure you want to confirm the order?',
-			// 	[				 
-			// 	  {
-			// 		text: 'Cancel',
-			// 		onPress: () => console.log('OK Pressed'),
-			// 		style: 'cancel',
-			// 	  },
-			// 	  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
-			// 	],
-			// 	{ cancelable: false }
-			// );
-			this.setState({modal_visible:true})
-			return
+			
 		} else {
 			navigate("VerifyUserStack")
 			return
 		}
 
 	
+	}
+
+	measureView(event) {
+		this.setState({
+			payment_view_height: event.nativeEvent.layout.height
+		})
 	}
 
 	onClosePressed = () => {
@@ -300,6 +333,267 @@ export default class Checkout extends React.Component {
 					this.setState({modal_visible:false})
 				}}
 			/>
+	}
+
+	tooglePayment = () => {
+
+		const { isPaymentToggle, payment_view_height } = this.state
+
+		var product_checkout_height = payment_view_height
+		var content = 247 * alpha
+		var finalheight = product_checkout_height - content
+
+			if (isPaymentToggle) {
+				this.setState({ isPaymentToggle: false }, function(){
+					Animated.spring(this.moveAnimation, {
+						toValue: {x: 0, y: windowHeight},
+					}).start()
+				})
+			} else {
+				this.setState({ isPaymentToggle: true }, function(){
+					Animated.spring(this.moveAnimation, {
+						toValue: {x: 0, y: finalheight},
+					}).start()
+				})
+			}
+
+	}
+
+	renderPaymentMethod() {
+
+		const { currentMember } = this.props
+
+		return <Animated.View
+			style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]} >
+				<View
+					style={styles.popOutPaymentView}>
+					<View
+						style={styles.paymentMethodTwoView}>
+						<TouchableOpacity
+							onPress={() => this.tooglePayment()}
+							style={styles.closeButton}>
+							<Image
+								source={require("./../../assets/images/x-3.png")}
+								style={styles.closeButtonImage}/>
+						</TouchableOpacity>
+						<Text
+							style={styles.paymentMethodTwoText}>Payment Method</Text>
+					</View>
+					<View
+						pointerEvents="box-none"
+						style={{
+							height: 150 * alpha,
+						}}>
+						<View
+							style={styles.brew9walletView}>
+								<TouchableOpacity
+									onPress={() => this.onWalletButtonPressed()}
+									style={styles.walletbuttonButton}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 30 * alpha,
+										marginLeft: 60 * alpha,
+										marginRight: 17 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<View
+										style={styles.walletView}>
+										<Text
+											style={this.state.selected_payment == "wallet" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 wallet</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Text
+											style={styles.balanceText}>Balance: ${parseFloat(currentMember.credits).toFixed(2)}</Text>
+									</View>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									{
+										this.state.selected_payment == "wallet" ?
+										<View
+											style={styles.selectTwoView}/>
+										: <View
+										style={styles.selectView}/>
+									}
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 1 * alpha,
+									bottom: 0 * alpha,
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 17 * alpha,
+										right: 0 * alpha,
+										bottom: 0 * alpha,
+										height: 52 * alpha,
+										alignItems: "flex-start",
+									}}>
+									<View
+										style={styles.walleticonView}>
+										<Image
+											source={require("./../../assets/images/fill-1-8.png")}
+											style={styles.fill1Image}/>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0 * alpha,
+												right: 0 * alpha,
+												top: 0 * alpha,
+												bottom: 0 * alpha,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/group-9-13.png")}
+												style={styles.group9Image}/>
+										</View>
+									</View>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Image
+										source={require("./../../assets/images/line-10-copy.png")}
+										style={styles.lineImage}/>
+								</View>
+								
+							</View>
+							</TouchableOpacity>
+						</View>
+						
+						<View
+							style={styles.creditCardView}>
+								<TouchableOpacity
+										onPress={() => this.onCreditButtonPressed()}
+										style={styles.creditbuttonButton}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 1 * alpha,
+									top: 0 * alpha,
+									bottom: 2 * alpha,
+									alignItems: "flex-end",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										flex: 1,
+										alignSelf: "stretch",
+									}}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											left: 0 * alpha,
+											top: 0 * alpha,
+											bottom: 0 * alpha,
+											justifyContent: "center",
+										}}>
+										<View
+											style={styles.cardiconView}>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0 * alpha,
+													right: 0 * alpha,
+													top: 0 * alpha,
+													bottom: 0 * alpha,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/group-3-31.png")}
+													style={styles.group3TwoImage}/>
+											</View>
+											<View
+												pointerEvents="box-none"
+												style={{
+													position: "absolute",
+													left: 0 * alpha,
+													right: 0 * alpha,
+													top: 0 * alpha,
+													bottom: 0 * alpha,
+													justifyContent: "center",
+												}}>
+												<Image
+													source={require("./../../assets/images/group-6-25.png")}
+													style={styles.group6TwoImage}/>
+											</View>
+										</View>
+									</View>
+									
+								
+								</View>
+								<View
+									style={styles.line10View}/>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 61 * alpha,
+										marginRight: 17 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={this.state.selected_payment == "credit" ? styles.creditCardSelectedText : styles.creditCardText}>Credit Card</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									{
+										this.state.selected_payment == "credit" ?
+										<View
+											style={styles.selectTwoView}/>
+										: <View
+										style={styles.selectView}/>
+									}
+									
+								</View>
+							</View>
+							</TouchableOpacity>
+						</View>
+						
+						
+					</View>
+				</View>
+		</Animated.View>
 	}
 
 	render() {
@@ -389,7 +683,8 @@ export default class Checkout extends React.Component {
 			style={styles.checkoutView}>
 			{this.renderConfirmPaymentModal()}
 			<ScrollView
-				style={styles.scrollviewScrollView}>
+				style={styles.scrollviewScrollView}
+				onLayout={(event) => this.measureView(event)}>
 				<View
 					style={styles.branchView}>
 					<View
@@ -700,8 +995,12 @@ export default class Checkout extends React.Component {
 										source={require("./../../assets/images/group-6-6.png")}
 										style={styles.group6TwoImage}/> */}
 								</View>
+								
 								<Text
-									style={styles.paymenttypeText}>Brew9 Credit ({this.props.members.currency} {credits})</Text>
+									style={styles.paymenttypeText}>{ this.state.selected_payment == "wallet" ? 
+										`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"
+									
+									}</Text>
 								{/* <Image
 									source={require("./../../assets/images/group-4-5.png")}
 									style={styles.arrowTwoImage}/> */}
@@ -750,6 +1049,8 @@ export default class Checkout extends React.Component {
 						</View>
 					</TouchableOpacity>
 				</View> */}
+
+				{this.renderPaymentMethod()}
 			</ScrollView>
 			{this.renderConfirmPaymentModal()}
 			<View
@@ -1377,7 +1678,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 40 * alpha,
+		bottom: 0 * alpha,
 		height: 47 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -1460,6 +1761,244 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginRight: 15 * alpha,
+	},
+
+
+
+
+
+
+
+
+	popOutPaymentView: {
+		backgroundColor: "white",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 72 * alpha,
+		height: 247 * alpha,
+	},
+	paymentMethodTwoView: {
+		backgroundColor: "transparent",
+		height: 49 * alpha,
+		marginRight: 1 * alpha,
+	},
+	closeButtonImage: {
+		resizeMode: "contain",
+	},
+	closeButton: {
+		backgroundColor: "white",
+		borderRadius: 10.5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 12 * alpha,
+		width: 21 * alpha,
+		top: 19 * alpha,
+		height: 21 * alpha,
+	},
+	closeButtonText: {
+		color: "black",
+		fontFamily: ".SFNSText",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	paymentMethodTwoText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 17 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		position: "absolute",
+		alignSelf: "center",
+		top: 19 * alpha,
+	},
+	brew9walletView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 70 * alpha,
+		height: 80 * alpha,
+	},
+	walletView: {
+		backgroundColor: "transparent",
+		width: 86 * alpha,
+		height: 30 * alpha,
+	},
+	brew9WalletText: {
+		backgroundColor: "transparent",
+		color: "rgb(186, 183, 183)",
+		fontFamily: "Helvetica",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	brew9WalletSelectedText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	balanceText: {
+		color: "rgb(186, 183, 183)",
+		fontFamily: "Helvetica",
+		fontSize: 9 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 1 * alpha,
+		marginRight: 28 * alpha,
+	},
+	selectView: {
+		backgroundColor: "transparent",
+		borderRadius: 9 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(186, 183, 183)",
+		borderStyle: "solid",
+		width: 18 * alpha,
+		height: 18 * alpha,
+	},
+	walleticonView: {
+		backgroundColor: "transparent",
+		width: 26 * alpha,
+		height: 23 * alpha,
+	},
+	fill1Image: {
+		backgroundColor: "transparent",
+		resizeMode: "center",
+		position: "absolute",
+		left: 3 * alpha,
+		right: 4 * alpha,
+		top: 2 * alpha,
+		height: 1 * alpha,
+	},
+	group9Image: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 22 * alpha,
+	},
+	lineImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		alignSelf: "flex-end",
+		width: 316 * alpha,
+		height: 3 * alpha,
+	},
+	walletbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 1 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	walletbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	walletbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	creditCardView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		height: 71 * alpha,
+	},
+	cardiconView: {
+		backgroundColor: "transparent",
+		width: 28 * alpha,
+		height: 26 * alpha,
+		marginLeft: 17 * alpha,
+	},
+	group3TwoImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 24 * alpha,
+		marginLeft: 1 * alpha,
+		marginRight: 3 * alpha,
+	},
+	group6TwoImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: null,
+		height: 25 * alpha,
+	},
+	creditbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	creditbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	creditbuttonButtonText: {
+		color: "white",
+		fontFamily: "Helvetica",
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	line10View: {
+		backgroundColor: "rgb(237, 235, 235)",
+		width: 314 * alpha,
+		height: 1 * alpha,
+	},
+	creditCardText: {
+		color: "rgb(186, 183, 183)",
+		fontFamily: "Helvetica",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	creditCardSelectedText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: "Helvetica",
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	selectTwoView: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 9 * alpha,
+		width: 18 * alpha,
+		height: 18 * alpha,
 	},
 
 })
