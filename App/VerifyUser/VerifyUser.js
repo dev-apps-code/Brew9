@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
 		height: 26 * alpha,
 	},
 	countdownText: {
-        color: "rgb(98, 97, 97)",
+        color: "white",
         fontFamily: NON_TITLE_FONT,
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
