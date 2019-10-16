@@ -311,18 +311,7 @@ export default class Home extends React.Component {
 				if (eventObject.result.force_upgrade) {
 
 					this.setState({modal_visible: true, modal_description: eventObject.message, force_upgrade: eventObject.result.force_upgrade, app_url:eventObject.result.url})
-					// Alert.alert(
-					// 	'Brew9',
-					// 	eventObject.message,
-					// 	eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
-					// 		[ 
-					// 			{ text: 'Cancel', style: 'cancel', onPress: () => {
-					// 				this.loadStoreProducts()
-					// 			}}, 
-					// 			{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
-					// 	{cancelable: eventObject.result.force_upgrade},
-					// );
-					
+			
 				} else {
 				this.setState({
 					data: eventObject.result,
