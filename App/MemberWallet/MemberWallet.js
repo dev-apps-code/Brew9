@@ -8,7 +8,7 @@
 
 import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, TITLE_FONT, NON_TITLE_FONT } from "../Common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 
@@ -115,15 +115,9 @@ export default class MemberWallet extends React.Component {
 						<Text
 							style={styles.availableBalanceText}>Available Balance</Text>
 						<View
-							style={styles.rm30View}>
+							style={styles.creditView}>
 							<Text
-								style={styles.rmText}>{members.currency}</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.textText}>{parseFloat(members.credits).toFixed(2)}</Text>
+								style={styles.textText}>${parseFloat(members.credits).toFixed(2)}</Text>
 						</View>
 						<View
 							style={{
@@ -370,30 +364,36 @@ const styles = StyleSheet.create({
 	},
 	availableBalanceText: {
 		color: "rgb(58, 58, 58)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+		alignItems: "center",
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
-	rm30View: {
+	creditView: {
 		backgroundColor: "transparent",
-		alignSelf: "flex-start",
+		alignSelf: "center",
 		width: 51 * alpha,
 		height: 34 * alpha,
-		marginLeft: 45 * alpha,
 		marginTop: 7 * alpha,
-		flexDirection: "row",
 		alignItems: "center",
+	},
+	textText: {
+		backgroundColor: "transparent",
+		color: "rgb(58, 58, 58)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		marginTop: 7 * alpha,
 	},
 	currencyText: {
 		backgroundColor: "transparent",
 		color: "rgb(58, 58, 58)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		alignSelf: "flex-start",
 		marginTop: 7 * alpha,
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
 	userCreditText: {
 		backgroundColor: "transparent",
 		color: "rgb(58, 58, 58)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 27 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
 	},
 	topUpButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
 	transactionHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
 	},
 	faqButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -528,7 +528,7 @@ const styles = StyleSheet.create({
 	},
 	faqText: {
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
 	},
 	changePasswordText: {
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -585,10 +585,9 @@ const styles = StyleSheet.create({
 	resetPasswordText: {
 		backgroundColor: "transparent",
 		color: "rgb(41, 41, 41)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		marginLeft: 20 * alpha,
 	},

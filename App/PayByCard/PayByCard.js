@@ -43,6 +43,12 @@ export default class PayByCard extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			card_name = "",
+			card_number = "",
+			card_expiry = "",
+			cart_csv = ""
+		}
 	}
 
 	componentDidMount() {
@@ -58,7 +64,28 @@ export default class PayByCard extends React.Component {
 	}
 
 	onPayNowPressed = () => {
+		validate = this.checkForm()
+	}
 
+	checkForm = () => {
+		if (this.state.card_name === "") {
+			this.refs.toast.show("Please select the name on your card")
+			return false
+		} else if (this.state.card_number.length != 8) {
+			this.refs.toast.show("Please select a correct card number")
+			return false
+		}
+		else if (this.state.card_expiry === "") {
+			this.refs.toast.show("Please select enter the expiry date")
+			return false
+		}
+		else if (this.state.card_csv.length != 3) {
+			this.refs.toast.show("Please select a correct csv")
+			return false
+		}
+		else {
+			return true
+		}
 	}
 
 	render() {
@@ -96,7 +123,8 @@ export default class PayByCard extends React.Component {
 						<TextInput
 							autoCorrect={false}
 							placeholder="Name On Card"
-							style={styles.nameinputTextInput}/>
+							style={styles.nameinputTextInput}
+							onChangeText={(card_name) => this.setState({card_name})}/>
 					</View>
 					<View
 						style={styles.cardnumberView}>
@@ -104,7 +132,8 @@ export default class PayByCard extends React.Component {
 							autoCorrect={false}
 							placeholder="Card Number"
 							keyboardType={"number-pad"}
-							style={styles.cardinputTextInput}/>
+							style={styles.cardinputTextInput}
+							onChangeText={(card_number) => this.setState({card_number})}/>
 					</View>
 					<View
 						style={styles.expirydateView}>
@@ -112,12 +141,14 @@ export default class PayByCard extends React.Component {
 							autoCorrect={false}
 							placeholder="Expiration (MM/YY)"
 							keyboardType={"number-pad"}
-							style={styles.dateinputTextInput}/>
+							style={styles.dateinputTextInput}
+							onChangeText={(card_expiry) => this.setState({card_expiry})}/>
 						<TextInput
 							autoCorrect={false}
 							placeholder="CSV"
 							keyboardType={"number-pad"}
-							style={styles.csvnputTextInput}/>
+							style={styles.csvnputTextInput}
+							onChangeText={(cart_csv) => this.setState({cart_csv})}/>
 					</View>
 					<TouchableOpacity
 						onPress={this.onPayNowPressed}

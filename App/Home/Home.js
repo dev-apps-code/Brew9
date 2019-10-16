@@ -203,11 +203,12 @@ export default class Home extends React.Component {
 			this.getLocationAsync();
 		  }
 		const { dispatch } = this.props
+		
 		dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	async componentDidMount() {
-
+		
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
@@ -215,6 +216,7 @@ export default class Home extends React.Component {
 		AppState.addEventListener('change', this._handleAppStateChange);
 
 		// this.loadStorePushToken()
+		
 		await this.registerForPushNotificationsAsync()
 	}
 
