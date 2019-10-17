@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
 	pointsText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 31 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
 	},
 	pointsCollectedText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
 	},
 	pointHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
 	},
 	transactionHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		

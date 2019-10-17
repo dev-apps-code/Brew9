@@ -9,6 +9,7 @@
 import { Image, Text, StyleSheet, TouchableWithoutFeedback, View } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
+import { NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style";
 
 export default class PointsCell extends React.Component {
 
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
 	locationText: {
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily:  NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
 	titleText: {
 		backgroundColor: "transparent",
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
 	titleText2: {
 		backgroundColor: "transparent",
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
 	timeText: {
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
 	timeText2: {
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
 	pointsText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
 	pointsText2: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

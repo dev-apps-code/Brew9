@@ -89,7 +89,7 @@ export default class ProductCell extends React.Component {
             pointerEvents="box-none"
             style={{
               width: 74 * alpha,
-              height: 84 * alpha,
+              height: 74 * alpha,
               marginLeft: 3 * alpha,
               marginTop: 4 * alpha
             }}
@@ -131,7 +131,7 @@ export default class ProductCell extends React.Component {
               {ingredients}
             </View>
 
-            <Text numberOfLines={3} style={styles.descriptionText}>
+            <Text numberOfLines={2} style={styles.descriptionText}>
               {this.props.productsummary}
             </Text>
             <View
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     resizeMode: "cover",
     width: 74 * alpha,
-    height: 84 * alpha,
+    height: 74 * alpha,
     marginLeft: 5 * alpha
   },
   soldView: {
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   soldtextText: {
     backgroundColor: "transparent",
     color: "white",
-    fontFamily: "ClanPro-Thin",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 13 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: "rgb(54, 54, 54)",
-    fontFamily: "ClanPro-News",
+    fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -247,8 +247,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     backgroundColor: "transparent",
-    opacity: 0.8,
-    color: "black",
+    color: "rgb(167, 167, 167)",
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: "normal",
@@ -262,7 +261,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 18 * fontAlpha,
     marginTop: 5 * alpha,
-    marginBottom: 20 * alpha,
+    marginBottom: 30 * alpha,
     fontStyle: "normal",
     textAlign: "left"
   },
@@ -280,7 +279,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: "black",
-    fontFamily: ".SFNSText",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -338,7 +337,7 @@ const styles = StyleSheet.create({
   },
   numberofitemText: {
     color: "rgb(255, 251, 251)",
-    fontFamily: "ClanPro-Thin",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 10 * fontAlpha,
     fontStyle: "normal",
     textAlign: "center",

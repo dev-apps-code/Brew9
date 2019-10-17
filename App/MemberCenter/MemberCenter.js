@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
 	},
 	memberServiceView: {
 		backgroundColor: "transparent",
-		width: 92 * alpha,
+		width: 100 * alpha,
 		height: 13 * alpha,
 		marginRight: 20 * alpha,
 		marginTop: 45 * alpha,
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
 	},
 	iText: {
 		color: "rgb(110, 110, 110)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: "Helvetica",
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -568,8 +568,7 @@ const styles = StyleSheet.create({
 	upgradeButtonText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontFamily: "SFProText-Medium",
-		fontSize: 10 * fontAlpha,
+		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -649,7 +648,6 @@ const styles = StyleSheet.create({
 	otherLevelRewardButtonText: {
 		color: "rgb(118, 118, 118)",
 		fontFamily: NON_TITLE_FONT,
-		fontFamily: "SFProText-Medium",
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -15,5 +15,11 @@ export const commonStyles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: "rgba(0, 178, 227, 0.5)"
+  },
+  text_primary_color: {
+    color: "rgb(0, 178, 227)",
+  },
+  background_primary_color: {
+    backgroundColor: "rgb(0, 178, 227)",
   }
 });

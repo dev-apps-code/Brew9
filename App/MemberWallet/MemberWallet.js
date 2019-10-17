@@ -176,7 +176,7 @@ export default class MemberWallet extends React.Component {
 									justifyContent: "center",
 								}}>
 								<Text
-									style={styles.transactionHistoryText}>Transaction History</Text>
+									style={styles.transactionHistoryText}>Order History</Text>
 							</View>
 						</View>
 						<View
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
 	creditView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 51 * alpha,
+		width: 200 * alpha,
 		height: 34 * alpha,
 		marginTop: 7 * alpha,
 		alignItems: "center",

@@ -13,6 +13,7 @@ import {alpha, fontAlpha} from "../Common/size";
 import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
 import {createAction} from "../Utils";
 import {connect} from "react-redux";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -152,7 +153,7 @@ export default class TopUpWallet extends React.Component {
 			<View
 				style={styles.topUpView}>
 				<Text
-					style={styles.selectedValueText}>{this.props.members.currency}{this.state.selected_price ? this.state.selected_price : '' }</Text>
+					style={styles.selectedValueText}>${this.state.selected_price ? this.state.selected_price : '' }</Text>
 				<View
 					style={{
 						flex: 1,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
 	},
 	selectedValueText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
 	},
 	topupButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		

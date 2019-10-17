@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -256,16 +256,15 @@ const styles = StyleSheet.create({
 	pointCollectedTwoView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 163 * alpha,
+		width: 300 * alpha,
 		height: 57 * alpha,
 		marginTop: 28 * alpha,
 	},
 	pointsCollectedText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		position: "absolute",
@@ -319,7 +318,7 @@ const styles = StyleSheet.create({
 	transactionHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		

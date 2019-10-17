@@ -9,6 +9,7 @@
 import { Text, Image, View, TouchableWithoutFeedback, StyleSheet } from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
+import { TITLE_FONT } from "../Common/common_style";
 
 
 export default class Card extends React.Component {
@@ -77,7 +78,7 @@ export default class Card extends React.Component {
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.valueText}>{this.props.currency}{this.props.price}</Text>
+									style={styles.valueText}>${this.props.price}</Text>
 								<View
 									style={{
 										flex: 1,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
 	valueText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

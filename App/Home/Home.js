@@ -849,33 +849,36 @@ export default class Home extends React.Component {
 
 		if (index) {
 			let product = this.state.products[index]
-			if (product.quantity == null) product.quantity = 1
-			if (product.calculated_price == null) product.calculated_price = product.price
-			if (product.selected_quantity == null) product.selected_quantity = 1
-			if (product.total_quantity == null) product.total_quantity = 0
-			if (product.variants) {
-				if (product.selected_variants == null) {
-					var selected = []
-					for (var index in product.variants) {
-						var variant = product.variants[index]
-						var hasRecommended = false
-						var value = null
-						for (var index in variant.variant_values) {
-							if (hasRecommended == false) {
-								value = variant.variant_values[index]
-								hasRecommended = variant.variant_values[index].recommended
+			if (product) {
+				if (product.quantity == null) product.quantity = 1
+				if (product.calculated_price == null) product.calculated_price = product.price
+				if (product.selected_quantity == null) product.selected_quantity = 1
+				if (product.total_quantity == null) product.total_quantity = 0
+				if (product.variants) {
+					if (product.selected_variants == null) {
+						var selected = []
+						for (var index in product.variants) {
+							var variant = product.variants[index]
+							var hasRecommended = false
+							var value = null
+							for (var index in variant.variant_values) {
+								if (hasRecommended == false) {
+									value = variant.variant_values[index]
+									hasRecommended = variant.variant_values[index].recommended
+								}
 							}
+							if (hasRecommended == false) {
+								value = variant.variant_values[0]
+							}
+							product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price ? value.price : 0.00)).toFixed(2)
+							selected.push(value)
 						}
-						if (hasRecommended == false) {
-							value = variant.variant_values[0]
-						}
-						product.calculated_price = (parseFloat(product.calculated_price) + parseFloat(value.price ? value.price : 0.00)).toFixed(2)
-						selected.push(value)
+						product.selected_variants = selected
 					}
-					product.selected_variants = selected
 				}
+				return product
 			}
-			return product
+			
 		}
 		return null
 
@@ -1017,10 +1020,7 @@ export default class Home extends React.Component {
 									</View>
 								)
 							}
-							{ (selected_product.description!=null && selected_product.description != '') && (
-								<Text style={styles.descriptionHeaderText}>Product Description</Text>
-								)
-							}
+							
 							{ (selected_product.description!=null && selected_product.description != '') && (
 								<Text style={styles.descriptionText}>{selected_product.description}</Text>
 							)}
@@ -1572,8 +1572,6 @@ const styles = StyleSheet.create({
 	},
 	navigationBarRightItemIcon: {
 		resizeMode: "contain",
-		width: 30 * alpha,
-		height: 30 * alpha,
 		tintColor: "black",
 	},
 	headerLeftContainer: {
@@ -1740,7 +1738,7 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	categorylistFlatListViewWrapper: {
-		width: 80 * alpha,
+		width: 85 * alpha,
 	},
 	productlistFlatList: {
 		backgroundColor: "white",
@@ -1749,7 +1747,7 @@ const styles = StyleSheet.create({
 	},
 	productlistFlatListViewWrapper: {
 
-		width: 295 * alpha,
+		width: 290 * alpha,
 		marginBottom: 1 * alpha,
 	},
 	cartView: {
@@ -2033,7 +2031,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		flex: 1,
 		marginLeft: 19 * alpha,
-		marginTop: 25 * alpha,
+		marginTop: 20 * alpha,
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
@@ -2048,7 +2046,7 @@ const styles = StyleSheet.create({
 	descriptionHeaderText: {
 		color: "rgb(167, 167, 167)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2059,7 +2057,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "rgb(167, 167, 167)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2138,10 +2136,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 28 * alpha,
-		marginRight: 9 * alpha,
 		marginBottom: 4 * alpha,
-		marginTop: 1 * alpha,
+		marginRight: 4 * alpha,
 	},
 	recommendedStarImage: {
 		resizeMode: "contain",
@@ -2150,12 +2146,14 @@ const styles = StyleSheet.create({
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		marginRight: 7 * alpha,
-		marginLeft: 7 * alpha,
+		marginRight: 4 * alpha,
+		marginLeft: 4 * alpha,
+		marginTop: 4 * alpha,
+		marginBottom: 4 * alpha,
 	},
 	selectedButton: {
 		backgroundColor: "rgb(0, 178, 227)",
@@ -2165,10 +2163,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 28 * alpha,
-		marginRight: 9 * alpha,
 		marginBottom: 4 * alpha,
-		marginTop: 1 * alpha,
+		marginRight: 4 * alpha,
 	},
 	selectedButtonImage: {
 		resizeMode: "contain",
@@ -2177,12 +2173,14 @@ const styles = StyleSheet.create({
 	selectedButtonText: {
 		color: "white",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		marginRight: 7 * alpha,
-		marginLeft: 7 * alpha,
+		marginRight: 4 * alpha,
+		marginLeft: 4 * alpha,
+		marginTop: 4 * alpha,
+		marginBottom: 4 * alpha,
 	},
 	optionsView: {
 		backgroundColor: "transparent",
