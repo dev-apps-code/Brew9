@@ -2124,7 +2124,7 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 7 * alpha,
+		marginTop: 2 * alpha,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},

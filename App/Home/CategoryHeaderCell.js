@@ -15,6 +15,7 @@ import {
   } from "react-native";
   import React from "react";
   import { alpha, fontAlpha } from "../Common/size";
+import { TITLE_FONT } from "../Common/common_style";
   
   export default class CategoryHeaderCell extends React.Component {
     constructor(props) {
@@ -51,8 +52,8 @@ import {
     },
     headerText: {
       backgroundColor: "transparent",
-      color: "rgb(78, 77, 77)",
-      fontFamily: "ClanPro-News",
+      color: "rgb(135, 135, 135)",
+      fontFamily: TITLE_FONT,
       fontSize: 14 * fontAlpha,
       fontStyle: "normal",
       fontWeight: "normal",
