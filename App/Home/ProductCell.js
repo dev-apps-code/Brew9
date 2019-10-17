@@ -197,7 +197,6 @@ export default class ProductCell extends React.Component {
 
 const styles = StyleSheet.create({
   productcell: {
-    backgroundColor: "transparent",
     width: "100%",
     // height: 143 * alpha,
     flex: 1,

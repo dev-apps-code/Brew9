@@ -22,12 +22,24 @@
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan qr code to allow you to pay or redeem for vouchers.",
         "NSLocationWhenInUseUsageDescription": "This app requires you to provide your location to suggest you the nearest shop"
-      }
+      },
+      "publishBundlePath": "ios/brew9/Supporting/shell-app.bundle",
+      "publishManifestPath": "ios/brew9/Supporting/shell-app-manifest.json"
     },
     "android": {
-      "package": "com.brew9.brew9"
+      "package": "com.brew9.brew9",
+      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },
     "slug": "brew9",
-    "description": ""
+    "description": "",
+   
+    "scheme": "exp8310c0a3fd094f75bd22dd17cc4ada42"
   }
 }
+
+ // "isDetached": true,
+    // "detach": {
+    //   "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v2.12.4-sdk34.0.0-ee3e7450-9ec2-4836-8c8c-335483e62917.tar.gz",
+    //   "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.12.2-sdk34.0.0-767c7d3b-87b6-4f80-a9af-92ce67e2a49d.tar.gz"
+    // },
