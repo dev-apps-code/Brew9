@@ -2141,7 +2141,8 @@ const styles = StyleSheet.create({
 	},
 	recommendedStarImage: {
 		resizeMode: "contain",
-		marginLeft: 7 * alpha,
+		marginLeft: 4 * alpha,
+		marginRight: -4 * alpha,
 	},
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
