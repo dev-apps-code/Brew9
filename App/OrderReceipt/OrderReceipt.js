@@ -293,7 +293,7 @@ export default class OrderReceipt extends React.Component {
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.totalText}>70.00</Text>
+									style={styles.totalText}>{order.total}</Text>
 							</View>
 							<View
 								style={styles.lineThreeView}/>
@@ -654,8 +654,7 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
-		textAlign: "center",
+		textAlign: "left",
 	},
 	descriptionText: {
 		backgroundColor: "transparent",
@@ -700,8 +699,8 @@ const styles = StyleSheet.create({
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		
-		textAlign: "center",
 		backgroundColor: "transparent",
+		textAlign: "left",
 	},
 	descriptionTwoText: {
 		color: "rgb(146, 146, 146)",
@@ -745,8 +744,8 @@ const styles = StyleSheet.create({
 		fontFamily: "DINPro-Bold",
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
-		textAlign: "center",
+		width: 190 * alpha,
+		textAlign: "left",
 		backgroundColor: "transparent",
 	},
 	quantityThreeText: {

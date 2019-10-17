@@ -116,7 +116,7 @@ export default class ProductCell extends React.Component {
             )}
           </View>
           <View style={styles.detailsView}>
-            <Text numberOfLines={1} style={styles.titleText}>
+            <Text numberOfLines={2} style={styles.titleText}>
               {this.props.productname}
             </Text>
             <View
@@ -124,8 +124,8 @@ export default class ProductCell extends React.Component {
               style={{
                 marginTop: 2 * alpha,
                 marginBottom: 2 * alpha,
-                flexDirection: "row"
-                // flexWrap: "wrap",
+                flexDirection: "row",
+                flexWrap: "wrap",
               }}
             >
               {ingredients}
@@ -140,7 +140,7 @@ export default class ProductCell extends React.Component {
               }}
             />
             <Text style={styles.priceText}>
-              ${parseFloat(this.props.productprice).toFixed(2)}
+              ${this.props.productprice ? parseFloat(this.props.productprice).toFixed(2) : 0.00}
             </Text>
 
             {/* <View
@@ -199,8 +199,8 @@ const styles = StyleSheet.create({
   productcell: {
     backgroundColor: "transparent",
     width: "100%",
-    height: 143 * alpha,
-    // flex: 1,
+    // height: 143 * alpha,
+    flex: 1,
     flexDirection: "row",
     alignItems: "flex-start"
   },
@@ -232,9 +232,10 @@ const styles = StyleSheet.create({
   },
   detailsView: {
     backgroundColor: "transparent",
-    width: 190 * alpha,
-    height: 105 * alpha,
-    marginLeft: 10 * alpha
+    width: "100%",
+    flex: 1,
+    marginLeft: 10 * alpha,
+    marginRight: 10 * alpha,
   },
   titleText: {
     color: "rgb(54, 54, 54)",
@@ -261,6 +262,7 @@ const styles = StyleSheet.create({
     color: "rgb(54, 54, 54)",
     fontFamily: TITLE_FONT,
     fontSize: 18 * fontAlpha,
+    marginTop: 5 * alpha,
     marginBottom: 20 * alpha,
     fontStyle: "normal",
     textAlign: "left"
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(245, 245, 245)",
     justifyContent: "center",
     marginRight: 5 * alpha,
-    marginBottom: 3 * alpha
+    marginBottom: 3 * alpha,
   },
   ingredientText: {
     backgroundColor: "transparent",

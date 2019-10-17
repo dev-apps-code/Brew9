@@ -249,7 +249,6 @@ export default class Profile extends React.Component {
 	render() {
 
 		const { currentMember ,members} = this.props
-
 		var background_photo;
 		var level_name;
 		var display_name;
@@ -569,7 +568,8 @@ export default class Profile extends React.Component {
 									style={{
 										height: 22 * alpha,
 										marginLeft: 30 * alpha,
-										marginRight: 237 * alpha,
+										// marginRight: 237 * alpha,
+										width: 200 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
@@ -1443,7 +1443,7 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		
-		textAlign: "center",
+		textAlign: "left",
 		flex: 1,
 		marginLeft: 15 * alpha,
 	},
@@ -1460,7 +1460,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		textAlign: "center",
+		textAlign: "left",
 		flex: 1,
 		marginLeft: 15 * alpha,
 	},
