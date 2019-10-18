@@ -49,6 +49,7 @@ import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { select } from "redux-saga/effects"
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -345,8 +346,9 @@ export default class Home extends React.Component {
 					page: this.state.page + 1,
 				},function () {
 					let data = [...this.state.data]
+					console.log("Data",data)
 					var items = []
-					var index_length = 0
+					var index_length = menu_banners.length
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
 						data[index].scroll_index = index_length
@@ -457,19 +459,11 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-		// console.log("Scroll Index", scroll_index)
+		console.log("Scroll Index", selected_index, scroll_index)
 
 		let data = [...this.state.data]
 
-		for (var index in data) {
-			if ( index == selected_index ) {
-				data[index].selected = true				
-			}else{
-				data[index].selected = false
-			}
-		}
-		this.setState( { data })
-
+		this.setState( { data, selected_category: selected_index })
 		if (scroll_index < this.state.products.length){
 			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
 		}		
@@ -488,10 +482,22 @@ export default class Home extends React.Component {
 		}
 
 		for (var index in data) {
-			if ( data[index].scroll_index >= first_index && data[index].scroll_index <= last_index ) {
+			var next_index = parseInt(index) + 1
+			var second_index = parseInt(first_index) + 1
+			if (first_index < data[index].scroll_index && index == 0) {
 				data[index].selected = true
 				break
 			}
+			else if (next_index <= data.length) {
+				console.log("First", first_index, "Previous",data[index].scroll_index)
+				if ( second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index) ) {
+					data[index].selected = true
+					break
+				}
+			} else {
+				
+			}
+			
 		}
 		this.setState( { data })
 
@@ -1041,7 +1047,7 @@ export default class Home extends React.Component {
 								alignItems: "center",
 							}}>
 							<Text
-								style={styles.priceText}>${ parseFloat(selected_product.calculated_price).toFixed(2)}</Text>
+								style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
 							<View
 								style={{
 									flex: 1,

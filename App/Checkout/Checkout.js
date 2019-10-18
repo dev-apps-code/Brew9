@@ -85,7 +85,6 @@ export default class Checkout extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 		this.loadValidVouchers()
-
 		// this.setState({
 		// 	modal_title: "Brew9",
 		// 	modal_description: `Mocha Coffee \n Chocolate`,
@@ -170,7 +169,6 @@ export default class Checkout extends React.Component {
 		}else{
 			let array = []
 			
-			
 			for (var index in vouchers_to_use){
 				var v = vouchers_to_use[index]
 				// let existing_voucher_types = array.map(a => a.voucher.voucher_type)
@@ -219,6 +217,40 @@ export default class Checkout extends React.Component {
 		this.tooglePayment()
 	}
 
+	removeItemFromCart(ids) {
+
+		let cart = this.state.cart
+		let original_cart = this.state.cart
+
+		for (x of ids) {
+			cart = cart.filter(item => item.id != x);
+		}
+		
+		let removed_item = _.differenceBy(original_cart,cart,'id')
+		
+		let removed_item_name = "These few items are currently out of stock and are removed from your cart.\n"
+
+		for (var index in removed_item) {
+			removed_item_name.concat(removed_item[index].name)
+			if (index > 0) {
+				removed_item_name.concat("\n")
+			}
+		}
+
+		this.setState({
+			cart: cart,
+			modal_title:'Brew9',
+			modal_description:removed_item_name,
+			modal_ok_text: null,
+			modal_cancelable: false,
+			modal_ok_action: ()=> {
+				this.setState({modal_visible:false})
+			},
+			modal_visible:true,
+		})
+	
+	}
+
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 
@@ -240,8 +272,15 @@ export default class Checkout extends React.Component {
 					},
 					modal_visible:true,
 				})
-			}else{
-				this.refs.toast.show(eventObject.message);
+			}
+			else{
+
+				if (eventObject.result) {
+					this.removeItemFromCart(eventObject.result)
+				} else {
+					this.refs.toast.show(eventObject.message);
+				}
+				
 			}
 		}
 
@@ -290,19 +329,6 @@ export default class Checkout extends React.Component {
 					return
 				}
 	
-				// Alert.alert(
-				// 	'Confirmation',
-				// 	'Are you sure you want to confirm the order?',
-				// 	[				 
-				// 	  {
-				// 		text: 'Cancel',
-				// 		onPress: () => console.log('OK Pressed'),
-				// 		style: 'cancel',
-				// 	  },
-				// 	  { text: 'OK', onPress: () =>  this.loadMakeOrder()},
-				// 	],
-				// 	{ cancelable: false }
-				// );
 				this.setState({
 					modal_visible:true,
 					modal_title: "Brew9",
