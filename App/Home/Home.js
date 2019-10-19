@@ -1033,86 +1033,91 @@ export default class Home extends React.Component {
 						</View>
 					{variants}
 				</ScrollView>
-				<View
-					style={styles.bottomView}>
+				{
+					(selected_product.price > 0.00 && selected_product.price) ?
 					<View
-						style={styles.lineView}/>
-					<View
-						style={styles.summaryView}>
+						style={styles.bottomView}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								height: 32 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
+							style={styles.lineView}/>
+						<View
+							style={styles.summaryView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 32 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<View
+									style={styles.controlView}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											top: 0 * alpha,
+											bottom: 0 * alpha,
+											justifyContent: "center",
+										}}>
+										<Text
+											style={styles.quantityText}>{select_quantity}</Text>
+									</View>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											left: 0 * alpha,
+											right: 0 * alpha,
+											top: 0 * alpha,
+											height: 23 * alpha,
+											flexDirection: "row",
+											alignItems: "flex-start",
+										}}>
+										<TouchableOpacity
+											onPress={() => { if (select_quantity > 1) this.setState({select_quantity: select_quantity -= 1}) }}
+											style={styles.removeButton}>
+											<Image
+												source={require("./../../assets/images/button-4.png")}
+												style={styles.removeButtonImage}/>
+										</TouchableOpacity>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<TouchableOpacity
+											onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
+											style={styles.addButton}>
+											<Image
+												source={require("./../../assets/images/add-18.png")}
+												style={styles.addButtonImage}/>
+										</TouchableOpacity>
+									</View>
+								</View>
+							</View>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<View
-								style={styles.controlView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										alignSelf: "center",
-										top: 0 * alpha,
-										bottom: 0 * alpha,
-										justifyContent: "center",
-									}}>
-									<Text
-										style={styles.quantityText}>{select_quantity}</Text>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										height: 23 * alpha,
-										flexDirection: "row",
-										alignItems: "flex-start",
-									}}>
-									<TouchableOpacity
-										onPress={() => { if (select_quantity > 1) this.setState({select_quantity: select_quantity -= 1}) }}
-										style={styles.removeButton}>
-										<Image
-											source={require("./../../assets/images/button-4.png")}
-											style={styles.removeButtonImage}/>
-									</TouchableOpacity>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<TouchableOpacity
-										onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
-										style={styles.addButton}>
-										<Image
-											source={require("./../../assets/images/add-18.png")}
-											style={styles.addButtonImage}/>
-									</TouchableOpacity>
-								</View>
-							</View>
+							<Text
+								style={styles.optionsText}>{variant_array.join(", ")}</Text>
 						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.optionsText}>{variant_array.join(", ")}</Text>
+						<TouchableOpacity
+							disabled={!enabled}
+							onPress={() => this.onAddToCartPressed(selected_product)}
+							style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
+							<Text
+								style={styles.addToCartButtonText}>Add to Cart</Text>
+						</TouchableOpacity>
 					</View>
-					<TouchableOpacity
-						disabled={!enabled}
-						onPress={() => this.onAddToCartPressed(selected_product)}
-						style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
-						<Text
-							style={styles.addToCartButtonText}>Add to Cart</Text>
-					</TouchableOpacity>
-				</View>
+					: <View style={{height: 10 * alpha}}></View>
+				}
+				
 			</View>
 
 
@@ -2030,7 +2035,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 5 * alpha,
-		maxHeight:250 * alpha,
+		maxHeight: 250 * alpha,
 	},
 	productView: {
 		backgroundColor: "transparent",
@@ -2111,6 +2116,7 @@ const styles = StyleSheet.create({
 	optionsTwoView: {
 		backgroundColor: "transparent",
 		marginTop: 5 * alpha,
+		marginBottom: 5 * alpha,
 		alignItems: "flex-start",
 		borderRadius:7.0,
 		overflow: "hidden",
@@ -2342,7 +2348,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 18 * fontAlpha,
+		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2405,7 +2411,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(141, 141, 141)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 8 * fontAlpha,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
