@@ -585,6 +585,7 @@ export default class Home extends React.Component {
 			navigation={this.props.navigation}
 			categoryname={item.name}
 			categoryImage={item.image.url}
+			categoryDescription={item.description}
 			index={index}
 			scrollIndex={item.scroll_index}
 			onSelectCategory={this.onSelectCategory}

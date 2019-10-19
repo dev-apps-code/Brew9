@@ -52,8 +52,10 @@ export default class CategoryHeaderCell extends React.Component {
             style={styles.textblockView}>
             <Text
               style={styles.headerText}>{this.props.categoryName}</Text>
-            <Text
-              style={styles.descriptionText}>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</Text>
+              {this.props.categoryDescription && (
+                  <Text
+                  style={styles.descriptionText}>{this.props.categoryDescription}</Text>
+              )}
           </View>
           
         </View>
