@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
   },
   ingredientText: {
     backgroundColor: "transparent",
-    color: "rgb(140, 140, 140)",
+    color: "rgb(130, 130, 130)",
     fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",

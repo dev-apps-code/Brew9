@@ -629,6 +629,7 @@ export default class Home extends React.Component {
 					item={item}
 					navigation={this.props.navigation}
 					categoryName={item.name}
+					categoryDescription={item.description}
 				/>
 			}
 		}
@@ -1172,7 +1173,7 @@ export default class Home extends React.Component {
 							selectedColor={"#FFFFFF"}
 							buttonColor={"#2A2929"}
 							borderColor={"#979797"}
-							backgroundColor={"#D8D8D8"}
+							backgroundColor={"rgb(225,225,225)"}
 							style={styles.pickUpDeliveryView}
 							textStyle={styles.optionText}
 							fontSize={10 * alpha}
