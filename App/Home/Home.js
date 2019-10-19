@@ -1838,7 +1838,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 		backgroundColor: "transparent",
@@ -1849,7 +1848,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 20 * alpha,
@@ -1862,9 +1860,9 @@ const styles = StyleSheet.create({
 		borderStyle: "solid",
 		position: "absolute",
 		left: 123 * alpha,
-		right: 137 * alpha,
 		top: 0 * alpha,
 		height: 20 * alpha,
+		flex: 1,
 		justifyContent: "center",
 	},
 	numberofitemText: {
@@ -1872,7 +1870,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 6 * alpha,
@@ -2465,7 +2462,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	bottomAlertView:{	
-		backgroundColor: "darkgray",	
+		backgroundColor: "transparent",	
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,

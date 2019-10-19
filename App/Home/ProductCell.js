@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     backgroundColor: "transparent",
-    color: "rgb(167, 167, 167)",
+    color: "rgb(130, 130, 130)",
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: "normal",
