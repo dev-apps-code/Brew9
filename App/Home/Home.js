@@ -1173,7 +1173,7 @@ export default class Home extends React.Component {
 							selectedColor={"#FFFFFF"}
 							buttonColor={"#2A2929"}
 							borderColor={"#979797"}
-							backgroundColor={"rgb(225,225,225)"}
+							backgroundColor={"rgb(240,240,240)"}
 							style={styles.pickUpDeliveryView}
 							textStyle={styles.optionText}
 							fontSize={10 * alpha}
@@ -1426,9 +1426,9 @@ export default class Home extends React.Component {
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 38 * alpha,
+								left: 28 * alpha,
 								right: 13 * alpha,
-								top: 5 * alpha,
+								top: 0 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
@@ -1447,39 +1447,9 @@ export default class Home extends React.Component {
 												marginTop: 1 * alpha,
 												marginBottom: 4 * alpha,
 											}}>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0 * alpha,
-													top: 0 * alpha,
-													bottom: 0 * alpha,
-													justifyContent: "center",
-												}}>
-												<Image
-													source={require("./../../assets/images/fill-1.png")}
-													style={styles.fill1Image}/>
-											</View>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 3 * alpha,
-													width: 9 * alpha,
-													top: 0 * alpha,
-													bottom: 2 * alpha,
-													alignItems: "flex-start",
-												}}>
-												<Image
-													source={require("./../../assets/images/group-4-2.png")}
-													style={styles.group4Image}/>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<View
-													style={styles.line8View}/>
-											</View>
+											<Image
+													source={require("./../../assets/images/shopping-bag.png")}
+													style={styles.cartImage}/>
 										</View>
 										<View
 											style={{
@@ -1781,7 +1751,7 @@ const styles = StyleSheet.create({
 	totalAmountView: {
 		backgroundColor: "transparent",
 		width: 280 * alpha,
-		height: 61 * alpha,
+		height: 51 * alpha,
 	},
 	rectangleView: {
 		backgroundColor: "rgb(231, 230, 230)",
@@ -1789,13 +1759,13 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 10 * alpha,
-		height: 51 * alpha,
+		height: 41 * alpha,
 	},
 	shopppingCartView: {
 		backgroundColor: "white",
 		borderRadius: 22.5 * alpha,
 		width: 102 * alpha,
-		height: 45 * alpha,
+		height: 35 * alpha,
 		justifyContent: "center",
 	},
 	shopppingCartButton: {
@@ -1843,6 +1813,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignSelf: "center",
 	},
+	cartImage: {
+		resizeMode: "contain",
+		width: 20 * alpha,
+		height: 20 * alpha,
+	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
@@ -1884,8 +1859,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 5 * alpha,
-		height: 51 * alpha,
+		top: 10 * alpha,
+		height: 41 * alpha,
 	},
 	checkoutButtonText: {
 		color: "white",
@@ -1904,7 +1879,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 51 * alpha,
+		bottom: 41 * alpha,
 		flex: 1,
 	},
 	clearAllView: {
@@ -2046,7 +2021,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2067,7 +2042,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "rgb(167, 167, 167)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2123,7 +2098,7 @@ const styles = StyleSheet.create({
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2158,7 +2133,7 @@ const styles = StyleSheet.create({
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -2185,7 +2160,7 @@ const styles = StyleSheet.create({
 	selectedButtonText: {
 		color: "white",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -2347,7 +2322,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 20 * fontAlpha,
+		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2467,7 +2442,7 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		bottom: 0 * alpha,	
-		width:windowWidth
+		width: windowWidth
 	},
 	alertView:{
 		backgroundColor: "darkgray",

@@ -1,7 +1,7 @@
-export const KSERVERURL = "http://brew9.dreamcode.solutions/api"
-export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
-// export const KSERVERURL ='http://localhost:3000/api'
-// export const KURL_INFO ='http://localhost:3000/info'
+// export const KSERVERURL = "http://brew9.dreamcode.solutions/api"
+// export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
+export const KSERVERURL ='http://localhost:3000/api'
+export const KURL_INFO ='http://localhost:3000/info'
 // export const KSERVERURL ='https://1a448323.ngrok.io/api'
 // export const KURL_INFO = 'https://1a448323.ngrok.io/info'
 
