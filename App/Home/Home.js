@@ -488,7 +488,7 @@ export default class Home extends React.Component {
 				data[index].selected = true
 				break
 			}
-			else if (next_index <= data.length) {
+			else if (next_index < data.length) {
 				console.log("First", first_index, "Previous",data[index].scroll_index)
 				if ( second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index) ) {
 					data[index].selected = true
