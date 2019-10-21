@@ -139,9 +139,12 @@ export default class ProductCell extends React.Component {
                 flex: 1
               }}
             />
+           
             <Text style={styles.priceText}>
-              ${this.props.productprice ? parseFloat(this.props.productprice).toFixed(2) : 0.00}
+              {this.props.productprice > 0.00 && this.props.productprice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
             </Text>
+            
+            
 
             {/* <View
 							pointerEvents="box-none"
@@ -247,7 +250,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     backgroundColor: "transparent",
-    color: "rgb(167, 167, 167)",
+    color: "rgb(130, 130, 130)",
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: "normal",
@@ -352,7 +355,7 @@ const styles = StyleSheet.create({
   },
   ingredientText: {
     backgroundColor: "transparent",
-    color: "rgb(167, 167, 167)",
+    color: "rgb(130, 130, 130)",
     fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: "normal",

@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 
 export const TITLE_FONT = "ClanPro-News";
 export const NON_TITLE_FONT = "ClanPro-Book";
+export const PRIMARY_COLOR = "rgb(0, 178, 227)"
 
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {

@@ -49,6 +49,7 @@ import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { select } from "redux-saga/effects"
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -345,8 +346,9 @@ export default class Home extends React.Component {
 					page: this.state.page + 1,
 				},function () {
 					let data = [...this.state.data]
+					console.log("Data",data)
 					var items = []
-					var index_length = 0
+					var index_length = menu_banners.length
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
 						data[index].scroll_index = index_length
@@ -457,19 +459,11 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-		// console.log("Scroll Index", scroll_index)
+		console.log("Scroll Index", selected_index, scroll_index)
 
 		let data = [...this.state.data]
 
-		for (var index in data) {
-			if ( index == selected_index ) {
-				data[index].selected = true				
-			}else{
-				data[index].selected = false
-			}
-		}
-		this.setState( { data })
-
+		this.setState( { data, selected_category: selected_index })
 		if (scroll_index < this.state.products.length){
 			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
 		}		
@@ -488,10 +482,22 @@ export default class Home extends React.Component {
 		}
 
 		for (var index in data) {
-			if ( data[index].scroll_index >= first_index && data[index].scroll_index <= last_index ) {
+			var next_index = parseInt(index) + 1
+			var second_index = parseInt(first_index) + 1
+			if (first_index < data[index].scroll_index && index == 0) {
 				data[index].selected = true
 				break
 			}
+			else if (next_index <= data.length) {
+				console.log("First", first_index, "Previous",data[index].scroll_index)
+				if ( second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index) ) {
+					data[index].selected = true
+					break
+				}
+			} else {
+				
+			}
+			
 		}
 		this.setState( { data })
 
@@ -579,6 +585,7 @@ export default class Home extends React.Component {
 			navigation={this.props.navigation}
 			categoryname={item.name}
 			categoryImage={item.image.url}
+			categoryDescription={item.description}
 			index={index}
 			scrollIndex={item.scroll_index}
 			onSelectCategory={this.onSelectCategory}
@@ -622,6 +629,7 @@ export default class Home extends React.Component {
 					item={item}
 					navigation={this.props.navigation}
 					categoryName={item.name}
+					categoryDescription={item.description}
 				/>
 			}
 		}
@@ -1027,86 +1035,91 @@ export default class Home extends React.Component {
 						</View>
 					{variants}
 				</ScrollView>
-				<View
-					style={styles.bottomView}>
+				{
+					(selected_product.price > 0.00 && selected_product.price) ?
 					<View
-						style={styles.lineView}/>
-					<View
-						style={styles.summaryView}>
+						style={styles.bottomView}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								height: 32 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.priceText}>${ parseFloat(selected_product.calculated_price).toFixed(2)}</Text>
+							style={styles.lineView}/>
+						<View
+							style={styles.summaryView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 32 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<View
+									style={styles.controlView}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											alignSelf: "center",
+											top: 0 * alpha,
+											bottom: 0 * alpha,
+											justifyContent: "center",
+										}}>
+										<Text
+											style={styles.quantityText}>{select_quantity}</Text>
+									</View>
+									<View
+										pointerEvents="box-none"
+										style={{
+											position: "absolute",
+											left: 0 * alpha,
+											right: 0 * alpha,
+											top: 0 * alpha,
+											height: 23 * alpha,
+											flexDirection: "row",
+											alignItems: "flex-start",
+										}}>
+										<TouchableOpacity
+											onPress={() => { if (select_quantity > 1) this.setState({select_quantity: select_quantity -= 1}) }}
+											style={styles.removeButton}>
+											<Image
+												source={require("./../../assets/images/button-4.png")}
+												style={styles.removeButtonImage}/>
+										</TouchableOpacity>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<TouchableOpacity
+											onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
+											style={styles.addButton}>
+											<Image
+												source={require("./../../assets/images/add-18.png")}
+												style={styles.addButtonImage}/>
+										</TouchableOpacity>
+									</View>
+								</View>
+							</View>
 							<View
 								style={{
 									flex: 1,
 								}}/>
-							<View
-								style={styles.controlView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										alignSelf: "center",
-										top: 0 * alpha,
-										bottom: 0 * alpha,
-										justifyContent: "center",
-									}}>
-									<Text
-										style={styles.quantityText}>{select_quantity}</Text>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										height: 23 * alpha,
-										flexDirection: "row",
-										alignItems: "flex-start",
-									}}>
-									<TouchableOpacity
-										onPress={() => { if (select_quantity > 1) this.setState({select_quantity: select_quantity -= 1}) }}
-										style={styles.removeButton}>
-										<Image
-											source={require("./../../assets/images/button-4.png")}
-											style={styles.removeButtonImage}/>
-									</TouchableOpacity>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<TouchableOpacity
-										onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
-										style={styles.addButton}>
-										<Image
-											source={require("./../../assets/images/add-18.png")}
-											style={styles.addButtonImage}/>
-									</TouchableOpacity>
-								</View>
-							</View>
+							<Text
+								style={styles.optionsText}>{variant_array.join(", ")}</Text>
 						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.optionsText}>{variant_array.join(", ")}</Text>
+						<TouchableOpacity
+							disabled={!enabled}
+							onPress={() => this.onAddToCartPressed(selected_product)}
+							style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
+							<Text
+								style={styles.addToCartButtonText}>Add to Cart</Text>
+						</TouchableOpacity>
 					</View>
-					<TouchableOpacity
-						disabled={!enabled}
-						onPress={() => this.onAddToCartPressed(selected_product)}
-						style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
-						<Text
-							style={styles.addToCartButtonText}>Add to Cart</Text>
-					</TouchableOpacity>
-				</View>
+					: <View style={{height: 10 * alpha}}></View>
+				}
+				
 			</View>
 
 
@@ -1160,7 +1173,7 @@ export default class Home extends React.Component {
 							selectedColor={"#FFFFFF"}
 							buttonColor={"#2A2929"}
 							borderColor={"#979797"}
-							backgroundColor={"#D8D8D8"}
+							backgroundColor={"rgb(225,225,225)"}
 							style={styles.pickUpDeliveryView}
 							textStyle={styles.optionText}
 							fontSize={10 * alpha}
@@ -1825,7 +1838,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * alpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 		backgroundColor: "transparent",
@@ -1836,7 +1848,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 20 * alpha,
@@ -1849,9 +1860,9 @@ const styles = StyleSheet.create({
 		borderStyle: "solid",
 		position: "absolute",
 		left: 123 * alpha,
-		right: 137 * alpha,
 		top: 0 * alpha,
 		height: 20 * alpha,
+		flex: 1,
 		justifyContent: "center",
 	},
 	numberofitemText: {
@@ -1859,7 +1870,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginLeft: 6 * alpha,
@@ -2024,7 +2034,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 5 * alpha,
-		maxHeight:250 * alpha,
+		maxHeight: 250 * alpha,
 	},
 	productView: {
 		backgroundColor: "transparent",
@@ -2105,6 +2115,7 @@ const styles = StyleSheet.create({
 	optionsTwoView: {
 		backgroundColor: "transparent",
 		marginTop: 5 * alpha,
+		marginBottom: 5 * alpha,
 		alignItems: "flex-start",
 		borderRadius:7.0,
 		overflow: "hidden",
@@ -2336,7 +2347,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 18 * fontAlpha,
+		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2399,7 +2410,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(141, 141, 141)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 8 * fontAlpha,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2451,7 +2462,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	bottomAlertView:{	
-		backgroundColor: "darkgray",	
+		backgroundColor: "transparent",	
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
