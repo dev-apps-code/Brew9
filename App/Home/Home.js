@@ -488,14 +488,15 @@ export default class Home extends React.Component {
 				data[index].selected = true
 				break
 			}
-			else if (next_index <= data.length) {
-				console.log("First", first_index, "Previous",data[index].scroll_index)
+			else if (data[parseInt(next_index)]) {
+				// console.log("First", first_index, "Previous",data[index].scroll_index)
 				if ( second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index) ) {
 					data[index].selected = true
 					break
 				}
 			} else {
-				
+				data[data.length-1].selected = true
+				break
 			}
 			
 		}
@@ -597,6 +598,7 @@ export default class Home extends React.Component {
 
 		if (item) {
 			if (item.clazz == "product") {
+				console.log(item)
 				return <ProductCell
 					navigation={this.props.navigation}
 					currency={"$"}
@@ -609,6 +611,8 @@ export default class Home extends React.Component {
 					productsummary={item.summary}
 					productvariant={item.variants}
 					productenable={item.enabled}
+					recommended={item.recommended}
+					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
 					producttotalquantity={item.total_quantity}
 					onChangeQuantity={this.onChangeQuantityPress}
@@ -926,15 +930,25 @@ export default class Home extends React.Component {
 		
 		return undefined
 	}
-	renderModalContent = (selected_product) => {
+	renderModalContent = (selected_product, shop) => {
 
 		let select_quantity = this.state.select_quantity
 
 		let filtered = selected_product.selected_variants.filter(function(el) { return el })
 		let variant_array = filtered.map(a => a.value)	
 		
-		var enabled = selected_product.enabled		
+		let order_limit = 100
 
+		if (selected_product.product_settings[0].order_limit) {
+			order_limit = selected_product.product_settings[0].order_limit
+		}
+
+		var enabled = selected_product.enabled
+
+		if (!shop.is_opened) {
+			enabled = false
+		}
+		
 		const ingredients = selected_product.ingredients.map((item, key) => {
 			return <View
 				style={styles.ingredientView}
@@ -1093,7 +1107,7 @@ export default class Home extends React.Component {
 												flex: 1,
 											}}/>
 										<TouchableOpacity
-											onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
+											onPress={() => { if (select_quantity < order_limit) this.setState({select_quantity: select_quantity += 1}) }}
 											style={styles.addButton}>
 											<Image
 												source={require("./../../assets/images/add-18.png")}
@@ -1369,7 +1383,7 @@ export default class Home extends React.Component {
 			<Toast ref="toast"
 				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
-					{this.renderModalContent(selected_product)}
+					{this.renderModalContent(selected_product, shop)}
 				</Modal> : null }
 			
 			{this.renderGallery()}
@@ -1428,7 +1442,7 @@ export default class Home extends React.Component {
 								position: "absolute",
 								left: 28 * alpha,
 								right: 13 * alpha,
-								top: 0 * alpha,
+								top: 7 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
@@ -1739,7 +1753,7 @@ const styles = StyleSheet.create({
 		// left: 0 * alpha,
 		// right: 0 * alpha,
 		// bottom: 0 * alpha,
-		height: 50 * alpha,
+		height: 60 * alpha,
 	},
 	bannerImage:{
 		height: windowHeight * alpha,
@@ -1758,7 +1772,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		top: 10 * alpha,
+		top: 20 * alpha,
 		height: 41 * alpha,
 	},
 	shopppingCartView: {
@@ -1834,7 +1848,7 @@ const styles = StyleSheet.create({
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
-		left: 123 * alpha,
+		left: 113 * alpha,
 		top: 0 * alpha,
 		height: 20 * alpha,
 		flex: 1,
@@ -1859,8 +1873,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 10 * alpha,
-		height: 41 * alpha,
+		top: 25 * alpha,
+		height: 36 * alpha,
 	},
 	checkoutButtonText: {
 		color: "white",

@@ -74,6 +74,8 @@ export default class ProductCell extends React.Component {
   };
 
   render() {
+
+    console.log("Limit", this.props.daily_limit)
     const ingredients = this.props.productingredient.map((item, key) => {
       return (
         <View style={styles.ingredientView} key={key}>
@@ -109,15 +111,23 @@ export default class ProductCell extends React.Component {
                 style={styles.productimageImage}
               />
             </View>
-            {!this.props.productenable && (
+            {!this.props.productenable ? 
               <View style={styles.soldView}>
                 <Text style={styles.soldtextText}>Sold Out</Text>
+              </View> : this.props.daily_limit > 0 && this.props.daily_limit ?
+              <View style={styles.soldView}>
+                <Text style={styles.soldtextText}>Limit {this.props.daily_limit}</Text>
               </View>
-            )}
+              : null }
           </View>
           <View style={styles.detailsView}>
             <Text numberOfLines={2} style={styles.titleText}>
               {this.props.productname}
+              {this.props.recommended && (
+                <Image
+									source={require("./../../assets/images/star_icon.png")}
+									style={styles.recommendedStarImage}/>
+              )}
             </Text>
             <View
               pointerEvents="box-none"
@@ -372,5 +382,15 @@ const styles = StyleSheet.create({
     height: 14 * alpha,
     marginLeft: 10 * alpha,
     justifyContent: "center"
-  }
-});
+  },
+  recommendedStarImage: {
+    resizeMode: "contain",
+    // height: 10 * alpha,
+    // width: 10 * alpha,
+    marginLeft: 3 * alpha,
+    height: 15 * alpha,
+    width: 15 * alpha,
+		marginLeft: 6 * alpha,
+    marginRight: -4 * alpha,
+	},
+})
