@@ -1,9 +1,27 @@
 {
   "expoServerPort": 19000,
+<<<<<<< HEAD
   "expoServerNgrokUrl": "https://s9-yjt.tonyvoon.brew9-app.exp.direct",
   "packagerNgrokUrl": "https://packager.s9-yjt.tonyvoon.brew9-app.exp.direct",
   "ngrokPid": 57942,
   "devToolsPort": 19003,
   "packagerPort": 19002,
   "packagerPid": 57910
+=======
+<<<<<<< HEAD
+  "expoServerNgrokUrl": "https://ix-7qw.tonyvoon.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.ix-7qw.tonyvoon.brew9-app.exp.direct",
+  "ngrokPid": 1408,
+  "devToolsPort": 19002,
+  "packagerPort": 19001,
+  "packagerPid": 1381
+=======
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
+  "devToolsPort": 19002,
+  "packagerPort": 19002,
+  "packagerPid": 46406
+>>>>>>> 6acfdbfdea1a72cead3994bd9f29bf462e09c696
+>>>>>>> 4efe9cb57f2020d347af2de2a240f1bfe6e59d87
 }
