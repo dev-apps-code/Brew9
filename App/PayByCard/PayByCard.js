@@ -11,6 +11,8 @@ import { StyleSheet, Image, TouchableOpacity, Text, View, TextInput } from "reac
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading.js"
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -157,6 +159,9 @@ export default class PayByCard extends React.Component {
 							style={styles.payNowButtonText}>Pay Now</Text>
 					</TouchableOpacity>
 				</View>
+				<Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}
 }
