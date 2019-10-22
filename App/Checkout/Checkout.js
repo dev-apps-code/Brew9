@@ -257,6 +257,7 @@ export default class Checkout extends React.Component {
 		const {cart,vouchers_to_use} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			console.log(eventObject)
 			this.setState({
 				loading: false,
 			})

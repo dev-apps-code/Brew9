@@ -488,14 +488,15 @@ export default class Home extends React.Component {
 				data[index].selected = true
 				break
 			}
-			else if (next_index < data.length) {
-				console.log("First", first_index, "Previous",data[index].scroll_index)
+			else if (data[parseInt(next_index)]) {
+				// console.log("First", first_index, "Previous",data[index].scroll_index)
 				if ( second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index) ) {
 					data[index].selected = true
 					break
 				}
 			} else {
-				
+				data[data.length-1].selected = true
+				break
 			}
 			
 		}
@@ -597,6 +598,7 @@ export default class Home extends React.Component {
 
 		if (item) {
 			if (item.clazz == "product") {
+				console.log(item)
 				return <ProductCell
 					navigation={this.props.navigation}
 					currency={"$"}
@@ -609,6 +611,8 @@ export default class Home extends React.Component {
 					productsummary={item.summary}
 					productvariant={item.variants}
 					productenable={item.enabled}
+					recommended={item.recommended}
+					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
 					producttotalquantity={item.total_quantity}
 					onChangeQuantity={this.onChangeQuantityPress}
@@ -926,15 +930,25 @@ export default class Home extends React.Component {
 		
 		return undefined
 	}
-	renderModalContent = (selected_product) => {
+	renderModalContent = (selected_product, shop) => {
 
 		let select_quantity = this.state.select_quantity
 
 		let filtered = selected_product.selected_variants.filter(function(el) { return el })
 		let variant_array = filtered.map(a => a.value)	
 		
-		var enabled = selected_product.enabled		
+		let order_limit = 100
 
+		if (selected_product.product_settings[0].order_limit) {
+			order_limit = selected_product.product_settings[0].order_limit
+		}
+
+		var enabled = selected_product.enabled
+
+		if (!shop.is_opened) {
+			enabled = false
+		}
+		
 		const ingredients = selected_product.ingredients.map((item, key) => {
 			return <View
 				style={styles.ingredientView}
@@ -1093,7 +1107,7 @@ export default class Home extends React.Component {
 												flex: 1,
 											}}/>
 										<TouchableOpacity
-											onPress={() => { this.setState({select_quantity: select_quantity += 1}) }}
+											onPress={() => { if (select_quantity < order_limit) this.setState({select_quantity: select_quantity += 1}) }}
 											style={styles.addButton}>
 											<Image
 												source={require("./../../assets/images/add-18.png")}
@@ -1173,7 +1187,7 @@ export default class Home extends React.Component {
 							selectedColor={"#FFFFFF"}
 							buttonColor={"#2A2929"}
 							borderColor={"#979797"}
-							backgroundColor={"rgb(225,225,225)"}
+							backgroundColor={"rgb(240,240,240)"}
 							style={styles.pickUpDeliveryView}
 							textStyle={styles.optionText}
 							fontSize={10 * alpha}
@@ -1369,7 +1383,7 @@ export default class Home extends React.Component {
 			<Toast ref="toast"
 				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
-					{this.renderModalContent(selected_product)}
+					{this.renderModalContent(selected_product, shop)}
 				</Modal> : null }
 			
 			{this.renderGallery()}
@@ -1426,9 +1440,9 @@ export default class Home extends React.Component {
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
-								left: 38 * alpha,
+								left: 28 * alpha,
 								right: 13 * alpha,
-								top: 5 * alpha,
+								top: 7 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
@@ -1447,39 +1461,9 @@ export default class Home extends React.Component {
 												marginTop: 1 * alpha,
 												marginBottom: 4 * alpha,
 											}}>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0 * alpha,
-													top: 0 * alpha,
-													bottom: 0 * alpha,
-													justifyContent: "center",
-												}}>
-												<Image
-													source={require("./../../assets/images/fill-1.png")}
-													style={styles.fill1Image}/>
-											</View>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 3 * alpha,
-													width: 9 * alpha,
-													top: 0 * alpha,
-													bottom: 2 * alpha,
-													alignItems: "flex-start",
-												}}>
-												<Image
-													source={require("./../../assets/images/group-4-2.png")}
-													style={styles.group4Image}/>
-												<View
-													style={{
-														flex: 1,
-													}}/>
-												<View
-													style={styles.line8View}/>
-											</View>
+											<Image
+													source={require("./../../assets/images/shopping-bag.png")}
+													style={styles.cartImage}/>
 										</View>
 										<View
 											style={{
@@ -1769,7 +1753,7 @@ const styles = StyleSheet.create({
 		// left: 0 * alpha,
 		// right: 0 * alpha,
 		// bottom: 0 * alpha,
-		height: 50 * alpha,
+		height: 60 * alpha,
 	},
 	bannerImage:{
 		height: windowHeight * alpha,
@@ -1781,21 +1765,21 @@ const styles = StyleSheet.create({
 	totalAmountView: {
 		backgroundColor: "transparent",
 		width: 280 * alpha,
-		height: 61 * alpha,
+		height: 51 * alpha,
 	},
 	rectangleView: {
 		backgroundColor: "rgb(231, 230, 230)",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		top: 10 * alpha,
-		height: 51 * alpha,
+		top: 20 * alpha,
+		height: 41 * alpha,
 	},
 	shopppingCartView: {
 		backgroundColor: "white",
 		borderRadius: 22.5 * alpha,
 		width: 102 * alpha,
-		height: 45 * alpha,
+		height: 35 * alpha,
 		justifyContent: "center",
 	},
 	shopppingCartButton: {
@@ -1843,6 +1827,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignSelf: "center",
 	},
+	cartImage: {
+		resizeMode: "contain",
+		width: 20 * alpha,
+		height: 20 * alpha,
+	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
@@ -1859,7 +1848,7 @@ const styles = StyleSheet.create({
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
-		left: 123 * alpha,
+		left: 113 * alpha,
 		top: 0 * alpha,
 		height: 20 * alpha,
 		flex: 1,
@@ -1884,8 +1873,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 5 * alpha,
-		height: 51 * alpha,
+		top: 25 * alpha,
+		height: 36 * alpha,
 	},
 	checkoutButtonText: {
 		color: "white",
@@ -1904,7 +1893,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 51 * alpha,
+		bottom: 41 * alpha,
 		flex: 1,
 	},
 	clearAllView: {
@@ -2046,7 +2035,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2067,7 +2056,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "rgb(167, 167, 167)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2123,7 +2112,7 @@ const styles = StyleSheet.create({
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2158,7 +2147,7 @@ const styles = StyleSheet.create({
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -2185,7 +2174,7 @@ const styles = StyleSheet.create({
 	selectedButtonText: {
 		color: "white",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -2347,7 +2336,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 20 * fontAlpha,
+		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2467,7 +2456,7 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		bottom: 0 * alpha,	
-		width:windowWidth
+		width: windowWidth
 	},
 	alertView:{
 		backgroundColor: "darkgray",
