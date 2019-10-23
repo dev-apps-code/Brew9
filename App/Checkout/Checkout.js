@@ -217,13 +217,15 @@ export default class Checkout extends React.Component {
 		this.tooglePayment()
 	}
 
-	removeItemFromCart(ids) {
 
+	removeItemFromCart(products) {
+
+		console.log(`products --- ${JSON.stringify(products)}`)
 		let cart = this.state.cart
 		let original_cart = this.state.cart
 
-		for (x of ids) {
-			cart = cart.filter(item => item.id != x);
+		for (x of products) {
+			cart = cart.filter(item => item.id != x.id);
 		}
 		
 		let removed_item = _.differenceBy(original_cart,cart,'id')
@@ -276,12 +278,16 @@ export default class Checkout extends React.Component {
 			}
 			else{
 
-				if (eventObject.result) {
-					this.removeItemFromCart(eventObject.result)
-				} else {
-					this.refs.toast.show(eventObject.message);
+				if (Array.isArray(eventObject.result)){
+					if (eventObject.result.length > 0){
+						let item = eventObject.result[0]
+						if (item.clazz = "product"){
+							this.removeItemFromCart(eventObject.result)
+							return
+						}
+					}
 				}
-				
+				this.refs.toast.show(eventObject.message);				
 			}
 		}
 

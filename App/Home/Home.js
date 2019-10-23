@@ -1397,10 +1397,18 @@ export default class Home extends React.Component {
 					style = styles.featuredpromoButtonPosition2
 				}
 			}else{
-				style = styles.featuredpromoButtonPosition1
+				if (cart.length > 0 ){
+					style = styles.featuredpromoButtonPosition2
+				}else{
+					style = styles.featuredpromoButtonPosition1
+				}
 			}
 		}else{
-			style = styles.featuredpromoButtonPosition1
+			if (cart.length > 0 ){
+				style = styles.featuredpromoButtonPosition2
+			}else{
+				style = styles.featuredpromoButtonPosition1
+			}
 		}
 
 		if (shop !== null && shop.featured_promotion !== null) {

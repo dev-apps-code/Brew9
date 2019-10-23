@@ -8,7 +8,7 @@
 
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha, windowHeight } from "../Common/size";
+import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 import {createAction} from '../Utils'
@@ -148,7 +148,6 @@ export default class Profile extends React.Component {
 
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
-
 			navigate("MemberVoucher",{validVouchers:validVouchers})
 			
 		}		
@@ -433,9 +432,8 @@ export default class Profile extends React.Component {
 										pointerEvents="box-none"
 										style={{
 											height: 83 * alpha,
-											marginLeft: 15 * alpha,
-											marginRight: 12 * alpha,
-											marginTop: 15 * alpha,
+											marginTop: 15 *alpha,
+											justifyContent: "space-between",
 											flexDirection: "row",
 											alignItems: "flex-start",
 										}}>
@@ -456,12 +454,21 @@ export default class Profile extends React.Component {
 													style={styles.pointText}>Point</Text>
 											</View>
 										</TouchableOpacity>
-										<View
-											style={{
-												flex: 1,
-											}}/>
 										<TouchableOpacity
-											onPress={() => this.onRewardButtonPressed()} >
+									onPress={() => this.onRewardButtonPressed()} >
+									<View
+										style={styles.rewardView}>
+										<Image
+											source={require("./../../assets/images/voucher_center.png")}
+											style={styles.rewardiconImage}/>
+										<Text
+											style={styles.rewardvalueText}>{vouchers_count}</Text>
+										<Text
+											style={styles.rewardText}>Voucher</Text>
+									</View>
+								</TouchableOpacity>										
+										<TouchableOpacity
+											onPress={() => this.onWalletButtonPressed()} >
 											<View
 												style={styles.walletView}>
 												<Image
@@ -475,20 +482,7 @@ export default class Profile extends React.Component {
 										</TouchableOpacity>
 									</View>
 								</View>
-							</View>
-							<TouchableOpacity
-								onPress={() => this.onRewardButtonPressed()} >
-								<View
-									style={styles.rewardView}>
-									<Image
-										source={require("./../../assets/images/voucher_center.png")}
-										style={styles.rewardiconImage}/>
-									<Text
-										style={styles.rewardvalueText}>{vouchers_count}</Text>
-									<Text
-										style={styles.rewardText}>Voucher</Text>
-								</View>
-							</TouchableOpacity>
+							</View>						
 						</View>
 					</View>
 					<View
@@ -984,7 +978,8 @@ const styles = StyleSheet.create({
 	},
 	fill1View: {
 		backgroundColor: PRIMARY_COLOR,
-		position: "absolute",
+		position: "absolute",		
+
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
@@ -994,6 +989,7 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		backgroundColor: "transparent",
 		position: "absolute",
+		width: windowWidth,
 		left: 0 * alpha,
 		right: 8 * alpha,
 		top: 1 * alpha,
@@ -1003,6 +999,7 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		backgroundColor: "transparent",
 		position: "absolute",
+		width: windowWidth,
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
@@ -1082,9 +1079,9 @@ const styles = StyleSheet.create({
 		marginTop: 6 * alpha,
 	},
 	initiallevelText: {
-		color: "rgb(15, 62, 81)",
+		color: PRIMARY_COLOR,
 		fontFamily: "DINPro-Bold",
-		fontSize: 8,
+		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
@@ -1151,12 +1148,7 @@ const styles = StyleSheet.create({
 		marginRight: 3 * alpha,
 		marginTop: 9 * alpha,
 	},
-	pointView: {
-		backgroundColor: "transparent",
-		width: 65 * alpha,
-		height: 83 * alpha,
-		alignItems: "center",
-	},
+	
 	pointiconImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
@@ -1164,7 +1156,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	pointvalueText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
@@ -1184,7 +1176,7 @@ const styles = StyleSheet.create({
 	},
 	walletView: {
 		backgroundColor: "transparent",
-		width: 66 * alpha,
+		width: (windowWidth-60)/3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1195,7 +1187,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	walletcreditText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
@@ -1214,12 +1206,16 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginTop: 5 * alpha,
 	},
+	pointView: {
+		backgroundColor: "transparent",
+		width: (windowWidth-60)/3,
+		height: 83 * alpha,
+		alignItems: "center",
+	},
 	rewardView: {
 		backgroundColor: "transparent",
-		position: "absolute",
 		alignSelf: "center",
-		width: 65 * alpha,
-		top: 104 * alpha,
+		width: (windowWidth-60)/3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1230,7 +1226,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	rewardvalueText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
@@ -1321,7 +1317,7 @@ const styles = StyleSheet.create({
 	},
 	missionlabelText: {
 		backgroundColor: "transparent",
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",

@@ -269,11 +269,11 @@ export default class VerifyUser extends React.Component {
 						</View>
 						: undefined}				
 				</View>
-				{this.state.loading ?
+				{/* {this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
 						<ActivityIndicator size="large" color="#FFFFFF"/>
 					</View>
-					: null }
+					: null } */}
 				<View
 					style={{
 						flex: 1,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 72 * alpha,
+		width: 120 * alpha,
 		height: 26 * alpha,
 	},
 	countdownText: {
@@ -487,6 +487,7 @@ const styles = StyleSheet.create({
 	activationView: {
 		backgroundColor: "white",
 		borderRadius: 7 * alpha,
+		overflow: "hidden",
 		borderColor: "rgb(140, 140, 140)",
 		borderWidth: 0.5,
 		height: 41 * alpha,
