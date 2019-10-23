@@ -15,11 +15,7 @@ import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
-<<<<<<< HEAD
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
-=======
-import {TITLE_FONT, NON_TITLE_FONT,PRIMARY_COLOR} from "../Common/common_style";
->>>>>>> d18c7ce2d721d417b8a9fb577792f9adb11d03f3
 import { ProgressBar, Colors } from 'react-native-paper';
 
 @connect(({ members }) => ({
