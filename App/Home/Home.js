@@ -260,7 +260,7 @@ export default class Home extends React.Component {
 	}
 	loadShops(loadProducts){
 
-		console.log("Status", loadProducts)
+		// console.log("Status", loadProducts)
 		const { dispatch,company_id,location } = this.props
 
 		this.setState({ loading: true })
@@ -346,13 +346,13 @@ export default class Home extends React.Component {
 					page: this.state.page + 1,
 				},function () {
 					let data = [...this.state.data]
-					console.log("Data",data)
+					// console.log("Data",data)
 					var items = []
 					var index_length = menu_banners.length
 					for(var index in data) {
 						data[index].selected = index == 0 ? true : false
 						data[index].scroll_index = index_length
-						console.log("Index",data[index])
+						// console.log("Index",data[index])
 						items = items.concat(data[index])
 						index_length = index_length + 1
 						items = items.concat(data[index].products)						
@@ -430,7 +430,7 @@ export default class Home extends React.Component {
 		this.setState({
 			selected_promotion: item.banner_detail_image
 		}, function(){
-			console.log(item.banner_detail_image)
+			// console.log(item.banner_detail_image)
 			this.setState({
 				isPromoToggle: true
 			})
@@ -459,7 +459,7 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-		console.log("Scroll Index", selected_index, scroll_index)
+		// console.log("Scroll Index", selected_index, scroll_index)
 
 		let data = [...this.state.data]
 
@@ -598,7 +598,6 @@ export default class Home extends React.Component {
 
 		if (item) {
 			if (item.clazz == "product") {
-				console.log(item)
 				return <ProductCell
 					navigation={this.props.navigation}
 					currency={"$"}
@@ -1514,7 +1513,6 @@ export default class Home extends React.Component {
 				Image.getSize(this.state.selected_promotion, (width, height) => {
 					image_width = width, image_height = height
 				
-					console.log (image_width, image_height)
 					if (image_width > image_height) {
 						this.setState({image_contain:true, image_check: true})
 					} else {

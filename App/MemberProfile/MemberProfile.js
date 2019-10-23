@@ -524,7 +524,6 @@ export default class MemberProfile extends React.Component {
 								<RadioForm formHorizontal={true} animation={true} >
 									{this.state.gender_options.map((obj, i) => {
 										var onPress = (value, index) => {
-											console.log("Gender",value)
 											this.setState({
 												gender: value,
 												genderIndex: index

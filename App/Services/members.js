@@ -60,3 +60,7 @@ export function currentOrder(authtoken,object) {
 export function qrCodeScan(authtoken,object) {
    return postMethod(authtoken,object)
 }
+
+export function missionStatements(authtoken,object) {
+   return getMethod(authtoken,object)
+}

@@ -54,7 +54,6 @@ export default class PromotionDetail extends React.Component {
 
   render() {
     const promo = this.props.navigation.getParam("details", null);
-    console.log("Promo Detail", promo);
     return (
       <View style={styles.promotiondetailView}>
         <Text style={styles.titleText}>{promo.title}</Text>

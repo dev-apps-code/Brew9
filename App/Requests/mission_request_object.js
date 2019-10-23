@@ -2,13 +2,12 @@ import BaseRequestObject from "./base_request_object";
 
 class MissionRequestObject extends BaseRequestObject{
 
-    constructor(level){
+    constructor(){
         super();
-        this.level = level
     }
 
    getUrlString() {
-       return `shops/${this.url_id}/missions`
+       return `companies/${this.url_id}/missions`
    }
 }
 export default MissionRequestObject

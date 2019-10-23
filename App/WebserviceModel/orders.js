@@ -23,7 +23,6 @@ import {
         {
             try{
     
-            console.log("LoadingOrder")
             const { object, callback } = payload
             const authtoken = yield select(state => state.member.userAuthToken)
             const json = yield call(

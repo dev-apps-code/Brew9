@@ -21,7 +21,6 @@ export default {
     
             const { object, callback } = payload
             const authtoken = yield select(state => state.members.userAuthToken)
-            console.log("request")
             const json = yield call(
                 validVouchers,
                 authtoken,

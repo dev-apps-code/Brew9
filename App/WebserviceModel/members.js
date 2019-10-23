@@ -13,7 +13,8 @@ import {
   orders,
   pointProductRedemption,
   currentOrder,
-  qrCodeScan
+  qrCodeScan,
+  missionStatements
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -269,7 +270,7 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        console.log("Destroy", eventObject)
+        
         if (eventObject.success == true) {
           yield put(createAction('destroyCurrentUser')(eventObject.result))
         }else{
@@ -347,6 +348,22 @@ export default {
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     },
+    *loadMissionStatements({ payload }, { call, put, select }) 
+    {
+    try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            missionStatements,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
 
   },
 }

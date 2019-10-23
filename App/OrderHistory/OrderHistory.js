@@ -59,7 +59,6 @@ export default class OrderHistory extends React.Component {
 		const { dispatch ,currentMember} = this.props	
 		this.setState({ loading_list: true })
 		const callback = eventObject => {
-			console.log("Orders", eventObject)
 			this.setState({loading_list: false,})
 			if (eventObject.success) {
 				this.setState({
