@@ -21,7 +21,7 @@ import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING} from "../Common/common_style";
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -398,7 +398,7 @@ export default class Checkout extends React.Component {
 
 		var product_checkout_height = payment_view_height
 		var content = 247 * alpha
-		var finalheight = product_checkout_height - content
+		var finalheight = product_checkout_height - content - BUTTONBOTTOMPADDING
 
 			if (isPaymentToggle) {
 				this.setState({ isPaymentToggle: false }, function(){
@@ -1734,7 +1734,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 0 * alpha,
+		bottom: BUTTONBOTTOMPADDING,
 		height: 47 * alpha,
 		flexDirection: "row",
 		alignItems: "center",

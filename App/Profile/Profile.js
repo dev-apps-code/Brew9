@@ -15,7 +15,7 @@ import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members:members,
@@ -995,7 +995,7 @@ const styles = StyleSheet.create({
 		height: 353 * alpha,
 	},
 	fill1View: {
-		backgroundColor: "rgb(221, 210, 194)",
+		backgroundColor: PRIMARY_COLOR,
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
@@ -1172,7 +1172,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	pointvalueText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: "DINPro-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
@@ -1203,7 +1203,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	walletcreditText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: "DINPro-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
@@ -1238,7 +1238,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	rewardvalueText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: "DINPro-Medium",
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
@@ -1329,7 +1329,7 @@ const styles = StyleSheet.create({
 	},
 	missionlabelText: {
 		backgroundColor: "transparent",
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR ,
 		fontFamily: "DINPro-Medium",
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",

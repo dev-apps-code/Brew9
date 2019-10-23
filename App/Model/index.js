@@ -8,7 +8,7 @@ import companies from '../WebserviceModel/companies'
 import point_products from '../WebserviceModel/point_products'
 import shops from '../WebserviceModel/shops'
 import orders from '../WebserviceModel/orders'
-import payments from '../WebserviceModel/payments.js/index.js'
+import payments from '../WebserviceModel/payments'
 
 export function registerModels(app) {
   app.model(members)

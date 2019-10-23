@@ -1,10 +1,10 @@
 import { windowWidth, alpha } from "./size";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 export const TITLE_FONT = "ClanPro-News";
 export const NON_TITLE_FONT = "ClanPro-Book";
 export const PRIMARY_COLOR = "rgb(0, 178, 227)"
-
+export const BUTTONBOTTOMPADDING = Platform.OS === "ios" ? 40*alpha : 0
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: "blue",

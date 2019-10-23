@@ -17,6 +17,8 @@ export const KCURRENT_API_VERSION_HEADER = "application/dc.v1";
 
 export const KTIMEOUT = 3 * 1000;
 
+const IS_TEST = true;
+
 export function encodeForFormData(details) {
   let formBody = [];
   for (const property in details) {
@@ -26,4 +28,20 @@ export function encodeForFormData(details) {
   }
   formBody = formBody.join("&");
   return formBody;
+}
+
+export function getPaymentServer(){
+  if (IS_TEST){
+    return 'https://baiduri-bpgs.mtf.gateway.mastercard.com'
+  }else{
+    return 'https://baiduri-bpgs.gateway.mastercard.com'
+  }
+}
+
+export function getMerchantId(){
+    return '950029645'
+}
+
+export function getBaiduriAuthorizationToken(){
+  return 'Basic TUVSQ0hBTlQuOTUwMDI5NjQ1Ojc0NTlkZWNiZWFiOWEwMzUxYzU4ZDk3YjFkZjg4NDdm'
 }
