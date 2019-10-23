@@ -317,6 +317,7 @@ export default class Checkout extends React.Component {
 	}
 
 	clearCart = () => {
+		const {navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		navigation.navigate({ routeName, key, params: { clearCart: true } })
 	}
@@ -324,7 +325,7 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total, selected_payment} = this.state
-		const {currentMember,selectedShop, navigation } = this.props
+		const {currentMember,selectedShop } = this.props
 
 		if (currentMember) {
 			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
