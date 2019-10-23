@@ -2085,7 +2085,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 9 * fontAlpha,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

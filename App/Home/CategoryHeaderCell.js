@@ -65,6 +65,7 @@ export default class CategoryHeaderCell extends React.Component {
 						</View>
 						
 					</View>
+<<<<<<< HEAD
 					{
 						(this.props.categoryDescription!=null) && (
 						<Text
@@ -74,6 +75,13 @@ export default class CategoryHeaderCell extends React.Component {
 						</Text>
 						)
 		  			}
+=======
+					{this.props.categoryDescription !== null && (
+						<Text
+						numberOfLines={3}
+						style={styles.descriptionText}>{this.props.categoryDescription}</Text>
+					)}
+>>>>>>> 59d51fb9c37123417eff7910bb368b67407f816d
 				</View>
 			</TouchableWithoutFeedback>
   }
@@ -92,33 +100,33 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    color: PRIMARY_COLOR,
-    textAlign: "left",
-    marginLeft: 10 * alpha,
-    paddingRight: 10 * alpha,
-    backgroundColor: "white",
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		color: PRIMARY_COLOR,
+		textAlign: "left",
+		marginLeft: 10 * alpha,
+		paddingRight: 10 * alpha,
+		backgroundColor: "white",
 	},
 	lineView: {
 		marginLeft: 10 * alpha,
-    backgroundColor: "rgb(229, 227, 227)",
-    height: 1,
+		backgroundColor: "rgb(229, 227, 227)",
+		height: 1,
 	},
 	descriptionText: {
 		backgroundColor: "transparent",
 		color: "rgb(167, 167, 167)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-    textAlign: "left",
+    	textAlign: "left",
     // width: 190 * alpha,
 		alignSelf: "flex-start",
-    marginLeft: 10 * alpha,
-    marginRight: 10 * alpha,
-    marginTop: 2 * alpha,
-    marginBottom: 10 * alpha,
+		marginLeft: 10 * alpha,
+		marginRight: 10 * alpha,
+		marginTop: 2 * alpha,
+		marginBottom: 10 * alpha,
 	},
 })
