@@ -10,10 +10,8 @@ import { View, Image, Text, StyleSheet } from "react-native"
 import React from "react"
 import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils"
-import {createStackNavigator, NavigationActions, StackActions} from 'react-navigation'
+
 import ProfileRequestObject from "../Requests/profile_request_object"
-import Login from "../Login/Login"
-import Home from "../Home/Home";
 
 @connect(({ members }) => ({
     members: members.profile,
@@ -39,9 +37,6 @@ export default class FirstScreen extends React.Component {
         }
     }
 
-    componentWillMount() {
-     
-    }
 
     componentDidMount() {
         const { dispatch } = this.props
@@ -54,7 +49,7 @@ export default class FirstScreen extends React.Component {
 
     checkLoginStatus() {
         const { members } = this.props
-        // console.log("Members", members)
+        console.log("Members", members)
         if (typeof members === 'undefined'|| members === null) {
             this.props.navigation.navigate("VerifyStack")
         }
@@ -87,6 +82,7 @@ export default class FirstScreen extends React.Component {
     }
 
     render() {
+      
         return <View></View>
     }
 }

@@ -36,6 +36,7 @@ import CartCell from "./CartCell"
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
+import LogoutRequestObject from "../Requests/logout_request_object.js"
 import SwitchSelector from "react-native-switch-selector"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import ImageViewer from 'react-native-image-zoom-viewer'
@@ -220,6 +221,7 @@ export default class Home extends React.Component {
 		this.loadShops(true)
 		AppState.addEventListener('change', this._handleAppStateChange);	
 		await this.registerForPushNotificationsAsync()
+
 	}
 
 	componentWillUnmount() {

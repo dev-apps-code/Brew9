@@ -34,8 +34,8 @@ function saveCurrentUserToStorage(profile) {
 }
 
 function clearCurrentUser() {
-  
   AsyncStorage.clear()
+  AsyncStorage.synchronize()
 }
 
 export default {

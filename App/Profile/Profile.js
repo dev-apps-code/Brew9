@@ -264,6 +264,7 @@ export default class Profile extends React.Component {
 		var display_name;
 		var points;
 		var avatar;
+		var membership_name;
 		var isLogin = true;
 
 		var vouchers_count;
