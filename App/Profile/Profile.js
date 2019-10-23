@@ -248,7 +248,9 @@ export default class Profile extends React.Component {
 		const {  currentMember } = this.props
 
 		if (currentMember !== null) {
-			this.loadDestroy()
+			// this.loadDestroy()
+			const { navigate } = this.props.navigation
+			navigate("MemberProfile")
 		}else{
 			const { navigate } = this.props.navigation
 			navigate("VerifyStack")
@@ -684,6 +686,56 @@ export default class Profile extends React.Component {
 				
 				<View
 					style={styles.menuView}>
+						<TouchableOpacity
+							onPress={() => this.onLogoutButtonPress()}
+							style={styles.logoutbuttonButton}>
+						<View
+							style={styles.logoutView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 14 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.logoutLabelText}>{isLogin ? "My Profile" : "Signup/Login"}</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Image
+											source={require("./../../assets/images/arrow.png")}
+											stytle={styles.arrowImage}/>
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									height: 58 * alpha,
+								}}>
+								<Text
+									style={styles.logoutbuttonButtonText}></Text>
+								
+							</View>
+						</View>
+					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => this.onOrderButtonPressed()}
 						style={styles.orderhostorybuttonButton}>
@@ -846,7 +898,7 @@ export default class Profile extends React.Component {
 									style={styles.lineThreeView}/>
 							</View>
 						</View>
-					</TouchableOpacity> */}
+					</TouchableOpacity> */}										
 					<TouchableOpacity
 							onPress={() => this.onAboutButtonPressed()}
 							style={styles.aboutbuttonButton}>
@@ -898,56 +950,6 @@ export default class Profile extends React.Component {
 						</View>
 						<View
 								style={styles.lineThreeView}/>
-					</TouchableOpacity>
-					<TouchableOpacity
-							onPress={() => this.onLogoutButtonPress()}
-							style={styles.logoutbuttonButton}>
-						<View
-							style={styles.logoutView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 14 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.logoutLabelText}>{isLogin ? "Logout" : "Signup/Login"}</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
-								<Text
-									style={styles.logoutbuttonButtonText}></Text>
-								
-							</View>
-						</View>
 					</TouchableOpacity>
 				</View>
 			</ScrollView>

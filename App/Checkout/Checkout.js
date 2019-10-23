@@ -63,6 +63,7 @@ export default class Checkout extends React.Component {
 			valid_vouchers:[],
 			discount:0,
 			cart:this.props.navigation.getParam("cart", []),
+			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
 			modal_visible: false,
 			modal_description: "",
 			modal_title: "",
@@ -84,17 +85,7 @@ export default class Checkout extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
-		this.loadValidVouchers()
-		// this.setState({
-		// 	modal_title: "Brew9",
-		// 	modal_description: `Mocha Coffee \n Chocolate`,
-		// 	modal_cancelable: false,
-		// 	modal_ok_text: "Remove from Cart",
-		// 	modal_ok_action: ()=> {
-		// 		this.setState({modal_visible:false})
-		// 	},
-		// 	modal_visible:true,
-		// })
+		this.loadValidVouchers()	
 	}
 
 	loadValidVouchers(){
@@ -170,10 +161,7 @@ export default class Checkout extends React.Component {
 			let array = []
 			
 			for (var index in vouchers_to_use){
-				var v = vouchers_to_use[index]
-				// let existing_voucher_types = array.map(a => a.voucher.voucher_type)
-				console.log("vocuher yype exitint",v.voucher.voucher_type)
-				console.log("vocuher yype new",voucher_item.voucher.voucher_type)
+				var v = vouchers_to_use[index]			
 				if (voucher_item.voucher_type == "SkipQueue" && v.voucher.voucher_type !== "SkipQueue"){
 					array.push(v)	
 					
@@ -218,35 +206,46 @@ export default class Checkout extends React.Component {
 	}
 
 
-	removeItemFromCart(products) {
+	removeItemFromCart(products,description) {
 
-		console.log(`products --- ${JSON.stringify(products)}`)
 		let cart = this.state.cart
-		let original_cart = this.state.cart
 
-		for (x of products) {
-			cart = cart.filter(item => item.id != x.id);
+		let newCart = [];
+		let product_ids = products.map(item => item.id);
+		
+		let cart_total = 0
+		let cart_total_quantity = 0
+		for (x of cart) {
+			if (!product_ids.includes(x.id)){
+				newCart.push(x)
+				cart_total_quantity = cart_total_quantity + cartItem.quantity
+				cart_total = (parseFloat(cart_total) + parseFloat(x.price)).toFixed(2)
+			}
 		}
-		
-		let removed_item = _.differenceBy(original_cart,cart,'id')
-		
-		let removed_item_name = "These few items are currently out of stock and are removed from your cart.\n"
+				
+		let removed_item_name = `${description} \n\n`
 
-		for (var index in removed_item) {
-			removed_item_name.concat(removed_item[index].name)
+		for (var index in products) {
+			let product = products[index];
+			removed_item_name = removed_item_name.concat(product.name)
 			if (index > 0) {
-				removed_item_name.concat("\n")
+				removed_item_name = removed_item_name.concat("\n")
 			}
 		}
 
 		this.setState({
-			cart: cart,
+			cart: newCart,
+			cart_total:cart_total,
+			cart_total_quantity:cart_total_quantity,
 			modal_title:'Brew9',
 			modal_description:removed_item_name,
 			modal_ok_text: null,
 			modal_cancelable: false,
 			modal_ok_action: ()=> {
 				this.setState({modal_visible:false})
+				if (newCart.length == 0){
+					this.props.navigation.goBack()
+				}
 			},
 			modal_visible:true,
 		})
@@ -282,7 +281,7 @@ export default class Checkout extends React.Component {
 					if (eventObject.result.length > 0){
 						let item = eventObject.result[0]
 						if (item.clazz = "product"){
-							this.removeItemFromCart(eventObject.result)
+							this.removeItemFromCart(eventObject.result,eventObject.message)
 							return
 						}
 					}
@@ -326,6 +325,7 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 		const {cart_total, selected_payment} = this.state
 		const {currentMember,selectedShop } = this.props
+
 
 		if (currentMember) {
 			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
@@ -422,7 +422,6 @@ export default class Checkout extends React.Component {
 					}).start()
 				})
 			}
-
 	}
 
 	renderPaymentMethod() {
@@ -664,10 +663,7 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		
-		let cart_total_quantity = this.props.navigation.getParam("cart_total_quantity",0)
-
-		let {cart,cart_total,vouchers_to_use,discount} = this.state
+		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity} = this.state
 		let {currentMember, selectedShop} = this.props
 		var final_price = cart_total - discount 
 		if (final_price < 0){
