@@ -44,10 +44,12 @@ export default class FirstScreen extends React.Component {
     }
 
     componentDidUpdate() {
+        
         this.checkLoginStatus()
     }
 
     checkLoginStatus() {
+<<<<<<< HEAD
         const { members } = this.props
         console.log("Members", members)
         if (typeof members === 'undefined'|| members === null) {
@@ -66,20 +68,21 @@ export default class FirstScreen extends React.Component {
         const callback = eventObject => {
             if (eventObject.success) {
               
+=======
+        const { members,isReady } = this.props
+        if (isReady){
+            if (typeof members === 'undefined'|| members === null) {
+                this.props.navigation.navigate("VerifyStack")
+            }
+            else {
+                this.props.navigation.navigate("TabGroupOne")
+>>>>>>> d18c7ce2d721d417b8a9fb577792f9adb11d03f3
             }
         }
-        const obj = new ProfileRequestObject()
         
-        if(members.id) {
-            obj.setUrlId(members.id)
-            dispatch(
-                createAction('members/loadProfile')({
-                    object:obj,
-                    callback,
-                })
-            )
-        }
     }
+
+    
 
     render() {
       

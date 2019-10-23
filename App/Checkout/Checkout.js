@@ -419,7 +419,7 @@ export default class Checkout extends React.Component {
 	renderPaymentMethod() {
 
 		const { currentMember } = this.props
-
+		const credits = currentMember!==undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 		return <Animated.View
 			style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]} >
 				<View
@@ -474,7 +474,7 @@ export default class Checkout extends React.Component {
 												flex: 1,
 											}}/>
 										<Text
-											style={styles.balanceText}>Balance: ${parseFloat(currentMember.credits).toFixed(2)}</Text>
+											style={styles.balanceText}>Balance: ${credits}</Text>
 									</View>
 									<View
 										style={{
