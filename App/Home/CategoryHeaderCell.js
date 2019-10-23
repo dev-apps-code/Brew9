@@ -65,23 +65,11 @@ export default class CategoryHeaderCell extends React.Component {
 						</View>
 						
 					</View>
-<<<<<<< HEAD
-					{
-						(this.props.categoryDescription!=null) && (
-						<Text
-							numberOfLines={3}
-							style={styles.descriptionText}>
-							{this.props.categoryDescription}
-						</Text>
-						)
-		  			}
-=======
 					{this.props.categoryDescription !== null && (
 						<Text
 						numberOfLines={3}
 						style={styles.descriptionText}>{this.props.categoryDescription}</Text>
 					)}
->>>>>>> 59d51fb9c37123417eff7910bb368b67407f816d
 				</View>
 			</TouchableWithoutFeedback>
   }
