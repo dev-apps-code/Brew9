@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
 	},
 	messageView: {
 		backgroundColor: "transparent",
-		width: 180 * alpha,
+		width: windowWidth - 40*alpha,
 		height: 35 * alpha,
 		marginTop: 16 * alpha,
 		alignItems: "center",

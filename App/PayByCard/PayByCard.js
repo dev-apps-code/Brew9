@@ -11,7 +11,11 @@ import { StyleSheet, Image, TouchableOpacity, Text, View, TextInput } from "reac
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
-
+import Toast, {DURATION} from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading.js"
+import {createAction, Storage} from "../Utils"
+import PaymentSessionRequestObject from '../Requests/payment_session_request_object.js'
+import UpdatePaymentSessionRequestObject from '../Requests/update_payment_session_request_object'
 @connect(({ members }) => ({
 	members: members.profile
 }))
@@ -56,6 +60,45 @@ export default class PayByCard extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+		this.loadGetSession()
+		
+	}
+
+	loadGetSession(){
+		const { dispatch } = this.props
+		this.setState({ loading: true })
+		
+		const callback = eventObject => {
+			this.loadUpdateSessionWithCardDetails()
+		}
+		const obj = new PaymentSessionRequestObject()
+		dispatch(
+			createAction('payments/loadGetSession')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
+	loadUpdateSessionWithCardDetails(){
+		const { dispatch } = this.props
+		let name = "Voon Sze Ching"		
+		let card_number = "4842810339276319"		
+		let security_code = '906'
+		let month = '11'
+		let year = '23'
+		const callback = eventObject => {
+			this.setState({ loading: false }) 				
+		}
+
+		const obj = new UpdatePaymentSessionRequestObject(name,card_number,security_code,month,year)
+
+		dispatch(
+			createAction('payments/loadSetCreditCardSession')({
+				object:obj,
+				callback,
+			})
+		)
 	}
 
 	onBackPressed = () => {
@@ -157,6 +200,9 @@ export default class PayByCard extends React.Component {
 							style={styles.payNowButtonText}>Pay Now</Text>
 					</TouchableOpacity>
 				</View>
+				<Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}
 }

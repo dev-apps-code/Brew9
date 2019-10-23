@@ -36,6 +36,7 @@ import CartCell from "./CartCell"
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
+import LogoutRequestObject from "../Requests/logout_request_object.js"
 import SwitchSelector from "react-native-switch-selector"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import ImageViewer from 'react-native-image-zoom-viewer'
@@ -140,7 +141,6 @@ export default class Home extends React.Component {
 			image_contain: false,
 			image_check: false,
 			app_url: '',
-
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -219,11 +219,9 @@ export default class Home extends React.Component {
 			onQrScanPressed: this.onQrScanPressed,
 		})
 		this.loadShops(true)
-		AppState.addEventListener('change', this._handleAppStateChange);
-
-		// this.loadStorePushToken()
-		
+		AppState.addEventListener('change', this._handleAppStateChange);	
 		await this.registerForPushNotificationsAsync()
+
 	}
 
 	componentWillUnmount() {
@@ -326,19 +324,7 @@ export default class Home extends React.Component {
 							this.loadStoreProducts()
 						},
 						app_url:eventObject.result.url
-					})
-					// Alert.alert(
-					// 	'Brew9',
-					// 	eventObject.message,
-					// 	eventObject.result.force_upgrade ? [ { text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ] : 
-					// 		[ 
-					// 			{ text: 'Cancel', style: 'cancel', onPress: () => {
-					// 				this.loadStoreProducts()
-					// 			}}, 
-					// 			{ text: 'OK', onPress: () => Linking.openURL(eventObject.result.url) }, ],
-					// 	{cancelable: eventObject.result.force_upgrade},
-					// );
-					
+					})								
 				} else {
 				this.setState({
 					data: eventObject.result,
@@ -913,22 +899,7 @@ export default class Home extends React.Component {
 	dismissProduct() {
 		this.setState({ modalVisible: false})
 	}
-
-	renderFeaturedPromo(shop, cart) {
-
-		if (shop !== null && shop.featured_promotion !== null) {
-			
-			return <TouchableOpacity
-					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
-					style={shop.is_opened ? styles.featuredpromoButton1 ? cart.length > 0 : styles.featuredpromoButton3 : styles.featuredpromoButton2}>
-					<Image
-						source={{uri: shop.featured_promotion.icon.url}}
-						style={styles.featuredpromoButtonImage}/>
-				</TouchableOpacity>
-		}
-		
-		return undefined
-	}
+	
 	renderModalContent = (selected_product, shop) => {
 
 		let select_quantity = this.state.select_quantity
@@ -943,6 +914,7 @@ export default class Home extends React.Component {
 		}
 
 		var enabled = selected_product.enabled
+
 
 		if (!shop.is_opened) {
 			enabled = false
@@ -1264,8 +1236,7 @@ export default class Home extends React.Component {
 								onViewableItemsChanged={this.reachProductIndex}
 								keyExtractor={(item, index) => index.toString()}/>
 							}
-						</View>
-						{this.renderFeaturedPromo(shop,cart)}
+						</View>						
 					</View>
 				}
 				{ this.state.isToggleLocation && (
@@ -1376,9 +1347,10 @@ export default class Home extends React.Component {
 				
 			
 			<View style={styles.bottomAlertView}>
-				{this.renderAlertBar(shop)}
+				{this.renderAlertBar(cart,shop)}
 				{this.renderBottomBar(cart,shop)}			
 			</View>
+			{this.renderFeaturedPromo(shop,cart)}
 			<Toast ref="toast"
 				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
@@ -1390,31 +1362,62 @@ export default class Home extends React.Component {
 		</View>
 	}
 
-	renderAlertBar(shop){	
-		
+	renderAlertBar(cart,shop){	
+
+		const style =  (cart.length > 0)  ? styles.alertViewCart : styles.alertView
 		if (shop !== null)  {
 			if ( shop.is_opened === false){
 				return (
-					<View style={styles.alertView}>
+					<View style={style}>
 						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
 					</View>)
 			}
 
 			if (shop.shop_busy_template_message != null){
-
-				const title = shop.shop_busy_template_message.title
 				const template = shop.shop_busy_template_message.template
 
 				return (
-					<View style={styles.alertView}>
-						{/* {title != null && title.length > 0 ?  <Text style={styles.alertViewTitle}>{title}</Text> : undefined} */}
+					<View style={style}>
 						<Text style={styles.alertViewText}>{template}</Text>
 					</View>)
 			}
 		}
 		
-			return undefined
+		return undefined
 	}
+
+	renderFeaturedPromo(shop, cart) {
+		let style = undefined
+
+		if (shop !== null ){
+			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+				if (cart.length > 0 ){
+					style = styles.featuredpromoButtonPosition3
+				}else{
+					style = styles.featuredpromoButtonPosition2
+				}
+			}else{
+				style = styles.featuredpromoButtonPosition1
+			}
+		}else{
+			style = styles.featuredpromoButtonPosition1
+		}
+
+		if (shop !== null && shop.featured_promotion !== null) {
+			
+			return <TouchableOpacity
+					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
+					style={[style,styles.featuredpromoButton]}>
+					<Image
+						source={{uri: shop.featured_promotion.icon.url}}
+						style={styles.featuredpromoButtonImage}/>
+				</TouchableOpacity>
+		}
+		
+		return undefined
+	}
+
+	
 
 	renderBottomBar(cart,shop){
 		
@@ -1747,10 +1750,10 @@ const styles = StyleSheet.create({
 	},
 	cartView: {
 		backgroundColor: "transparent",
-		// position: "absolute",
-		// left: 0 * alpha,
-		// right: 0 * alpha,
-		// bottom: 0 * alpha,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,
 		height: 60 * alpha,
 	},
 	bannerImage:{
@@ -2456,6 +2459,15 @@ const styles = StyleSheet.create({
 		bottom: 0 * alpha,	
 		width: windowWidth
 	},
+	alertViewCart:{
+		backgroundColor: "darkgray",
+		marginBottom:35*alpha,
+		paddingBottom: 10*alpha,
+		// position: "absolute",
+		// left: 0 * alpha,
+		// right: 0 * alpha,
+		// bottom: 60 * alpha,		
+	},
 	alertView:{
 		backgroundColor: "darkgray",
 	},
@@ -2599,41 +2611,25 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		alignSelf: "stretch",
 	},
-	featuredpromoButton: {
+	featuredpromoButton:{
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 100 * alpha,
-		height: 50 * alpha,
+		width: 60 * alpha,
+		height: 30 * alpha,
+		left: 10 * alpha
+	},
+	featuredpromoButtonPosition1: {	
 		bottom: 10 * alpha,
-		left: 10 * alpha
 	},
-	featuredpromoButton2: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		width: 60 * alpha,
-		height: 30 * alpha,
-		bottom: 20 * alpha,
-		left: 10 * alpha
+	featuredpromoButtonPosition2: {	
+		bottom: 50 * alpha,	
 	},
-	featuredpromoButton3: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		width: 60 * alpha,
-		height: 30 * alpha,
-		bottom: 60 * alpha,
-		left: 10 * alpha
+	featuredpromoButtonPosition3: {
+		bottom: 100 * alpha,
 	},
 	featuredpromoButtonImage: {
 		resizeMode: "cover",

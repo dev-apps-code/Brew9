@@ -265,6 +265,7 @@ export default class Profile extends React.Component {
 		var display_name;
 		var points;
 		var avatar;
+		var membership_name;
 		var isLogin = true;
 		var membership_progress
 
@@ -982,7 +983,7 @@ const styles = StyleSheet.create({
 		height: 353 * alpha,
 	},
 	fill1View: {
-		backgroundColor: "rgb(221, 210, 194)",
+		backgroundColor: PRIMARY_COLOR,
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,

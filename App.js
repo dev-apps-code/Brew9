@@ -135,7 +135,7 @@ const VerifyUserStack = createStackNavigator(
   }
 );
 
-const VerifyStack = createStackNavigator(
+export const VerifyStack = createStackNavigator(
   {
     VerifyUser: {
       screen: VerifyUser
@@ -383,7 +383,7 @@ const RootNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "TabGroupOne",
+    initialRouteName: "FirstScreen",
     mode: "modal",
     headerMode: "none"
   }
