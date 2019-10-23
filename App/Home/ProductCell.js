@@ -75,7 +75,6 @@ export default class ProductCell extends React.Component {
 
   render() {
 
-    console.log("Limit", this.props.daily_limit)
     const ingredients = this.props.productingredient.map((item, key) => {
       return (
         <View style={styles.ingredientView} key={key}>
@@ -83,6 +82,8 @@ export default class ProductCell extends React.Component {
         </View>
       );
     });
+
+    var hasPrice = this.props.productprice > 0.00 && this.props.productprice ? true : false
 
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
@@ -111,14 +112,14 @@ export default class ProductCell extends React.Component {
                 style={styles.productimageImage}
               />
             </View>
-            {!this.props.productenable ? 
+            {/* {!this.props.productenable ? 
               <View style={styles.soldView}>
                 <Text style={styles.soldtextText}>Sold Out</Text>
               </View> : this.props.daily_limit > 0 && this.props.daily_limit ?
               <View style={styles.soldView}>
                 <Text style={styles.soldtextText}>Limit {this.props.daily_limit}</Text>
               </View>
-              : null }
+              : null } */}
           </View>
           <View style={styles.detailsView}>
             <Text numberOfLines={2} style={styles.titleText}>
@@ -141,7 +142,7 @@ export default class ProductCell extends React.Component {
               {ingredients}
             </View>
 
-            <Text numberOfLines={2} style={styles.descriptionText}>
+            <Text numberOfLines={hasPrice ? 2 : 3} style={styles.descriptionText}>
               {this.props.productsummary}
             </Text>
             <View
@@ -151,7 +152,7 @@ export default class ProductCell extends React.Component {
             />
            
             <Text style={styles.priceText}>
-              {this.props.productprice > 0.00 && this.props.productprice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
+              {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
             </Text>
             
             

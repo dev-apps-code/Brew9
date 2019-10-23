@@ -15,7 +15,8 @@ import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { ProgressBar, Colors } from 'react-native-paper';
 
 @connect(({ members }) => ({
 	members:members,
@@ -266,6 +267,7 @@ export default class Profile extends React.Component {
 		var avatar;
 		var membership_name;
 		var isLogin = true;
+		var membership_progress
 
 		var vouchers_count;
 		if (currentMember != null ){
@@ -277,7 +279,12 @@ export default class Profile extends React.Component {
 			avatar = currentMember.image != null ? {uri: currentMember.image} : require("./../../assets/images/avatar.png")
 			vouchers_count = currentMember.voucher_items_count
 			credits = parseFloat(currentMember.credits).toFixed(2)
-			// console.log("Member", currentMember)
+			member_exp = currentMember.premium_membership ? currentMember.premium_membership.experience_points : currentMember.free_membership.experience_points
+			exp_needed = currentMember.premium_membership ? currentMember.premium_membership.membership_level.maximum_experience : currentMember.free_membership.membership_level.maximum_experience
+			membership_progress = currentMember.premium_membership ?
+				currentMember.premium_membership.experience_points/currentMember.premium_membership.membership_level.maximum_experience :
+				currentMember.free_membership.experience_points/currentMember.free_membership.membership_level.maximum_experience
+			
 		}else{
 			background_photo =  {uri:''}
 			level_name = ''
@@ -286,12 +293,15 @@ export default class Profile extends React.Component {
 			avatar = require("./../../assets/images/avatar.png")
 			vouchers_count = 0
 			credits = 0
+			membership_name = ""
+			member_exp = 0
+			exp_needed = 1
 		}
 
 		if (currentMember === null) {
 			isLogin = false
 		}
-
+		
 		return <ScrollView
 				style={styles.amendedCopy3View}>
 				<View
@@ -375,61 +385,38 @@ export default class Profile extends React.Component {
 													pointerEvents="box-none"
 													style={{
 														position: "absolute",
-														left: 0 * alpha,
-														right: 0 * alpha,
-														top: 0 * alpha,
+														left: 0,
+														right: 0,
+														top: 0,
 														height: 22 * alpha,
 													}}>
 													<View
 														pointerEvents="box-none"
 														style={{
 															position: "absolute",
+															left: 0,
 															right: 3 * alpha,
-															width: 190 * alpha,
-															top: 0 * alpha,
+															top: 0,
 															height: 11 * alpha,
 															flexDirection: "row",
-															justifyContent: "flex-end",
 															alignItems: "flex-start",
 														}}>
 														<Text
-															style={styles.initiallevelText}>{}</Text>
+															style={styles.initiallevelText}>{level_name}</Text>
+														<View
+															style={{
+																flex: 1,
+															}}/>
 														<Text
-															style={styles.nextlevelText}>{}</Text>
+															style={styles.nextlevelText}></Text>
 													</View>
 													<View
 														style={styles.progressbarView}>
-														<View
-															pointerEvents="box-none"
-															style={{
-																position: "absolute",
-																left: 0 * alpha,
-																right: 0 * alpha,
-																top: 0 * alpha,
-																bottom: 0,
-																justifyContent: "center",
-															}}>
-															<Image
-																source={require("./../../assets/images/group-4-14.png")}
-																style={styles.group4Image}/>
-														</View>
-														<View
-															pointerEvents="box-none"
-															style={{
-																position: "absolute",
-																left: 0 * alpha,
-																top: 0 * alpha,
-																bottom: 0,
-																justifyContent: "center",
-															}}>
-															<Image
-																source={require("./../../assets/images/group-7-4.png")}
-																style={styles.group7Image}/>
-														</View>
+														<ProgressBar style={styles.progresslineView} progress={membership_progress ? membership_progress : 0} color={"rgb(0, 178, 227)"} />
 													</View>
 												</View>
 												<Text
-													style={styles.levelexpText}></Text>
+													style={styles.levelexpText}>{member_exp} / {exp_needed}</Text>
 											</View>
 										</View>
 										<View
@@ -453,11 +440,11 @@ export default class Profile extends React.Component {
 											alignItems: "flex-start",
 										}}>
 										<TouchableOpacity
-											onPress={() => this.onRewardButtonPressed()} >
+											onPress={() => this.onPointButtonPressed()} >
 											<View
 												style={styles.pointView}>
 												<Image
-													source={require("./../../assets/images/icon-23-copy.png")}
+													source={require("./../../assets/images/point_center.png")}
 													style={styles.pointiconImage}/>
 												<Text
 													style={styles.pointvalueText}>{points}</Text>
@@ -478,7 +465,7 @@ export default class Profile extends React.Component {
 											<View
 												style={styles.walletView}>
 												<Image
-													source={require("./../../assets/images/icon-25-copy.png")}
+													source={require("./../../assets/images/wallet_center.png")}
 													style={styles.walletIconImage}/>
 												<Text
 													style={styles.walletcreditText}>${parseFloat(credits).toFixed(2)}</Text>
@@ -490,16 +477,16 @@ export default class Profile extends React.Component {
 								</View>
 							</View>
 							<TouchableOpacity
-								onPress={() => this.onPointButtonPressed()} >
+								onPress={() => this.onRewardButtonPressed()} >
 								<View
 									style={styles.rewardView}>
 									<Image
-										source={require("./../../assets/images/icon-24-copy.png")}
+										source={require("./../../assets/images/voucher_center.png")}
 										style={styles.rewardiconImage}/>
 									<Text
 										style={styles.rewardvalueText}>{vouchers_count}</Text>
 									<Text
-										style={styles.rewardText}>Reward</Text>
+										style={styles.rewardText}>Voucher</Text>
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -728,7 +715,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.orderHistoryLabelText}>Order History</Text>
+										style={isLogin ? styles.orderHistoryLabelText : styles.orderHistoryDisableLabelText}>Order History</Text>
 									<View
 										style={{
 											flex: 1,
@@ -781,7 +768,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.qrCodeLabelText}>QR Code</Text>
+										style={isLogin ? styles.qrCodeLabelText : styles.qrCodeDisableLabelText}>QR Code</Text>
 									<View
 										style={{
 											flex: 1,
@@ -891,7 +878,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.aboutLabelText}>About Brew9</Text>
+										style={isLogin ? styles.aboutLabelText : styles.aboutDisableLabelText}>About Brew9</Text>
 									<View
 										style={{
 											flex: 1,
@@ -1057,7 +1044,7 @@ const styles = StyleSheet.create({
 	},
 	membershiplabelText: {
 		color: "rgb(65, 28, 15)",
-		fontFamily: "Helvetica-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
@@ -1097,12 +1084,11 @@ const styles = StyleSheet.create({
 	initiallevelText: {
 		color: "rgb(15, 62, 81)",
 		fontFamily: "DINPro-Bold",
-		fontSize: 8 * fontAlpha,
+		fontSize: 8,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginRight: 164 * alpha,
 	},
 	nextlevelText: {
 		color: "rgb(15, 62, 81)",
@@ -1121,6 +1107,11 @@ const styles = StyleSheet.create({
 		top: 11 * alpha,
 		height: 11 * alpha,
 	},
+	progresslineView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		paddingTop: 0,
+	},
 	group4Image: {
 		resizeMode: "cover",
 		backgroundColor: "transparent",
@@ -1135,15 +1126,15 @@ const styles = StyleSheet.create({
 		marginLeft: 2 * alpha,
 	},
 	levelexpText: {
-		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 7 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 		position: "absolute",
-		left: 20 * alpha,
+		left: 50 * alpha,
 		top: 1 * alpha,
 	},
 	profileImage: {
@@ -1173,9 +1164,9 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	pointvalueText: {
-		color: PRIMARY_COLOR,
-		fontFamily: "DINPro-Medium",
-		fontSize: 16 * fontAlpha,
+		color: "rgb(26, 72, 84)",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1184,7 +1175,7 @@ const styles = StyleSheet.create({
 	},
 	pointText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1204,9 +1195,9 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	walletcreditText: {
-		color: PRIMARY_COLOR,
-		fontFamily: "DINPro-Medium",
-		fontSize: 16 * fontAlpha,
+		color: "rgb(26, 72, 84)",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1215,7 +1206,7 @@ const styles = StyleSheet.create({
 	},
 	walletText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1239,9 +1230,9 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	rewardvalueText: {
-		color: PRIMARY_COLOR,
-		fontFamily: "DINPro-Medium",
-		fontSize: 16 * fontAlpha,
+		color: "rgb(26, 72, 84)",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1250,7 +1241,7 @@ const styles = StyleSheet.create({
 	},
 	rewardText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1279,7 +1270,7 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "rgb(69, 69, 69)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1309,7 +1300,7 @@ const styles = StyleSheet.create({
 	welcomeSomebodyText: {
 		backgroundColor: "transparent",
 		color: "rgb(250, 250, 250)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1330,8 +1321,8 @@ const styles = StyleSheet.create({
 	},
 	missionlabelText: {
 		backgroundColor: "transparent",
-		color: PRIMARY_COLOR ,
-		fontFamily: "DINPro-Medium",
+		color: "rgb(26, 72, 84)",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1345,7 +1336,7 @@ const styles = StyleSheet.create({
 	},
 	missioncenterbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1407,7 +1398,7 @@ const styles = StyleSheet.create({
 	priorityCopyText: {
 		backgroundColor: "transparent",
 		color: "rgb(44, 44, 44)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1442,7 +1433,7 @@ const styles = StyleSheet.create({
 	},
 	freeDeliveryCopyText: {
 		color: "rgb(44, 44, 44)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1477,7 +1468,7 @@ const styles = StyleSheet.create({
 	},
 	buy1Free1CopyText: {
 		color: "rgb(44, 44, 44)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1521,7 +1512,7 @@ const styles = StyleSheet.create({
 	},
 	buy2Free1CopyText: {
 		color: "rgb(44, 44, 44)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1544,7 +1535,16 @@ const styles = StyleSheet.create({
 	},
 	orderHistoryLabelText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	orderHistoryDisableLabelText: {
+		color: "rgb(188, 188, 188)",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1596,7 +1596,16 @@ const styles = StyleSheet.create({
 	},
 	qrCodeLabelText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	qrCodeDisableLabelText: {
+		color: "rgb(188, 188, 188)",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1605,7 +1614,7 @@ const styles = StyleSheet.create({
 	},
 	qrDescriptionText: {
 		color: "rgb(188, 188, 188)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1654,7 +1663,7 @@ const styles = StyleSheet.create({
 	},
 	redeemStationLabelText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1663,7 +1672,7 @@ const styles = StyleSheet.create({
 	},
 	redeemDescriptionText: {
 		color: "rgb(188, 188, 188)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1709,7 +1718,7 @@ const styles = StyleSheet.create({
 	},
 	moreCopyTwoText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1728,7 +1737,7 @@ const styles = StyleSheet.create({
 	},
 	logoutLabelText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1737,7 +1746,7 @@ const styles = StyleSheet.create({
 	},
 	logoutDescriptionText: {
 		color: "rgb(188, 188, 188)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1776,7 +1785,16 @@ const styles = StyleSheet.create({
 	},
 	aboutLabelText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	aboutDisableLabelText: {
+		color: "rgb(188, 188, 188)",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1785,7 +1803,7 @@ const styles = StyleSheet.create({
 	},
 	aboutDescriptionText: {
 		color: "rgb(188, 188, 188)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -90,7 +90,6 @@ export default class ScanQr extends React.Component {
                 loading: false,
             })  
             if (eventObject.success) {
-                console.log("Scan", eventObject)
                 this.setState({ modal_visible: true, message: eventObject.message})
             }
             else {

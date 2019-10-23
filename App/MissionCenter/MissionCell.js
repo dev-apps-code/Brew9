@@ -9,6 +9,7 @@
 import { StyleSheet, TouchableWithoutFeedback, View, Text } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size"
+import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
 
 
 export default class MissionCell extends React.Component {
@@ -27,7 +28,19 @@ export default class MissionCell extends React.Component {
 
 	render() {
 	
+		var voucher_string = ""
+		var mission_vouchers = this.props.vouchers
 
+		if (this.props.vouchers) {
+			for (var index in mission_vouchers) {
+				var voucher = mission_vouchers[index]
+				voucher_string += (voucher.voucher.name + " x" + voucher.quantity)
+				if (index < mission_vouchers.length) {
+					voucher_string += ", "
+				}
+			}
+		}
+		
 		return <TouchableWithoutFeedback
 				onPress={this.onCellTwoPress}>
 				<View
@@ -45,8 +58,14 @@ export default class MissionCell extends React.Component {
 						}}>
 						<Text
 							style={styles.titleText}>{this.props.title}</Text>
-						<Text
-							style={styles.descriptionText}>+{this.props.point} points</Text>
+						{
+							mission_vouchers.length > 0 ?
+							<Text
+								style={styles.descriptionText}>{voucher_string}</Text> : 
+							<Text
+								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text>
+						}
+						
 						<View
 							style={{
 								flex: 1,
@@ -64,9 +83,9 @@ export default class MissionCell extends React.Component {
 							justifyContent: "center",
 						}}>
 						<View
-							style={styles.statusView}>
+							style={this.props.completed == true ? styles.statusCompleteView : styles.statusView}>
 							<Text
-								style={styles.completeText}>Incomplete</Text>
+								style={styles.completeText}>{this.props.completed == true ? "Completed" : "Incomplete"}</Text>
 						</View>
 					</View>
 				</View>
@@ -83,8 +102,8 @@ const styles = StyleSheet.create({
 	titleText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
-		fontSize: 15 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -93,7 +112,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		opacity: 0.39,
 		color: "black",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -127,10 +146,13 @@ const styles = StyleSheet.create({
 	completeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: "SFProText-Medium",
-		fontSize: 11 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
+	highlight: {
+		color: PRIMARY_COLOR,
+	}
 })
