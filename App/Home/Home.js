@@ -827,7 +827,12 @@ export default class Home extends React.Component {
 		if (this.state.isCartToggle) {
 			this.toogleCart(false)
 		}
-		this.state.cart = []
+
+		this.setState({
+			cart_total_quantity: 0,
+			cart_total: 0,
+			cart:[]
+		})
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
 			this.state.products[index].total_quantity = 0
