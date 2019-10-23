@@ -55,7 +55,7 @@ export default class FirstScreen extends React.Component {
         }
         else {
             this.props.navigation.navigate("TabGroupOne")
-            this.loadProfile()
+            // this.loadProfile()
         }
         // this.props.navigation.navigate("VerifyStack")
     }
