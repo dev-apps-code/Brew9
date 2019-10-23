@@ -60,10 +60,10 @@ export default class VerifyUser extends React.Component {
 	componentWillMount() {
 	}
 
-	onTermsAndConditionsPressed = (url) => {
+	onTermsAndConditionsPressed = (url,title) => {
 		const { navigate } = this.props.navigation
 		navigate("WebCommon", {
-            title: 'Terms and Conditions',
+            title: title,
             web_url: url + '&id=' + this.props.company_id,
         })
 	}
@@ -286,7 +286,11 @@ export default class VerifyUser extends React.Component {
 							style={styles.termsAndConditionsButtonText}>Terms and Conditions</Text>
 					</TouchableOpacity> */}
 					<Hyperlink
-						onPress={url => this.onTermsAndConditionsPressed(url)}
+						onPress={url => this.onTermsAndConditionsPressed(url,url === KURL_TERMS_OF_SERVICE
+							? 'Terms of Service'
+							: url === KURL_PRIVACY_POLICY
+								? 'Privacy Policy'
+								: url === KURL_EULA ? 'End User License Agreement' : url)}
 						linkStyle={[{ color: '#0000EE' }, styles.description_text]}
 						linkText={url =>
 							url === KURL_TERMS_OF_SERVICE
