@@ -152,8 +152,7 @@ export default class Home extends React.Component {
 
 		if (currentMember != null){
 			navigate("ScanQr")
-		}else{
-			
+		}else{			
 			this.setState({
 				modal_visible: true, 
 				modal_title: "Brew9",
@@ -1248,6 +1247,7 @@ export default class Home extends React.Component {
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
+								onScrollToIndexFailed={(info) => { /* handle error here /*/ }}
 								ref={(ref) => { this.flatListRef = ref }}
 								style={styles.productlistFlatList}
 								refreshing={this.state.isRefreshing}
@@ -1355,7 +1355,7 @@ export default class Home extends React.Component {
 					</View>
 					<View
 						style={styles.popOutCartFlatListViewWrapper}>
-						<FlatList
+						<FlatList							
 							renderItem={this.renderPopOutCartFlatListCell}
 							data={this.state.cart}
 							style={styles.popOutCartFlatList}
