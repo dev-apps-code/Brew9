@@ -276,7 +276,7 @@ export default class Profile extends React.Component {
 			display_name = currentMember.name ? currentMember.name : currentMember.phone_no
 			membership_name = currentMember.premium_membership ? currentMember.premium_membership.membership_plan.name : currentMember.free_membership.membership_plan.name
 			points = currentMember.points
-			avatar = currentMember.image != null ? {uri: currentMember.image} : require("./../../assets/images/avatar.png")
+			avatar = currentMember.image != null ? {uri: currentMember.image} : require("./../../assets/images/user.png")
 			vouchers_count = currentMember.voucher_items_count
 			credits = parseFloat(currentMember.credits).toFixed(2)
 			member_exp = currentMember.premium_membership ? currentMember.premium_membership.experience_points : currentMember.free_membership.experience_points
@@ -290,7 +290,7 @@ export default class Profile extends React.Component {
 			level_name = ''
 			display_name = 'Brew 9'
 			points = 0
-			avatar = require("./../../assets/images/avatar.png")
+			avatar = require("./../../assets/images/user.png")
 			vouchers_count = 0
 			credits = 0
 			membership_name = ""
@@ -440,7 +440,9 @@ export default class Profile extends React.Component {
 											alignItems: "flex-start",
 										}}>
 										<TouchableOpacity
-											onPress={() => this.onPointButtonPressed()} >
+											onPress={() => this.onPointButtonPressed()}
+											style={styles.pointButtonView}
+											>
 											<View
 												style={styles.pointView}>
 												<Image
@@ -477,7 +479,8 @@ export default class Profile extends React.Component {
 								</View>
 							</View>
 							<TouchableOpacity
-								onPress={() => this.onRewardButtonPressed()} >
+								onPress={() => this.onRewardButtonPressed()}
+								style={styles.rewardButtonView}>
 								<View
 									style={styles.rewardView}>
 									<Image
@@ -972,7 +975,7 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
-		height: 340 * alpha,
+		height: 500 * alpha,
 	},
 	topbackgroundView: {
 		backgroundColor: "transparent",
@@ -1139,7 +1142,7 @@ const styles = StyleSheet.create({
 	},
 	profileImage: {
 		resizeMode: "contain",
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		width: 78 * alpha,
 		height: 78 * alpha,
 		borderRadius: 39 * alpha,
@@ -1150,6 +1153,13 @@ const styles = StyleSheet.create({
 		marginLeft: 3 * alpha,
 		marginRight: 3 * alpha,
 		marginTop: 9 * alpha,
+	},
+
+	pointButtonView: {
+		backgroundColor: "transparent",
+		width: 65 * alpha,
+		height: 83 * alpha,
+		alignItems: "center",
 	},
 	pointView: {
 		backgroundColor: "transparent",
@@ -1214,12 +1224,19 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginTop: 5 * alpha,
 	},
-	rewardView: {
+	rewardButtonView: {
 		backgroundColor: "transparent",
 		position: "absolute",
 		alignSelf: "center",
 		width: 65 * alpha,
 		top: 104 * alpha,
+		height: 83 * alpha,
+		alignItems: "center",
+	},
+	rewardView: {
+		backgroundColor: "transparent",
+		alignSelf: "center",
+		width: 65 * alpha,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1354,6 +1371,7 @@ const styles = StyleSheet.create({
 		marginLeft: 18 * alpha,
 		marginRight: 18 * alpha,
 		marginTop: 167 * alpha,
+		elevation: 2 * alpha,
 	},
 	monthlyBenefitView: {
 		backgroundColor: "transparent",

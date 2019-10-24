@@ -405,7 +405,7 @@ export default class MemberProfile extends React.Component {
 							height: 80 * alpha,
 						}}>
 						<Image
-							source={members.image ? {uri: image} : require("./../../assets/images/avatar.png")}
+							source={members.image ? {uri: image} : require("./../../assets/images/user.png")}
 							style={styles.avatarImage}/>
 						<TouchableOpacity
 							onPress={this._pickImage}

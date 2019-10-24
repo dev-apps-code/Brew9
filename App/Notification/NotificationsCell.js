@@ -9,6 +9,7 @@
 import { View, StyleSheet, Text, Image, TouchableWithoutFeedback } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 export default class NotificationsCell extends React.Component {
 
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
 	},
 	timeText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -141,13 +142,13 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 12 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		width: 254 * alpha,
+		width: "100%",
 	},
 	circleView: {
 		backgroundColor: "rgb(247, 66, 75)",

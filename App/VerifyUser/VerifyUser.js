@@ -267,7 +267,7 @@ export default class VerifyUser extends React.Component {
 							/>
 							</View>
 						</View>
-						: undefined}				
+						: undefined }				 
 				</View>
 				{this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
@@ -447,7 +447,6 @@ const styles = StyleSheet.create({
 	sendButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 4 * alpha,
-	
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -473,16 +472,17 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 72 * alpha,
+		width: 100 * alpha,
 		height: 26 * alpha,
 	},
 	countdownText: {
         color: "white",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 12 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
-        textAlign: "center",
+		textAlign: "center",
+		width: 100 * alpha,
     },
 	activationView: {
 		backgroundColor: "white",

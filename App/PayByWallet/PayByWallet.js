@@ -160,7 +160,7 @@ export default class PayByWallet extends React.Component {
 				<View
 					style={styles.walletBalanceView}>
 					<Image
-						source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
+						source={members.image ? {uri: members.image} : require("./../../assets/images/user.png")}
 						style={styles.profilePicImage}/>
 					<Text
 						style={styles.nicknameText}>{

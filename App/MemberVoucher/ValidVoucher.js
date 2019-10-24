@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: null,
 		height: 2 * alpha,
-		marginTop: 20 * alpha,
+		marginTop: 5 * alpha,
 	},
 	dateText: {
 		color: "rgb(149, 148, 148)",
