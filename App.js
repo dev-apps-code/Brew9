@@ -60,6 +60,29 @@ import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
 import { registerModels } from "./App/Model/index";
 
+const VerifyUserStack = createStackNavigator(
+  {
+    VerifyUser: {
+      screen: VerifyUser
+    },
+    Register: {
+      screen: Register
+    },
+    WebCommonModal: {
+      screen: WebCommonModal
+    },
+    WebCommon: {
+      screen: WebCommon
+    }
+  },
+  {
+    initialRouteName: "VerifyUser",
+    mode: "modal",
+    header: "none"
+  }
+);
+
+
 const PushOrder = createStackNavigator(
   {
     Home: {
@@ -107,33 +130,13 @@ const PushOrder = createStackNavigator(
     },
     ScanQr: {
       screen: ScanQr
-    }
+    },   
   },
   {
     initialRouteName: "Home"
   }
 );
 
-const VerifyUserStack = createStackNavigator(
-  {
-    VerifyUser: {
-      screen: VerifyUser
-    },
-    Register: {
-      screen: Register
-    },
-    WebCommonModal: {
-      screen: WebCommonModal
-    },
-    WebCommon: {
-      screen: WebCommon
-    }
-  },
-  {
-    initialRouteName: "VerifyUser",
-    mode: "modal"
-  }
-);
 
 export const VerifyStack = createStackNavigator(
   {
@@ -380,6 +383,10 @@ const RootNavigator = createStackNavigator(
     },
     VerifyStack: {
       screen: VerifyStack
+    },
+    VerifyUserStack:{
+      screen: VerifyUserStack,
+    
     }
   },
   {

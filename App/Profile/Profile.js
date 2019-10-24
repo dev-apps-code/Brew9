@@ -8,7 +8,7 @@
 
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
 import React from "react"
-import { alpha, fontAlpha, windowHeight } from "../Common/size";
+import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 import {createAction} from '../Utils'
@@ -148,7 +148,6 @@ export default class Profile extends React.Component {
 
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
-
 			navigate("MemberVoucher",{validVouchers:validVouchers})
 			
 		}		
@@ -249,7 +248,9 @@ export default class Profile extends React.Component {
 		const {  currentMember } = this.props
 
 		if (currentMember !== null) {
-			this.loadDestroy()
+			// this.loadDestroy()
+			const { navigate } = this.props.navigation
+			navigate("MemberProfile")
 		}else{
 			const { navigate } = this.props.navigation
 			navigate("VerifyStack")
@@ -433,9 +434,8 @@ export default class Profile extends React.Component {
 										pointerEvents="box-none"
 										style={{
 											height: 83 * alpha,
-											marginLeft: 15 * alpha,
-											marginRight: 12 * alpha,
-											marginTop: 15 * alpha,
+											marginTop: 15 *alpha,
+											justifyContent: "space-between",
 											flexDirection: "row",
 											alignItems: "flex-start",
 										}}>
@@ -458,12 +458,21 @@ export default class Profile extends React.Component {
 													style={styles.pointText}>Point</Text>
 											</View>
 										</TouchableOpacity>
-										<View
-											style={{
-												flex: 1,
-											}}/>
 										<TouchableOpacity
-											onPress={() => this.onRewardButtonPressed()} >
+									onPress={() => this.onRewardButtonPressed()} >
+									<View
+										style={styles.rewardView}>
+										<Image
+											source={require("./../../assets/images/voucher_center.png")}
+											style={styles.rewardiconImage}/>
+										<Text
+											style={styles.rewardvalueText}>{vouchers_count}</Text>
+										<Text
+											style={styles.rewardText}>Voucher</Text>
+									</View>
+								</TouchableOpacity>										
+										<TouchableOpacity
+											onPress={() => this.onWalletButtonPressed()} >
 											<View
 												style={styles.walletView}>
 												<Image
@@ -477,21 +486,7 @@ export default class Profile extends React.Component {
 										</TouchableOpacity>
 									</View>
 								</View>
-							</View>
-							<TouchableOpacity
-								onPress={() => this.onRewardButtonPressed()}
-								style={styles.rewardButtonView}>
-								<View
-									style={styles.rewardView}>
-									<Image
-										source={require("./../../assets/images/voucher_center.png")}
-										style={styles.rewardiconImage}/>
-									<Text
-										style={styles.rewardvalueText}>{vouchers_count}</Text>
-									<Text
-										style={styles.rewardText}>Voucher</Text>
-								</View>
-							</TouchableOpacity>
+							</View>						
 						</View>
 					</View>
 					<View
@@ -693,6 +688,56 @@ export default class Profile extends React.Component {
 				
 				<View
 					style={styles.menuView}>
+						<TouchableOpacity
+							onPress={() => this.onLogoutButtonPress()}
+							style={styles.logoutbuttonButton}>
+						<View
+							style={styles.logoutView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 14 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.logoutLabelText}>{isLogin ? "My Profile" : "Signup/Login"}</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Image
+											source={require("./../../assets/images/arrow.png")}
+											stytle={styles.arrowImage}/>
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									height: 58 * alpha,
+								}}>
+								<Text
+									style={styles.logoutbuttonButtonText}></Text>
+								
+							</View>
+						</View>
+					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => this.onOrderButtonPressed()}
 						style={styles.orderhostorybuttonButton}>
@@ -855,7 +900,7 @@ export default class Profile extends React.Component {
 									style={styles.lineThreeView}/>
 							</View>
 						</View>
-					</TouchableOpacity> */}
+					</TouchableOpacity> */}										
 					<TouchableOpacity
 							onPress={() => this.onAboutButtonPressed()}
 							style={styles.aboutbuttonButton}>
@@ -908,56 +953,6 @@ export default class Profile extends React.Component {
 						<View
 								style={styles.lineThreeView}/>
 					</TouchableOpacity>
-					<TouchableOpacity
-							onPress={() => this.onLogoutButtonPress()}
-							style={styles.logoutbuttonButton}>
-						<View
-							style={styles.logoutView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 14 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.logoutLabelText}>{isLogin ? "Logout" : "Signup/Login"}</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
-								<Text
-									style={styles.logoutbuttonButtonText}></Text>
-								
-							</View>
-						</View>
-					</TouchableOpacity>
 				</View>
 			</ScrollView>
 	}
@@ -987,7 +982,8 @@ const styles = StyleSheet.create({
 	},
 	fill1View: {
 		backgroundColor: PRIMARY_COLOR,
-		position: "absolute",
+		position: "absolute",		
+
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
@@ -997,6 +993,7 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		backgroundColor: "transparent",
 		position: "absolute",
+		width: windowWidth,
 		left: 0 * alpha,
 		right: 8 * alpha,
 		top: 1 * alpha,
@@ -1006,6 +1003,7 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		backgroundColor: "transparent",
 		position: "absolute",
+		width: windowWidth,
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
@@ -1085,9 +1083,9 @@ const styles = StyleSheet.create({
 		marginTop: 6 * alpha,
 	},
 	initiallevelText: {
-		color: "rgb(15, 62, 81)",
+		color: PRIMARY_COLOR,
 		fontFamily: "DINPro-Bold",
-		fontSize: 8,
+		fontSize: 12,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
@@ -1154,19 +1152,7 @@ const styles = StyleSheet.create({
 		marginRight: 3 * alpha,
 		marginTop: 9 * alpha,
 	},
-
-	pointButtonView: {
-		backgroundColor: "transparent",
-		width: 65 * alpha,
-		height: 83 * alpha,
-		alignItems: "center",
-	},
-	pointView: {
-		backgroundColor: "transparent",
-		width: 65 * alpha,
-		height: 83 * alpha,
-		alignItems: "center",
-	},
+	
 	pointiconImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
@@ -1174,7 +1160,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	pointvalueText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
@@ -1194,7 +1180,7 @@ const styles = StyleSheet.create({
 	},
 	walletView: {
 		backgroundColor: "transparent",
-		width: 66 * alpha,
+		width: (windowWidth-60)/3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1205,7 +1191,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	walletcreditText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
@@ -1224,12 +1210,16 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginTop: 5 * alpha,
 	},
-	rewardButtonView: {
+	pointView: {
 		backgroundColor: "transparent",
-		position: "absolute",
+		width: (windowWidth-60)/3,
+		height: 83 * alpha,
+		alignItems: "center",
+	},
+	rewardView: {
+		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 65 * alpha,
-		top: 104 * alpha,
+		width: (windowWidth-60)/3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1247,7 +1237,7 @@ const styles = StyleSheet.create({
 		height: 33 * alpha,
 	},
 	rewardvalueText: {
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
@@ -1338,7 +1328,7 @@ const styles = StyleSheet.create({
 	},
 	missionlabelText: {
 		backgroundColor: "transparent",
-		color: "rgb(26, 72, 84)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",

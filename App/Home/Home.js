@@ -148,8 +148,22 @@ export default class Home extends React.Component {
 
 	onQrScanPressed = () => {
 		const { navigate } = this.props.navigation
+		const {currentMember} = this.props
 
-		navigate("ScanQr")
+		if (currentMember != null){
+			navigate("ScanQr")
+		}else{
+			
+			this.setState({
+				modal_visible: true, 
+				modal_title: "Brew9",
+				modal_description: "You need to login before you can topup" , 
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.navigate("VerifyUserStack")
+				},				
+			})	
+		}
 	}
 
 	registerForPushNotificationsAsync = async() => {
@@ -827,7 +841,12 @@ export default class Home extends React.Component {
 		if (this.state.isCartToggle) {
 			this.toogleCart(false)
 		}
-		this.state.cart = []
+
+		this.setState({
+			cart_total_quantity: 0,
+			cart_total: 0,
+			cart:[]
+		})
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
 			this.state.products[index].total_quantity = 0
@@ -1397,10 +1416,18 @@ export default class Home extends React.Component {
 					style = styles.featuredpromoButtonPosition2
 				}
 			}else{
-				style = styles.featuredpromoButtonPosition1
+				if (cart.length > 0 ){
+					style = styles.featuredpromoButtonPosition2
+				}else{
+					style = styles.featuredpromoButtonPosition1
+				}
 			}
 		}else{
-			style = styles.featuredpromoButtonPosition1
+			if (cart.length > 0 ){
+				style = styles.featuredpromoButtonPosition2
+			}else{
+				style = styles.featuredpromoButtonPosition1
+			}
 		}
 
 		if (shop !== null && shop.featured_promotion !== null) {
