@@ -148,8 +148,22 @@ export default class Home extends React.Component {
 
 	onQrScanPressed = () => {
 		const { navigate } = this.props.navigation
+		const {currentMember} = this.props
 
-		navigate("ScanQr")
+		if (currentMember != null){
+			navigate("ScanQr")
+		}else{
+			
+			this.setState({
+				modal_visible: true, 
+				modal_title: "Brew9",
+				modal_description: "You need to login before you can topup" , 
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+					this.props.navigation.navigate("VerifyUserStack")
+				},				
+			})	
+		}
 	}
 
 	registerForPushNotificationsAsync = async() => {
