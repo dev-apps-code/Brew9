@@ -138,7 +138,7 @@ export default class Home extends React.Component {
 			modal_cancelable: false,
 			modal_ok_action: ()=> {this.setState({modal_visible:false})},
 			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
-			image_contain: false,
+			image_isHorizontal: false,
 			image_check: false,
 			app_url: '',
 		}
@@ -1544,9 +1544,9 @@ export default class Home extends React.Component {
 					image_width = width, image_height = height
 				
 					if (image_width > image_height) {
-						this.setState({image_contain:true, image_check: true})
+						this.setState({image_isHorizontal:true, image_check: true})
 					} else {
-						this.setState({image_contain:false, image_check: true})
+						this.setState({image_isHorizontal:false, image_check: true})
 					}
 					
 				});
@@ -1560,17 +1560,17 @@ export default class Home extends React.Component {
 					</View>
 				<ScrollView
             		style={{ horizontal: true, flex: 1}}>
-					<AutoHeightImage
-							source={{uri:  this.state.selected_promotion}}
-							width={windowWidth}
-							style={this.state.image_contain ? styles.bannerContainImage : styles.bannerImage}/>
-				
-						</ScrollView>		
-						<TouchableOpacity
-							onPress={this.onClosePressed}
-							style={styles.closeGalleryButton}>
-							<Text style={styles.closeGalleryButtonText}>X</Text>
-						</TouchableOpacity>
+					<View style={this.state.image_isHorizontal ? styles.bannerContainImage : styles.bannerImage} >
+						<AutoHeightImage
+							source={{uri: this.state.selected_promotion}}
+							width={windowWidth}/>
+				    </View>         
+				</ScrollView>		
+				<TouchableOpacity
+					onPress={this.onClosePressed}
+					style={styles.closeGalleryButton}>
+					<Text style={styles.closeGalleryButtonText}>X</Text>
+				</TouchableOpacity>
 				</Modal>
 		}
 		
@@ -1784,11 +1784,12 @@ const styles = StyleSheet.create({
 		height: 60 * alpha,
 	},
 	bannerImage:{
-		height: windowHeight * alpha,
+		flex: 1,
 	},
 	bannerContainImage: {
-		height: windowHeight * alpha,
-		resizeMode: "contain"
+		height: windowHeight,
+		alignItems: "center",
+		justifyContent: "center"
 	},
 	totalAmountView: {
 		backgroundColor: "transparent",

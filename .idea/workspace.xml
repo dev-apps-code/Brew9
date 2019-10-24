@@ -2,42 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.expo-shared/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo-shared/assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/bottom-fill@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/bottom-fill@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-109-copy@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-109-copy@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-109-copy@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-109-copy@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-109-copy@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-109-copy@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-11-copy-5@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-copy-5@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-11-copy-5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-copy-5@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-11-copy-5@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-11-copy-5@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-11@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-11@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-11@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-11@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-13-11@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-13-11@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-30@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-30@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-30@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-30@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-3-30@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-3-30@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-23@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-23@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-23@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-23@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-6-23@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-6-23@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-7-copy-8@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7-copy-8@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-7-copy-8@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7-copy-8@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-7-copy-8@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-7-copy-8@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-22@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-22@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-22@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-22@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-8-22@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-8-22@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-12@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-12@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-12@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-12@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-12@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-12@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-copy-13@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-copy-13@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-copy-13@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-copy-13@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/group-9-copy-13@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/group-9-copy-13@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/top-fill@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/top-fill@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/top-fill@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/top-fill@3x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +39,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
+            <state relative-caret-position="30">
               <caret line="2" column="51" selection-start-line="2" selection-start-column="51" selection-end-line="2" selection-end-column="51" />
             </state>
           </provider>
@@ -82,7 +49,7 @@
         <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="42">
-              <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+              <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -90,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Home/CartCell.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="37" column="44" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
+            <state relative-caret-position="450">
+              <caret line="38" column="44" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#107#211#0" expanded="true" />
@@ -103,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2895">
-              <caret line="210" column="20" selection-start-line="210" selection-start-column="20" selection-end-line="210" selection-end-column="20" />
+            <state relative-caret-position="10440">
+              <caret line="702" column="20" selection-start-line="702" selection-start-column="20" selection-end-line="702" selection-end-column="20" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -219,7 +186,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="252" />
     <option name="y" value="345" />
     <option name="width" value="1280" />
@@ -230,6 +197,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -258,8 +227,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -349,16 +316,17 @@
       <workItem from="1569470924397" duration="79000" />
       <workItem from="1570430783367" duration="526000" />
       <workItem from="1570578230333" duration="921000" />
+      <workItem from="1571882333755" duration="165000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="438959000" />
+    <option name="totallyTimeSpent" value="439124000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="252" y="345" width="1280" height="570" extended-state="1" />
+    <frame x="252" y="345" width="1280" height="570" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23443224" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23828755" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -375,7 +343,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.5936073" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.5920502" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -847,15 +815,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
+        <state relative-caret-position="30">
           <caret line="2" column="51" selection-start-line="2" selection-start-column="51" selection-end-line="2" selection-end-column="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Home/CartCell.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="37" column="44" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
+        <state relative-caret-position="450">
+          <caret line="38" column="44" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#107#211#0" expanded="true" />
@@ -865,8 +833,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2895">
-          <caret line="210" column="20" selection-start-line="210" selection-start-column="20" selection-end-line="210" selection-end-column="20" />
+        <state relative-caret-position="10440">
+          <caret line="702" column="20" selection-start-line="702" selection-start-column="20" selection-end-line="702" selection-end-column="20" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -876,7 +844,7 @@
     <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
-          <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
         </state>
       </provider>
     </entry>
