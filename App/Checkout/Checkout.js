@@ -406,22 +406,23 @@ export default class Checkout extends React.Component {
 		const { isPaymentToggle, payment_view_height } = this.state
 
 		var product_checkout_height = payment_view_height
+		console.log("Payment Height",payment_view_height)
 		var content = 247 * alpha
 		var finalheight = product_checkout_height - content - BUTTONBOTTOMPADDING
 
-			if (isPaymentToggle) {
-				this.setState({ isPaymentToggle: false }, function(){
-					Animated.spring(this.moveAnimation, {
-						toValue: {x: 0, y: windowHeight},
-					}).start()
-				})
-			} else {
-				this.setState({ isPaymentToggle: true }, function(){
-					Animated.spring(this.moveAnimation, {
-						toValue: {x: 0, y: finalheight},
-					}).start()
-				})
-			}
+		if (isPaymentToggle) {
+			this.setState({ isPaymentToggle: false }, function(){
+				Animated.spring(this.moveAnimation, {
+					toValue: {x: 0, y: windowHeight},
+				}).start()
+			})
+		} else {
+			this.setState({ isPaymentToggle: true }, function(){
+				Animated.spring(this.moveAnimation, {
+					toValue: {x: 0, y: 0},
+				}).start()
+			})
+		}
 	}
 
 	renderPaymentMethod() {
@@ -429,7 +430,7 @@ export default class Checkout extends React.Component {
 		const { currentMember } = this.props
 		const credits = currentMember!==undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 		return <Animated.View
-			style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]} >
+					style={this.moveAnimation.getLayout()} >
 				<View
 					style={styles.popOutPaymentView}>
 					<View
@@ -1070,6 +1071,7 @@ export default class Checkout extends React.Component {
 
 						</View>
 					</TouchableOpacity>
+					
 				</View>
 				{/* <View
 					style={styles.remarkView}>
@@ -1110,9 +1112,9 @@ export default class Checkout extends React.Component {
 						</View>
 					</TouchableOpacity>
 				</View> */}
-
-				{this.renderPaymentMethod()}
+				
 			</ScrollView>
+			{this.renderPaymentMethod()}
 			{this.renderPopup()}
 			<View
 				style={styles.totalPayNowView}>
@@ -1735,7 +1737,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	totalPayNowView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
@@ -1823,12 +1825,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginRight: 15 * alpha,
 	},
-
-
-
-
-
-
 
 
 	popOutPaymentView: {
