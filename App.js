@@ -59,7 +59,7 @@ import PayByCard from "./App/PayByCard/PayByCard"
 import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
 import { registerModels } from "./App/Model/index";
-
+import PaymentsWebview from "./App/Checkout/PaymentsWebview"
 const VerifyUserStack = createStackNavigator(
   {
     VerifyUser: {
@@ -87,6 +87,9 @@ const PushOrder = createStackNavigator(
   {
     Home: {
       screen: Home
+    },
+    PaymentsWebview:{
+      screen: PaymentsWebview
     },
     Checkout: {
       screen: Checkout,

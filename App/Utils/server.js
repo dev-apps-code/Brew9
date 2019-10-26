@@ -9,9 +9,6 @@ export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 
-export const KURL_CREDIT = "http://www.innogix.com/co3/credit_policy.html";
-export const KURL_TERMS_CO3_GO =
-  "http://www.innogix.com/co3/co3_go_agreement.html";
 
 export const KCURRENT_API_VERSION_HEADER = "application/dc.v1";
 

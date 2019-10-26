@@ -327,7 +327,7 @@ export default class Checkout extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 
-		if (currentMember) {
+		if (currentMember != undefined) {
 			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
 			// 	this.refs.toast.show("You are too far away");
 			// 	return
@@ -427,7 +427,7 @@ export default class Checkout extends React.Component {
 	renderPaymentMethod() {
 
 		const { currentMember } = this.props
-		const credits = currentMember!==undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
+		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 		return <Animated.View
 					style={this.moveAnimation.getLayout()} >
 				<View
