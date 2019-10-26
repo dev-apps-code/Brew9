@@ -16,6 +16,8 @@ import {
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 export default class CategoryCell extends React.Component {
   constructor(props) {
@@ -25,6 +27,8 @@ export default class CategoryCell extends React.Component {
   componentDidMount() {}
 
   onCategoryCellPress = () => {
+    const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Category', 'Click', this.props.categoryname))
     this.props.onSelectCategory(this.props.scrollIndex, this.props.index);
   };
 

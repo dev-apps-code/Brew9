@@ -406,7 +406,6 @@ export default class Checkout extends React.Component {
 		const { isPaymentToggle, payment_view_height } = this.state
 
 		var product_checkout_height = payment_view_height
-		console.log("Payment Height",payment_view_height)
 		var content = 247 * alpha
 		var finalheight = product_checkout_height - content - BUTTONBOTTOMPADDING
 

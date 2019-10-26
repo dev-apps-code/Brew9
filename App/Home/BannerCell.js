@@ -9,6 +9,8 @@
 import React from "react"
 import { TouchableWithoutFeedback, Image, View, StyleSheet } from "react-native"
 import { alpha, fontAlpha } from "../Common/size";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 export default class BannerCell extends React.Component {
 
@@ -21,11 +23,13 @@ export default class BannerCell extends React.Component {
     }
 
     onBannerCellPress = () => {
-        
+        const analytics = new Analytics(ANALYTICS_ID)
+        analytics.event(new Event('Banner', 'Click', `Banner ${this.props.index}`))
         this.props.onPressItem(this.props.item,this.props.index)
     }
 
     render() {
+        
         return <TouchableWithoutFeedback
             onPress={this.onBannerCellPress}>
             <View

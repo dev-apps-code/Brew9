@@ -2201,6 +2201,13 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
+expo-analytics@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/expo-analytics/-/expo-analytics-1.0.13.tgz#71e26ebe5bc112678cb7af701f7c973f7088f0a7"
+  integrity sha512-kbz7llKmBcMBJXWyD+e+A/ClNzD2FvfJplMYPx8KyT3EsrUToAOvHpY+9GRw/kMRoG4/uR+ShES5qoD4LiIJ7g==
+  dependencies:
+    expo-constants "^5.0.1"
+
 expo-app-loader-provider@~6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/expo-app-loader-provider/-/expo-app-loader-provider-6.0.0.tgz#c187a39942ac27cfaec3b394a5c9851d3f39678b"
@@ -2230,6 +2237,13 @@ expo-camera@~6.0.0:
   dependencies:
     lodash "^4.6.0"
     prop-types "^15.6.0"
+
+expo-constants@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-5.0.1.tgz#597263397f269d7fe37d9cd6b30e305c16635a00"
+  integrity sha512-Ny3teALKaE/jFzBg6DHr2GOoHpwQ/OLs3q3VugZOoR6hXCeVcCEP9MyNvhgn/cheeBDAa6UIgarv2Yufb5RMqQ==
+  dependencies:
+    ua-parser-js "^0.7.19"
 
 expo-constants@~6.0.0:
   version "6.0.0"

@@ -257,7 +257,7 @@ export default class VerifyUser extends React.Component {
 								until={120}
 								onFinish={() => this.setState({is_counting: false})}
 								style={styles.sendCountdown}
-								size={7}
+								size={12}
 								digitStyle={{backgroundColor: 'transparent'}}
 								digitTxtStyle={styles.countdownText}
 								separatorStyle={{color: '#FFFFFF'}}
@@ -267,7 +267,7 @@ export default class VerifyUser extends React.Component {
 							/>
 							</View>
 						</View>
-						: undefined }				 
+						: undefined }
 				</View>
 				{/* {this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
@@ -472,13 +472,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 120 * alpha,
-		height: 26 * alpha,
+		width: 100 * alpha,
+		height: 40 * alpha,
 	},
 	countdownText: {
         color: "white",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 14 * fontAlpha,
+        fontSize: 19 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
 		textAlign: "center",

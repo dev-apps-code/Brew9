@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "packagerPort": 19004,
-  "packagerPid": 17694,
+  "packagerPort": 19001,
+  "packagerPid": 4606,
   "expoServerNgrokUrl": "https://hq-9av.tonyvoon.brew9-app.exp.direct",
   "packagerNgrokUrl": "https://packager.hq-9av.tonyvoon.brew9-app.exp.direct",
-  "ngrokPid": 17712,
-  "devToolsPort": 19005
+  "ngrokPid": 4617,
+  "devToolsPort": 19002
 }
