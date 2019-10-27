@@ -9,9 +9,10 @@ import point_products from '../WebserviceModel/point_products'
 import shops from '../WebserviceModel/shops'
 import orders from '../WebserviceModel/orders'
 import payments from '../WebserviceModel/payments'
-
+import config from './config'
 export function registerModels(app) {
   app.model(members)
+  app.model(config)
   app.model(point_statments)
   app.model(vouchers)
   app.model(products)

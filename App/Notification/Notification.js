@@ -53,9 +53,14 @@ export default class Notification extends React.Component {
     };
   };
 
-  static tabBarItemOptions = ({ navigation }) => {
+  static tabBarItemOptions = (navigation,store ) => {
     return {
       tabBarLabel: "Inbox",
+      tabBarOnPress: ({ navigation, defaultHandler }) => {
+
+				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				defaultHandler()
+			  },
       tabBarIcon: ({ iconTintColor, focused }) => {
         const image = focused
           ? require("./../../assets/images/inbox_selected.png")
