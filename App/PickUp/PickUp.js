@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT} from "../Common/common_style";
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -44,18 +44,17 @@ export default class PickUp extends React.Component {
 		return {
 			tabBarLabel: "Pickup",
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
-
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
 				defaultHandler()
-			  },
+			},
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
-				? require('./../../assets/images/pickup_selected.png') 
-				: require('./../../assets/images/pickup.png')
+				? require('./../../assets/images/pickup_selected_tab.png') 
+				: require('./../../assets/images/pickup_tab.png')
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30, height: 30 * alpha }}/>
+					style={{resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT}}/>
 			},
 		}
 	}

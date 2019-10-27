@@ -49,7 +49,7 @@ import openMap from 'react-native-open-maps';
 import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
 
@@ -101,12 +101,12 @@ export default class Home extends React.Component {
 			  },
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
-				? require('./../../assets/images/menu_selected.png') 
-				: require('./../../assets/images/menu.png')
+				? require('./../../assets/images/order_selected_tab.png') 
+				: require('./../../assets/images/order_tab.png')
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30, height: 30 * alpha}}/>
+					style={{resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }}/>
 			},
 		}
 	}
