@@ -253,20 +253,33 @@ export default class MemberProfile extends React.Component {
 	}
 
 	onSendCodePressed = () => {
+		const {country_code, phone_no} = this.state 
+
+		if (country_code == '' || country_code == undefined || phone_no == '' || phone_no == undefined) {
+			this.refs.toast.show("Please fill in phone number");
+			return
+		}
+
 		this.setState({
 			loading: true,
 		})
 		const phoneFormData = {
 			// phone_no: this.state.phone_no,
-			phone_no: this.state.phone_no,
-			// country_code: this.state.country_code,
-			country_code: this.state.country_code,
+			phone_no,
+			country_code
 		}
 
 		this.loadUpdatePhoneNumber(phoneFormData)
 	}
 
 	onConfirmButtonPressed = () => {
+
+		const {verification_code, phone_no} = this.state 
+
+		if (verification_code == '' || verification_code == undefined) {
+			this.refs.toast.show("Please fill in sms code");
+			return
+		}
 		this.setState({
 			loading: true,
 		})
@@ -728,6 +741,7 @@ export default class MemberProfile extends React.Component {
 			</TouchableOpacity>
 
 			<Modal isVisible={this.state.modalVisible}
+					coverScreen={false}
 				   avoidKeyboard={true}>
 				{this.renderModalContent()}
 			</Modal>
@@ -911,7 +925,7 @@ const styles = StyleSheet.create({
 		borderRadius: 1 * alpha,
 		borderWidth: 1,
 		borderColor: "rgb(187, 186, 186)",
-		borderStyle: "solid",
+		// borderStyle: "solid",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
