@@ -24,7 +24,7 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -917,7 +917,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	saveButton: {
-		backgroundColor: "rgb(164, 163, 163)",
+		backgroundColor: PRIMARY_COLOR,
 		borderRadius: 4 * alpha,
 		flexDirection: "row",
 		alignItems: "center",

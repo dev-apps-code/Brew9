@@ -62,13 +62,7 @@ export default class PaymentsWebview extends React.Component {
         <WebView
           style={styles.webviewWebView}
           source={{ uri: this.props.navigation.getParam("web_url", "") }}
-        />
-        <TouchableOpacity
-          onPress={this.onClosePressed}
-          style={styles.closeButton}
-        >
-          <Text style={styles.closeButtonText}>X</Text>
-        </TouchableOpacity>
+        />      
       </View>
     );
   }

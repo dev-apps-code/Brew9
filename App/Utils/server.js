@@ -2,8 +2,8 @@
 export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
 export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO ='http://localhost:3000/info'
-// export const KSERVERURL ='https://1a448323.ngrok.io/api'
-// export const KURL_INFO = 'https://1a448323.ngrok.io/info'
+export const KSERVERURL ='https://3569c93f.ngrok.io/api'
+export const KURL_INFO = 'https://3569c93f.ngrok.io/info'
 
 export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";

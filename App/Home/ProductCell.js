@@ -16,8 +16,9 @@ import {
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
-import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
-
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 export default class ProductCell extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +28,9 @@ export default class ProductCell extends React.Component {
 
   onProductCellPress = () => {
     this.props.onCellPress(this.props.item, this.props.index);
+    const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Product', 'Click', this.props.item.name))
+    
   };
 
   onAddPressed = () => {
@@ -75,6 +79,7 @@ export default class ProductCell extends React.Component {
 
   render() {
 
+    
     const ingredients = this.props.productingredient.map((item, key) => {
       return (
         <View style={styles.ingredientView} key={key}>
@@ -111,8 +116,7 @@ export default class ProductCell extends React.Component {
                 source={{ uri: this.props.productimage }}
                 style={styles.productimageImage}
               />
-            </View>
-            {/* {!this.props.productenable ? 
+              {/* {!this.props.productenable ? 
               <View style={styles.soldView}>
                 <Text style={styles.soldtextText}>Sold Out</Text>
               </View> : this.props.daily_limit > 0 && this.props.daily_limit ?
@@ -120,6 +124,13 @@ export default class ProductCell extends React.Component {
                 <Text style={styles.soldtextText}>Limit {this.props.daily_limit}</Text>
               </View>
               : null } */}
+              {this.props.productstatus != null && this.props.productstatus.length > 0 ? 
+                <View style={styles.soldView}>
+                  <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
+                </View>
+              : null }
+            </View>
+            
           </View>
           <View style={styles.detailsView}>
             <Text numberOfLines={2} style={styles.titleText}>
@@ -224,24 +235,45 @@ const styles = StyleSheet.create({
     height: 74 * alpha,
     marginLeft: 5 * alpha
   },
+  // soldView: {
+  //   backgroundColor: "rgba(0, 0, 0, 0.7)",
+  //   position: "absolute",
+  //   left: 5,
+  //   width: 74 * alpha,
+  //   top: 62 * alpha,
+  //   height: 22 * alpha,
+  //   justifyContent: "center",
+  //   alignItems: "center"
+  // },
+  // soldtextText: {
+  //   backgroundColor: "transparent",
+  //   color: "white",
+  //   fontFamily: NON_TITLE_FONT,
+  //   fontSize: 13 * fontAlpha,
+  //   fontStyle: "normal",
+  //   fontWeight: "normal",
+  //   textAlign: "center"
+  // },
   soldView: {
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: "transparent",
     position: "absolute",
-    left: 5,
     width: 74 * alpha,
-    top: 62 * alpha,
-    height: 22 * alpha,
+    top: 75 * alpha,
+    left: 5 * alpha,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center"
   },
   soldtextText: {
-    backgroundColor: "transparent",
+    backgroundColor: PRIMARY_COLOR,
     color: "white",
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center"
+    fontFamily: TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    textAlign: "center",
+    paddingLeft: 5 * alpha,
+    paddingRight: 5 * alpha,
+    paddingTop: 2 * alpha,
+    paddingBottom: 2 * alpha,
   },
   detailsView: {
     backgroundColor: "transparent",
@@ -389,9 +421,10 @@ const styles = StyleSheet.create({
     // height: 10 * alpha,
     // width: 10 * alpha,
     marginLeft: 3 * alpha,
-    height: 15 * alpha,
-    width: 15 * alpha,
+    width: 14 * alpha,
+    height: 14 * alpha,
 		marginLeft: 6 * alpha,
     marginRight: -4 * alpha,
+    backgroundColor: "transparent",
 	},
 })

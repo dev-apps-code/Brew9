@@ -100,7 +100,7 @@ export default class TopUpWallet extends React.Component {
 	onTopUpPressed = () => {
 		const { navigate } = this.props.navigation
 
-		navigate("Transaction", {
+		navigate("PaymentsWebview", {
 			transaction_name: 'Top Up Wallet',
 			amount: this.state.selected_price,
 		})

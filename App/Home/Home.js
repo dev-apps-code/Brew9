@@ -51,6 +51,7 @@ import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 import { select } from "redux-saga/effects"
+import { Analytics, PageHit } from 'expo-analytics';
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -609,6 +610,7 @@ export default class Home extends React.Component {
 					productsummary={item.summary}
 					productvariant={item.variants}
 					productenable={item.enabled}
+					productstatus={item.status}
 					recommended={item.recommended}
 					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
@@ -2096,16 +2098,15 @@ const styles = StyleSheet.create({
 	},
 	ingredientView: {
 		backgroundColor: "rgb(245, 245, 245)",
-		height: 14 * alpha,
 		justifyContent: "center",
 		marginRight: 5 * alpha,
 		marginTop: 3 * alpha,
 	},
 	ingredientText: {
 		backgroundColor: "transparent",
-		color: "rgb(167, 167, 167)",
+		color: "rgb(130, 130, 130)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2380,7 +2381,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2479,12 +2480,12 @@ const styles = StyleSheet.create({
 		height: 150 * alpha,
 		alignItems: "center",
 	},
-	bottomAlertView:{	
-		backgroundColor: "transparent",	
+	bottomAlertView:{
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 0 * alpha,	
+		bottom: 0 * alpha,
+		flex: 1,
 		width: windowWidth
 	},
 	alertViewCart:{

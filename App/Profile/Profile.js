@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Animated } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -16,7 +16,7 @@ import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
-import { ProgressBar, Colors } from 'react-native-paper';
+// import { ProgressBar, Colors } from 'react-native-paper';
 
 @connect(({ members }) => ({
 	members:members,
@@ -241,7 +241,7 @@ export default class Profile extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'About Brew9',
-			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+			web_url: KURL_INFO + '?page=about_us&id=' + company_id,
 		})
 	}
 
@@ -259,6 +259,30 @@ export default class Profile extends React.Component {
 		}
 	}
 
+	renderProgressBar(progress) {
+
+		progress_percent = progress * 100
+		return (
+			<View style={{flexDirection: "row", height: 10 * alpha,  flex: 1}}>
+			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 0.5 * alpha, borderRadius: 4 * alpha,}}>
+				<View
+				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
+				/>
+				<Animated.View
+				  style={{
+					position: "absolute",
+					left: 0,
+					top: 0,
+					bottom: 0,
+					borderRadius: 4 * alpha,
+					width: `${progress_percent}%`,
+					backgroundColor: PRIMARY_COLOR
+				  }}
+				/>
+			  </View>
+			</View>
+		  )
+	}
 	render() {
 
 		const { currentMember ,members} = this.props
@@ -268,6 +292,7 @@ export default class Profile extends React.Component {
 		var points;
 		var avatar;
 		var membership_name;
+		var next_level_name
 		var isLogin = true;
 		var membership_progress
 
@@ -286,7 +311,7 @@ export default class Profile extends React.Component {
 			membership_progress = currentMember.premium_membership ?
 				currentMember.premium_membership.experience_points/currentMember.premium_membership.membership_level.maximum_experience :
 				currentMember.free_membership.experience_points/currentMember.free_membership.membership_level.maximum_experience
-			
+			next_level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.next_level_name : currentMember.free_membership.membership_level.next_level_name
 		}else{
 			background_photo =  {uri:''}
 			level_name = ''
@@ -298,6 +323,7 @@ export default class Profile extends React.Component {
 			membership_name = ""
 			member_exp = 0
 			exp_needed = 1
+			next_level_name = ""
 		}
 
 		if (currentMember === null) {
@@ -410,12 +436,14 @@ export default class Profile extends React.Component {
 																flex: 1,
 															}}/>
 														<Text
-															style={styles.nextlevelText}></Text>
+															style={styles.nextlevelText}>{next_level_name}</Text>
 													</View>
 													<View
 														style={styles.progressbarView}>
-														<ProgressBar style={styles.progresslineView} progress={membership_progress ? membership_progress : 0} color={"rgb(0, 178, 227)"} />
+															{this.renderProgressBar(membership_progress ? membership_progress : 0)}
+														{/* <ProgressBar style={styles.progresslineView} progress={membership_progress ? membership_progress : 0} color={"rgb(0, 178, 227)"} /> */}
 													</View>
+													
 												</View>
 												<Text
 													style={styles.levelexpText}>{member_exp} / {exp_needed}</Text>
@@ -736,7 +764,8 @@ export default class Profile extends React.Component {
 								}}>
 								<Text
 									style={styles.logoutbuttonButtonText}></Text>
-								
+								<View
+									style={styles.lineView}/>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -1100,7 +1129,7 @@ const styles = StyleSheet.create({
 		elevation: 2 * alpha,
 	},
 	nextlevelText: {
-		color: "rgb(15, 62, 81)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
@@ -1114,8 +1143,8 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		top: 11 * alpha,
-		height: 11 * alpha,
+		top: 15 * alpha,
+		height: 10 * alpha,
 		elevation: 2 * alpha,
 	},
 	progresslineView: {
