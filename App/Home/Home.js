@@ -1053,7 +1053,7 @@ export default class Home extends React.Component {
 								style={{
 									height: 32 * alpha,
 									flexDirection: "row",
-									alignItems: "center",
+									// alignItems: "center",
 								}}>
 								<Text
 									style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
@@ -1112,7 +1112,7 @@ export default class Home extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.optionsText}>{variant_array.join(", ")}</Text>
+								style={styles.optionsText}>{variant_array.join(",")}</Text>
 						</View>
 						<TouchableOpacity
 							disabled={!enabled}
@@ -1993,7 +1993,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	favouriteButton: {
-		backgroundColor: "rgb(193, 191, 191)",
+		backgroundColor: "rgb(191, 191, 191)",
 		borderRadius: 14 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -2004,7 +2004,7 @@ const styles = StyleSheet.create({
 		marginRight: 11 * alpha,
 	},
 	closeButton: {
-		backgroundColor: "rgb(193, 191, 191)",
+		backgroundColor: "rgb(191, 191, 191)",
 		borderRadius: 12.5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -2085,7 +2085,7 @@ const styles = StyleSheet.create({
 		marginTop: 10 * alpha,
 	},
 	descriptionText: {
-		color: "rgb(167, 167, 167)",
+		color: "rgb(130, 130, 130)",
 		fontFamily:  NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
@@ -2105,14 +2105,16 @@ const styles = StyleSheet.create({
 	ingredientText: {
 		backgroundColor: "transparent",
 		color: "rgb(130, 130, 130)",
-		fontFamily:  NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginLeft: 5 * alpha,
 		marginRight: 4 * alpha,
-	},
+		marginLeft: 4 * alpha,
+		marginTop: 4 * alpha,
+		marginBottom: 4 * alpha
+	  },
 	ingredientTwoView: {
 		backgroundColor: "rgb(245, 245, 245)",
 		width: 27 * alpha,
@@ -2381,7 +2383,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
 		fontFamily:  NON_TITLE_FONT,
-		fontSize: 18 * fontAlpha,
+		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2429,7 +2431,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(141, 141, 141)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
