@@ -664,6 +664,7 @@ export default class MemberProfile extends React.Component {
 			</TouchableOpacity>
 
 			<Modal isVisible={this.state.modalVisible}
+					coverScreen={false}
 				   avoidKeyboard={true}>
 				{this.renderModalContent()}
 			</Modal>
