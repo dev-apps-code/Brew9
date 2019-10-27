@@ -53,11 +53,12 @@ import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
 
-@connect(({ members, shops }) => ({
+@connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
 	location: members.location,
-	selectedShop: shops.selectedShop
+	selectedShop: shops.selectedShop,
+	isToggleShopLocation: config.isToggleShopLocation
 }))
 export default class Home extends React.Component {
 	
@@ -89,10 +90,15 @@ export default class Home extends React.Component {
 		}
 	}
 
-	static tabBarItemOptions = ({ navigation }) => {
+	static tabBarItemOptions = ( navigation,store ) => {
 	
 		return {
 			tabBarLabel: "Order",
+			tabBarOnPress: ({ navigation, defaultHandler }) => {
+
+				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				defaultHandler()
+			  },
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
 				? require('./../../assets/images/menu_selected.png') 
@@ -130,7 +136,6 @@ export default class Home extends React.Component {
 			modalGalleryVisible: true,
 			selected_promotion: "",
 			isPromoToggle: false,
-			isToggleLocation: false,
 			ignoreVersion: false,
 			appState: AppState.currentState,
 			modal_visible: false,
@@ -506,16 +511,12 @@ export default class Home extends React.Component {
 
 	onMorePressed = () => {
 
-		let toggle = this.state.isToggleLocation
+		const {isToggleShopLocation, dispatch} = this.props
 
-		if (toggle) {
-			this.setState({
-				isToggleLocation: false,
-			})
+		if (isToggleShopLocation) {
+			dispatch(createAction("config/setToggleShopLocation")(false))
 		} else {
-			this.setState({
-				isToggleLocation: true,
-			})
+			dispatch(createAction("config/setToggleShopLocation")(true))
 		}
 		
 	}
@@ -1134,7 +1135,8 @@ export default class Home extends React.Component {
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,cart,delivery,isToggleLocation} = this.state
+		let {shop,cart,delivery} = this.state
+		let {isToggleShopLocation} = this.props
 		
 		return <View style={styles.page1View}>	
 			
@@ -1208,9 +1210,9 @@ export default class Home extends React.Component {
 								onPress={this.onMorePressed}
 								style={styles.moreButton}>
 								<Text
-									style={styles.moreButtonText}>{isToggleLocation ? "Hide" : "More"}</Text>
+									style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "More"}</Text>
 							</TouchableOpacity>
-							{ isToggleLocation ? 
+							{ isToggleShopLocation ? 
 								<Image
 									source={require("./../../assets/images/bitmap-15.png")}
 									style={styles.bitmapImage}/> :
@@ -1260,7 +1262,7 @@ export default class Home extends React.Component {
 						</View>						
 					</View>
 				}
-				{ this.state.isToggleLocation && (
+				{ this.props.isToggleShopLocation && (
 					<View
 					style={styles.showLocationView}>
 						

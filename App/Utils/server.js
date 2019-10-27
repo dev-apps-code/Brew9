@@ -2,14 +2,14 @@
 export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
 export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO ='http://localhost:3000/info'
-export const KSERVERURL ='https://3569c93f.ngrok.io/api'
-export const KURL_INFO = 'https://3569c93f.ngrok.io/info'
+// export const KSERVERURL ='https://3569c93f.ngrok.io/api'
+// export const KURL_INFO = 'https://3569c93f.ngrok.io/info'
 
 export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 
-
+ 
 export const KCURRENT_API_VERSION_HEADER = "application/dc.v1";
 
 export const KTIMEOUT = 3 * 1000;

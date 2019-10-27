@@ -350,13 +350,13 @@ const TabGroupOne = createBottomTabNavigator(
 
       switch (routeName) {
         case "PushOrder":
-          return Home.tabBarItemOptions(navigation);
+          return Home.tabBarItemOptions(navigation,store);
         case "PushPickup":
-          return PickUp.tabBarItemOptions(navigation);
+          return PickUp.tabBarItemOptions(navigation,store);
         case "PushInbox":
-          return Notification.tabBarItemOptions(navigation);
+          return Notification.tabBarItemOptions(navigation,store);
         case "PushProfile":
-          return Profile.tabBarItemOptions(navigation);
+          return Profile.tabBarItemOptions(navigation,store);
       }
     }
   }

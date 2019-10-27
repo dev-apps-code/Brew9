@@ -25,11 +25,11 @@ import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 export default class PickUp extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-
+		// const {dispatch} = this.props
 		const { params = {} } = navigation.state
 		return {
 			title: "PickUp",
-            headerTintColor: "black",          
+			headerTintColor: "black",     
 			headerLeft: null,
 			headerRight: null,
 			headerTitleStyle: { 
@@ -39,10 +39,15 @@ export default class PickUp extends React.Component {
 		}
 	}
 
-	static tabBarItemOptions = ({ navigation }) => {
+	static tabBarItemOptions = ( navigation,store ) => {
 
 		return {
 			tabBarLabel: "Pickup",
+			tabBarOnPress: ({ navigation, defaultHandler }) => {
+
+				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				defaultHandler()
+			  },
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
 				? require('./../../assets/images/pickup_selected.png') 
