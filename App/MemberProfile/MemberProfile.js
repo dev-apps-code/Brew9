@@ -24,7 +24,7 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -62,16 +62,21 @@ export default class MemberProfile extends React.Component {
 			country: "bn",
 			members:[],
 			modalVisible: false,
+			member_phone_number: "",
 			dob: "",
 			nickname: "",
+			email: "",
 			image: null,
 			phone_no:  "",
 			gender_options: [
 				{label: 'Male', value: 0 },
 				{label: 'Female', value: 1 }
 			],
+			verification_code: "",
 			gender: -1,
 			genderIndex: 0,
+			has_send_code: false,
+			member_have_dob: false,
 		}
 	}
 
@@ -107,7 +112,7 @@ export default class MemberProfile extends React.Component {
 				loading: false,
 			})
 		}
-		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.image, formData.gender)
+		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.image, formData.gender, formData.email)
 		obj.setUrlId(this.state.members.id)
 		dispatch(
 			createAction('members/loadUpdateProfile')({
@@ -123,9 +128,12 @@ export default class MemberProfile extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-					loading: false,
+					has_send_code: true
 				})
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new UpdatePhoneNumberRequestObject(formData.phone_no, formData.country_code)
 		obj.setUrlId(this.state.members.id)
@@ -141,11 +149,18 @@ export default class MemberProfile extends React.Component {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			
 			if (eventObject.success) {
 				this.setState({
-					loading: false,
+					member_phone_number: this.state.phone_no,
+					modalVisible: false,
 				})
+			} else {
+				this.refs.toast.show(eventObject.message);
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new VerifyPhoneNumberUpdateRequestObject(formData.code, formData.phone_no, formData.country_code)
 		obj.setUrlId(this.state.members.id)
@@ -165,7 +180,15 @@ export default class MemberProfile extends React.Component {
 			dob: members.dob,
 			nickname: members.nickname,
 			gender: members.gender,
+			email: members.email,
+			member_phone_number: members.phone_no
 		})
+
+		if (members.dob != undefined) {
+			this.setState({
+				member_have_dob: true
+			})
+		}
 	}
 
 	_pickImage = async () => {
@@ -230,6 +253,9 @@ export default class MemberProfile extends React.Component {
 	}
 
 	onSendCodePressed = () => {
+		this.setState({
+			loading: true,
+		})
 		const phoneFormData = {
 			// phone_no: this.state.phone_no,
 			phone_no: this.state.phone_no,
@@ -241,8 +267,11 @@ export default class MemberProfile extends React.Component {
 	}
 
 	onConfirmButtonPressed = () => {
+		this.setState({
+			loading: true,
+		})
 		const phoneFormData = {
-			code: this.state.country_code,
+			code: this.state.verification_code,
 			// phone_no: this.state.phone_no,
 			phone_no: this.state.phone_no,
 			// country_code: this.state.country_code,
@@ -262,6 +291,7 @@ export default class MemberProfile extends React.Component {
 				nickname: this.state.nickname,
 				image: this.state.image,
 				gender: this.state.gender,
+				email: this.state.email,
 			}
 			this.loadUpdateProfile(profileFormData)
 		}
@@ -274,10 +304,9 @@ export default class MemberProfile extends React.Component {
 				pointerEvents="box-none"
 				style={{
 					position: "absolute",
-					left: 22 * alpha,
-					right: 10 * alpha,
+					width: "100%",
 					top: 15 * alpha,
-					height: 292 * alpha,
+					height: "100%",
 				}}>
 				<View
 					pointerEvents="box-none"
@@ -304,9 +333,8 @@ export default class MemberProfile extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							width: 279 * alpha,
+							width: "100%",
 							height: 30 * alpha,
-							marginLeft: 1 * alpha,
 							flexDirection: "row",
 							alignItems: "flex-start",
 						}}>
@@ -316,7 +344,7 @@ export default class MemberProfile extends React.Component {
 								width: 106 * alpha,
 								height: 30 * alpha,
 								alignItems: "center",
-								justifyContent: "center"
+								justifyContent: "center",
 							}}>
 							{/* <TouchableOpacity
 								onPress={this.onButtonTwoPressed}
@@ -340,7 +368,7 @@ export default class MemberProfile extends React.Component {
 							keyboardType="number-pad"
 							clearButtonMode="always"
 							autoCorrect={false}
-							placeholder="Please enter your phone number"
+							placeholder="Phone Number"
 							onChangeText={(phone_no) => this.setState({phone_no})}
 							style={styles.phoneNumberTextInput}/>
 					</View>
@@ -349,18 +377,19 @@ export default class MemberProfile extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							width: 281 * alpha,
+							width: "100%",
 							height: 30 * alpha,
-							marginLeft: 1 * alpha,
 							marginTop: 4 * alpha,
 							flexDirection: "row",
 							alignItems: "flex-start",
 						}}>
 						<TextInput
 							autoCorrect={false}
-							placeholder="4 digit verification code"
-							onChangeText={(code) => this.setState({code})}
+							placeholder="SMS Code"
+							keyboardType="number-pad"
+							onChangeText={(verification_code) => this.setState({verification_code})}
 							style={styles.codeTextInput}/>
+							<View style={{flex: 1}}/>
 						<TouchableOpacity
 							onPress={this.onSendCodePressed}
 							style={styles.verificationcodeButton}>
@@ -376,7 +405,7 @@ export default class MemberProfile extends React.Component {
 						}}/>
 					<TouchableOpacity
 						onPress={this.onConfirmButtonPressed}
-						style={styles.confirmButton}>
+						style={this.state.has_send_code ? styles.confirmButton: styles.confirmDisabledButton}>
 						<Text
 							style={styles.confirmButtonText}>Confirm</Text>
 					</TouchableOpacity>
@@ -387,7 +416,7 @@ export default class MemberProfile extends React.Component {
 
 	render() {
 
-		const { members, image, dob, nickname, gender } = this.state;
+		const { members, image, dob, nickname, gender, member_phone_number, email } = this.state;
 
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
@@ -454,6 +483,41 @@ export default class MemberProfile extends React.Component {
 					</View>
 				</View>
 				<View
+					style={styles.emailView}>
+					<Image
+						source={require("./../../assets/images/line-17.png")}
+						style={styles.seperatorImage}/>
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0 * alpha,
+							top: 0 * alpha,
+							bottom: 0 * alpha,
+							justifyContent: "center",
+						}}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								width: 315 * alpha,
+								height: 16 * alpha,
+								marginLeft: 22 * alpha,
+								flexDirection: "row",
+								alignItems: "center",
+							}}>
+							<Text
+								style={styles.emailText}>Email</Text>
+							<TextInput
+								autoCorrect={false}
+								placeholder="Email"
+								style={styles.emailTextInput}
+								onChangeText={(email) => this.setState({email})}
+								defaultValue={email}
+							/>
+						</View>
+					</View>
+				</View>
+				<View
 					style={styles.phoneNumberView}>
 					<View
 						style={styles.seperatorView}/>
@@ -479,7 +543,7 @@ export default class MemberProfile extends React.Component {
 							<Text
 								style={styles.phoneNumberText}>Phone Number</Text>
 							<Text
-								style={styles.textInputTextInput}>{members.phone_no}</Text>
+								style={styles.textInputTextInput}>{member_phone_number}</Text>
 							<View
 								style={{
 									flex: 1,
@@ -626,10 +690,10 @@ export default class MemberProfile extends React.Component {
 						cancelBtnText="Cancel"
 						showIcon={false}
 						style={styles.birthdayDatePicker}
-						disabled={this.state.dob ? true : false}
+						disabled={this.state.member_have_dob}
 						customStyles={{
 							dateText: {
-								fontFamily: "DINPro-Medium",
+								fontFamily: NON_TITLE_FONT,
 								fontSize: 13 * fontAlpha,
 								color: "rgb(135, 135, 135)",
 							},
@@ -740,16 +804,15 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(10, 10, 10)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		marginTop: 14 * alpha,
 	},
 	personalInfoView: {
 		backgroundColor: "white",
-		height: 212 * alpha,
+		height: 270 * alpha,
 		marginTop: 10 * alpha,
 	},
 	nicknameView: {
@@ -768,10 +831,10 @@ const styles = StyleSheet.create({
 	nicknameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+		width: 110 * alpha,
 		textAlign: "left",
 	},
 	usernameTextInput: {
@@ -785,7 +848,31 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		width: 200 * alpha,
 		height: 16 * alpha,
-		marginLeft: 53 * alpha,
+	},
+	emailView: {
+		backgroundColor: "transparent",
+		height: 53 * alpha,
+	},
+	emailText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		width: 110 * alpha,
+		textAlign: "left",
+	},
+	emailTextInput: {
+		backgroundColor: "transparent",
+		padding: 0,
+		color: "rgb(135, 135, 135)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		width: 200 * alpha,
+		height: 16 * alpha,
 	},
 	phoneNumberView: {
 		backgroundColor: "transparent",
@@ -801,10 +888,10 @@ const styles = StyleSheet.create({
 	},
 	phoneNumberText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+		width: 110 * alpha,
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -819,7 +906,6 @@ const styles = StyleSheet.create({
 		padding: 0,
 		width: 142 * alpha,
 		height: 18 * alpha,
-		marginLeft: 21 * alpha,
 	},
 	updateButton: {
 		backgroundColor: "transparent",
@@ -861,10 +947,10 @@ const styles = StyleSheet.create({
 	},
 	genderText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+		width: 110 * alpha,
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -872,7 +958,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: 53 * alpha,
 		backgroundColor: "transparent",
-		marginLeft: 69 * alpha,
 		alignItems: "center",
 		justifyContent: "center",
 	},
@@ -885,7 +970,7 @@ const styles = StyleSheet.create({
 	birthdayText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -900,7 +985,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(135, 135, 135)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -911,10 +996,9 @@ const styles = StyleSheet.create({
 	},
 	saveButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 	},
 	saveButton: {
@@ -927,7 +1011,7 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		width: 330 * alpha,
 		height: 40 * alpha,
-		marginTop: 39 * alpha,
+		marginTop: 30 * alpha,
 	},
 	saveButtonImage: {
 		resizeMode: "contain",
@@ -946,7 +1030,7 @@ const styles = StyleSheet.create({
 	closeButtonText: {
 		color: "rgb(113, 113, 113)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -997,7 +1081,6 @@ const styles = StyleSheet.create({
 	formView: {
 		backgroundColor: "transparent",
 		height: 152 * alpha,
-		marginRight: 9 * alpha,
 		marginTop: 29 * alpha,
 		alignItems: "flex-start",
 	},
@@ -1048,11 +1131,10 @@ const styles = StyleSheet.create({
 		marginLeft: 0 * alpha,
 	},
 	lineTwoView: {
+		width: "100%",
 		backgroundColor: "rgb(151, 151, 151)",
 		opacity: 0.29,
-		alignSelf: "stretch",
 		height: 1 * alpha,
-		marginRight: 7 * alpha,
 		marginTop: 5 * alpha,
 	},
 	codeTextInput: {
@@ -1064,11 +1146,11 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		width: 153 * alpha,
+		width: 193 * alpha,
 		height: 30 * alpha,
 	},
 	verificationcodeButtonText: {
-		color: "rgb(78, 77, 77)",
+		color: "white",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
@@ -1076,14 +1158,14 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	verificationcodeButton: {
-		backgroundColor: "transparent",
+		backgroundColor: PRIMARY_COLOR,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 125 * alpha,
+		borderRadius: 4 * alpha,
+		width: 100 * alpha,
 		height: 30 * alpha,
-		marginLeft: 3 * alpha,
 	},
 	verificationcodeButtonImage: {
 		resizeMode: "contain",
@@ -1092,7 +1174,7 @@ const styles = StyleSheet.create({
 	lineThreeView: {
 		backgroundColor: "rgb(151, 151, 151)",
 		opacity: 0.29,
-		width: 145 * alpha,
+		width: 193 * alpha,
 		height: 1 * alpha,
 		marginTop: 1 * alpha,
 	},
@@ -1105,8 +1187,19 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	confirmButton: {
-		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 4,
+		backgroundColor: PRIMARY_COLOR,
+		borderRadius: 4 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		alignSelf: "stretch",
+		height: 37 * alpha,
+		marginBottom: 7 * alpha,
+	},
+	confirmDisabledButton: {
+		backgroundColor: DISABLED_COLOR,
+		borderRadius: 4 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",

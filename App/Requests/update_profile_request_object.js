@@ -2,12 +2,13 @@ import BaseRequestObject from "./base_request_object";
 
 class UpdateProfileRequestObject extends BaseRequestObject{
 
-    constructor(dob, nickname, image, gender){
+    constructor(dob, nickname, image, gender, email){
         super();
         this.dob = dob
         this.nickname = nickname
         this.image = image
         this.gender = gender
+        this.email = email
     }
 
    getUrlString() {
