@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@twotalltotems/react-native-otp-input": "^1.1.0",
     "debug": "^4.1.1",
     "dva-core": "^1.1.0",
     "expo": "^34.0.0",
