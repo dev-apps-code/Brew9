@@ -33,6 +33,18 @@
     },
     "slug": "brew9",
     "description": "",
-    "scheme": "exp8310c0a3fd094f75bd22dd17cc4ada42"
+    "scheme": "exp8310c0a3fd094f75bd22dd17cc4ada42",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "Dreamcode Solution",
+            "project": "Brew9 App",
+            "authToken": "830f94ce512849769746e0a96312d2d720e2bb2dc992423892d64e399b058a9e",
+          }
+        }
+      ]
+    }
   }
 }

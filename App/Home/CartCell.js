@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		backgroundColor: "transparent",
 		color: "rgb(130, 128, 128)",
-		fontFamily: "ClanPro-NarrBook",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

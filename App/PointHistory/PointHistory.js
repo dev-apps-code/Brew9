@@ -14,7 +14,7 @@ import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
 import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -149,6 +149,12 @@ export default class PointHistory extends React.Component {
 
 		const { members } = this.props
 
+		var expiry_date = ""
+
+		if (members.point_expiry_date != undefined){
+			expiry_date = members.point_expiry_date
+		}
+
 		return <View
 			style={styles.pointHistoryView}>
 			<View
@@ -161,6 +167,8 @@ export default class PointHistory extends React.Component {
 							style={styles.pointsCollectedText}>Points Collected</Text>
 						<Text
 							style={styles.pointsText}>{members.points}</Text>
+						<Text
+							style={styles.pointsExpiryText}>{expiry_date}</Text>
 					</View>
 					<View
 						style={{
@@ -256,6 +264,7 @@ const styles = StyleSheet.create({
 	pointCollectedTwoView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
+		flexDirection: "column",
 		width: 300 * alpha,
 		height: 57 * alpha,
 		marginTop: 28 * alpha,
@@ -267,22 +276,29 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		position: "absolute",
-		left: 28 * alpha,
-		right: 30 * alpha,
-		top: 0,
+		alignSelf: "center",
 	},
 	pointsText: {
-		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
 		fontSize: 31 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
-		position: "absolute",
 		alignSelf: "center",
-		top: 18 * alpha,
+		top: 10 * alpha,
+	},
+	pointsExpiryText: {
+		color: LIGHT_GREY,
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		alignSelf: "center",
+		top: 10 * alpha,
 	},
 	pointRuleButtonImage: {
 		resizeMode: "contain",

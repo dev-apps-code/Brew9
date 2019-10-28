@@ -15,8 +15,8 @@ import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
-// import { ProgressBar, Colors } from 'react-native-paper';
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE} from "../Common/common_style";
+import { LinearGradient } from 'expo-linear-gradient';
 
 @connect(({ members }) => ({
 	members:members,
@@ -48,12 +48,12 @@ export default class Profile extends React.Component {
 			  },
 			tabBarIcon: ({ iconTintColor, focused }) => {
 				const image = focused 
-				? require('./../../assets/images/profile_selected.png') 
-				: require('./../../assets/images/profile.png')
+				? require('./../../assets/images/profile_selected_tab.png') 
+				: require('./../../assets/images/profile_tab.png')
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha }}/>
+					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }}/>
 			},
 		}
 	}
@@ -273,16 +273,18 @@ export default class Profile extends React.Component {
 				<View
 				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
 				/>
-				<Animated.View
-				  style={{
-					position: "absolute",
-					left: 0,
-					top: 0,
-					bottom: 0,
-					borderRadius: 4 * alpha,
-					width: `${progress_percent}%`,
-					backgroundColor: PRIMARY_COLOR
-				  }}
+				<LinearGradient
+					colors={[LIGHT_BLUE, PRIMARY_COLOR]}
+					start={[0,0]}
+					end={[1,0]}
+					style={{
+						position: "absolute",
+						left: 0,
+						top: 0,
+						bottom: 0,
+						borderRadius: 4 * alpha,
+						width: `${progress_percent}%`,
+					}}
 				/>
 			  </View>
 			</View>
@@ -446,7 +448,6 @@ export default class Profile extends React.Component {
 													<View
 														style={styles.progressbarView}>
 															{this.renderProgressBar(membership_progress ? membership_progress : 0)}
-														{/* <ProgressBar style={styles.progresslineView} progress={membership_progress ? membership_progress : 0} color={"rgb(0, 178, 227)"} /> */}
 													</View>
 													
 												</View>
@@ -612,7 +613,7 @@ export default class Profile extends React.Component {
 										flex: 1,
 									}}/>
 								<Image
-									source={require("./../../assets/images/group-198-2.png")}
+									source={require("./../../assets/images/mission.png")}
 									style={styles.missioniconImage}/>
 							</View>
 						</View>
