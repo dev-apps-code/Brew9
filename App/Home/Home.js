@@ -824,6 +824,7 @@ export default class Home extends React.Component {
 						clazz: "promo",
 						name: promotion.cart_text,
 						description:  "",
+						price: 0.00,
 					}
 	
 					console.log("Add Promo", cartItem)
@@ -1509,29 +1510,38 @@ export default class Home extends React.Component {
 	renderPromotionTopBar(shop, cart) {
 
 		const {cart_total} = this.state
+
 		if (cart.length > 0) {
 			if (shop.trigger_promotions != undefined && shop.trigger_promotions.length > 0) {
 				
+				var has_promo = false
+
 				const promos = shop.trigger_promotions.map((item, key) => {
 
 					var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
 					var remaining = trigger_price - cart_total
 
 					if (remaining < 0) {
+						has_promo = false
 						return
 					}
 
 					var display_text = item.display_text
 					var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
 
-					return <View style={styles.promotionBarView}
+					if (!has_promo) {
+						has_promo = true
+						return <View style={styles.promotionBarView}
 						key={key}>
 						<Text
-							numberOfLines={2} 
+							numberOfLines={2}
 							style={styles.promotionTopBarText}>
 							{final_text}
 						</Text>
 					</View>
+					}
+					return
+					
 				})
 
 				return <View style={styles.promotionTopBarView}>
