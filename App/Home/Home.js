@@ -583,7 +583,7 @@ export default class Home extends React.Component {
 				onChangeQuantity={this.onChangeQuantityPress}
 				price={item.price}
 			/>
-		} else if (item.clazz == "promo") {
+		} else if (item.clazz == "promotion") {
 			return <CartPromoCell
 				navigation={this.props.navigation}
 				name={item.name}
@@ -802,7 +802,6 @@ export default class Home extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		console.log("Check Trigger")
 		const { shop, cart_total } = this.state
 
 		let cart = [...this.state.cart]
@@ -821,13 +820,13 @@ export default class Home extends React.Component {
 
 					shop.trigger_promotions[index].has_triggered = true
 					let cartItem = {
-						clazz: "promo",
+						clazz: "promotion",
+						id: promotion.id,
 						name: promotion.cart_text,
 						description:  "",
 						price: 0.00,
 					}
 	
-					console.log("Add Promo", cartItem)
 					this.setState({
 						cart: cart.concat(cartItem),
 					})

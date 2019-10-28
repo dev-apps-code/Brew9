@@ -100,7 +100,8 @@ export default class Checkout extends React.Component {
 					}			      
 				}
 
-			const obj = new ValidVouchersRequestObject(selectedShop.id,cart)
+			filtered_cart = _.filter(cart, {clazz: 'product'});
+			const obj = new ValidVouchersRequestObject(selectedShop.id,filtered_cart)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('vouchers/loadVouchersForCart')({
@@ -740,7 +741,7 @@ export default class Checkout extends React.Component {
 							style={styles.rm20TwoText}>${parseFloat(item.price).toFixed(2)}</Text>
 					</View>
 				}	
-			} else if (item.clazz == "promo") {
+			} else if (item.clazz == "promotion") {
 				return <View
 					style={styles.itemTwoView}
 					key={key}>
