@@ -1,32 +1,25 @@
 import BaseRequestObject from "./base_request_object";
 
-class MakeOrderRequestObj extends BaseRequestObject{
+class TopUpRequestObject extends BaseRequestObject{
 
-    constructor(order_items, voucher_item_ids,payment_method){
+    constructor(merchant_id, top_up_product_id){
         super();
-        this.order_items = order_items
-        this.voucher_item_ids = voucher_item_ids    
-        this.payment_method = payment_method
+        this.merchant_id = merchant_id
+        this.top_up_product_id = top_up_product_id
     }
 
    getUrlString() {
-       return `shops/${this.url_id}/make_order`
-   }
-
-   getFormData(){
-    var string =  JSON.stringify({'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids});
-
-    return string
+       return `top_up_products/${this.url_id}/make_order`
    }
 }
-export default MakeOrderRequestObj
+export default TopUpRequestObject
 
 /* ---- SERVICES ----- 
 
 import { getMethod,postMethod,postMultipartMethod } from '../Utils/webservice_helper'
 
 export function makeOrder(authtoken,object) {
-   return getMethod(authtoken,object)
+   return postMethod(authtoken,object)
 }
 
 
@@ -42,7 +35,7 @@ export function makeOrder(authtoken,object) {
     try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.member.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             makeOrder,
             authtoken,
@@ -88,10 +81,10 @@ loadMakeOrder(){
             loading: false,
             })        }
     }
-    const obj = new MakeOrderRequestObj(order_items, voucher_item_ids)
+    const obj = new TopUpRequestObject(merchant_id, top_up_product_id)
     obj.setUrlId(:id) #TODO
     dispatch(
-        createAction('shops/loadMakeOrder')({
+        createAction('merchants/loadMakeOrder')({
             object:obj,
             callback,
         })
@@ -100,3 +93,10 @@ loadMakeOrder(){
 
 
  -------------- */
+
+/* ---- JSON API RESPONSE ----- 
+
+
+
+ -------------- */
+

@@ -19,10 +19,11 @@ import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+
 export default class ProductCell extends React.Component {
   constructor(props) {
     super(props);
-  }
+  } 
 
   componentDidMount() {}
 

@@ -1,25 +1,17 @@
 import BaseRequestObject from "./base_request_object";
 
-class MakeOrderRequestObj extends BaseRequestObject{
+class TopUpOrderRequestObject extends BaseRequestObject{
 
-    constructor(order_items, voucher_item_ids,payment_method){
+    constructor(shop_id){
         super();
-        this.order_items = order_items
-        this.voucher_item_ids = voucher_item_ids    
-        this.payment_method = payment_method
+        this.shop_id = shop_id
     }
 
    getUrlString() {
-       return `shops/${this.url_id}/make_order`
-   }
-
-   getFormData(){
-    var string =  JSON.stringify({'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids});
-
-    return string
+       return `top_up_products/${this.url_id}/make_order`
    }
 }
-export default MakeOrderRequestObj
+export default TopUpOrderRequestObject 
 
 /* ---- SERVICES ----- 
 
@@ -42,7 +34,7 @@ export function makeOrder(authtoken,object) {
     try{
 
         const { object, callback } = payload
-        const authtoken = yield select(state => state.member.userAuthToken)
+        const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             makeOrder,
             authtoken,
@@ -88,10 +80,10 @@ loadMakeOrder(){
             loading: false,
             })        }
     }
-    const obj = new MakeOrderRequestObj(order_items, voucher_item_ids)
+    const obj = new TopUpOrderRequestObject(shop_id)
     obj.setUrlId(:id) #TODO
     dispatch(
-        createAction('shops/loadMakeOrder')({
+        createAction('top_ups/loadMakeOrder')({
             object:obj,
             callback,
         })
@@ -100,3 +92,10 @@ loadMakeOrder(){
 
 
  -------------- */
+
+/* ---- JSON API RESPONSE ----- 
+
+
+
+ -------------- */
+
