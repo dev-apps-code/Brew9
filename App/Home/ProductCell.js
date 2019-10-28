@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
-import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKGROUND } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 export default class ProductCell extends React.Component {
@@ -81,9 +81,17 @@ export default class ProductCell extends React.Component {
 
     
     const ingredients = this.props.productingredient.map((item, key) => {
+
+      var highlight = false
+
+      console.log(item)
+      if (item.highlight == true) {
+        hightlight = true
+      }
+
       return (
-        <View style={styles.ingredientView} key={key}>
-          <Text numberOfLines={1} style={styles.ingredientText}>{item.name}</Text>
+        <View style={item.highlight ? styles.ingredientHighlightView : styles.ingredientView} key={key}>
+          <Text numberOfLines={1} style={item.highlight ? styles.ingredientHighlightText : styles.ingredientText}>{item.name}</Text>
         </View>
       );
     });
@@ -396,6 +404,12 @@ const styles = StyleSheet.create({
     marginRight: 5 * alpha,
     marginBottom: 3 * alpha,
   },
+  ingredientHighlightView: {
+    backgroundColor: LIGHT_BLUE_BACKGROUND,
+    justifyContent: "center",
+    marginRight: 5 * alpha,
+    marginBottom: 3 * alpha,
+  },
   ingredientText: {
     backgroundColor: "transparent",
     color: "rgb(130, 130, 130)",
@@ -409,12 +423,18 @@ const styles = StyleSheet.create({
     marginTop: 4 * alpha,
     marginBottom: 4 * alpha
   },
-  ingredientTwoView: {
-    backgroundColor: "rgb(245, 245, 245)",
-    width: 27 * alpha,
-    height: 14 * alpha,
-    marginLeft: 10 * alpha,
-    justifyContent: "center"
+  ingredientHighlightText: {
+    backgroundColor: "transparent",
+    color: PRIMARY_COLOR,
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    textAlign: "left",
+    marginRight: 4 * alpha,
+    marginLeft: 4 * alpha,
+    marginTop: 4 * alpha,
+    marginBottom: 4 * alpha
   },
   recommendedStarImage: {
     resizeMode: "contain",
