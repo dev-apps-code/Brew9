@@ -691,39 +691,56 @@ export default class Checkout extends React.Component {
 		})
 		const cart_items = cart.map((item, key) => {
 
-			if (item.selected_variants) {
+			if (item.clazz == "product") {
+				if (item.selected_variants) {
 
-				let filtered = item.selected_variants.filter(function(el) { return el })
-				let variant_array = filtered.map(a => a.value)
-
-				return <View
-					style={styles.itemView}
-					key={key}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							alignSelf: "flex-start",
-							width: 257 * alpha,
-							height: 49 * alpha,
-							marginLeft: 16 * alpha,
-							marginTop: 10 * alpha,
-							alignItems: "flex-start",
-						}}>
+					let filtered = item.selected_variants.filter(function(el) { return el })
+					let variant_array = filtered.map(a => a.value)
+	
+					return <View
+						style={styles.itemView}
+						key={key}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								alignSelf: "flex-start",
+								width: 257 * alpha,
+								height: 49 * alpha,
+								marginLeft: 16 * alpha,
+								marginTop: 10 * alpha,
+								alignItems: "flex-start",
+							}}>
+							<Text
+								style={styles.nameText}>{item.name}</Text>
+							<Text
+								style={styles.variantText}>{variant_array.join(", ")}</Text>
+						</View>
+						<View
+							style={{
+								flex: 1,
+							}}/>
 						<Text
-							style={styles.nameText}>{item.name}</Text>
+							style={styles.quantityText}>x{item.quantity}</Text>
 						<Text
-							style={styles.variantText}>{variant_array.join(", ")}</Text>
+							style={styles.cartpriceText}>${parseFloat(item.price).toFixed(2)}</Text>
 					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.quantityText}>x{item.quantity}</Text>
-					<Text
-						style={styles.cartpriceText}>${parseFloat(item.price).toFixed(2)}</Text>
-				</View>
-			} else {
+				} else {
+					return <View
+						style={styles.itemTwoView}
+						key={key}>
+						<Text
+							style={styles.nameTwoText}>{item.name}</Text>
+						<View
+							style={{
+								flex: 1,
+							}}/>
+						<Text
+							style={styles.quantityTwoText}>x{item.quantity}</Text>
+						<Text
+							style={styles.rm20TwoText}>${parseFloat(item.price).toFixed(2)}</Text>
+					</View>
+				}	
+			} else if (item.clazz == "promo") {
 				return <View
 					style={styles.itemTwoView}
 					key={key}>
@@ -734,9 +751,7 @@ export default class Checkout extends React.Component {
 							flex: 1,
 						}}/>
 					<Text
-						style={styles.quantityTwoText}>x{item.quantity}</Text>
-					<Text
-						style={styles.rm20TwoText}>${parseFloat(item.price).toFixed(2)}</Text>
+						style={styles.quantityTwoText}>Free</Text>
 				</View>
 			}
 		})

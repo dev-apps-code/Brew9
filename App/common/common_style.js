@@ -4,6 +4,7 @@ import { StyleSheet, Platform } from "react-native";
 export const TITLE_FONT = "ClanPro-News";
 export const NON_TITLE_FONT = "ClanPro-Book";
 export const PRIMARY_COLOR = "rgb(0, 178, 227)"
+export const LIGHT_GREY = "rgb(130, 130, 130)"
 export const LIGHT_BLUE = "rgb(119, 210, 235)"
 export const LIGHT_BLUE_BACKGROUND = "rgb(218, 247, 255)"
 export const RED = "rgb(239, 81, 81)"

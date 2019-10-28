@@ -33,6 +33,7 @@ import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
 import BannerCell from "./BannerCell"
 import CartCell from "./CartCell"
+import CartPromoCell from "./CartPromoCell"
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
@@ -568,18 +569,27 @@ export default class Home extends React.Component {
 	}
 
 	renderPopOutCartFlatListCell = ({ item, index }) => {
-		return <CartCell
-			navigation={this.props.navigation}
-			id={item.id}
-			name={item.name}
-			index={index}
-			item={item}
-			quantity={item.quantity}
-			variations={item.selected_variants}
-			// currency={this.props.members.currency}
-			onChangeQuantity={this.onChangeQuantityPress}
-			price={item.price}
-		/>
+
+		if (item.clazz == "product") {
+			return <CartCell
+				navigation={this.props.navigation}
+				id={item.id}
+				name={item.name}
+				index={index}
+				item={item}
+				quantity={item.quantity}
+				variations={item.selected_variants}
+				// currency={this.props.members.currency}
+				onChangeQuantity={this.onChangeQuantityPress}
+				price={item.price}
+			/>
+		} else if (item.clazz == "promo") {
+			return <CartPromoCell
+				navigation={this.props.navigation}
+				name={item.name}
+			/>
+		}
+		
 	}
 
 	renderCategorylistFlatListCell = ({ item, index }) => {
@@ -720,7 +730,7 @@ export default class Home extends React.Component {
 				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
 			}
-
+			this.check_promotion_trigger()
 			this.forceUpdate()
 
 		} else {
@@ -790,8 +800,49 @@ export default class Home extends React.Component {
 
 	}
 
+	check_promotion_trigger = () => {
+
+		console.log("Check Trigger")
+		const { shop, cart_total } = this.state
+
+		let cart = [...this.state.cart]
+
+		if (shop.trigger_promotions != undefined && shop.trigger_promotions.length > 0) {
+			
+			for (var index in shop.trigger_promotions) {
+				var promotion = shop.trigger_promotions[index]
+				var trigger_price = promotion.trigger_price ? parseFloat(promotion.trigger_price) : 0.00
+				var remaining = trigger_price - cart_total
+
+				const search_cart_promo_index = cart.findIndex(element => element.name == promotion.cart_text)
+
+				// console.log("Search", search_cart_promo)
+				if (remaining < 0 && search_cart_promo_index < 0) {
+
+					shop.trigger_promotions[index].has_triggered = true
+					let cartItem = {
+						clazz: "promo",
+						name: promotion.cart_text,
+						description:  "",
+					}
+	
+					console.log("Add Promo", cartItem)
+					this.setState({
+						cart: cart.concat(cartItem),
+					})
+				} else if (remaining > 0 && search_cart_promo_index > 0){
+					cart.splice(search_cart_promo_index, 1)
+					this.setState({
+						cart
+					})
+				}
+			}
+		}
+	}
+
 	onAddToCartPressed = (product) => {
 
+		const { shop } = this.state
 		let cart = [...this.state.cart]
 
 		const clone_variants = _.cloneDeep(product.selected_variants)
@@ -810,13 +861,18 @@ export default class Home extends React.Component {
 			selected_variants: clone_variants
 		}
 
+		console.log("cart", cartItem)
+		
+
 		product.total_quantity = parseInt(product.total_quantity) + parseInt(this.state.select_quantity)
 
 		let total_price = product.calculated_price * this.state.select_quantity
 
 		if (search_cart) {
 			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
-			this.setState({ cart, select_quantity: 1 })
+			this.setState({ cart, select_quantity: 1 }, function(){
+				this.check_promotion_trigger()
+			})
 		} else {
 			this.setState({
 				cart: this.state.cart.concat(cartItem),
@@ -824,6 +880,7 @@ export default class Home extends React.Component {
 				select_quantity: 1,
 			}, function(){
 				this.toogleCart(true)
+				this.check_promotion_trigger()
 			})
 		}
 
@@ -853,6 +910,7 @@ export default class Home extends React.Component {
 			this.state.products[index].quantity = null
 			this.state.products[index].total_quantity = 0
 		}
+		
 	}
 
 	onFeaturedPromotionPressed (item) {
@@ -1151,7 +1209,6 @@ export default class Home extends React.Component {
 						marginRight: 10 * alpha,
 						marginTop: 8 * alpha,
 						flexDirection: "row",
-						alignItems: "flex-start",
 					}}>
 						
 					<View
@@ -1226,7 +1283,7 @@ export default class Home extends React.Component {
 					</View>
 					
 				</View>
-				{/* {this.renderPromotionTopBar()} */}
+				{this.renderPromotionTopBar(shop, cart)}
 				{this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>
 					:
 					<View
@@ -1449,12 +1506,41 @@ export default class Home extends React.Component {
 		return undefined
 	}
 
-	renderPromotionTopBar() {
-		return <View style={styles.promotionTopBarView}>
-			<Text style={styles.promotionTopBarText}>
-				Buy 1 Free 1
-			</Text>
-		</View>
+	renderPromotionTopBar(shop, cart) {
+
+		const {cart_total} = this.state
+		if (cart.length > 0) {
+			if (shop.trigger_promotions != undefined && shop.trigger_promotions.length > 0) {
+				
+				const promos = shop.trigger_promotions.map((item, key) => {
+
+					var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
+					var remaining = trigger_price - cart_total
+
+					if (remaining < 0) {
+						return
+					}
+
+					var display_text = item.display_text
+					var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+
+					return <View style={styles.promotionBarView}
+						key={key}>
+						<Text
+							numberOfLines={2} 
+							style={styles.promotionTopBarText}>
+							{final_text}
+						</Text>
+					</View>
+				})
+
+				return <View style={styles.promotionTopBarView}>
+					{promos}
+				</View>
+				
+			}
+		}
+		return
 	}
 
 	renderBottomBar(cart,shop){
@@ -1621,7 +1707,6 @@ const styles = StyleSheet.create({
 	page1View: {
 		backgroundColor: "rgb(243, 243, 243)",
 		flex: 1,
-		flexDirection: "column"
 	},
 	topsectionView: {
 		backgroundColor: "white",
@@ -1760,10 +1845,7 @@ const styles = StyleSheet.create({
 	},
 	productsectionView: {
 		backgroundColor: "transparent",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		// top: 50 * alpha,
-		bottom: 0 * alpha,
+		flex: 1,
 		flexDirection: "row",
 	},
 	categorylistFlatList: {
@@ -2695,14 +2777,21 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	promotionTopBarView: {
-		height: 25 * alpha,
+		backgroundColor: "transparent"
+	},
+	promotionBarView: {
+		width: "100%",
+		height: 32 * alpha,
 		backgroundColor: RED,
 		justifyContent: "center",
+		alignItems: "center",
 	},
 	promotionTopBarText: {
 		fontFamily: TITLE_FONT,
 		color: "white",
-		fontSize: 14 * alpha,
-		alignSelf: "center"
+		fontSize: 10 * alpha,
+		alignSelf: "center",
+		paddingLeft: 10 * alpha,
+		paddingRight: 10 * alpha,
 	}
 })

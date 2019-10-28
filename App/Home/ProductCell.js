@@ -84,7 +84,6 @@ export default class ProductCell extends React.Component {
 
       var highlight = false
 
-      console.log(item)
       if (item.highlight == true) {
         hightlight = true
       }
