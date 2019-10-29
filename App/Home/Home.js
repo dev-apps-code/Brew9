@@ -22,7 +22,8 @@ import {
 	Platform,
 	Alert,
 	Linking,
-	AppState	
+	AppState,
+	Keyboard	
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -234,7 +235,7 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
-		
+		Keyboard.dismiss()
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
