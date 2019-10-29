@@ -694,12 +694,16 @@ export default class Home extends React.Component {
 
 				if (index >= 0) {
 					cart[index] = cartItem
-					this.setState({ cart }, function(){this.toogleCart(true)})
+					this.setState({ cart }, function(){
+						this.toogleCart(true)
+						this.check_promotion_trigger()
+					})
 				} else {
 					this.setState({
 						cart: this.state.cart.concat(cartItem)
 					}, function(){
 						this.toogleCart(true)
+						this.check_promotion_trigger()
 					})
 				}
 
@@ -726,13 +730,15 @@ export default class Home extends React.Component {
 				if (cartItem.quantity === null) {
 					cart.splice(index, 1)
 				}
-				this.setState({ cart }, function(){this.toogleCart(true)})
+				this.setState({ cart }, function(){
+					this.toogleCart(true)
+					this.check_promotion_trigger()
+				})
 				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
 			}
-			this.check_promotion_trigger()
 			this.forceUpdate()
-
+			
 		} else {
 
 			var item = this.state.products[index]
