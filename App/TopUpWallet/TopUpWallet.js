@@ -9,14 +9,17 @@
 import { Text, TouchableOpacity, View, StyleSheet, Image, FlatList, ActivityIndicator } from "react-native"
 import Card from "./Card"
 import React from "react"
-import {alpha, fontAlpha} from "../Common/size";
+import {alpha, fontAlpha } from "../Common/size";
 import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
+import TopUpOrderRequestObject from "../Requests/top_up_order_request_object";
 import {createAction} from "../Utils";
 import {connect} from "react-redux";
-import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
-
-@connect(({ members }) => ({
-	members: members.profile
+import { TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING } from "../Common/common_style";
+import HudLoading from "../Components/HudLoading.js"
+import Toast, {DURATION} from 'react-native-easy-toast'
+@connect(({ members,shops }) => ({
+	members: members.profile,
+	selectedShop: shops.selectedShop
 }))
 export default class TopUpWallet extends React.Component {
 
@@ -47,17 +50,18 @@ export default class TopUpWallet extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: true,
+			loading_list: false,
 			data: [],
-			selected_price: null,
+			selectedTopUpProduct: null,
 			selected: 0,
+			order:null
 		}
 	}
 
 	loadTopUpProducts(){
 		const { dispatch, members } = this.props
 
-		this.setState({ loading: true })
+		this.setState({ loading_list: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
@@ -65,13 +69,13 @@ export default class TopUpWallet extends React.Component {
 				},function () {
 					if (eventObject.result.length > 0) {
 						this.setState({
-							selected_price: eventObject.result[0].price
+							selectedTopUpProduct: eventObject.result[0]
 						})
 					}
 				}.bind(this))
 			}
 			this.setState({
-				loading: false,
+				loading_list: false,
 			})
 		}
 		const obj = new TopUpProductsRequestObject()
@@ -98,18 +102,53 @@ export default class TopUpWallet extends React.Component {
 	}
 
 	onTopUpPressed = () => {
-		const { navigate } = this.props.navigation
 
-		navigate("PaymentsWebview", {
-			transaction_name: 'Top Up Wallet',
-			amount: this.state.selected_price,
-		})
+		const {selectedTopUpProduct} = this.state
+		
+		this.loadMakeOrder(selectedTopUpProduct.id)
 	}
 
-	onTopUpCardPressed = (price,index) => {
+	
+	loadMakeOrder(topUpProductId){
+		const { navigate } = this.props.navigation
+		const { dispatch, selectedShop } = this.props
+		const {selectedTopUpProduct} = this.state
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			this.setState({
+				loading: false,
+			})       
+			if (eventObject.success) {
+
+				const order = eventObject.result
+				this.setState({order:order})
+				navigate("PaymentsWebview", {
+					name: `Top Up - ${selectedTopUpProduct.price}`,
+					order_id: order.receipt_no,
+					session_id:order.session_id,
+					amount: order.total,
+					type:'top_up',
+				})
+			}else{
+				this.refs.toast.show(eventObject.message);
+			}
+		}
+		const obj = new TopUpOrderRequestObject(selectedShop.id)
+		obj.setUrlId(topUpProductId) 
+		dispatch(
+			createAction('top_up/loadMakeOrder')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+	
+
+	onTopUpCardPressed = (topUpProduct,index) => {
 
 		this.setState({
-			selected_price: price,
+			selectedTopUpProduct: topUpProduct,
 			selected: index,
 		})
 	}
@@ -121,6 +160,7 @@ export default class TopUpWallet extends React.Component {
 			image={item.image}
 			price={item.price}
 			index={index}
+			item={item}
 			currency={this.props.members.currency}
 			selected={this.state.selected}
 			onPressItem={this.onTopUpCardPressed}
@@ -136,7 +176,7 @@ export default class TopUpWallet extends React.Component {
 			{/*	<Text*/}
 			{/*		style={styles.messageText}>Please contact customer service for top up receipt, orders will no longer be issued.</Text>*/}
 			{/*</View>*/}
-			{ this.state.loading && (
+			{ this.state.loading_list && (
 				<View style={[styles.container, styles.horizontal]}>
 					<ActivityIndicator size="large" />
 				</View>
@@ -153,7 +193,7 @@ export default class TopUpWallet extends React.Component {
 			<View
 				style={styles.topUpView}>
 				<Text
-					style={styles.selectedValueText}>${this.state.selected_price ? this.state.selected_price : '' }</Text>
+					style={styles.selectedValueText}>${this.state.selectedTopUpProduct ? this.state.selectedTopUpProduct.price : '' }</Text>
 				<View
 					style={{
 						flex: 1,
@@ -165,6 +205,9 @@ export default class TopUpWallet extends React.Component {
 						style={styles.topupButtonText}>Top Up</Text>
 				</TouchableOpacity>
 			</View>
+			<Toast ref="toast"
+            position="center"/>
+			<HudLoading isLoading={this.state.loading}/>
 		</View>
 	}
 }
@@ -218,7 +261,7 @@ const styles = StyleSheet.create({
 		marginRight: 20 * alpha,
 	},
 	topuplistFlatList: {
-		backgroundColor: "transparent",
+
 		width: "100%",
 		height: "100%",
 	},
@@ -226,10 +269,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	topUpView: {
-		backgroundColor: "white",
-		height: 52 * alpha,
+
+		height: 52 * alpha ,
 		flexDirection: "row",
 		alignItems: "center",
+		marginBottom: BUTTONBOTTOMPADDING
 	},
 	selectedValueText: {
 		color: "rgb(59, 59, 59)",

@@ -202,6 +202,9 @@ const PushProfile = createStackNavigator(
     Profile: {
       screen: Profile
     },
+    PaymentsWebview:{
+      screen: PaymentsWebview
+    },
     VIPPurchase: {
       screen: VIPPurchase
     },

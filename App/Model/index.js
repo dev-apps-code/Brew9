@@ -9,6 +9,7 @@ import point_products from '../WebserviceModel/point_products'
 import shops from '../WebserviceModel/shops'
 import orders from '../WebserviceModel/orders'
 import payments from '../WebserviceModel/payments'
+import top_up from '../WebserviceModel/top_up'
 import config from './config'
 export function registerModels(app) {
   app.model(members)
@@ -22,4 +23,5 @@ export function registerModels(app) {
   app.model(shops)
   app.model(orders)
   app.model(payments)
+  app.model(top_up)
 }

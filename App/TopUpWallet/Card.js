@@ -26,7 +26,7 @@ export default class Card extends React.Component {
 	}
 
 	onCardPress = () => {
-		this.props.onPressItem(this.props.price,this.props.index);
+		this.props.onPressItem(this.props.item,this.props.index);
 		this.setState({
 			selected: this.props.selected
 		})
