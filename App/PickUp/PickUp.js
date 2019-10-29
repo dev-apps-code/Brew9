@@ -132,51 +132,39 @@ export default class PickUp extends React.Component {
 
 			const order_items = item.order_items.map((item, key) => {
 
-				if (item.variations != null && item.variations != "") {
-					return <View
-						style={styles.drinksView}
-						key={key}>
-						<Text
-							style={styles.mochaText}>{item.product_name}</Text>
+				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				return <View
+					style={styles.drinksView}
+					key={key}>
 						<View
 							pointerEvents="box-none"
 							style={{
-								height: 37 * alpha,
-								marginTop: 2 * alpha,
-								flexDirection: "row",
-								alignItems: "flex-start",
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
 							}}>
-							<Text
-								style={styles.noStrawNormalSugText}>{item.variations}</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.x1Text}>x{item.quantity}</Text>
-							<Text
-								style={styles.rm11Text}>${item.total_price}</Text>
-						</View>
-						<Image
-							source={require("./../../assets/images/group-109-copy.png")}
-							style={styles.dottedLineImage}/>
-					</View>
-				} else {
-					return <View
-					style={styles.drinksTwoView}
-					key={key}>
-					<Text
-						style={styles.mochaTwoText}>{item.product_name}</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.x1TwoText}>x{item.quantity}</Text>
-					<Text
-						style={styles.rm11TwoText}>${item.total_price}</Text>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>{item.product_name}</Text>
+									{(item.variations != null && item.variations != "") ?
+									<Text
+										style={styles.productVariantText}>{item.variations}</Text> :
+										<View style={styles.spacer} />
+									}
+								</View>
+								<Text
+									style={styles.productQuantityText}>x{item.quantity}</Text>
+								
+								<Text
+									style={styles.productPriceText}>{price_string}</Text>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
+							</View>
 				</View>
-				}
+				
 				
 			})
 
@@ -234,7 +222,7 @@ export default class PickUp extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							alignSelf: "flex-end",
-							width: 102 * alpha,
+							width: 200 * alpha,
 							height: 52 * alpha,
 							marginRight: 111 * alpha,
 							marginTop: 19 * alpha,
@@ -417,7 +405,6 @@ export default class PickUp extends React.Component {
 						}}>
 						<View
 							style={styles.cartView}>
-							
 							{order_items}
 							{voucher_items}
 						</View>
@@ -693,7 +680,7 @@ const styles = StyleSheet.create({
 	},
 	customerServiceButtonText: {
 		color: "rgb(51, 51, 51)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -719,7 +706,7 @@ const styles = StyleSheet.create({
 	},
 	saySomethingButtonText: {
 		color: "rgb(51, 51, 51)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -742,7 +729,7 @@ const styles = StyleSheet.create({
 	queuenumberText: {
 		backgroundColor: "transparent",
 		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 26 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -753,7 +740,7 @@ const styles = StyleSheet.create({
 	},
 	queueheaderText: {
 		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -794,8 +781,8 @@ const styles = StyleSheet.create({
 	},
 	orderedText: {
 		color: "rgb(205, 207, 208)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -803,8 +790,8 @@ const styles = StyleSheet.create({
 	},
 	orderedSelectedText: {
 		color: "rgb(35, 31, 32)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -842,8 +829,8 @@ const styles = StyleSheet.create({
 	},
 	pickUpText: {
 		color: "rgb(205, 207, 208)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -851,8 +838,8 @@ const styles = StyleSheet.create({
 	},
 	pickUpSelectedText: {
 		color: "rgb(35, 31, 32)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -880,20 +867,20 @@ const styles = StyleSheet.create({
 	},
 	processingText: {
 		color: "rgb(205, 207, 208)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
 	},
 	processingSelectedText: {
 		color: "rgb(35, 31, 32)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
 	},
 	dividerTwoImage: {
@@ -913,7 +900,7 @@ const styles = StyleSheet.create({
 	},
 	queuelengthText: {
 		color: "rgb(136, 136, 136)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -922,7 +909,7 @@ const styles = StyleSheet.create({
 	},
 	messageText: {
 		color: "rgb(136, 136, 136)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -961,7 +948,7 @@ const styles = StyleSheet.create({
 	},
 	shopNameText: {
 		color: "rgb(63, 63, 63)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -971,7 +958,7 @@ const styles = StyleSheet.create({
 	},
 	addressText: {
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -981,7 +968,7 @@ const styles = StyleSheet.create({
 	},
 	phoneText: {
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -992,7 +979,7 @@ const styles = StyleSheet.create({
 	},
 	callButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1030,7 +1017,7 @@ const styles = StyleSheet.create({
 	},
 	directionButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1055,61 +1042,23 @@ const styles = StyleSheet.create({
 	cartView: {
 		backgroundColor: "rgb(245, 245, 245)",
 		flex: 1,
-		marginTop: -1 * alpha,
+		flexDirection: "column"
 	},
 	drinksView: {
 		backgroundColor: "transparent",
-		height: 84 * alpha,
+		flex: 1,
 		marginLeft: 25 * alpha,
-		marginRight: 24 * alpha,
+		marginRight: 25 * alpha,
 		marginTop: 10 * alpha,
 	},
-	mochaText: {
-		backgroundColor: "transparent",
-		color: "rgb(63, 63, 63)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-		alignSelf: "flex-start",
-	},
-	noStrawNormalSugText: {
-		backgroundColor: "transparent",
-		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		width: 191 * alpha,
-		marginTop: 6 * alpha,
-	},
-	x1Text: {
-		backgroundColor: "transparent",
-		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		marginRight: 16 * alpha,
-	},
-	rm11Text: {
-		backgroundColor: "transparent",
-		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-	},
-	dottedLineImage: {
+	
+	dottedLineImageTwo: {
 		backgroundColor: "transparent",
 		resizeMode: "cover",
-		width: 280*alpha,
+		position: "absolute",
+		bottom: 0,
+		width: 280 * alpha,
 		height: 2 * alpha,
-		marginTop: 22 * alpha,
 	},
 	totalView: {
 		backgroundColor: "transparent",
@@ -1123,27 +1072,16 @@ const styles = StyleSheet.create({
 	totalText: {
 		backgroundColor: "transparent",
 		color: "rgb(63, 63, 63)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "center",
 	},
-	rm1100Text: {
-		backgroundColor: "transparent",
-		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "right",
-		alignSelf: "flex-start",
-		marginTop: 4 * alpha,
-	},
+	
 	remarkView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginTop: -1,
 		height: 116 * alpha,
 		paddingBottom: 10 * alpha,
 	},
@@ -1159,7 +1097,7 @@ const styles = StyleSheet.create({
 
 	pleaseCallBranchFText: {
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1170,7 +1108,7 @@ const styles = StyleSheet.create({
 	},
 	orderTime100717Text: {
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1193,7 +1131,7 @@ const styles = StyleSheet.create({
 	},
 	copyButtonText: {
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1202,7 +1140,7 @@ const styles = StyleSheet.create({
 	orderNo020028201Text: {
 		backgroundColor: "transparent",
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1213,52 +1151,14 @@ const styles = StyleSheet.create({
 	remarkNoPackingText: {
 		backgroundColor: "transparent",
 		color: "rgb(164, 164, 164)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 		marginLeft: 3 * alpha,
 	},
-	drinksTwoView: {
-		backgroundColor: "transparent",
-		height: 61 * alpha,
-		marginLeft: 25 * alpha,
-		marginRight: 24 * alpha,
-		flexDirection: "row",
-		alignItems: "flex-start",
-	},
-	mochaTwoText: {
-		color: "rgb(63, 63, 63)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginTop: 20 * alpha,
-	},
-	x1TwoText: {
-		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginRight: 16 * alpha,
-		marginTop: 24 * alpha,
-	},
-	rm11TwoText: {
-		color: "rgb(50, 50, 50)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginTop: 24 * alpha,
-	},
+	
 
 	voucherView: {
 		backgroundColor: "transparent",
@@ -1272,7 +1172,7 @@ const styles = StyleSheet.create({
 	nameFourText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 12* fontAlpha,
 		fontStyle: "normal",
 		
@@ -1280,11 +1180,73 @@ const styles = StyleSheet.create({
 	},
 	descriptionThreeText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
+	},
+
+
+
+	productDetailView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		alignItems: "flex-start",
+	},
+	productNameText: {
+		backgroundColor: "transparent",
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		marginBottom: 5 * alpha,
+	},
+	productVariantText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		marginBottom: 10 * alpha,
+	},
+	productQuantityText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		marginRight: 4 * alpha,
+		width: 25 * alpha,
+	},
+	productPriceText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 45 * alpha,
+	},
+	spacer: {
+		marginBottom: 10 * alpha,
+	},
+	dottedLineImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		alignSelf: "center",
+		position: "absolute",
+		bottom: 0,
+		width: 291 * alpha,
+		height: 2 * alpha,
 	},
 })
