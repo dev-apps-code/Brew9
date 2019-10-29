@@ -16,11 +16,12 @@ import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT} from "../Common/common_style";
 
-@connect(({ members, shops }) => ({
+@connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
 	location: members.location,
-	selectedShop: shops.selectedShop
+	selectedShop: shops.selectedShop,
+	selectedTab:config.selectedTab
 }))
 export default class PickUp extends React.Component {
 
@@ -45,6 +46,7 @@ export default class PickUp extends React.Component {
 			tabBarLabel: "Pickup",
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				store.dispatch(createAction("config/setTab")("pickup"))
 				defaultHandler()
 			},
 			tabBarIcon: ({ iconTintColor, focused }) => {
@@ -69,7 +71,15 @@ export default class PickUp extends React.Component {
 
 	componentDidMount() {
 		this.loadCurrentOrder()
+		console.log("did mount")
 	}
+
+	componentDidUpdate(prevProps, prevState) {
+
+		if (prevProps.selectedTab != this.props.selectedTab) {
+		  	this.loadCurrentOrder()
+		}
+	  }
 
 	onOrderHistoryPressed = () => {
 

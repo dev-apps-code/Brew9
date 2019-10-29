@@ -74,7 +74,7 @@ export default class Checkout extends React.Component {
 			payment_toggle: false,
 			payment_model_visible: false,
 			payment_view_height: 0 * alpha,
-			selected_payment: 'wallet'
+			selected_payment: 'credits'
 		}
 
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -304,14 +304,14 @@ export default class Checkout extends React.Component {
 
 	onWalletButtonPressed = () => {
 		this.setState({
-			selected_payment: "wallet"
+			selected_payment: "credits"
 		})
 		this.tooglePayment()
 	}
 
 	onCreditButtonPressed = () => {
 		this.setState({
-			selected_payment: "credit"
+			selected_payment: "credit_card"
 		})
 		this.tooglePayment()
 	}
@@ -334,7 +334,7 @@ export default class Checkout extends React.Component {
 			// 	return
 			// }
 
-			if ( selected_payment == "wallet") {
+			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
 					this.refs.toast.show("You do not have enough credit. Please top up at our counter");
 					return
@@ -355,7 +355,7 @@ export default class Checkout extends React.Component {
 					}
 				})
 				return
-			} else if ( selected_payment == "credit") {
+			} else if ( selected_payment == "credit_card") {
 				navigate("PayByCard" , {
 					cart_total: this.props.navigation.getParam("cart_total", 0.00)
 				})
@@ -477,7 +477,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.walletView}>
 										<Text
-											style={this.state.selected_payment == "wallet" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 wallet</Text>
+											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 wallet</Text>
 										<View
 											style={{
 												flex: 1,
@@ -490,7 +490,7 @@ export default class Checkout extends React.Component {
 											flex: 1,
 										}}/>
 									{
-										this.state.selected_payment == "wallet" ?
+										this.state.selected_payment == "credits" ?
 										<View
 											style={styles.selectTwoView}/>
 										: <View
@@ -638,13 +638,13 @@ export default class Checkout extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={this.state.selected_payment == "credit" ? styles.creditCardSelectedText : styles.creditCardText}>Credit Card</Text>
+										style={this.state.selected_payment == "credit_card" ? styles.creditCardSelectedText : styles.creditCardText}>Credit Card</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									{
-										this.state.selected_payment == "credit" ?
+										this.state.selected_payment == "credit_card" ?
 										<View
 											style={styles.selectTwoView}/>
 										: <View
@@ -1074,7 +1074,7 @@ export default class Checkout extends React.Component {
 								</View>
 								
 								<Text
-									style={styles.paymenttypeText}>{ this.state.selected_payment == "wallet" ? 
+									style={styles.paymenttypeText}>{ this.state.selected_payment == "credits" ? 
 										`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"
 									
 									}</Text>

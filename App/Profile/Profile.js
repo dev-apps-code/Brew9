@@ -44,6 +44,7 @@ export default class Profile extends React.Component {
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
 
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				store.dispatch(createAction("config/setTab")("profile"))
 				defaultHandler()
 			  },
 			tabBarIcon: ({ iconTintColor, focused }) => {

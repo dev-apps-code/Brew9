@@ -1,9 +1,10 @@
-// export const KSERVERURL = "http://brew9.dreamcode.solutions/api"
+export const KSERVERURL = "http://brew9.dreamcode.solutions/api"
 export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
+export const KPAYMENTYURL = "http://brew9.dreamcode.solutions/payments/baiduri"
 
-export const KSERVERURL ='http://localhost:3000/api'
+// export const KSERVERURL ='http://localhost:3000/api'
 
-export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
+// export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
 // export const KPAYMENTYURL ='http://payment.brew9.com'
 // export const KURL_INFO ='http://localhost:3000/info'
 // export const KSERVERURL ='https://3569c93f.ngrok.io/api'

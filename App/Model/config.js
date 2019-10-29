@@ -8,10 +8,17 @@
   
     state: {
         isToggleShopLocation:false,
+        selectedTab:'home'
     },
   
   
     reducers: {
+      setTab(state, { payload }) {
+        return {
+          ...state,
+          selectedTab:payload,
+        }   
+      },
        setDefaultState(state, { payload }) {
           return {
             ...state,
@@ -23,7 +30,8 @@
           ...state,
           isToggleShopLocation:payload,
         }
-     },     
+     },  
+   
     },
     // effects: {
    

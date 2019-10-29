@@ -58,7 +58,8 @@ export default class Notification extends React.Component {
       tabBarLabel: "Inbox",
       tabBarOnPress: ({ navigation, defaultHandler }) => {
 
-				store.dispatch(createAction("config/setToggleShopLocation")(false))
+        store.dispatch(createAction("config/setToggleShopLocation")(false))
+        store.dispatch(createAction("config/setTab")("notification"))
 				defaultHandler()
 			  },
       tabBarIcon: ({ iconTintColor, focused }) => {

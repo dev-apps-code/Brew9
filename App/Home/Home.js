@@ -99,6 +99,7 @@ export default class Home extends React.Component {
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
 
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				store.dispatch(createAction("config/setTab")("home"))
 				defaultHandler()
 			  },
 			tabBarIcon: ({ iconTintColor, focused }) => {
