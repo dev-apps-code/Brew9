@@ -22,7 +22,8 @@ import {
 	Platform,
 	Alert,
 	Linking,
-	AppState	
+	AppState,
+	Keyboard	
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -234,7 +235,7 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
-		
+		Keyboard.dismiss()
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
@@ -694,12 +695,16 @@ export default class Home extends React.Component {
 
 				if (index >= 0) {
 					cart[index] = cartItem
-					this.setState({ cart }, function(){this.toogleCart(true)})
+					this.setState({ cart }, function(){
+						this.toogleCart(true)
+						this.check_promotion_trigger()
+					})
 				} else {
 					this.setState({
 						cart: this.state.cart.concat(cartItem)
 					}, function(){
 						this.toogleCart(true)
+						this.check_promotion_trigger()
 					})
 				}
 
@@ -726,13 +731,15 @@ export default class Home extends React.Component {
 				if (cartItem.quantity === null) {
 					cart.splice(index, 1)
 				}
-				this.setState({ cart }, function(){this.toogleCart(true)})
+				this.setState({ cart }, function(){
+					this.toogleCart(true)
+					this.check_promotion_trigger()
+				})
 				this.state.cart_total_quantity = (parseInt(this.state.cart_total_quantity) - 1)
 				this.state.cart_total = (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
 			}
-			this.check_promotion_trigger()
 			this.forceUpdate()
-
+			
 		} else {
 
 			var item = this.state.products[index]
@@ -804,18 +811,21 @@ export default class Home extends React.Component {
 
 		const { shop, cart_total } = this.state
 
-		let cart = [...this.state.cart]
+		let newcart = [...this.state.cart]
+
+		var promotions_item = []
 
 		if (shop.trigger_promotions != undefined && shop.trigger_promotions.length > 0) {
 			
 			for (var index in shop.trigger_promotions) {
+
+				
 				var promotion = shop.trigger_promotions[index]
 				var trigger_price = promotion.trigger_price ? parseFloat(promotion.trigger_price) : 0.00
 				var remaining = trigger_price - cart_total
 
-				const search_cart_promo_index = cart.findIndex(element => element.name == promotion.cart_text)
+				const search_cart_promo_index = newcart.findIndex(element => element.name == promotion.cart_text)
 
-				// console.log("Search", search_cart_promo)
 				if (remaining < 0 && search_cart_promo_index < 0) {
 
 					shop.trigger_promotions[index].has_triggered = true
@@ -826,18 +836,24 @@ export default class Home extends React.Component {
 						description:  "",
 						price: 0.00,
 					}
-	
-					this.setState({
-						cart: cart.concat(cartItem),
-					})
+					promotions_item.push(cartItem)
+					// console.log("Add", cartItem.name)
+					// console.log("Items", promotions_item)
+					// // this.setState({
+					// // 	cart: newcart.concat(cartItem),
+					// // })
 				} else if (remaining > 0 && search_cart_promo_index > 0){
-					cart.splice(search_cart_promo_index, 1)
+					newcart.splice(search_cart_promo_index, 1)
 					this.setState({
-						cart
+						cart: newcart
 					})
 				}
 			}
 		}
+		// console.log("Items", promotions_item)
+		this.setState({
+			cart: newcart.concat(promotions_item),
+		})
 	}
 
 	onAddToCartPressed = (product) => {

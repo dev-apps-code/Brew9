@@ -152,7 +152,7 @@ export default class PointHistory extends React.Component {
 		var expiry_date = ""
 
 		if (members.point_expiry_date != undefined){
-			expiry_date = members.point_expiry_date
+			expiry_date = `Expiry Date: ${members.point_expiry_date}`
 		}
 
 		return <View
@@ -167,6 +167,7 @@ export default class PointHistory extends React.Component {
 							style={styles.pointsCollectedText}>Points Collected</Text>
 						<Text
 							style={styles.pointsText}>{members.points}</Text>
+							{members.point_expiry_date != undefined}
 						<Text
 							style={styles.pointsExpiryText}>{expiry_date}</Text>
 					</View>
@@ -266,8 +267,8 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		flexDirection: "column",
 		width: 300 * alpha,
-		height: 57 * alpha,
-		marginTop: 28 * alpha,
+		flex: 1,
+		marginTop: 18 * alpha,
 	},
 	pointsCollectedText: {
 		color: "rgb(59, 59, 59)",
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		top: 10 * alpha,
+		top: 5 * alpha,
 	},
 	pointsExpiryText: {
 		color: LIGHT_GREY,

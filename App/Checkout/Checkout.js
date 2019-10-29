@@ -290,9 +290,9 @@ export default class Checkout extends React.Component {
 				this.refs.toast.show(eventObject.message);				
 			}
 		}
-
+		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		const obj = new MakeOrderRequestObj(cart, voucher_item_ids)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
 			createAction('shops/loadMakeOrder')({
