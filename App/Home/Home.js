@@ -1212,7 +1212,33 @@ export default class Home extends React.Component {
 		let selected_product = this.get_product(this.state.selected_index)
 		let {shop,cart,delivery} = this.state
 		let {isToggleShopLocation} = this.props
-		
+		let categoryBottomSpacer = undefined
+		if (shop !== null ){
+			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+				if (cart.length > 0 ){
+					console.log("Position3")
+					categoryBottomSpacer = styles.categoryListPosition3
+				}else{
+					console.log("Position2")
+					categoryBottomSpacer = styles.categoryListPosition2
+				}
+			}else{
+				if (cart.length > 0 ){
+					console.log("Position2")
+					categoryBottomSpacer = styles.categoryListPosition2
+				}else{
+					console.log("Position1")
+					categoryBottomSpacer = styles.categoryListPosition1
+				}
+			}
+		}else{
+			if (cart.length > 0 ){
+				categoryBottomSpacer = styles.categoryListPosition2
+			}else{
+				categoryBottomSpacer = styles.categoryListPosition1
+			}
+		}
+
 		return <View style={styles.page1View}>	
 			
 			
@@ -1307,12 +1333,15 @@ export default class Home extends React.Component {
 						style={styles.productsectionView}
 						onLayout={(event) => this.measureView(event)}>
 						<View
-							style={styles.categorylistFlatListViewWrapper}>
+							style={[styles.categorylistFlatListViewWrapper]}>
 							<FlatList
 								renderItem={this.renderCategorylistFlatListCell}
 								data={this.state.data}
 								style={styles.categorylistFlatList}
 								keyExtractor={(item, index) => index.toString()}/>
+
+								<View style={categoryBottomSpacer}/>
+								{this.renderFeaturedPromo(shop,cart)}
 						</View>
 						<View
 							style={{
@@ -1443,11 +1472,14 @@ export default class Home extends React.Component {
 				</Animated.View>
 				{this.renderPopup()}
 				
-			{this.renderFeaturedPromo(shop,cart)}
+			
 			<View style={styles.bottomAlertView}>
 				{this.renderAlertBar(cart,shop)}
-				{this.renderBottomBar(cart,shop)}			
+				{this.renderBottomBar(cart,shop)}	
+						
 			</View>
+
+			
 			
 			<Toast ref="toast"
 				position="center"/>
@@ -1879,8 +1911,18 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 	},
+	
 	categorylistFlatListViewWrapper: {
 		width: 85 * alpha,
+	},
+	categoryListPosition1: {
+		height: 40 * alpha
+	},
+	categoryListPosition2: {
+		height: 80 * alpha
+	},
+	categoryListPosition3: {
+		height: 130 * alpha
 	},
 	productlistFlatList: {
 		backgroundColor: "white",
@@ -1888,7 +1930,6 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	productlistFlatListViewWrapper: {
-
 		width: 290 * alpha,
 		marginBottom: 1 * alpha,
 	},
@@ -2781,7 +2822,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		width: 60 * alpha,
 		height: 30 * alpha,
-		left: 10 * alpha
+		left: 10 * alpha,
 	},
 	featuredpromoButtonPosition1: {	
 		bottom: 10 * alpha,

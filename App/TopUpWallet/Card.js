@@ -97,24 +97,23 @@ const styles = StyleSheet.create({
 	cardcell: {
 		backgroundColor: "transparent",
 		width: "100%",
-		height: 244 * alpha,
+		flex: 1,
+		flexDirection: "column"
 	},
 	cardImage: {
+		marginTop: 10 * alpha,
 		backgroundColor: "transparent",
-		resizeMode: "cover",
-		position: "absolute",
+		resizeMode: "contain",
 		alignSelf: "center",
-		width: 339 * alpha,
-		top: 15 * alpha,
-		height: 191 * alpha,
+		width: 340 * alpha,
+		height: 196 * alpha,
 	},
 	infoView: {
 		backgroundColor: "transparent",
-		position: "absolute",
 		alignSelf: "center",
-		width: 339 * alpha,
-		top: 190 * alpha,
+		width: 340 * alpha,
 		height: 39 * alpha,
+		marginBottom: 10 * alpha,
 	},
 	backgroundImage: {
 		resizeMode: "cover",
