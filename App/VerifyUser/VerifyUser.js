@@ -6,7 +6,8 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from "react-native"
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, 
+	Keyboard } from "react-native"
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -52,11 +53,9 @@ export default class VerifyUser extends React.Component {
 
 	}
 
-	
-
 	componentDidMount() {
 	}
-
+	  
 	componentWillMount() {
 	}
 
@@ -73,6 +72,7 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onSendPressed = () => {
+		Keyboard.dismiss()
 		if (this.state.is_counting){
 			this.refs.toast.show("Please wait for 2 minutes before trying to resend.");
 			return
@@ -133,14 +133,16 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onVerifyPressed = () => {
+		Keyboard.dismiss()
 		this.loadActivateAccount()
 	}
+
 
 	loadActivateAccount(){
         const { dispatch } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-
+			
             if (eventObject.success) {
 
 				var obj = eventObject.result
@@ -153,7 +155,7 @@ export default class VerifyUser extends React.Component {
 				}                
             }else{
 				this.refs.toast.show(eventObject.message)
-            }
+			}
 			this.setState({
 				loading: false,
 			})
@@ -496,7 +498,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	activationCodeTextInput: {
-
 		color: "rgb(46, 46, 46)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,

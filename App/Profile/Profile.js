@@ -349,13 +349,13 @@ export default class Profile extends React.Component {
 						style={styles.membersectionView}>
 						<View
 							style={styles.topbackgroundView}>
-							<View
+							{/* <View
 								style={styles.fill1View}/>
 							<Image
 								source={require("./../../assets/images/fill-2.png")}
-								style={styles.fill2Image}/>
+								style={styles.fill2Image}/> */}
 							<Image
-								source={require("./../../assets/images/group-133-3.png")}
+								source={require("./../../assets/images/profile_top_banner.png")}
 								style={styles.group133Image}/>
 						</View>
 						<View
@@ -1371,7 +1371,8 @@ const styles = StyleSheet.create({
 	},
 	welcomeSomebodyText: {
 		backgroundColor: "transparent",
-		color: "rgb(250, 250, 250)",
+		// color: "rgb(250, 250, 250)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",

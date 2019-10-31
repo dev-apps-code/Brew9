@@ -1188,7 +1188,7 @@ export default class Home extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.optionsText}>{variant_array.join(",")}</Text>
+								style={styles.optionsText}>{variant_array.join(", ")}</Text>
 						</View>
 						<TouchableOpacity
 							disabled={!enabled}
@@ -1413,7 +1413,7 @@ export default class Home extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.businessHour1000Text}>Business Hour: {shop ? shop.opening_hour.start_time : ""} ~ {shop ? shop.opening_hour.end_time : ""}</Text>
+							style={styles.businessHour1000Text}>Business Hour: {shop ? shop.opening_hour.start_time : ""} - {shop ? shop.opening_hour.end_time : ""}</Text>
 					</View>
 				</View>
 				)}
@@ -2495,7 +2495,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily:  TITLE_FONT,
 		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
