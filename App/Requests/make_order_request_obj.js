@@ -14,7 +14,7 @@ class MakeOrderRequestObj extends BaseRequestObject{
    }
 
    getFormData(){
-    var string =  JSON.stringify({'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids});
+    var string =  JSON.stringify({'payment_method':this.payment_method,'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids});
 
     return string
    }
