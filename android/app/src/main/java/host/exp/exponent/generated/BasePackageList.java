@@ -7,9 +7,9 @@ import org.unimodules.core.interfaces.Package;
 public class BasePackageList {
   public List<Package> getPackageList() {
     return Arrays.<Package>asList(
+        new expo.modules.constants.ConstantsPackage(),
         new expo.modules.barcodescanner.BarCodeScannerPackage(),
         new expo.modules.camera.CameraPackage(),
-        new expo.modules.constants.ConstantsPackage(),
         new expo.modules.facebook.FacebookPackage(),
         new expo.modules.filesystem.FileSystemPackage(),
         new expo.modules.font.FontLoaderPackage(),

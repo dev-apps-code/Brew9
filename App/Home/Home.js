@@ -1443,12 +1443,12 @@ export default class Home extends React.Component {
 				</Animated.View>
 				{this.renderPopup()}
 				
-			
+			{this.renderFeaturedPromo(shop,cart)}
 			<View style={styles.bottomAlertView}>
 				{this.renderAlertBar(cart,shop)}
 				{this.renderBottomBar(cart,shop)}			
 			</View>
-			{this.renderFeaturedPromo(shop,cart)}
+			
 			<Toast ref="toast"
 				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>

@@ -255,8 +255,8 @@ export default class Checkout extends React.Component {
 
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
-
-		const {cart,vouchers_to_use} = this.state
+		const { navigate } = this.props.navigation
+		const {cart,vouchers_to_use, selected_payment} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			console.log(eventObject)
@@ -264,17 +264,29 @@ export default class Checkout extends React.Component {
 				loading: false,
 			})
 			if (eventObject.success) {
-				this.setState({
-					modal_title:'Brew9',
-					modal_description:eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-						this.clearCart()
-					},
-					modal_visible:true,
-				})
+
+				if (selected_payment == 'credits'){
+					this.setState({
+						modal_title:'Brew9',
+						modal_description:eventObject.message,
+						modal_ok_text: null,
+						modal_cancelable: false,
+						modal_ok_action: ()=> {
+							this.setState({modal_visible:false})
+							this.clearCart()
+						},
+						modal_visible:true,
+					})
+				}else{
+					const order = eventObject.result
+					navigate("PaymentsWebview", {
+						name: `Brew9 Order`,
+						order_id: order.receipt_no,
+						session_id:order.session_id,
+						amount: order.total,
+						type:'order',
+					})
+				}
 			}
 			else{
 
@@ -292,7 +304,7 @@ export default class Checkout extends React.Component {
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_method)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
 			createAction('shops/loadMakeOrder')({
@@ -356,8 +368,19 @@ export default class Checkout extends React.Component {
 				})
 				return
 			} else if ( selected_payment == "credit_card") {
-				navigate("PayByCard" , {
-					cart_total: this.props.navigation.getParam("cart_total", 0.00)
+				this.setState({
+					modal_visible:true,
+					modal_title: "Brew9",
+					modal_description: "Are you sure you want to confirm the order?",
+					modal_ok_text: null,
+					modal_cancelable: true,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+						this.loadMakeOrder()
+					},
+					modal_cancel_action: ()=> {
+						this.setState({modal_visible:false})
+					}
 				})
 				return
 			}
