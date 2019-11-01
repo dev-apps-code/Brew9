@@ -430,10 +430,10 @@ export default class Profile extends React.Component {
 														pointerEvents="box-none"
 														style={{
 															position: "absolute",
-															left: 0,
-															right: 3 * alpha,
+															left: 0 * alpha,
+															right: 0 * alpha,
 															top: 0,
-															height: 11 * alpha,
+															height: 15 * alpha,
 															flexDirection: "row",
 															alignItems: "flex-start",
 														}}>
@@ -602,7 +602,7 @@ export default class Profile extends React.Component {
 								pointerEvents="box-none"
 								style={{
 									height: 103 * alpha,
-									marginLeft: 45 * alpha,
+									marginLeft: 25 * alpha,
 									marginRight: 28 * alpha,
 									flexDirection: "row",
 									alignItems: "center",
@@ -624,112 +624,15 @@ export default class Profile extends React.Component {
 						
 						</View>
 				</TouchableOpacity>
-				{/* <View
-					style={styles.monthlyBenefitView}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							width: 161 * alpha,
-							height: 121 * alpha,
-							alignItems: "flex-start",
-						}}>
-						<Text
-							style={styles.monthlyBenefitsCopyText}>Monthly Benefits</Text>
-						<View
-							pointerEvents="box-none"
-							style={{
-								width: 146 * alpha,
-								height: 85 * alpha,
-								marginLeft: 15 * alpha,
-								marginTop: 18 * alpha,
-								flexDirection: "row",
-								alignItems: "flex-start",
-							}}>
-							<View
-								style={styles.priorityView}>
-								<View
-									style={styles.groupView}>
-									<Image
-										source={require("./../../assets/images/icon-28-copy-2.png")}
-										style={styles.icon28CopyImage}/>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.priorityCopyText}>Priority</Text>
-							</View>
-							<View
-								style={styles.freeDeliveryView}>
-								<View
-									style={styles.group2View}>
-									<Image
-										source={require("./../../assets/images/icon-29-copy-2.png")}
-										style={styles.icon29CopyImage}/>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.freeDeliveryCopyText}>Free Delivery</Text>
-							</View>
-						</View>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<View
-						style={styles.buy1Free1View}>
-						<View
-							style={styles.group3View}>
-							<Image
-								source={require("./../../assets/images/icon-30-copy-2.png")}
-								style={styles.icon30CopyImage}/>
-						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.buy1Free1CopyText}>Buy 1 Free 1</Text>
-					</View>
-					<View
-						pointerEvents="box-none"
-						style={{
-							width: 75 * alpha,
-							height: 121 * alpha,
-							alignItems: "flex-end",
-						}}>
-						<Text
-							style={styles.moreCopyText}>more</Text>
-						<View
-							style={styles.buy2Free1View}>
-							<View
-								style={styles.group5View}>
-								<Image
-									source={require("./../../assets/images/icon-31-copy-2.png")}
-									style={styles.icon31CopyImage}/>
-							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.buy2Free1CopyText}>Buy 2 Free 1</Text>
-						</View>
-					</View>
-				</View> */}
+				
 				
 				<View
 					style={styles.menuView}>
 						<TouchableOpacity
 							onPress={() => this.onLogoutButtonPress()}
-							style={styles.logoutbuttonButton}>
+							style={styles.menuRowbuttonButton}>
 						<View
-							style={styles.logoutView}>
+							style={styles.menuRowView}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -743,21 +646,21 @@ export default class Profile extends React.Component {
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 14 * alpha,
+										height: 24 * alpha,
 										marginLeft: 20 * alpha,
 										marginRight: 20 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.logoutLabelText}>{isLogin ? "My Profile" : "Signup/Login"}</Text>
+										style={styles.menuRowLabelText}>{isLogin ? "My Profile" : "Signup/Login"}</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/arrow.png")}
-											stytle={styles.arrowImage}/>
+											source={require("./../../assets/images/forward.png")}
+											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
 							<View
@@ -769,18 +672,17 @@ export default class Profile extends React.Component {
 									top: 0 * alpha,
 									height: 58 * alpha,
 								}}>
-								<Text
-									style={styles.logoutbuttonButtonText}></Text>
+								
 								<View
-									style={styles.lineView}/>
+									style={styles.menuRowLineView}/>
 							</View>
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => this.onOrderButtonPressed()}
-						style={styles.orderhostorybuttonButton}>
+						style={styles.menuRowbuttonButton}>
 						<View
-							style={styles.orderHistoryView}>
+							style={styles.menuRowView}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -794,21 +696,21 @@ export default class Profile extends React.Component {
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 14 * alpha,
+										height: 24 * alpha,
 										marginLeft: 20 * alpha,
 										marginRight: 20 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.orderHistoryLabelText : styles.orderHistoryDisableLabelText}>Order History</Text>
+										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>Order History</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
+											source={require("./../../assets/images/forward.png")}
+											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
 							<View
@@ -822,18 +724,18 @@ export default class Profile extends React.Component {
 								}}>
 								
 									<Text
-										style={styles.orderhostorybuttonButtonText}></Text>
+										style={styles.menuRowDescriptionText}></Text>
 								
 								<View
-									style={styles.lineView}/>
+									style={styles.menuRowLineView}/>
 							</View>
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => this.onQRButtonPressed()}
-						style={styles.qrbuttonButton}>
+						style={styles.menuRowbuttonButton}>
 						<View
-							style={styles.qrCodeView}>
+							style={styles.menuRowView}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -847,23 +749,23 @@ export default class Profile extends React.Component {
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 14 * alpha,
+										height: 24 * alpha,
 										marginLeft: 20 * alpha,
 										marginRight: 20 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.qrCodeLabelText : styles.qrCodeDisableLabelText}>QR Code</Text>
+										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>QR Code</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.qrDescriptionText}>Scan for reward or pay</Text>
+										style={styles.menuRowDescriptionText}>Scan for reward or pay</Text>
 									<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
+											source={require("./../../assets/images/forward.png")}
+											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
 							<View
@@ -876,74 +778,17 @@ export default class Profile extends React.Component {
 									bottom: 0,
 								}}>
 								
-									<Text
-										style={styles.qrbuttonButtonText}></Text>
-								
 								<View
-									style={styles.lineTwoView}/>
+									style={styles.menuRowLineView}/>
 							</View>
 						</View>
 					</TouchableOpacity>
-					{/* <TouchableOpacity
-						onPress={() => this.onRedeemButtonPressed()}
-						style={styles.redeembuttonButton}>
-						<View
-							style={styles.redeemStationView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 14 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.redeemStationLabelText}>Redeem Station</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.redeemDescriptionText}>Redeem for member or voucher</Text>
-									<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
-								
-									<Text
-										style={styles.redeembuttonButtonText}></Text>
-								
-								<View
-									style={styles.lineThreeView}/>
-							</View>
-						</View>
-					</TouchableOpacity> */}										
+													
 					<TouchableOpacity
 							onPress={() => this.onAboutButtonPressed()}
-							style={styles.aboutbuttonButton}>
+							style={styles.menuRowbuttonButton}>
 						<View
-							style={styles.aboutView}>
+							style={styles.menuRowView}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -957,21 +802,21 @@ export default class Profile extends React.Component {
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 14 * alpha,
+										height: 24 * alpha,
 										marginLeft: 20 * alpha,
 										marginRight: 20 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.aboutLabelText : styles.aboutDisableLabelText}>About Brew9</Text>
+										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>About Brew9</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/arrow.png")}
-											style={styles.arrowImage}/>
+											source={require("./../../assets/images/forward.png")}
+											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
 							<View
@@ -983,13 +828,8 @@ export default class Profile extends React.Component {
 									top: 0 * alpha,
 									height: 58 * alpha,
 								}}>
-								<Text
-									style={styles.aboutbuttonButtonText}></Text>
-								
 							</View>
 						</View>
-						<View
-								style={styles.lineThreeView}/>
 					</TouchableOpacity>
 				</View>
 			</ScrollView>
@@ -1088,7 +928,7 @@ const styles = StyleSheet.create({
 	membershiplabelText: {
 		color: "rgb(65, 28, 15)",
 		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
 		textAlign: "center",
@@ -1123,25 +963,26 @@ const styles = StyleSheet.create({
 		width: 193 * alpha,
 		height: 22 * alpha,
 		marginTop: 6 * alpha,
+		marginLeft: 2 * alpha,
 		elevation: 2 * alpha,
 	},
 	initiallevelText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
-		textAlign: "center",
+		textAlign: "left",
 		backgroundColor: "transparent",
 		elevation: 2 * alpha,
 	},
 	nextlevelText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "bold",
-		textAlign: "center",
+		textAlign: "right",
 		backgroundColor: "transparent",
 		elevation: 2 * alpha,
 	},
@@ -1176,13 +1017,13 @@ const styles = StyleSheet.create({
 	levelexpText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 7 * fontAlpha,
+		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 50 * alpha,
+		alignSelf: "center",
 		top: 1 * alpha,
 	},
 	profileImage: {
@@ -1210,7 +1051,7 @@ const styles = StyleSheet.create({
 	pointvalueText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 15 * fontAlpha,
+		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1249,7 +1090,7 @@ const styles = StyleSheet.create({
 	walletcreditText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 15 * fontAlpha,
+		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1304,7 +1145,7 @@ const styles = StyleSheet.create({
 	rewardvalueText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 15 * fontAlpha,
+		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1371,7 +1212,6 @@ const styles = StyleSheet.create({
 	},
 	welcomeSomebodyText: {
 		backgroundColor: "transparent",
-		// color: "rgb(250, 250, 250)",
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
@@ -1396,10 +1236,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 20 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 	},
 	missioniconImage: {
 		backgroundColor: "transparent",
@@ -1429,177 +1269,17 @@ const styles = StyleSheet.create({
 		marginTop: 167 * alpha,
 		elevation: 2 * alpha,
 	},
-	monthlyBenefitView: {
-		backgroundColor: "transparent",
-		height: 121 * alpha,
-		marginLeft: 18 * alpha,
-		marginRight: 19 * alpha,
-		marginTop: 41 * alpha,
-		flexDirection: "row",
-		alignItems: "flex-start",
-	},
-	monthlyBenefitsCopyText: {
-		color: "rgb(69, 69, 69)",
-		fontFamily: "Helvetica-Bold",
-		fontSize: 15 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	priorityView: {
-		backgroundColor: "transparent",
-		width: 60 * alpha,
-		height: 85 * alpha,
-	},
-	groupView: {
-		backgroundColor: "white",
-		borderRadius: 30 * alpha,
-		shadowColor: "rgba(205, 205, 205, 0.5)",
-		shadowRadius: 7,
-		shadowOpacity: 1,
-		height: 60 * alpha,
-		justifyContent: "center",
-	},
-	icon28CopyImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: null,
-		height: 47 * alpha,
-		marginLeft: 7 * alpha,
-		marginRight: 10 * alpha,
-	},
-	priorityCopyText: {
-		backgroundColor: "transparent",
-		color: "rgb(44, 44, 44)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		marginLeft: 12 * alpha,
-		marginRight: 13 * alpha,
-	},
-	freeDeliveryView: {
-		backgroundColor: "transparent",
-		width: 66 * alpha,
-		height: 85 * alpha,
-		marginLeft: 20 * alpha,
-	},
-	group2View: {
-		backgroundColor: "white",
-		borderRadius: 30 * alpha,
-		shadowColor: "rgba(205, 205, 205, 0.5)",
-		shadowRadius: 7,
-		shadowOpacity: 1,
-		height: 60 * alpha,
-		marginLeft: 3 * alpha,
-		marginRight: 3 * alpha,
-		justifyContent: "center",
-	},
-	icon29CopyImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 46 * alpha,
-		marginLeft: 9 * alpha,
-		marginRight: 9 * alpha,
-	},
-	freeDeliveryCopyText: {
-		color: "rgb(44, 44, 44)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	buy1Free1View: {
-		backgroundColor: "transparent",
-		width: 63 * alpha,
-		height: 85 * alpha,
-		marginRight: 20 * alpha,
-		marginTop: 36 * alpha,
-	},
-	group3View: {
-		backgroundColor: "white",
-		borderRadius: 30 * alpha,
-		shadowColor: "rgba(205, 205, 205, 0.5)",
-		shadowRadius: 7,
-		shadowOpacity: 1,
-		height: 60 * alpha,
-		marginLeft: 1 * alpha,
-		marginRight: 2 * alpha,
-		justifyContent: "center",
-	},
-	icon30CopyImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 46 * alpha,
-		marginLeft: 9 * alpha,
-		marginRight: 8 * alpha,
-	},
-	buy1Free1CopyText: {
-		color: "rgb(44, 44, 44)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	moreCopyText: {
-		color: "rgb(69, 69, 69)",
-		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "bold",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	buy2Free1View: {
-		backgroundColor: "transparent",
-		width: 63 * alpha,
-		height: 85 * alpha,
-		marginRight: 12 * alpha,
-		marginTop: 18 * alpha,
-	},
-	group5View: {
-		backgroundColor: "white",
-		borderRadius: 30 * alpha,
-		shadowColor: "rgba(205, 205, 205, 0.5)",
-		shadowRadius: 7,
-		shadowOpacity: 1,
-		height: 60 * alpha,
-		marginLeft: 1 * alpha,
-		marginRight: 2 * alpha,
-		justifyContent: "center",
-	},
-	icon31CopyImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: null,
-		height: 47 * alpha,
-		marginLeft: 9 * alpha,
-		marginRight: 8 * alpha,
-	},
-	buy2Free1CopyText: {
-		color: "rgb(44, 44, 44)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
+	
 	menuView: {
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 13 * alpha,
 		marginBottom: 13 * alpha,
 	},
-	orderHistoryView: {
+
+
+
+	menuRowView: {
 		backgroundColor: "transparent",
 		height: 58 * alpha,
 		marginRight: 1 * alpha,
@@ -1607,86 +1287,25 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	orderHistoryLabelText: {
+	menuRowLabelText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
-	orderHistoryDisableLabelText: {
+	menuRowDisableLabelText: {
 		color: "rgb(188, 188, 188)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
-	arrowView: {
-		backgroundColor: "transparent",
-		width: 7 * alpha,
-		height: 8 * alpha,
-	},
-	arrowImage: {
-		width: 7 * alpha,
-		resizeMode: "contain"
-	},
-	orderhostorybuttonButton: {
-		backgroundColor: "transparent",
-		flex: 1,
-	},
-	orderhostorybuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	orderhostorybuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	lineView: {
-		backgroundColor: "transparent",
-		borderWidth: 1 * alpha,
-		borderColor: "rgb(244, 244, 244)",
-		borderStyle: "solid",
-		position: "absolute",
-		alignSelf: "center",
-		width: 376 * alpha,
-		top: 57 * alpha,
-		height: 1 * alpha,
-	},
-	qrCodeView: {
-		backgroundColor: "transparent",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	qrCodeLabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	qrCodeDisableLabelText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	qrDescriptionText: {
+	menuRowDescriptionText: {
 		color: "rgb(188, 188, 188)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
@@ -1701,219 +1320,27 @@ const styles = StyleSheet.create({
 		width: 7 * alpha,
 		height: 8 * alpha,
 	},
-	qrbuttonButton: {
+	menuRowbuttonButton: {
 		backgroundColor: "transparent",
 		flex: 1,
 	},
-	qrbuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	qrbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	lineTwoView: {
+	
+	menuRowLineView: {
 		backgroundColor: "transparent",
 		borderWidth: 1 * alpha,
-		borderColor: "rgb(244, 244, 244)",
+		borderColor: "rgb(245, 245, 245)",
 		borderStyle: "solid",
 		position: "absolute",
 		alignSelf: "center",
 		width: 375 * alpha,
 		top: 57 * alpha,
 		height: 1 * alpha,
+		left: 20 * alpha,
 	},
-	redeemStationView: {
-		backgroundColor: "transparent",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	redeemStationLabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	redeemDescriptionText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginRight: 23 * alpha,
-	},
-	arrowThreeView: {
-		backgroundColor: "transparent",
-		width: 7 * alpha,
-		height: 8 * alpha,
-	},
-	redeembuttonButton: {
-		backgroundColor: "transparent",
-		flex: 1,
-	},
-	redeembuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	redeembuttonButtonImage: {
+	menuRowArrowImage: {
+		width: 10 * alpha,
+		tintColor: "rgb(195, 195, 195)",
 		resizeMode: "contain",
 	},
-	lineThreeView: {
-		backgroundColor: "transparent",
-		borderWidth: 1 * alpha,
-		borderColor: "rgb(244, 244, 244)",
-		borderStyle: "solid",
-		position: "absolute",
-		left: 1 * alpha,
-		right: 0 * alpha,
-		top: 57 * alpha,
-		height: 1 * alpha,
-	},
-	moreView: {
-		backgroundColor: "transparent",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-	},
-	moreCopyTwoText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginLeft: 20 * alpha,
-	},
-	logoutView: {
-		backgroundColor: "transparent",
-		width: "100%",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	logoutLabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	logoutDescriptionText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginRight: 23 * alpha,
-	},
-	arrowThreeView: {
-		backgroundColor: "transparent",
-		width: 7 * alpha,
-		height: 8 * alpha,
-	},
-	logoutbuttonButton: {
-		backgroundColor: "transparent",
-		flex: 1,
-	},
-	logoutbuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	logoutbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	aboutView: {
-		backgroundColor: "transparent",
-		width: "100%",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	aboutLabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	aboutDisableLabelText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	aboutDescriptionText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginRight: 23 * alpha,
-	},
-	arrowThreeView: {
-		backgroundColor: "transparent",
-		width: 7 * alpha,
-		height: 8 * alpha,
-	},
-	aboutbuttonButton: {
-		backgroundColor: "transparent",
-		flex: 1,
-	},
-	aboutbuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	aboutbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	lineThreeView: {
-		backgroundColor: "transparent",
-		borderWidth: 1 * alpha,
-		borderColor: "rgb(244, 244, 244)",
-		borderStyle: "solid",
-		position: "absolute",
-		left: 1 * alpha,
-		right: 0 * alpha,
-		top: 57 * alpha,
-		height: 1 * alpha,
-	},
+
 })

@@ -1283,30 +1283,28 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery} = this.state
 		let {isToggleShopLocation} = this.props
 		let categoryBottomSpacer = undefined
+
 		if (shop !== null ){
 			if (shop.is_opened == false || shop.shop_busy_template_message != null){
-				if (cart.length > 0 ){
-					console.log("Position3")
+				if (shop.featured_promotion !== null) {
 					categoryBottomSpacer = styles.categoryListPosition3
-				}else{
-					console.log("Position2")
-					categoryBottomSpacer = styles.categoryListPosition2
+				} else {
+					categoryBottomSpacer = styles.categoryListPosition4
 				}
-			}else{
-				if (cart.length > 0 ){
-					console.log("Position2")
+			} else {
+				if (shop.featured_promotion !== null && cart.length > 0) { //Have Feature Have Cart
+					categoryBottomSpacer = styles.categoryListPosition3
+				} else if (shop.featured_promotion !== null && cart.length == 0) { //Have Feature No Cart
 					categoryBottomSpacer = styles.categoryListPosition2
-				}else{
-					console.log("Position1")
+				} else if (shop.featured_promotion == null && cart.length > 0) { //No Feature Have Cart
+					
+					categoryBottomSpacer = styles.categoryListPosition2
+				} else { //All no
 					categoryBottomSpacer = styles.categoryListPosition1
 				}
 			}
-		}else{
-			if (cart.length > 0 ){
-				categoryBottomSpacer = styles.categoryListPosition2
-			}else{
-				categoryBottomSpacer = styles.categoryListPosition1
-			}
+		} else {
+			categoryBottomSpacer = styles.categoryListPosition1
 		}
 
 		return <View style={styles.page1View}>	
@@ -2019,13 +2017,16 @@ const styles = StyleSheet.create({
 		width: 85 * alpha,
 	},
 	categoryListPosition1: {
-		height: 40 * alpha
+		height: 0 * alpha
 	},
 	categoryListPosition2: {
-		height: 80 * alpha
+		height: 40 * alpha
 	},
 	categoryListPosition3: {
-		height: 130 * alpha
+		height: 80 * alpha
+	},
+	categoryListPosition4: {
+		height: 30 * alpha
 	},
 	productlistFlatList: {
 		backgroundColor: "white",
