@@ -9,6 +9,7 @@
 import { Text, Image, TouchableWithoutFeedback, TouchableOpacity, View, StyleSheet } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 export default class OrderCell extends React.Component {
 
@@ -44,6 +45,10 @@ export default class OrderCell extends React.Component {
 		navigate("OrderInvoice")
 	}
 
+	onOrderPress = () => {
+
+	}
+
 	render() {
 
 		var trim_products = this.props.products.slice(0, 5);
@@ -58,7 +63,7 @@ export default class OrderCell extends React.Component {
 		)
 
 		return <TouchableWithoutFeedback
-			onPress={this.onPuchongPress}>
+			onPress={() => this.onOrderPress()}>
 			<View
 				navigation={this.props.navigation}
 				style={styles.ordercell}>
@@ -70,7 +75,7 @@ export default class OrderCell extends React.Component {
 					<View
 						style={styles.orderheaderView}>
 						<Text
-							style={styles.puchongBranchText}>{this.props.shop_name}</Text>
+							style={styles.shopBranchText}>{this.props.shop_name}</Text>
 						<View
 							style={{
 								flex: 1,
@@ -104,7 +109,7 @@ export default class OrderCell extends React.Component {
 					<View
 						style={styles.ordernoView}>
 						<Text
-							style={styles.labelText}>Order No.   :</Text>
+							style={styles.orderNoText}>Order No. :</Text>
 						<Text
 							style={styles.ordernumberText}>{this.props.receipt_no}</Text>
 					</View>
@@ -114,7 +119,7 @@ export default class OrderCell extends React.Component {
 							alignSelf: "stretch",
 							height: 18 * alpha,
 							marginLeft: 20 * alpha,
-							marginRight: 20 * alpha,
+							marginRight: 0 * alpha,
 							marginTop: 1 * alpha,
 							flexDirection: "row",
 							alignItems: "flex-start",
@@ -122,9 +127,9 @@ export default class OrderCell extends React.Component {
 						<View
 							style={styles.ordertimeView}>
 							<Text
-								style={styles.labelTwoText}>Order Time :</Text>
+								style={styles.orderText}>Order Time :</Text>
 							<Text
-								style={styles.textText}>{this.props.payment_time}</Text>
+								style={styles.orderTimeText}>{this.props.payment_time}</Text>
 						</View>
 						<View
 							style={{
@@ -134,12 +139,12 @@ export default class OrderCell extends React.Component {
 							style={styles.priceText}>${this.props.total}</Text>
 					</View>
 				</View>
-				<View
+				{/* <View
 					style={{
 						flex: 1,
 					}}/>
 				<View
-					style={styles.lineView}/>
+					style={styles.lineView}/> */}
 				{/*<View*/}
 				{/*	style={styles.optionView}>*/}
 				{/*	<TouchableOpacity*/}
@@ -165,7 +170,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		width: "100%",
 		// height: 228 * alpha,
-		height: 197 * alpha,
+		flex: 1,
+		marginBottom: 10 * alpha,
 	},
 	orderheaderView: {
 		backgroundColor: "transparent",
@@ -177,10 +183,10 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	puchongBranchText: {
+	shopBranchText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -189,11 +195,11 @@ const styles = StyleSheet.create({
 	},
 	completeButtonText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
+		textTransform: 'capitalize'
 	},
 	completeButton: {
 		backgroundColor: "transparent",
@@ -254,10 +260,10 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	labelText: {
+	orderNoText: {
 		backgroundColor: "transparent",
 		color: "rgb(149, 149, 149)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -266,12 +272,12 @@ const styles = StyleSheet.create({
 	ordernumberText: {
 		backgroundColor: "transparent",
 		color: "rgb(149, 149, 149)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginLeft: 13 * alpha,
+		marginLeft: 5 * alpha,
 	},
 	ordertimeView: {
 		backgroundColor: "transparent",
@@ -281,41 +287,42 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	labelTwoText: {
+	orderText: {
 		backgroundColor: "transparent",
 		color: "rgb(149, 149, 149)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	textText: {
+	orderTimeText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 12 * alpha,
+		marginLeft: 5 * alpha,
 	},
 	priceText: {
 		backgroundColor: "transparent",
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
 		alignSelf: "center",
+		marginRight: 20 * alpha,
 	},
 	lineView: {
 		backgroundColor: "rgb(241, 241, 241)",
 		alignSelf: "center",
 		width: 334 * alpha,
 		height: 1 * alpha,
-		marginBottom: 10,
+		marginBottom: 10 * alpha,
 	},
 	optionView: {
 		backgroundColor: "transparent",
@@ -330,7 +337,7 @@ const styles = StyleSheet.create({
 	},
 	reviewButtonText: {
 		color: "rgb(94, 94, 94)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -373,7 +380,7 @@ const styles = StyleSheet.create({
 	},
 	receiptButtonText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		

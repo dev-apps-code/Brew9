@@ -339,12 +339,11 @@ export default class Checkout extends React.Component {
 		const {cart_total, selected_payment} = this.state
 		const {currentMember,selectedShop } = this.props
 
-
 		if (currentMember != undefined) {
-			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-			// 	this.refs.toast.show("You are too far away");
-			// 	return
-			// }
+			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+				this.refs.toast.show("You are too far away");
+				return
+			}
 
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){

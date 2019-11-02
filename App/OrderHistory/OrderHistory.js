@@ -13,6 +13,8 @@ import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
 import GetOrdersRequestObject from '../Requests/get_orders_request_object'
 import {createAction} from '../Utils'
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
 	purchaseHistoryText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
 	seeAllText: {
 		backgroundColor: "transparent",
 		color: "rgb(102, 101, 101)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		
