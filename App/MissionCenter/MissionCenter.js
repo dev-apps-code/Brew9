@@ -16,6 +16,9 @@ import { createAction, dispatch } from '../Utils/index'
 import MissionCell from "./MissionCell"
 import MissionCategoryCell from "./MissionCategoryCell"
 import _ from 'lodash'
+import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
+import Brew9Modal from "../Components/Brew9Modal"
+import HudLoading from "../Components/HudLoading"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -54,6 +57,12 @@ export default class MissionCenter extends React.Component {
             loading: false,
             missions: [],
             mission_statements: [],
+            modal_visible: false,
+			modal_description: "",
+			modal_title: "",
+			modal_cancelable: false,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
         }
     }
 
@@ -69,6 +78,17 @@ export default class MissionCenter extends React.Component {
         this.props.navigation.goBack()
     }
 
+    renderPopup(){
+		return <Brew9Modal
+			title={this.state.modal_title}
+			description={this.state.modal_description}
+			visible={this.state.modal_visible}
+			cancelable={this.state.modal_cancelable}
+			okayButtonAction={this.state.modal_ok_action}
+			cancelButtonAction={this.state.modal_cancel_action}
+		/>
+    }
+    
     loadMissions(){
         const { dispatch, selectedShop } = this.props
         this.setState({ loading: true })
@@ -128,6 +148,54 @@ export default class MissionCenter extends React.Component {
         )
     }
 
+    missionRewardClaim = (statement_id) => {
+
+        if (statement_id != undefined) {
+            const { dispatch } = this.props
+        
+            this.setState({ loading: true })
+            const callback = eventObject => {
+                console.log(eventObject)
+                if (eventObject.success) {
+                    this.update_claim(eventObject.result)
+                }
+                this.setState({
+                    loading: false,
+                    modal_visible: true,
+                    modal_title: "Brew9",
+                    modal_description: eventObject.message
+                })   
+            }
+            const obj = new MissionRewardClaimRequestObject()
+            obj.setUrlId(statement_id)
+            dispatch(
+                createAction('missions/missionRewardClaim')({
+                    object:obj,
+                    callback,
+                })
+            )
+        }
+    }
+
+    update_claim(mission_statement) {
+
+        if (mission_statement.clazz == "mission_statement") {
+            let missions = [...this.state.missions]
+            for (var index in missions) {
+                
+                if (mission_statement.mission_id == missions[index].id) {
+                    missions[index].statement_id = mission_statement.id
+                    missions[index].progress = mission_statement.task_progress
+                    missions[index].status = mission_statement.status   
+                }
+            }
+            this.setState({
+                missions
+            })
+        }
+
+    }
+
     update_mission() {
 
         let missions = [...this.state.missions]
@@ -137,6 +205,7 @@ export default class MissionCenter extends React.Component {
             var found_mission = _.find(statements, {mission_id:missions[index].id})
             
             if (found_mission != undefined) {
+                missions[index].statement_id = found_mission.id
                 missions[index].progress = found_mission.task_progress
                 missions[index].status = found_mission.status
             }
@@ -155,6 +224,8 @@ export default class MissionCenter extends React.Component {
                 point={item.points}
                 status={item.status}
                 progress={item.progress}
+                statement_id={item.statement_id}
+                onStatusPressed={this.missionRewardClaim}
                 mission_task_count={item.mission_task_count}
                 vouchers={item.mission_vouchers}
                 navigation={this.props.navigation}/>
@@ -180,6 +251,8 @@ export default class MissionCenter extends React.Component {
 						style={styles.missionlistFlatList}
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
+                <HudLoading isLoading={this.state.loading}/>
+                {this.renderPopup()}
         </View>
     }
 }
