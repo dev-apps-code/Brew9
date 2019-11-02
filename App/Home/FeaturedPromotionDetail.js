@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
@@ -40,6 +40,10 @@ export default class FeaturedPromotionDetail extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      imageWidth: 0,
+      imageHeight: 0,
+    }
   }
 
   componentDidMount() {
@@ -54,17 +58,33 @@ export default class FeaturedPromotionDetail extends React.Component {
 
   render() {
     const promo = this.props.navigation.getParam("details", null);
-    console.log("Promo Detail", promo);
+
+    Image.getSize(promo.image.url, (width, height) => {
+      if (this.props.width && !this.props.height) {
+          this.setState({
+              imageWidth: this.props.width,
+              imageHeight: height * (this.props.width / width)
+          });
+      } else if (!this.props.width && this.props.height) {
+          this.setState({
+            imageWidth: width * (this.props.height / height),
+              imageHeight: this.props.height
+          });
+      } else {
+          this.setState({ imageWidth: width, imageHeight: height });
+      }
+  });
+
     return (
-      <View style={styles.promotiondetailView}>
+      <ScrollView style={styles.promotiondetailView}>
         <Text style={styles.titleText}>{promo.title}</Text>
         <Text style={styles.timeText}>{promo.date}</Text>
         <Image
           source={{ uri: promo.image.url }}
-          style={styles.promoimageImage}
+          style={[styles.promoimageImage, { height: this.state.height, width: this.state.width }]}
         />
         <Text style={styles.descriptionText}>{promo.description}</Text>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -80,7 +100,7 @@ const styles = StyleSheet.create({
   },
   navigationBarItemTitle: {
     color: "black",
-    fontFamily: "DINPro-Bold",
+    fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha
   },
   navigationBarItemIcon: {
@@ -91,7 +111,6 @@ const styles = StyleSheet.create({
   promotiondetailView: {
     backgroundColor: "white",
     flex: 1,
-    alignItems: "center"
   },
   labelText: {
     color: "black",
@@ -131,9 +150,7 @@ const styles = StyleSheet.create({
   promoimageImage: {
     resizeMode: "center",
     backgroundColor: "transparent",
-    alignSelf: "stretch",
-    width: null,
-    height: 152 * alpha,
+    alignSelf: "center",
     marginTop: 18 * alpha
   },
   descriptionText: {

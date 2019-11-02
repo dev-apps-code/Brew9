@@ -61,7 +61,7 @@ export default class MemberWallet extends React.Component {
 
 		const { navigate } = this.props.navigation
 
-		navigate("OrderHistory")
+		navigate("CreditHistory")
 	}
 
 	onTopUpPressed = () => {
@@ -176,7 +176,7 @@ export default class MemberWallet extends React.Component {
 									justifyContent: "center",
 								}}>
 								<Text
-									style={styles.transactionHistoryText}>Order History</Text>
+									style={styles.transactionHistoryText}>Credit History</Text>
 							</View>
 						</View>
 						<View

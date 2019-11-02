@@ -54,6 +54,7 @@ import CategoryHeaderCell from "./CategoryHeaderCell"
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
+import ProfileRequestObject from '../Requests/profile_request_object'
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -150,6 +151,7 @@ export default class Home extends React.Component {
 			image_isHorizontal: false,
 			image_check: false,
 			app_url: '',
+			first_time_buy: false
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -258,6 +260,30 @@ export default class Home extends React.Component {
 		this.setState({ appState: nextAppState });
 	  };
 
+
+	loadProfile(){
+		const { dispatch, currentMember } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			console.log("Profile", eventObject)
+			if (eventObject.success) {
+				this.setState({
+					loading: false,
+				})
+			}
+		}
+		const obj = new ProfileRequestObject()
+		if (currentMember != null){
+			obj.setUrlId(currentMember.id)
+		}
+		
+		dispatch(
+			createAction('members/loadProfile')({
+				object:obj,
+				callback,
+			})
+		)
+	}
 
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
@@ -412,6 +438,7 @@ export default class Home extends React.Component {
 			
 			if (clearCart) {
 				this.onClearPress()
+				this.loadProfile()
 			}
 		})
 
@@ -812,42 +839,85 @@ export default class Home extends React.Component {
 
 		const { shop, cart_total } = this.state
 
+		const { currentMember } = this.props
+
 		let newcart = [...this.state.cart]
 
 		var promotions_item = []
 
-		if (shop.trigger_promotions != undefined && shop.trigger_promotions.length > 0) {
+		if (shop.all_promotions != undefined && shop.all_promotions.length > 0) {
 			
-			for (var index in shop.trigger_promotions) {
+			for (var index in shop.all_promotions) {
 
-				
-				var promotion = shop.trigger_promotions[index]
-				var trigger_price = promotion.trigger_price ? parseFloat(promotion.trigger_price) : 0.00
-				var remaining = trigger_price - cart_total
+				var promotion = shop.all_promotions[index]
 
-				const search_cart_promo_index = newcart.findIndex(element => element.name == promotion.cart_text)
+				if (currentMember != null && currentMember.first_time_buyer == false) {
 
-				if (remaining < 0 && search_cart_promo_index < 0) {
-
-					shop.trigger_promotions[index].has_triggered = true
-					let cartItem = {
-						clazz: "promotion",
-						id: promotion.id,
-						name: promotion.cart_text,
-						description:  "",
-						price: 0.00,
+					if (promotion.event_type == "TRIGGER") {
+						if (promotion.trigger_price != undefined && promotion.trigger_price > 0) {
+							var trigger_price = parseFloat(promotion.trigger_price)
+							var remaining = trigger_price - cart_total
+			
+							const search_cart_promo_index = newcart.findIndex(element => element.name == promotion.cart_text)
+			
+							if (remaining < 0 && search_cart_promo_index < 0) {
+			
+								shop.all_promotions[index].has_triggered = true
+								let cartItem = {
+									clazz: "promotion",
+									id: promotion.id,
+									name: promotion.cart_text,
+									description:  "",
+									price: 0.00,
+								}
+								promotions_item.push(cartItem)
+								// console.log("Add", cartItem.name)
+								// console.log("Items", promotions_item)
+								// // this.setState({
+								// // 	cart: newcart.concat(cartItem),
+								// // })
+							} else if (remaining > 0 && search_cart_promo_index > 0){
+								newcart.splice(search_cart_promo_index, 1)
+								this.setState({
+									cart: newcart
+								})
+							}
+						}
 					}
-					promotions_item.push(cartItem)
-					// console.log("Add", cartItem.name)
-					// console.log("Items", promotions_item)
-					// // this.setState({
-					// // 	cart: newcart.concat(cartItem),
-					// // })
-				} else if (remaining > 0 && search_cart_promo_index > 0){
-					newcart.splice(search_cart_promo_index, 1)
-					this.setState({
-						cart: newcart
-					})
+				} else if (currentMember != null && currentMember.first_time_buyer == true) {
+
+					console.log("First Time Promo")
+					if (promotion.event_type == "NEVER PURCHASE") {
+						if (promotion.trigger_price != undefined && promotion.trigger_price > 0) {
+							var trigger_price = parseFloat(promotion.trigger_price)
+							var remaining = trigger_price - cart_total
+			
+							const search_cart_promo_index = newcart.findIndex(element => element.name == promotion.cart_text)
+			
+							if (remaining < 0 && search_cart_promo_index < 0) {
+			
+								shop.all_promotions[index].has_triggered = true
+								let cartItem = {
+									clazz: "promotion",
+									id: promotion.id,
+									name: promotion.cart_text,
+									description:  "",
+									price: 0.00,
+								}
+								promotions_item.push(cartItem)
+								// console.log("Add", cartItem.name)
+								// console.log("Items", promotions_item)
+								// // this.setState({
+								// // 	cart: newcart.concat(cartItem),
+								// // })
+							} else if (remaining > 0 && search_cart_promo_index > 0){
+								newcart.splice(search_cart_promo_index, 1)
+								this.setState({
+									cart: newcart
+								})
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1188,7 +1258,7 @@ export default class Home extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.optionsText}>{variant_array.join(",")}</Text>
+								style={styles.optionsText}>{variant_array.join(", ")}</Text>
 						</View>
 						<TouchableOpacity
 							disabled={!enabled}
@@ -1212,7 +1282,31 @@ export default class Home extends React.Component {
 		let selected_product = this.get_product(this.state.selected_index)
 		let {shop,cart,delivery} = this.state
 		let {isToggleShopLocation} = this.props
-		
+		let categoryBottomSpacer = undefined
+
+		if (shop !== null ){
+			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+				if (shop.featured_promotion !== null) {
+					categoryBottomSpacer = styles.categoryListPosition3
+				} else {
+					categoryBottomSpacer = styles.categoryListPosition4
+				}
+			} else {
+				if (shop.featured_promotion !== null && cart.length > 0) { //Have Feature Have Cart
+					categoryBottomSpacer = styles.categoryListPosition3
+				} else if (shop.featured_promotion !== null && cart.length == 0) { //Have Feature No Cart
+					categoryBottomSpacer = styles.categoryListPosition2
+				} else if (shop.featured_promotion == null && cart.length > 0) { //No Feature Have Cart
+					
+					categoryBottomSpacer = styles.categoryListPosition2
+				} else { //All no
+					categoryBottomSpacer = styles.categoryListPosition1
+				}
+			}
+		} else {
+			categoryBottomSpacer = styles.categoryListPosition1
+		}
+
 		return <View style={styles.page1View}>	
 			
 			
@@ -1307,12 +1401,15 @@ export default class Home extends React.Component {
 						style={styles.productsectionView}
 						onLayout={(event) => this.measureView(event)}>
 						<View
-							style={styles.categorylistFlatListViewWrapper}>
+							style={[styles.categorylistFlatListViewWrapper]}>
 							<FlatList
 								renderItem={this.renderCategorylistFlatListCell}
 								data={this.state.data}
 								style={styles.categorylistFlatList}
 								keyExtractor={(item, index) => index.toString()}/>
+
+								<View style={categoryBottomSpacer}/>
+								{this.renderFeaturedPromo(shop,cart)}
 						</View>
 						<View
 							style={{
@@ -1413,7 +1510,7 @@ export default class Home extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.businessHour1000Text}>Business Hour: {shop ? shop.opening_hour.start_time : ""} ~ {shop ? shop.opening_hour.end_time : ""}</Text>
+							style={styles.businessHour1000Text}>Business Hour: {shop ? shop.opening_hour.start_time : ""} - {shop ? shop.opening_hour.end_time : ""}</Text>
 					</View>
 				</View>
 				)}
@@ -1446,9 +1543,12 @@ export default class Home extends React.Component {
 			
 			<View style={styles.bottomAlertView}>
 				{this.renderAlertBar(cart,shop)}
-				{this.renderBottomBar(cart,shop)}			
+				{this.renderBottomBar(cart,shop)}	
+						
 			</View>
-			{this.renderFeaturedPromo(shop,cart)}
+
+			
+			
 			<Toast ref="toast"
 				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
@@ -1526,37 +1626,70 @@ export default class Home extends React.Component {
 	renderPromotionTopBar(shop, cart) {
 
 		const {cart_total} = this.state
+		const {currentMember} = this.props
 
 		if (cart.length > 0) {
-			if (shop.trigger_promotions != undefined && shop.trigger_promotions.length > 0) {
+			if (shop.all_promotions != undefined && shop.all_promotions.length > 0) {
 				
 				var has_promo = false
 
-				const promos = shop.trigger_promotions.map((item, key) => {
+				const promos = shop.all_promotions.map((item, key) => {
 
-					var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
-					var remaining = trigger_price - cart_total
+					if (currentMember != null && currentMember.first_time_buyer == false) {
+						if (item.event_type == "TRIGGER") {
+							var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
+							var remaining = trigger_price - cart_total
+		
+							if (remaining < 0) {
+								has_promo = false
+								return
+							}
+		
+							var display_text = item.display_text
+							var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+		
+							if (!has_promo) {
+								has_promo = true
+								return <View style={styles.promotionBarView}
+								key={key}>
+								<Text
+									numberOfLines={2}
+									style={styles.promotionTopBarText}>
+									{final_text}
+								</Text>
+							</View>
+							}
+							return
+						}
+					} else if (currentMember != null && currentMember.first_time_buyer == true) {
 
-					if (remaining < 0) {
-						has_promo = false
-						return
+						console.log("First Time Promo")
+						if (item.event_type == "NEVER PURCHASE") {
+							var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
+							var remaining = trigger_price - cart_total
+		
+							if (remaining < 0) {
+								has_promo = false
+								return
+							}
+		
+							var display_text = item.display_text
+							var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+		
+							if (!has_promo) {
+								has_promo = true
+								return <View style={styles.promotionBarView}
+								key={key}>
+								<Text
+									numberOfLines={2}
+									style={styles.promotionTopBarText}>
+									{final_text}
+								</Text>
+							</View>
+							}
+							return
+						}
 					}
-
-					var display_text = item.display_text
-					var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
-
-					if (!has_promo) {
-						has_promo = true
-						return <View style={styles.promotionBarView}
-						key={key}>
-						<Text
-							numberOfLines={2}
-							style={styles.promotionTopBarText}>
-							{final_text}
-						</Text>
-					</View>
-					}
-					return
 					
 				})
 
@@ -1879,8 +2012,21 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 	},
+	
 	categorylistFlatListViewWrapper: {
 		width: 85 * alpha,
+	},
+	categoryListPosition1: {
+		height: 0 * alpha
+	},
+	categoryListPosition2: {
+		height: 40 * alpha
+	},
+	categoryListPosition3: {
+		height: 80 * alpha
+	},
+	categoryListPosition4: {
+		height: 30 * alpha
 	},
 	productlistFlatList: {
 		backgroundColor: "white",
@@ -1888,7 +2034,6 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	productlistFlatListViewWrapper: {
-
 		width: 290 * alpha,
 		marginBottom: 1 * alpha,
 	},
@@ -2495,7 +2640,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily:  TITLE_FONT,
 		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2781,7 +2926,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		width: 60 * alpha,
 		height: 30 * alpha,
-		left: 10 * alpha
+		left: 10 * alpha,
 	},
 	featuredpromoButtonPosition1: {	
 		bottom: 10 * alpha,

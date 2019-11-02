@@ -57,6 +57,8 @@ import DirectionMap from "./App/DirectionMap/DirectionMap";
 import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail";
 import ScanQr from "./App/Home/ScanQr";
 import PayByCard from "./App/PayByCard/PayByCard"
+import CreditHistory from "./App/CreditHistory/CreditHistory"
+
 import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
 import { registerModels } from "./App/Model/index";
@@ -219,6 +221,9 @@ const PushProfile = createStackNavigator(
     },
     PointHistory: {
       screen: PointHistory
+    },
+    CreditHistory: {
+      screen: CreditHistory
     },
     MemberWallet: {
       screen: MemberWallet

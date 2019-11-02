@@ -3,12 +3,11 @@ export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
 export const KPAYMENTYURL = "http://brew9.dreamcode.solutions/payments/baiduri"
 
 // export const KSERVERURL ='http://localhost:3000/api'
-
+// export const KURL_INFO ='http://localhost:3000/info'
 // export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
 // export const KPAYMENTYURL ='http://payment.brew9.com'
-// export const KURL_INFO ='http://localhost:3000/info'
-// export const KSERVERURL ='https://3569c93f.ngrok.io/api'
-// export const KURL_INFO = 'https://3569c93f.ngrok.io/info'
+// export const KSERVERURL ='https://37ced299.ngrok.io/api'
+// export const KURL_INFO = 'https://37ced299.ngrok.io/info'
 
 export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
