@@ -93,6 +93,8 @@ export default class Checkout extends React.Component {
 		const {cart} = this.state
 		if (currentMember != null ){
 			const callback = eventObject => {
+
+				console.log(`--   voucher ${eventObject.result}`)
 				if (eventObject.success) {
 					this.setState({ 
 						valid_vouchers:eventObject.result
@@ -186,14 +188,14 @@ export default class Checkout extends React.Component {
 		for (var index in vouchers_to_use){
 			var item = vouchers_to_use[index]
 			let voucher = item.voucher
-			if (item.voucher.voucher_type == "Cash Voucher"){
-				discount = item.voucher.display_value
-			}else{
-				
+			if (voucher.voucher_type == "Cash Voucher"){
+				discount = voucher.discount_price
+			}else{				
+				console.log(`voucher ${voucher.discount_price} ${voucher.discount_type}`)
 				if (voucher.discount_type != null && voucher.discount_type != '' && voucher.discount_price != null && voucher.discount_price != 0){
-					if (voucher.discount_type == "fixed"){
+					if (voucher.discount_type.toLowerCase() == "fixed"){
 						discount = voucher.discount_price
-					}else if(voucher.discount_type == "percent"){
+					}else if(voucher.discount_type.toLowerCase() == "percent"){
 						discount = cart_total * voucher.discount_price/100.0						
 					}
 				}
@@ -340,10 +342,10 @@ export default class Checkout extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-				this.refs.toast.show("You are too far away");
-				return
-			}
+			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away");
+			// 	return
+			// }
 
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){

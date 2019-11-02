@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		backgroundColor: "transparent",
-		opacity: 0.39,
+
 		color: "black",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
