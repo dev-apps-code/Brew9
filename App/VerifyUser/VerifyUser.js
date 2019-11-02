@@ -49,6 +49,7 @@ export default class VerifyUser extends React.Component {
 			code: "",
 			code_from_server:"",
 			is_counting: false,
+			count_down: 3,
 		}
 
 	}
@@ -251,13 +252,17 @@ export default class VerifyUser extends React.Component {
 								style={styles.verifyButtonText}>Verify</Text>
 						</TouchableOpacity>
 					</View> : null }
-					{this.state.is_counting ? 
+					
 					<View style={styles.countDownContainer} >
 						<View style={styles.countDownWrapper}>
-							<CountDown
+						{ this.state.is_counting  ?
+								<CountDown
 								until={120}
-								onFinish={() => this.setState({is_counting: false})}
-								style={styles.sendCountdown}
+								onFinish={() => 
+									this.setState({is_counting:false})
+								}
+								running={this.state.is_counting}
+								style={this.state.is_counting ? styles.sendCountdown : styles.hidden}
 								size={12}
 								digitStyle={{backgroundColor: 'transparent'}}
 								digitTxtStyle={styles.countdownText}
@@ -266,9 +271,10 @@ export default class VerifyUser extends React.Component {
 								timeLabels={{m: null, s: null}}
 								showSeparator
 							/>
+							: undefined}
+						
 							</View>
 						</View>
-						: undefined }
 				</View>
 				{/* {this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
@@ -469,6 +475,10 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 	},
+	hidden: {
+		width: 0,
+		height: 0,
+	  },
 	sendCountdown: {
 		flexDirection: "row",
 		alignItems: "center",
