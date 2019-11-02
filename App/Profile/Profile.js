@@ -461,10 +461,13 @@ export default class Profile extends React.Component {
 												flex: 1,
 											}}/>
 										<View style={{elevation: 2 * alpha}}>
+										<TouchableOpacity onPress={()=> this.onMemberButtonPressed()}>
 										<Image
 											source={avatar}
 											style={styles.profileImage}/>
+											</TouchableOpacity>
 										</View>
+										
 									</View>
 									<View
 										style={styles.dividerView}/>
