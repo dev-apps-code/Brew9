@@ -433,7 +433,7 @@ export default class Home extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			if (selectedShop.distance < selectedShop.max_order_distance_in_km){
+			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
 				this.setState({
 					modal_visible: true, 
 					modal_title: "Brew9",
