@@ -282,6 +282,8 @@ const PushProfile = createStackNavigator(
   }
 );
 
+
+
 PushOrder.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
@@ -293,6 +295,17 @@ PushOrder.navigationOptions = ({ navigation }) => {
     tabBarVisible
   };
 };
+
+
+const prevGetStateForHome = PushOrder.router.getStateForAction;
+PushOrder.router.getStateForAction = (action, state) => {
+
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Home') {
+    return state;
+  }
+
+  return prevGetStateForHome(action, state);
+}
 
 PushPickup.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
@@ -306,6 +319,17 @@ PushPickup.navigationOptions = ({ navigation }) => {
   };
 };
 
+
+const prevGetStateForPickUp = PushPickup.router.getStateForAction;
+PushPickup.router.getStateForAction = (action, state) => {
+
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'PickUp') {
+    return state;
+  }
+
+  return prevGetStateForPickUp(action, state);
+}
+
 PushInbox.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
@@ -317,6 +341,16 @@ PushInbox.navigationOptions = ({ navigation }) => {
     tabBarVisible
   };
 };
+
+const prevGetStateForPushInbox = PushInbox.router.getStateForAction;
+PushInbox.router.getStateForAction = (action, state) => {
+
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Notification') {
+    return state;
+  }
+
+  return prevGetStateForPushInbox(action, state);
+}
 
 PushProfile.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
@@ -331,6 +365,16 @@ PushProfile.navigationOptions = ({ navigation }) => {
     tabBarVisible
   };
 };
+
+const prevGetStateForPushProfile = PushProfile.router.getStateForAction;
+PushProfile.router.getStateForAction = (action, state) => {
+
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Profile') {
+    return state;
+  }
+
+  return prevGetStateForPushProfile(action, state);
+}
 
 const TabGroupOne = createBottomTabNavigator(
   {

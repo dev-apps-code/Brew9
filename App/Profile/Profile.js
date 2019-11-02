@@ -751,7 +751,7 @@ export default class Profile extends React.Component {
 									bottom: 0,
 									justifyContent: "center",
 								}}>
-								<View
+								{/* <View
 									pointerEvents="box-none"
 									style={{
 										height: 24 * alpha,
@@ -771,7 +771,7 @@ export default class Profile extends React.Component {
 									<Image
 											source={require("./../../assets/images/forward.png")}
 											style={styles.menuRowArrowImage}/>
-								</View>
+								</View> */}
 							</View>
 							<View
 								pointerEvents="box-none"
