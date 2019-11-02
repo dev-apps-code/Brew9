@@ -430,26 +430,43 @@ export default class Home extends React.Component {
 	onCheckoutPressed = () => {
 		const { navigate } = this.props.navigation
 		const { navigation } = this.props
-		this.navigationListener = navigation.addListener('willFocus', payload => {
-			this.removeNavigationListener()
-			const { state } = payload
-    		const { params } = state
-			const { clearCart } = params
-			
-			if (clearCart) {
-				this.onClearPress()
-				this.loadProfile()
-			}
-		})
+		const {currentMember,selectedShop } = this.props
 
-		navigate("Checkout", {
-			cart: this.state.cart,
-			cart_total_quantity: this.state.cart_total_quantity,
-			cart_total: this.state.cart_total,
-			shop: this.state.shop,
-			returnToRoute: navigation.state,
-			clearCart: false
-		})
+		if (currentMember != undefined) {
+			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+				this.setState({
+					modal_visible: true, 
+					modal_title: "Brew9",
+					modal_description: "You are too far away", 
+					modal_cancelable: false, 
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+				})
+				return
+			} else {
+				this.navigationListener = navigation.addListener('willFocus', payload => {
+					this.removeNavigationListener()
+					const { state } = payload
+					const { params } = state
+					const { clearCart } = params
+					
+					if (clearCart) {
+						this.onClearPress()
+						this.loadProfile()
+					}
+				})
+		
+				navigate("Checkout", {
+					cart: this.state.cart,
+					cart_total_quantity: this.state.cart_total_quantity,
+					cart_total: this.state.cart_total,
+					shop: this.state.shop,
+					returnToRoute: navigation.state,
+					clearCart: false
+				})
+			}
+		}
 	}
 
 	removeNavigationListener() {
@@ -1547,8 +1564,6 @@ export default class Home extends React.Component {
 						
 			</View>
 
-			
-			
 			<Toast ref="toast"
 				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
@@ -1774,7 +1789,7 @@ export default class Home extends React.Component {
 					</View>
 				</View>
 				<TouchableHighlight
-					onPress={this.onCheckoutPressed}
+					onPress={() => this.onCheckoutPressed()}
 					style={styles.checkoutButton}
 					underlayColor='cyan'
 					>

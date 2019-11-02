@@ -15,7 +15,7 @@ import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE} from "../Common/common_style";
+import {LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE} from "../Common/common_style";
 import { LinearGradient } from 'expo-linear-gradient';
 
 @connect(({ members }) => ({
@@ -534,9 +534,9 @@ export default class Profile extends React.Component {
 						style={{
 							position: "absolute",
 							left: 19 * alpha,
-							width: 277 * alpha,
+							width: 290 * alpha,
 							top: 70 * alpha,
-							height: 232 * alpha,
+							height: 252 * alpha,
 							alignItems: "flex-start",
 						}}>
 						<View
@@ -584,6 +584,8 @@ export default class Profile extends React.Component {
 						</View>
 						<Text
 							style={styles.welcomeSomebodyText}>Welcome, {display_name}!</Text>
+						<Text
+							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 					</View>
 				</View>
 				<TouchableOpacity
@@ -895,7 +897,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 19 * alpha,
 		right: 19 * alpha,
-		top: 298 * alpha,
+		top: 308 * alpha,
 		height: 199 * alpha,
 	},
 	detailsView: {
@@ -1046,6 +1048,7 @@ const styles = StyleSheet.create({
 	},
 	
 	pointiconImage: {
+		tintColor: LIGHT_GREY,
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: 49 * alpha,
@@ -1085,6 +1088,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	walletIconImage: {
+		tintColor: LIGHT_GREY,
 		resizeMode: "center",
 		backgroundColor: "transparent",
 		width: 51 * alpha,
@@ -1140,6 +1144,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	rewardiconImage: {
+		tintColor: LIGHT_GREY,
 		backgroundColor: "transparent",
 		resizeMode: "center",
 		width: 51 * alpha,
@@ -1222,6 +1227,16 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		marginTop: 176 * alpha,
+	},
+	companySloganText: {
+		backgroundColor: "transparent",
+		color: LIGHT_GREY,
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		marginTop: 3 * alpha,
 	},
 	missionCentreView: {
 		backgroundColor: "transparent",

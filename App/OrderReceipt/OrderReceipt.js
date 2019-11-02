@@ -11,6 +11,8 @@ import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
 import {connect} from "react-redux";
 import openMap from 'react-native-open-maps';
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+
 @connect(({ members }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -80,55 +82,42 @@ export default class OrderReceipt extends React.Component {
 	renderOrderItems(items, vouchers) {
 
 		const order_items = items.map((item, key) => {
-
-			if (item.variants != null && item.variants != "") {
-				return <View
-					style={styles.itemView}
+			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				
+			return <View
+					style={styles.drinksView}
 					key={key}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							alignSelf: "stretch",
-							width: 179 * alpha,
-							marginTop: 14 * alpha,
-							marginBottom: 17,
-							alignItems: "flex-start",
-						}}>
-						<Text
-							style={styles.nameText}>{item.product_name}</Text>
 						<View
+							pointerEvents="box-none"
 							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
 								flex: 1,
-							}}/>
-						<Text
-							style={styles.descriptionText}>{item.variants}</Text>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.quantityText}>x{item.quantity}</Text>
-					<Text
-						style={styles.priceText}>{item.total_price}</Text>
+								flexDirection: "row"
+							}}>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>{item.product_name}</Text>
+									{(item.variations != null && item.variations != "") ?
+									<Text
+										style={styles.productVariantText}>{item.variations}</Text> :
+										<View style={styles.spacer} />
+									}
+								</View>
+								<Text
+									style={styles.productQuantityText}>x{item.quantity}</Text>
+								
+								<Text
+									style={styles.productPriceText}>{price_string}</Text>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
+							</View>
 				</View>
-			} else {
-				return <View
-					style={styles.item2View}
-					key={key}>
-					<Text
-						style={styles.nameThreeText}>{item.product_name}</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.quantityThreeText}>x{item.quantity}</Text>
-					<Text
-						style={styles.priceThreeText}>{item.total_price}</Text>
-				</View>
-			}
-		})
+				
+				
+			})
 
 		const voucher_items = vouchers.map((item, key) => {
 
@@ -136,13 +125,13 @@ export default class OrderReceipt extends React.Component {
 				style={styles.voucherView}
 				key={key}>
 				<Text
-					style={styles.nameFourText}>{item.voucher.name}</Text>
+					style={styles.voucherNameText}>{item.voucher.name}</Text>
 				<View
 					style={{
 						flex: 1,
 					}}/>
 				<Text
-					style={styles.descriptionThreeText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
 			</View>
 		})
 
@@ -214,10 +203,6 @@ export default class OrderReceipt extends React.Component {
 									style={styles.branchView}>
 									<Text
 										style={styles.shopBranchText}>{order.shop.name}</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
 									<Text
 										numberOfLines={3}
 										style={styles.shopBranchAddressText}>{order.shop.address}</Text>
@@ -262,28 +247,7 @@ export default class OrderReceipt extends React.Component {
 							<View
 								style={styles.lineTwoView}/>
 							{this.renderOrderItems(order.order_items, order.voucher_items)}
-							{/* <View
-								style={styles.voucherView}>
-								<Text
-									style={styles.nameFourText}>Buy 2 Free 1</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.descriptionThreeText}>-28.00</Text>
-							</View>
-							<View
-								style={styles.voucher2View}>
-								<Text
-									style={styles.nameFiveText}>Priority Voucher</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.descriptionFourText}>Prior Made</Text>
-							</View> */}
+							
 							<View
 								style={styles.totalView}>
 								<Text
@@ -293,12 +257,12 @@ export default class OrderReceipt extends React.Component {
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.totalText}>{order.total}</Text>
+									style={styles.totalText}>${order.total}</Text>
 							</View>
 							<View
 								style={styles.lineThreeView}/>
-							<Text
-								style={styles.callrefundText}>Please call for refund.</Text>
+							{/* <Text
+								style={styles.callrefundText}>Please call for refund.</Text> */}
 						</View>
 						
 					</View>
@@ -318,7 +282,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -336,7 +300,7 @@ const styles = StyleSheet.create({
 	},
 	customerServiceButtonText: {
 		color: "rgb(67, 65, 65)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -362,9 +326,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(248, 248, 248)",
 		alignSelf: "stretch",
 		marginLeft: 18 * alpha,
-		marginRight: 19 * alpha,
+		marginRight: 18 * alpha,
 		marginTop: 13 * alpha,
-		marginBottom: 20,
+		marginBottom: 20 * alpha,
+		borderRadius: 14 * alpha,
 		flex: 1,
 	},
 	whiteboxView: {
@@ -374,6 +339,8 @@ const styles = StyleSheet.create({
 		right: 0 * alpha,
 		top: 0 * alpha,
 		height: 168 * alpha,
+		borderTopRightRadius: 14 * alpha,
+		borderTopLeftRadius: 14 * alpha,
 	},
 	completeOrderView: {
 		backgroundColor: "transparent",
@@ -389,7 +356,7 @@ const styles = StyleSheet.create({
 	},
 	completedOrderText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -399,10 +366,10 @@ const styles = StyleSheet.create({
 	},
 	thankMessageText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
+		marginTop: 5 * alpha,
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "stretch",
@@ -425,25 +392,23 @@ const styles = StyleSheet.create({
 	branchView: {
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
-		width: 162 * alpha,
-		height: 50 * alpha,
+		width: 182 * alpha,
+		height: 60 * alpha,
 	},
 	shopBranchText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 15 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		marginRight: 12 * alpha,
 	},
 	shopBranchAddressText: {
 		color: "rgb(146, 146, 146)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 1 * alpha,
@@ -451,7 +416,7 @@ const styles = StyleSheet.create({
 	callView: {
 		backgroundColor: "transparent",
 		width: 35 * alpha,
-		height: 62 * alpha,
+		height: 55 * alpha,
 		marginRight: 8 * alpha,
 	},
 	callIconButton: {
@@ -469,21 +434,12 @@ const styles = StyleSheet.create({
 	callIconButtonImage: {
 		resizeMode: "contain",
 	},
-	callIconButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
 	callText: {
 		backgroundColor: "transparent",
 		color: "rgb(163, 163, 163)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		marginLeft: 6 * alpha,
 		marginRight: 7 * alpha,
@@ -491,15 +447,7 @@ const styles = StyleSheet.create({
 	directionView: {
 		backgroundColor: "transparent",
 		width: 50 * alpha,
-		height: 62 * alpha,
-	},
-	directionIconButtonText: {
-		color: "black",
-		fontFamily: ".SFNSText",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
+		height: 55 * alpha,
 	},
 	directionIconButton: {
 		backgroundColor: "transparent",
@@ -520,10 +468,9 @@ const styles = StyleSheet.create({
 	},
 	directionText: {
 		color: "rgb(163, 163, 163)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "center",
 		backgroundColor: "transparent",
 	},
@@ -543,18 +490,9 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	nameFourText: {
-		backgroundColor: "transparent",
+	voucherDescriptionText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "center",
-	},
-	descriptionThreeText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -570,24 +508,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	nameFiveText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	descriptionFourText: {
-		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-	},
 	totalView: {
 		backgroundColor: "transparent",
 		height: 21 * alpha,
@@ -600,7 +520,7 @@ const styles = StyleSheet.create({
 	totallabelText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -608,11 +528,10 @@ const styles = StyleSheet.create({
 	},
 	totalText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
-		textAlign: "left",
+		textAlign: "right",
 		backgroundColor: "transparent",
 	},
 	lineThreeView: {
@@ -625,10 +544,9 @@ const styles = StyleSheet.create({
 	callrefundText: {
 		backgroundColor: "transparent",
 		color: "rgb(152, 149, 149)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		alignSelf: "flex-start",
 		marginLeft: 26 * alpha,
@@ -644,14 +562,13 @@ const styles = StyleSheet.create({
 	itemView: {
 		backgroundColor: "transparent",
 		height: 90 * alpha,
-		marginLeft: 1 * alpha,
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "left",
@@ -659,7 +576,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		backgroundColor: "transparent",
 		color: "rgb(146, 146, 146)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -668,22 +585,21 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		marginRight: 52 * alpha,
 		marginTop: 26 * alpha,
 	},
 	priceText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
 		marginTop: 26 * alpha,
 	},
 	itemTwoView: {
@@ -693,45 +609,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "flex-start",
 	},
-	nameTwoText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 15 * fontAlpha,
-		fontStyle: "normal",
-		
-		backgroundColor: "transparent",
-		textAlign: "left",
-	},
-	descriptionTwoText: {
-		color: "rgb(146, 146, 146)",
-		fontFamily: "DINPro-Bold",
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	quantityTwoText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginRight: 52 * alpha,
-		marginTop: 26 * alpha,
-	},
-	priceTwoText: {
-		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginTop: 26 * alpha,
-	},
+	
 	item2View: {
 		backgroundColor: "transparent",
 		height: 46 * alpha,
@@ -741,7 +619,7 @@ const styles = StyleSheet.create({
 	},
 	nameThreeText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		width: 190 * alpha,
@@ -751,21 +629,21 @@ const styles = StyleSheet.create({
 	quantityThreeText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		marginRight: 56 * alpha,
 	},
 	priceThreeText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		marginRight: 3 * alpha,
 	},
 
@@ -776,22 +654,79 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	nameFourText: {
+	voucherNameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 12* fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 	},
-	descriptionThreeText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: "DINPro-Medium",
+
+	drinksView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 10 * alpha,
+	},
+
+
+	productDetailView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		alignItems: "flex-start",
+	},
+	productNameText: {
+		backgroundColor: "transparent",
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "bold",
+		textAlign: "left",
+		marginBottom: 5 * alpha,
+	},
+	productVariantText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		marginBottom: 10 * alpha,
+	},
+	productQuantityText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
+		marginRight: 4 * alpha,
+		width: 25 * alpha,
+	},
+	productPriceText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 45 * alpha,
+	},
+	spacer: {
+		marginBottom: 10 * alpha,
+	},
+	dottedLineImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		alignSelf: "center",
+		position: "absolute",
+		bottom: 0,
+		width: 291 * alpha,
+		height: 2 * alpha,
 	},
 })

@@ -8,7 +8,7 @@
 
 import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView } from "react-native";
 import React from "react";
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 export default class FeaturedPromotionDetail extends React.Component {
@@ -43,6 +43,7 @@ export default class FeaturedPromotionDetail extends React.Component {
     this.state = {
       imageWidth: 0,
       imageHeight: 0,
+      image_check: false,
     }
   }
 
@@ -59,29 +60,38 @@ export default class FeaturedPromotionDetail extends React.Component {
   render() {
     const promo = this.props.navigation.getParam("details", null);
 
-    Image.getSize(promo.image.url, (width, height) => {
-      if (this.props.width && !this.props.height) {
-          this.setState({
-              imageWidth: this.props.width,
-              imageHeight: height * (this.props.width / width)
-          });
-      } else if (!this.props.width && this.props.height) {
-          this.setState({
-            imageWidth: width * (this.props.height / height),
-              imageHeight: this.props.height
-          });
-      } else {
-          this.setState({ imageWidth: width, imageHeight: height });
-      }
-  });
+    if (!this.state.image_check) {
+      Image.getSize(promo.image.url, (width, height) => {
 
+        final_width = windowWidth
+        final_height = height * windowWidth / width
+        
+        // if (this.props.width && !this.props.height) {
+        //     this.setState({
+        //       imageWidth: this.props.width,
+        //       imageHeight: height * (this.props.width / width)
+        //     });
+        // } else if (!this.props.width && this.props.height) {
+        //     this.setState({
+        //       imageWidth: width * (this.props.height / height),
+        //       imageHeight: this.props.height
+        //     });
+        // } else {
+        //     this.setState({ imageWidth: width, imageHeight: height, image_check: true })
+        // }
+        this.setState({ imageWidth: final_width, imageHeight: final_height, image_check: true })
+      })
+    }
+    
+
+    console.log(this.state.imageHeight,this.state.imageWidth)
     return (
       <ScrollView style={styles.promotiondetailView}>
         <Text style={styles.titleText}>{promo.title}</Text>
         <Text style={styles.timeText}>{promo.date}</Text>
         <Image
           source={{ uri: promo.image.url }}
-          style={[styles.promoimageImage, { height: this.state.height, width: this.state.width }]}
+          style={[styles.promoimageImage, { height: this.state.imageHeight, width: this.state.imageWidth }]}
         />
         <Text style={styles.descriptionText}>{promo.description}</Text>
       </ScrollView>
@@ -148,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 6 * alpha
   },
   promoimageImage: {
-    resizeMode: "center",
+    resizeMode: "contain",
     backgroundColor: "transparent",
     alignSelf: "center",
     marginTop: 18 * alpha
@@ -163,6 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    marginTop: 20 * alpha
+    marginTop: 20 * alpha,
+    marginBottom: 20 * alpha,
   }
 });
