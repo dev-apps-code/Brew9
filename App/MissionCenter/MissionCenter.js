@@ -130,18 +130,15 @@ export default class MissionCenter extends React.Component {
 
     update_mission() {
 
-        console.log("Update Mission")
         let missions = [...this.state.missions]
         statements = this.state.mission_statements
 
         for (var index in missions) {
-            console.log("mission ID", missions[index].id)
             var found_mission = _.find(statements, {mission_id:missions[index].id})
-            console.log("Found",found_mission)
+            
             if (found_mission != undefined) {
-                missions[index].completed = true
-            } else {
-                missions[index].completed = false
+                missions[index].progress = found_mission.task_progress
+                missions[index].status = found_mission.status
             }
         }
         this.setState({
@@ -156,7 +153,9 @@ export default class MissionCenter extends React.Component {
                 item={item}
                 title={item.name}
                 point={item.points}
-                completed={item.completed}
+                status={item.status}
+                progress={item.progress}
+                mission_task_count={item.mission_task_count}
                 vouchers={item.mission_vouchers}
                 navigation={this.props.navigation}/>
         } else if (item.clazz == "mission_category") {

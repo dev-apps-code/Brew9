@@ -41,6 +41,8 @@ export default class MissionCell extends React.Component {
 			}
 		}
 		
+		mission_progress = (this.props.mission_task_count != null && this.props.mission_task_count != "") ?`(${this.props.progress}/${this.props.mission_task_count})` : ""
+
 		return <TouchableWithoutFeedback
 				onPress={this.onCellTwoPress}>
 				<View
@@ -57,7 +59,7 @@ export default class MissionCell extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.titleText}>{this.props.title}</Text>
+							style={styles.titleText}>{this.props.title} {mission_progress}</Text>
 						{
 							mission_vouchers.length > 0 ?
 							<Text
@@ -83,9 +85,9 @@ export default class MissionCell extends React.Component {
 							justifyContent: "center",
 						}}>
 						<View
-							style={this.props.completed == true ? styles.statusCompleteView : styles.statusView}>
+							style={this.props.status != "In Progress" ? styles.statusCompleteView : styles.statusView}>
 							<Text
-								style={styles.completeText}>{this.props.completed == true ? "Completed" : "Incomplete"}</Text>
+								style={styles.completeText}>{this.props.status}</Text>
 						</View>
 					</View>
 				</View>
