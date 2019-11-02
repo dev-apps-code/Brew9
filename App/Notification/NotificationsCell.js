@@ -83,7 +83,7 @@ export default class NotificationsCell extends React.Component {
 								style={{
 									flex: 1,
 								}}/>
-							{ this.props.id > this.props.last_read && (
+							{ !this.props.read && (
 							<View
 								style={styles.circleView}/>)}
 						</View>

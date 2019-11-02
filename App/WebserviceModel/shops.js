@@ -23,7 +23,7 @@ export default {
         try{
     
             const { object, callback } = payload
-            const authtoken = yield select(state => state.userAuthToken)
+            const authtoken = yield select(state => state.members.userAuthToken)
             const json = yield call(
                 shops,
                 authtoken,

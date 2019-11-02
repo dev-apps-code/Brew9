@@ -434,18 +434,18 @@ export default class Home extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-				this.setState({
-					modal_visible: true, 
-					modal_title: "Brew9",
-					modal_description: "You are too far away", 
-					modal_cancelable: false, 
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-				})
-				return
-			} else {
+			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			// 	this.setState({
+			// 		modal_visible: true, 
+			// 		modal_title: "Brew9",
+			// 		modal_description: "You are too far away", 
+			// 		modal_cancelable: false, 
+			// 		modal_ok_action: ()=> {
+			// 			this.setState({modal_visible:false})
+			// 		},
+			// 	})
+			// 	return
+			// } else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -466,7 +466,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			}
+			// }
 		}
 	}
 
@@ -1905,7 +1905,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarRightItemIcon: {
 		resizeMode: "contain",
-		tintColor: "black",
+		tintColor: TABBAR_INACTIVE_TINT,
 	},
 	headerLeftContainer: {
 		flexDirection: "row",

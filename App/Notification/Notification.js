@@ -105,18 +105,24 @@ export default class Notification extends React.Component {
     this.setState({ loading: true });
     const callback = eventObject => {
       if (eventObject.success) {
+
+        let unread= 0
+        let data = eventObject.result
+
+        for(var index in data) {
+          let item = data[index]
+          let read = item.id <= this.state.last_read ? true : false   
+          data[index].read = read
+          if (read == false){
+            unread = unread + 1
+          }
+        }
+
         this.setState(
           {
-            data: eventObject.result
-          },
-          function() {
-            const maxValue = Math.max(...this.state.data.map(o => o.id), 0);
-            this.setState({
-              last_read: maxValue
-            });
-
-            this.count_unread();
-          }
+            data,
+            unread
+          }        
         );
       }
       this.setState({
@@ -151,20 +157,6 @@ export default class Notification extends React.Component {
       });
   }
 
-  count_unread() {
-    results = this.state.data;
-    var count = 0;
-    for (var index in results) {
-      result = results[index];
-      if (result.id > this.state.last_read) {
-        count++;
-      }
-    }
-    this.setState({
-      unread: count
-    });
-  }
-
   onBackPressed = () => {
     this.props.navigation.goBack();
   };
@@ -179,18 +171,32 @@ export default class Notification extends React.Component {
         text={item.text}
         time={item.created_at}
         type={item.notification_type}
-        last_read={this.state.last_read}
+        read={item.read}
       />
     );
   };
 
   onReadAllPressed = () => {
-    SecureStore.setItemAsync(
-      "notification_key",
-      `${this.state.last_read}`
-    ).catch(error => {
-      console.log(error);
-    });
+
+    const { data} = this.state
+
+    if (data.length > 0){
+      let data = [...this.state.data]
+      for(var index in data) {
+        data[index].read = true
+      }
+
+      const last_read = data[0].id
+
+      this.setState({data,unread:0})
+      SecureStore.setItemAsync(
+        "notification_key",
+        `${last_read}`
+      ).catch(error => {
+        console.log(error);
+      });
+    }
+ 
   };
 
   render() {

@@ -40,7 +40,6 @@ export default class CartPromoCell extends React.Component {
 				<View
 					pointerEvents="box-none"
 					style={{
-						position: "absolute",
 						left: 0 * alpha,
 						right: 0 * alpha,
 						top: 0 * alpha,
@@ -50,7 +49,7 @@ export default class CartPromoCell extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							height: 47 * alpha,
+							flex: 1,
 							marginLeft: 20 * alpha,
 							marginRight: 19 * alpha,
 							flexDirection: "row",
@@ -97,12 +96,11 @@ const styles = StyleSheet.create({
 	cart3: {
 		backgroundColor: "white",
 		flex: 1,
-		height: 50 * alpha,
 	},
 	detailsView: {
 		backgroundColor: "transparent",
         width: 250 * alpha,
-        height: 50 * alpha,
+        flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -112,6 +110,10 @@ const styles = StyleSheet.create({
         flex: 1,
 	},
 	titleText: {
+		width: 250 * alpha,
+		flex: 1,
+		marginTop: 10 * alpha,
+		marginBottom: 10 * alpha,
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,

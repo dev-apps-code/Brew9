@@ -87,6 +87,7 @@ export default class CheckoutVoucher extends React.Component {
                     valid_initial:false
                     })  
 				if (eventObject.success) {
+
 					this.setState({ 
 						valid_data:eventObject.result
 					},function () {
@@ -255,7 +256,7 @@ export default class CheckoutVoucher extends React.Component {
         if (this.state.valid_selected) {
             return <ValidVoucher
                 navigation={this.props.navigation}
-                title={item.voucher.name}
+                title={item.voucher.discount_type}
                 item={item}
                 description={item.voucher.description}
                 display_value={item.voucher.display_value}
