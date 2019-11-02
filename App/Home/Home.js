@@ -1853,7 +1853,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarRightItemIcon: {
 		resizeMode: "contain",
-		tintColor: "black",
+		tintColor: TABBAR_INACTIVE_TINT,
 	},
 	headerLeftContainer: {
 		flexDirection: "row",
