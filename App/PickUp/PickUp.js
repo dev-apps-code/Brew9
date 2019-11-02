@@ -351,7 +351,6 @@ export default class PickUp extends React.Component {
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 50 * alpha,
 									marginLeft: 25 * alpha,
 									marginRight: 5 * alpha,
 									flexDirection: "row",
@@ -364,7 +363,6 @@ export default class PickUp extends React.Component {
 									<View
 										pointerEvents="box-none"
 										style={{
-											flex: 1,
 											marginTop: 2 * alpha,
 										}}>
 										<Text
@@ -374,10 +372,7 @@ export default class PickUp extends React.Component {
 											style={styles.phoneText}>{item.shop.phone_no}</Text>
 									</View>
 								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
+							
 								<TouchableOpacity
 									onPress={() => this.onCallPressed(item.shop.phone_no)}
 									style={styles.callButton}>
@@ -944,7 +939,7 @@ const styles = StyleSheet.create({
 	branchAddressView: {
 		backgroundColor: "transparent",
 		width: 200 * alpha,
-		height: 50 * alpha,
+
 	},
 	shopNameText: {
 		color: "rgb(63, 63, 63)",
@@ -1030,7 +1025,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(231, 231, 231)",
 		height: 2 * alpha,
 		width: windowWidth - 80 *alpha,
-		marginTop: 26 * alpha,
+		marginTop: 10 * alpha,
 		alignSelf: "center",
 	},
 	lineTwoView: {

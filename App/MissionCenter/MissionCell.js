@@ -10,6 +10,7 @@ import { StyleSheet, TouchableWithoutFeedback, View, Text } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size"
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 
 export default class MissionCell extends React.Component {
@@ -22,8 +23,13 @@ export default class MissionCell extends React.Component {
 	
 	}
 
-	onCellTwoPress = () => {
-	
+	onStatusPressed = (statement_id) => {
+		if (this.props.status != undefined && this.props.status != "") {
+			if (this.props.status == "Completed") {
+				this.props.onStatusPressed(statement_id)
+			}
+		}
+		
 	}
 
 	render() {
@@ -41,6 +47,9 @@ export default class MissionCell extends React.Component {
 			}
 		}
 		
+		progress = this.props.progress != undefined ? this.props.progress : 0
+		mission_progress_text = (this.props.mission_task_count != null && this.props.mission_task_count != "") ?`(${progress}/${this.props.mission_task_count})` : ""
+
 		return <TouchableWithoutFeedback
 				onPress={this.onCellTwoPress}>
 				<View
@@ -57,7 +66,7 @@ export default class MissionCell extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.titleText}>{this.props.title}</Text>
+							style={styles.titleText}>{this.props.title} {mission_progress_text}</Text>
 						{
 							mission_vouchers.length > 0 ?
 							<Text
@@ -82,11 +91,15 @@ export default class MissionCell extends React.Component {
 							bottom: 0,
 							justifyContent: "center",
 						}}>
+						<TouchableOpacity
+							onPress={() => this.onStatusPressed(this.props.statement_id)}
+						>
 						<View
-							style={this.props.completed == true ? styles.statusCompleteView : styles.statusView}>
+							style={this.props.status != "In Progress" ? styles.statusCompleteView : styles.statusView}>
 							<Text
-								style={styles.completeText}>{this.props.completed == true ? "Completed" : "Incomplete"}</Text>
+								style={styles.completeText}>{this.props.status}</Text>
 						</View>
+						</TouchableOpacity>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>

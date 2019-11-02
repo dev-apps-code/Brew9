@@ -49,10 +49,26 @@ public class AppConstants {
         
         
         
+<<<<<<< HEAD
         // ADD EMBEDDED RESPONSES HERE
         // START EMBEDDED RESPONSES
         embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@tonyvoon/brew9", "assets://shell-app-manifest.json", "application/json"));
         embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40tonyvoon%2Fbrew9%2F1.0.0%2F36bf4caffa77200c1868b9e93499245e-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+=======
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // ADD EMBEDDED RESPONSES HERE
+        // START EMBEDDED RESPONSES
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@tonyvoon/brew9", "assets://shell-app-manifest.json", "application/json"));
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40tonyvoon%2Fbrew9%2F1.0.0%2F85cb3625c4a60c62ad50aff3b5faec44-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+>>>>>>> 209bf5e6fb33e0e8d660ae68bf26d8682054c7b8
         // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }
