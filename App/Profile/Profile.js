@@ -1112,7 +1112,7 @@ const styles = StyleSheet.create({
 	
 	pointiconImage: {
 		tintColor: LIGHT_GREY,
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 49 * alpha,
 		height: 33 * alpha,
@@ -1152,7 +1152,7 @@ const styles = StyleSheet.create({
 	},
 	walletIconImage: {
 		tintColor: LIGHT_GREY,
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 51 * alpha,
 		height: 33 * alpha,
@@ -1209,7 +1209,7 @@ const styles = StyleSheet.create({
 	rewardiconImage: {
 		tintColor: LIGHT_GREY,
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 51 * alpha,
 		height: 33 * alpha,
 	},

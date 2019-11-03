@@ -672,6 +672,7 @@ export default class Home extends React.Component {
 					productvariant={item.variants}
 					productenable={item.enabled}
 					productstatus={item.status}
+					productHidden={item.hidden}
 					recommended={item.recommended}
 					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
@@ -2072,10 +2073,10 @@ const styles = StyleSheet.create({
 		height: 0 * alpha
 	},
 	categoryListPosition2: {
-		height: 40 * alpha
+		height: 60 * alpha
 	},
 	categoryListPosition3: {
-		height: 80 * alpha
+		height: 100 * alpha
 	},
 	categoryListPosition4: {
 		height: 30 * alpha
