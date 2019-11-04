@@ -58,6 +58,13 @@ export default class ScanQr extends React.Component {
             scanned: false,
             modal_visible: false,
             message: "",
+            modal_visible: false,
+			modal_description: "",
+			modal_title: "",
+			modal_cancelable: false,
+			modal_ok_text: null,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
         }
     }
 
@@ -70,17 +77,24 @@ export default class ScanQr extends React.Component {
 
     renderSuccessModal() {
 		return <Brew9Modal
-				title={"Brew9"}
-				description={this.state.message}
-				visible={this.state.modal_visible}
-				cancelable={false}
-				okayButtonAction={()=> {
-					this.setState({modal_visible:false})
-				}}
-			/>
+            title={this.state.modal_title}
+            description={this.state.modal_description}
+            visible={this.state.modal_visible}
+            confirm_text={this.state.modal_ok_text}
+            cancelable={this.state.modal_cancelable}
+            okayButtonAction={()=> {
+                this.setState({modal_visible:false})
+                this.onSuccessfulScan()
+            }}
+            cancelButtonAction={this.state.modal_cancel_action}
+		/>
     }
 
- 
+    onSuccessfulScan= () => {
+		const { navigate } = this.props.navigation
+		navigate("Profile")
+    }
+    
     loadQrCodeScan(qr_code){
         const { dispatch, currentMember } = this.props
 
@@ -91,7 +105,13 @@ export default class ScanQr extends React.Component {
                 loading: false,
             })  
             if (eventObject.success) {
-                this.setState({ modal_visible: true, message: eventObject.message})
+                this.setState({ 
+                    modal_title:'Brew9',
+                    modal_description: eventObject.message,
+                    modal_ok_text: null,
+                    modal_cancelable: false,
+                    modal_visible: true, 
+                })
             }
             else {
                 this.refs.toast.show(eventObject.message)

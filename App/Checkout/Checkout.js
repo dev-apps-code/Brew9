@@ -730,7 +730,7 @@ export default class Checkout extends React.Component {
 							style={{
 								alignSelf: "flex-start",
 								width: 257 * alpha,
-								height: 49 * alpha,
+								flex: 1,
 								marginLeft: 16 * alpha,
 								marginTop: 10 * alpha,
 								alignItems: "flex-start",
@@ -771,10 +771,6 @@ export default class Checkout extends React.Component {
 					key={key}>
 					<Text
 						style={styles.nameTwoText}>{item.name}</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
 					<Text
 						style={styles.quantityTwoText}>Free</Text>
 				</View>
@@ -1553,7 +1549,7 @@ const styles = StyleSheet.create({
 	},
 	itemTwoView: {
 		backgroundColor: "transparent",
-		height: 50 * alpha,
+		flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -1564,7 +1560,10 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		flex: 1,
 		backgroundColor: "transparent",
+		marginTop: 5 * alpha,
+		marginBottom: 5 * alpha,
 		marginLeft: 16 * alpha,
 	},
 	quantityTwoText: {

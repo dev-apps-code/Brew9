@@ -150,6 +150,7 @@ export default class Home extends React.Component {
 			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 			image_isHorizontal: false,
 			image_check: false,
+			image_isLong: false,
 			app_url: '',
 			first_time_buy: false
 		}
@@ -433,18 +434,18 @@ export default class Home extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-				this.setState({
-					modal_visible: true, 
-					modal_title: "Brew9",
-					modal_description: "You are too far away", 
-					modal_cancelable: false, 
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-				})
-				return
-			} else {
+			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			// 	this.setState({
+			// 		modal_visible: true, 
+			// 		modal_title: "Brew9",
+			// 		modal_description: "You are too far away", 
+			// 		modal_cancelable: false, 
+			// 		modal_ok_action: ()=> {
+			// 			this.setState({modal_visible:false})
+			// 		},
+			// 	})
+			// 	return
+			// } else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -465,7 +466,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			}
+			// }
 		}
 	}
 
@@ -479,15 +480,17 @@ export default class Home extends React.Component {
 	onBannerPressed = (item,index) => {
 		const { navigate } = this.props.navigation
 
-		if (item.banner_detail_image == null || item.banner_detail_image == '' )
-		this.setState({
-			selected_promotion: item.banner_detail_image
-		}, function(){
-			// console.log(item.banner_detail_image)
+		if (item.banner_detail_image != undefined && item.banner_detail_image != "") {
 			this.setState({
-				isPromoToggle: true
+				selected_promotion: item.banner_detail_image
+			}, function(){
+				// console.log(item.banner_detail_image)
+				this.setState({
+					isPromoToggle: true
+				})
+				this.calculateImageDimension(item.banner_detail_image)
 			})
-		})
+		}
 	}
 
 	_toggleDelivery = (value) => {
@@ -669,6 +672,7 @@ export default class Home extends React.Component {
 					productvariant={item.variants}
 					productenable={item.enabled}
 					productstatus={item.status}
+					productHidden={item.hidden}
 					recommended={item.recommended}
 					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
@@ -1018,12 +1022,54 @@ export default class Home extends React.Component {
 		
 	}
 
-	onFeaturedPromotionPressed (item) {
-		const { navigate } = this.props.navigation
+	calculateImageDimension(selected_promotion){
 
-		navigate("FeaturedPromotionDetail", {
-			details: item,
-		})
+		const { image_check } = this.state
+		let image_width = 0
+		let image_height = 0
+		var image_long = false
+
+		if (!image_check) {
+			Image.getSize(selected_promotion, (width, height) => {
+				image_width = width, image_height = height
+
+				var ratio =  windowWidth / image_width
+				var calculated_height = image_height * ratio
+
+				if (calculated_height > windowHeight) {
+					image_long = true
+				}
+				if (image_width > image_height) {
+					this.setState({image_isHorizontal:true, image_check: true, image_isLong: image_long})
+				} else {
+					this.setState({image_isHorizontal:false, image_check: true, image_isLong: image_long})
+				}
+			});
+		}
+			
+	}
+
+	onFeaturedPromotionPressed (item) {
+
+		if (item.image.url != undefined && item.image.url != "") {
+			this.setState({
+				selected_promotion: item.image.url
+			}, function(){
+				// console.log(item.banner_detail_image)
+				this.setState({
+					isPromoToggle: true
+				})
+				this.calculateImageDimension(item.image.url)
+			})
+		}
+
+		
+
+		// const { navigate } = this.props.navigation
+
+		// navigate("FeaturedPromotionDetail", {
+		// 	details: item,
+		// })
 	}
 
 	get_product(index) {
@@ -1627,6 +1673,7 @@ export default class Home extends React.Component {
 
 		if (shop !== null && shop.featured_promotion !== null) {
 			
+			// console.log("Featured", shop.featured_promotion.icon.url)
 			return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
 					style={[style,styles.featuredpromoButton]}>
@@ -1803,38 +1850,28 @@ export default class Home extends React.Component {
 	}
 
 	renderGallery() {
-		const images = [{
-			url: this.state.selected_promotion,
-		}]	 
-		
-		if (this.state.selected_promotion) {
-			let image_width = 0
-			let image_height = 0
-		
-			if (this.state.isPromoToggle &&  !this.state.image_check) {
-				Image.getSize(this.state.selected_promotion, (width, height) => {
-					image_width = width, image_height = height
-				
-					if (image_width > image_height) {
-						this.setState({image_isHorizontal:true, image_check: true})
-					} else {
-						this.setState({image_isHorizontal:false, image_check: true})
-					}
-					
-				});
-			}
-			
 
-			return <Modal visible={this.state.isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
+		const { image_isHorizontal, isPromoToggle, image_isLong , selected_promotion} = this.state
+
+		// console.log(image_isHorizontal, isPromoToggle, image_isLong , selected_promotion)
+		// const images = [{
+		// 	url: selected_promotion,
+		// }]	 
+		
+		if (selected_promotion) {
+			
+			return <Modal visible={isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<View style={styles.loading}>
 					<ActivityIndicator size="large" color="white" />
 					</View>
 				<ScrollView
             		style={{ horizontal: true, flex: 1}}>
-					<View style={this.state.image_isHorizontal ? styles.bannerContainImage : styles.bannerImage} >
+					<View style={image_isHorizontal ? styles.bannerContainImage : 
+						!image_isHorizontal && !image_isLong ? styles.bannerShortImage : 
+						styles.bannerImage}>
 						<AutoHeightImage
-							source={{uri: this.state.selected_promotion}}
+							source={{uri: selected_promotion}}
 							width={windowWidth}/>
 				    </View>         
 				</ScrollView>		
@@ -2036,10 +2073,10 @@ const styles = StyleSheet.create({
 		height: 0 * alpha
 	},
 	categoryListPosition2: {
-		height: 40 * alpha
+		height: 60 * alpha
 	},
 	categoryListPosition3: {
-		height: 80 * alpha
+		height: 100 * alpha
 	},
 	categoryListPosition4: {
 		height: 30 * alpha
@@ -2062,9 +2099,18 @@ const styles = StyleSheet.create({
 		height: 60 * alpha,
 	},
 	bannerImage:{
+		alignItems: "center",
+		justifyContent: "center",
 		flex: 1,
 	},
+	bannerShortImage: {
+		alignItems: "center",
+		justifyContent: "center",
+		flex: 1,
+		height: windowHeight,
+	},
 	bannerContainImage: {
+		backgroundColor: "transparent",
 		height: windowHeight,
 		alignItems: "center",
 		justifyContent: "center"
@@ -2941,7 +2987,7 @@ const styles = StyleSheet.create({
 		padding: 0,
 		position: "absolute",
 		width: 60 * alpha,
-		height: 30 * alpha,
+		height: 60 * alpha,
 		left: 10 * alpha,
 	},
 	featuredpromoButtonPosition1: {	
@@ -2954,7 +3000,7 @@ const styles = StyleSheet.create({
 		bottom: 100 * alpha,
 	},
 	featuredpromoButtonImage: {
-		resizeMode: "cover",
+		resizeMode: "contain",
 		width: "100%",
 		height: "100%"
 	},

@@ -19,6 +19,8 @@ import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKGROUND } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { BlurView } from 'expo-blur';
+import Constants from 'expo-constants';
 
 export default class ProductCell extends React.Component {
   constructor(props) {
@@ -28,10 +30,14 @@ export default class ProductCell extends React.Component {
   componentDidMount() {}
 
   onProductCellPress = () => {
-    this.props.onCellPress(this.props.item, this.props.index);
-    const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Product', 'Click', this.props.item.name))
-    
+
+    if (this.props.productHidden != undefined && !this.props.productHidden) {
+      this.props.onCellPress(this.props.item, this.props.index);
+      const analytics = new Analytics(ANALYTICS_ID)
+      analytics.event(new Event('Product', 'Click', this.props.item.name))
+      
+    }
+   
   };
 
   onAddPressed = () => {
@@ -79,8 +85,6 @@ export default class ProductCell extends React.Component {
   };
 
   render() {
-
-    
     const ingredients = this.props.productingredient.map((item, key) => {
 
       var highlight = false
@@ -100,128 +104,90 @@ export default class ProductCell extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
+        
         <View navigation={this.props.navigation} style={styles.productcell}>
-          <View
-            pointerEvents="box-none"
-            style={{
-              width: 74 * alpha,
-              height: 74 * alpha,
-              marginLeft: 3 * alpha,
-              marginTop: 4 * alpha
-            }}
-          >
             <View
               pointerEvents="box-none"
               style={{
-                position: "absolute",
-                left: 0,
-                top: 0 * alpha,
-                bottom: 0 * alpha,
-                justifyContent: "center"
-              }}
-            >
-              <Image
+                width: 74 * alpha,
+                height: 74 * alpha,
+                marginLeft: 3 * alpha,
+                marginTop: 4 * alpha
+              }} >
+              <View
+                pointerEvents="box-none"
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0 * alpha,
+                  bottom: 0 * alpha,
+                  justifyContent: "center"
+                }}
+              >
+                { this.props.productHidden ? <Image
+                  source={{ uri: this.props.productimage }}
+                  style={styles.productblurimageImage}
+                  blurRadius={10}
+                /> :  <Image
                 source={{ uri: this.props.productimage }}
                 style={styles.productimageImage}
-              />
-              {/* {!this.props.productenable ? 
-              <View style={styles.soldView}>
-                <Text style={styles.soldtextText}>Sold Out</Text>
-              </View> : this.props.daily_limit > 0 && this.props.daily_limit ?
-              <View style={styles.soldView}>
-                <Text style={styles.soldtextText}>Limit {this.props.daily_limit}</Text>
+                
+              />}
+               
+              
+                {this.props.productstatus != null && this.props.productstatus.length > 0 ? 
+                  <View style={styles.soldView}>
+                    <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
+                  </View>
+                : null }
               </View>
-              : null } */}
-              {this.props.productstatus != null && this.props.productstatus.length > 0 ? 
-                <View style={styles.soldView}>
-                  <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
-                </View>
-              : null }
+              
             </View>
+            { this.props.productHidden ? <View style={styles.blurView}>
+              <Image
+                  source={require("./../../assets/images/blur.png")}
+                  style={styles.detailBlurImage} />
+              </View> : <View style={styles.detailsView}>
+              <Text numberOfLines={2} style={styles.titleText}>
+                {this.props.productname}
+                {this.props.recommended && (
+                  <Image
+                    source={require("./../../assets/images/star_icon.png")}
+                    style={styles.recommendedStarImage}/>
+                )}
+              </Text>
+              <View
+                pointerEvents="box-none"
+                style={{
+                  marginTop: 2 * alpha,
+                  marginBottom: 2 * alpha,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                }}
+              >
+                {ingredients}
+              </View>
+
+              <Text numberOfLines={hasPrice ? 2 : 3} style={styles.descriptionText}>
+                {this.props.productsummary}
+              </Text>
+              <View
+                style={{
+                  flex: 1
+                }}
+              />
             
-          </View>
-          <View style={styles.detailsView}>
-            <Text numberOfLines={2} style={styles.titleText}>
-              {this.props.productname}
-              {this.props.recommended && (
-                <Image
-									source={require("./../../assets/images/star_icon.png")}
-									style={styles.recommendedStarImage}/>
-              )}
-            </Text>
-            <View
-              pointerEvents="box-none"
-              style={{
-                marginTop: 2 * alpha,
-                marginBottom: 2 * alpha,
-                flexDirection: "row",
-                flexWrap: "wrap",
-              }}
-            >
-              {ingredients}
+              <Text style={styles.priceText}>
+                {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
+              </Text>
+             
             </View>
-
-            <Text numberOfLines={hasPrice ? 2 : 3} style={styles.descriptionText}>
-              {this.props.productsummary}
-            </Text>
-            <View
-              style={{
-                flex: 1
-              }}
-            />
-           
-            <Text style={styles.priceText}>
-              {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
-            </Text>
+            }
             
+            {/* { this.props.productHidden && (<BlurView tint="light" intensity={85} blurRadius={100} style={styles.blurView}></BlurView>)} */}
             
-
-            {/* <View
-							pointerEvents="box-none"
-							style={{
-								alignSelf: "stretch",
-								height: 29 * alpha,
-								marginRight: 1 * alpha,
-								flexDirection: "row",
-								alignItems: "flex-end",
-							}}>
-							<Text
-                				style={styles.priceText}>${parseFloat(this.props.productprice).toFixed(2)}</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/> */}
-            {/* <View
-								pointerEvents="box-none"
-								style={{
-									width: 61,
-									height: 28,
-									marginBottom: 2,
-								}}>
-								<TouchableOpacity
-									onPress={this.onAddPressed}
-									style={styles.addButton}>
-									<Image
-										source={require("./../../assets/images/add-5.png")}
-										style={styles.addButtonImage}/>
-								</TouchableOpacity>
-								<View
-									style={styles.selectoptionView}>
-									<TouchableOpacity
-										onPress={this.onButtonPressed}
-										style={styles.optionButton}>
-										<Text
-											style={styles.optionButtonText}>Option</Text>
-									</TouchableOpacity>
-									<View
-										style={styles.badgeView}>
-										<Text
-											style={styles.numberofitemText}>2</Text>
-									</View>
-								</View>
-							</View> */}
-            {/* </View> */}
-          </View>
+            { this.props.productHidden && (<Text
+							style={styles.toBeUnvieiledText}>To Be Unveiled</Text>)}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -229,14 +195,50 @@ export default class ProductCell extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  blurView: {
+    flex: 1,
+    width: "100%",
+    // height: 143 * alpha,
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  notBlurred: {
+    ...StyleSheet.absoluteFill,
+    top: Constants.statusBarHeight,
+  },
   productcell: {
+    backgroundColor: "white",
     width: "100%",
     // height: 143 * alpha,
     flex: 1,
     flexDirection: "row",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   productimageImage: {
+    backgroundColor: "transparent",
+    resizeMode: "cover",
+    width: 74 * alpha,
+    height: 74 * alpha,
+    marginLeft: 5 * alpha
+  },
+  blurView: {
+    backgroundColor: "transparent",
+    width: "100%",
+    flex: 1,
+    height: 113 * alpha,
+    marginRight: 10 * alpha,
+    marginBottom: 20 * alpha,
+  },
+  detailBlurImage: {
+    backgroundColor: "transparent",
+    resizeMode: "contain",
+    width: 200 * alpha,
+    height: "100%",
+  },
+  productblurimageImage: {
     backgroundColor: "transparent",
     resizeMode: "cover",
     width: 74 * alpha,
@@ -446,5 +448,21 @@ const styles = StyleSheet.create({
 		marginLeft: 6 * alpha,
     marginRight: -4 * alpha,
     backgroundColor: "transparent",
+  },
+  toBeUnvieiledText: {
+		color: "white",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: PRIMARY_COLOR,
+    position: "absolute",
+    paddingTop: 3 * alpha,
+    paddingBottom: 3 * alpha,
+    paddingRight: 5 * alpha,
+    paddingLeft: 5 * alpha,
+		right: 0,
+		top: 0,
 	},
 })

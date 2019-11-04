@@ -34,15 +34,19 @@ export default class MissionCell extends React.Component {
 
 	render() {
 	
-		var voucher_string = ""
+		var reward_string = ""
 		var mission_vouchers = this.props.vouchers
 
-		if (this.props.vouchers) {
+		if (this.props.point > 0) {
+			reward_string += `+${this.props.point} points `
+		}
+
+		if (this.props.vouchers.length > 0) {
 			for (var index in mission_vouchers) {
 				var voucher = mission_vouchers[index]
-				voucher_string += (voucher.voucher.name + " x" + voucher.quantity)
+				reward_string += (voucher.voucher.name + " x" + voucher.quantity)
 				if (index < mission_vouchers.length) {
-					voucher_string += ", "
+					reward_string += ", "
 				}
 			}
 		}
@@ -67,13 +71,11 @@ export default class MissionCell extends React.Component {
 						}}>
 						<Text
 							style={styles.titleText}>{this.props.title} {mission_progress_text}</Text>
-						{
-							mission_vouchers.length > 0 ?
+						
 							<Text
-								style={styles.descriptionText}>{voucher_string}</Text> : 
-							<Text
-								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text>
-						}
+								style={styles.descriptionText}>{reward_string}</Text>
+							{/* <Text
+								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text> */}
 						
 						<View
 							style={{

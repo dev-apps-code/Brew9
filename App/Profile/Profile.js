@@ -10,7 +10,7 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Animated }
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
-import {KURL_INFO} from "../Utils/server";
+import {KURL_INFO, KURL_MEMBERSHIP_INFO} from "../Utils/server";
 import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
@@ -121,6 +121,16 @@ export default class Profile extends React.Component {
 
 			navigate("MemberProfile")
 		}
+	}
+
+	onMembershipInfoPressed = () => {
+		const { navigate } = this.props.navigation
+		const {  company_id } = this.props
+
+		navigate("WebCommon", {
+			title: 'Membership Info',
+			web_url: KURL_MEMBERSHIP_INFO,
+		})
 	}
 
 	onMissionCenterPressed = () => {
@@ -684,6 +694,59 @@ export default class Profile extends React.Component {
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
+						onPress={() => this.onMembershipInfoPressed()}
+						style={styles.menuRowbuttonButton}>
+						<View
+							style={styles.menuRowView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 24 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>Membership Info</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Image
+											source={require("./../../assets/images/forward.png")}
+											style={styles.menuRowArrowImage}/>
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+								}}>
+								
+									<Text
+										style={styles.menuRowDescriptionText}></Text>
+								
+								<View
+									style={styles.menuRowLineView}/>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
 						onPress={() => this.onOrderButtonPressed()}
 						style={styles.menuRowbuttonButton}>
 						<View
@@ -1049,7 +1112,7 @@ const styles = StyleSheet.create({
 	
 	pointiconImage: {
 		tintColor: LIGHT_GREY,
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 49 * alpha,
 		height: 33 * alpha,
@@ -1089,7 +1152,7 @@ const styles = StyleSheet.create({
 	},
 	walletIconImage: {
 		tintColor: LIGHT_GREY,
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 51 * alpha,
 		height: 33 * alpha,
@@ -1146,7 +1209,7 @@ const styles = StyleSheet.create({
 	rewardiconImage: {
 		tintColor: LIGHT_GREY,
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 51 * alpha,
 		height: 33 * alpha,
 	},
