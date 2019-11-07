@@ -2383,7 +2383,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		width: 45 * alpha,
+		width: 50 * alpha,
 	},
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",

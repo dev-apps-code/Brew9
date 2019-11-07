@@ -752,6 +752,7 @@ const styles = StyleSheet.create({
 		marginTop: 16 * alpha,
 		alignItems: "center",
 	},
+	
 	queuenumberText: {
 		backgroundColor: "transparent",
 		color: PRIMARY_COLOR,

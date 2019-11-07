@@ -242,14 +242,13 @@ export default class Home extends React.Component {
 			const latInRad = this.toRad(shop.latitude);
 			const longInRad = this.toRad(shop.longitude);
 			var calculated_distance = Math.acos(Math.sin(prevLatInRad) * Math.sin(latInRad) + Math.cos(prevLatInRad) * Math.cos(latInRad) * Math.cos(longInRad - prevLongInRad))
-			console.log("Compute", calculated_distance)
+			// console.log("Compute", calculated_distance)
 			this.setState({distance : calculated_distance})
 		  }
 		}
 		
 	  
 	toRad(angle) {
-		console.log("Angle", Math.PI)
 		return (angle * Math.PI) / 180;
 	}
 
@@ -1064,7 +1063,7 @@ export default class Home extends React.Component {
 			selected_variants: clone_variants
 		}
 
-		console.log("cart", cartItem)
+		// console.log("cart", cartItem)
 		
 
 		product.total_quantity = parseInt(product.total_quantity) + parseInt(this.state.select_quantity)
