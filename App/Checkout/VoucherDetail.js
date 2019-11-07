@@ -302,14 +302,14 @@ export default class VoucherDetail extends React.Component {
 						</View>
 					</View>
 				</ScrollView>
-				{ this.state.valid ? 
+				{/* { this.state.valid ?  */}
 					<TouchableOpacity
 					onPress={this.onUsePessed}
 					style={styles.useButton}>
 					<Text
 						style={styles.useButtonText}>Apply Voucher</Text>
 				</TouchableOpacity>
-				: undefined}
+				{/* : undefined} */}
 			
 			</View>
 	}

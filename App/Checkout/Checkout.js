@@ -99,8 +99,8 @@ export default class Checkout extends React.Component {
 				console.log(`--   voucher ${eventObject.result}`)
 				if (eventObject.success) {
 					this.setState({ 
-						valid_vouchers:eventObject.result
-					})	
+						valid_vouchers: eventObject.result
+						})	
 					}			      
 				}
 
@@ -409,8 +409,6 @@ export default class Checkout extends React.Component {
 			navigate("VerifyUserStack")
 			return
 		}
-
-	
 	}
 
 	measureView(event) {
@@ -749,7 +747,10 @@ export default class Checkout extends React.Component {
 			)
 		})
 
-		return <View style={styles.orderitemsView}><View
+		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
+				<TouchableOpacity
+							onPress={this.onVoucherButtonPressed}
+							style={styles.voucherButton}><View
 					style={styles.drinksView}>
 						<View
 							pointerEvents="box-none"
@@ -768,12 +769,12 @@ export default class Checkout extends React.Component {
 								</View>
 								<Text
 									style={styles.productVoucherText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'} available</Text>
-								<Image
-									source={require("./../../assets/images/group-109-copy.png")}
-									style={styles.dottedLineImage}/>
+								
 							</View>
-				</View>
+					</View>
+				</TouchableOpacity>
 				{renderVouchers}
+			</View>
 			</View>
 	}
 	
@@ -817,7 +818,6 @@ export default class Checkout extends React.Component {
 							</View>
 				</View>
 				
-				
 		})
 
 		const voucher_items = vouchers.map((item, key) => {
@@ -836,9 +836,10 @@ export default class Checkout extends React.Component {
 			</View>
 		})
 
-		return <View style={styles.orderitemsView}>
+		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
 			{order_items}
 			{voucher_items}
+		</View>
 		</View>
 	}
 
@@ -879,70 +880,86 @@ export default class Checkout extends React.Component {
 							}}>
 							<View
 								style={styles.lineView}/>
-							<View
-								style={styles.locationView}>
+								<View style={styles.locationWrapperView}>
 								<View
-									style={styles.branchView}>
-									<Text
-										style={styles.shopBranchText}>{shop.name}</Text>
-									<Text
-										numberOfLines={3}
-										style={styles.shopBranchAddressText}>{shop.address}</Text>
-								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.callView}>
-									<TouchableOpacity
-										onPress={() => this.onCallPressed(shop.phone_no)}
-										style={styles.callIconButton}>
-										<Image
-											source={require("./../../assets/images/group-3-23.png")}
-											style={styles.callIconButtonImage}/>
-									</TouchableOpacity>
+									style={styles.locationView}>
+									<View
+										style={styles.branchView}>
+										<Text
+											style={styles.shopBranchText}>{shop.name}</Text>
+										<Text
+											numberOfLines={3}
+											style={styles.shopBranchAddressText}>{shop.address}</Text>
+									</View>
 									<View
 										style={{
 											flex: 1,
 										}}/>
-									<Text
-										style={styles.callText}>Call</Text>
-								</View>
-								<View
-									style={styles.directionView}>
-									<TouchableOpacity
-										onPress={ () => this.onDirectionPressed(shop)}
-										style={styles.directionIconButton}>
-										<Image
-											source={require("./../../assets/images/group-3-17.png")}
-											style={styles.directionIconButtonImage}/>
-									</TouchableOpacity>
 									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.directionText}>Direction</Text>
+										style={styles.callView}>
+										<TouchableOpacity
+											onPress={() => this.onCallPressed(shop.phone_no)}
+											style={styles.callIconButton}>
+											<Image
+												source={require("./../../assets/images/group-3-23.png")}
+												style={styles.callIconButtonImage}/>
+										</TouchableOpacity>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Text
+											style={styles.callText}>Call</Text>
+									</View>
+									<View
+										style={styles.directionView}>
+										<TouchableOpacity
+											onPress={ () => this.onDirectionPressed(shop)}
+											style={styles.directionIconButton}>
+											<Image
+												source={require("./../../assets/images/group-3-17.png")}
+												style={styles.directionIconButtonImage}/>
+										</TouchableOpacity>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Text
+											style={styles.directionText}>Direction</Text>
+									</View>
 								</View>
 							</View>
-							<View
-								style={styles.lineTwoView}/>
+							<View style={styles.receiptSectionSeperator}>
+								<Image
+									source={require("./../../assets/images/curve_in_background.png")}
+									style={styles.curve_in}/>
+								<View
+									style={styles.sectionSeperatorView}/>
+							</View>
+							
 							{this.renderOrderItems(cart, vouchers_to_use, promotion)}
 							{this.renderVoucherSection()}
-							<View
-								style={styles.totalView}>
-								<Text
-									style={styles.totallabelText}>TOTAL</Text>
+							<View style={styles.receiptSectionSeperator}>
+								<Image
+									source={require("./../../assets/images/curve_in_background.png")}
+									style={styles.curve_in}/>
 								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.totalText}>${parseFloat(final_price).toFixed(2)}</Text>
+									style={styles.sectionSeperatorView}/>
 							</View>
-							<View
-								style={styles.lineThreeView}/>
+							<View style={styles.totalViewWrapper}>
+								<View
+									style={styles.totalView}>
+									<Text
+										style={styles.totallabelText}>TOTAL</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.totalText}>${parseFloat(final_price).toFixed(2)}</Text>
+								</View>
+								
+							</View>
 						</View>
 						
 					</View>
@@ -1461,8 +1478,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 375 * alpha,
-		height: 50 * alpha,
+		flex: 1,
 	},
 	voucherButtonImage: {
 		resizeMode: "contain",
@@ -1966,7 +1982,6 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	orderCartView: {
-		backgroundColor: "rgb(248, 248, 248)",
 		alignSelf: "stretch",
 		marginLeft: 18 * alpha,
 		marginRight: 18 * alpha,
@@ -1988,20 +2003,20 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	logoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
-		width: 23 * alpha,
-		height: 46 * alpha,
+		width: 30 * alpha,
+		height: 60 * alpha,
 		marginTop: 30 * alpha,
 	},
 	completedOrderText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 2 * alpha,
+		marginTop: 10 * alpha,
 		marginBottom: 30 * alpha,
 	},
 	thankMessageText: {
@@ -2019,6 +2034,10 @@ const styles = StyleSheet.create({
 	lineView: {
 		backgroundColor: "rgb(234, 234, 234)",
 		height: 2 * alpha,
+	},
+	locationWrapperView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		flex: 1,
 	},
 	locationView: {
 		backgroundColor: "transparent",
@@ -2148,12 +2167,19 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
+	totalViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
+		flex: 1,
+		borderBottomLeftRadius: 14 * alpha,
+		borderBottomRightRadius: 14 * alpha,
+	},
 	totalView: {
 		backgroundColor: "transparent",
 		height: 21 * alpha,
 		marginLeft: 26 * alpha,
 		marginRight: 24 * alpha,
 		marginTop: 10 * alpha,
+		marginBottom: 18 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 	},
@@ -2303,6 +2329,10 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 
+	drinksViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
+		flex: 1,
+	},
 	drinksView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -2377,6 +2407,27 @@ const styles = StyleSheet.create({
 		height: 2 * alpha,
 	},
 
+	receiptSectionSeperator: {
+		flex: 1,
+		backgroundColor: "transparent",
+		alignContent: "center",
+		justifyContent: "center",
+	}, 
 
+	curve_in: {
+		height: 14 * alpha,
+		resizeMode: "stretch",
+		width: "100%",
+		backgroundColor: "transparent",
+	},
+
+	sectionSeperatorView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		position: "absolute",
+		alignSelf: "center",
+		width: 300 * alpha,
+		height: 1 * alpha,
+		
+	},
 
 })
