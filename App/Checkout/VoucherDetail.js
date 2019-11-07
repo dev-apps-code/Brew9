@@ -85,7 +85,7 @@ export default class VoucherDetail extends React.Component {
 		const display_value = item.voucher.display_value
 		const discount_type = item.voucher.discount_type
 		const discount_price = item.voucher.discount_price
-		if (display_value != null  && display_value !==''){
+		if (display_value != null  && display_value !=='' && discount_type == 'fixed'){
 
 			return (
 				<View
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -337,8 +337,8 @@ const styles = StyleSheet.create({
 	},
 	currencyText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "SFProText-Medium",
-		fontSize: 9 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -359,19 +359,19 @@ const styles = StyleSheet.create({
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "SFProText-Medium",
-		fontSize: 9 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		right: 0,
-		top: 16 * alpha,
+		top: 10 * alpha,
 	},
 	percentvalueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 24 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(68, 68, 68)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 40 * alpha,
+		width: 70 * alpha,
 		height: 31 * alpha,
 	},
 	currenrcyText: {
@@ -434,11 +434,11 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0 * alpha,
-		top: 6 * alpha,
+		top: 3 * alpha,
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
 	},
 	dateText: {
 		color: "rgb(149, 148, 148)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
 	},
 	termsButtonText: {
 		color: "rgb(136, 133, 133)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
 	},
 	textTwoText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
 	},
 	titleTwoText: {
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
 	},
 	usableshopText: {
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
 	usableshopcontentText: {
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
 	usabletimeText: {
 		backgroundColor: "transparent",
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
 	},
 	usabletimecontentText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -606,7 +606,7 @@ const styles = StyleSheet.create({
 	},
 	usableitemText: {
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
 	},
 	usableitemcontentText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -628,7 +628,7 @@ const styles = StyleSheet.create({
 	},
 	usablescenarioText: {
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -639,7 +639,7 @@ const styles = StyleSheet.create({
 	},
 	usablescenariocontentText: {
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
 	usableconditionText: {
 		backgroundColor: "transparent",
 		color: "rgb(61, 61, 61)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
 	usableconditioncontentText: {
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

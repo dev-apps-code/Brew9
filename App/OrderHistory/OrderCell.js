@@ -136,7 +136,7 @@ export default class OrderCell extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.priceText}>${this.props.total}</Text>
+							style={styles.priceText}>${parseFloat(this.props.total).toFixed(2)}</Text>
 					</View>
 				</View>
 				{/* <View

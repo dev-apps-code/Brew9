@@ -62,10 +62,10 @@ export default class MissionCell extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							position: "absolute",
-							left: 20 * alpha,
+							marginLeft: 20 * alpha,
 							width: 335 * alpha,
-							top: 18 * alpha,
+							flex: 1,
+							marginTop: 18 * alpha,
 							bottom: 1 * alpha,
 							alignItems: "flex-start",
 						}}>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 	missioncell: {
 		backgroundColor: "white",
 		width: "100%",
-		height: 66 * alpha,
+		flex: 1,
 	},
 	titleText: {
 		backgroundColor: "transparent",
@@ -124,15 +124,16 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	descriptionText: {
+		width: 250 * alpha,
 		backgroundColor: "transparent",
-
 		color: "black",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginTop: 2,
+		marginTop: 2 * alpha,
+		marginBottom: 18 * alpha,
 	},
 	lineView: {
 		backgroundColor: "rgb(241, 241, 241)",

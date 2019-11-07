@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Animated, Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native"
+import { Animated, Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
 import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
@@ -21,7 +21,7 @@ import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
-import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR} from "../Common/common_style";
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -62,6 +62,8 @@ export default class Checkout extends React.Component {
 			vouchers_to_use:[],
 			valid_vouchers:[],
 			discount:0,
+			promotion: this.props.navigation.getParam("promotion", []),
+			promotion_ids: this.props.navigation.getParam("promotion_ids", []),
 			cart:this.props.navigation.getParam("cart", []),
 			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
 			modal_visible: false,
@@ -74,7 +76,7 @@ export default class Checkout extends React.Component {
 			payment_toggle: false,
 			payment_model_visible: false,
 			payment_view_height: 0 * alpha,
-			selected_payment: 'credits'
+			selected_payment: ''
 		}
 
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -258,7 +260,7 @@ export default class Checkout extends React.Component {
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 		const { navigate } = this.props.navigation
-		const {cart,vouchers_to_use, selected_payment} = this.state
+		const {cart,vouchers_to_use, selected_payment, promotion_ids} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			console.log(eventObject)
@@ -301,12 +303,21 @@ export default class Checkout extends React.Component {
 						}
 					}
 				}
-				this.refs.toast.show(eventObject.message);				
+				this.setState({
+					modal_title:'Brew9',
+					modal_description:eventObject.message,
+					modal_ok_text: null,
+					modal_cancelable: false,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+					modal_visible:true,
+				})			
 			}
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
 			createAction('shops/loadMakeOrder')({
@@ -342,14 +353,22 @@ export default class Checkout extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-			// 	this.refs.toast.show("You are too far away");
-			// 	return
-			// }
-
+			 
+			if ( selected_payment == "") {
+				this.tooglePayment()
+			}
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
-					this.refs.toast.show("You do not have enough credit. Please top up at our counter");
+					this.setState({
+						modal_visible:true,
+						modal_title: "Brew9",
+						modal_description: "You do not have enough credit. Please top up at our counter",
+						modal_ok_text: null,
+						modal_cancelable: false,
+						modal_ok_action: ()=> {
+							this.setState({modal_visible:false})
+						},
+					})
 					return
 				}
 	
@@ -412,6 +431,18 @@ export default class Checkout extends React.Component {
 		// navigate("Transaction", {
 		// 	amount: cart_total
 		// })
+	}
+
+	onDirectionPressed(shop) {
+		let latitude = shop ? parseFloat(shop.latitude) : 0.0
+		let longitude = shop ? parseFloat(shop.longitude) : 0.0
+
+		openMap({ latitude: latitude, longitude: longitude });
+	}
+
+	
+	onCallPressed = (phone_no) => {
+		Linking.openURL(`tel:${phone_no}`)
 	}
 
 	renderPopup() {
@@ -686,6 +717,240 @@ export default class Checkout extends React.Component {
 		</Animated.View>
 	}
 
+	renderVoucherSection() {
+
+		const { vouchers_to_use } = this.state
+
+		const renderVouchers = vouchers_to_use.map((item,key) => {
+			return (
+				<View style={styles.orderitemsView}><View
+					style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>{item.voucher.name}</Text>
+									
+										<View style={styles.spacer} />
+								</View>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
+							</View>
+					</View>
+				</View>
+			)
+		})
+
+		return <View style={styles.orderitemsView}><View
+					style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>Available Voucher</Text>
+									
+										<View style={styles.spacer} />
+								</View>
+								<Text
+									style={styles.productVoucherText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'} available</Text>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
+							</View>
+				</View>
+				{renderVouchers}
+			</View>
+	}
+	
+	renderOrderItems(items, vouchers, promotions) {
+
+		let fullList = [...items,...promotions] 
+		const order_items = fullList.map((item, key) => {
+			var price_string = item.price != undefined && item.price > 0 && item.clazz == "product" ? `$${parseFloat(item.price).toFixed(2)}` 
+			: item.price != undefined && item.price > 0 && item.clazz == "promotion" ? `-$${parseFloat(item.price).toFixed(2)}` 
+			: item.price != undefined && item.price == 0 ? "Free" : ""
+			let filtered = item.selected_variants != null ? item.selected_variants.filter(function(el) { return el }) : []
+			let variant_array = filtered.map(a => a.value)
+			return <View
+					style={styles.drinksView}
+					key={key}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>{item.name}</Text>
+									{(variant_array.length > 0) ?
+									<Text
+										style={styles.productVariantText}>{variant_array.join(", ")}</Text> :
+										<View style={styles.spacer} />
+									}
+								</View>
+								<Text
+									style={styles.productQuantityText}>{ item.quantity != null && item.quantity > 0 && (`x${item.quantity}`)}</Text>
+								<Text
+									style={styles.productPriceText}>{price_string}</Text>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
+							</View>
+				</View>
+				
+				
+		})
+
+		const voucher_items = vouchers.map((item, key) => {
+
+			return <View
+				style={styles.voucherView}
+				key={key}>
+				<Text
+					style={styles.voucherNameText}>{item.voucher.name}</Text>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+				<Text
+					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${parseFloat(item.voucher.discount_price).toFixed(2)}` : ""}</Text>
+			</View>
+		})
+
+		return <View style={styles.orderitemsView}>
+			{order_items}
+			{voucher_items}
+		</View>
+	}
+
+	renderCheckoutReceipt(){
+		const { cart, promotion, vouchers_to_use, shop , cart_total, discount} = this.state
+		let {currentMember, selectedShop} = this.props
+		var final_price = cart_total - discount 
+		if (final_price < 0){
+			final_price = 0
+		}
+		final_price = final_price.toFixed(2)
+		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
+
+		return <View
+				style={styles.orderReceiptView}>
+				<ScrollView
+					style={styles.orderScrollView}>
+					<View
+						style={styles.orderCartView}>
+						<View
+							pointerEvents="box-none"
+							style={styles.whiteboxView}>
+							<View
+								style={styles.completeOrderView}>
+								<Image
+									source={require("./../../assets/images/group-3-20.png")}
+									style={styles.logoImage}/>
+								<Text
+									style={styles.completedOrderText}>Order Information</Text>
+							</View>
+							<View
+								style={styles.viewView}/>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								flex: 1,
+							}}>
+							<View
+								style={styles.lineView}/>
+							<View
+								style={styles.locationView}>
+								<View
+									style={styles.branchView}>
+									<Text
+										style={styles.shopBranchText}>{shop.name}</Text>
+									<Text
+										numberOfLines={3}
+										style={styles.shopBranchAddressText}>{shop.address}</Text>
+								</View>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<View
+									style={styles.callView}>
+									<TouchableOpacity
+										onPress={() => this.onCallPressed(shop.phone_no)}
+										style={styles.callIconButton}>
+										<Image
+											source={require("./../../assets/images/group-3-23.png")}
+											style={styles.callIconButtonImage}/>
+									</TouchableOpacity>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.callText}>Call</Text>
+								</View>
+								<View
+									style={styles.directionView}>
+									<TouchableOpacity
+										onPress={ () => this.onDirectionPressed(shop)}
+										style={styles.directionIconButton}>
+										<Image
+											source={require("./../../assets/images/group-3-17.png")}
+											style={styles.directionIconButtonImage}/>
+									</TouchableOpacity>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.directionText}>Direction</Text>
+								</View>
+							</View>
+							<View
+								style={styles.lineTwoView}/>
+							{this.renderOrderItems(cart, vouchers_to_use, promotion)}
+							{this.renderVoucherSection()}
+							<View
+								style={styles.totalView}>
+								<Text
+									style={styles.totallabelText}>TOTAL</Text>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<Text
+									style={styles.totalText}>${parseFloat(final_price).toFixed(2)}</Text>
+							</View>
+							<View
+								style={styles.lineThreeView}/>
+						</View>
+						
+					</View>
+				</ScrollView>
+			</View>
+	}
+
+
 	render() {
 
 		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity} = this.state
@@ -697,470 +962,33 @@ export default class Checkout extends React.Component {
 		final_price = final_price.toFixed(2)
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
-		const renderVouchers = vouchers_to_use.map((item,key) => {
-			return (
-				<View
-					key={key}
-					pointerEvents="box-none"
-					style={{
-						height: 18 * alpha,
-						marginLeft: 16 * alpha,
-						marginRight: 16 * alpha,
-						flexDirection: "row",
-						alignItems: "center",
-					}}>
-					<Text
-						style={styles.promoCodeText}>{item.voucher.name}</Text>
-				</View>				
-				)
-		})
-		const cart_items = cart.map((item, key) => {
-
-			if (item.clazz == "product") {
-				if (item.selected_variants) {
-
-					let filtered = item.selected_variants.filter(function(el) { return el })
-					let variant_array = filtered.map(a => a.value)
-	
-					return <View
-						style={styles.itemView}
-						key={key}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								alignSelf: "flex-start",
-								width: 257 * alpha,
-								flex: 1,
-								marginLeft: 16 * alpha,
-								marginTop: 10 * alpha,
-								alignItems: "flex-start",
-							}}>
-							<Text
-								style={styles.nameText}>{item.name}</Text>
-							<Text
-								style={styles.variantText}>{variant_array.join(", ")}</Text>
-						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.quantityText}>x{item.quantity}</Text>
-						<Text
-							style={styles.cartpriceText}>${parseFloat(item.price).toFixed(2)}</Text>
-					</View>
-				} else {
-					return <View
-						style={styles.itemTwoView}
-						key={key}>
-						<Text
-							style={styles.nameTwoText}>{item.name}</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.quantityTwoText}>x{item.quantity}</Text>
-						<Text
-							style={styles.rm20TwoText}>${parseFloat(item.price).toFixed(2)}</Text>
-					</View>
-				}	
-			} else if (item.clazz == "promotion") {
-				return <View
-					style={styles.itemTwoView}
-					key={key}>
-					<Text
-						style={styles.nameTwoText}>{item.name}</Text>
-					<Text
-						style={styles.quantityTwoText}>Free</Text>
-				</View>
-			}
-		})
-
+		
 		return <View
 			style={styles.checkoutView}>
 			<ScrollView
 				style={styles.scrollviewScrollView}
 				onLayout={(event) => this.measureView(event)}>
-				<View
-					style={styles.branchView}>
-					<View
-						style={styles.branchTwoView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								height: 31 * alpha,
-								flexDirection: "row",
-								alignItems: "flex-start",
-							}}>
-							<View
-								style={styles.branchThreeView}>
-								<Text
-									style={styles.branchText}>{this.state.shop ? this.state.shop.name : ""}</Text>
-								<Image
-									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.arrowImage2}/>
-							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-								<TouchableOpacity onPress={this.onLocationButtonPressed}>
-									<Image
-										source={require("./../../assets/images/group-8-11.png")}
-										style={styles.group8Image}/>
-								</TouchableOpacity>
-						</View>					
-						<Text
-							style={styles.distance1kmPleaseText}>Distance {selectedShop.distance} km
-						</Text>
-					</View>
-				{/*	<View
-						pointerEvents="box-none"
-						style={{
-							height: 54 * alpha,
-							marginLeft: 15 * alpha,
-							marginRight: 15 * alpha,
-							marginTop: 23 * alpha,
-							flexDirection: "row",
-							alignItems: "flex-start",
-						}}>
-						<View
-							style={this.state.delivery_options == 'pickup' ? styles.selfPickUpView_selected : styles.selfPickUpView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 25 * alpha,
-									right: 0 * alpha,
-									bottom: 0 * alpha,
-									height: 54 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/pick-up-2.png")}
-									style={this.state.delivery_options == 'pickup' ? styles.pickUpImage_selected : styles.pickUpImage}/>
-								<Text
-									style={this.state.delivery_options == 'pickup' ? styles.selfPickUpText_selected : styles.selfPickUpText}>Self Pick-up</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								{this.state.delivery_options == 'pickup' ? <Image
-									source={require("./../../assets/images/fill-1-3.png")}
-									style={styles.tabTwoImage}/> : null}
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onPickUpButtonPressed}
-									style={styles.pickupbuttonButton}>
-									<Text
-										style={styles.pickupbuttonButtonText}></Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-
-
-						<View
-							style={{
-								flex: 1,
-							}}/>
-
-						<View
-							style={this.state.delivery_options == 'delivery' ? styles.deliveryView_selected : styles.deliveryView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 36 * alpha,
-									right: 0 * alpha,
-									bottom: 0 * alpha,
-									height: 54 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/delivery-2.png")}
-									style={this.state.delivery_options == 'delivery' ? styles.deliveryImage_selected : styles.deliveryImage}/>
-								<Text
-									style={this.state.delivery_options == 'delivery' ? styles.deliveryText_selected : styles.deliveryText}>Delivery</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								{this.state.delivery_options == 'delivery' ?
-									<Image
-										source={require("./../../assets/images/fill-1-3.png")}
-										style={styles.tabImage}/>
-									: null}
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onDeliveryButtonPressed}
-									style={styles.deliverybuttonButton}>
-									<Text
-										style={styles.deliverybuttonButtonText}></Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					 <View>
-						style={styles.contactView}>
-						<Text
-							style={styles.contactText}>Contact</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<TextInput
-							keyboardType="number-pad"
-							autoCorrect={false}
-							placeholder=""
-							value={phone_no}
-							style={styles.phoneinputTextInput}/>
-						<TouchableOpacity
-							onPress={this.onAutoFillPressed}
-							style={styles.autoFillButton}>
-							<Text
-								style={styles.autoFillButtonText}>Update Phone No.</Text>
-						</TouchableOpacity>
-					</View> */}
-				</View>
-				{/*<View*/}
-				{/*	style={styles.capacityView}>*/}
-				{/*	<View*/}
-				{/*		style={styles.groupView}>*/}
-				{/*		<Text*/}
-				{/*			style={styles.orderCapacityText}>Order Capacity</Text>*/}
-				{/*		<View*/}
-				{/*			style={styles.rateView}>*/}
-				{/*			<View*/}
-				{/*				style={styles.rectangleView}/>*/}
-				{/*		</View>*/}
-				{/*		<Text*/}
-				{/*			style={styles.orders34CupsText}>13</Text>*/}
-				{/*		<View*/}
-				{/*			style={{*/}
-				{/*				flex: 1,*/}
-				{/*			}}/>*/}
-				{/*		<Text*/}
-				{/*			style={styles.estimated15MinsToText}>Estimated </Text>*/}
-				{/*	</View>*/}
-				{/*</View>*/}
+				
 				<View
 					style={styles.ordersummaryView}>
-					<Text
-						style={styles.orderConfirmationText}>Order Confirmation</Text>
-						{cart_items}
-					<View
-						style={styles.voucherView}>
-						<TouchableOpacity
-							onPress={this.onVoucherButtonPressed}
-							style={styles.voucherButton}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 18 * alpha,
-										marginLeft: 16 * alpha,
-										marginRight: 16 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.promoCodeText}>Available Voucher</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.statusText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'}</Text>
-										
-									<Image
-										source={require("./../../assets/images/group-4-5.png")}
-										style={styles.arrowImage}/>
-								</View>
-								{renderVouchers}
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 18 * alpha,
-										marginLeft: 16 * alpha,
-										marginRight: 16 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.promoCodeText}>Discount</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.statusText}>{this.state.discount}</Text>																	
-								</View>
-							
-							</View>
-						</TouchableOpacity>
-
-					</View>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.summaryText}>Total {cart_total_quantity} {cart_total_quantity>1 ? 'items' : 'item'}</Text>
-
+						{this.renderCheckoutReceipt()}
 				</View>
-				<View
-					style={styles.paymentMethodView}>
-					<TouchableOpacity
-						onPress={this.onPaymentButtonPressed}
-						style={styles.paymentButton}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0 * alpha,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 27 * alpha,
-									marginLeft: 16 * alpha,
-									marginRight: 16 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.paymentMethodText}>Payment Method</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.paymenticonView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											alignSelf: "center",
-											top: 0 * alpha,
-											bottom: 0 * alpha,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/group-3-11.png")}
-											style={styles.group3TwoImage}/>											
-									</View>
-
-									{/* <Image
-										source={require("./../../assets/images/group-6-6.png")}
-										style={styles.group6TwoImage}/> */}
-								</View>
-								
-								<Text
-									style={styles.paymenttypeText}>{ this.state.selected_payment == "credits" ? 
-										`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"
-									
-									}</Text>
-								{/* <Image
-									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.arrowTwoImage}/> */}
-							</View>
-
-
-						</View>
-					</TouchableOpacity>
-					
-				</View>
-				{/* <View
-					style={styles.remarkView}>
-					<TouchableOpacity
-						onPress={this.onRemarkButtonPressed}
-						style={styles.remarkButton}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0 * alpha,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 19 * alpha,
-									marginLeft: 16 * alpha,
-									marginRight: 16 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.remarkText}>Remark</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.remarksText}>No sugar</Text>
-								<Image
-									source={require("./../../assets/images/group-4-5.png")}
-									style={styles.arrowThreeImage}/>
-							</View>
-						</View>
-					</TouchableOpacity>
-				</View> */}
 				
 			</ScrollView>
 			{this.renderPaymentMethod()}
 			{this.renderPopup()}
+			
 			<View
 				style={styles.totalPayNowView}>
-				<Text
-					style={styles.priceText}>${final_price}</Text>
-				<View
-					style={{
-						flex: 1,
-					}}/>
+					<TouchableOpacity
+						onPress={() => this.onPaymentButtonPressed()}
+						style={styles.paymentButton}>
+					<Text
+						style={styles.paymentButtonText}>{ this.state.selected_payment == '' ? "Select a payment method" : this.state.selected_payment == "credits" ? 
+						`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"}</Text>
+					</TouchableOpacity>
 				<TouchableOpacity
-					onPress={this.onPayNowPressed}
+					onPress={() => this.onPayNowPressed()}
 					style={styles.payNowButton}>
 					<Text
 						style={styles.payNowButtonText}>Pay Now</Text>
@@ -1185,7 +1013,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -1194,7 +1022,7 @@ const styles = StyleSheet.create({
 		tintColor: "black",
 	},
 	checkoutView: {
-		backgroundColor: "rgb(247, 247, 247)",
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		flex: 1,
 	},
 	scrollviewScrollView: {
@@ -1342,7 +1170,7 @@ const styles = StyleSheet.create({
 	},
 	pickupbuttonButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "left",
@@ -1410,7 +1238,7 @@ const styles = StyleSheet.create({
 	},
 	deliverybuttonButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -1587,6 +1415,7 @@ const styles = StyleSheet.create({
 		marginRight: 15 * alpha,
 	},
 	voucherView: {
+		flex: 1,
 		backgroundColor: "transparent",
 	},
 	promoCodeText: {
@@ -1597,6 +1426,17 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
+	},
+	discountStatusText: {
+		color: "rgb(181, 181, 181)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 61 * alpha,
+		marginRight: 5 * alpha,
 	},
 	statusText: {
 		color: "rgb(181, 181, 181)",
@@ -1685,7 +1525,7 @@ const styles = StyleSheet.create({
 	paymenttypeText: {
 		color: 'rgb(85,85,85)',
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -1700,24 +1540,20 @@ const styles = StyleSheet.create({
 		height: 11 * alpha,
 	},
 	paymentButton: {
+		width: "100%",
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		bottom: 0 * alpha,
+		flex: 1,
 	},
 	paymentButtonText: {
-		color: "white",
+		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "left"
 	},
 	paymentButtonImage: {
 		resizeMode: "contain",
@@ -1786,10 +1622,9 @@ const styles = StyleSheet.create({
 	},
 	priceText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 16 * alpha,
@@ -1809,31 +1644,29 @@ const styles = StyleSheet.create({
 	},
 	payNowButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 	},
 	itemView: {
 		backgroundColor: "transparent",
 		flex: 1,
 		flexDirection: "row",
-		alignItems: "center",
 	},
 	nameText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
 	variantText: {
-		color: "rgb(148, 148, 148)",
+		color: "rgb(164, 164, 164)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -1845,16 +1678,17 @@ const styles = StyleSheet.create({
 	},
 	quantityText: {
 		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
+		color: "rgb(63, 63, 63)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		marginRight: 16 * alpha,
+		marginTop: 10 * alpha,
 	},
 	cartpriceText: {
-		color: "rgb(54, 54, 54)",
+		color: "rgb(63, 63, 63)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
@@ -1862,6 +1696,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginRight: 15 * alpha,
+		marginTop: 10 * alpha,
 	},
 
 
@@ -1896,7 +1731,6 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "black",
-		fontFamily: ".SFNSText",
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1905,7 +1739,7 @@ const styles = StyleSheet.create({
 	paymentMethodTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1924,13 +1758,13 @@ const styles = StyleSheet.create({
 	},
 	walletView: {
 		backgroundColor: "transparent",
-		width: 86 * alpha,
+		width: 200 * alpha,
 		height: 30 * alpha,
 	},
 	brew9WalletText: {
 		backgroundColor: "transparent",
 		color: "rgb(186, 183, 183)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1939,7 +1773,7 @@ const styles = StyleSheet.create({
 	brew9WalletSelectedText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -1947,8 +1781,8 @@ const styles = StyleSheet.create({
 	},
 	balanceText: {
 		color: "rgb(186, 183, 183)",
-		fontFamily: "Helvetica",
-		fontSize: 9 * fontAlpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2009,7 +1843,7 @@ const styles = StyleSheet.create({
 	},
 	walletbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2060,7 +1894,7 @@ const styles = StyleSheet.create({
 	},
 	creditbuttonButtonText: {
 		color: "white",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2073,7 +1907,7 @@ const styles = StyleSheet.create({
 	},
 	creditCardText: {
 		color: "rgb(186, 183, 183)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2082,7 +1916,7 @@ const styles = StyleSheet.create({
 	},
 	creditCardSelectedText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2095,5 +1929,454 @@ const styles = StyleSheet.create({
 		width: 18 * alpha,
 		height: 18 * alpha,
 	},
+
+
+
+
+	orderReceiptView: {
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
+		flex: 1,
+	},
+	orderScrollView: {
+		backgroundColor: "transparent",
+		flex: 1,
+	},
+	customerServiceButtonText: {
+		color: "rgb(67, 65, 65)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		
+		textAlign: "left",
+	},
+	customerServiceButton: {
+		backgroundColor: "white",
+		borderRadius: 14.5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		width: 119 * alpha,
+		height: 29 * alpha,
+		marginRight: 19 * alpha,
+		marginTop: 13 * alpha,
+	},
+	customerServiceButtonImage: {
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
+	},
+	orderCartView: {
+		backgroundColor: "rgb(248, 248, 248)",
+		alignSelf: "stretch",
+		marginLeft: 18 * alpha,
+		marginRight: 18 * alpha,
+		marginTop: 13 * alpha,
+		marginBottom: 20 * alpha,
+		borderRadius: 14 * alpha,
+		flex: 1,
+	},
+	whiteboxView: {
+		backgroundColor: "white",
+		flex: 1,
+		alignItems: "center",
+		borderTopRightRadius: 14 * alpha,
+		borderTopLeftRadius: 14 * alpha,
+	},
+	completeOrderView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		alignItems: "center",
+	},
+	logoImage: {
+		resizeMode: "center",
+		backgroundColor: "transparent",
+		width: 23 * alpha,
+		height: 46 * alpha,
+		marginTop: 30 * alpha,
+	},
+	completedOrderText: {
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginTop: 2 * alpha,
+		marginBottom: 30 * alpha,
+	},
+	thankMessageText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		marginTop: 5 * alpha,
+		textAlign: "center",
+		backgroundColor: "transparent",
+		alignSelf: "stretch",
+		marginLeft: 2 * alpha,
+		marginRight: 2 * alpha,
+	},
+	lineView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		height: 2 * alpha,
+	},
+	locationView: {
+		backgroundColor: "transparent",
+		height: 64 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 18 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	branchView: {
+		backgroundColor: "transparent",
+		alignSelf: "flex-start",
+		width: 182 * alpha,
+		height: 60 * alpha,
+	},
+	shopBranchText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		marginRight: 12 * alpha,
+	},
+	shopBranchAddressText: {
+		color: "rgb(146, 146, 146)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 1 * alpha,
+	},
+	callView: {
+		backgroundColor: "transparent",
+		width: 35 * alpha,
+		height: 55 * alpha,
+		marginRight: 8 * alpha,
+	},
+	callIconButton: {
+		backgroundColor: "transparent",
+		borderRadius: 17.5 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(180, 179, 179)",
+		borderStyle: "solid",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 35 * alpha,
+	},
+	callIconButtonImage: {
+		resizeMode: "contain",
+	},
+	callText: {
+		backgroundColor: "transparent",
+		color: "rgb(163, 163, 163)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		marginLeft: 6 * alpha,
+		marginRight: 7 * alpha,
+	},
+	directionView: {
+		backgroundColor: "transparent",
+		width: 50 * alpha,
+		height: 55 * alpha,
+	},
+	directionIconButton: {
+		backgroundColor: "transparent",
+		borderRadius: 17.5 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(180, 179, 179)",
+		borderStyle: "solid",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 35 * alpha,
+		marginLeft: 8 * alpha,
+		marginRight: 7 * alpha,
+	},
+	directionIconButtonImage: {
+		resizeMode: "contain",
+	},
+	directionText: {
+		color: "rgb(163, 163, 163)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	lineTwoView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		height: 1 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 24 * alpha,
+		marginTop: 12 * alpha,
+	},
+	voucherView: {
+		backgroundColor: "transparent",
+		height: 18 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 42 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	voucherDescriptionText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	voucher2View: {
+		backgroundColor: "transparent",
+		height: 17 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 17 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	totalView: {
+		backgroundColor: "transparent",
+		height: 21 * alpha,
+		marginLeft: 26 * alpha,
+		marginRight: 24 * alpha,
+		marginTop: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	totallabelText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		
+		textAlign: "center",
+	},
+	totalText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+	},
+	lineThreeView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		height: 1 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 24 * alpha,
+		marginTop: 14 * alpha,
+	},
+	callrefundText: {
+		backgroundColor: "transparent",
+		color: "rgb(152, 149, 149)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		alignSelf: "flex-start",
+		marginLeft: 26 * alpha,
+		marginTop: 13 * alpha,
+		marginBottom: 13,
+	},
+	orderitemsView: {
+		backgroundColor: "transparent",
+		marginLeft: 24 * alpha,
+		marginRight: 24 * alpha,
+		flex: 1,
+	},
+	itemView: {
+		backgroundColor: "transparent",
+		height: 90 * alpha,
+		flexDirection: "row",
+		alignItems: "flex-start",
+	},
+	nameText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+	},
+	descriptionText: {
+		backgroundColor: "transparent",
+		color: "rgb(146, 146, 146)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		
+		textAlign: "left",
+	},
+	quantityText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		marginRight: 52 * alpha,
+		marginTop: 26 * alpha,
+	},
+	priceText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 26 * alpha,
+	},
+	itemTwoView: {
+		backgroundColor: "transparent",
+		height: 90 * alpha,
+		marginRight: 1 * alpha,
+		flexDirection: "row",
+		alignItems: "flex-start",
+	},
+	
+	item2View: {
+		backgroundColor: "transparent",
+		height: 46 * alpha,
+		marginRight: 1 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	nameThreeText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		width: 190 * alpha,
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	quantityThreeText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		marginRight: 56 * alpha,
+	},
+	priceThreeText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		marginRight: 3 * alpha,
+	},
+
+	voucherView: {
+		backgroundColor: "transparent",
+		height: 18 * alpha,
+		marginBottom: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	voucherNameText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12* fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+	},
+
+	drinksView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 10 * alpha,
+	},
+
+	productDetailView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		alignItems: "flex-start",
+	},
+	productNameText: {
+		backgroundColor: "transparent",
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		marginBottom: 5 * alpha,
+	},
+	productVariantText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		marginBottom: 10 * alpha,
+	},
+	productQuantityText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		marginRight: 4 * alpha,
+		width: 25 * alpha,
+	},
+	productPriceText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 45 * alpha,
+	},
+	productVoucherText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+	},
+	spacer: {
+		marginBottom: 10 * alpha,
+	},
+	dottedLineImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		alignSelf: "center",
+		position: "absolute",
+		bottom: 0,
+		width: 291 * alpha,
+		height: 2 * alpha,
+	},
+
+
 
 })

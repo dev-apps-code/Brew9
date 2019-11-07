@@ -48,7 +48,7 @@ export default class ValidVoucher extends React.Component {
 		const display_value = item.voucher.display_value
 		const discount_type = item.voucher.discount_type
 		const discount_price = item.voucher.discount_price
-		if (display_value != null  && display_value !==''){
+		if (display_value != null  && display_value !=='' && discount_type == 'fixed'){
 
 			return (
 				<View
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(68, 68, 68)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -239,18 +239,18 @@ const styles = StyleSheet.create({
 	currencyText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 9 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0,
-		top: 6 * alpha,
+		top: 3 * alpha,
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -261,18 +261,18 @@ const styles = StyleSheet.create({
 	percentText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 9 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		right: 0,
-		top: 16 * alpha,
+		top: 10 * alpha,
 	},
 	percentvalueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 24 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
 	},
 	dateText: {
 		color: "rgb(149, 148, 148)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
 	},
 	termsButtonText: {
 		color: "rgb(136, 133, 133)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		

@@ -86,8 +86,7 @@ export function postJsonMethod(authtoken,object) {
 
 export function postMultipartMethod(authtoken, object) {
      const urlString = `${KSERVERURL}/${object.getUrlString()}`
-    // console.log(urlString)
-    // console.log(object.getFormData())
+    // console.log("MultiPart", object.getFormData())
     return fetch(urlString, {
     method: 'POST',
     headers: {

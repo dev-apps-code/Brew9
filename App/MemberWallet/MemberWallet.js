@@ -126,162 +126,119 @@ export default class MemberWallet extends React.Component {
 								flex: 1,
 							}}/>
 						<TouchableOpacity
-							onPress={this.onTopUpPressed}
+							onPress={() => this.onTopUpPressed()}
 							style={styles.topUpButton}>
 							<Text
 								style={styles.topUpButtonText}>Top Up</Text>
 						</TouchableOpacity>
 					</View>
-					<View
-						style={styles.optionsView}>
-						<View
-							style={styles.seperatorView}/>
-						<View
-							style={styles.transactionHistoryView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<TouchableOpacity
-									onPress={this.onTransactionHistoryPressed}
-									style={styles.transactionhistoryButton}/>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 10 * alpha,
-									width: 356 * alpha,
-									top: 21 * alpha,
-									height: 33 * alpha,
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/group-2.png")}
-									style={styles.groupImage}/>
-								<View
-									style={styles.seperatorTwoView}/>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<Text
-									style={styles.transactionHistoryText}>Credit History</Text>
-							</View>
-						</View>
-						<View
-							style={styles.faqView}>
-							<TouchableOpacity
-								onPress={this.onFaqPressed}
-								style={styles.faqButton}>
-								<Text
-									style={styles.faqButtonText}></Text>
-							</TouchableOpacity>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 11 * alpha,
-									width: 354 * alpha,
-									top: 26 * alpha,
-									height: 28 * alpha,
-									alignItems: "center",
-								}}>
-								<Image
-									source={require("./../../assets/images/group-2.png")}
-									style={styles.groupTwoImage}/>
-								<View
-									style={styles.seperatorThreeView}/>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<Text
-									style={styles.faqText}>FAQ</Text>
-							</View>
-						</View>
-						{/*<View*/}
-						{/*	style={styles.changePasswordView}>*/}
-						{/*	<View*/}
-						{/*		pointerEvents="box-none"*/}
-						{/*		style={{*/}
-						{/*			position: "absolute",*/}
-						{/*			right: 10 * alpha,*/}
-						{/*			width: 356 * alpha,*/}
-						{/*			top: 19 * alpha,*/}
-						{/*			height: 34 * alpha,*/}
-						{/*			alignItems: "center",*/}
-						{/*		}}>*/}
-						{/*		<Image*/}
-						{/*			source={require("./../../assets/images/group-2.png")}*/}
-						{/*			style={styles.groupThreeImage}/>*/}
-						{/*		<View*/}
-						{/*			style={styles.seperatorFourView}/>*/}
-						{/*	</View>*/}
-						{/*	<View*/}
-						{/*		pointerEvents="box-none"*/}
-						{/*		style={{*/}
-						{/*			position: "absolute",*/}
-						{/*			left: 0 * alpha,*/}
-						{/*			top: 0 * alpha,*/}
-						{/*			bottom: 0 * alpha,*/}
-						{/*			justifyContent: "center",*/}
-						{/*		}}>*/}
-						{/*		<Text*/}
-						{/*			style={styles.changePasswordText}>Change Password</Text>*/}
-						{/*	</View>*/}
-						{/*</View>*/}
-						{/*<View*/}
-						{/*	style={styles.resetPasswordView}>*/}
-						{/*	<View*/}
-						{/*		pointerEvents="box-none"*/}
-						{/*		style={{*/}
-						{/*			position: "absolute",*/}
-						{/*			right: 10 * alpha,*/}
-						{/*			width: 356 * alpha,*/}
-						{/*			top: 22 * alpha,*/}
-						{/*			height: 32 * alpha,*/}
-						{/*			alignItems: "center",*/}
-						{/*		}}>*/}
-						{/*		<Image*/}
-						{/*			source={require("./../../assets/images/group-2.png")}*/}
-						{/*			style={styles.groupFourImage}/>*/}
-						{/*		<View*/}
-						{/*			style={styles.seperatorFiveView}/>*/}
-						{/*	</View>*/}
-						{/*	<View*/}
-						{/*		pointerEvents="box-none"*/}
-						{/*		style={{*/}
-						{/*			position: "absolute",*/}
-						{/*			left: 0 * alpha,*/}
-						{/*			top: 0 * alpha,*/}
-						{/*			bottom: 0 * alpha,*/}
-						{/*			justifyContent: "center",*/}
-						{/*		}}>*/}
-						{/*		<Text*/}
-						{/*			style={styles.resetPasswordText}>Reset Password</Text>*/}
-						{/*	</View>*/}
-						{/*</View>*/}
-					</View>
+					
+					
 				</View>
+				<View
+						style={styles.menuView}>
+					
+						<TouchableOpacity
+							onPress={() => this.onTransactionHistoryPressed()}
+							style={styles.menuRowbuttonButton}>
+							<View
+								style={styles.menuRowView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0 * alpha,
+										right: 0 * alpha,
+										top: 0 * alpha,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											height: 24 * alpha,
+											marginLeft: 20 * alpha,
+											marginRight: 20 * alpha,
+											flexDirection: "row",
+											alignItems: "center",
+										}}>
+										<Text
+											style={styles.menuRowLabelText}>Credit History</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Image
+												source={require("./../../assets/images/forward.png")}
+												style={styles.menuRowArrowImage}/>
+									</View>
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0 * alpha,
+										right: 0 * alpha,
+										top: 0 * alpha,
+										bottom: 0,
+									}}>
+									
+										<Text
+											style={styles.menuRowDescriptionText}></Text>
+									
+									<View
+										style={styles.menuRowLineView}/>
+								</View>
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity
+								onPress={() => this.onFaqPressed()}
+								style={styles.menuRowbuttonButton}>
+							<View
+								style={styles.menuRowView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0 * alpha,
+										right: 0 * alpha,
+										top: 0 * alpha,
+										bottom: 0,
+										justifyContent: "center",
+									}}>
+									<View
+										pointerEvents="box-none"
+										style={{
+											height: 24 * alpha,
+											marginLeft: 20 * alpha,
+											marginRight: 20 * alpha,
+											flexDirection: "row",
+											alignItems: "center",
+										}}>
+										<Text
+											style={styles.menuRowLabelText}>FAQs</Text>
+										<View
+											style={{
+												flex: 1,
+											}}/>
+										<Image
+												source={require("./../../assets/images/forward.png")}
+												style={styles.menuRowArrowImage}/>
+									</View>
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 0 * alpha,
+										right: 0 * alpha,
+										top: 0 * alpha,
+										height: 58 * alpha,
+									}}>
+								</View>
+							</View>
+						</TouchableOpacity>
+					</View>
 			</ScrollView>
 		</View>
 	}
@@ -308,7 +265,7 @@ const styles = StyleSheet.create({
 		tintColor: "black",
 	},
 	walletView: {
-		backgroundColor: "rgb(243, 243, 243)",
+		backgroundColor: "white",
 		flex: 1,
 	},
 	viewScrollView: {
@@ -353,7 +310,7 @@ const styles = StyleSheet.create({
 	},
 	infoView: {
 		backgroundColor: "transparent",
-		height: 378 * alpha,
+		flex: 1,
 		marginRight: 10 * alpha,
 	},
 	balanceView: {
@@ -367,7 +324,7 @@ const styles = StyleSheet.create({
 	availableBalanceText: {
 		color: "rgb(58, 58, 58)",
 		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		alignItems: "center",
 		textAlign: "left",
@@ -385,7 +342,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(58, 58, 58)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		marginTop: 7 * alpha,
@@ -592,5 +549,73 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		textAlign: "left",
 		marginLeft: 20 * alpha,
+	},
+
+	menuView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 13 * alpha,
+		marginBottom: 13 * alpha,
+	},
+
+	menuRowView: {
+		backgroundColor: "transparent",
+		height: 58 * alpha,
+		marginRight: 1 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	menuRowLabelText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	menuRowDisableLabelText: {
+		color: "rgb(188, 188, 188)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	menuRowDescriptionText: {
+		color: "rgb(188, 188, 188)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		marginRight: 23 * alpha,
+	},
+	arrowTwoView: {
+		backgroundColor: "transparent",
+		width: 7 * alpha,
+		height: 8 * alpha,
+	},
+	menuRowbuttonButton: {
+		backgroundColor: "transparent",
+		flex: 1,
+	},
+	
+	menuRowLineView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		position: "absolute",
+		alignSelf: "center",
+		width: 375 * alpha,
+		top: 57 * alpha,
+		height: 1 * alpha,
+		left: 20 * alpha,
+	},
+	menuRowArrowImage: {
+		width: 10 * alpha,
+		tintColor: "rgb(195, 195, 195)",
+		resizeMode: "contain",
 	},
 })

@@ -79,11 +79,11 @@ export default class OrderReceipt extends React.Component {
 		Linking.openURL(`tel:${phone_no}`)
 	}
 
-	renderOrderItems(items, vouchers) {
+	renderOrderItems(items, vouchers, promotion) {
 
 		const order_items = items.map((item, key) => {
-			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
-				
+			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+			let variant_array = item.map(a => a.value)
 			return <View
 					style={styles.drinksView}
 					key={key}>
@@ -101,7 +101,7 @@ export default class OrderReceipt extends React.Component {
 										style={styles.productNameText}>{item.product_name}</Text>
 									{(item.variations != null && item.variations != "") ?
 									<Text
-										style={styles.productVariantText}>{item.variations}</Text> :
+										style={styles.productVariantText}>{variant_array.join(", ")}</Text> :
 										<View style={styles.spacer} />
 									}
 								</View>
@@ -117,7 +117,7 @@ export default class OrderReceipt extends React.Component {
 				</View>
 				
 				
-			})
+		})
 
 		const voucher_items = vouchers.map((item, key) => {
 
@@ -131,7 +131,7 @@ export default class OrderReceipt extends React.Component {
 						flex: 1,
 					}}/>
 				<Text
-					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${parseFloat(item.voucher.discount_price).toFixed(2)}` : ""}</Text>
 			</View>
 		})
 
@@ -257,7 +257,7 @@ export default class OrderReceipt extends React.Component {
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.totalText}>${order.total}</Text>
+									style={styles.totalText}>${parseFloat(order.total).toFixed(2)}</Text>
 							</View>
 							<View
 								style={styles.lineThreeView}/>
@@ -669,7 +669,6 @@ const styles = StyleSheet.create({
 		marginTop: 10 * alpha,
 	},
 
-
 	productDetailView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -681,7 +680,6 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "left",
 		marginBottom: 5 * alpha,
 	},

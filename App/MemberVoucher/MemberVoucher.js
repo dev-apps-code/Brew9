@@ -447,13 +447,11 @@ export default class MemberVoucher extends React.Component {
 						<Text
 							style={styles.howToUseButtonText}>How to use</Text>
 					</TouchableOpacity>
-					{ this.state.loading && (
+					{ this.state.loading ? 
 						<View style={[styles.container, styles.horizontal]}>
 							<ActivityIndicator size="large" />
-						</View>
-					)}
-
-					{ this.state.current_data.length == 0 && !this.state.loading ?
+						</View> :
+						this.state.current_data.length == 0 && !this.state.loading ?
 						<View
 							style={styles.novoucherviewView}> 
 							<Image 
@@ -537,7 +535,7 @@ const styles = StyleSheet.create({
 	availablebarView: {
 		backgroundColor: "rgb(68, 68, 68)",
 		position: "absolute",
-		right: 26 * alpha,
+		alignSelf: "center",
 		width: 67 * alpha,
 		bottom: 0 * alpha,
 		height: 2 * alpha,
@@ -558,9 +556,9 @@ const styles = StyleSheet.create({
 		color: "rgb(68, 68, 68)",
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
+		backgroundColor: "transparent",
 		fontStyle: "normal",
-		
-		textAlign: "left",
+		textAlign: "center",
 	},
 	expiredView: {
 		backgroundColor: "white",
@@ -594,7 +592,7 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
-		textAlign: "left",
+		textAlign: "center",
 	},
 	usedView: {
 		backgroundColor: "white",
@@ -634,7 +632,7 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
-		textAlign: "left",
+		textAlign: "center",
 	},
 	voucherviewView: {
 		backgroundColor: "transparent",
