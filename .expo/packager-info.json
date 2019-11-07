@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "packagerPort": 19002,
-  "packagerPid": 98316,
-  "expoServerNgrokUrl": "https://ny-8bq.tonyvoon.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.ny-8bq.tonyvoon.brew9-app.exp.direct",
-  "ngrokPid": 98339,
-  "devToolsPort": 19003
+  "packagerPort": 19001,
+  "packagerPid": 722,
+  "expoServerNgrokUrl": "https://d4-arj.anonymous.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.d4-arj.anonymous.brew9-app.exp.direct",
+  "ngrokPid": 733,
+  "devToolsPort": 19002
 }
