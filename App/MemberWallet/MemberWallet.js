@@ -8,9 +8,11 @@
 
 import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
 import React from "react"
-import { alpha, fontAlpha, TITLE_FONT, NON_TITLE_FONT } from "../Common/size";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
+
+import { alpha, fontAlpha} from "../Common/size";
+import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -437,7 +439,7 @@ const styles = StyleSheet.create({
 	},
 	transactionHistoryText: {
 		backgroundColor: "transparent",
-		color: "rgb(41, 41, 41)",
+		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
@@ -484,7 +486,7 @@ const styles = StyleSheet.create({
 		marginTop: 17 * alpha,
 	},
 	faqText: {
-		color: "rgb(41, 41, 41)",
+		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
