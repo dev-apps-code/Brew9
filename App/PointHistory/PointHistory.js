@@ -151,7 +151,7 @@ export default class PointHistory extends React.Component {
 
 		var expiry_date = ""
 
-		if (members.point_expiry_date != undefined){
+		if (members.point_expiry_date != null && members.point_expiry_date != ""){
 			expiry_date = `Expiry Date: ${members.point_expiry_date}`
 		}
 
@@ -349,7 +349,6 @@ const styles = StyleSheet.create({
 	},
 	pointhistoryFlatListViewWrapper: {
 		flex: 1,
-		marginRight: 1,
 	},
 	blankView: {
 		backgroundColor: "transparent",

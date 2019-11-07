@@ -51,8 +51,7 @@ export default {
     location:null,
 
   },
-
-
+  
   reducers: {
      setDefaultState(state, { payload }) {
         return {

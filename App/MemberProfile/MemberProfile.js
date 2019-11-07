@@ -24,7 +24,9 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles} from "../Common/common_style";
+import Brew9Modal from "../Components/Brew9Modal"
+import ImageResizer from 'react-native-image-resizer';
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -75,8 +77,16 @@ export default class MemberProfile extends React.Component {
 			verification_code: "",
 			gender: -1,
 			genderIndex: 0,
+			selected_image: null,
 			has_send_code: false,
 			member_have_dob: false,
+			modal_visible: false,
+			modal_description: "",
+			modal_title: "Brew9",
+			modal_cancelable: false,
+			modal_ok_text: null,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 	}
 
@@ -98,15 +108,43 @@ export default class MemberProfile extends React.Component {
 		}
 	}
 
+	renderPopup() {
+		return <Brew9Modal
+			title={this.state.modal_title}
+			description={this.state.modal_description}
+			visible={this.state.modal_visible}
+			confirm_text={this.state.modal_ok_text}
+			cancelable={this.state.modal_cancelable}
+			okayButtonAction={this.state.modal_ok_action}
+			cancelButtonAction={this.state.modal_cancel_action}
+		/>
+	}
+
 	loadUpdateProfile(formData){
 		const { dispatch } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				
+				this.setState({
+					modal_description:"Profile Update Successful",
+					modal_ok_text: null,
+					modal_cancelable: false,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+					modal_visible:true,
+				})
 			} else {
-				this.refs.toast.show(eventObject.message);
+				this.setState({
+					modal_description: eventObject.message,
+					modal_ok_text: null,
+					modal_cancelable: false,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+					modal_visible:true,
+				})
 			}
 			this.setState({
 				loading: false,
@@ -128,7 +166,15 @@ export default class MemberProfile extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.setState({
-					has_send_code: true
+					modal_title:'Brew9',
+					modal_description:"Phone Update Successful",
+					modal_ok_text: null,
+					modal_cancelable: false,
+					has_send_code: true,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+					modal_visible:true,
 				})
 			}
 			this.setState({
@@ -156,7 +202,17 @@ export default class MemberProfile extends React.Component {
 					modalVisible: false,
 				})
 			} else {
-				this.refs.toast.show(eventObject.message);
+				this.setState({
+					modal_title:'Brew9',
+					modal_description: eventObject.message,
+					modal_ok_text: null,
+					modal_cancelable: false,
+					has_send_code: true,
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+					modal_visible:true,
+				})
 			}
 			this.setState({
 				loading: false,
@@ -176,7 +232,9 @@ export default class MemberProfile extends React.Component {
 		const { members } = this.props
 		this.setState({
 			members: members,
-			image: members.image,
+			image: {
+				uri: members.image
+			},
 			dob: members.dob,
 			nickname: members.nickname,
 			gender: members.gender,
@@ -203,26 +261,72 @@ export default class MemberProfile extends React.Component {
 			});
 	
 			if (!result.cancelled) {
+				
+				let data = {
+					uri: result.uri,
+					name: Math.random().toString(36).substr(2, 5) + 'avatar.jpg',
+					type: 'image/jpg'
+				}
+				console.log("Image", data)
 				this.setState({
-					image: result.uri
+					image: data
 				})
 			}
 		} else {
-			this.refs.toast.show('Please enable camera roll permission in settings.')
+			this.setState({
+				modal_title:'Brew9',
+				modal_description:"Please enable camera roll permission in settings.",
+				modal_ok_text: null,
+				modal_cancelable: false,
+				has_send_code: true,
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+				},
+				modal_visible:true,
+			})
 		}
-		
 	}
 
 	checkForm = () => {
 		if (this.state.gender === -1) {
-			this.refs.toast.show("Please select your gender")
+			this.setState({
+				modal_title:'Brew9',
+				modal_description:"Please select your gender",
+				modal_ok_text: null,
+				modal_cancelable: false,
+				has_send_code: true,
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+				},
+				modal_visible:true,
+			})
 			return false
 		} else if (!this.state.nickname) {
-			this.refs.toast.show("Please select a nickname")
+			this.setState({
+				modal_title:'Brew9',
+				modal_description:"Please select a nickname",
+				modal_ok_text: null,
+				modal_cancelable: false,
+				has_send_code: true,
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+				},
+				modal_visible:true,
+			})
 			return false
 		}
 		else if (!this.state.dob) {
-			this.refs.toast.show("Please select enter your birthdate")
+			this.setState({
+				modal_title:'Brew9',
+				modal_description:"Please select enter your birthdate",
+				modal_ok_text: null,
+				modal_cancelable: false,
+				has_send_code: true,
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+				},
+				modal_visible:true,
+			})
 			return false
 		}
 		else {
@@ -256,7 +360,18 @@ export default class MemberProfile extends React.Component {
 		const {country_code, phone_no} = this.state 
 
 		if (country_code == '' || country_code == undefined || phone_no == '' || phone_no == undefined) {
-			this.refs.toast.show("Please fill in phone number");
+			console.log("SEND CODE")
+			this.setState({
+				modal_title:'Brew9',
+				modal_description:"Please fill in phone number",
+				modal_ok_text: null,
+				modal_cancelable: false,
+				has_send_code: true,
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+				},
+				modal_visible:true,
+			})
 			return
 		}
 
@@ -277,7 +392,17 @@ export default class MemberProfile extends React.Component {
 		const {verification_code, phone_no} = this.state 
 
 		if (verification_code == '' || verification_code == undefined) {
-			this.refs.toast.show("Please fill in sms code");
+			this.setState({
+				modal_title:'Brew9',
+				modal_description:"Please fill in sms code",
+				modal_ok_text: null,
+				modal_cancelable: false,
+				has_send_code: true,
+				modal_ok_action: ()=> {
+					this.setState({modal_visible:false})
+				},
+				modal_visible:true,
+			})
 			return
 		}
 		this.setState({
@@ -306,6 +431,7 @@ export default class MemberProfile extends React.Component {
 				gender: this.state.gender,
 				email: this.state.email,
 			}
+			console.log("Save", profileFormData)
 			this.loadUpdateProfile(profileFormData)
 		}
 	}
@@ -404,7 +530,7 @@ export default class MemberProfile extends React.Component {
 							style={styles.codeTextInput}/>
 							<View style={{flex: 1}}/>
 						<TouchableOpacity
-							onPress={this.onSendCodePressed}
+							onPress={() => this.onSendCodePressed()}
 							style={styles.verificationcodeButton}>
 							<Text
 								style={styles.verificationcodeButtonText}>Send Code</Text>
@@ -429,7 +555,7 @@ export default class MemberProfile extends React.Component {
 
 	render() {
 
-		const { members, image, dob, nickname, gender, member_phone_number, email } = this.state;
+		const { members, image, dob, nickname, gender, member_phone_number, email, selected_image } = this.state;
 
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
@@ -446,9 +572,11 @@ export default class MemberProfile extends React.Component {
 							width: 80 * alpha,
 							height: 80 * alpha,
 						}}>
+						
 						<Image
-							source={members.image ? {uri: image} : require("./../../assets/images/user.png")}
+							source={image != null ? {uri: image.uri} : require("./../../assets/images/user.png")}
 							style={styles.avatarImage}/>
+						
 						<TouchableOpacity
 							onPress={this._pickImage}
 							style={styles.imagebuttonButton}>
@@ -790,7 +918,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	avatarImage: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		borderRadius: 40 * alpha,
 		resizeMode: "contain",
 		position: "absolute",

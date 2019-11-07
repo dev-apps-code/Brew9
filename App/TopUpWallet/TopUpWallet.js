@@ -17,6 +17,8 @@ import {connect} from "react-redux";
 import { TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import HudLoading from "../Components/HudLoading.js"
 import Toast, {DURATION} from 'react-native-easy-toast'
+import Brew9Modal from "../Components/Brew9Modal"
+
 @connect(({ members,shops }) => ({
 	members: members.profile,
 	selectedShop: shops.selectedShop
@@ -54,7 +56,14 @@ export default class TopUpWallet extends React.Component {
 			data: [],
 			selectedTopUpProduct: null,
 			selected: 0,
-			order:null
+			order:null,
+			modal_visible: false,
+			modal_description: "",
+			modal_title: "Brew9",
+			modal_cancelable: false,
+			modal_ok_text: null,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 	}
 
@@ -108,7 +117,18 @@ export default class TopUpWallet extends React.Component {
 		this.loadMakeOrder(selectedTopUpProduct.id)
 	}
 
-	
+	renderPopupModal() {
+		return <Brew9Modal
+            title={this.state.modal_title}
+            description={this.state.modal_description}
+            visible={this.state.modal_visible}
+            confirm_text={this.state.modal_ok_text}
+            cancelable={this.state.modal_cancelable}
+            okayButtonAction={this.state.modal_ok_action}
+            cancelButtonAction={this.state.modal_cancel_action}
+		/>
+	}
+
 	loadMakeOrder(topUpProductId){
 		const { navigate } = this.props.navigation
 		const { dispatch, selectedShop } = this.props
@@ -131,7 +151,10 @@ export default class TopUpWallet extends React.Component {
 					type:'top_up',
 				})
 			}else{
-				this.refs.toast.show(eventObject.message);
+				this.setState({
+					modal_visible:true,
+					modal_description: eventObject.message,
+				})
 			}
 		}
 		const obj = new TopUpOrderRequestObject(selectedShop.id)
@@ -185,7 +208,9 @@ export default class TopUpWallet extends React.Component {
 				style={styles.topuplistFlatListViewWrapper}>
 				<FlatList
 					renderItem={this.renderTopuplistFlatListCell}
+					// contentContainerStyle={styles.topuplistcontainer}
 					data={this.state.data}
+					numColumns={2}
 					style={styles.topuplistFlatList}
 					selected={this.state.selected}
 					keyExtractor={(item, index) => index.toString()}/>
@@ -208,6 +233,7 @@ export default class TopUpWallet extends React.Component {
 			<Toast ref="toast"
             position="center"/>
 			<HudLoading isLoading={this.state.loading}/>
+			{this.renderPopupModal()}
 		</View>
 	}
 }
@@ -223,7 +249,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -253,7 +279,7 @@ const styles = StyleSheet.create({
 	messageText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -261,12 +287,17 @@ const styles = StyleSheet.create({
 		marginRight: 20 * alpha,
 	},
 	topuplistFlatList: {
-
 		width: "100%",
 		height: "100%",
 	},
 	topuplistFlatListViewWrapper: {
 		flex: 1,
+	},
+	topuplistcontainer: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: 'space-between',
+		padding: 10 * alpha,
 	},
 	topUpView: {
 

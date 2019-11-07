@@ -88,7 +88,7 @@ export default class ValidVoucher extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.valueText}>{discount_price}</Text>
+								style={styles.valueText}>{discount_price != undefined ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
 						</View>
 					</View>
 				)
@@ -109,7 +109,7 @@ export default class ValidVoucher extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.percentvalueText}>{discount_price}</Text>
+								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}</Text>
 							<Text
 								style={styles.percentText}>%</Text> 
 						</View>
@@ -233,20 +233,20 @@ const styles = StyleSheet.create({
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 60 * alpha,
+		width: 90 * alpha,
 		height: 31 * alpha,
 	},
 	currencyText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 9 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0,
-		top: 6 * alpha,
+		top: 3 * alpha,
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
@@ -261,14 +261,14 @@ const styles = StyleSheet.create({
 	percentText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 9 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		right: 0,
-		top: 16 * alpha,
+		top: 10 * alpha,
 	},
 	percentvalueText: {
 		color: "rgb(0, 178, 227)",
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
 		fontSize: 24 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		backgroundColor: "transparent",
 		marginRight: 15 * alpha,
 	},

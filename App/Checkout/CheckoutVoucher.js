@@ -13,8 +13,8 @@ import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import VoucherRequestObject from "../Requests/voucher_request_object";
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
-import UsedVoucher from "./UsedVoucher"
-import ValidVoucher from "./ValidVoucher"
+import UsedVoucher from "../MemberVoucher/UsedVoucher"
+import ValidVoucher from "../MemberVoucher/ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
@@ -256,7 +256,7 @@ export default class CheckoutVoucher extends React.Component {
         if (this.state.valid_selected) {
             return <ValidVoucher
                 navigation={this.props.navigation}
-                title={item.voucher.discount_type}
+                title={item.voucher.name}
                 item={item}
                 description={item.voucher.description}
                 display_value={item.voucher.display_value}
@@ -436,8 +436,7 @@ const styles = StyleSheet.create({
         fontFamily: "DINPro-Bold",
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
-        
-        textAlign: "left",
+        textAlign: "center",
     },
     availableButtonImage: {
         resizeMode: "contain",
@@ -474,8 +473,7 @@ const styles = StyleSheet.create({
         fontFamily: "SFProText-Medium",
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
-        
-        textAlign: "left",
+        textAlign: "center",
     },
     usedButtonImage: {
         resizeMode: "contain",

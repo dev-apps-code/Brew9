@@ -8,7 +8,7 @@
 
 import { Text, Image, View, TouchableWithoutFeedback, StyleSheet } from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../Common/size";
+import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { TITLE_FONT } from "../Common/common_style";
 
 
@@ -42,7 +42,7 @@ export default class Card extends React.Component {
 					<Image
 						source={{uri: this.props.image}}
 						style={styles.cardImage}/>
-					<View
+					{/* <View
 						style={styles.infoView}>
 						<View
 							pointerEvents="box-none"
@@ -87,7 +87,7 @@ export default class Card extends React.Component {
 									style={ this.props.selected === this.props.index ? styles.selectView_selected : styles.selectView }/>
 							</View>
 						</View>
-					</View>
+					</View> */}
 				</View>
 			</TouchableWithoutFeedback>
 	}
@@ -96,24 +96,24 @@ export default class Card extends React.Component {
 const styles = StyleSheet.create({
 	cardcell: {
 		backgroundColor: "transparent",
-		width: "100%",
+		width: windowWidth / 2,
 		flex: 1,
-		flexDirection: "column"
+		flexDirection: "column",
+		padding: 10 * alpha,
 	},
 	cardImage: {
 		marginTop: 10 * alpha,
 		backgroundColor: "transparent",
 		resizeMode: "contain",
 		alignSelf: "center",
-		width: 340 * alpha,
-		height: 196 * alpha,
+		width: "100%",
+		height: 100 * alpha,
 	},
 	infoView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 340 * alpha,
+		width: "100%",
 		height: 39 * alpha,
-		marginBottom: 10 * alpha,
 	},
 	backgroundImage: {
 		resizeMode: "cover",
