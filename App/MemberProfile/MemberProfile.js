@@ -68,7 +68,9 @@ export default class MemberProfile extends React.Component {
 			dob: "",
 			nickname: "",
 			email: "",
-			image: null,
+			image: {
+				uri: null
+			},
 			phone_no:  "",
 			gender_options: [
 				{label: 'Male', value: 0 },
@@ -267,7 +269,6 @@ export default class MemberProfile extends React.Component {
 					name: Math.random().toString(36).substr(2, 5) + 'avatar.jpg',
 					type: 'image/jpg'
 				}
-				console.log("Image", data)
 				this.setState({
 					image: data
 				})
@@ -559,8 +560,9 @@ export default class MemberProfile extends React.Component {
 
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
+			keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
 			style={{ flex: 1 }}
-		><View
+			enabled><View
 			style={styles.memberProfileView}>
 			<View
 				style={styles.profileView}>
@@ -574,7 +576,7 @@ export default class MemberProfile extends React.Component {
 						}}>
 						
 						<Image
-							source={image != null ? {uri: image.uri} : require("./../../assets/images/user.png")}
+							source={image.uri != null ? {uri: image.uri} : require("./../../assets/images/user.png")}
 							style={styles.avatarImage}/>
 						
 						<TouchableOpacity
@@ -617,6 +619,7 @@ export default class MemberProfile extends React.Component {
 								autoCorrect={false}
 								placeholder="Nickname"
 								style={styles.usernameTextInput}
+								returnKeyType={'done'}
 								onChangeText={(nickname) => this.setState({nickname})}
 								defaultValue={nickname}
 							/>
@@ -652,6 +655,7 @@ export default class MemberProfile extends React.Component {
 								autoCorrect={false}
 								placeholder="Email"
 								style={styles.emailTextInput}
+								returnKeyType={'done'}
 								onChangeText={(email) => this.setState({email})}
 								defaultValue={email}
 							/>
@@ -862,7 +866,7 @@ export default class MemberProfile extends React.Component {
 				</View>
 			</View>
 			<TouchableOpacity
-				onPress={this.onSavePressed}
+				onPress={() => this.onSavePressed()}
 				style={styles.saveButton}>
 				<Text
 					style={styles.saveButtonText}>SAVE</Text>
@@ -874,9 +878,8 @@ export default class MemberProfile extends React.Component {
 				{this.renderModalContent()}
 			</Modal>
 		</View>
-		<Toast ref="toast"
-            position="center"/>
-			<HudLoading isLoading={this.state.loading}/>
+		{this.renderPopup()}
+		<HudLoading isLoading={this.state.loading}/>
 		</KeyboardAvoidingView>
 
 	}
@@ -893,7 +896,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -921,7 +924,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		borderRadius: 40 * alpha,
 		resizeMode: "contain",
-		position: "absolute",
 		alignSelf: "center",
 		width: 80 * alpha,
 		top: 0,
@@ -1038,7 +1040,7 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(135, 135, 135)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
