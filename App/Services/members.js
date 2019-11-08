@@ -65,3 +65,7 @@ export function qrCodeScan(authtoken,object) {
 export function missionStatements(authtoken,object) {
    return getMethod(authtoken,object)
 }
+
+export function missionRewardClaim(authtoken,object) {
+   return postMethod(authtoken,object)
+}

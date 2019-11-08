@@ -48,52 +48,25 @@ export default class ValidVoucher extends React.Component {
 		const display_value = item.voucher.display_value
 		const discount_type = item.voucher.discount_type
 		const discount_price = item.voucher.discount_price
-		if (display_value != null  && display_value !==''){
-
-			return (
-				<View
-				style={styles.valueView}>
-					<Text
-						style={styles.currencyText}>{members.currency}</Text> 			
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0,
-							right: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<Text
-							style={styles.valueText}>{display_value}</Text>
-					</View>
-				</View>
-			)
-		}else if (discount_type != null && discount_type != '' && discount_price != null && discount_price != ''){
+		if (discount_type != null && discount_type != '' && discount_price != null && discount_price != ''){
 			if (discount_type == 'fixed'){
 				return (
 					<View
 					style={styles.valueView}>
-						<Text
-							style={styles.currencyText}>{members.currency}</Text> 			
+								
 						<View
 							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.valueText}>{discount_price != undefined ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
+								style={styles.valueText}>{discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
+							<Text
+								style={styles.currencyText}>{members.currency}</Text> 	
 						</View>
 					</View>
 				)
 			}else {
-
 				return (
 					<View
 					style={styles.valueView}>
@@ -101,21 +74,34 @@ export default class ValidVoucher extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}</Text>
-							<Text
 								style={styles.percentText}>%</Text> 
+							<Text
+								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}</Text>
+							
 						</View>
 					</View>
 				)
 			}
+		} else if (display_value != null  && display_value !==''){
+			return (
+				<View
+				style={styles.valueView}>
+							
+					<View
+						pointerEvents="box-none"
+						style={{
+							justifyContent: "center",
+						}}>
+						<Text
+							style={styles.valueText}>{display_value}</Text>
+						<Text
+							style={styles.currencyText}>{members.currency}</Text> 	
+					</View>
+				</View>
+			)
 		}
 	}
 
@@ -135,17 +121,15 @@ export default class ValidVoucher extends React.Component {
 							style={{
 								position: "absolute",
 								left: 30 * alpha,
-								right: 31 * alpha,
+								right: 30 * alpha,
 								top: 23 * alpha,
-								bottom: 11 * alpha,
+								bottom: 10 * alpha,
 							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 31 * alpha,
-									marginRight: 1,
+									height: 30 * alpha,
 									flexDirection: "row",
-									alignItems: "flex-start",
 								}}>
 								<Text
 									style={styles.titleText}>{this.props.title}</Text>
@@ -186,7 +170,7 @@ export default class ValidVoucher extends React.Component {
 											style={styles.termsButtonText}>Terms & Conditions</Text>
 									</TouchableOpacity>
 									<Image
-										source={require("./../../assets/images/group-18.png")}
+										source={require("./../../assets/images/forward.png")}
 										style={styles.arrowImage}/>
 								</View>
 							</View>
@@ -226,14 +210,11 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginTop: 1 * alpha,
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 90 * alpha,
 		height: 31 * alpha,
 	},
 	currencyText: {
@@ -309,7 +290,7 @@ const styles = StyleSheet.create({
 	},
 	termsView: {
 		backgroundColor: "transparent",
-		width: 115 * alpha,
+		width: 140 * alpha,
 		height: 13 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -318,10 +299,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
+		// justifyContent: "center",
 		padding: 0,
 		height: 13 * alpha,
-		width: 95 * alpha,
+		width: 120 * alpha,
 		marginRight: 4 * alpha,
 	},
 	termsButtonText: {
@@ -329,15 +310,15 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		
-		textAlign: "left",
+		width: 120 * alpha,
+		textAlign: "right",
 	},
 	termsButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
 	arrowImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		flex: 1,
 		alignSelf: "flex-end",

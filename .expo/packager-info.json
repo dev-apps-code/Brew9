@@ -1,9 +1,10 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://d4-arj.anonymous.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.d4-arj.anonymous.brew9-app.exp.direct",
-  "ngrokPid": 2000,
-  "devToolsPort": 19002,
+  "expoServerNgrokUrl": "https://ny-8bq.tonyvoon.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.ny-8bq.tonyvoon.brew9-app.exp.direct",
+  "ngrokPid": 32185,
+  "devToolsPort": 19004,
   "packagerPort": 19003,
-  "packagerPid": 1987
+  "packagerPid": 32154,
+  "webpackServerPort": null
 }

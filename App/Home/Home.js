@@ -63,6 +63,7 @@ import ProfileRequestObject from '../Requests/profile_request_object'
 	selectedShop: shops.selectedShop,
 	isToggleShopLocation: config.isToggleShopLocation
 }))
+
 export default class Home extends React.Component {
 	
 	static navigationOptions = ({ navigation }) => {
@@ -158,6 +159,7 @@ export default class Home extends React.Component {
 			first_time_buy: false,
 			location: null,
 			distance: 100,
+			first_promo_popup: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -270,6 +272,7 @@ export default class Home extends React.Component {
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
+
 		this.loadShops(true)
 		AppState.addEventListener('change', this._handleAppStateChange);	
 		await this.registerForPushNotificationsAsync()
@@ -295,10 +298,11 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			console.log("Profile", eventObject)
 			if (eventObject.success) {
-				this.setState({
-					loading: false,
-				})
+				
 			}
+			this.setState({
+				loading: false,
+			})
 		}
 		const obj = new ProfileRequestObject()
 		if (currentMember != null){
@@ -336,10 +340,11 @@ export default class Home extends React.Component {
 
 		// console.log("Status", loadProducts)
 		const { dispatch,company_id,location } = this.props
-
+		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
+			console.log("Shop", eventObject)
 			if (eventObject.success) {			
 					this.setState({
 						shop: eventObject.result,
@@ -348,6 +353,10 @@ export default class Home extends React.Component {
 						if (loadProducts){
 							this.loadStoreProducts()
 							this.computeDistance()
+							if (first_promo_popup == false) {
+								this.onFeaturedPromotionPressed(eventObject.result.featured_promotion)
+							}
+							
 						}					
 					})		
 			}
@@ -434,6 +443,7 @@ export default class Home extends React.Component {
 				isRefreshing: false,
 				loading: false,
 			})
+			
 		}
 		
 			const obj = new ProductRequestObject()
@@ -484,6 +494,7 @@ export default class Home extends React.Component {
 					if (clearCart) {
 						this.onClearPress()
 						this.loadProfile()
+						this.loadShops()
 					}
 				})
 		
@@ -602,7 +613,6 @@ export default class Home extends React.Component {
 		} else {
 			dispatch(createAction("config/setToggleShopLocation")(true))
 		}
-		
 	}
 
 	toogleCart = (isUpdate) => {
@@ -611,7 +621,7 @@ export default class Home extends React.Component {
 
 		var product_checkout_height = product_view_height
 		var headerHeight = 31 * alpha
-		var height = (this.state.cart.length * 71) * alpha
+		var height = (this.state.cart.length * 71) * alpha + (this.state.promotion.length * 71) * alpha
 		var checkoutHeight = 51 * alpha
 		var content = headerHeight + height + checkoutHeight
 		var finalheight = product_checkout_height - content
@@ -1019,7 +1029,28 @@ export default class Home extends React.Component {
 								})
 							}
 						}
-
+						else {
+							
+							if (search_cart_promo_index < 0) {
+			
+								shop.all_promotions[index].has_triggered = true
+								let cartItem = {
+									clazz: "promotion",
+									id: promotion.id,
+									name: promotion.cart_text,
+									description:  "",
+									price: price,
+								}
+								promotions_item.push(cartItem)
+								this.setState({
+									promotion: newpromotion.concat(promotions_item),
+									promotion_ids: promotion_ids
+								}, function(){
+								
+								})
+										
+							} 
+						}
 						
 					}
 				}
@@ -1109,7 +1140,8 @@ export default class Home extends React.Component {
 			cart_total_quantity: 0,
 			cart_total: 0,
 			cart:[],
-			promotion:[]
+			promotion:[],
+			promotion_ids:[]
 		})
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
@@ -1149,7 +1181,8 @@ export default class Home extends React.Component {
 
 		if (item.image.url != undefined && item.image.url != "") {
 			this.setState({
-				selected_promotion: item.image.url
+				selected_promotion: item.image.url,
+				first_promo_popup: true
 			}, function(){
 				// console.log(item.banner_detail_image)
 				this.setState({
@@ -1803,59 +1836,30 @@ export default class Home extends React.Component {
 				const promos = shop.all_promotions.map((item, key) => {
 
 					if (currentMember != null) {
-						if (item.event_type == "TRIGGER") {
-							var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
-							var remaining = trigger_price - cart_total
-		
-							if (remaining < 0) {
-								has_promo = false
-								return
-							}
-		
-							var display_text = item.display_text
-							var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
-		
-							if (!has_promo) {
-								has_promo = true
-								return <View style={styles.promotionBarView}
-								key={key}>
-								<Text
-									numberOfLines={2}
-									style={styles.promotionTopBarText}>
-									{final_text}
-								</Text>
-							</View>
-							}
+						var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
+						var remaining = trigger_price - cart_total
+	
+						if (remaining < 0) {
+							has_promo = false
 							return
 						}
-
-						if (item.event_type == "NEVER PURCHASE") {
-							var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
-							var remaining = trigger_price - cart_total
-		
-							if (remaining < 0) {
-								has_promo = false
-								return
-							}
-		
-							var display_text = item.display_text
-							var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
-		
-							if (!has_promo) {
-								has_promo = true
-								return <View style={styles.promotionBarView}
-								key={key}>
-								<Text
-									numberOfLines={2}
-									style={styles.promotionTopBarText}>
-									{final_text}
-								</Text>
-							</View>
-							}
-							return
+	
+						var display_text = item.display_text
+						var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+	
+						if (!has_promo) {
+							has_promo = true
+							return <View style={styles.promotionBarView}
+							key={key}>
+							<Text
+								numberOfLines={2}
+								style={styles.promotionTopBarText}>
+								{final_text}
+							</Text>
+						</View>
 						}
+						return
 					}
-					
 				})
 
 				return <View style={styles.promotionTopBarView}>

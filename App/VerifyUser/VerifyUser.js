@@ -26,7 +26,8 @@ import Brew9Modal from "../Components/Brew9Modal"
 
 @connect(({ members }) => ({
 	members: members.profile,
-	company_id: members.company_id
+	company_id: members.company_id,
+	location: members.location,
 }))
 export default class VerifyUser extends React.Component {
 
@@ -171,7 +172,29 @@ export default class VerifyUser extends React.Component {
 		this.loadActivateAccount()
 	}
 
+	loadShops(){
 
+		// console.log("Status", loadProducts)
+		const { dispatch,company_id,location } = this.props
+
+		const callback = eventObject => {
+			if (eventObject.success) {		
+			}
+		}
+
+		var latitude = location != null ? location.coords.latitude : null
+		var longitude = location != null ? location.coords.longitude  : null
+	
+		const obj = new NearestShopRequestObject(latitude, longitude)
+		obj.setUrlId(company_id)
+		dispatch(
+			createAction('shops/loadShops')({
+				object:obj,
+				callback,
+			}
+		))
+		
+	}
 	loadActivateAccount(){
         const { dispatch } = this.props
         this.setState({ loading: true })
@@ -184,6 +207,7 @@ export default class VerifyUser extends React.Component {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
+
 					const { navigate } = this.props.navigation
 					navigate('TabGroupOne')
 				}                

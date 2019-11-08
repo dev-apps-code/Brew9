@@ -13,8 +13,8 @@ import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import VoucherRequestObject from "../Requests/voucher_request_object";
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
-import UsedVoucher from "../MemberVoucher/UsedVoucher"
-import ValidVoucher from "../MemberVoucher/ValidVoucher"
+import UsedVoucher from "../Checkout/UsedVoucher"
+import ValidVoucher from "../Checkout/ValidVoucher"
 import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 

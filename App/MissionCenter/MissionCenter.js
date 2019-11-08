@@ -89,6 +89,25 @@ export default class MissionCenter extends React.Component {
 		/>
     }
     
+    loadProfile(){
+		const { dispatch, currentMember } = this.props
+
+		const callback = eventObject => {
+
+		}
+		const obj = new ProfileRequestObject()
+		if (currentMember != null){
+			obj.setUrlId(currentMember.id)
+		}
+		
+		dispatch(
+			createAction('members/loadProfile')({
+				object:obj,
+				callback,
+			})
+		)
+    }
+    
     loadMissions(){
         const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
@@ -158,6 +177,7 @@ export default class MissionCenter extends React.Component {
                 console.log(eventObject)
                 if (eventObject.success) {
                     this.update_claim(eventObject.result)
+                    // this.loadProfile()
                 }
                 this.setState({
                     loading: false,
@@ -169,7 +189,7 @@ export default class MissionCenter extends React.Component {
             const obj = new MissionRewardClaimRequestObject()
             obj.setUrlId(statement_id)
             dispatch(
-                createAction('missions/missionRewardClaim')({
+                createAction('members/missionRewardClaim')({
                     object:obj,
                     callback,
                 })
@@ -193,6 +213,8 @@ export default class MissionCenter extends React.Component {
                 missions
             })
         }
+
+        // this.loadProfile()
     }
 
     update_mission() {

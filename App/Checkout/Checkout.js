@@ -159,6 +159,7 @@ export default class Checkout extends React.Component {
 
 		const {vouchers_to_use} = this.state
 	
+		console.log("Add Here")
 		if (vouchers_to_use.length == 0){
 			this.setState({vouchers_to_use:[voucher_item]})
 			this.calculateVoucherDiscount([voucher_item])
@@ -317,6 +318,7 @@ export default class Checkout extends React.Component {
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
+		console.log("Promotions", promotion_ids)
 		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
@@ -717,36 +719,6 @@ export default class Checkout extends React.Component {
 
 	renderVoucherSection() {
 
-		const { vouchers_to_use } = this.state
-
-		const renderVouchers = vouchers_to_use.map((item,key) => {
-			return (
-				<View style={styles.orderitemsView}><View
-					style={styles.drinksView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								justifyContent: "center",
-								backgroundColor:"transparent",
-								flex: 1,
-								flexDirection: "row"
-							}}>
-								<View
-									style={styles.productDetailView}>
-									<Text
-										style={styles.productNameText}>{item.voucher.name}</Text>
-									
-										<View style={styles.spacer} />
-								</View>
-								<Image
-									source={require("./../../assets/images/group-109-copy.png")}
-									style={styles.dottedLineImage}/>
-							</View>
-					</View>
-				</View>
-			)
-		})
-
 		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
 				<TouchableOpacity
 							onPress={this.onVoucherButtonPressed}
@@ -773,13 +745,13 @@ export default class Checkout extends React.Component {
 							</View>
 					</View>
 				</TouchableOpacity>
-				{renderVouchers}
 			</View>
-			</View>
+		</View>
 	}
 	
 	renderOrderItems(items, vouchers, promotions) {
 
+		const { cart_total } = this.state
 		let fullList = [...items,...promotions] 
 		const order_items = fullList.map((item, key) => {
 			var price_string = item.price != undefined && item.price > 0 && item.clazz == "product" ? `$${parseFloat(item.price).toFixed(2)}` 
@@ -822,18 +794,46 @@ export default class Checkout extends React.Component {
 
 		const voucher_items = vouchers.map((item, key) => {
 
+			var discount_value = null
+
+			if (item.voucher.discount_price) {
+				if (item.voucher.discount_type == "fixed") {
+					discount_value = item.voucher.discount_price
+				} else if (item.voucher.discount_type == "percent") {
+					discount_value = cart_total * item.voucher.discount_price/100.0	
+				}
+
+			} 
+			
 			return <View
-				style={styles.voucherView}
-				key={key}>
-				<Text
-					style={styles.voucherNameText}>{item.voucher.name}</Text>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-				<Text
-					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${parseFloat(item.voucher.discount_price).toFixed(2)}` : ""}</Text>
-			</View>
+					style={styles.drinksView}
+					key={key}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>{item.voucher.name}</Text>
+									
+										<View style={styles.spacer} />
+									
+								</View>
+								<Text
+									style={styles.productQuantityText}></Text>
+								<Text
+									style={styles.productPriceText}>{ discount_value ? `-$${parseFloat(discount_value).toFixed(2)}` : ""}</Text>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
+							</View>
+				</View>
+			
 		})
 
 		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
@@ -1040,6 +1040,7 @@ const styles = StyleSheet.create({
 	},
 	checkoutView: {
 		backgroundColor: DEFAULT_GREY_BACKGROUND,
+		paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
 		flex: 1,
 	},
 	scrollviewScrollView: {

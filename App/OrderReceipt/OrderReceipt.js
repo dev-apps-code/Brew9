@@ -176,7 +176,7 @@ export default class OrderReceipt extends React.Component {
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.thankMessageText}>Thank you for your support, welcome again.</Text>
+									style={styles.thankMessageText}>Thank you, let's brew again.</Text>
 							</View>
 							<View
 								style={styles.viewView}/>

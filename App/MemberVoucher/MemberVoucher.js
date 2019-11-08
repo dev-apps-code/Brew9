@@ -321,6 +321,7 @@ export default class MemberVoucher extends React.Component {
 				title={item.voucher.name}
 				description={item.voucher.description}
 				display_value={item.voucher.display_value}
+				discount_price={item.voucher.discount_price}
 				discount_type={item.voucher.discount_type}
 				used_date={item.used_date}
 				company_id={this.props.company_id}
@@ -454,9 +455,6 @@ export default class MemberVoucher extends React.Component {
 						this.state.current_data.length == 0 && !this.state.loading ?
 						<View
 							style={styles.novoucherviewView}> 
-							<Image 
-								source={require("./../../assets/images/brew9-doodle-03.png")} 
-								style={styles.storeimageImage}/> 
 							<Text 
 								style={styles.noRewardAvailableText}>No voucher available</Text> 
 						</View> :
