@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	logoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		tintColor: "rgb(0, 178, 227)",
 		backgroundColor: "transparent",
 		width: 110 * alpha,
