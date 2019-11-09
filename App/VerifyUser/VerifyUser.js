@@ -21,7 +21,6 @@ import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
-import OTPInputView from '@twotalltotems/react-native-otp-input'
 import Brew9Modal from "../Components/Brew9Modal"
 
 @connect(({ members }) => ({

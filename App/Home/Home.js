@@ -55,6 +55,7 @@ import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PR
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
 import ProfileRequestObject from '../Requests/profile_request_object'
+import { getDistance, getPreciseDistance } from 'geolib';
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -239,25 +240,30 @@ export default class Home extends React.Component {
 		const { location } = this.props
 
 		if (location != null && shop != null) {
-			const prevLatInRad = this.toRad(location.coords.latitude);
-			const prevLongInRad = this.toRad(location.coords.longitude);
-			const latInRad = this.toRad(shop.latitude);
-			const longInRad = this.toRad(shop.longitude);
-			var calculated_distance = Math.acos(Math.sin(prevLatInRad) * Math.sin(latInRad) + Math.cos(prevLatInRad) * Math.cos(latInRad) * Math.cos(longInRad - prevLongInRad))
+			const prevLatInRad = location.coords.latitude
+			const prevLongInRad = location.coords.longitude
+			const latInRad = shop.latitude
+			const longInRad = shop.longitude
+			console.log("Shop", latInRad, longInRad, "User", prevLatInRad, prevLongInRad)
+			var pdis = getPreciseDistance(
+				{ latitude: prevLatInRad, longitude: prevLongInRad },
+				{ latitude: latInRad, longitude: longInRad }
+			  );
+			// var calculated_distance = Math.acos(Math.sin(prevLatInRad) * Math.sin(latInRad) + Math.cos(prevLatInRad) * Math.cos(latInRad) * Math.cos(longInRad - prevLongInRad))
 			// console.log("Compute", calculated_distance)
-			this.getdistanceString(calculated_distance)
+			this.getdistanceString(pdis)
 		}
 	}
 		
 	getdistanceString(calculated_distance) {
 		var distance_string = ""
-		var parseDistance = parseFloat(calculated_distance).toFixed(3)
-		if (parseDistance >= 1 ) {
-			distance_string = `${parseDistance}km`
+		console.log(calculated_distance)
+		var parseDistance = parseFloat(calculated_distance).toFixed(2)
+		if (parseDistance > 1000 ) {
+			distance_string = `${parseDistance/1000}km`
 		} else {
-			distance_string = `${parseDistance * 1000}m`
+			distance_string = `${parseDistance}m`
 		}
-		console.log("distance", distance_string)
 		this.setState({distance : distance_string})
 	}
 
