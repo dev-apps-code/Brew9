@@ -7,11 +7,12 @@ export const PRIMARY_COLOR = "rgb(0, 178, 227)"
 export const LIGHT_GREY = "rgb(130, 130, 130)"
 export const LIGHT_BLUE = "rgb(181, 219, 229)"
 export const LIGHT_BLUE_BACKGROUND = "rgb(218, 247, 255)"
+export const DEFAULT_GREY_BACKGROUND = "rgb(238, 238, 238)"
 export const RED = "rgb(239, 81, 81)"
 export const DISABLED_COLOR = "rgb(191, 191, 191)"
 export const TABBAR_INACTIVE_TINT = "rgb(85, 85, 85)"
 export const TABBAR_ACTIVE_TINT = "black"
-export const BUTTONBOTTOMPADDING = Platform.OS === "ios" ? 40*alpha : 0
+export const BUTTONBOTTOMPADDING = Platform.OS === "ios" ? 40 * alpha : 0
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: "blue",

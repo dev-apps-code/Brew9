@@ -21,10 +21,13 @@ import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import OTPInputView from '@twotalltotems/react-native-otp-input'
+import Brew9Modal from "../Components/Brew9Modal"
 
 @connect(({ members }) => ({
 	members: members.profile,
-	company_id: members.company_id
+	company_id: members.company_id,
+	location: members.location,
 }))
 export default class VerifyUser extends React.Component {
 
@@ -50,6 +53,13 @@ export default class VerifyUser extends React.Component {
 			code_from_server:"",
 			is_counting: false,
 			count_down: 3,
+			modal_visible: false,
+			modal_description: "",
+			modal_title: "Brew9",
+			modal_cancelable: false,
+			modal_ok_text: null,
+			modal_ok_action: ()=> {this.setState({modal_visible:false})},
+			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 
 	}
@@ -75,7 +85,10 @@ export default class VerifyUser extends React.Component {
 	onSendPressed = () => {
 		Keyboard.dismiss()
 		if (this.state.is_counting){
-			this.refs.toast.show("Please wait for 2 minutes before trying to resend.");
+			this.setState({
+				modal_visible:true,
+				modal_description: "Please wait for 2 minutes before trying to resend.",
+			})
 			return
 		}
 		this.loadLogin()
@@ -89,22 +102,43 @@ export default class VerifyUser extends React.Component {
 		})
 	}
 
+	renderPopupModal() {
+		return <Brew9Modal
+            title={this.state.modal_title}
+            description={this.state.modal_description}
+            visible={this.state.modal_visible}
+            confirm_text={this.state.modal_ok_text}
+            cancelable={this.state.modal_cancelable}
+            okayButtonAction={this.state.modal_ok_action}
+            cancelButtonAction={this.state.modal_cancel_action}
+		/>
+	}
+
 	loadLogin(){
 		const { dispatch } = this.props
 		const {phone_no, country_code} = this.state
 
 		if (phone_no == null || phone_no == ''){
-			this.refs.toast.show('Please ensure you have enter your phone number!')
+			this.setState({
+				modal_visible:true,
+				modal_description: "Please ensure you have enter your phone number!",
+			})
 			return
 		}
 
 		if (phone_no.length < 7){
-			this.refs.toast.show('Your phone number is too short')
+			this.setState({
+				modal_visible:true,
+				modal_description: "Your phone number is too short",
+			})
 			return
 		}
 
 		if (country_code == null || country_code == ''){
-			this.refs.toast.show('Please ensure you have enter a country code!')
+			this.setState({
+				modal_visible:true,
+				modal_description: "Please ensure you have enter a country code!",
+			})
 			return
 		}
 
@@ -138,7 +172,29 @@ export default class VerifyUser extends React.Component {
 		this.loadActivateAccount()
 	}
 
+	loadShops(){
 
+		// console.log("Status", loadProducts)
+		const { dispatch,company_id,location } = this.props
+
+		const callback = eventObject => {
+			if (eventObject.success) {		
+			}
+		}
+
+		var latitude = location != null ? location.coords.latitude : null
+		var longitude = location != null ? location.coords.longitude  : null
+	
+		const obj = new NearestShopRequestObject(latitude, longitude)
+		obj.setUrlId(company_id)
+		dispatch(
+			createAction('shops/loadShops')({
+				object:obj,
+				callback,
+			}
+		))
+		
+	}
 	loadActivateAccount(){
         const { dispatch } = this.props
         this.setState({ loading: true })
@@ -151,11 +207,15 @@ export default class VerifyUser extends React.Component {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
+
 					const { navigate } = this.props.navigation
 					navigate('TabGroupOne')
 				}                
             }else{
-				this.refs.toast.show(eventObject.message)
+				this.setState({
+					modal_visible:true,
+					modal_description: eventObject.message,
+				})
 			}
 			this.setState({
 				loading: false,
@@ -241,6 +301,19 @@ export default class VerifyUser extends React.Component {
 							value={this.state.code}
 							style={styles.activationCodeTextInput}
 							onChangeText={(code) => this.setState({code: code})}/>
+
+					{/* <OTPInputView
+						style={styles.activationCodeTextInput}
+						pinCount={6}
+						// code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+						// onCodeChanged = {code => { this.setState({code})}}
+						autoFocusOnLoad
+						codeInputFieldStyle={styles.underlineStyleBase}
+						codeInputHighlightStyle={styles.underlineStyleHighLighted}
+						onCodeFilled = {(code => {
+							console.log(`Your verification code for Brew9 is ${code}`)
+						})}
+					/> */}
 						<View
 							style={{
 								flex: 1,
@@ -252,7 +325,6 @@ export default class VerifyUser extends React.Component {
 								style={styles.verifyButtonText}>Verify</Text>
 						</TouchableOpacity>
 					</View> : null }
-					
 					<View style={styles.countDownContainer} >
 						<View style={styles.countDownWrapper}>
 						{ this.state.is_counting  ?
@@ -323,6 +395,7 @@ export default class VerifyUser extends React.Component {
 						</Text>
 						</Hyperlink>
 			</View>
+			{this.renderPopupModal()}
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast" position="center"/>
 		</View>
@@ -557,7 +630,7 @@ const styles = StyleSheet.create({
 	},
 	termsAndConditionsButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -571,7 +644,7 @@ const styles = StyleSheet.create({
 		width: windowWidth,
 		marginBottom: 40 * alpha,
 		color: "rgb(90, 90, 90)", 
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
@@ -580,7 +653,7 @@ const styles = StyleSheet.create({
 	},
 	phoneCountryCodeText: {
 		marginLeft: 0 * alpha,
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		color: "black",
 	},
@@ -608,4 +681,19 @@ const styles = StyleSheet.create({
         marginRight: 10 * alpha,
 	},
 	
+	underlineStyleBase: {
+		backgroundColor: "transparent",
+		fontFamily: TITLE_FONT,
+		color: "rgb(46, 46, 46)",
+		width: 10 * alpha,
+		borderWidth: 0,
+		paddingLeft: 0,
+		paddingRight: 0,
+		marginLeft: 0,
+		marginRight: 0,
+	  },
+	
+	  underlineStyleHighLighted: {
+		borderColor: "#03DAC6",
+	  },
 })

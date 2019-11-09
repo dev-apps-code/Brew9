@@ -82,8 +82,7 @@ export default class OrderReceipt extends React.Component {
 	renderOrderItems(items, vouchers) {
 
 		const order_items = items.map((item, key) => {
-			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
-				
+			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
 			return <View
 					style={styles.drinksView}
 					key={key}>
@@ -110,14 +109,15 @@ export default class OrderReceipt extends React.Component {
 								
 								<Text
 									style={styles.productPriceText}>{price_string}</Text>
-								<Image
+								{ key < items.length - 1 && (<Image
 									source={require("./../../assets/images/group-109-copy.png")}
-									style={styles.dottedLineImage}/>
+								style={styles.dottedLineImage}/> )}
+								
 							</View>
 				</View>
 				
 				
-			})
+		})
 
 		const voucher_items = vouchers.map((item, key) => {
 
@@ -131,13 +131,14 @@ export default class OrderReceipt extends React.Component {
 						flex: 1,
 					}}/>
 				<Text
-					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${parseFloat(item.voucher.discount_price).toFixed(2)}` : ""}</Text>
 			</View>
 		})
 
-		return <View style={styles.orderitemsView}>
+		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
 			{order_items}
 			{voucher_items}
+		</View>
 		</View>
 	}
 	
@@ -149,15 +150,6 @@ export default class OrderReceipt extends React.Component {
 				style={styles.orderReceiptView}>
 				<ScrollView
 					style={styles.orderScrollView}>
-					{/* <TouchableOpacity
-						onPress={this.onCustomerServicePressed}
-						style={styles.customerServiceButton}>
-						<Image
-							source={require("./../../assets/images/group-3-22.png")}
-							style={styles.customerServiceButtonImage}/>
-						<Text
-							style={styles.customerServiceButtonText}>Customer Service</Text>
-					</TouchableOpacity> */}
 					<View
 						style={styles.orderCartView}>
 						<View
@@ -184,7 +176,7 @@ export default class OrderReceipt extends React.Component {
 										flex: 1,
 									}}/>
 								<Text
-									style={styles.thankMessageText}>Thank you for your support, welcome again.</Text>
+									style={styles.thankMessageText}>Thank you, let's brew again.</Text>
 							</View>
 							<View
 								style={styles.viewView}/>
@@ -197,6 +189,7 @@ export default class OrderReceipt extends React.Component {
 							}}>
 							<View
 								style={styles.lineView}/>
+								<View style={styles.locationWrapperView}>
 							<View
 								style={styles.locationView}>
 								<View
@@ -244,23 +237,35 @@ export default class OrderReceipt extends React.Component {
 										style={styles.directionText}>Direction</Text>
 								</View>
 							</View>
-							<View
-								style={styles.lineTwoView}/>
-							{this.renderOrderItems(order.order_items, order.voucher_items)}
-							
-							<View
-								style={styles.totalView}>
-								<Text
-									style={styles.totallabelText}>TOTAL</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Text
-									style={styles.totalText}>${order.total}</Text>
 							</View>
-							<View
-								style={styles.lineThreeView}/>
+							<View style={styles.receiptSectionSeperator}>
+								<Image
+									source={require("./../../assets/images/curve_in_background.png")}
+									style={styles.curve_in}/>
+								<View
+									style={styles.sectionSeperatorView}/>
+							</View>
+							{this.renderOrderItems(order.order_items, order.voucher_items)}
+							<View style={styles.receiptSectionSeperator}>
+								<Image
+									source={require("./../../assets/images/curve_in_background.png")}
+									style={styles.curve_in}/>
+								<View
+									style={styles.sectionSeperatorView}/>
+							</View>
+							<View style={styles.totalViewWrapper}>
+								<View
+									style={styles.totalView}>
+									<Text
+										style={styles.totallabelText}>TOTAL</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.totalText}>${parseFloat(order.total).toFixed(2)}</Text>
+								</View>
+							</View>
 							{/* <Text
 								style={styles.callrefundText}>Please call for refund.</Text> */}
 						</View>
@@ -323,7 +328,6 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	orderCartView: {
-		backgroundColor: "rgb(248, 248, 248)",
 		alignSelf: "stretch",
 		marginLeft: 18 * alpha,
 		marginRight: 18 * alpha,
@@ -349,20 +353,20 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	logoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
-		width: 23 * alpha,
-		height: 46 * alpha,
+		width: 30 * alpha,
+		height: 60 * alpha,
 	},
 	completedOrderText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 2 * alpha,
+		marginTop: 10 * alpha,
 	},
 	thankMessageText: {
 		color: "rgb(54, 54, 54)",
@@ -379,6 +383,10 @@ const styles = StyleSheet.create({
 	lineView: {
 		backgroundColor: "rgb(234, 234, 234)",
 		height: 2 * alpha,
+	},
+	locationWrapperView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		flex: 1,
 	},
 	locationView: {
 		backgroundColor: "transparent",
@@ -508,6 +516,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
+	totalViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
+		flex: 1,
+		borderBottomLeftRadius: 14 * alpha,
+		borderBottomRightRadius: 14 * alpha,
+	},
 	totalView: {
 		backgroundColor: "transparent",
 		height: 21 * alpha,
@@ -516,6 +530,7 @@ const styles = StyleSheet.create({
 		marginTop: 10 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
+		marginBottom: 18 * alpha,
 	},
 	totallabelText: {
 		backgroundColor: "transparent",
@@ -663,12 +678,15 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 
+	drinksViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
+		flex: 1,
+	},
 	drinksView: {
 		backgroundColor: "transparent",
 		flex: 1,
 		marginTop: 10 * alpha,
 	},
-
 
 	productDetailView: {
 		backgroundColor: "transparent",
@@ -681,7 +699,6 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "left",
 		marginBottom: 5 * alpha,
 	},
@@ -729,4 +746,28 @@ const styles = StyleSheet.create({
 		width: 291 * alpha,
 		height: 2 * alpha,
 	},
+
+	receiptSectionSeperator: {
+		flex: 1,
+		backgroundColor: "transparent",
+		alignContent: "center",
+		justifyContent: "center",
+	}, 
+
+	curve_in: {
+		height: 14 * alpha,
+		resizeMode: "stretch",
+		width: "100%",
+		backgroundColor: "transparent",
+	},
+
+	sectionSeperatorView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		position: "absolute",
+		alignSelf: "center",
+		width: 300 * alpha,
+		height: 1 * alpha,
+		
+	},
+
 })

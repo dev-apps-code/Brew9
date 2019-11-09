@@ -7,7 +7,7 @@ class MissionRewardClaimRequestObject extends BaseRequestObject{
     }
 
    getUrlString() {
-       return `missions/${this.url_id}/claim_mission_reward`
+       return `members/${this.url_id}/claim_mission_reward`
    }
 }
 export default MissionRewardClaimRequestObject

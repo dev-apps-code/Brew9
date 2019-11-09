@@ -79,7 +79,7 @@ export default class CartPromoCell extends React.Component {
 									justifyContent: "center",
 								}}>
 								<Text
-									style={styles.quantityText}>Free</Text>
+									style={styles.quantityText}>{this.props.price != 0 ? `-$${parseFloat(this.props.price).toFixed(2)}` : "Free"}</Text>
 							</View>
 							
 						</View>

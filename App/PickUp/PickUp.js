@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
-import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR} from "../Common/common_style";
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -159,9 +159,9 @@ export default class PickUp extends React.Component {
 								
 								<Text
 									style={styles.productPriceText}>{price_string}</Text>
-								<Image
+								{ item.order_items != null &&  key < item.order_items.length - 1 && (<Image
 									source={require("./../../assets/images/group-109-copy.png")}
-									style={styles.dottedLineImage}/>
+								style={styles.dottedLineImage}/> )}
 							</View>
 				</View>
 				
@@ -171,17 +171,34 @@ export default class PickUp extends React.Component {
 			const voucher_items = item.voucher_items.map((item, key) => {
 
 				return <View
-					style={styles.voucherView}
+					style={styles.drinksView}
 					key={key}>
-					<Text
-						style={styles.nameFourText}>{item.voucher.name}</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.descriptionThreeText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+								<View
+									style={styles.productDetailView}>
+									<Text
+										style={styles.productNameText}>{item.voucher.name}</Text>
+									
+										<View style={styles.spacer} />
+									
+								</View>
+								
+								<Text
+									style={styles.productPriceText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+								{ item.voucher_items != null && key < item.voucher_items.length - 1 && (<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+								style={styles.dottedLineImage}/> )}
+							</View>
 				</View>
+				
+				
 			})
 
 			return <View
@@ -191,7 +208,7 @@ export default class PickUp extends React.Component {
 					pointerEvents="box-none"
 					style={{
 						alignSelf: "flex-start",
-						width: 193 * alpha,
+						flex: 1,
 						height: 29 * alpha,
 						marginLeft: 19 * alpha,
 						flexDirection: "row",
@@ -221,16 +238,15 @@ export default class PickUp extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							alignSelf: "flex-end",
-							width: 200 * alpha,
+							flex: 1,
 							height: 52 * alpha,
-							marginRight: 111 * alpha,
 							marginTop: 19 * alpha,
 						}}>
 						<Text
-							style={styles.queuenumberText}>{item.queue_no}</Text>
-						<Text
 							style={styles.queueheaderText}>Queue Number</Text>
+						<Text
+							style={styles.queuenumberText}>{item.queue_no}</Text>
+						
 					</View>
 					<View
 						style={styles.progressView}>
@@ -337,80 +353,78 @@ export default class PickUp extends React.Component {
 				</View>
 				<View
 					style={styles.orderDetailView}>
-					<View
-						style={styles.branchDirectionView}>
-						<Image
-							source={require("./../../assets/images/top-fill.png")}
-							style={styles.topFillImage}/>
-						<View
-							pointerEvents="box-none"
-							style={{
-								flex: 1,
-								justifyContent: "center",
-							}}>
+					<View style={styles.locationWrapperView}>
 							<View
-								pointerEvents="box-none"
-								style={{
-									marginLeft: 25 * alpha,
-									marginRight: 5 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
+								style={styles.locationView}>
 								<View
-									style={styles.branchAddressView}>
+									style={styles.branchView}>
 									<Text
-										style={styles.shopNameText}>{item.shop.name}</Text>
-									<View
-										pointerEvents="box-none"
-										style={{
-											marginTop: 2 * alpha,
-										}}>
-										<Text
-											numberOfLines={2}
-											style={styles.addressText}>{item.shop.address}</Text>
-										<Text
-											style={styles.phoneText}>{item.shop.phone_no}</Text>
-									</View>
+										style={styles.shopBranchText}>{item.shop.name}</Text>
+									<Text
+										numberOfLines={3}
+										style={styles.shopBranchAddressText}>{item.shop.address}</Text>
 								</View>
-							
-								<TouchableOpacity
-									onPress={() => this.onCallPressed(item.shop.phone_no)}
-									style={styles.callButton}>
-									<Image
-										source={require("./../../assets/images/group-6-23.png")}
-										style={styles.callButtonImage}/>
-								</TouchableOpacity>
-								<TouchableOpacity
-									onPress={() => this.onDirectionPressed(item.shop)}
-									style={styles.directionButton}>
-									<Image
-										source={require("./../../assets/images/group-3-30.png")}
-										style={styles.directionButtonImage}/>
-								</TouchableOpacity>
+								<View
+									style={{
+										flex: 1,
+									}}/>
+								<View
+									style={styles.callView}>
+									<TouchableOpacity
+										onPress={() => this.onCallPressed(item.shop.phone_no)}
+										style={styles.callIconButton}>
+										<Image
+											source={require("./../../assets/images/group-3-23.png")}
+											style={styles.callIconButtonImage}/>
+									</TouchableOpacity>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.callText}>Call</Text>
+								</View>
+								<View
+									style={styles.directionView}>
+									<TouchableOpacity
+										onPress={ () => this.onDirectionPressed(item.shop)}
+										style={styles.directionIconButton}>
+										<Image
+											source={require("./../../assets/images/group-3-17.png")}
+											style={styles.directionIconButtonImage}/>
+									</TouchableOpacity>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={styles.directionText}>Direction</Text>
+								</View>
 							</View>
+							</View>
+							<View style={styles.receiptSectionSeperator}>
+							<Image
+								source={require("./../../assets/images/curve_in_background.png")}
+								style={styles.curve_in}/>
 							<View
-							style={styles.lineView}/>
+								style={styles.sectionSeperatorView}/>
 						</View>
-						
-					</View>
-					<View
-						pointerEvents="box-none"
-						style={{
-							flex: 1,
-						}}>
 						<View
-							style={styles.cartView}>
+							style={styles.drinksViewWrapper}>
 							{order_items}
 							{voucher_items}
 						</View>
-					</View>
+						<View style={styles.receiptSectionSeperator}>
+							<Image
+								source={require("./../../assets/images/curve_in_background.png")}
+								style={styles.curve_in}/>
+							<View
+								style={styles.sectionSeperatorView}/>
+						</View>
+						<View style={styles.remarkViewWrapper}>
 					<View
 						style={styles.remarkView}>
-						<Image
-							source={require("./../../assets/images/bottom-fill.png")}
-							style={styles.bottomFillImage}/>
-							<View
-								style={styles.lineTwoView}/>
+						 
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -451,6 +465,7 @@ export default class PickUp extends React.Component {
 							<Text
 								style={styles.remarkNoPackingText}>Remark:</Text>
 						</View>
+					</View>
 					</View>
 				</View>
 			</View>
@@ -534,7 +549,12 @@ export default class PickUp extends React.Component {
 		const { current_order } = this.state
 		return <View
 				style={styles.pickUpMainView}>
-				{ this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>  : current_order.length > 0 ? this.renderQueueView(current_order) : this.renderEmpty() }
+				{ this.state.loading ? 
+					<View style={[styles.container, styles.horizontal]}>
+						<ActivityIndicator size="large" />
+					</View>  : 
+					current_order.length > 0 ? this.renderQueueView(current_order) : 
+					this.renderEmpty() }
 			</View>
 	}
 }
@@ -570,6 +590,15 @@ const styles = StyleSheet.create({
 		height: 140 * alpha,
 		alignItems: "center",
 	},
+	container: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10 * alpha,
+    },
 	logoImage: {
 		resizeMode: "center",
 		backgroundColor: "transparent",
@@ -649,6 +678,7 @@ const styles = StyleSheet.create({
 	loadingIndicator:{
 		marginTop:100 * alpha,
 	},
+	
 
 
 
@@ -712,26 +742,26 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	queueView: {
-		backgroundColor: "rgb(253, 253, 253)",
+		backgroundColor: "white",
 		borderTopRightRadius: 14 * alpha,
 		borderTopLeftRadius: 14 * alpha,
+		flex: 1,
 		height: 228 * alpha,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
 		marginTop: 16 * alpha,
 		alignItems: "center",
 	},
+	
 	queuenumberText: {
 		backgroundColor: "transparent",
-		color: "rgb(50, 50, 50)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 26 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
-		position: "absolute",
-		right: 24 * alpha,
-		top: 18 * alpha,
+		textAlign: "center",
+		marginTop: 10 * alpha,
 	},
 	queueheaderText: {
 		color: "rgb(50, 50, 50)",
@@ -739,11 +769,8 @@ const styles = StyleSheet.create({
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
-		position: "absolute",
-		right: 0 * alpha,
-		top: 0 * alpha,
 	},
 	progressView: {
 		backgroundColor: "transparent",
@@ -917,7 +944,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 5 * alpha,
+		marginTop: 2 * alpha,
 		marginBottom: 10 * alpha,
 	},
 	branchDirectionView: {
@@ -1034,10 +1061,9 @@ const styles = StyleSheet.create({
 		height: 2* alpha,
 		alignSelf: "center",
 	},
-	cartView: {
-		backgroundColor: "rgb(245, 245, 245)",
+	drinksViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
 		flex: 1,
-		flexDirection: "column"
 	},
 	drinksView: {
 		backgroundColor: "transparent",
@@ -1073,7 +1099,12 @@ const styles = StyleSheet.create({
 		
 		textAlign: "center",
 	},
-	
+	remarkViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
+		flex: 1,
+		borderBottomRightRadius: 14 * alpha, 
+		borderBottomLeftRadius: 14 * alpha,
+	},
 	remarkView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -1244,4 +1275,136 @@ const styles = StyleSheet.create({
 		width: 291 * alpha,
 		height: 2 * alpha,
 	},
+
+
+
+
+
+
+
+
+
+
+	locationWrapperView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		flex: 1,
+	},
+	locationView: {
+		backgroundColor: "transparent",
+		height: 64 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 18 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	branchView: {
+		backgroundColor: "transparent",
+		alignSelf: "flex-start",
+		width: 182 * alpha,
+		height: 60 * alpha,
+	},
+	shopBranchText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		marginRight: 12 * alpha,
+	},
+	shopBranchAddressText: {
+		color: "rgb(146, 146, 146)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 1 * alpha,
+	},
+	callView: {
+		backgroundColor: "transparent",
+		width: 35 * alpha,
+		height: 55 * alpha,
+		marginRight: 8 * alpha,
+	},
+	callIconButton: {
+		backgroundColor: "transparent",
+		borderRadius: 17.5 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(180, 179, 179)",
+		borderStyle: "solid",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 35 * alpha,
+	},
+	callIconButtonImage: {
+		resizeMode: "contain",
+	},
+	callText: {
+		backgroundColor: "transparent",
+		color: "rgb(163, 163, 163)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		marginLeft: 6 * alpha,
+		marginRight: 7 * alpha,
+	},
+	directionView: {
+		backgroundColor: "transparent",
+		width: 50 * alpha,
+		height: 55 * alpha,
+	},
+	directionIconButton: {
+		backgroundColor: "transparent",
+		borderRadius: 17.5 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(180, 179, 179)",
+		borderStyle: "solid",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 35 * alpha,
+		marginLeft: 8 * alpha,
+		marginRight: 7 * alpha,
+	},
+	directionIconButtonImage: {
+		resizeMode: "contain",
+	},
+	directionText: {
+		color: "rgb(163, 163, 163)",
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	receiptSectionSeperator: {
+		flex: 1,
+		backgroundColor: "transparent",
+		alignContent: "center",
+		justifyContent: "center",
+	}, 
+
+	curve_in: {
+		height: 14 * alpha,
+		resizeMode: "stretch",
+		width: "100%",
+		backgroundColor: "transparent",
+	},
+
+	sectionSeperatorView: {
+		backgroundColor: "rgb(234, 234, 234)",
+		position: "absolute",
+		alignSelf: "center",
+		width: 300 * alpha,
+		height: 1 * alpha,
+		
+	},
+
+	
 })

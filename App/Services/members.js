@@ -1,4 +1,5 @@
 import { getMethod,postMethod,postMultipartMethod,deleteMethod } from '../Utils/webservice_helper'
+import ProfileRequestObject from '../Requests/profile_request_object'
 
 export function storePushToken(authtoken,object) {
    return postMethod(authtoken,object)
@@ -63,4 +64,8 @@ export function qrCodeScan(authtoken,object) {
 
 export function missionStatements(authtoken,object) {
    return getMethod(authtoken,object)
+}
+
+export function missionRewardClaim(authtoken,object) {
+   return postMethod(authtoken,object)
 }

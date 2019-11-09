@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList} from "react-native"
+import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import MissionRequestObject from '../Requests/mission_request_object'
@@ -89,8 +89,27 @@ export default class MissionCenter extends React.Component {
 		/>
     }
     
+    loadProfile(){
+		const { dispatch, currentMember } = this.props
+
+		const callback = eventObject => {
+
+		}
+		const obj = new ProfileRequestObject()
+		if (currentMember != null){
+			obj.setUrlId(currentMember.id)
+		}
+		
+		dispatch(
+			createAction('members/loadProfile')({
+				object:obj,
+				callback,
+			})
+		)
+    }
+    
     loadMissions(){
-        const { dispatch, selectedShop } = this.props
+        const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
             if (eventObject.success) {
@@ -109,12 +128,12 @@ export default class MissionCenter extends React.Component {
                 })     
             }
 
-            this.setState({
-                loading: false,
-            })  
+            // this.setState({
+            //     loading: false,
+            // })  
         }
         const obj = new MissionRequestObject()
-        obj.setUrlId(1)
+        obj.setUrlId(company_id)
         dispatch(
             createAction('shops/loadMissions')({
                 object:obj,
@@ -158,6 +177,7 @@ export default class MissionCenter extends React.Component {
                 console.log(eventObject)
                 if (eventObject.success) {
                     this.update_claim(eventObject.result)
+                    // this.loadProfile()
                 }
                 this.setState({
                     loading: false,
@@ -169,7 +189,7 @@ export default class MissionCenter extends React.Component {
             const obj = new MissionRewardClaimRequestObject()
             obj.setUrlId(statement_id)
             dispatch(
-                createAction('missions/missionRewardClaim')({
+                createAction('members/missionRewardClaim')({
                     object:obj,
                     callback,
                 })
@@ -194,6 +214,7 @@ export default class MissionCenter extends React.Component {
             })
         }
 
+        // this.loadProfile()
     }
 
     update_mission() {
@@ -243,6 +264,9 @@ export default class MissionCenter extends React.Component {
 
         return <View
             style={styles.missionCenterView}>
+                {this.state.loading ? <View style={[styles.container, styles.horizontal]}>
+					<ActivityIndicator size="large" />
+				</View> :
                 <View
 					style={styles.missionlistFlatListViewWrapper}>
 					<FlatList
@@ -251,7 +275,7 @@ export default class MissionCenter extends React.Component {
 						style={styles.missionlistFlatList}
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
-                <HudLoading isLoading={this.state.loading}/>
+                }
                 {this.renderPopup()}
         </View>
     }
@@ -276,6 +300,15 @@ const styles = StyleSheet.create({
 		width: 18 * alpha,
 		height: 18 * alpha,
 		tintColor: "black",
+    },
+    container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
 	},
     missionCenterView: {
         backgroundColor: "rgb(243, 243, 243)",

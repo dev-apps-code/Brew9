@@ -2,11 +2,12 @@ import BaseRequestObject from "./base_request_object";
 
 class MakeOrderRequestObj extends BaseRequestObject{
 
-    constructor(order_items, voucher_item_ids,payment_method){
+    constructor(order_items, voucher_item_ids,payment_method, promotion_ids){
         super();
         this.order_items = order_items
         this.voucher_item_ids = voucher_item_ids    
         this.payment_method = payment_method
+        this.promotion_ids = promotion_ids
     }
 
    getUrlString() {
@@ -14,7 +15,7 @@ class MakeOrderRequestObj extends BaseRequestObject{
    }
 
    getFormData(){
-    var string =  JSON.stringify({'payment_method':this.payment_method,'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids});
+    var string =  JSON.stringify({'payment_method':this.payment_method,'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids, 'promotion_ids': this.promotion_ids});
 
     return string
    }

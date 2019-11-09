@@ -333,7 +333,7 @@ export default class Profile extends React.Component {
 		}else{
 			background_photo =  {uri:''}
 			level_name = ''
-			display_name = 'Brew 9'
+			display_name = 'Brew9'
 			points = 0
 			avatar = require("./../../assets/images/user.png")
 			vouchers_count = 0
@@ -1085,7 +1085,7 @@ const styles = StyleSheet.create({
 	levelexpText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 9 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -1120,7 +1120,7 @@ const styles = StyleSheet.create({
 	pointvalueText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 17 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1160,7 +1160,7 @@ const styles = StyleSheet.create({
 	walletcreditText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 17 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1216,7 +1216,7 @@ const styles = StyleSheet.create({
 	rewardvalueText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 17 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -1347,7 +1347,7 @@ const styles = StyleSheet.create({
 		height: 120 * alpha,
 		marginLeft: 18 * alpha,
 		marginRight: 18 * alpha,
-		marginTop: 167 * alpha,
+		marginTop: 177 * alpha,
 		elevation: 2 * alpha,
 	},
 	
@@ -1407,10 +1407,7 @@ const styles = StyleSheet.create({
 	},
 	
 	menuRowLineView: {
-		backgroundColor: "transparent",
-		borderWidth: 1 * alpha,
-		borderColor: "rgb(245, 245, 245)",
-		borderStyle: "solid",
+		backgroundColor: "rgb(245, 245, 245)",
 		position: "absolute",
 		alignSelf: "center",
 		width: 375 * alpha,

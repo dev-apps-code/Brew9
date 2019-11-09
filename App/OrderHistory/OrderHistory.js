@@ -7,7 +7,7 @@
 //
 
 import OrderCell from "./OrderCell.js"
-import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity} from "react-native"
+import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator} from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
@@ -168,15 +168,25 @@ export default class OrderHistory extends React.Component {
 					{/*	source={require("./../../assets/images/group-16.png")}*/}
 					{/*	style={styles.groupImage}/>*/}
 				</View>
-				<View
-					style={styles.orderHistoryFlatListViewWrapper}>
-					<FlatList
-						onEndReached={this.loadMore.bind(this)}
-						renderItem={this.renderOrderHistoryFlatListCell}
-						data={orders_data}
-						style={styles.orderHistoryFlatList}
-						keyExtractor={(item, index) => index.toString()}/>
-				</View>
+				{this.state.loading_list ?
+					<View style={[styles.container, styles.horizontal]}>
+						<ActivityIndicator size="large" />
+					</View> : 
+					<View
+						style={styles.orderHistoryFlatListViewWrapper}>
+						{(!this.state.loading_list && this.state.orders_data.length > 0) ?
+						<FlatList
+							onEndReached={this.loadMore.bind(this)}
+							renderItem={this.renderOrderHistoryFlatListCell}
+							data={orders_data}
+							style={styles.orderHistoryFlatList}
+							keyExtractor={(item, index) => index.toString()}/>
+							: <View
+								style={styles.blankView}>
+									<Text style={styles.noLabelText}>You have not place any order yet</Text>
+						</View> }
+					</View>
+				}
 			</View>
 	}
 }
@@ -199,6 +209,15 @@ const styles = StyleSheet.create({
 		width: 18 * alpha,
 		height: 18 * alpha,
 		tintColor: "black",
+	},
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
 	},
 	OrderHistoryView: {
 		backgroundColor: "white",
@@ -250,5 +269,20 @@ const styles = StyleSheet.create({
 	},
 	orderHistoryFlatListViewWrapper: {
 		flex: 1,
+	},
+	blankView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	noLabelText: {
+		color: "rgb(149, 149, 149)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
 	},
 })

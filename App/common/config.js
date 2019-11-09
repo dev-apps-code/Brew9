@@ -1,1 +1,1 @@
-export const ANALYTICS_ID = 'UA-118812151-1'
+export const ANALYTICS_ID = 'UA-151223427-1'

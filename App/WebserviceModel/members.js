@@ -14,7 +14,8 @@ import {
   pointProductRedemption,
   currentOrder,
   qrCodeScan,
-  missionStatements
+  missionStatements,
+  missionRewardClaim
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -51,8 +52,7 @@ export default {
     location:null,
 
   },
-
-
+  
   reducers: {
      setDefaultState(state, { payload }) {
         return {
@@ -360,6 +360,24 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
+    *missionRewardClaim({ payload }, { call, put, select }) 
+    {
+    try{
+        console.log("MemberClaimReward")
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            missionRewardClaim,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result.member))
+        }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     }, 

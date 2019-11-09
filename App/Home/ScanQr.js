@@ -57,7 +57,6 @@ export default class ScanQr extends React.Component {
             hasCameraPermission: null,
             scanned: false,
             modal_visible: false,
-            message: "",
             modal_visible: false,
 			modal_description: "",
 			modal_title: "",
@@ -82,16 +81,14 @@ export default class ScanQr extends React.Component {
             visible={this.state.modal_visible}
             confirm_text={this.state.modal_ok_text}
             cancelable={this.state.modal_cancelable}
-            okayButtonAction={()=> {
-                this.setState({modal_visible:false})
-                this.onSuccessfulScan()
-            }}
+            okayButtonAction={this.state.modal_ok_action}
             cancelButtonAction={this.state.modal_cancel_action}
 		/>
     }
 
     onSuccessfulScan= () => {
-		const { navigate } = this.props.navigation
+        const { navigate } = this.props.navigation
+        this.props.navigation.goBack()
 		navigate("Profile")
     }
     
@@ -106,16 +103,26 @@ export default class ScanQr extends React.Component {
             })  
             if (eventObject.success) {
                 this.setState({ 
-                    modal_title:'Brew9',
-                    modal_description: eventObject.message,
-                    modal_ok_text: null,
-                    modal_cancelable: false,
-                    modal_visible: true, 
+                    modal_ok_action: ()=> {
+                        this.setState({modal_visible:false})
+                        this.onSuccessfulScan()
+                    }
                 })
             }
             else {
-                this.refs.toast.show(eventObject.message)
-            }     
+                this.setState({ 
+                    modal_ok_action: ()=> {
+                        this.setState({modal_visible:false})
+                    }
+                })
+            }   
+            this.setState({ 
+                modal_title:'Brew9',
+                modal_description: eventObject.message,
+                modal_ok_text: null,
+                modal_cancelable: false,
+                modal_visible: true, 
+            })  
         }
         const obj = new QrCodeScanRequestObject(qr_code)
         obj.setUrlId(currentMember.id) 
