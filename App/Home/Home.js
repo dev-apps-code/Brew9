@@ -222,8 +222,8 @@ export default class Home extends React.Component {
 	
 		let location = await Location.getCurrentPositionAsync({});
 
-		this.computeDistance()
 		dispatch(createAction("members/setLocation")(location));
+		this.computeDistance()
 	  };
 	
 	  componentDidUpdate(prevProps, prevState) {
@@ -251,10 +251,11 @@ export default class Home extends React.Component {
 		
 	getdistanceString(calculated_distance) {
 		var distance_string = ""
-		if (calculated_distance >= 1 ) {
-			distance_string = `${calculated_distance}km`
+		var parseDistance = parseFloat(calculated_distance).toFixed(3)
+		if (parseDistance >= 1 ) {
+			distance_string = `${parseDistance}km`
 		} else {
-			distance_string = `${calculated_distance * 1000}m`
+			distance_string = `${parseDistance * 1000}m`
 		}
 		console.log("distance", distance_string)
 		this.setState({distance : distance_string})
@@ -1578,7 +1579,7 @@ export default class Home extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.distance1kmText}>Distance {distance ? parseFloat(distance).toFixed(3) : "0"}km</Text>
+							style={styles.distance1kmText}>Distance {distance}</Text>
 						<View
 							style={{
 								flex: 1,
