@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.brew9.brew9",
+      "bundleIdentifier": "com.dreamcode.brew9",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan qr code to allow you to pay or redeem for vouchers.",
         "NSLocationWhenInUseUsageDescription": "This app requires you to provide your location to suggest you the nearest shop"
@@ -28,6 +28,7 @@
     },
     "android": {
       "package": "com.brew9.brew9",
+      "googleServicesFile": "./assets/fcm/google-services.json",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },

@@ -55,8 +55,7 @@ export default {
                 session_id,
                 object,
             )
-            console.log(`json returned ${JSON.stringify(json)}`)
-            console.log()
+
             if (json.result == 'SUCCESS') {
                 yield put(createAction('setSessionJson')(json))
                 typeof callback === 'function' && callback(null)   

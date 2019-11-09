@@ -159,7 +159,6 @@ export default class Checkout extends React.Component {
 
 		const {vouchers_to_use} = this.state
 	
-		console.log("Add Here")
 		if (vouchers_to_use.length == 0){
 			this.setState({vouchers_to_use:[voucher_item]})
 			this.calculateVoucherDiscount([voucher_item])
@@ -194,7 +193,7 @@ export default class Checkout extends React.Component {
 			if (voucher.voucher_type == "Cash Voucher"){
 				discount = voucher.discount_price
 			}else{				
-				console.log(`voucher ${voucher.discount_price} ${voucher.discount_type}`)
+				// console.log(`voucher ${voucher.discount_price} ${voucher.discount_type}`)
 				if (voucher.discount_type != null && voucher.discount_type != '' && voucher.discount_price != null && voucher.discount_price != 0){
 					if (voucher.discount_type.toLowerCase() == "fixed"){
 						discount = voucher.discount_price
@@ -264,7 +263,7 @@ export default class Checkout extends React.Component {
 		const {cart,vouchers_to_use, selected_payment, promotion_ids} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log(eventObject)
+
 			this.setState({
 				loading: false,
 			})

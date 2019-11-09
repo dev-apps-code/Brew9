@@ -171,7 +171,7 @@ export default class PaymentsWebview extends React.Component {
             modal_visible:true,
           })
         }
-        console.log(params)
+
     }else if (url.includes('receipt')){
       
     }

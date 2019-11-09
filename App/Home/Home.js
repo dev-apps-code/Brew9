@@ -5,7 +5,7 @@
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
-
+import Constants from 'expo-constants';
 import {
 	Text,
 	StyleSheet,
@@ -326,7 +326,7 @@ export default class Home extends React.Component {
 		}
 
 		if (currentMember != null){
-			const obj = new PushRequestObject('device_key', 'device_type', token, Platform.OS)
+			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadStorePushToken')({
