@@ -158,7 +158,7 @@ export default class Home extends React.Component {
 			app_url: '',
 			first_time_buy: false,
 			location: null,
-			distance: 100,
+			distance: "-",
 			first_promo_popup: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -245,11 +245,21 @@ export default class Home extends React.Component {
 			const longInRad = this.toRad(shop.longitude);
 			var calculated_distance = Math.acos(Math.sin(prevLatInRad) * Math.sin(latInRad) + Math.cos(prevLatInRad) * Math.cos(latInRad) * Math.cos(longInRad - prevLongInRad))
 			// console.log("Compute", calculated_distance)
-			this.setState({distance : calculated_distance})
-		  }
+			this.getdistanceString(calculated_distance)
 		}
+	}
 		
-	  
+	getdistanceString(calculated_distance) {
+		var distance_string = ""
+		if (calculated_distance >= 1 ) {
+			distance_string = `${calculated_distance}km`
+		} else {
+			distance_string = `${calculated_distance * 1000}m`
+		}
+		console.log("distance", distance_string)
+		this.setState({distance : distance_string})
+	}
+
 	toRad(angle) {
 		return (angle * Math.PI) / 180;
 	}
