@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
 		height: 53 * alpha,
 	},
 	group3Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 16 * alpha,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
 		marginRight: 9 * alpha,
 	},
 	group6Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0 * alpha,
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
 		height: 36 * alpha,
 	},
 	fill7Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		position: "absolute",
 		left: 9 * alpha,
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
 		height: 10 * alpha,
 	},
 	group13Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 40 * alpha,
 		height: 43 * alpha,
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
 	},
 	group14Image: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 32 * alpha,
 		height: 48 * alpha,
 		marginLeft: 33 * alpha,
@@ -343,14 +343,14 @@ const styles = StyleSheet.create({
 	},
 	group3TwoImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: null,
 		height: 52 * alpha,
 		marginLeft: 1 * alpha,
 	},
 	fill4Image: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		position: "absolute",
 		left: 8 * alpha,
 		right: 9 * alpha,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
 	},
 	group12Image: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 34 * alpha,
 		height: 42 * alpha,
 		marginLeft: 33 * alpha,

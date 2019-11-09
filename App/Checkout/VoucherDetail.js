@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	arrowImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		flex: 1,
 		alignSelf: "flex-end",

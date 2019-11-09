@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     marginTop: 6 * alpha
   },
   promoimageImage: {
-    resizeMode: "center",
+    resizeMode: "contain",
     backgroundColor: "transparent",
     alignSelf: "stretch",
     width: null,

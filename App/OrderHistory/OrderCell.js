@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
 	},
 	etcimageImage: {
 		backgroundColor: "rgb(252, 252, 252)",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 43 * alpha,
 		height: 43 * alpha,
 	},

@@ -334,11 +334,5 @@ const styles = StyleSheet.create({
 		marginTop: 13 * alpha,
 		marginBottom: 53 * alpha,
 	},
-	slideImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: "100%",
-		height: 3 * alpha,
-		marginBottom: 15 * alpha,
-	},
+	
 })

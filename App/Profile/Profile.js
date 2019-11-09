@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
 		height: 10 * alpha,
 	},
 	group7Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 144 * alpha,
 		height: 8 * alpha,
@@ -1246,7 +1246,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	bellImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 26 * alpha,
 		height: 25 * alpha,
@@ -1270,13 +1270,13 @@ const styles = StyleSheet.create({
 		marginRight: 16 * alpha,
 	},
 	group3Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 4 * alpha,
 	},
 	group6Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 4 * alpha,

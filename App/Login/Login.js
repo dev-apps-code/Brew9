@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
 		height: windowHeight - 100,
 	},
 	logoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "stretch",
 		width: null,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "blue"
 	},
 	bitmapImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 28 * alpha,
 		height: 16 * alpha,
@@ -500,7 +500,7 @@ const styles = StyleSheet.create({
 		height: 28 * alpha,
 	},
 	group3Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 23 * alpha,

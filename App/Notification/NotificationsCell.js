@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 		marginBottom: 1 * alpha,
 	},
 	arrowImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 9 * alpha,
 		height: 10 * alpha,

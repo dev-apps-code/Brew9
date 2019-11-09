@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   iconImage: {
-    resizeMode: "center",
+    resizeMode: "contain",
     backgroundColor: "transparent",
     width: 27,
     height: 27,

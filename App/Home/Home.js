@@ -158,7 +158,7 @@ export default class Home extends React.Component {
 			app_url: '',
 			first_time_buy: false,
 			location: null,
-			distance: 100,
+			distance: "-",
 			first_promo_popup: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -222,8 +222,8 @@ export default class Home extends React.Component {
 	
 		let location = await Location.getCurrentPositionAsync({});
 
-		this.computeDistance()
 		dispatch(createAction("members/setLocation")(location));
+		this.computeDistance()
 	  };
 	
 	  componentDidUpdate(prevProps, prevState) {
@@ -245,11 +245,22 @@ export default class Home extends React.Component {
 			const longInRad = this.toRad(shop.longitude);
 			var calculated_distance = Math.acos(Math.sin(prevLatInRad) * Math.sin(latInRad) + Math.cos(prevLatInRad) * Math.cos(latInRad) * Math.cos(longInRad - prevLongInRad))
 			// console.log("Compute", calculated_distance)
-			this.setState({distance : calculated_distance})
-		  }
+			this.getdistanceString(calculated_distance)
 		}
+	}
 		
-	  
+	getdistanceString(calculated_distance) {
+		var distance_string = ""
+		var parseDistance = parseFloat(calculated_distance).toFixed(3)
+		if (parseDistance >= 1 ) {
+			distance_string = `${parseDistance}km`
+		} else {
+			distance_string = `${parseDistance * 1000}m`
+		}
+		console.log("distance", distance_string)
+		this.setState({distance : distance_string})
+	}
+
 	toRad(angle) {
 		return (angle * Math.PI) / 180;
 	}
@@ -1179,17 +1190,21 @@ export default class Home extends React.Component {
 
 	onFeaturedPromotionPressed (item) {
 
+		const { currentMember } = this.props
 		if (item.image.url != undefined && item.image.url != "") {
-			this.setState({
-				selected_promotion: item.image.url,
-				first_promo_popup: true
-			}, function(){
-				// console.log(item.banner_detail_image)
+			let should_show = this.shouldShowFeatured(this.state.shop)
+			if (should_show == true) {
 				this.setState({
-					isPromoToggle: true
+					selected_promotion: item.image.url,
+					first_promo_popup: true
+				}, function(){
+					// console.log(item.banner_detail_image)
+					this.setState({
+						isPromoToggle: true
+					})
+					this.calculateImageDimension(item.image.url)
 				})
-				this.calculateImageDimension(item.image.url)
-			})
+			}
 		}
 
 		
@@ -1476,20 +1491,21 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery,distance, promotion} = this.state
 		let {isToggleShopLocation} = this.props
 		let categoryBottomSpacer = undefined
+		let should_show = this.shouldShowFeatured(shop)
 
 		let fullList = [...cart,...promotion]
 
 		if (shop !== null ){
 			if (shop.is_opened == false || shop.shop_busy_template_message != null){
-				if (shop.featured_promotion !== null) {
+				if (shop.featured_promotion !== null && should_show == true) {
 					categoryBottomSpacer = styles.categoryListPosition3
 				} else {
 					categoryBottomSpacer = styles.categoryListPosition4
 				}
 			} else {
-				if (shop.featured_promotion !== null && cart.length > 0) { //Have Feature Have Cart
+				if (shop.featured_promotion !== null && cart.length > 0 && should_show == true) { //Have Feature Have Cart
 					categoryBottomSpacer = styles.categoryListPosition3
-				} else if (shop.featured_promotion !== null && cart.length == 0) { //Have Feature No Cart
+				} else if (shop.featured_promotion !== null && cart.length == 0 && should_show == true) { //Have Feature No Cart
 					categoryBottomSpacer = styles.categoryListPosition2
 				} else if (shop.featured_promotion == null && cart.length > 0) { //No Feature Have Cart
 					
@@ -1563,7 +1579,7 @@ export default class Home extends React.Component {
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.distance1kmText}>Distance {distance ? parseFloat(distance).toFixed(3) : "0"}km</Text>
+							style={styles.distance1kmText}>Distance {distance}</Text>
 						<View
 							style={{
 								flex: 1,
@@ -1783,8 +1799,24 @@ export default class Home extends React.Component {
 		return undefined
 	}
 
+	shouldShowFeatured(shop) {
+		if (shop != null) {
+			const { currentMember} = this.props
+			if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+				return true
+			} else if (shop.featured_promotion.for_new_user == false) {
+				return true
+			} else {
+				return false
+			}
+		}
+		return false
+	}
+
 	renderFeaturedPromo(shop, cart) {
 		let style = undefined
+
+		const { currentMember } = this.props
 
 		if (shop !== null ){
 			if (shop.is_opened == false || shop.shop_busy_template_message != null){
@@ -1810,14 +1842,16 @@ export default class Home extends React.Component {
 
 		if (shop !== null && shop.featured_promotion !== null) {
 			
-			// console.log("Featured", shop.featured_promotion.icon.url)
-			return <TouchableOpacity
+			let should_show = this.shouldShowFeatured(shop)
+			if (should_show == true) {
+				return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
 					style={[style,styles.featuredpromoButton]}>
 					<Image
 						source={{uri: shop.featured_promotion.icon.url}}
 						style={styles.featuredpromoButtonImage}/>
 				</TouchableOpacity>
+			}
 		}
 		
 		return undefined
@@ -2066,25 +2100,12 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	groupImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		flex: 1,
-		height: 10 * alpha,
-		marginLeft: 6 * alpha,
-	},
 	pickUpDeliveryView: {
 		borderRadius: 16 * alpha,
 		width: 96 * alpha,
 		height: 32 * alpha,
 	},
-	rectangleImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		opacity: 0.34,
-		width: null,
-		height: 31 * alpha,
-	},
+	
 	pickUpView: {
 		backgroundColor: "rgba(42, 41, 41, 0.89)",
 		borderRadius: 14.5 * alpha,
@@ -2155,12 +2176,7 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
-	downArrowImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 8 * alpha,
-		height: 4 * alpha,
-	},
+	
 	productsectionView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -2259,18 +2275,7 @@ const styles = StyleSheet.create({
 		marginRight: 12 * alpha,
 		flexDirection: "row",
 	},
-	fill1Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 15 * alpha,
-		height: 16 * alpha,
-	},
-	group4Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 8 * alpha,
-		height: 8 * alpha,
-	},
+	
 	line8View: {
 		backgroundColor: "rgb(85, 85, 85)",
 		width: 9 * alpha,

@@ -675,7 +675,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	group8Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 19 * alpha,
 		height: 22 * alpha,
@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	group9Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 27 * alpha,
 		height: 18 * alpha,

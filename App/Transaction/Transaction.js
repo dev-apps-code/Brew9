@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	chosenImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 18 * alpha,
 		height: 18 * alpha,

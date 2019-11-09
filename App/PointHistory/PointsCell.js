@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
 	},
 	arrowImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 9 * alpha,
 		height: 10 * alpha,
 	},
