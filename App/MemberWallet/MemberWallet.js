@@ -423,14 +423,7 @@ const styles = StyleSheet.create({
 	transactionhistoryButtonImage: {
 		resizeMode: "contain",
 	},
-	groupImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		alignSelf: "flex-end",
-		width: 9 * alpha,
-		height: 10 * alpha,
-		marginRight: 11 * alpha,
-	},
+	
 	seperatorTwoView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,
@@ -471,14 +464,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	groupTwoImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		alignSelf: "flex-end",
-		width: 9 * alpha,
-		height: 10 * alpha,
-		marginRight: 10 * alpha,
-	},
+	
 	seperatorThreeView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 354 * alpha,
@@ -499,14 +485,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		height: 51 * alpha,
 	},
-	groupThreeImage: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		alignSelf: "flex-end",
-		width: 9 * alpha,
-		height: 10 * alpha,
-		marginRight: 11 * alpha,
-	},
+	
 	seperatorFourView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,
@@ -528,14 +507,7 @@ const styles = StyleSheet.create({
 		height: 51 * alpha,
 		marginRight: 1 * alpha,
 	},
-	groupFourImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 9 * alpha,
-		height: 10 * alpha,
-		marginRight: 11 * alpha,
-	},
+	
 	seperatorFiveView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,

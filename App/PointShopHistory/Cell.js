@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   imageImage: {
     backgroundColor: "rgb(246, 246, 246)",
-    resizeMode: "center",
+    resizeMode: "contain",
     width: 90 * alpha,
     height: 89 * alpha,
     marginLeft: 15 * alpha

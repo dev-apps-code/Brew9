@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
 		marginTop: 40 * alpha,
 	},
 	bitmapImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 28 * alpha,
 		height: 16 * alpha,

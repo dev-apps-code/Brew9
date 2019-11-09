@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
 	},
 	groupImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 7 * alpha,
 		height: 8 * alpha,
 		marginRight: 20 * alpha,

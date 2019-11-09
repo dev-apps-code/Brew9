@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   arrowImage: {
     backgroundColor: "transparent",
-    resizeMode: "center",
+    resizeMode: "contain",
     flex: 1,
     alignSelf: "flex-end",
     height: 7 * alpha,
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   },
   expiredImage: {
     backgroundColor: "transparent",
-    resizeMode: "center",
+    resizeMode: "contain",
     position: "absolute",
     right: 0,
     width: 75 * alpha,

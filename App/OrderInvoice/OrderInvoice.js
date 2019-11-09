@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	group3Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 27 * alpha,
 		height: 52 * alpha,
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
 	},
 	tickImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 17 * alpha,
 		height: 17 * alpha,
 		marginRight: 7 * alpha,

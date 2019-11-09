@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   arrowImage: {
     backgroundColor: "transparent",
-    resizeMode: "center",
+    resizeMode: "contain",
     flex: 1,
     alignSelf: "flex-end",
     height: 7 * alpha,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   usedImage: {
     backgroundColor: "transparent",
-    resizeMode: "center",
+    resizeMode: "contain",
     position: "absolute",
     width: 75 * alpha,
     right: 0,

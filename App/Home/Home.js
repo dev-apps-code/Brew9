@@ -2066,25 +2066,12 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	groupImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		flex: 1,
-		height: 10 * alpha,
-		marginLeft: 6 * alpha,
-	},
 	pickUpDeliveryView: {
 		borderRadius: 16 * alpha,
 		width: 96 * alpha,
 		height: 32 * alpha,
 	},
-	rectangleImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		opacity: 0.34,
-		width: null,
-		height: 31 * alpha,
-	},
+	
 	pickUpView: {
 		backgroundColor: "rgba(42, 41, 41, 0.89)",
 		borderRadius: 14.5 * alpha,
@@ -2155,12 +2142,7 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
-	downArrowImage: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 8 * alpha,
-		height: 4 * alpha,
-	},
+	
 	productsectionView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -2259,18 +2241,7 @@ const styles = StyleSheet.create({
 		marginRight: 12 * alpha,
 		flexDirection: "row",
 	},
-	fill1Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 15 * alpha,
-		height: 16 * alpha,
-	},
-	group4Image: {
-		resizeMode: "center",
-		backgroundColor: "transparent",
-		width: 8 * alpha,
-		height: 8 * alpha,
-	},
+	
 	line8View: {
 		backgroundColor: "rgb(85, 85, 85)",
 		width: 9 * alpha,

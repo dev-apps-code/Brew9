@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
 	},
 	productimageImage: {
 		backgroundColor: "#f6f4f5",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: windowWidth ,
 		height: 250 * alpha,
 	},

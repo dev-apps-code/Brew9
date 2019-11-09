@@ -1080,13 +1080,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
-	arrowImage2: {
-		backgroundColor: "transparent",
-		resizeMode: "center",
-		width: 11 * alpha,
-		height: 11 * alpha,
-		marginLeft: 21 * alpha,
-	},
+	
 	group8Image: {
 		resizeMode: "cover",
 		backgroundColor: "transparent",
@@ -1121,14 +1115,14 @@ const styles = StyleSheet.create({
 		height: 54 * alpha,
 	},
 	pickUpImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 32 * alpha,
 		height: 26 * alpha,
 		tintColor : "rgb(70, 76, 84)"
 	},
 	pickUpImage_selected: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 32 * alpha,
 		height: 26 * alpha,
@@ -1154,21 +1148,21 @@ const styles = StyleSheet.create({
 		marginLeft: 18 * alpha,
 	},
 	fill1Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
 		width: 17 * alpha,
 		height: 17 * alpha,
 	},
 	tabImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
 		width: 17 * alpha,
 		height: 17 * alpha,
 	},
 	tabTwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "flex-end",
 		width: 17 * alpha,
@@ -1210,13 +1204,13 @@ const styles = StyleSheet.create({
 		height: 54 * alpha,
 	},
 	deliveryImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 35 * alpha,
 		height: 23 * alpha,
 	},
 	deliveryImage_selected: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 35 * alpha,
 		height: 23 * alpha,
@@ -1469,7 +1463,7 @@ const styles = StyleSheet.create({
 	},
 	arrowImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 11 * alpha,
 		height: 11 * alpha,
 	},
@@ -1525,13 +1519,13 @@ const styles = StyleSheet.create({
 		marginRight: 1 * alpha,
 	},
 	group3TwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 24 * alpha,
 		height: 24 * alpha,
 	},
 	group6TwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		position: "absolute",
 		alignSelf: "center",
@@ -1551,7 +1545,7 @@ const styles = StyleSheet.create({
 		marginRight: 9 * alpha,
 	},
 	arrowTwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 11 * alpha,
 		height: 11 * alpha,
@@ -1600,7 +1594,7 @@ const styles = StyleSheet.create({
 	},
 	arrowThreeImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 11 * alpha,
 		height: 11 * alpha,
 	},
@@ -1823,7 +1817,7 @@ const styles = StyleSheet.create({
 	},
 	fill1Image: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		position: "absolute",
 		left: 3 * alpha,
 		right: 4 * alpha,
@@ -1831,7 +1825,7 @@ const styles = StyleSheet.create({
 		height: 1 * alpha,
 	},
 	group9Image: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 22 * alpha,
@@ -1881,7 +1875,7 @@ const styles = StyleSheet.create({
 		marginLeft: 17 * alpha,
 	},
 	group3TwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 24 * alpha,
@@ -1889,7 +1883,7 @@ const styles = StyleSheet.create({
 		marginRight: 3 * alpha,
 	},
 	group6TwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 25 * alpha,

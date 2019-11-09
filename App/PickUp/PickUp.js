@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
         padding: 10 * alpha,
     },
 	logoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 65 * alpha,
 		height: 89 * alpha,
@@ -786,7 +786,7 @@ const styles = StyleSheet.create({
 	orderedImage: {
 		tintColor: "rgb(205, 207, 208)",
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: null,
 		height: 26 * alpha,
 		marginLeft: 14 * alpha,
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
 	orderedSelectedImage: {
 		tintColor: "rgb(35, 31, 32)",
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: null,
 		height: 26 * alpha,
 		marginLeft: 14 * alpha,
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
 	},
 	dividerImage: {
 		backgroundColor: "transparent",
-		resizeMode: "center",
+		resizeMode: "contain",
 		width: 22 * alpha,
 		height: 4 * alpha,
 		marginLeft: 9 * alpha,
@@ -833,7 +833,7 @@ const styles = StyleSheet.create({
 	},
 	pickupImage: {
 		tintColor: "rgb(205, 207, 208)",
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 25 * alpha,
@@ -842,7 +842,7 @@ const styles = StyleSheet.create({
 	},
 	pickupSelectedImage: {
 		tintColor: "rgb(35, 31, 32)",
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: null,
 		height: 25 * alpha,
@@ -906,7 +906,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 	},
 	dividerTwoImage: {
-		resizeMode: "center",
+		resizeMode: "contain",
 		backgroundColor: "transparent",
 		width: 22 * alpha,
 		height: 4 * alpha,

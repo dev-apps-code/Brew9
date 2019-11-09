@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap"
   },
   categoryIconImage: {
-    resizeMode: "center",
+    resizeMode: "contain",
     backgroundColor: "transparent",
     width: 18 * alpha,
     height: 18 * alpha
