@@ -1179,17 +1179,21 @@ export default class Home extends React.Component {
 
 	onFeaturedPromotionPressed (item) {
 
+		const { currentMember } = this.props
 		if (item.image.url != undefined && item.image.url != "") {
-			this.setState({
-				selected_promotion: item.image.url,
-				first_promo_popup: true
-			}, function(){
-				// console.log(item.banner_detail_image)
+			let should_show = this.shouldShowFeatured(this.state.shop)
+			if (should_show == true) {
 				this.setState({
-					isPromoToggle: true
+					selected_promotion: item.image.url,
+					first_promo_popup: true
+				}, function(){
+					// console.log(item.banner_detail_image)
+					this.setState({
+						isPromoToggle: true
+					})
+					this.calculateImageDimension(item.image.url)
 				})
-				this.calculateImageDimension(item.image.url)
-			})
+			}
 		}
 
 		
@@ -1476,20 +1480,21 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery,distance, promotion} = this.state
 		let {isToggleShopLocation} = this.props
 		let categoryBottomSpacer = undefined
+		let should_show = this.shouldShowFeatured(shop)
 
 		let fullList = [...cart,...promotion]
 
 		if (shop !== null ){
 			if (shop.is_opened == false || shop.shop_busy_template_message != null){
-				if (shop.featured_promotion !== null) {
+				if (shop.featured_promotion !== null && should_show == true) {
 					categoryBottomSpacer = styles.categoryListPosition3
 				} else {
 					categoryBottomSpacer = styles.categoryListPosition4
 				}
 			} else {
-				if (shop.featured_promotion !== null && cart.length > 0) { //Have Feature Have Cart
+				if (shop.featured_promotion !== null && cart.length > 0 && should_show == true) { //Have Feature Have Cart
 					categoryBottomSpacer = styles.categoryListPosition3
-				} else if (shop.featured_promotion !== null && cart.length == 0) { //Have Feature No Cart
+				} else if (shop.featured_promotion !== null && cart.length == 0 && should_show == true) { //Have Feature No Cart
 					categoryBottomSpacer = styles.categoryListPosition2
 				} else if (shop.featured_promotion == null && cart.length > 0) { //No Feature Have Cart
 					
@@ -1783,8 +1788,24 @@ export default class Home extends React.Component {
 		return undefined
 	}
 
+	shouldShowFeatured(shop) {
+		if (shop != null) {
+			const { currentMember} = this.props
+			if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+				return true
+			} else if (shop.featured_promotion.for_new_user == false) {
+				return true
+			} else {
+				return false
+			}
+		}
+		return false
+	}
+
 	renderFeaturedPromo(shop, cart) {
 		let style = undefined
+
+		const { currentMember } = this.props
 
 		if (shop !== null ){
 			if (shop.is_opened == false || shop.shop_busy_template_message != null){
@@ -1810,14 +1831,16 @@ export default class Home extends React.Component {
 
 		if (shop !== null && shop.featured_promotion !== null) {
 			
-			// console.log("Featured", shop.featured_promotion.icon.url)
-			return <TouchableOpacity
+			let should_show = this.shouldShowFeatured(shop)
+			if (should_show == true) {
+				return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
 					style={[style,styles.featuredpromoButton]}>
 					<Image
 						source={{uri: shop.featured_promotion.icon.url}}
 						style={styles.featuredpromoButtonImage}/>
 				</TouchableOpacity>
+			}
 		}
 		
 		return undefined
