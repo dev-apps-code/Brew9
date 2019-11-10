@@ -6,18 +6,14 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Animated, Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
+import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
 import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
-import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
-import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
-import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'

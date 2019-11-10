@@ -1148,13 +1148,6 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-	bellImage: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		width: 26 * alpha,
-		height: 25 * alpha,
-		marginLeft: 10 * alpha,
-	},
 	messageText: {
 		color: "rgb(69, 69, 69)",
 		fontFamily: TITLE_FONT,
