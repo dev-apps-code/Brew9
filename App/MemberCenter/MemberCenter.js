@@ -130,7 +130,7 @@ export default class MemberCenter extends React.Component {
 					<View
 						style={styles.profileView}>
 						<Image
-							source={members.image ? {uri: members.image} : require("./../../assets/images/avatar.png")}
+							source={members.image ? {uri: members.image} : require("./../../assets/images/user.png")}
 							style={styles.avatarImage}/>
 						<View
 							pointerEvents="box-none"
