@@ -5,7 +5,7 @@
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
-
+import Constants from 'expo-constants';
 import {
 	Text,
 	StyleSheet,
@@ -249,13 +249,12 @@ export default class Home extends React.Component {
 				{ latitude: prevLatInRad, longitude: prevLongInRad },
 				{ latitude: latInRad, longitude: longInRad }
 			  );
-			// var calculated_distance = Math.acos(Math.sin(prevLatInRad) * Math.sin(latInRad) + Math.cos(prevLatInRad) * Math.cos(latInRad) * Math.cos(longInRad - prevLongInRad))
-			// console.log("Compute", calculated_distance)
-			this.getdistanceString(pdis)
+		
+			this.setDistanceString(pdis)
 		}
 	}
 		
-	getdistanceString(calculated_distance) {
+	setDistanceString(calculated_distance) {
 		var distance_string = ""
 		console.log(calculated_distance)
 		var parseDistance = parseFloat(calculated_distance).toFixed(2)
@@ -272,9 +271,9 @@ export default class Home extends React.Component {
 	}
 
 	componentWillMount() {
-			if (Platform.OS === 'android') {
+		if (Platform.OS === 'android') {
 			this.setState({
-			  errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+			  errorMessage: 'Oops, this will not work in an Android emulator. Try it on your device!',
 			});
 		  } else {
 			this.getLocationAsync();
@@ -304,6 +303,7 @@ export default class Home extends React.Component {
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
+			console.log("testing location get")
 		}
 		this.setState({ appState: nextAppState });
 	  };
@@ -343,7 +343,7 @@ export default class Home extends React.Component {
 		}
 
 		if (currentMember != null){
-			const obj = new PushRequestObject('device_key', 'device_type', token, Platform.OS)
+			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadStorePushToken')({
@@ -353,6 +353,7 @@ export default class Home extends React.Component {
 			)
 		}
 	}
+	
 	loadShops(loadProducts){
 
 		// console.log("Status", loadProducts)

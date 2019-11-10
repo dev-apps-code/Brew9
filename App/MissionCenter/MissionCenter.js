@@ -174,7 +174,7 @@ export default class MissionCenter extends React.Component {
         
             this.setState({ loading: true })
             const callback = eventObject => {
-                console.log(eventObject)
+
                 if (eventObject.success) {
                     this.update_claim(eventObject.result)
                     // this.loadProfile()

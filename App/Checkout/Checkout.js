@@ -6,18 +6,14 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Animated, Alert, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
+import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
 import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
-import PhoneInput from 'react-native-phone-input'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
-import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
 import {createAction, Storage} from "../Utils"
-import { commonStyles } from "../Common/common_style"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
@@ -159,7 +155,6 @@ export default class Checkout extends React.Component {
 
 		const {vouchers_to_use} = this.state
 	
-		console.log("Add Here")
 		if (vouchers_to_use.length == 0){
 			this.setState({vouchers_to_use:[voucher_item]})
 			this.calculateVoucherDiscount([voucher_item])
@@ -194,7 +189,7 @@ export default class Checkout extends React.Component {
 			if (voucher.voucher_type == "Cash Voucher"){
 				discount = voucher.discount_price
 			}else{				
-				console.log(`voucher ${voucher.discount_price} ${voucher.discount_type}`)
+				// console.log(`voucher ${voucher.discount_price} ${voucher.discount_type}`)
 				if (voucher.discount_type != null && voucher.discount_type != '' && voucher.discount_price != null && voucher.discount_price != 0){
 					if (voucher.discount_type.toLowerCase() == "fixed"){
 						discount = voucher.discount_price
@@ -264,7 +259,7 @@ export default class Checkout extends React.Component {
 		const {cart,vouchers_to_use, selected_payment, promotion_ids} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log(eventObject)
+
 			this.setState({
 				loading: false,
 			})
