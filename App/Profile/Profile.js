@@ -71,7 +71,6 @@ export default class Profile extends React.Component {
 		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log("Profile", eventObject)
 			if (eventObject.success) {
 				this.setState({
 					loading: false,
@@ -136,10 +135,11 @@ export default class Profile extends React.Component {
 	onMissionCenterPressed = () => {
 
 		const {  currentMember } = this.props
+		const { navigate } = this.props.navigation
 		if (currentMember !== null) {
-			const { navigate } = this.props.navigation
-
 			navigate("MissionCenter")
+		} else {
+			navigate("VerifyUserStack")
 		}
 	}
 
@@ -162,29 +162,32 @@ export default class Profile extends React.Component {
 	onRewardButtonPressed = () => {
 		const {  currentMember } = this.props
 		const {validVouchers} = this.state
-
-		if (currentMember !== null) {
-			const { navigate } = this.props.navigation
-			navigate("MemberVoucher",{validVouchers:validVouchers})
+		const { navigate } = this.props.navigation
 			
-		}		
+		if (currentMember !== null) {
+			navigate("MemberVoucher",{validVouchers:validVouchers})
+		} else {
+			navigate("VerifyUserStack")
+		}
 	}
 
 	onPointButtonPressed = () => {
 		const {  currentMember } = this.props
+		const { navigate } = this.props.navigation
 		if (currentMember !== null) {
-			const { navigate } = this.props.navigation
-
 			navigate("PointHistory")
+		} else {
+			navigate("VerifyUserStack")
 		}
 	}
 
 	onWalletButtonPressed = () => {
 		const {  currentMember } = this.props
+		const { navigate } = this.props.navigation
 		if (currentMember !== null) {
-			const { navigate } = this.props.navigation
-
 			navigate("MemberWallet")
+		} else {
+			navigate("VerifyUserStack")
 		}
 	}
 
@@ -192,26 +195,27 @@ export default class Profile extends React.Component {
 		const {  currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
-
 			navigate("MemberProfile")
 		}
 	}
 
 	onOrderButtonPressed = () => {
 		const {  currentMember } = this.props
+		const { navigate } = this.props.navigation
 		if (currentMember !== null) {
-			const { navigate } = this.props.navigation
-
 			navigate("OrderHistory")
+		} else {
+			navigate("VerifyUserStack")
 		}
 	}
 
 	onPersonalButtonPressed = () => {
 		const { currentMember } = this.props
+		const { navigate } = this.props.navigation
 		if (currentMember !== null) {
-			const { navigate } = this.props.navigation
-
 			navigate("MemberProfile")
+		} else {
+			navigate("VerifyUserStack")
 		}
 	}
 
@@ -551,49 +555,9 @@ export default class Profile extends React.Component {
 						}}>
 						<View
 							style={styles.notificationView}>
-							{/* <Image
-								source={require("./../../assets/images/bell-2.png")}
-								style={styles.bellImage}/>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.messageText}>13 new messages, click to see</Text>
-							<View
-								style={styles.group7View}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-3-32.png")}
-										style={styles.group3Image}/>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<Image
-										source={require("./../../assets/images/group-6-29.png")}
-										style={styles.group6Image}/>
-								</View>
-							</View> */}
 						</View>
 						<Text
-							style={styles.welcomeSomebodyText}>Welcome, {display_name}!</Text>
+							style={styles.welcomeSomebodyText}>Welcome {display_name}!</Text>
 						<Text
 							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 					</View>
@@ -718,7 +682,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>Membership Info</Text>
+										style={styles.menuRowLabelText}>Membership Info</Text>
 									<View
 										style={{
 											flex: 1,
@@ -788,70 +752,14 @@ export default class Profile extends React.Component {
 									left: 0 * alpha,
 									right: 0 * alpha,
 									top: 0 * alpha,
-									bottom: 0,
-								}}>
-								
-									<Text
-										style={styles.menuRowDescriptionText}></Text>
-								
+									bottom: 0,}}>
+								<Text
+									style={styles.menuRowDescriptionText}></Text>
 								<View
 									style={styles.menuRowLineView}/>
 							</View>
 						</View>
 					</TouchableOpacity>
-					{/* <TouchableOpacity
-						onPress={() => this.onQRButtonPressed()}
-						style={styles.menuRowbuttonButton}>
-						<View
-							style={styles.menuRowView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>QR Code</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.menuRowDescriptionText}>Scan for reward or pay</Text>
-									<Image
-											source={require("./../../assets/images/forward.png")}
-											style={styles.menuRowArrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-								}}>
-								
-								<View
-									style={styles.menuRowLineView}/>
-							</View>
-						</View>
-					</TouchableOpacity>
-													 */}
 					<TouchableOpacity
 							onPress={() => this.onAboutButtonPressed()}
 							style={styles.menuRowbuttonButton}>
@@ -877,7 +785,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>About Brew9</Text>
+										style={styles.menuRowLabelText}>About Brew9</Text>
 									<View
 										style={{
 											flex: 1,
@@ -1234,11 +1142,6 @@ const styles = StyleSheet.create({
 		marginTop: 5 * alpha,
 	},
 	notificationView: {
-		// backgroundColor: "white",
-		// borderRadius: 18.5,
-		// shadowColor: "rgba(157, 157, 157, 0.5)",
-		// shadowRadius: 4,
-		// shadowOpacity: 1,
 		alignSelf: "center",
 		width: 217 * alpha,
 		height: 37 * alpha,
@@ -1261,25 +1164,6 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginRight: 5 * alpha,
-	},
-	group7View: {
-		backgroundColor: "transparent",
-		flex: 1,
-		height: 7 * alpha,
-		marginLeft: 5 * alpha,
-		marginRight: 16 * alpha,
-	},
-	group3Image: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		width: null,
-		height: 4 * alpha,
-	},
-	group6Image: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		width: null,
-		height: 4 * alpha,
 	},
 	welcomeSomebodyText: {
 		backgroundColor: "transparent",

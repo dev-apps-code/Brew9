@@ -19,7 +19,6 @@ import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKGROUND } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
-import { BlurView } from 'expo-blur';
 import Constants from 'expo-constants';
 
 export default class ProductCell extends React.Component {

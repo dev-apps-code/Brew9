@@ -26,7 +26,6 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles} from "../Common/common_style";
 import Brew9Modal from "../Components/Brew9Modal"
-import ImageResizer from 'react-native-image-resizer';
 
 @connect(({ members }) => ({
 	members: members.profile
