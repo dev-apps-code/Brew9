@@ -296,7 +296,7 @@ export default class Home extends React.Component {
 		  }
 		const { dispatch } = this.props
 		
-		dispatch(createAction('members/loadCurrentUserFromCache')({}))
+		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	async componentDidMount() {
@@ -380,19 +380,18 @@ export default class Home extends React.Component {
 			this.setState({ loading: false })
 
 			if (eventObject.success) {			
-					this.setState({
-						shop: eventObject.result,
-						menu_banners: eventObject.result.menu_banners
-					}, function () {
-						if (loadProducts){
-							this.loadStoreProducts()
-							this.getLocationAsync()
-							if (first_promo_popup == false) {
-								this.onFeaturedPromotionPressed(eventObject.result.featured_promotion)
-							}
-							
-						}					
-					})		
+				this.setState({
+					shop: eventObject.result,
+					menu_banners: eventObject.result.menu_banners
+				}, function () {
+					if (loadProducts){
+						this.loadStoreProducts()
+						this.getLocationAsync()
+						if (first_promo_popup == false) {
+							this.onFeaturedPromotionPressed(eventObject.result.featured_promotion)
+						}
+					}					
+				})		
 			}
 		}
 
@@ -2041,7 +2040,7 @@ export default class Home extends React.Component {
 				    </View>         
 				</ScrollView>		
 				<TouchableOpacity
-					onPress={this.onClosePressed}
+					onPress={() => this.onClosePressed()}
 					style={styles.closeGalleryButton}>
 					<Text style={styles.closeGalleryButtonText}>X</Text>
 				</TouchableOpacity>
