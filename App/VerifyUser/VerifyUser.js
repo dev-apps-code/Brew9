@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
 	},
 	welcomeText: {
 		color: "black",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
 		

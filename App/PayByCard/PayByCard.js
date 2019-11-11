@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
 	payeeText: {
 		backgroundColor: "transparent",
 		color: "rgb(165, 165, 165)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14,
 		fontStyle: "normal",
 		fontWeight: "normal",

@@ -382,7 +382,7 @@ export default class Register extends React.Component {
 						disabled={this.state.dob ? true : false}
 						customStyles={{
 							dateText: {
-								fontFamily: "DINPro-Medium",
+								fontFamily: NON_TITLE_FONT,
 								fontSize: 13 * fontAlpha,
 								color: "rgb(135, 135, 135)",
 							},
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(10, 10, 10)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
 	nicknameText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
 	},
 	phoneNumberText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -551,7 +551,7 @@ const styles = StyleSheet.create({
 	},
 	textInputTextInput: {
 		color: "rgb(135, 135, 135)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
 	},
 	genderText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -626,7 +626,7 @@ const styles = StyleSheet.create({
 	birthdayText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -641,7 +641,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		padding: 0,
 		color: "rgb(135, 135, 135)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
 	},
 	saveButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		

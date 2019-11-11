@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
 	brew9SdnBhdText: {
 		backgroundColor: "transparent",
 		color: "rgb(87, 87, 87)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
 	amountText: {
 		backgroundColor: "transparent",
 		color: "rgb(76, 76, 76)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
 	dateText: {
 		backgroundColor: "transparent",
 		color: "rgb(76, 76, 76)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
 	userCreditText: {
 		backgroundColor: "transparent",
 		color: "rgb(76, 76, 76)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

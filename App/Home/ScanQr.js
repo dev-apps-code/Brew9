@@ -17,6 +17,7 @@ import { createAction, dispatch } from '../Utils/index'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import Brew9Modal from "../Components/Brew9Modal"
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
     },
     noLabelText: {
 		color: "rgb(149, 149, 149)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

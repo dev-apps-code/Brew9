@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
 	},
 	iText: {
 		color: "rgb(110, 110, 110)",
-		fontFamily: "Helvetica",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		

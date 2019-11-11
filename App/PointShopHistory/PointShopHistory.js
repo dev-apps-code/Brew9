@@ -13,6 +13,7 @@ import {alpha, fontAlpha} from "../Common/size";
 import { connect } from "react-redux";
 import GetPointProductRedemptionRequestObject from '../Requests/get_point_product_redemption_request_object'
 import {createAction} from '../Utils'
+import { NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {

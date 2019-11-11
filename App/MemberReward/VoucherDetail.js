@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
 	},
 	availableButtonText: {
 		color: "rgb(68, 68, 68)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
 	},
 	expiredButtonText: {
 		color: "rgb(118, 118, 118)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
 	},
 	usedButtonText: {
 		color: "rgb(118, 118, 118)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
 	},
 	redeemrewardButtonText: {
 		color: "rgb(82, 82, 82)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		

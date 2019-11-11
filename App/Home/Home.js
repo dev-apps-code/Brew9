@@ -1825,12 +1825,14 @@ export default class Home extends React.Component {
 	shouldShowFeatured(shop) {
 		if (shop != null) {
 			const { currentMember} = this.props
-			if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
-				return true
-			} else if (shop.featured_promotion.for_new_user == false) {
-				return true
-			} else {
-				return false
+			if (currentMember != null) {
+				if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+					return true
+				} else if (shop.featured_promotion.for_new_user == false) {
+					return true
+				} else {
+					return false
+				}
 			}
 		}
 		return false

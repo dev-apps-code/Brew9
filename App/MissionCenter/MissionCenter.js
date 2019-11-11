@@ -19,6 +19,7 @@ import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
 import Brew9Modal from "../Components/Brew9Modal"
 import HudLoading from "../Components/HudLoading"
+import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
 	},
     navigationBarItemTitle: {
         color: "black",
-        fontFamily: "DINPro-Bold",
+        fontFamily: TITLE_FONT,
         fontSize: 16 * fontAlpha,
     },
     navigationBarItemIcon: {

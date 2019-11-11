@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import SpinnerKit from 'react-native-loading-spinner-overlay'
 import { barHeight, windowWidth, windowHeight, alpha } from '../Common/size.js'
 // import Spinner from 'react-native-spinkit'
-
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native'
 

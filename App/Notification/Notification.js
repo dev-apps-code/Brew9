@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   navigationBarItemTitle: {
     color: "black",
-    fontFamily: "DINPro-Bold",
+    fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha
   },
   navigationBarItemIcon: {

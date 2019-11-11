@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     },
     enterCodeText: {
         color: "rgb(46, 46, 46)",
-        fontFamily: "SFProText-Medium",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
         
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     },
     submitButtonText: {
         color: "white",
-        fontFamily: "SFProText-Medium",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 12 * fontAlpha,
         fontStyle: "normal",
         
