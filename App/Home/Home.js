@@ -1832,6 +1832,8 @@ export default class Home extends React.Component {
 				} else {
 					return false
 				}
+			} else {
+				return true
 			}
 		}
 		return false

@@ -108,7 +108,7 @@ export default class Register extends React.Component {
 			return false
 		}
 		else if (!this.state.dob) {
-			this.refs.toast.show("Please select enter your birthdate")
+			this.refs.toast.show("Please select enter your Birthday")
 			return false
 		}
 		else {

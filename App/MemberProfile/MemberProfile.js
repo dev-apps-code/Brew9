@@ -318,7 +318,7 @@ export default class MemberProfile extends React.Component {
 		else if (!this.state.dob) {
 			this.setState({
 				modal_title:'Brew9',
-				modal_description:"Please select enter your birthdate",
+				modal_description:"Please select enter your Birthday",
 				modal_ok_text: null,
 				modal_cancelable: false,
 				has_send_code: true,
