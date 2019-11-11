@@ -97,7 +97,7 @@ export default class MissionCell extends React.Component {
 							onPress={() => this.onStatusPressed(this.props.statement_id)}
 						>
 						<View
-							style={this.props.status != "In Progress" ? styles.statusCompleteView : styles.statusView}>
+							style={this.props.status != "Pending" ? styles.statusCompleteView : styles.statusView}>
 							<Text
 								style={styles.completeText}>{this.props.status}</Text>
 						</View>
