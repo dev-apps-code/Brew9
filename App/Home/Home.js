@@ -161,6 +161,7 @@ export default class Home extends React.Component {
 			location: null,
 			distance: "-",
 			first_promo_popup: false,
+			monitorLocation: null,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -212,6 +213,7 @@ export default class Home extends React.Component {
 		this.loadStorePushToken(token)
 	  }
 
+	 
 	getLocationAsync = async () => {
 
 		const {dispatch} = this.props
@@ -219,19 +221,33 @@ export default class Home extends React.Component {
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
 			 this.refs.toast.show('Permission to access location was denied')
+			 return
 		}
+
+		Location.watchPositionAsync(
+			{
+				distanceInterval: 100,
+				timeInterval: 10000
+			},
+			newLocation => {
+				dispatch(createAction("members/setLocation")(newLocation));
+				
+			// this.props.getMyLocation sets my redu
+		  },
+		  error => console.log(error)
+		);
 	
 		let location = await Location.getCurrentPositionAsync({});
-
 		dispatch(createAction("members/setLocation")(location));
-		this.computeDistance()
 	  };
 	
 	  componentDidUpdate(prevProps, prevState) {
-
-		if (prevProps.location != this.props.location && prevProps.location != null) {
-		  this.loadShops(false)
-		}
+		if (prevProps.location != this.props.location ){
+			if (prevProps.location != null){
+				this.loadShops(false)
+			}
+			this.computeDistance()
+		}	
 	  }
 
 	computeDistance() {
@@ -303,7 +319,7 @@ export default class Home extends React.Component {
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
-			console.log("testing location get")
+			
 		}
 		this.setState({ appState: nextAppState });
 	  };
@@ -353,7 +369,7 @@ export default class Home extends React.Component {
 			)
 		}
 	}
-	
+
 	loadShops(loadProducts){
 
 		// console.log("Status", loadProducts)
@@ -362,7 +378,7 @@ export default class Home extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
-			console.log("Shop", eventObject)
+
 			if (eventObject.success) {			
 					this.setState({
 						shop: eventObject.result,
@@ -370,7 +386,7 @@ export default class Home extends React.Component {
 					}, function () {
 						if (loadProducts){
 							this.loadStoreProducts()
-							this.computeDistance()
+							this.getLocationAsync()
 							if (first_promo_popup == false) {
 								this.onFeaturedPromotionPressed(eventObject.result.featured_promotion)
 							}
