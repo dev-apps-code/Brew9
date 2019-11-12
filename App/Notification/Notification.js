@@ -13,7 +13,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  AppState
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
@@ -57,11 +58,10 @@ export default class Notification extends React.Component {
     return {
       tabBarLabel: "Inbox",
       tabBarOnPress: ({ navigation, defaultHandler }) => {
-
         store.dispatch(createAction("config/setToggleShopLocation")(false))
         store.dispatch(createAction("config/setTab")("notification"))
-				defaultHandler()
-			  },
+        defaultHandler()
+			},
       tabBarIcon: ({ iconTintColor, focused }) => {
         const image = focused
           ? require("./../../assets/images/inbox_selected_tab.png")
@@ -82,16 +82,21 @@ export default class Notification extends React.Component {
       loading: false,
       data: [],
       unread: 0,
-      last_read: 0
+      last_read: 0,
+      appState: AppState.currentState,
     };
+    
   }
 
   componentDidMount() {
     this.loadLocalStore();
     const { members } = this.props;
-
+    AppState.addEventListener('change', this._handleAppStateChange);	
     if (members != null) {
-      this.loadNotifications();
+      this.props.navigation.addListener('didFocus', this.loadNotifications)
+    
+      // this.props.navigation.addListener('didFocus', this.loadNotifications())
+      // this.loadNotifications();
     }
 
     this.props.navigation.setParams({
@@ -100,10 +105,30 @@ export default class Notification extends React.Component {
     });
   }
 
-  loadNotifications() {
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    const { members } = this.props;
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      if (members != null) {
+        this.loadNotifications();
+      }
+    }
+    this.setState({appState: nextAppState});
+  };
+
+  loadNotifications = () => {
+    console.log("Ntofication")
+        
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
+      this.loadLocalStore()
       if (eventObject.success) {
 
         let unread= 0
@@ -117,7 +142,6 @@ export default class Notification extends React.Component {
             unread = unread + 1
           }
         }
-
         this.setState(
           {
             data,

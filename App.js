@@ -395,6 +395,8 @@ const TabGroupOne = createBottomTabNavigator(
     tabBarPosition: "bottom",
     animationEnabled: true,
     tabBarOptions: {
+
+      lazy: false,
       showIcon: true,
       activeTintColor: TABBAR_ACTIVE_TINT,
       inactiveTintColor: TABBAR_INACTIVE_TINT,

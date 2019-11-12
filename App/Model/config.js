@@ -11,7 +11,6 @@
         selectedTab:'home'
     },
   
-  
     reducers: {
       setTab(state, { payload }) {
         return {
