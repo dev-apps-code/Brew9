@@ -126,14 +126,14 @@ export default class Profile extends React.Component {
 		const { navigate } = this.props.navigation
 		const {  company_id } = this.props
 
-		// navigate("WebCommon", {
-        //     title: 'How To Use',
-        //     web_url: KURL_INFO + '?page=level_info&id=' + currentMember.company_id,
-        // })
 		navigate("WebCommon", {
-			title: 'Membership Info',
-			web_url: KURL_MEMBERSHIP_INFO,
-		})
+            title: 'Membership Info',
+            web_url: KURL_INFO + '?page=level_info&id=' + company_id,
+        })
+		// navigate("WebCommon", {
+		// 	title: 'Membership Info',
+		// 	web_url: KURL_MEMBERSHIP_INFO,
+		// })
 	}
 
 	onMissionCenterPressed = () => {
