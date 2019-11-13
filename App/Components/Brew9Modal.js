@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import Modal, { ModalContent, ModalButton, ModalFooter } from 'react-native-modals';
 import { View, Text, StyleSheet, Image, ActivityIndicator, Button } from 'react-native'
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 class Brew9Modal extends Component {
     
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "rgb(57, 57, 57)",
-		fontFamily: "SFProText-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * alpha,
 		fontStyle: "normal",
 		textAlign: "center",
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: "rgb(57, 57, 57)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * alpha,
 		fontStyle: "normal",
 		textAlign: "center",

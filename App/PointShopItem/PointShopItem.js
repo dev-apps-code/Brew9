@@ -17,6 +17,8 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import RedeemRequestObject from "../Requests/redeem_request_object"
 import Brew9Modal from "../Components/Brew9Modal"
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
+
 @connect(({ members,shops }) => ({
 	members: members.profile,
 	selectedShop:shops.selectedShop
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -272,7 +274,7 @@ const styles = StyleSheet.create({
 	},
 	pointsText: {
 		color: "rgb(142, 142, 142)",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -287,7 +289,7 @@ const styles = StyleSheet.create({
 	},
 	titleTwoText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -297,7 +299,7 @@ const styles = StyleSheet.create({
 	},
 	pointsTwoText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
 	},
 	titleThreeText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -322,7 +324,7 @@ const styles = StyleSheet.create({
 	},
 	pointsThreeText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
 	},
 	titleFourText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
 	},
 	pointsFourText: {
 		color: "black",
-		fontFamily: "DINPro-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -372,7 +374,7 @@ const styles = StyleSheet.create({
 	},
 	purchaseButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		

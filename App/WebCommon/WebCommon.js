@@ -10,6 +10,7 @@ import {View, StyleSheet, TouchableOpacity, Image} from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
 import { WebView } from 'react-native-webview';
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 export default class WebCommon extends React.Component {
 
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {

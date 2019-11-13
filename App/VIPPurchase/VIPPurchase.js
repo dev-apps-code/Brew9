@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
 	welcomeGiftPackText: {
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
 	},
 	x2Text: {
 		color: "rgb(253, 253, 253)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
 	},
 	x2TwoText: {
 		color: "rgb(253, 253, 253)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
 	x1Text: {
 		backgroundColor: "transparent",
 		color: "rgb(253, 253, 253)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -674,7 +674,7 @@ const styles = StyleSheet.create({
 	},
 	x2ThreeText: {
 		color: "rgb(253, 253, 253)",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 8 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -701,7 +701,7 @@ const styles = StyleSheet.create({
 	},
 	detailsText: {
 		color: "rgb(59, 59, 59)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -862,7 +862,7 @@ const styles = StyleSheet.create({
 	},
 	payButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		

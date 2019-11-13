@@ -14,6 +14,7 @@ import { KURL_INFO } from "../Utils/server.js"
 import {createAction} from "../Utils";
 import {connect} from "react-redux";
 import MembershipPointsProductRequestObject from "../Requests/membership_points_product_request_object.js"
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 @connect(({ members }) => ({
     members: members.profile
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
 	},
     navigationBarItemTitle: {
         color: "black",
-        fontFamily: "DINPro-Bold",
+        fontFamily: TITLE_FONT,
         fontSize: 16 * fontAlpha,
     },
     navigationBarItemIcon: {

@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
 	},
 	nicknameText: {
 		color: "rgb(69, 67, 67)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
 	},
 	selectwalletButtonText: {
 		color: "white",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
 	},
 	payByBrew9WalletText: {
 		color: "rgb(69, 67, 67)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
 	},
 	payByBrew9WalletTextDisabled: {
 		color: "rgb(186, 179, 179)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -481,7 +481,7 @@ const styles = StyleSheet.create({
 	},
 	scanQrcodeToEarnText: {
 		color: "rgb(62, 61, 61)",
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		

@@ -9,6 +9,7 @@
 import { View, Text, Image, TouchableWithoutFeedback, StyleSheet } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 export default class PointProductNoHeaderCell extends React.Component {
 
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: "black",
-        fontFamily: "DINPro-Medium",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     },
     valueText: {
         color: "rgb(0, 178, 227)",
-        fontFamily: "DINPro-Medium",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 16 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     },
     pointsText: {
         color: "black",
-        fontFamily: "DINPro-Medium",
+        fontFamily: NON_TITLE_FONT,
         fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",

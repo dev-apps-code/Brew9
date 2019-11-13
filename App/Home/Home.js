@@ -296,7 +296,7 @@ export default class Home extends React.Component {
 		  }
 		const { dispatch } = this.props
 		
-		dispatch(createAction('members/loadCurrentUserFromCache')({}))
+		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	async componentDidMount() {
@@ -380,19 +380,21 @@ export default class Home extends React.Component {
 			this.setState({ loading: false })
 
 			if (eventObject.success) {			
-					this.setState({
-						shop: eventObject.result,
-						menu_banners: eventObject.result.menu_banners
-					}, function () {
-						if (loadProducts){
-							this.loadStoreProducts()
-							this.getLocationAsync()
-							if (first_promo_popup == false) {
+				this.setState({
+					shop: eventObject.result,
+					menu_banners: eventObject.result.menu_banners
+				}, function () {
+					if (loadProducts){
+						this.loadStoreProducts()
+						this.getLocationAsync()
+						if (first_promo_popup == false) {
+							let should_show = this.shouldShowFeatured(this.state.shop)
+							if (should_show == true) {
 								this.onFeaturedPromotionPressed(eventObject.result.featured_promotion)
 							}
-							
-						}					
-					})		
+						}
+					}					
+				})		
 			}
 		}
 
@@ -507,18 +509,18 @@ export default class Home extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			// if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-			// 	this.setState({
-			// 		modal_visible: true, 
-			// 		modal_title: "Brew9",
-			// 		modal_description: "You are too far away", 
-			// 		modal_cancelable: false, 
-			// 		modal_ok_action: ()=> {
-			// 			this.setState({modal_visible:false})
-			// 		},
-			// 	})
-			// 	return
-			// } else {
+			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+				this.setState({
+					modal_visible: true, 
+					modal_title: "Brew9",
+					modal_description: "You are too far away", 
+					modal_cancelable: false, 
+					modal_ok_action: ()=> {
+						this.setState({modal_visible:false})
+					},
+				})
+				return
+			} else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -542,7 +544,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			// }
+			}
 		} else {
 			navigate("VerifyUserStack")
 		}
@@ -985,7 +987,7 @@ export default class Home extends React.Component {
 		
 						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
 		
-						if (remaining < 0 && search_cart_promo_index < 0) {
+						if (remaining <= 0 && search_cart_promo_index < 0) {
 		
 							shop.all_promotions[index].has_triggered = true
 							let cartItem = {
@@ -1007,7 +1009,7 @@ export default class Home extends React.Component {
 							}, function(){
 							})
 									
-						} else if (remaining > 0 && search_cart_promo_index > 0){
+						} else if (remaining >= 0 && search_cart_promo_index > 0){
 							newpromotion.splice(search_cart_promo_index, 1)
 							this.setState({
 								promotion: newpromotion
@@ -1215,8 +1217,8 @@ export default class Home extends React.Component {
 
 		const { currentMember } = this.props
 		if (item.image.url != undefined && item.image.url != "") {
-			let should_show = this.shouldShowFeatured(this.state.shop)
-			if (should_show == true) {
+			// let should_show = this.shouldShowFeatured(this.state.shop)
+			// if (should_show == true) {
 				this.setState({
 					selected_promotion: item.image.url,
 					first_promo_popup: true
@@ -1227,7 +1229,7 @@ export default class Home extends React.Component {
 					})
 					this.calculateImageDimension(item.image.url)
 				})
-			}
+			// }
 		}
 
 		
@@ -1514,21 +1516,21 @@ export default class Home extends React.Component {
 		let {shop,cart,delivery,distance, promotion} = this.state
 		let {isToggleShopLocation} = this.props
 		let categoryBottomSpacer = undefined
-		let should_show = this.shouldShowFeatured(shop)
+		// let should_show = this.shouldShowFeatured(shop)
 
 		let fullList = [...cart,...promotion]
 
 		if (shop !== null ){
 			if (shop.is_opened == false || shop.shop_busy_template_message != null){
-				if (shop.featured_promotion !== null && should_show == true) {
+				if (shop.featured_promotion !== null) {
 					categoryBottomSpacer = styles.categoryListPosition3
 				} else {
 					categoryBottomSpacer = styles.categoryListPosition4
 				}
 			} else {
-				if (shop.featured_promotion !== null && cart.length > 0 && should_show == true) { //Have Feature Have Cart
+				if (shop.featured_promotion !== null && cart.length > 0) { //Have Feature Have Cart
 					categoryBottomSpacer = styles.categoryListPosition3
-				} else if (shop.featured_promotion !== null && cart.length == 0 && should_show == true) { //Have Feature No Cart
+				} else if (shop.featured_promotion !== null && cart.length == 0) { //Have Feature No Cart
 					categoryBottomSpacer = styles.categoryListPosition2
 				} else if (shop.featured_promotion == null && cart.length > 0) { //No Feature Have Cart
 					
@@ -1825,12 +1827,16 @@ export default class Home extends React.Component {
 	shouldShowFeatured(shop) {
 		if (shop != null) {
 			const { currentMember} = this.props
-			if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
-				return true
-			} else if (shop.featured_promotion.for_new_user == false) {
-				return true
+			if (currentMember != null) {
+				if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+					return true
+				} else if (shop.featured_promotion.for_new_user == false) {
+					return true
+				} else {
+					return false
+				}
 			} else {
-				return false
+				return true
 			}
 		}
 		return false
@@ -1865,8 +1871,8 @@ export default class Home extends React.Component {
 
 		if (shop !== null && shop.featured_promotion !== null) {
 			
-			let should_show = this.shouldShowFeatured(shop)
-			if (should_show == true) {
+			// let should_show = this.shouldShowFeatured(shop)
+			// if (should_show == true) {
 				return <TouchableOpacity
 					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
 					style={[style,styles.featuredpromoButton]}>
@@ -1874,7 +1880,7 @@ export default class Home extends React.Component {
 						source={{uri: shop.featured_promotion.icon.url}}
 						style={styles.featuredpromoButtonImage}/>
 				</TouchableOpacity>
-			}
+			// }
 		}
 		
 		return undefined
@@ -1896,7 +1902,7 @@ export default class Home extends React.Component {
 						var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
 						var remaining = trigger_price - cart_total
 	
-						if (remaining < 0) {
+						if (remaining <= 0) {
 							has_promo = false
 							return
 						}
@@ -2039,7 +2045,7 @@ export default class Home extends React.Component {
 				    </View>         
 				</ScrollView>		
 				<TouchableOpacity
-					onPress={this.onClosePressed}
+					onPress={() => this.onClosePressed()}
 					style={styles.closeGalleryButton}>
 					<Text style={styles.closeGalleryButtonText}>X</Text>
 				</TouchableOpacity>

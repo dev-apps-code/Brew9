@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   titleText: {
     backgroundColor: "transparent",
     color: "black",
-    fontFamily: "DINPro-Medium",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   valueText: {
     backgroundColor: "transparent",
     color: "rgb(0, 178, 227)",
-    fontFamily: "DINPro-Medium",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   pointsText: {
     backgroundColor: "transparent",
     color: "rgb(142, 142, 142)",
-    fontFamily: "DINPro-Medium",
+    fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",

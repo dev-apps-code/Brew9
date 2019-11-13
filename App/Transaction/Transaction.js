@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
 	},
 	navigationBarItemTitle: {
 		color: "black",
-		fontFamily: "DINPro-Bold",
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 	},
 	navigationBarItemIcon: {
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(69, 67, 67)",
 		fontFamily: NON_TITLE_FONT,
-		fontFamily: "SFProText-Medium",
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 35 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
