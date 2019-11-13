@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator } from "react-native"
+import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator, RefreshControl } from "react-native"
 import React from "react"
 import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { ScrollView } from "react-native-gesture-handler";
@@ -66,6 +66,7 @@ export default class PickUp extends React.Component {
 		this.state = {
 			loading: false,
 			current_order: [],
+			refreshing: false,
 		}
 	}
 
@@ -84,10 +85,8 @@ export default class PickUp extends React.Component {
 	onOrderHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
-		const { currentMember } = this.props
-		if (currentMember !== null) {
-			navigate("OrderHistory")
-		}
+		navigate("OrderHistory")
+		
 	}
 
 	onCallPressed = (phone_no) => {
@@ -113,6 +112,7 @@ export default class PickUp extends React.Component {
 				}
 				this.setState({
 					loading: false,
+					refreshing: false,
 				})
 			}
 			const obj = new GetCurrentOrderRequestObject()
@@ -239,7 +239,6 @@ export default class PickUp extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							flex: 1,
-							height: 52 * alpha,
 							marginTop: 19 * alpha,
 						}}>
 						<Text
@@ -250,23 +249,7 @@ export default class PickUp extends React.Component {
 					</View>
 					<View
 						style={styles.progressView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0 * alpha,
-								justifyContent: "center",
-							}}>
 							<View
-								pointerEvents="box-none"
-								style={{
-									height: 50 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<View
 									style={styles.orderedView}>
 									<Image
 										source={require("./../../assets/images/group-9-copy-13.png")}
@@ -282,42 +265,6 @@ export default class PickUp extends React.Component {
 									source={require("./../../assets/images/group-11-copy-5.png")}
 									style={styles.dividerImage}/>
 								<View
-									style={{
-										flex: 1,
-									}}/>
-								<View
-									style={styles.pickUpView}>
-									<Image
-										source={require("./../../assets/images/group-7-copy-8.png")}
-										style={item.status === "completed" ? styles.pickupSelectedImage  : styles.pickupImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={item.status === "completed" ? styles.pickUpSelectedText : styles.pickUpText}>Pick Up</Text>
-								</View>
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0 * alpha,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									width: 87 * alpha,
-									height: 50 * alpha,
-									marginRight: 54 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<View
 									style={styles.processingView}>
 									<Image
 										source={require("./../../assets/images/group-13-11.png")}
@@ -327,29 +274,27 @@ export default class PickUp extends React.Component {
 											flex: 1,
 										}}/>
 									<Text
-										style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Processing</Text>
+										style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
 								</View>
-								<View
-									style={{
-										flex: 1,
-									}}/>
 								<Image
 									source={require("./../../assets/images/group-11-copy-5.png")}
-									style={styles.dividerTwoImage}/>
-							</View>
+									style={styles.dividerImage}/>
+								<View
+									style={styles.pickUpView}>
+									<Image
+										source={require("./../../assets/images/group-7-copy-8.png")}
+										style={item.status === "ready" ? styles.pickupSelectedImage  : styles.pickupImage}/>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Text
+										style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
+								</View>
 						</View>
-					</View>
-					{/* <View
-						style={styles.waitingView}>
+					
 						<Text
-							style={styles.queuelengthText}>14</Text>
-					</View> */}
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.messageText}>Notification will be sent when your drinks are ready</Text>
+							style={styles.messageText}>Notification will be sent when your drinks are ready</Text>
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -471,10 +416,21 @@ export default class PickUp extends React.Component {
 			</View>
 		})
 
-		return <ScrollView style={{flex: 1}}>
+		return <ScrollView style={{flex: 1}}
+			refreshControl={
+				<RefreshControl
+				refreshing={this.state.refreshing}
+				onRefresh={this.onRefresh}
+				/>
+			}>
 			{queues}
 		</ScrollView>
 	}
+
+	onRefresh = () => {
+		this.setState({refreshing: true})
+		this.loadCurrentOrder()
+	  }
 
 	onDirectionPressed(shop) {
 
@@ -746,7 +702,6 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 14 * alpha,
 		borderTopLeftRadius: 14 * alpha,
 		flex: 1,
-		height: 228 * alpha,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
 		marginTop: 16 * alpha,
@@ -757,16 +712,16 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 26 * fontAlpha,
+		fontSize: 40 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		marginTop: 10 * alpha,
+		marginTop: 5 * alpha,
 	},
 	queueheaderText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 15 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -774,32 +729,34 @@ const styles = StyleSheet.create({
 	},
 	progressView: {
 		backgroundColor: "transparent",
-		width: 220 * alpha,
+		width: 300 * alpha,
 		height: 53 * alpha,
 		marginTop: 20 * alpha,
+		marginBottom: 20 * alpha,
+		flexDirection: "row",
+		justifyContent: "center",
+		alignSelf: "center"
 	},
 	orderedView: {
 		backgroundColor: "transparent",
-		width: 48 * alpha,
+		width: 80 * alpha,
 		height: 50 * alpha,
+		alignItems: "center",
+		flexDirection: "column"
 	},
 	orderedImage: {
 		tintColor: "rgb(205, 207, 208)",
 		backgroundColor: "transparent",
 		resizeMode: "contain",
-		width: null,
 		height: 26 * alpha,
-		marginLeft: 14 * alpha,
-		marginRight: 11 * alpha,
+		backgroundColor: "transparent",
 	},
 	orderedSelectedImage: {
 		tintColor: "rgb(35, 31, 32)",
 		backgroundColor: "transparent",
 		resizeMode: "contain",
-		width: null,
 		height: 26 * alpha,
-		marginLeft: 14 * alpha,
-		marginRight: 11 * alpha,
+		backgroundColor: "transparent",
 	},
 	orderedText: {
 		color: "rgb(205, 207, 208)",
@@ -807,7 +764,7 @@ const styles = StyleSheet.create({
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
 	},
 	orderedSelectedText: {
@@ -816,38 +773,33 @@ const styles = StyleSheet.create({
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
+		textAlign: "center",
+		backgroundColor: "red",
 	},
 	dividerImage: {
 		backgroundColor: "transparent",
 		resizeMode: "contain",
-		width: 22 * alpha,
 		height: 4 * alpha,
-		marginLeft: 9 * alpha,
+		marginTop: 15 * alpha,
 	},
 	pickUpView: {
 		backgroundColor: "transparent",
-		width: 45 * alpha,
-		height: 49 * alpha,
+		width: 80 * alpha,
+		height: 50 * alpha,
+		alignItems: "center",
+		flexDirection: "column"
 	},
 	pickupImage: {
 		tintColor: "rgb(205, 207, 208)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
-		width: null,
 		height: 25 * alpha,
-		marginLeft: 9 * alpha,
-		marginRight: 10 * alpha,
 	},
 	pickupSelectedImage: {
 		tintColor: "rgb(35, 31, 32)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
-		width: null,
 		height: 25 * alpha,
-		marginLeft: 9 * alpha,
-		marginRight: 10 * alpha,
 	},
 	pickUpText: {
 		color: "rgb(205, 207, 208)",
@@ -855,7 +807,7 @@ const styles = StyleSheet.create({
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
 	},
 	pickUpSelectedText: {
@@ -864,27 +816,27 @@ const styles = StyleSheet.create({
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
 	},
 	processingView: {
 		backgroundColor: "transparent",
-		width: 65 * alpha,
+		width: 80 * alpha,
 		height: 50 * alpha,
+		alignItems: "center",
+		flexDirection: "column"
 	},
 	processingImage: {
 		tintColor: "rgb(205, 207, 208)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 27 * alpha,
 		height: 26 * alpha,
 	},
 	processingSelectedImage: {
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: 27 * alpha,
 		height: 26 * alpha,
 	},
 	processingText: {
@@ -937,7 +889,8 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginBottom: 14 * alpha,
+		marginBottom: 20 * alpha,
+		marginBottom: 20 * alpha,
 	},
 	orderDetailView: {
 		backgroundColor: "transparent",

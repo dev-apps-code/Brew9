@@ -160,6 +160,7 @@ export default class Home extends React.Component {
 			first_time_buy: false,
 			location: null,
 			distance: "-",
+			member_distance: 1000,
 			first_promo_popup: false,
 			monitorLocation: null,
 		}
@@ -186,6 +187,11 @@ export default class Home extends React.Component {
 		}
 	}
 
+	componentDidUpdate() {
+		console.log("promo trigger check")
+			this.check_promotion_trigger()
+	}
+	
 	registerForPushNotificationsAsync = async() => {
 		const { status: existingStatus } = await Permissions.getAsync(
 		  Permissions.NOTIFICATIONS
@@ -279,7 +285,7 @@ export default class Home extends React.Component {
 		} else {
 			distance_string = `${parseDistance}m`
 		}
-		this.setState({distance : distance_string})
+		this.setState({distance : distance_string,member_distance: (parseDistance/1000)})
 	}
 
 	toRad(angle) {
@@ -384,6 +390,7 @@ export default class Home extends React.Component {
 					shop: eventObject.result,
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
+					this.check_promotion_trigger()
 					if (loadProducts){
 						this.loadStoreProducts()
 						this.getLocationAsync()
@@ -503,13 +510,14 @@ export default class Home extends React.Component {
 	}
 
 	onCheckoutPressed = () => {
-		const { cart, promotion } = this.state
+		const { cart, promotion, member_distance } = this.state
 		const { navigate } = this.props.navigation
 		const { navigation } = this.props
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
+			if (member_distance > selectedShop.max_order_distance_in_km){
+				console.log("Member Distance", member_distance, "Shop Limit", selectedShop.max_order_distance_in_km)
 				this.setState({
 					modal_visible: true, 
 					modal_title: "Brew9",
@@ -971,7 +979,7 @@ export default class Home extends React.Component {
 		var promotions_item = []
 		var final_cart_value = cart_total
 
-		if (shop.all_promotions != undefined && shop.all_promotions.length > 0) {
+		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
 			
 			for (var index in shop.all_promotions) {
 
@@ -1695,48 +1703,15 @@ export default class Home extends React.Component {
 									description={shop.location}
 									/>
 							</MapView>
-					{/* <View
-						style={styles.deliveryView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								alignItems: "flex-start",
-							}}>
-							<Text
-								style={styles.deliveryTwoText}>Delivery</Text>
-							<Text
-								style={styles.freeWithRm40SpendText}>Free with RM40 spend</Text>
-							<Text
-								style={styles.deliveredByBrew9Text}>Delivered by Brew9, deliver within 3000m from branch</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.deliverAreaAffectText}>(Deliver area affected by location, weather and other factors,{"\n"}based on the actual distance)</Text>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Text
-								style={styles.deliveryRm5ExtraText}>Delivery RM5 (Extra charge delivery after 21:14)</Text>
-						</View>
-					</View> */}
 					<View
 						style={styles.branchInfoView}>
 						<Text
 							style={styles.branchInfoText}>Outlet Info</Text>
+						{/* { (shop != null && shop.image != null) && ( */}
+						<Image
+							source={{uri: shop.image.thumb.url}}
+							style={styles.shopImage}/>
+						{/* ) } */}
 						<Text
 							style={styles.branchHeaderAddress}>Address:</Text>
 						<Text
@@ -1892,7 +1867,7 @@ export default class Home extends React.Component {
 		const {currentMember} = this.props
 
 		if (cart.length > 0) {
-			if (shop.all_promotions != undefined && shop.all_promotions.length > 0) {
+			if (shop.all_promotions != null && shop.all_promotions.length > 0) {
 				
 				var has_promo = false
 
@@ -2076,6 +2051,11 @@ const styles = StyleSheet.create({
 	navigationBarRightItemIcon: {
 		resizeMode: "contain",
 		tintColor: TABBAR_INACTIVE_TINT,
+	},
+	shopImage: {
+		resizeMode: "contain",
+		width: 80 * alpha,
+		height: 45 * alpha,
 	},
 	headerLeftContainer: {
 		flexDirection: "row",
@@ -3076,7 +3056,7 @@ const styles = StyleSheet.create({
 		width: windowWidth - 100 *alpha,
 		height: 76 * alpha,
 		marginLeft: 10 * alpha,
-		marginTop: 25 * alpha,
+		marginTop: 15 * alpha,
 		alignItems: "flex-start",
 	},
 	branchInfoText: {
