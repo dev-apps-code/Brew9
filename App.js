@@ -167,7 +167,7 @@ export const VerifyStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: "VerifyUser"
+    initialRouteName: "VerifyUser",
   }
 );
 
@@ -456,7 +456,6 @@ const RootNavigator = createStackNavigator(
   },
   {
     initialRouteName: "FirstScreen",
-    mode: "modal",
     headerMode: "none"
   }
 );

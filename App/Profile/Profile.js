@@ -341,7 +341,7 @@ export default class Profile extends React.Component {
 		}else{
 			background_photo =  {uri:''}
 			level_name = ''
-			display_name = 'Brew9'
+			display_name = ''
 			points = 0
 			avatar = require("./../../assets/images/user.png")
 			vouchers_count = 0
@@ -561,7 +561,7 @@ export default class Profile extends React.Component {
 							style={styles.notificationView}>
 						</View>
 						<Text
-							style={styles.welcomeSomebodyText}>Welcome {display_name}!</Text>
+							style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
 						<Text
 							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 					</View>

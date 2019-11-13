@@ -774,7 +774,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		backgroundColor: "red",
+		backgroundColor: "transparent",
 	},
 	dividerImage: {
 		backgroundColor: "transparent",
