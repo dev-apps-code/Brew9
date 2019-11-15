@@ -14,7 +14,7 @@ import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
 import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND} from "../Common/common_style";
 @connect(({ members }) => ({
 	members: members.profile
 }))
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
 		padding: 10 * alpha,
 	},
 	pointHistoryView: {
-		backgroundColor: "rgb(243, 243, 243)",
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		flex: 1,
 	},
 	contentView: {

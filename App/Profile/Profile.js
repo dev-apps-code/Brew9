@@ -213,6 +213,18 @@ export default class Profile extends React.Component {
 		}
 	}
 
+
+	onFaqPressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
+		})
+	}
+
+
 	onPersonalButtonPressed = () => {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
@@ -790,6 +802,57 @@ export default class Profile extends React.Component {
 									}}>
 									<Text
 										style={styles.menuRowLabelText}>About Brew9</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Image
+										source={require("./../../assets/images/forward.png")}
+										style={styles.menuRowArrowImage}/>
+									
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,}}>
+								<Text
+									style={styles.menuRowDescriptionText}></Text>
+								<View
+									style={styles.menuRowLineView}/>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+							onPress={() => this.onFaqPressed()}
+							style={styles.menuRowbuttonButton}>
+						<View
+							style={styles.menuRowView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 24 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.menuRowLabelText}>FAQs</Text>
 									<View
 										style={{
 											flex: 1,

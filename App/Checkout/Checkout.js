@@ -18,6 +18,8 @@ import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
 import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR} from "../Common/common_style";
+import DateTimePicker from "react-native-modal-datetime-picker";
+
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -72,7 +74,10 @@ export default class Checkout extends React.Component {
 			payment_toggle: false,
 			payment_model_visible: false,
 			payment_view_height: 0 * alpha,
-			selected_payment: ''
+			selected_payment: '',
+			pick_up_time: null,
+			pick_up_date: null,
+			isDateTimePickerVisible: false,
 		}
 
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -117,6 +122,23 @@ export default class Checkout extends React.Component {
 		this.props.navigation.goBack()
 	}
 
+	showDateTimePicker = () => {
+		this.setState({ isDateTimePickerVisible: true });
+	  };
+	
+	  hideDateTimePicker = () => {
+		this.setState({ isDateTimePickerVisible: false });
+	  };
+	
+	  handleDatePicked = date => {
+		console.log("A date has been picked: ", date);
+		this.setState({
+			pick_up_date: date,
+			pick_up_time: `${date.getHours()}:${date.getMinutes()}`
+		})
+		this.hideDateTimePicker();
+	  };
+	  
 	onBranchButtonPressed = () => {
 
 	}
@@ -256,7 +278,7 @@ export default class Checkout extends React.Component {
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 		const { navigate } = this.props.navigation
-		const {cart,vouchers_to_use, selected_payment, promotion_ids} = this.state
+		const {cart,vouchers_to_use, selected_payment, promotion_ids, pick_up_date} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
@@ -266,17 +288,7 @@ export default class Checkout extends React.Component {
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits'){
-					this.setState({
-						modal_title:'Brew9',
-						modal_description:eventObject.message,
-						modal_ok_text: null,
-						modal_cancelable: false,
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-							this.clearCart()
-						},
-						modal_visible:true,
-					})
+					this.clearCart()
 				}else{
 					const order = eventObject.result
 					navigate("PaymentsWebview", {
@@ -314,7 +326,7 @@ export default class Checkout extends React.Component {
 		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
 		console.log("Promotions", promotion_ids)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids, pick_up_date)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
 			createAction('shops/loadMakeOrder')({
@@ -347,13 +359,16 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const {cart_total, selected_payment} = this.state
-		const {currentMember,selectedShop } = this.props
+		const {currentMember,selectedShop, pick_up_date } = this.props
 
 		if (currentMember != undefined) {
-			 
-			if ( selected_payment == "") {
+			if ( pick_up_date == null) {
+				this.showDateTimePicker()
+			}
+			else if ( selected_payment == "") {
 				this.tooglePayment()
 			}
+			
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
 					this.setState({
@@ -368,37 +383,10 @@ export default class Checkout extends React.Component {
 					})
 					return
 				}
-	
-				this.setState({
-					modal_visible:true,
-					modal_title: "Brew9",
-					modal_description: "Are you sure you want to confirm the order?",
-					modal_ok_text: null,
-					modal_cancelable: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-						this.loadMakeOrder()
-					},
-					modal_cancel_action: ()=> {
-						this.setState({modal_visible:false})
-					}
-				})
+				this.loadMakeOrder()
 				return
 			} else if ( selected_payment == "credit_card") {
-				this.setState({
-					modal_visible:true,
-					modal_title: "Brew9",
-					modal_description: "Are you sure you want to confirm the order?",
-					modal_ok_text: null,
-					modal_cancelable: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-						this.loadMakeOrder()
-					},
-					modal_cancel_action: ()=> {
-						this.setState({modal_visible:false})
-					}
-				})
+				this.loadMakeOrder()
 				return
 			}
 			
@@ -714,11 +702,13 @@ export default class Checkout extends React.Component {
 
 	renderVoucherSection() {
 
-		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
+		return <View style={styles.drinksViewWrapper}>
+			<View style={styles.orderitemsView}>
 				<TouchableOpacity
-							onPress={this.onVoucherButtonPressed}
-							style={styles.voucherButton}><View
-					style={styles.drinksView}>
+					onPress={() => this.onVoucherButtonPressed()}
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -727,23 +717,54 @@ export default class Checkout extends React.Component {
 								flex: 1,
 								flexDirection: "row"
 							}}>
-								<View
-									style={styles.productDetailView}>
-									<Text
-										style={styles.productNameText}>Available Voucher</Text>
-									
-										<View style={styles.spacer} />
-								</View>
+							<View
+								style={styles.productDetailView}>
 								<Text
-									style={styles.productVoucherText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'} available</Text>
-								
+									style={styles.productNameText}>Available Voucher</Text>
+								<View style={styles.spacer} />
 							</View>
+							<Text
+								style={styles.productVoucherText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'} available</Text>
+							
+						</View>
 					</View>
 				</TouchableOpacity>
 			</View>
 		</View>
 	}
 	
+	renderPickupTime() {
+		return <View style={styles.drinksViewWrapper}>
+			<View style={styles.orderitemsView}>
+				<TouchableOpacity
+					onPress={() => this.showDateTimePicker()}
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+							<View
+								style={styles.productDetailView}>
+								<Text
+									style={styles.productNameText}>Pickup Time</Text>
+								<View style={styles.spacer} />
+							</View>
+							<Text
+								style={styles.productVoucherText}>{this.state.pick_up_time != null? this.state.pick_up_time : '-'}</Text>
+							
+						</View>
+					</View>
+				</TouchableOpacity>
+			</View>
+		</View>
+	}
+
 	renderOrderItems(items, vouchers, promotions) {
 
 		const { cart_total } = this.state
@@ -934,6 +955,7 @@ export default class Checkout extends React.Component {
 							
 							{this.renderOrderItems(cart, vouchers_to_use, promotion)}
 							{this.renderVoucherSection()}
+							{this.renderPickupTime()}
 							<View style={styles.receiptSectionSeperator}>
 								<Image
 									source={require("./../../assets/images/curve_in_background.png")}
@@ -1007,9 +1029,15 @@ export default class Checkout extends React.Component {
 				</TouchableOpacity>
 			</View>
 			<HudLoading isLoading={this.state.loading}/>
-			<Toast ref="toast"
-            position="center"/>
-			
+			<Toast ref="toast" position="center"/>
+			<DateTimePicker
+				isVisible={this.state.isDateTimePickerVisible}
+				onConfirm={this.handleDatePicked}
+				onCancel={this.hideDateTimePicker}
+				mode={"time"}
+				minuteInterval={30}
+				hideTitleContainerIOS={true}
+			/>
 		</View>
 	}
 }

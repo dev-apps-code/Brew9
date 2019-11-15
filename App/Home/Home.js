@@ -266,7 +266,7 @@ export default class Home extends React.Component {
 			const prevLongInRad = location.coords.longitude
 			const latInRad = shop.latitude
 			const longInRad = shop.longitude
-			console.log("Shop", latInRad, longInRad, "User", prevLatInRad, prevLongInRad)
+			// console.log("Shop", latInRad, longInRad, "User", prevLatInRad, prevLongInRad)
 			var pdis = getPreciseDistance(
 				{ latitude: prevLatInRad, longitude: prevLongInRad },
 				{ latitude: latInRad, longitude: longInRad }
@@ -278,7 +278,7 @@ export default class Home extends React.Component {
 		
 	setDistanceString(calculated_distance) {
 		var distance_string = ""
-		console.log(calculated_distance)
+		// console.log(calculated_distance)
 		var parseDistance = parseFloat(calculated_distance).toFixed(2)
 		if (parseDistance > 1000 ) {
 			distance_string = `${parseDistance/1000}km`
@@ -517,7 +517,6 @@ export default class Home extends React.Component {
 
 		if (currentMember != undefined) {
 			if (member_distance > selectedShop.max_order_distance_in_km){
-				console.log("Member Distance", member_distance, "Shop Limit", selectedShop.max_order_distance_in_km)
 				this.setState({
 					modal_visible: true, 
 					modal_title: "Brew9",
@@ -539,6 +538,7 @@ export default class Home extends React.Component {
 						this.onClearPress()
 						this.loadProfile()
 						this.loadShops()
+						navigate("PickUp")
 					}
 				})
 		
@@ -554,6 +554,13 @@ export default class Home extends React.Component {
 				})
 			}
 		} else {
+			this.navigationListener = navigation.addListener('willFocus', payload => {
+				this.removeNavigationListener()
+				const { state } = payload
+				const { params } = state
+				
+				this.loadShops()
+			})
 			navigate("VerifyUserStack")
 		}
 	}

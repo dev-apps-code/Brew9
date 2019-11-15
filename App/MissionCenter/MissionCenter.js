@@ -18,7 +18,7 @@ import MissionCategoryCell from "./MissionCategoryCell"
 import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
 import Brew9Modal from "../Components/Brew9Modal"
-import HudLoading from "../Components/HudLoading"
+import Toast, {DURATION} from 'react-native-easy-toast'
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
 
 @connect(({ members }) => ({
@@ -175,17 +175,14 @@ export default class MissionCenter extends React.Component {
         
             this.setState({ loading: true })
             const callback = eventObject => {
-
-                if (eventObject.success) {
-                    this.update_claim(eventObject.result)
-                    // this.loadProfile()
-                }
+                console.log(eventObject)
+                this.refs.toast.show(eventObject.message, 500)
                 this.setState({
                     loading: false,
-                    modal_visible: true,
-                    modal_title: "Brew9",
-                    modal_description: eventObject.message
-                })   
+                    mission_statements: eventObject.result,
+                }, function(){
+                    this.loadMissionStatements()
+                })
             }
             const obj = new MissionRewardClaimRequestObject()
             obj.setUrlId(statement_id)
@@ -278,6 +275,7 @@ export default class MissionCenter extends React.Component {
 				</View>
                 }
                 {this.renderPopup()}
+                <Toast ref="toast" position="center"/>
         </View>
     }
 }

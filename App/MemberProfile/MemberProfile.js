@@ -289,44 +289,15 @@ export default class MemberProfile extends React.Component {
 
 	checkForm = () => {
 		if (this.state.gender === -1) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please select your gender",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please select your gender", 500)
+			
 			return false
 		} else if (!this.state.nickname) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please select a nickname",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please select a nickname", 500)
 			return false
 		}
 		else if (!this.state.dob) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please select enter your Birthday",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please select enter your Birthday", 500)
 			return false
 		}
 		else {
@@ -431,7 +402,7 @@ export default class MemberProfile extends React.Component {
 				gender: this.state.gender,
 				email: this.state.email,
 			}
-			console.log("Save", profileFormData)
+			// console.log("Save", profileFormData)
 			this.loadUpdateProfile(profileFormData)
 		}
 	}
@@ -828,7 +799,7 @@ export default class MemberProfile extends React.Component {
 					<DatePicker
 						date={this.state.dob}
 						mode="date"
-						placeholder="Select BirthDate"
+						placeholder="Select BirthDay"
 						format="YYYY-MM-DD"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
@@ -878,6 +849,7 @@ export default class MemberProfile extends React.Component {
 			</Modal>
 		</View>
 		{this.renderPopup()}
+		<Toast ref="toast" position="center"/>
 		<HudLoading isLoading={this.state.loading}/>
 		</KeyboardAvoidingView>
 

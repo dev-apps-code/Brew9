@@ -198,7 +198,9 @@ export default class VerifyUser extends React.Component {
         const { dispatch } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-			
+			this.setState({
+				loading: false,
+			})
             if (eventObject.success) {
 
 				var obj = eventObject.result
@@ -206,9 +208,13 @@ export default class VerifyUser extends React.Component {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
-
-					const { navigate } = this.props.navigation
-					navigate('TabGroupOne')
+					// const { navigate } = this.props.navigation
+					// navigate('Home', {
+					// 	hasLogin: true
+					// })
+					const { navigation } = this.props
+					const { routeName, key } = navigation.getParam('returnToRoute')
+					navigation.navigate({ routeName, key})
 				}                
             }else{
 				this.setState({
@@ -216,9 +222,7 @@ export default class VerifyUser extends React.Component {
 					modal_description: eventObject.message,
 				})
 			}
-			this.setState({
-				loading: false,
-			})
+			
         }
         const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
         dispatch(

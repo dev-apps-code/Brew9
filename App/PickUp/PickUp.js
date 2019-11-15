@@ -105,6 +105,7 @@ export default class PickUp extends React.Component {
 		if (currentMember != null){
 			this.setState({ loading: true })
 			const callback = eventObject => {
+				console.log(eventObject)
 				if (eventObject.success) {
 					this.setState({
 						current_order: eventObject.result
@@ -133,6 +134,7 @@ export default class PickUp extends React.Component {
 			const order_items = item.order_items.map((item, key) => {
 
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				
 				return <View
 					style={styles.drinksView}
 					key={key}>
@@ -240,12 +242,20 @@ export default class PickUp extends React.Component {
 						style={{
 							flex: 1,
 							marginTop: 19 * alpha,
+							flexDirection:"row"
 						}}>
-						<Text
-							style={styles.queueheaderText}>Queue Number</Text>
-						<Text
-							style={styles.queuenumberText}>{item.queue_no}</Text>
-						
+						<View style={styles.queueHeaderBlock}>
+							<Text
+								style={styles.queueheaderText}>Queue Number</Text>
+							<Text
+								style={styles.queuenumberText}>{item.queue_no}</Text>
+						</View>
+						<View style={styles.queueHeaderBlock}>
+							<Text
+								style={styles.pickupTimeheaderText}>Pick Up</Text>
+							<Text
+								style={styles.pickupTimeText}>{item.pickup_time}</Text>
+						</View>
 					</View>
 					<View
 						style={styles.progressView}>
@@ -292,9 +302,6 @@ export default class PickUp extends React.Component {
 										style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
 								</View>
 						</View>
-					
-						<Text
-							style={styles.messageText}>Notification will be sent when your drinks are ready</Text>
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -458,7 +465,7 @@ export default class PickUp extends React.Component {
 						<View
 							style={styles.centerView}>
 							<Image
-								source={require("./../../assets/images/brew9-doodle-09-3.png")}
+								source={require("./../../assets/images/cup_icon.png")}
 								style={styles.logoImage}/>
 							<View
 								style={styles.messageView}>
@@ -558,8 +565,8 @@ const styles = StyleSheet.create({
 	logoImage: {
 		resizeMode: "contain",
 		backgroundColor: "transparent",
-		width: 65 * alpha,
-		height: 89 * alpha,
+		width: 90 * alpha,
+		height: 90 * alpha,
 	},
 	messageView: {
 		backgroundColor: "transparent",
@@ -712,13 +719,33 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 40 * fontAlpha,
+		fontSize: 35 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
 		marginTop: 5 * alpha,
 	},
 	queueheaderText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+	},
+	pickupTimeText: {
+		backgroundColor: "transparent",
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 35 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		marginTop: 5 * alpha,
+		alignSelf: "center"
+	},
+	pickupTimeheaderText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
@@ -781,6 +808,8 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		height: 4 * alpha,
 		marginTop: 15 * alpha,
+		marginLeft: -10 * alpha,
+		marginRight: -10 * alpha,
 	},
 	pickUpView: {
 		backgroundColor: "transparent",
@@ -1359,5 +1388,10 @@ const styles = StyleSheet.create({
 		
 	},
 
+	queueHeaderBlock: {
+		backgroundColor: "transparent",
+		marginLeft: 10 * alpha, 
+		marginRight: 10 * alpha,
+	}
 	
 })

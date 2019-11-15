@@ -122,18 +122,6 @@ export default class PayByCard extends React.Component {
 		)
 	}
 
-	renderPopupModal() {
-		return <Brew9Modal
-            title={this.state.modal_title}
-            description={this.state.modal_description}
-            visible={this.state.modal_visible}
-            confirm_text={this.state.modal_ok_text}
-            cancelable={this.state.modal_cancelable}
-            okayButtonAction={this.state.modal_ok_action}
-            cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()

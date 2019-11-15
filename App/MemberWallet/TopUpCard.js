@@ -11,8 +11,7 @@ import React from "react"
 import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { TITLE_FONT } from "../Common/common_style";
 
-
-export default class Card extends React.Component {
+export default class TopUpCard extends React.Component {
 
 	constructor(props) {
 		super(props)

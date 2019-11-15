@@ -40,7 +40,6 @@ import PayByWallet from "./App/PayByWallet/PayByWallet";
 import MemberCenter from "./App/MemberCenter/MemberCenter";
 import WebCommon from "./App/WebCommon/WebCommon";
 import WebCommonModal from "./App/WebCommonModal/WebCommonModal";
-import TopUpWallet from "./App/TopUpWallet/TopUpWallet";
 import OrderReceipt from "./App/OrderReceipt/OrderReceipt";
 import OrderReview from "./App/OrderReview/OrderReview";
 import OrderInvoice from "./App/OrderInvoice/OrderInvoice";
@@ -251,9 +250,6 @@ const PushProfile = createStackNavigator(
     },
     WebCommon: {
       screen: WebCommon
-    },
-    TopUpWallet: {
-      screen: TopUpWallet
     },
     OrderReceipt: {
       screen: OrderReceipt
