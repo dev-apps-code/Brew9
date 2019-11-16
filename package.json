@@ -53,6 +53,7 @@
     "react-native-progress-hud": "^1.0.4",
     "react-native-qrcode-svg": "^5.2.0",
     "react-native-reanimated": "~1.1.0",
+    "react-native-shimmer-placeholder": "git+https://github.com/tomzaku/react-native-shimmer-placeholder.git#expo",
     "react-native-simple-radio-button": "^2.7.3",
     "react-native-snap-carousel": "^3.8.0",
     "react-native-spinkit": "^1.4.1",

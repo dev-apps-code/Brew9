@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Animated } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -26,6 +26,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 	premium_membership: members.premium_membership
 }))
 export default class Profile extends React.Component {
+
+	timer = null
 
 	static navigationOptions = ({ navigation }) => {
 
@@ -61,10 +63,38 @@ export default class Profile extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			hasShimmered: false,
+		}
+		this.moveAnimation = new Animated.ValueXY({ x: 0, y: 0 })
 	}
 
 	componentDidMount() {
 		this.loadProfile()	
+		this.loopShimmer()
+		this.timer = setInterval(()=> this.loopShimmer(), 3000)
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.timer);
+	}
+
+	loopShimmer() {
+		const { hasShimmered } = this.state
+		if (hasShimmered == false ) {
+			Animated.timing(this.moveAnimation, {
+				toValue: {x: windowWidth - (40 * alpha), y: 0},
+				duration: 700
+			}).start()
+			this.setState({ hasShimmered: true})
+		} else {
+			Animated.timing(this.moveAnimation, {
+				toValue: {x: 0, y: 0},
+				duration: 700
+			}).start()
+			this.setState({ hasShimmered: false})
+		}
+		
 	}
 
 	loadProfile(){
@@ -145,6 +175,7 @@ export default class Profile extends React.Component {
 		} else {
 			navigate("VerifyUserStack")
 		}
+
 	}
 
 	onVIPPressed = () => {
@@ -206,11 +237,7 @@ export default class Profile extends React.Component {
 	onOrderButtonPressed = () => {
 		const {  currentMember } = this.props
 		const { navigate } = this.props.navigation
-		if (currentMember !== null) {
-			navigate("OrderHistory")
-		} else {
-			navigate("VerifyUserStack")
-		}
+		navigate("OrderHistory")
 	}
 
 
@@ -233,6 +260,10 @@ export default class Profile extends React.Component {
 		} else {
 			navigate("VerifyUserStack")
 		}
+	}
+
+	onFeedbackPressed = () => {
+		Linking.openURL('mailto:feedback@brew9.co')
 	}
 
 	onQRButtonPressed = () => {
@@ -324,6 +355,8 @@ export default class Profile extends React.Component {
 	render() {
 
 		const { currentMember ,members} = this.props
+		const { hasShimmered } = this.state
+
 		var background_photo;
 		var level_name;
 		var display_name;
@@ -369,11 +402,11 @@ export default class Profile extends React.Component {
 		}
 		
 		return <ScrollView
-				style={styles.amendedCopy3View}>
+				style={styles.profileView}>
 				<View
 					pointerEvents="box-none"
 					style={{
-						height: 340 * alpha,
+						height: 520 * alpha,
 					}}>
 					<View
 						style={styles.membersectionView}>
@@ -410,7 +443,7 @@ export default class Profile extends React.Component {
 									pointerEvents="box-none"
 									style={{
 										position: "absolute",
-										left: 12 * alpha,
+										left: 15 * alpha,
 										right: 15 * alpha,
 										top: 0 * alpha,
 										height: 187 * alpha,
@@ -581,43 +614,33 @@ export default class Profile extends React.Component {
 				<TouchableOpacity
 					onPress={() => this.onMissionCenterPressed()}
 					style={styles.missioncenterbuttonButton}>
+					<Image
+						source={require("./../../assets/images/mission_center.png")}
+						style={styles.missionCenterBackground}/>
+						<Animated.View style={[this.moveAnimation.getLayout(), hasShimmered ? {opacity: 1} : {opacity: 0}]} >
+							<Image
+								source={require("./../../assets/images/reflection.png")}
+								style={styles.missionCenterReflection}/>
+						</Animated.View>
 					<View
 						style={styles.missionCentreView}>
 						<View
-							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
+								flex: 1,
+								flexDirection: "row",
+								alignItems: "center"
 							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 103 * alpha,
-									marginLeft: 25 * alpha,
-									marginRight: 28 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.missionlabelText}>MISSION CENTRE</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Image
-									source={require("./../../assets/images/mission.png")}
-									style={styles.missioniconImage}/>
-							</View>
-						</View>
-						
+							<Image
+								source={require("./../../assets/images/crown.png")}
+								style={styles.missioniconImage}/>
 							<Text
-								style={styles.missioncenterbuttonButtonText}></Text>
-						
+								style={styles.missioncenterbuttonButtonText}>Claim Rewards</Text>
 						</View>
+						
+						<Image
+							source={require("./../../assets/images/next.png")}
+							style={styles.missionArrow}/>
+					</View>
 				</TouchableOpacity>
 				
 				
@@ -751,7 +774,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>Order History</Text>
+										style={styles.menuRowLabelText}>Order History</Text>
 									<View
 										style={{
 											flex: 1,
@@ -773,6 +796,53 @@ export default class Profile extends React.Component {
 									style={styles.menuRowDescriptionText}></Text>
 								<View
 									style={styles.menuRowLineView}/>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+							onPress={() => this.onFeedbackPressed()}
+							style={styles.menuRowbuttonButton}>
+						<View
+							style={styles.menuRowView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 24 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={styles.menuRowLabelText}>Feedback</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									<Image
+										source={require("./../../assets/images/forward.png")}
+										style={styles.menuRowArrowImage}/>
+								</View>
+							</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									height: 58 * alpha,
+								}}>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -858,8 +928,8 @@ export default class Profile extends React.Component {
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
-											style={styles.menuRowArrowImage}/>
+										source={require("./../../assets/images/forward.png")}
+										style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
 							<View
@@ -880,7 +950,7 @@ export default class Profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	amendedCopy3View: {
+	profileView: {
 		backgroundColor: "white",
 		flex: 1,
 	},
@@ -933,8 +1003,8 @@ const styles = StyleSheet.create({
 	memberDetailView: {
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 19 * alpha,
-		right: 19 * alpha,
+		left: 20 * alpha,
+		right: 20 * alpha,
 		top: 308 * alpha,
 		height: 199 * alpha,
 	},
@@ -1245,55 +1315,6 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginTop: 3 * alpha,
 	},
-	missionCentreView: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		bottom: 0,
-	},
-	missionlabelText: {
-		backgroundColor: "transparent",
-		color: PRIMARY_COLOR,
-		fontFamily: TITLE_FONT,
-		fontSize: 20 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	missioniconImage: {
-		backgroundColor: "transparent",
-		resizeMode: "contain",
-		width: 93 * alpha,
-		height: 103 * alpha,
-	},
-	missioncenterbuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	missioncenterbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	missioncenterbuttonButton: {
-		backgroundColor: "white",
-		shadowColor: "rgba(217, 217, 217, 0.5)",
-		shadowRadius: 10,
-		shadowOpacity: 1,
-		height: 120 * alpha,
-		marginLeft: 18 * alpha,
-		marginRight: 18 * alpha,
-		marginTop: 177 * alpha,
-		elevation: 2 * alpha,
-	},
 	
 	menuView: {
 		backgroundColor: "transparent",
@@ -1365,4 +1386,84 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 
+
+
+	
+	missionlabelText: {
+		backgroundColor: "transparent",
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 20 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	
+	missioniconImage: {
+		backgroundColor: "transparent",
+		resizeMode: "contain",
+		width: 35 * alpha,
+		height: 35 * alpha,
+		marginLeft: 20 * alpha,
+	},
+	missioncenterbuttonButtonText: {
+		color: "white",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		marginLeft: 10 * alpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	missioncenterbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	missioncenterbuttonButton: {
+		// backgroundColor: "white",
+		// shadowColor: "rgba(217, 217, 217, 0.5)",
+		// shadowRadius: 10,
+		// shadowOpacity: 1,
+		flex: 1,
+		marginLeft: 20 * alpha,
+		marginRight: 20 * alpha,
+		height: 67 * alpha,
+		// marginTop: 177 * alpha,
+	},
+	
+	missionCenterBackground: {
+		resizeMode: "contain",
+		position: "absolute",
+		width: "100%",
+		height: 67 * alpha,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+	},
+
+	missionCenterReflection: {
+		resizeMode: "contain",
+		position: "absolute",
+		height: 67 * alpha,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+	},
+	missionCentreView: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		flex: 1,
+		padding: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0,
+	},
+	missionArrow: {
+		width: 10 * alpha,
+		marginRight: 10 * alpha,
+		tintColor: "white",
+		resizeMode: "contain",
+	}
 })
