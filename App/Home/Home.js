@@ -23,7 +23,7 @@ import {
 	Alert,
 	Linking,
 	AppState,
-	Keyboard	
+	Keyboard,
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -287,7 +287,7 @@ export default class Home extends React.Component {
 			this.getLocationAsync();
 		  }
 		const { dispatch } = this.props
-		
+		this.setState({isPromoToggle: false,})
 		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
@@ -303,6 +303,16 @@ export default class Home extends React.Component {
 
 	}
 
+	handleBackButton() {
+		let routeName = this.props.navigation.state.routeName
+
+		console.log("route", routeName)
+		if (routeName != 'Home') {
+			// this.props.navigation.goBack()
+		}
+		
+		return true;
+	}
 	componentWillUnmount() {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);

@@ -127,7 +127,7 @@ export default class Profile extends React.Component {
 
 		const callback = eventObject => {
 			if (eventObject.success) {
-				navigate("VerifyStack")
+				navigate("VerifyUserStack")
 			}
 			this.setState({
 				loading: false,
@@ -321,7 +321,7 @@ export default class Profile extends React.Component {
 			navigate("MemberProfile")
 		}else{
 			const { navigate } = this.props.navigation
-			navigate("VerifyStack")
+			navigate("VerifyUserStack")
 			return
 		}
 	}

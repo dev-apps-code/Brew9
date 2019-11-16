@@ -52,7 +52,7 @@ export default class FirstScreen extends React.Component {
         const { members,isReady } = this.props
         if (isReady){
             if (typeof members === 'undefined'|| members === null) {
-                this.props.navigation.navigate("VerifyStack")
+                this.props.navigation.navigate("VerifyUserStack")
             }
             else {
                 this.props.navigation.navigate("TabGroupOne")

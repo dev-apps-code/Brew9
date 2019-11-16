@@ -7,7 +7,7 @@
 //
 
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, 
-	Keyboard } from "react-native"
+	Keyboard} from "react-native"
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -61,6 +61,10 @@ export default class VerifyUser extends React.Component {
 	componentWillMount() {
 	}
 
+	handleBackButton() {
+		return true;
+	}
+	
 	onTermsAndConditionsPressed = (url,title) => {
 		const { navigate } = this.props.navigation
 		navigate("WebCommon", {
