@@ -48,10 +48,9 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
-import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
-import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
 import ProfileRequestObject from '../Requests/profile_request_object'
@@ -147,12 +146,6 @@ export default class Home extends React.Component {
 			isPromoToggle: false,
 			ignoreVersion: false,
 			appState: AppState.currentState,
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 			image_isHorizontal: false,
 			image_check: false,
 			image_isLong: false,
@@ -175,21 +168,14 @@ export default class Home extends React.Component {
 		if (currentMember != null){
 			navigate("ScanQr")
 		}else{			
-			this.setState({
-				modal_visible: true, 
-				modal_title: "Brew9",
-				modal_description: "You need to login before you can topup" , 
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-					this.props.navigation.navigate("VerifyUserStack")
-				},				
-			})	
+			this.refs.toast.show("You need to login before you can topup", TOAST_DURATION, () => {
+				this.props.navigation.navigate("VerifyUserStack")
+			});
 		}
 	}
 
 	componentDidUpdate() {
-		console.log("promo trigger check")
-			this.check_promotion_trigger()
+		this.check_promotion_trigger()
 	}
 	
 	registerForPushNotificationsAsync = async() => {
@@ -419,17 +405,6 @@ export default class Home extends React.Component {
 		
 	}
 
-	renderPopup(){
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	loadStoreProducts() {
 
 		const { dispatch, company_id } = this.props
@@ -438,22 +413,9 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				if (eventObject.result.force_upgrade) {
-
-					this.setState({
-						modal_visible: true, 
-						modal_title: "Brew9",
-						modal_description: eventObject.message, 
-						modal_cancelable: eventObject.result.force_upgrade, 
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-							Linking.openURL(this.state.app_url)
-						},
-						modal_cancel_action: ()=> {
-							this.setState({modal_visible:false})
-							this.loadStoreProducts()
-						},
-						app_url:eventObject.result.url
-					})								
+					this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+						Linking.openURL(eventObject.result.url)
+					});			
 				} else {
 				this.setState({
 					data: eventObject.result,
@@ -517,15 +479,7 @@ export default class Home extends React.Component {
 
 		if (currentMember != undefined) {
 			if (member_distance > selectedShop.max_order_distance_in_km){
-				this.setState({
-					modal_visible: true, 
-					modal_title: "Brew9",
-					modal_description: "You are too far away", 
-					modal_cancelable: false, 
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-				})
+				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
@@ -591,20 +545,12 @@ export default class Home extends React.Component {
 	_toggleDelivery = (value) => {
 		
 		if (value == 1) {
-			this.setState({
-				modal_visible: true, 
-				modal_title: "Brew9",
-				modal_description: "Delivery Option Coming Soon", 
-				modal_cancelable: false, 
-				delivery: value,
-				modal_ok_action: ()=> {
-					this.setState({
-						delivery: 0
-					}, function () {
-						this.setState({modal_visible:false})
-					})
-				}
-			})
+
+			this.refs.toast.show("Delivery Option Coming Soon", TOAST_DURATION, () => {
+                this.setState({
+					delivery: 0
+				})
+            })
 		}
 		
 	}
@@ -1762,7 +1708,6 @@ export default class Home extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 					</View>
 				</Animated.View>
-				{this.renderPopup()}
 				
 			
 			<View style={styles.bottomAlertView}>

@@ -17,9 +17,8 @@ import MissionCell from "./MissionCell"
 import MissionCategoryCell from "./MissionCategoryCell"
 import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
-import Brew9Modal from "../Components/Brew9Modal"
 import Toast, {DURATION} from 'react-native-easy-toast'
-import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
+import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -58,12 +57,6 @@ export default class MissionCenter extends React.Component {
             loading: false,
             missions: [],
             mission_statements: [],
-            modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
         }
     }
 
@@ -79,17 +72,6 @@ export default class MissionCenter extends React.Component {
         this.props.navigation.goBack()
     }
 
-    renderPopup(){
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-    }
-    
     loadProfile(){
 		const { dispatch, currentMember } = this.props
 
@@ -147,8 +129,7 @@ export default class MissionCenter extends React.Component {
         const { dispatch } = this.props
         this.setState({ loading_list: true })
         const callback = eventObject => {
-            console.log("MissionStatement", eventObject.result)
-            if (eventObject.success) {
+             if (eventObject.success) {
                 this.setState({
                     mission_statements: eventObject.result,
                 }, function(){
@@ -176,7 +157,7 @@ export default class MissionCenter extends React.Component {
             this.setState({ loading: true })
             const callback = eventObject => {
                 console.log(eventObject)
-                this.refs.toast.show(eventObject.message, 500)
+                this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
                     loading: false,
                     mission_statements: eventObject.result,
@@ -274,7 +255,6 @@ export default class MissionCenter extends React.Component {
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
                 }
-                {this.renderPopup()}
                 <Toast ref="toast" position="center"/>
         </View>
     }

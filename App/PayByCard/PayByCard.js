@@ -10,13 +10,12 @@ import React from "react"
 import { StyleSheet, Image, TouchableOpacity, Text, View, TextInput } from "react-native"
 import { alpha, fontAlpha } from "../Common/size";
 import {connect} from "react-redux";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading.js"
 import {createAction, Storage} from "../Utils"
 import PaymentSessionRequestObject from '../Requests/payment_session_request_object.js'
 import UpdatePaymentSessionRequestObject from '../Requests/update_payment_session_request_object'
-import Brew9Modal from "../Components/Brew9Modal"
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -54,26 +53,7 @@ export default class PayByCard extends React.Component {
 			card_number: "",
 			card_expiry: "",
 			cart_csv: "",
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "Brew9",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
-	}
-
-	renderPopupModal() {
-		return <Brew9Modal
-            title={this.state.modal_title}
-            description={this.state.modal_description}
-            visible={this.state.modal_visible}
-            confirm_text={this.state.modal_ok_text}
-            cancelable={this.state.modal_cancelable}
-            okayButtonAction={this.state.modal_ok_action}
-            cancelButtonAction={this.state.modal_cancel_action}
-		/>
 	}
 
 	componentDidMount() {
@@ -133,30 +113,18 @@ export default class PayByCard extends React.Component {
 
 	checkForm = () => {
 		if (this.state.card_name === "") {
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please select the name on your card",
-			})
+			this.refs.toast.show("Please select the name on your card", TOAST_DURATION)
 			return false
 		} else if (this.state.card_number.length != 8) {
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please select a correct card number",
-			})
+			this.refs.toast.show("Please select a correct card number", TOAST_DURATION)
 			return false
 		}
 		else if (this.state.card_expiry === "") {
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please select enter the expiry date",
-			})
+			this.refs.toast.show("Please select enter the expiry date", TOAST_DURATION)
 			return false
 		}
 		else if (this.state.card_csv.length != 3) {
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please select a correct csv",
-			})
+			this.refs.toast.show("Please select a correct csv", TOAST_DURATION)
 			return false
 		}
 		else {
@@ -233,9 +201,7 @@ export default class PayByCard extends React.Component {
 							style={styles.payNowButtonText}>Pay Now</Text>
 					</TouchableOpacity>
 				</View>
-				<Toast ref="toast"
-            position="center"/>
-			{this.renderPopupModal()}
+				<Toast ref="toast" position="center"/>
 			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}

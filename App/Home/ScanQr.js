@@ -14,10 +14,9 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import QrCodeScanRequestObject from '../Requests/qr_code_scan_request_object'
 import { connect } from 'react-redux'
 import { createAction, dispatch } from '../Utils/index'
-import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import Brew9Modal from "../Components/Brew9Modal"
-import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
+import Toast, {DURATION} from 'react-native-easy-toast'
+import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -57,14 +56,6 @@ export default class ScanQr extends React.Component {
             loading: false,
             hasCameraPermission: null,
             scanned: false,
-            modal_visible: false,
-            modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
         }
     }
 
@@ -73,18 +64,6 @@ export default class ScanQr extends React.Component {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
-    }
-
-    renderSuccessModal() {
-		return <Brew9Modal
-            title={this.state.modal_title}
-            description={this.state.modal_description}
-            visible={this.state.modal_visible}
-            confirm_text={this.state.modal_ok_text}
-            cancelable={this.state.modal_cancelable}
-            okayButtonAction={this.state.modal_ok_action}
-            cancelButtonAction={this.state.modal_cancel_action}
-		/>
     }
 
     onSuccessfulScan= () => {
@@ -103,27 +82,13 @@ export default class ScanQr extends React.Component {
                 loading: false,
             })  
             if (eventObject.success) {
-                this.setState({ 
-                    modal_ok_action: ()=> {
-                        this.setState({modal_visible:false})
-                        this.onSuccessfulScan()
-                    }
+                this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+                    this.onSuccessfulScan()
                 })
             }
             else {
-                this.setState({ 
-                    modal_ok_action: ()=> {
-                        this.setState({modal_visible:false})
-                    }
-                })
+                this.refs.toast.show(eventObject.message, TOAST_DURATION)
             }   
-            this.setState({ 
-                modal_title:'Brew9',
-                modal_description: eventObject.message,
-                modal_ok_text: null,
-                modal_cancelable: false,
-                modal_visible: true, 
-            })  
         }
         const obj = new QrCodeScanRequestObject(qr_code)
         obj.setUrlId(currentMember.id) 
@@ -176,9 +141,7 @@ export default class ScanQr extends React.Component {
             {scanned && (
                 <Button title={'Tap to Scan Again'} onPress={() => this.setState({ scanned: false })} />
             )}
-            {this.renderSuccessModal()}
-            <Toast ref="toast"
-				position="center"/>
+            <Toast ref="toast" position="center"/>
             <HudLoading isLoading={this.state.loading}/>
             </View>
         )

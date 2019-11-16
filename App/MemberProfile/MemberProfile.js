@@ -24,8 +24,7 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles} from "../Common/common_style";
-import Brew9Modal from "../Components/Brew9Modal"
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -81,13 +80,6 @@ export default class MemberProfile extends React.Component {
 			selected_image: null,
 			has_send_code: false,
 			member_have_dob: false,
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "Brew9",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 	}
 
@@ -109,43 +101,16 @@ export default class MemberProfile extends React.Component {
 		}
 	}
 
-	renderPopup() {
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			confirm_text={this.state.modal_ok_text}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	loadUpdateProfile(formData){
 		const { dispatch } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({
-					modal_description:"Profile Update Successful",
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show("Profile Update Successful", TOAST_DURATION)
+				
 			} else {
-				this.setState({
-					modal_description: eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
@@ -166,17 +131,7 @@ export default class MemberProfile extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({
-					modal_title:'Brew9',
-					modal_description:"Phone Update Successful",
-					modal_ok_text: null,
-					modal_cancelable: false,
-					has_send_code: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show("Phone Update Successful", TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
@@ -203,17 +158,7 @@ export default class MemberProfile extends React.Component {
 					modalVisible: false,
 				})
 			} else {
-				this.setState({
-					modal_title:'Brew9',
-					modal_description: eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					has_send_code: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
@@ -273,17 +218,7 @@ export default class MemberProfile extends React.Component {
 				})
 			}
 		} else {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please enable camera roll permission in settings.",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please enable camera roll permission in settings.", TOAST_DURATION)
 		}
 	}
 
@@ -331,18 +266,7 @@ export default class MemberProfile extends React.Component {
 		const {country_code, phone_no} = this.state 
 
 		if (country_code == '' || country_code == undefined || phone_no == '' || phone_no == undefined) {
-			console.log("SEND CODE")
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please fill in phone number",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please fill in phone number", TOAST_DURATION)
 			return
 		}
 
@@ -363,17 +287,7 @@ export default class MemberProfile extends React.Component {
 		const {verification_code, phone_no} = this.state 
 
 		if (verification_code == '' || verification_code == undefined) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please fill in sms code",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please fill in sms code", TOAST_DURATION)
 			return
 		}
 		this.setState({
@@ -848,7 +762,6 @@ export default class MemberProfile extends React.Component {
 				{this.renderModalContent()}
 			</Modal>
 		</View>
-		{this.renderPopup()}
 		<Toast ref="toast" position="center"/>
 		<HudLoading isLoading={this.state.loading}/>
 		</KeyboardAvoidingView>

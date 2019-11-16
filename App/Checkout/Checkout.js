@@ -7,7 +7,6 @@
 //
 
 import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
-import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
@@ -17,7 +16,7 @@ import {createAction, Storage} from "../Utils"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
-import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION} from "../Common/common_style";
 import DateTimePicker from "react-native-modal-datetime-picker";
 
 @connect(({ members,shops }) => ({
@@ -64,13 +63,6 @@ export default class Checkout extends React.Component {
 			promotion_ids: this.props.navigation.getParam("promotion_ids", []),
 			cart:this.props.navigation.getParam("cart", []),
 			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 			payment_toggle: false,
 			payment_model_visible: false,
 			payment_view_height: 0 * alpha,
@@ -256,23 +248,10 @@ export default class Checkout extends React.Component {
 			}
 		}
 
-		this.setState({
-			cart: newCart,
-			cart_total:cart_total,
-			cart_total_quantity:cart_total_quantity,
-			modal_title:'Brew9',
-			modal_description:removed_item_name,
-			modal_ok_text: null,
-			modal_cancelable: false,
-			modal_ok_action: ()=> {
-				this.setState({modal_visible:false})
-				if (newCart.length == 0){
-					this.props.navigation.goBack()
-				}
-			},
-			modal_visible:true,
-		})
-	
+		this.refs.toast.show(removed_item_name, TOAST_DURATION)
+		if (newCart.length == 0){
+			this.props.navigation.goBack()
+		}
 	}
 
 	loadMakeOrder(){
@@ -311,16 +290,7 @@ export default class Checkout extends React.Component {
 						}
 					}
 				}
-				this.setState({
-					modal_title:'Brew9',
-					modal_description:eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})			
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
@@ -371,16 +341,7 @@ export default class Checkout extends React.Component {
 			
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
-					this.setState({
-						modal_visible:true,
-						modal_title: "Brew9",
-						modal_description: "You do not have enough credit. Please top up at our counter",
-						modal_ok_text: null,
-						modal_cancelable: false,
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-						},
-					})
+					this.refs.toast.show("You do not have enough credit. Please top up at our counter", TOAST_DURATION)
 					return
 				}
 				this.loadMakeOrder()
@@ -426,18 +387,6 @@ export default class Checkout extends React.Component {
 	
 	onCallPressed = (phone_no) => {
 		Linking.openURL(`tel:${phone_no}`)
-	}
-
-	renderPopup() {
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			confirm_text={this.state.modal_ok_text}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
 	}
 
 	tooglePayment = () => {
@@ -1010,7 +959,6 @@ export default class Checkout extends React.Component {
 				
 			</ScrollView>
 			{this.renderPaymentMethod()}
-			{this.renderPopup()}
 			
 			<View
 				style={styles.totalPayNowView}>

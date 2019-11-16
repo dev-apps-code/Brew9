@@ -20,8 +20,7 @@ import {createAction, Storage} from "../Utils"
 import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
-import Brew9Modal from "../Components/Brew9Modal"
+import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -52,13 +51,6 @@ export default class VerifyUser extends React.Component {
 			code_from_server:"",
 			is_counting: false,
 			count_down: 3,
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "Brew9",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 
 	}
@@ -84,10 +76,7 @@ export default class VerifyUser extends React.Component {
 	onSendPressed = () => {
 		Keyboard.dismiss()
 		if (this.state.is_counting){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please wait for 2 minutes before trying to resend.",
-			})
+			this.refs.toast.show("Please wait for 2 minutes before trying to resend.", TOAST_DURATION)
 			return
 		}
 		this.loadLogin()
@@ -101,43 +90,22 @@ export default class VerifyUser extends React.Component {
 		})
 	}
 
-	renderPopupModal() {
-		return <Brew9Modal
-            title={this.state.modal_title}
-            description={this.state.modal_description}
-            visible={this.state.modal_visible}
-            confirm_text={this.state.modal_ok_text}
-            cancelable={this.state.modal_cancelable}
-            okayButtonAction={this.state.modal_ok_action}
-            cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	loadLogin(){
 		const { dispatch } = this.props
 		const {phone_no, country_code} = this.state
 
 		if (phone_no == null || phone_no == ''){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please ensure you have enter your phone number!",
-			})
+			this.refs.toast.show("Please ensure you have enter your phone number!", TOAST_DURATION)
 			return
 		}
 
 		if (phone_no.length < 7){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Your phone number is too short",
-			})
+			this.refs.toast.show("Your phone number is too short", TOAST_DURATION)
 			return
 		}
 
 		if (country_code == null || country_code == ''){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please ensure you have enter a country code!",
-			})
+			this.refs.toast.show("Please ensure you have enter a country code!", TOAST_DURATION)
 			return
 		}
 
@@ -217,10 +185,7 @@ export default class VerifyUser extends React.Component {
 					navigation.navigate({ routeName, key})
 				}                
             }else{
-				this.setState({
-					modal_visible:true,
-					modal_description: eventObject.message,
-				})
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			
         }
@@ -398,7 +363,6 @@ export default class VerifyUser extends React.Component {
 						</Text>
 						</Hyperlink>
 			</View>
-			{this.renderPopupModal()}
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast" position="center"/>
 		</View>
