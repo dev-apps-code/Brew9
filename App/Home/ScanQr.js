@@ -30,7 +30,7 @@ export default class ScanQr extends React.Component {
 
         const { params = {} } = navigation.state
         return {
-            title: "Scan Qr",
+            title: "Scan QR",
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>

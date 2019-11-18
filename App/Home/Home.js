@@ -303,16 +303,6 @@ export default class Home extends React.Component {
 
 	}
 
-	handleBackButton() {
-		let routeName = this.props.navigation.state.routeName
-
-		console.log("route", routeName)
-		if (routeName != 'Home') {
-			// this.props.navigation.goBack()
-		}
-		
-		return true;
-	}
 	componentWillUnmount() {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
@@ -556,7 +546,7 @@ export default class Home extends React.Component {
 		
 		if (value == 1) {
 
-			this.refs.toast.show("Delivery Option Coming Soon", TOAST_DURATION, () => {
+			this.refs.toast.show("Delivery not yet available", TOAST_DURATION, () => {
                 this.setState({
 					delivery: 0
 				})
@@ -2268,6 +2258,7 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	totalpriceText: {
+		height: 41 * alpha,
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * alpha,
@@ -2328,7 +2319,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 41 * alpha,
+		bottom: 35 * alpha,
 		flex: 1,
 	},
 	clearAllView: {
@@ -2364,6 +2355,7 @@ const styles = StyleSheet.create({
 	popOutCartFlatList: {
 		backgroundColor: "white",
 		width: "100%",
+		marginBottom: 20 * alpha,
 		flex: 1
 	},
 	popOutCartFlatListViewWrapper: {
@@ -3104,13 +3096,13 @@ const styles = StyleSheet.create({
 		left: 10 * alpha,
 	},
 	featuredpromoButtonPosition1: {	
-		bottom: 10 * alpha,
+		bottom: 0 * alpha,
 	},
 	featuredpromoButtonPosition2: {	
-		bottom: 50 * alpha,	
+		bottom: 40 * alpha,	
 	},
 	featuredpromoButtonPosition3: {
-		bottom: 100 * alpha,
+		bottom: 90 * alpha,
 	},
 	featuredpromoButtonImage: {
 		resizeMode: "contain",

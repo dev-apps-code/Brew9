@@ -95,6 +95,7 @@ export default class MissionCenter extends React.Component {
         const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
+            console.log(eventObject)
             if (eventObject.success) {
 
                 var mission_categories = eventObject.result
@@ -224,6 +225,7 @@ export default class MissionCenter extends React.Component {
                 point={item.points}
                 status={item.status}
                 progress={item.progress}
+                mission_type={item.mission_type}
                 statement_id={item.statement_id}
                 onStatusPressed={this.missionRewardClaim}
                 mission_task_count={item.mission_task_count}

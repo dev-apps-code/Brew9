@@ -307,7 +307,7 @@ export default class Profile extends React.Component {
 		const {  company_id } = this.props
 
 		navigate("WebCommon", {
-			title: 'About Brew9',
+			title: 'Brew9 Inspiration',
 			web_url: KURL_INFO + '?page=about_us&id=' + company_id,
 		})
 	}
@@ -406,7 +406,7 @@ export default class Profile extends React.Component {
 				<View
 					pointerEvents="box-none"
 					style={{
-						height: 520 * alpha,
+						height: 530 * alpha,
 					}}>
 					<View
 						style={styles.membersectionView}>
@@ -429,8 +429,8 @@ export default class Profile extends React.Component {
 									position: "absolute",
 									left: 0 * alpha,
 									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 199 * alpha,
+									top: 10 * alpha,
+									height: 200 * alpha,
 								}}>
 								<View
 									style={styles.detailsView}>
@@ -596,10 +596,10 @@ export default class Profile extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							position: "absolute",
-							left: 19 * alpha,
+							left: 20 * alpha,
 							width: 290 * alpha,
-							top: 70 * alpha,
-							height: 252 * alpha,
+							top: 80 * alpha,
+							height: 250 * alpha,
 							alignItems: "flex-start",
 						}}>
 						<View
@@ -666,18 +666,18 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.menuRowLabelText}>{isLogin ? "My Profile" : "Signup/Login"}</Text>
+										style={styles.menuRowLabelText}>{isLogin ? "My Profile" : "Login"}</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
+											source={require("./../../assets/images/next.png")}
 											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -716,7 +716,7 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
@@ -727,7 +727,7 @@ export default class Profile extends React.Component {
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
+											source={require("./../../assets/images/next.png")}
 											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -769,7 +769,7 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
@@ -780,7 +780,7 @@ export default class Profile extends React.Component {
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
+											source={require("./../../assets/images/next.png")}
 											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -819,7 +819,7 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
@@ -830,7 +830,7 @@ export default class Profile extends React.Component {
 											flex: 1,
 										}}/>
 									<Image
-										source={require("./../../assets/images/forward.png")}
+										source={require("./../../assets/images/next.png")}
 										style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -866,18 +866,18 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.menuRowLabelText}>About Brew9</Text>
+										style={styles.menuRowLabelText}>Brew9 Inspiration</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-										source={require("./../../assets/images/forward.png")}
+										source={require("./../../assets/images/next.png")}
 										style={styles.menuRowArrowImage}/>
 									
 								</View>
@@ -917,7 +917,7 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
@@ -928,7 +928,7 @@ export default class Profile extends React.Component {
 											flex: 1,
 										}}/>
 									<Image
-										source={require("./../../assets/images/forward.png")}
+										source={require("./../../assets/images/next.png")}
 										style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -1302,7 +1302,7 @@ const styles = StyleSheet.create({
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 		marginTop: 176 * alpha,
 	},
 	companySloganText: {
@@ -1312,7 +1312,7 @@ const styles = StyleSheet.create({
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 		marginTop: 3 * alpha,
 	},
 	

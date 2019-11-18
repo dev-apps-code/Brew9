@@ -289,10 +289,10 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		top: 5 * alpha,
 	},
-	pointsExpiryText: {
+pointsExpiryText: {
 		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
 	},
 	pointRuleButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10 * alpha,
+		marginRight: 5 * alpha,
 	},
 	pointRuleButton: {
 		backgroundColor: "transparent",

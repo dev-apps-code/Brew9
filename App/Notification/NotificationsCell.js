@@ -106,7 +106,7 @@ export default class NotificationsCell extends React.Component {
 						}}>
 						{ this.props.type == "promo" && (
 							<Image
-							source={require("./../../assets/images/group-2.png")}
+							source={require("./../../assets/images/next.png")}
 							style={styles.arrowImage}/>
 						)}
 					</View>
@@ -167,8 +167,7 @@ const styles = StyleSheet.create({
 	arrowImage: {
 		resizeMode: "contain",
 		backgroundColor: "transparent",
-		width: 9 * alpha,
-		height: 10 * alpha,
+		width: 10 * alpha,
 		marginRight: 20 * alpha,
 	},
 })

@@ -24,7 +24,7 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -454,19 +454,16 @@ export default class MemberProfile extends React.Component {
 					style={styles.profilepicView}>
 					<View
 						pointerEvents="box-none"
-						style={{
-							width: 80 * alpha,
-							height: 80 * alpha,
-						}}>
-						
+						>
 						<Image
 							source={image.uri != null ? {uri: image.uri} : require("./../../assets/images/user.png")}
 							style={styles.avatarImage}/>
-						
 						<TouchableOpacity
 							onPress={this._pickImage}
 							style={styles.imagebuttonButton}>
 						</TouchableOpacity>
+						{ image.uri == null && (<Text
+							style={styles.avatarUploadText}>Upload Photo</Text>) }
 					</View>
 					<Text
 						style={styles.nameText}>{members.nickname}</Text>
@@ -713,7 +710,7 @@ export default class MemberProfile extends React.Component {
 					<DatePicker
 						date={this.state.dob}
 						mode="date"
-						placeholder="Select BirthDay"
+						placeholder="Select Birthday"
 						format="YYYY-MM-DD"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
@@ -794,13 +791,10 @@ const styles = StyleSheet.create({
 	},
 	profileView: {
 		backgroundColor: "white",
-		height: 161 * alpha,
 		alignItems: "center",
 	},
 	profilepicView: {
 		backgroundColor: "transparent",
-		width: 81 * alpha,
-		height: 110 * alpha,
 		marginTop: 27 * alpha,
 		alignItems: "center",
 	},
@@ -828,6 +822,15 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 80 * alpha,
 	},
+	avatarUploadText: {
+		backgroundColor: "transparent",
+		color: LIGHT_GREY,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		marginTop: 4 * alpha,
+	},
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(10, 10, 10)",
@@ -835,7 +838,8 @@ const styles = StyleSheet.create({
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
-		marginTop: 14 * alpha,
+		marginTop: 10 * alpha,
+		marginBottom: 10 * alpha,
 	},
 	personalInfoView: {
 		backgroundColor: "white",
@@ -985,7 +989,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: 53 * alpha,
 		backgroundColor: "transparent",
-		alignItems: "center",
 		justifyContent: "center",
 	},
 	birthdayView: {
@@ -1000,7 +1003,6 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		marginLeft: 22 * alpha,
 	},

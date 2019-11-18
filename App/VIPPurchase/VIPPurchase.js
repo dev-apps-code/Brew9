@@ -304,7 +304,7 @@ export default class VIPPurchase extends React.Component {
 							<Text
 								style={styles.otherdetailsButtonText}>Other Membership Details</Text>
 							<Image
-								source={require("./../../assets/images/group-2.png")}
+								source={require("./../../assets/images/next.png")}
 								style={styles.otherdetailsButtonImage}/>
 						</TouchableOpacity>
 					</View>
@@ -772,7 +772,9 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	otherdetailsButtonImage: {
+		tintColor: "rgb(176, 176, 176)",
 		resizeMode: "contain",
+		width: 10 * alpha,
 		marginLeft: 10 * alpha,
 	},
 	otherdetailsButton: {

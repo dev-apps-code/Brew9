@@ -36,6 +36,13 @@ export default class MissionCell extends React.Component {
 	
 		var reward_string = ""
 		var mission_vouchers = this.props.vouchers
+		var status_string = ""
+
+		if (this.props.status == "Claimed" && this.props.mission_type == "Login") {
+			status_string = "Checked In"
+		} else {
+			status_string = this.props.status
+		}
 
 		if (this.props.point > 0) {
 			reward_string += `+${this.props.point} points `
@@ -99,7 +106,7 @@ export default class MissionCell extends React.Component {
 						<View
 							style={this.props.status != "Pending" ? styles.statusCompleteView : styles.statusView}>
 							<Text
-								style={styles.completeText}>{this.props.status}</Text>
+								style={styles.completeText}>{status_string}</Text>
 						</View>
 						</TouchableOpacity>
 					</View>
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -128,7 +135,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "black",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -152,9 +159,9 @@ const styles = StyleSheet.create({
 	},
 	statusCompleteView: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 9.5 * alpha,
-		width: 70 * alpha,
-		height: 19 * alpha,
+		borderRadius: 11 * alpha,
+		width: 80 * alpha,
+		height: 22 * alpha,
 		marginRight: 20 * alpha,
 		justifyContent: "center",
 		alignItems: "center",
@@ -162,8 +169,8 @@ const styles = StyleSheet.create({
 	completeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

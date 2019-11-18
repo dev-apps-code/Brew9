@@ -341,7 +341,7 @@ export default class Checkout extends React.Component {
 			
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
-					this.refs.toast.show("You do not have enough credit. Please top up at our counter", TOAST_DURATION)
+					this.refs.toast.show("Oops, insufficient credit. Please top up at our counter", TOAST_DURATION)
 					return
 				}
 				this.loadMakeOrder()
@@ -464,7 +464,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.walletView}>
 										<Text
-											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 wallet</Text>
+											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 Wallet</Text>
 										<View
 											style={{
 												flex: 1,
@@ -524,16 +524,16 @@ export default class Checkout extends React.Component {
 												style={styles.group9Image}/>
 										</View>
 									</View>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/line-10-copy.png")}
-										style={styles.lineImage}/>
+									
 								</View>
 								
 							</View>
+							<View
+										style={{
+											flex: 1,
+										}}/>
+									<View
+									style={styles.menuRowLineView}/>
 							</TouchableOpacity>
 						</View>
 						
@@ -603,7 +603,7 @@ export default class Checkout extends React.Component {
 								
 								</View>
 								<View
-									style={styles.line10View}/>
+									style={styles.menuRowLineView}/>
 							</View>
 							<View
 								pointerEvents="box-none"
@@ -1532,7 +1532,7 @@ const styles = StyleSheet.create({
 	paymentButtonText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left"
@@ -2333,7 +2333,7 @@ const styles = StyleSheet.create({
 	productQuantityText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2344,7 +2344,7 @@ const styles = StyleSheet.create({
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2354,7 +2354,7 @@ const styles = StyleSheet.create({
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2396,4 +2396,12 @@ const styles = StyleSheet.create({
 		
 	},
 
+	menuRowLineView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		alignSelf: "flex-end",
+		width: 375 * alpha,
+		// top: 57 * alpha,
+		height: 1 * alpha,
+		left: 20 * alpha,
+	},
 })

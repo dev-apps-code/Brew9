@@ -499,7 +499,7 @@ export default class PickUp extends React.Component {
 							<Text
 								style={styles.orderHistoryButtonText}>Order History</Text>
 							<Image
-								source={require("./../../assets/images/group-2.png")}
+								source={require("./../../assets/images/next.png")}
 								style={styles.orderHistoryButtonImage}/>
 						</TouchableOpacity>
 					</View>
@@ -635,8 +635,10 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	orderHistoryButtonImage: {
+		tintColor: "rgb(176, 176, 176)",
+		width: 10 * alpha,
 		resizeMode: "contain",
-		marginLeft: 10 * alpha,
+		marginLeft: 5 * alpha,
 	},
 	loadingIndicator:{
 		marginTop:100 * alpha,

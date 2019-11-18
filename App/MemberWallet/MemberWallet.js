@@ -213,7 +213,7 @@ export default class MemberWallet extends React.Component {
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.transactionHistoryText}>Point History</Text>
+						style={styles.transactionHistoryText}>Recharge Option</Text>
 				</View>
 				<View
 					style={styles.topuplistFlatListViewWrapper}>
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
 	},
 	creditHistoryButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10 * alpha,
+		marginRight: 5 * alpha,
 	},
 	creditHistoryButton: {
 		backgroundColor: "transparent",
@@ -320,7 +320,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		width: 77 * alpha,
 		height: 15 * alpha,
 		marginRight: 19 * alpha,
 		marginBottom: 18 * alpha,
@@ -332,6 +331,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		backgroundColor: "transparent",
 	},
 	headerView: {
 		backgroundColor: "white",

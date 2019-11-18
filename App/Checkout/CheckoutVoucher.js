@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     availableButtonText: {
         color: "rgb(68, 68, 68)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         textAlign: "center",
     },
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     usedButtonText: {
         color: "rgb(118, 118, 118)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         textAlign: "center",
     },

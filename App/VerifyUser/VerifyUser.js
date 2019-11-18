@@ -61,10 +61,6 @@ export default class VerifyUser extends React.Component {
 	componentWillMount() {
 	}
 
-	handleBackButton() {
-		return true;
-	}
-	
 	onTermsAndConditionsPressed = (url,title) => {
 		const { navigate } = this.props.navigation
 		navigate("WebCommon", {
