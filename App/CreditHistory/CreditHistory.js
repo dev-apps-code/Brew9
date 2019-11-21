@@ -25,7 +25,7 @@ export default class CreditsHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Credits",
+			title: "Wallet History",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

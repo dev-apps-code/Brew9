@@ -75,7 +75,7 @@ export default class MemberProfile extends React.Component {
 				{label: 'Female', value: 1 }
 			],
 			verification_code: "",
-			gender: -1,
+			gender: 2,
 			genderIndex: 0,
 			selected_image: null,
 			has_send_code: false,
@@ -223,9 +223,8 @@ export default class MemberProfile extends React.Component {
 	}
 
 	checkForm = () => {
-		if (this.state.gender === -1) {
+		if (this.state.gender == null) {
 			this.refs.toast.show("Please select your gender", 500)
-			
 			return false
 		} else if (!this.state.nickname) {
 			this.refs.toast.show("Please select a nickname", 500)
@@ -534,7 +533,7 @@ export default class MemberProfile extends React.Component {
 								style={styles.emailText}>Email</Text>
 							<TextInput
 								autoCorrect={false}
-								placeholder="Email"
+								placeholder="Email (Optional)"
 								style={styles.emailTextInput}
 								returnKeyType={'done'}
 								onChangeText={(email) => this.setState({email})}
@@ -710,7 +709,7 @@ export default class MemberProfile extends React.Component {
 					<DatePicker
 						date={this.state.dob}
 						mode="date"
-						placeholder="Select Birthday"
+						placeholder="Birthday"
 						format="YYYY-MM-DD"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"

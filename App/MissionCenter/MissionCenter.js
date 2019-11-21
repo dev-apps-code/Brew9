@@ -17,6 +17,7 @@ import MissionCell from "./MissionCell"
 import MissionCategoryCell from "./MissionCategoryCell"
 import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
+import MissionLoginRequestObject from "../Requests/mission_login_request_object"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
 
@@ -111,10 +112,6 @@ export default class MissionCenter extends React.Component {
                     this.loadMissionStatements()
                 })     
             }
-
-            // this.setState({
-            //     loading: false,
-            // })  
         }
         const obj = new MissionRequestObject()
         obj.setUrlId(company_id)
@@ -150,14 +147,37 @@ export default class MissionCenter extends React.Component {
         )
     }
 
-    missionRewardClaim = (statement_id) => {
+    missionLogin = () => {
+        console.log("Login")
+        const { dispatch, currentMember } = this.props
+        
+        this.setState({ loading: true })
+        const callback = eventObject => {
+            this.refs.toast.show(eventObject.message, TOAST_DURATION)
+            this.setState({
+                loading: false,
+                mission_statements: eventObject.result,
+            }, function(){
+                this.loadMissionStatements()
+            })
+        }
+        const obj = new MissionLoginRequestObject()
+        obj.setUrlId(currentMember.id);
+        dispatch(
+            createAction('members/missionLogin')({
+                object:obj,
+                callback,
+            })
+        )
+    }
 
+    missionRewardClaim = (statement_id) => {
+        console.log("Claim")
         if (statement_id != undefined) {
             const { dispatch } = this.props
         
             this.setState({ loading: true })
             const callback = eventObject => {
-                console.log(eventObject)
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
                     loading: false,
@@ -227,7 +247,7 @@ export default class MissionCenter extends React.Component {
                 progress={item.progress}
                 mission_type={item.mission_type}
                 statement_id={item.statement_id}
-                onStatusPressed={this.missionRewardClaim}
+                onStatusPressed={item.mission_type == "Login" ? this.missionLogin : this.missionRewardClaim}
                 mission_task_count={item.mission_task_count}
                 vouchers={item.mission_vouchers}
                 navigation={this.props.navigation}/>

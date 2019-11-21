@@ -57,6 +57,7 @@ import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail";
 import ScanQr from "./App/Home/ScanQr";
 import PayByCard from "./App/PayByCard/PayByCard"
 import CreditHistory from "./App/CreditHistory/CreditHistory"
+import About from "./App/About/About"
 
 import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
@@ -271,7 +272,10 @@ const PushProfile = createStackNavigator(
     },
     VoucherDetail: {
       screen: VoucherDetail
-    }
+    },
+    About: {
+      screen: About
+    },
   },
   {
     initialRouteName: "Profile"

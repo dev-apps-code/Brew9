@@ -27,7 +27,7 @@ export default class MemberWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Wallet",
+			title: "Balance",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -191,7 +191,7 @@ export default class MemberWallet extends React.Component {
 					<View
 						style={styles.walletCreditView}>
 						<Text
-							style={styles.walletCreditText}>Points Collected</Text>
+							style={styles.walletCreditText}>Balance</Text>
 						<Text
 							style={styles.creditsText}>${parseFloat(members.credits).toFixed(2)}</Text>
 						
@@ -207,13 +207,13 @@ export default class MemberWallet extends React.Component {
 							source={require("./../../assets/images/icon-rule.png")}
 							style={styles.creditHistoryButtonImage}/>
 						<Text
-							style={styles.creditHistoryButtonText}>Credit History</Text>
+							style={styles.creditHistoryButtonText}>Balance History</Text>
 					</TouchableOpacity>
 				</View>
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.transactionHistoryText}>Recharge Option</Text>
+						style={styles.transactionHistoryText}>TopUp Amount</Text>
 				</View>
 				<View
 					style={styles.topuplistFlatListViewWrapper}>

@@ -68,3 +68,7 @@ export function missionStatements(authtoken,object) {
 export function missionRewardClaim(authtoken,object) {
    return postMethod(authtoken,object)
 }
+
+export function missionLogin(authtoken, object) {
+   return postMethod(authtoken,object)
+}

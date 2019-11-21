@@ -1229,7 +1229,7 @@ const styles = StyleSheet.create({
 	productQuantityText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -1240,7 +1240,7 @@ const styles = StyleSheet.create({
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",

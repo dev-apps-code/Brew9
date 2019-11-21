@@ -240,18 +240,6 @@ export default class Profile extends React.Component {
 		navigate("OrderHistory")
 	}
 
-
-	onFaqPressed = () => {
-		const { navigate } = this.props.navigation
-		const { members } = this.props
-
-		navigate("WebCommon", {
-			title: 'FAQs',
-			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
-		})
-	}
-
-
 	onPersonalButtonPressed = () => {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
@@ -262,9 +250,17 @@ export default class Profile extends React.Component {
 		}
 	}
 
-	onFeedbackPressed = () => {
-		Linking.openURL('mailto:feedback@brew9.co')
+	onLevelInfoPressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
+		})
 	}
+
+	
 
 	onQRButtonPressed = () => {
 		const {  currentMember } = this.props
@@ -304,15 +300,11 @@ export default class Profile extends React.Component {
 
 	onAboutButtonPressed = () => {
 		const { navigate } = this.props.navigation
-		const {  company_id } = this.props
 
-		navigate("WebCommon", {
-			title: 'Brew9 Inspiration',
-			web_url: KURL_INFO + '?page=about_us&id=' + company_id,
-		})
+		navigate("About")
 	}
 
-	onLogoutButtonPress = () => {
+	onProfileButtonPress = () => {
 		const {  currentMember } = this.props
 
 		if (currentMember !== null) {
@@ -331,7 +323,7 @@ export default class Profile extends React.Component {
 		progress_percent = progress * 100
 		return (
 			<View style={{flexDirection: "row", height: 10 * alpha,  flex: 1}}>
-			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 0.5 * alpha, borderRadius: 4 * alpha,}}>
+			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha}}>
 				<View
 				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
 				/>
@@ -513,7 +505,16 @@ export default class Profile extends React.Component {
 														style={styles.progressbarView}>
 															{this.renderProgressBar(membership_progress ? membership_progress : 0)}
 													</View>
-													
+													<TouchableOpacity onPress={()=> this.onLevelInfoPressed()}>
+														<View
+															style={styles.levelInfoView}>
+															<Image
+																source={require("./../../assets/images/exclaimation.png")}
+																style={styles.howToUseButtonImage}/>
+															<Text
+																style={styles.levelInfoText}>Info</Text>
+														</View>
+													</TouchableOpacity>
 												</View>
 												<Text
 													style={styles.levelexpText}>{member_exp} / {exp_needed}</Text>
@@ -554,9 +555,14 @@ export default class Profile extends React.Component {
 													style={styles.pointiconImage}/>
 												<Text
 													style={styles.pointvalueText}>{points}</Text>
-												
-												<Text
-													style={styles.pointText}>Point</Text>
+												<View style={{
+													flexDirection: "row", 
+													marginTop: 5 * alpha}}>
+													<Text style={styles.pointText}>Point</Text>
+													<Image
+														source={require("./../../assets/images/next.png")}
+														style={styles.infoArrow}/>
+												</View>
 											</View>
 										</TouchableOpacity>
 										<TouchableOpacity
@@ -569,8 +575,14 @@ export default class Profile extends React.Component {
 													style={styles.rewardiconImage}/>
 												<Text
 													style={styles.rewardvalueText}>{vouchers_count}</Text>
-												<Text
-													style={styles.rewardText}>Voucher</Text>
+												<View style={{
+													flexDirection: "row", 
+													marginTop: 5 * alpha}}>
+													<Text style={styles.rewardText}>Voucher</Text>
+													<Image
+														source={require("./../../assets/images/next.png")}
+														style={styles.infoArrow}/>
+												</View>
 											</View>
 										</TouchableOpacity>										
 										<TouchableOpacity
@@ -583,8 +595,14 @@ export default class Profile extends React.Component {
 													style={styles.walletIconImage}/>
 												<Text
 													style={styles.walletcreditText}>${parseFloat(credits).toFixed(2)}</Text>
-												<Text
-													style={styles.walletText}>Wallet</Text>
+												<View style={{
+													flexDirection: "row", 
+													marginTop: 5 * alpha}}>
+													<Text style={styles.walletText}>Balance</Text>
+													<Image
+														source={require("./../../assets/images/next.png")}
+														style={styles.infoArrow}/>
+												</View>
 											</View>
 										</TouchableOpacity>
 									</View>
@@ -646,8 +664,8 @@ export default class Profile extends React.Component {
 				
 				<View
 					style={styles.menuView}>
-						<TouchableOpacity
-							onPress={() => this.onLogoutButtonPress()}
+					<TouchableOpacity
+							onPress={() => this.onProfileButtonPress()}
 							style={styles.menuRowbuttonButton}>
 						<View
 							style={styles.menuRowView}>
@@ -671,7 +689,7 @@ export default class Profile extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.menuRowLabelText}>{isLogin ? "My Profile" : "Login"}</Text>
+										style={styles.menuRowLabelText}>My Profile</Text>
 									<View
 										style={{
 											flex: 1,
@@ -799,53 +817,7 @@ export default class Profile extends React.Component {
 							</View>
 						</View>
 					</TouchableOpacity>
-					<TouchableOpacity
-							onPress={() => this.onFeedbackPressed()}
-							style={styles.menuRowbuttonButton}>
-						<View
-							style={styles.menuRowView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.menuRowLabelText}>Feedback</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/next.png")}
-										style={styles.menuRowArrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
-							</View>
-						</View>
-					</TouchableOpacity>
+					
 					<TouchableOpacity
 							onPress={() => this.onAboutButtonPressed()}
 							style={styles.menuRowbuttonButton}>
@@ -892,55 +864,6 @@ export default class Profile extends React.Component {
 									bottom: 0,}}>
 								<Text
 									style={styles.menuRowDescriptionText}></Text>
-								<View
-									style={styles.menuRowLineView}/>
-							</View>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-							onPress={() => this.onFaqPressed()}
-							style={styles.menuRowbuttonButton}>
-						<View
-							style={styles.menuRowView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.menuRowLabelText}>FAQs</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/next.png")}
-										style={styles.menuRowArrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -953,15 +876,6 @@ const styles = StyleSheet.create({
 	profileView: {
 		backgroundColor: "white",
 		flex: 1,
-	},
-	membersectionView: {
-		backgroundColor: "transparent",
-		opacity: 0.99,
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		height: 500 * alpha,
 	},
 	topbackgroundView: {
 		backgroundColor: "transparent",
@@ -1031,9 +945,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	membershipinfoView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		width: 193 * alpha,
-		height: 51 * alpha,
+		height: 61 * alpha,
 		marginTop: 28 * alpha,
 		alignItems: "flex-start",
 		elevation: 2 * alpha,
@@ -1050,7 +964,7 @@ const styles = StyleSheet.create({
 	},
 	membershipstatusButton: {
 		backgroundColor: "rgba(181, 181, 181, 0.28)",
-		borderRadius: 11.5,
+		borderRadius: 11.5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -1114,6 +1028,25 @@ const styles = StyleSheet.create({
 		paddingTop: 0,
 		elevation: 2 * alpha,
 	},
+	levelInfoView: {
+		width: 40 * alpha,
+		height: 14 * alpha,
+		marginRight: 20 * alpha,
+		position: "absolute",
+		right: -60 * alpha,
+		top: 14 * alpha,
+		justifyContent: "center",
+		alignItems: "center",
+		flexDirection: "row"
+	},
+	levelInfoText: {
+		color: "rgb(151, 151, 151)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
 	group4Image: {
 		resizeMode: "cover",
 		backgroundColor: "transparent",
@@ -1126,6 +1059,13 @@ const styles = StyleSheet.create({
 		width: 144 * alpha,
 		height: 8 * alpha,
 		marginLeft: 2 * alpha,
+	},
+	levelInfo: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		position: "absolute",
+		fontSize: 10 * alpha,
+		top: 25 * alpha,
 	},
 	levelexpText: {
 		color: "rgb(54, 54, 54)",
@@ -1180,7 +1120,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 5 * alpha,
+		marginLeft: 14 * alpha,
 	},
 	walletButtonView: {
 		backgroundColor: "transparent",
@@ -1220,7 +1160,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 5 * alpha,
+		marginLeft: 14 * alpha,
 	},
 	pointButtonView: {
 		alignSelf: "center",
@@ -1276,7 +1216,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 5 * alpha,
+		marginLeft: 14 * alpha,
 	},
 	notificationView: {
 		alignSelf: "center",
@@ -1386,9 +1326,6 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 
-
-
-	
 	missionlabelText: {
 		backgroundColor: "transparent",
 		color: PRIMARY_COLOR,
@@ -1465,5 +1402,19 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 		tintColor: "white",
 		resizeMode: "contain",
-	}
+	},
+
+	infoArrow: {
+		width: 9 * alpha,
+		marginLeft: 5 * alpha,
+		height: "100%",
+		tintColor: "rgb(54, 54, 54)",
+		resizeMode: "contain",
+	},
+	howToUseButtonImage: {
+        resizeMode: "contain",
+		tintColor: "rgb(151, 151, 151)",
+		width: 9 * alpha,
+		marginRight: 3 * alpha,
+    },
 })

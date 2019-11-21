@@ -24,40 +24,32 @@ export default class MissionCell extends React.Component {
 	}
 
 	onStatusPressed = (statement_id) => {
+		
 		if (this.props.status != undefined && this.props.status != "") {
 			if (this.props.status == "Completed") {
 				this.props.onStatusPressed(statement_id)
 			}
 		}
-		
+		if (this.props.mission_type == "Login") {
+			this.props.onStatusPressed()
+		}
 	}
 
 	render() {
 	
-		var reward_string = ""
-		var mission_vouchers = this.props.vouchers
 		var status_string = ""
+		var voucher_length = this.props.vouchers.length
 
-		if (this.props.status == "Claimed" && this.props.mission_type == "Login") {
-			status_string = "Checked In"
+		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
+			status_string = "Check In"
 		} else {
 			status_string = this.props.status
 		}
-
-		if (this.props.point > 0) {
-			reward_string += `+${this.props.point} points `
-		}
-
-		if (this.props.vouchers.length > 0) {
-			for (var index in mission_vouchers) {
-				var voucher = mission_vouchers[index]
-				reward_string += (voucher.voucher.name + " x" + voucher.quantity)
-				if (index < mission_vouchers.length) {
-					reward_string += ", "
-				}
-			}
-		}
 		
+		const vouchers = this.props.vouchers.map((item, key) => {
+			return <Text key={key}>{item.voucher.name} x <Text style={styles.highlight}>{item.quantity}</Text>{key < voucher_length - 1 ? ", " : ""}</Text>
+		})
+
 		progress = this.props.progress != undefined ? this.props.progress : 0
 		mission_progress_text = (this.props.mission_task_count != null && this.props.mission_task_count != "") ?`(${progress}/${this.props.mission_task_count})` : ""
 
@@ -79,11 +71,13 @@ export default class MissionCell extends React.Component {
 						<Text
 							style={styles.titleText}>{this.props.title} {mission_progress_text}</Text>
 						
-							<Text
-								style={styles.descriptionText}>{reward_string}</Text>
 							{/* <Text
-								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text> */}
-						
+								style={styles.descriptionText}>{reward_string}</Text> */}
+							{this.props.point != null && (<Text
+								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text>)}
+							{this.props.vouchers.length > 0 && (<Text
+								style={styles.voucherText}>{vouchers}</Text>)}
+							<View style={styles.spacer} />
 						<View
 							style={{
 								flex: 1,
@@ -133,14 +127,24 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		width: 250 * alpha,
 		backgroundColor: "transparent",
-		color: "black",
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 2 * alpha,
+	},
+	voucherText: {
+		width: 250 * alpha,
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		marginTop: 2 * alpha,
-		marginBottom: 18 * alpha,
 	},
 	lineView: {
 		backgroundColor: "rgb(241, 241, 241)",
@@ -177,5 +181,8 @@ const styles = StyleSheet.create({
 	},
 	highlight: {
 		color: PRIMARY_COLOR,
+	},
+	spacer: {
+		marginBottom: 18 * alpha,
 	}
 })

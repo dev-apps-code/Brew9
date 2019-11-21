@@ -265,13 +265,13 @@ export default class Home extends React.Component {
 	setDistanceString(calculated_distance) {
 		var distance_string = ""
 		// console.log(calculated_distance)
-		var parseDistance = parseFloat(calculated_distance).toFixed(2)
+		var parseDistance = calculated_distance
 		if (parseDistance > 1000 ) {
-			distance_string = `${parseDistance/1000}km`
+			distance_string = `${parseFloat(parseDistance/1000).toFixed(1)}km`
 		} else {
 			distance_string = `${parseDistance}m`
 		}
-		this.setState({distance : distance_string,member_distance: (parseDistance/1000)})
+		this.setState({distance : distance_string, member_distance: (parseDistance/1000)})
 	}
 
 	toRad(angle) {
@@ -1506,7 +1506,6 @@ export default class Home extends React.Component {
 
 		return <View style={styles.page1View}>	
 			
-			
 			<View style={styles.topsectionView}>
 				
 				<View
@@ -1715,14 +1714,13 @@ export default class Home extends React.Component {
 				{this.renderBottomBar(cart,shop)}	
 						
 			</View>
-
-			<Toast ref="toast"
-				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
 					{this.renderModalContent(selected_product, shop)}
 				</Modal> : null }
 			
 			{this.renderGallery()}
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+			
 			
 		</View>
 	}
@@ -2029,7 +2027,6 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		height: 67 * alpha,
-		// height: 50 * alpha,
 	},
 	branchView: {
 		backgroundColor: "transparent",
@@ -2201,7 +2198,7 @@ const styles = StyleSheet.create({
 	totalAmountView: {
 		backgroundColor: "transparent",
 		width: 280 * alpha,
-		height: 51 * alpha,
+		height: 70 * alpha,
 	},
 	rectangleView: {
 		backgroundColor: "rgb(231, 230, 230)",
@@ -2209,7 +2206,7 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 20 * alpha,
-		height: 41 * alpha,
+		height: 46 * alpha,
 	},
 	shopppingCartView: {
 		backgroundColor: "white",
@@ -2220,7 +2217,7 @@ const styles = StyleSheet.create({
 	},
 	shopppingCartButton: {
 		backgroundColor: "transparent",
-		borderRadius: 22.5,
+		borderRadius: 22.5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -2258,14 +2255,13 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	totalpriceText: {
-		height: 41 * alpha,
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginTop: 20 * alpha,
+		marginTop: 25 * alpha,
 	},
 	badgeView: {
 		backgroundColor: "rgb(0, 178, 227)",
@@ -2299,15 +2295,14 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 25 * alpha,
-		height: 36 * alpha,
+		top: 15 * alpha,
+		height: 46 * alpha,
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 	},
 	checkoutButtonImage: {
