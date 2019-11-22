@@ -7,7 +7,6 @@
 //
 
 import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
-import Brew9Modal from "../Components/Brew9Modal"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
@@ -17,7 +16,11 @@ import {createAction, Storage} from "../Utils"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
-import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
+import Moment from 'moment';
+import TimePicker from "react-native-24h-timepicker";
+import ScrollPicker from 'rn-scrollable-picker';
+
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
 	members: members,
@@ -62,19 +65,19 @@ export default class Checkout extends React.Component {
 			promotion_ids: this.props.navigation.getParam("promotion_ids", []),
 			cart:this.props.navigation.getParam("cart", []),
 			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
-			payment_toggle: false,
-			payment_model_visible: false,
+			isPaymentToggle: false,
 			payment_view_height: 0 * alpha,
-			selected_payment: ''
+			selected_payment: '',
+			pick_up_time: null,
+			pick_up_date: null,
+			selected_hour: "00",
+			selected_minute: "00",
+			hour_range: [],
+			minute_range: [],
+			isPickupToogle: false,
+			pickup_view_height: 150 * alpha,
 		}
-
+		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
 
@@ -83,8 +86,47 @@ export default class Checkout extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+		this.setTimePickerDefault()
 		this.loadValidVouchers()	
 	}
+
+	setTimePickerDefault() {
+
+		const { selectedShop } = this.props
+
+		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
+		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+		var time_now = Moment(new Date(), 'h:mm')
+
+		var hour = time_now.hours();
+		var min = time_now.minutes();
+
+		var first_hour = hour > opening.hours() ? hour : opening.hours()
+		var last_hour = closing.hours()
+		
+		var hour_array = _.range(first_hour, last_hour);
+
+		this.setState({
+			selected_hour: first_hour,
+			selected_minute: "00",
+			minute_range: [ "00", "15", "30", "45", "00"],
+			hour_range: hour_array
+		})
+	}
+
+
+	onHourValueChange = (option) => {
+		this.setState({
+			selected_hour: option,
+		})
+	}
+
+	onMinuteValueChange = (option) => {
+		this.setState({
+			selected_minute: option
+		})
+	}
+
 
 	loadValidVouchers(){
 		const { dispatch,currentMember,selectedShop } = this.props
@@ -92,7 +134,7 @@ export default class Checkout extends React.Component {
 		if (currentMember != null ){
 			const callback = eventObject => {
 
-				console.log(`--   voucher ${eventObject.result}`)
+				// console.log(`--   voucher ${eventObject.result}`)
 				if (eventObject.success) {
 					this.setState({ 
 						valid_vouchers: eventObject.result
@@ -115,6 +157,17 @@ export default class Checkout extends React.Component {
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
+	}
+	
+	
+	onConfirmTimePicker() {
+		const { selected_hour, selected_minute} = this.state
+		this.setState({ 
+			pick_up_time: `${selected_hour}:${selected_minute}` ,
+			pick_up_date: `${selected_hour}:${selected_minute}` ,
+		}, function () {
+			this.tooglePickup()
+		});
 	}
 
 	onBranchButtonPressed = () => {
@@ -234,29 +287,16 @@ export default class Checkout extends React.Component {
 			}
 		}
 
-		this.setState({
-			cart: newCart,
-			cart_total:cart_total,
-			cart_total_quantity:cart_total_quantity,
-			modal_title:'Brew9',
-			modal_description:removed_item_name,
-			modal_ok_text: null,
-			modal_cancelable: false,
-			modal_ok_action: ()=> {
-				this.setState({modal_visible:false})
-				if (newCart.length == 0){
-					this.props.navigation.goBack()
-				}
-			},
-			modal_visible:true,
-		})
-	
+		this.refs.toast.show(removed_item_name, TOAST_DURATION)
+		if (newCart.length == 0){
+			this.props.navigation.goBack()
+		}
 	}
 
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 		const { navigate } = this.props.navigation
-		const {cart,vouchers_to_use, selected_payment, promotion_ids} = this.state
+		const {cart,vouchers_to_use, selected_payment, promotion_ids, pick_up_date} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
@@ -266,17 +306,7 @@ export default class Checkout extends React.Component {
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits'){
-					this.setState({
-						modal_title:'Brew9',
-						modal_description:eventObject.message,
-						modal_ok_text: null,
-						modal_cancelable: false,
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-							this.clearCart()
-						},
-						modal_visible:true,
-					})
+					this.clearCart()
 				}else{
 					const order = eventObject.result
 					navigate("PaymentsWebview", {
@@ -299,22 +329,13 @@ export default class Checkout extends React.Component {
 						}
 					}
 				}
-				this.setState({
-					modal_title:'Brew9',
-					modal_description:eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})			
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
 		console.log("Promotions", promotion_ids)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids, pick_up_date)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
 			createAction('shops/loadMakeOrder')({
@@ -346,59 +367,50 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const {cart_total, selected_payment} = this.state
-		const {currentMember,selectedShop } = this.props
+		const {cart_total, selected_payment, pick_up_date} = this.state
+		const {currentMember,selectedShop} = this.props
 
 		if (currentMember != undefined) {
-			 
+			if ( pick_up_date == null) {
+				this.tooglePickup()
+				return
+			} else {
+				if (selectedShop != null) {
+					var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
+					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
+					var pickup = Moment(pick_up_date, 'h:mm')
+					var now = Moment(new Date(), 'h:mm')
+
+					// console.log("Opening", opening, "Closing", closing, "Pickup", pickup, "Now", now)
+
+					if (pickup < now) {
+						this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
+						return	
+					}
+					else if (pickup < opening) {
+						this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
+						return
+					} else if ( pickup > closing) {
+						this.refs.toast.show("Shop is closed at this time", TOAST_DURATION)
+						return
+					}
+				}
+			}
+
 			if ( selected_payment == "") {
 				this.tooglePayment()
+				return
 			}
+			
 			if ( selected_payment == "credits") {
 				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
-					this.setState({
-						modal_visible:true,
-						modal_title: "Brew9",
-						modal_description: "You do not have enough credit. Please top up at our counter",
-						modal_ok_text: null,
-						modal_cancelable: false,
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-						},
-					})
+					this.refs.toast.show("Oops, insufficient credit. Please top up at our counter.", TOAST_DURATION)
 					return
 				}
-	
-				this.setState({
-					modal_visible:true,
-					modal_title: "Brew9",
-					modal_description: "Are you sure you want to confirm the order?",
-					modal_ok_text: null,
-					modal_cancelable: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-						this.loadMakeOrder()
-					},
-					modal_cancel_action: ()=> {
-						this.setState({modal_visible:false})
-					}
-				})
+				this.loadMakeOrder()
 				return
 			} else if ( selected_payment == "credit_card") {
-				this.setState({
-					modal_visible:true,
-					modal_title: "Brew9",
-					modal_description: "Are you sure you want to confirm the order?",
-					modal_ok_text: null,
-					modal_cancelable: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-						this.loadMakeOrder()
-					},
-					modal_cancel_action: ()=> {
-						this.setState({modal_visible:false})
-					}
-				})
+				this.loadMakeOrder()
 				return
 			}
 			
@@ -415,17 +427,10 @@ export default class Checkout extends React.Component {
 	}
 
 	onClosePressed = () => {
-
-	
 		this.setState({ 
 			loginModalVisible: false, 
 			registerModalVisible: false, 
 		})
-		
-
-		// navigate("Transaction", {
-		// 	amount: cart_total
-		// })
 	}
 
 	onDirectionPressed(shop) {
@@ -440,16 +445,26 @@ export default class Checkout extends React.Component {
 		Linking.openURL(`tel:${phone_no}`)
 	}
 
-	renderPopup() {
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			confirm_text={this.state.modal_ok_text}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
+	tooglePickup = () => {
+		const { isPickupToogle, pickup_view_height } = this.state
+
+		var product_checkout_height = pickup_view_height
+		var content = 247 * alpha
+		var finalheight = pickup_view_height - content - BUTTONBOTTOMPADDING
+
+		if (isPickupToogle) {
+			this.setState({ isPickupToogle: false }, function(){
+				Animated.spring(this.movePickAnimation, {
+					toValue: {x: 0, y: windowHeight},
+				}).start()
+			})
+		} else {
+			this.setState({ isPickupToogle: true }, function(){
+				Animated.spring(this.movePickAnimation, {
+					toValue: {x: 0, y: 0},
+				}).start()
+			})
+		}
 	}
 
 	tooglePayment = () => {
@@ -527,7 +542,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.walletView}>
 										<Text
-											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 wallet</Text>
+											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 Wallet</Text>
 										<View
 											style={{
 												flex: 1,
@@ -587,16 +602,16 @@ export default class Checkout extends React.Component {
 												style={styles.group9Image}/>
 										</View>
 									</View>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/line-10-copy.png")}
-										style={styles.lineImage}/>
+									
 								</View>
 								
 							</View>
+							<View
+										style={{
+											flex: 1,
+										}}/>
+									<View
+									style={styles.menuRowLineView}/>
 							</TouchableOpacity>
 						</View>
 						
@@ -666,7 +681,7 @@ export default class Checkout extends React.Component {
 								
 								</View>
 								<View
-									style={styles.line10View}/>
+									style={styles.menuRowLineView}/>
 							</View>
 							<View
 								pointerEvents="box-none"
@@ -712,13 +727,25 @@ export default class Checkout extends React.Component {
 		</Animated.View>
 	}
 
-	renderVoucherSection() {
+	renderVoucherSection(vouchers) {
 
-		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
-				<TouchableOpacity
-							onPress={this.onVoucherButtonPressed}
-							style={styles.voucherButton}><View
-					style={styles.drinksView}>
+		const { cart_total } = this.state
+		const voucher_items = vouchers.map((item, key) => {
+
+			var discount_value = null
+
+			if (item.voucher.discount_price) {
+				if (item.voucher.discount_type == "fixed") {
+					discount_value = item.voucher.discount_price
+				} else if (item.voucher.discount_type == "percent") {
+					discount_value = cart_total * item.voucher.discount_price/100.0	
+				}
+
+			} 
+			
+			return <View
+					style={styles.drinksView}
+					key={key}>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -729,24 +756,143 @@ export default class Checkout extends React.Component {
 							}}>
 								<View
 									style={styles.productDetailView}>
-									<Text
-										style={styles.productNameText}>Available Voucher</Text>
+									<View style={styles.voucherDetailView}>
+										<Text
+											style={styles.productNameText}>{item.voucher.name}</Text>
+										<View
+											style={styles.voucherButtonView}>
+											<Text
+												style={styles.voucherButtonText}>Voucher</Text>
+										</View>
+									</View>
+									<View style={styles.spacer} />
 									
-										<View style={styles.spacer} />
 								</View>
 								<Text
-									style={styles.productVoucherText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'} available</Text>
-								
+									style={styles.productQuantityText}></Text>
+								<Text
+									style={styles.productPriceText}>{ discount_value ? `-$${parseFloat(discount_value).toFixed(2)}` : ""}</Text>
+								<Image
+									source={require("./../../assets/images/group-109-copy.png")}
+									style={styles.dottedLineImage}/>
 							</View>
+				</View>
+			
+		})
+
+		return <View style={styles.drinksViewWrapper}>
+			<View style={styles.orderitemsView}>
+				<TouchableOpacity
+					onPress={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? () => this.onVoucherButtonPressed() : () => null }
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row",
+							}}>
+							<View
+								style={styles.productDetailView}>
+								<Text
+									style={styles.productNameText}>Available Voucher</Text>
+								<View style={styles.spacer} />
+							</View>
+							<Text
+								style={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? styles.productVoucherText : styles.productVoucherDisableText}>{this.state.valid_vouchers != null ? this.state.valid_vouchers.length : '-'} available</Text>
+							<Image
+								source={require("./../../assets/images/next.png")}
+								style={styles.menuRowArrowImage}/>
+						</View>
+					</View>
+				</TouchableOpacity>
+			</View>
+			<View style={styles.orderitemsView}>
+				{voucher_items}
+			</View>
+		</View>
+	}
+	
+	renderPaymentSection() {
+
+		const { currentMember } = this.props
+		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
+
+		return <View style={styles.drinksViewWrapper}>
+			<View style={styles.orderitemsView}>
+				<TouchableOpacity
+					// onPress={() => this.showDateTimePicker()}
+					onPress={() => this.onPaymentButtonPressed()}
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+							<View
+								style={styles.productDetailView}>
+								<Text
+									style={styles.productNameText}>Payment Method</Text>
+								<View style={styles.spacer} />
+							</View>
+							<Text
+								style={styles.productVoucherText}>{ this.state.selected_payment == '' ? "Select payment" : this.state.selected_payment == "credits" ? 
+								`Brew9 Credit ${this.props.members.currency}${credits}` : "Credit Card"}</Text>
+							<Image
+								source={require("./../../assets/images/next.png")}
+								style={styles.menuRowArrowImage}/>
+						</View>
 					</View>
 				</TouchableOpacity>
 			</View>
 		</View>
 	}
-	
-	renderOrderItems(items, vouchers, promotions) {
 
-		const { cart_total } = this.state
+	renderPickupTime() {
+		return <View style={styles.drinksViewWrapper}>
+			<View style={styles.orderitemsView}>
+				<TouchableOpacity
+					// onPress={() => this.showDateTimePicker()}
+					onPress={() => this.tooglePickup()}
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor:"transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+							<View
+								style={styles.productDetailView}>
+								<Text
+									style={styles.productNameText}>Pickup Time</Text>
+								<View style={styles.spacer} />
+							</View>
+							<Text
+								style={styles.productVoucherText}>{this.state.pick_up_time != null? this.state.pick_up_time : 'Select pick up time'}</Text>
+							<Image
+								source={require("./../../assets/images/next.png")}
+								style={styles.menuRowArrowImage}/>
+						</View>
+					</View>
+				</TouchableOpacity>
+			</View>
+		</View>
+	}
+
+	renderOrderItems(items, promotions) {
+
 		let fullList = [...items,...promotions] 
 		const order_items = fullList.map((item, key) => {
 			var price_string = item.price != undefined && item.price > 0 && item.clazz == "product" ? `$${parseFloat(item.price).toFixed(2)}` 
@@ -787,55 +933,106 @@ export default class Checkout extends React.Component {
 				
 		})
 
-		const voucher_items = vouchers.map((item, key) => {
-
-			var discount_value = null
-
-			if (item.voucher.discount_price) {
-				if (item.voucher.discount_type == "fixed") {
-					discount_value = item.voucher.discount_price
-				} else if (item.voucher.discount_type == "percent") {
-					discount_value = cart_total * item.voucher.discount_price/100.0	
-				}
-
-			} 
-			
-			return <View
-					style={styles.drinksView}
-					key={key}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								justifyContent: "center",
-								backgroundColor:"transparent",
-								flex: 1,
-								flexDirection: "row"
-							}}>
-								<View
-									style={styles.productDetailView}>
-									<Text
-										style={styles.productNameText}>{item.voucher.name}</Text>
-									
-										<View style={styles.spacer} />
-									
-								</View>
-								<Text
-									style={styles.productQuantityText}></Text>
-								<Text
-									style={styles.productPriceText}>{ discount_value ? `-$${parseFloat(discount_value).toFixed(2)}` : ""}</Text>
-								<Image
-									source={require("./../../assets/images/group-109-copy.png")}
-									style={styles.dottedLineImage}/>
-							</View>
-				</View>
-			
-		})
-
 		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
 			{order_items}
-			{voucher_items}
 		</View>
 		</View>
+	}
+
+	renderPickupTimeScroll() {
+		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
+		let {currentMember, selectedShop} = this.props
+
+		return <Animated.View style={this.movePickAnimation.getLayout()}>
+			<View style={{flex: 1,flexDirection: "column"}}>
+			<View style={{
+				position: "absolute", 
+				bottom: 150 * alpha, 
+				width: "100%", 
+				height: 50 * alpha, 
+				alignItems: "center", 
+				justifyContent: "center", 
+				flexDirection: "row",
+				backgroundColor: "white"
+				}}>
+				<TouchableOpacity onPress={() => this.tooglePickup()}><Text style={styles.popOutTimePickerViewCancel}>Cancel</Text></TouchableOpacity>
+				<View style={{flex: 1}}/>
+				<TouchableOpacity onPress={() => this.onConfirmTimePicker()}><Text style={styles.popOutTimePickerViewDone}>Done</Text></TouchableOpacity>
+			</View>
+			<View style={{
+				backgroundColor: "rgb(245, 245, 245)",
+				position: "absolute",
+				alignSelf: "center",
+				width: "100%",
+				bottom: 150 * alpha, 
+				height: 1 * alpha,
+			}} />
+			<View style={styles.popOutTimePickerView}>
+			<View style={styles.timepickerTopBar} />	
+			<ScrollPicker
+				ref={(sp) => {this.sp = sp}}
+				dataSource={hour_range}
+				selectedIndex={0}
+				itemHeight={50 * alpha}
+				wrapperHeight={150 * alpha}
+				wrapperStyle={{
+					backgroundColor: 'transparent',
+					flex: 1,
+				}}
+				renderItem={(data, index, isSelected) => {
+					return(
+						<TouchableOpacity onPress={ console.log() } 
+							style={styles.timePickerRow}>
+								<Text style={isSelected ? 
+										styles.timePickerSelected
+									 : 
+									 	styles.timePickerUnselected
+									}
+								>
+									{data}
+								</Text>
+							</TouchableOpacity>
+						)
+					}}
+					onValueChange={(data, selectedIndex) => {
+						this.onHourValueChange(hour_range[selectedIndex]);
+				}}
+			/>
+			<ScrollPicker
+				ref={(sp) => {this.sp = sp}}
+				dataSource={minute_range}
+				selectedIndex={0}
+				itemHeight={50 * alpha}
+				wrapperHeight={150 * alpha}
+				wrapperStyle={{
+					backgroundColor: 'transparent',
+					flex: 1,
+				}}
+				renderItem={(data, index, isSelected) => {
+					return(
+						<TouchableOpacity onPress={console.log()} 
+						style={{height: 50 * alpha, alignItems: "center",
+						justifyContent: "center",}}>
+							<Text style={isSelected ? 
+									styles.timePickerSelected
+									: 
+									styles.timePickerUnselected
+								}
+							>
+								{data}
+							</Text>
+						</TouchableOpacity>
+					)
+				}}
+				onValueChange={(data, selectedIndex) => {
+					this.onMinuteValueChange(minute_range[selectedIndex]);
+				}}
+			/>
+			</View>
+			<View style={styles.timepickerBottomBar} />	
+		</View>
+		
+	</Animated.View>
 	}
 
 	renderCheckoutReceipt(){
@@ -865,16 +1062,13 @@ export default class Checkout extends React.Component {
 								<Text
 									style={styles.completedOrderText}>Order Information</Text>
 							</View>
-							<View
-								style={styles.viewView}/>
 						</View>
 						<View
 							pointerEvents="box-none"
 							style={{
 								flex: 1,
 							}}>
-							<View
-								style={styles.lineView}/>
+							
 								<View style={styles.locationWrapperView}>
 								<View
 									style={styles.locationView}>
@@ -932,8 +1126,17 @@ export default class Checkout extends React.Component {
 									style={styles.sectionSeperatorView}/>
 							</View>
 							
-							{this.renderOrderItems(cart, vouchers_to_use, promotion)}
-							{this.renderVoucherSection()}
+							{this.renderOrderItems(cart, promotion)}
+							<View style={styles.receiptSectionSeperator}>
+								<Image
+									source={require("./../../assets/images/curve_in_background.png")}
+									style={styles.curve_in}/>
+								<View
+									style={styles.sectionSeperatorView}/>
+							</View>
+							{this.renderVoucherSection(vouchers_to_use)}
+							{this.renderPaymentSection()}
+							{this.renderPickupTime()}
 							<View style={styles.receiptSectionSeperator}>
 								<Image
 									source={require("./../../assets/images/curve_in_background.png")}
@@ -965,8 +1168,9 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity} = this.state
+		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
 		let {currentMember, selectedShop} = this.props
+
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0
@@ -974,7 +1178,6 @@ export default class Checkout extends React.Component {
 		final_price = final_price.toFixed(2)
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
-		
 		return <View
 			style={styles.checkoutView}>
 			<ScrollView
@@ -988,17 +1191,18 @@ export default class Checkout extends React.Component {
 				
 			</ScrollView>
 			{this.renderPaymentMethod()}
-			{this.renderPopup()}
-			
+			{this.renderPickupTimeScroll()}
 			<View
 				style={styles.totalPayNowView}>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						onPress={() => this.onPaymentButtonPressed()}
 						style={styles.paymentButton}>
 					<Text
 						style={styles.paymentButtonText}>{ this.state.selected_payment == '' ? "Select a payment method" : this.state.selected_payment == "credits" ? 
 						`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"}</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
+					<View style={styles.paymentButton}><Text
+						style={styles.paymentButtonText}>${cart_total}</Text></View>
 				<TouchableOpacity
 					onPress={() => this.onPayNowPressed()}
 					style={styles.payNowButton}>
@@ -1007,8 +1211,20 @@ export default class Checkout extends React.Component {
 				</TouchableOpacity>
 			</View>
 			<HudLoading isLoading={this.state.loading}/>
-			<Toast ref="toast"
-            position="center"/>
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+			
+			{/* <TimePicker
+				ref={ref => {
+					this.TimePicker = ref;
+				}}
+				onCancel={() => this.onCancelTimePicker()}
+				maxHour={20}
+				minuteInterval={30}
+				selectedHour={this.state.selected_hour}
+				selectedMinute={this.state.selected_minute}
+				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
+			/> */}
+			
 			
 		</View>
 	}
@@ -1550,15 +1766,15 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
 		flex: 1,
 	},
 	paymentButtonText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
+		marginLeft: 20 * alpha,
 		textAlign: "left"
 	},
 	paymentButtonImage: {
@@ -1705,13 +1921,12 @@ const styles = StyleSheet.create({
 		marginTop: 10 * alpha,
 	},
 
-
 	popOutPaymentView: {
 		backgroundColor: "white",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 72 * alpha,
+		bottom: 0 * alpha,
 		height: 247 * alpha,
 	},
 	paymentMethodTwoView: {
@@ -2334,6 +2549,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "flex-start",
 	},
+	voucherDetailView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		alignItems: "center",
+		flexDirection: "row"
+	},
 	productNameText: {
 		backgroundColor: "transparent",
 		color: "rgb(63, 63, 63)",
@@ -2357,7 +2578,7 @@ const styles = StyleSheet.create({
 	productQuantityText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2368,7 +2589,7 @@ const styles = StyleSheet.create({
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2378,7 +2599,16 @@ const styles = StyleSheet.create({
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+	},
+	productVoucherDisableText: {
+		color: "rgb(163, 163, 163)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2420,4 +2650,98 @@ const styles = StyleSheet.create({
 		
 	},
 
+	menuRowLineView: {
+		backgroundColor: "rgb(245, 245, 245)",
+		alignSelf: "flex-end",
+		width: 375 * alpha,
+		// top: 57 * alpha,
+		height: 1 * alpha,
+		left: 20 * alpha,
+	},
+
+	menuRowArrowImage: {
+		width: 10 * alpha,
+		height: 10 * alpha,
+		marginLeft: 5 * alpha,
+		marginTop: 4 * alpha,
+		tintColor: "rgb(50, 50, 50)",
+		resizeMode: "contain",
+	},
+
+	voucherButtonView: {
+		backgroundColor: PRIMARY_COLOR,
+		borderRadius: 10 * alpha,
+		width: 60 * alpha,
+		alignItems: "center",
+		justifyContent: "center",
+		marginBottom: 5 * alpha,
+		marginLeft: 5 * alpha
+	},
+	voucherButtonText: {
+		color: "white",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * alpha,
+		textAlign: "center",
+		paddingLeft: 5 * alpha,
+		paddingRight: 5 * alpha,
+	},
+
+	popOutTimePickerView: {
+		backgroundColor: "white",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,
+		height: 150 * alpha,
+		flexDirection: "row"
+	},
+	popOutTimePickerViewDone: {
+		fontFamily: TITLE_FONT,
+		color: PRIMARY_COLOR,
+		marginRight: 30 * alpha,
+		fontSize: 16 * alpha,
+	},
+	popOutTimePickerViewCancel: {
+		fontFamily: TITLE_FONT,
+		color: "rgb(50, 50, 50)",
+		marginLeft: 30 * alpha,
+		fontSize: 16 * alpha,
+	},
+	timePickerSelected: {
+		color: "rgb(54, 54, 54)",
+		textAlign: 'center',
+		fontSize: 24 * fontAlpha,
+		fontFamily: TITLE_FONT,
+	},
+	timePickerUnselected: {
+		color: "rgb(54, 54, 54)",
+		textAlign: 'center',
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 18 * fontAlpha,
+	},
+	timePickerRow: {
+		height: 50 * alpha,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	timepickerTopBar: {
+		backgroundColor: "rgb(230, 230, 230)",
+		position: "absolute",
+		alignSelf: "center",
+		flex: 1,
+		bottom: 50 * alpha, 
+		left: 20 * alpha,
+		right: 20 * alpha,
+		height: 1 * alpha,
+	},
+	timepickerBottomBar: {
+		backgroundColor: "rgb(230, 230, 230)",
+		position: "absolute",
+		alignSelf: "center",
+		flex: 1,
+		bottom: 100 * alpha, 
+		left: 20 * alpha,
+		right: 20 * alpha,
+		height: 1 * alpha,
+	},
 })

@@ -11,6 +11,7 @@ import React from "react"
 import { alpha, fontAlpha} from "../Common/size"
 import { createAction } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
+import UpdateAvatarRequestObject from "../Requests/update_avatar_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
 import VerifyPhoneNumberUpdateRequestObject from "../Requests/verify_phone_number_update_request_object"
 import * as SecureStore from "expo-secure-store"
@@ -24,8 +25,7 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles} from "../Common/common_style";
-import Brew9Modal from "../Components/Brew9Modal"
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -76,18 +76,11 @@ export default class MemberProfile extends React.Component {
 				{label: 'Female', value: 1 }
 			],
 			verification_code: "",
-			gender: -1,
+			gender: 2,
 			genderIndex: 0,
 			selected_image: null,
 			has_send_code: false,
 			member_have_dob: false,
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "Brew9",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 	}
 
@@ -109,43 +102,16 @@ export default class MemberProfile extends React.Component {
 		}
 	}
 
-	renderPopup() {
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			confirm_text={this.state.modal_ok_text}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	loadUpdateProfile(formData){
 		const { dispatch } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({
-					modal_description:"Profile Update Successful",
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show("Profile Update Successful", TOAST_DURATION)
+				
 			} else {
-				this.setState({
-					modal_description: eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
@@ -161,22 +127,37 @@ export default class MemberProfile extends React.Component {
 		)
 	}
 	
+	loadUpdateAvatar(formData){
+		const { dispatch } = this.props
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.refs.toast.show("Avatar Update Successful", TOAST_DURATION)
+				
+			} else {
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+			}
+			this.setState({
+				loading: false,
+			})
+		}
+		const obj = new UpdateAvatarRequestObject(formData.image)
+		obj.setUrlId(this.state.members.id)
+		dispatch(
+			createAction('members/loadUpdateAvatar')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
 	loadUpdatePhoneNumber(formData){
 		const { dispatch } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.setState({
-					modal_title:'Brew9',
-					modal_description:"Phone Update Successful",
-					modal_ok_text: null,
-					modal_cancelable: false,
-					has_send_code: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show("Phone Update Successful", TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
@@ -203,17 +184,7 @@ export default class MemberProfile extends React.Component {
 					modalVisible: false,
 				})
 			} else {
-				this.setState({
-					modal_title:'Brew9',
-					modal_description: eventObject.message,
-					modal_ok_text: null,
-					modal_cancelable: false,
-					has_send_code: true,
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-					modal_visible:true,
-				})
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
@@ -270,63 +241,26 @@ export default class MemberProfile extends React.Component {
 				}
 				this.setState({
 					image: data
+				}, function () {
+					console.log("Avatar Selected")
+					this.uploadAvatar()
 				})
 			}
 		} else {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please enable camera roll permission in settings.",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please enable camera roll permission in settings.", TOAST_DURATION)
 		}
 	}
 
 	checkForm = () => {
-		if (this.state.gender === -1) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please select your gender",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+		if (this.state.gender == null) {
+			this.refs.toast.show("Please select your gender", 500)
 			return false
 		} else if (!this.state.nickname) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please select a nickname",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please select a nickname", 500)
 			return false
 		}
 		else if (!this.state.dob) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please select enter your Birthday",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please select enter your Birthday", 500)
 			return false
 		}
 		else {
@@ -360,18 +294,7 @@ export default class MemberProfile extends React.Component {
 		const {country_code, phone_no} = this.state 
 
 		if (country_code == '' || country_code == undefined || phone_no == '' || phone_no == undefined) {
-			console.log("SEND CODE")
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please fill in phone number",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please fill in phone number", TOAST_DURATION)
 			return
 		}
 
@@ -392,17 +315,7 @@ export default class MemberProfile extends React.Component {
 		const {verification_code, phone_no} = this.state 
 
 		if (verification_code == '' || verification_code == undefined) {
-			this.setState({
-				modal_title:'Brew9',
-				modal_description:"Please fill in sms code",
-				modal_ok_text: null,
-				modal_cancelable: false,
-				has_send_code: true,
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-				},
-				modal_visible:true,
-			})
+			this.refs.toast.show("Please fill in sms code", TOAST_DURATION)
 			return
 		}
 		this.setState({
@@ -419,6 +332,14 @@ export default class MemberProfile extends React.Component {
 		this.loadVerifyPhoneNumberUpdate(phoneFormData)
 	}
 
+	uploadAvatar = () => {
+		const profileFormData = {
+			image: this.state.image,
+		}
+		// console.log("Save", profileFormData)
+		this.loadUpdateAvatar(profileFormData)
+	}
+
 	onSavePressed = () => {
 
 		let formcheck = this.checkForm()
@@ -431,7 +352,7 @@ export default class MemberProfile extends React.Component {
 				gender: this.state.gender,
 				email: this.state.email,
 			}
-			console.log("Save", profileFormData)
+			// console.log("Save", profileFormData)
 			this.loadUpdateProfile(profileFormData)
 		}
 	}
@@ -569,19 +490,16 @@ export default class MemberProfile extends React.Component {
 					style={styles.profilepicView}>
 					<View
 						pointerEvents="box-none"
-						style={{
-							width: 80 * alpha,
-							height: 80 * alpha,
-						}}>
-						
+						>
 						<Image
 							source={image.uri != null ? {uri: image.uri} : require("./../../assets/images/user.png")}
 							style={styles.avatarImage}/>
-						
 						<TouchableOpacity
 							onPress={this._pickImage}
 							style={styles.imagebuttonButton}>
 						</TouchableOpacity>
+						{ image.uri == null && (<Text
+							style={styles.avatarUploadText}>Upload Photo</Text>) }
 					</View>
 					<Text
 						style={styles.nameText}>{members.nickname}</Text>
@@ -652,7 +570,7 @@ export default class MemberProfile extends React.Component {
 								style={styles.emailText}>Email</Text>
 							<TextInput
 								autoCorrect={false}
-								placeholder="Email"
+								placeholder="Email (Optional)"
 								style={styles.emailTextInput}
 								returnKeyType={'done'}
 								onChangeText={(email) => this.setState({email})}
@@ -828,7 +746,7 @@ export default class MemberProfile extends React.Component {
 					<DatePicker
 						date={this.state.dob}
 						mode="date"
-						placeholder="Select BirthDate"
+						placeholder="Birthday"
 						format="YYYY-MM-DD"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
@@ -877,7 +795,7 @@ export default class MemberProfile extends React.Component {
 				{this.renderModalContent()}
 			</Modal>
 		</View>
-		{this.renderPopup()}
+		<Toast ref="toast" position="center"/>
 		<HudLoading isLoading={this.state.loading}/>
 		</KeyboardAvoidingView>
 
@@ -909,13 +827,10 @@ const styles = StyleSheet.create({
 	},
 	profileView: {
 		backgroundColor: "white",
-		height: 161 * alpha,
 		alignItems: "center",
 	},
 	profilepicView: {
 		backgroundColor: "transparent",
-		width: 81 * alpha,
-		height: 110 * alpha,
 		marginTop: 27 * alpha,
 		alignItems: "center",
 	},
@@ -943,6 +858,15 @@ const styles = StyleSheet.create({
 		top: 0,
 		height: 80 * alpha,
 	},
+	avatarUploadText: {
+		backgroundColor: "transparent",
+		color: LIGHT_GREY,
+		fontFamily: TITLE_FONT,
+		fontSize: 11 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		marginTop: 4 * alpha,
+	},
 	nameText: {
 		backgroundColor: "transparent",
 		color: "rgb(10, 10, 10)",
@@ -950,7 +874,8 @@ const styles = StyleSheet.create({
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
-		marginTop: 14 * alpha,
+		marginTop: 10 * alpha,
+		marginBottom: 10 * alpha,
 	},
 	personalInfoView: {
 		backgroundColor: "white",
@@ -1100,7 +1025,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: 53 * alpha,
 		backgroundColor: "transparent",
-		alignItems: "center",
 		justifyContent: "center",
 	},
 	birthdayView: {
@@ -1115,7 +1039,6 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 		marginLeft: 22 * alpha,
 	},

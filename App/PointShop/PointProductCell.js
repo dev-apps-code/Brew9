@@ -97,7 +97,7 @@ export default class PointProductCell extends React.Component {
               >
                 <Text style={styles.viewmoreButtonText}>View More</Text>
                 <Image
-                  source={require("./../../assets/images/group-2.png")}
+                  source={require("./../../assets/images/next.png")}
                   style={styles.viewmoreButtonImage}
                 />
               </TouchableOpacity>
@@ -176,7 +176,9 @@ const styles = StyleSheet.create({
     height: 40 * alpha
   },
   viewmoreButtonImage: {
+    tintColor: "rgb(164, 164, 164)",
     resizeMode: "contain",
+    width: 10 * alpha,
     marginLeft: 10 * alpha
   },
   itemView: {

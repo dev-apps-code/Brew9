@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Animated } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -26,6 +26,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 	premium_membership: members.premium_membership
 }))
 export default class Profile extends React.Component {
+
+	timer = null
 
 	static navigationOptions = ({ navigation }) => {
 
@@ -61,10 +63,38 @@ export default class Profile extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			hasShimmered: false,
+		}
+		this.moveAnimation = new Animated.ValueXY({ x: 0, y: 0 })
 	}
 
 	componentDidMount() {
 		this.loadProfile()	
+		this.loopShimmer()
+		this.timer = setInterval(()=> this.loopShimmer(), 3000)
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.timer);
+	}
+
+	loopShimmer() {
+		const { hasShimmered } = this.state
+		if (hasShimmered == false ) {
+			Animated.timing(this.moveAnimation, {
+				toValue: {x: windowWidth - (40 * alpha), y: 0},
+				duration: 700
+			}).start()
+			this.setState({ hasShimmered: true})
+		} else {
+			Animated.timing(this.moveAnimation, {
+				toValue: {x: 0, y: 0},
+				duration: 700
+			}).start()
+			this.setState({ hasShimmered: false})
+		}
+		
 	}
 
 	loadProfile(){
@@ -97,7 +127,7 @@ export default class Profile extends React.Component {
 
 		const callback = eventObject => {
 			if (eventObject.success) {
-				navigate("VerifyStack")
+				navigate("VerifyUserStack")
 			}
 			this.setState({
 				loading: false,
@@ -126,14 +156,14 @@ export default class Profile extends React.Component {
 		const { navigate } = this.props.navigation
 		const {  company_id } = this.props
 
-		// navigate("WebCommon", {
-        //     title: 'How To Use',
-        //     web_url: KURL_INFO + '?page=level_info&id=' + currentMember.company_id,
-        // })
 		navigate("WebCommon", {
-			title: 'Membership Info',
-			web_url: KURL_MEMBERSHIP_INFO,
-		})
+            title: 'Membership Info',
+            web_url: KURL_INFO + '?page=level_info&id=' + company_id,
+        })
+		// navigate("WebCommon", {
+		// 	title: 'Membership Info',
+		// 	web_url: KURL_MEMBERSHIP_INFO,
+		// })
 	}
 
 	onMissionCenterPressed = () => {
@@ -145,6 +175,7 @@ export default class Profile extends React.Component {
 		} else {
 			navigate("VerifyUserStack")
 		}
+
 	}
 
 	onVIPPressed = () => {
@@ -206,11 +237,7 @@ export default class Profile extends React.Component {
 	onOrderButtonPressed = () => {
 		const {  currentMember } = this.props
 		const { navigate } = this.props.navigation
-		if (currentMember !== null) {
-			navigate("OrderHistory")
-		} else {
-			navigate("VerifyUserStack")
-		}
+		navigate("OrderHistory")
 	}
 
 	onPersonalButtonPressed = () => {
@@ -222,6 +249,18 @@ export default class Profile extends React.Component {
 			navigate("VerifyUserStack")
 		}
 	}
+
+	onLevelInfoPressed = () => {
+		const { navigate } = this.props.navigation
+		const { members } = this.props
+
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
+		})
+	}
+
+	
 
 	onQRButtonPressed = () => {
 		const {  currentMember } = this.props
@@ -261,15 +300,11 @@ export default class Profile extends React.Component {
 
 	onAboutButtonPressed = () => {
 		const { navigate } = this.props.navigation
-		const {  company_id } = this.props
 
-		navigate("WebCommon", {
-			title: 'About Brew9',
-			web_url: KURL_INFO + '?page=about_us&id=' + company_id,
-		})
+		navigate("About")
 	}
 
-	onLogoutButtonPress = () => {
+	onProfileButtonPress = () => {
 		const {  currentMember } = this.props
 
 		if (currentMember !== null) {
@@ -278,7 +313,7 @@ export default class Profile extends React.Component {
 			navigate("MemberProfile")
 		}else{
 			const { navigate } = this.props.navigation
-			navigate("VerifyStack")
+			navigate("VerifyUserStack")
 			return
 		}
 	}
@@ -288,7 +323,7 @@ export default class Profile extends React.Component {
 		progress_percent = progress * 100
 		return (
 			<View style={{flexDirection: "row", height: 10 * alpha,  flex: 1}}>
-			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 0.5 * alpha, borderRadius: 4 * alpha,}}>
+			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha}}>
 				<View
 				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
 				/>
@@ -312,6 +347,8 @@ export default class Profile extends React.Component {
 	render() {
 
 		const { currentMember ,members} = this.props
+		const { hasShimmered } = this.state
+
 		var background_photo;
 		var level_name;
 		var display_name;
@@ -341,7 +378,7 @@ export default class Profile extends React.Component {
 		}else{
 			background_photo =  {uri:''}
 			level_name = ''
-			display_name = 'Brew9'
+			display_name = ''
 			points = 0
 			avatar = require("./../../assets/images/user.png")
 			vouchers_count = 0
@@ -357,11 +394,11 @@ export default class Profile extends React.Component {
 		}
 		
 		return <ScrollView
-				style={styles.amendedCopy3View}>
+				style={styles.profileView}>
 				<View
 					pointerEvents="box-none"
 					style={{
-						height: 340 * alpha,
+						height: 530 * alpha,
 					}}>
 					<View
 						style={styles.membersectionView}>
@@ -384,8 +421,8 @@ export default class Profile extends React.Component {
 									position: "absolute",
 									left: 0 * alpha,
 									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 199 * alpha,
+									top: 10 * alpha,
+									height: 200 * alpha,
 								}}>
 								<View
 									style={styles.detailsView}>
@@ -398,7 +435,7 @@ export default class Profile extends React.Component {
 									pointerEvents="box-none"
 									style={{
 										position: "absolute",
-										left: 12 * alpha,
+										left: 15 * alpha,
 										right: 15 * alpha,
 										top: 0 * alpha,
 										height: 187 * alpha,
@@ -468,7 +505,16 @@ export default class Profile extends React.Component {
 														style={styles.progressbarView}>
 															{this.renderProgressBar(membership_progress ? membership_progress : 0)}
 													</View>
-													
+													<TouchableOpacity onPress={()=> this.onLevelInfoPressed()}>
+														<View
+															style={styles.levelInfoView}>
+															<Image
+																source={require("./../../assets/images/exclaimation.png")}
+																style={styles.howToUseButtonImage}/>
+															<Text
+																style={styles.levelInfoText}>Info</Text>
+														</View>
+													</TouchableOpacity>
 												</View>
 												<Text
 													style={styles.levelexpText}>{member_exp} / {exp_needed}</Text>
@@ -509,9 +555,14 @@ export default class Profile extends React.Component {
 													style={styles.pointiconImage}/>
 												<Text
 													style={styles.pointvalueText}>{points}</Text>
-												
-												<Text
-													style={styles.pointText}>Point</Text>
+												<View style={{
+													flexDirection: "row", 
+													marginTop: 5 * alpha}}>
+													<Text style={styles.pointText}>Point</Text>
+													<Image
+														source={require("./../../assets/images/next.png")}
+														style={styles.infoArrow}/>
+												</View>
 											</View>
 										</TouchableOpacity>
 										<TouchableOpacity
@@ -524,8 +575,14 @@ export default class Profile extends React.Component {
 													style={styles.rewardiconImage}/>
 												<Text
 													style={styles.rewardvalueText}>{vouchers_count}</Text>
-												<Text
-													style={styles.rewardText}>Voucher</Text>
+												<View style={{
+													flexDirection: "row", 
+													marginTop: 5 * alpha}}>
+													<Text style={styles.rewardText}>Voucher</Text>
+													<Image
+														source={require("./../../assets/images/next.png")}
+														style={styles.infoArrow}/>
+												</View>
 											</View>
 										</TouchableOpacity>										
 										<TouchableOpacity
@@ -538,8 +595,14 @@ export default class Profile extends React.Component {
 													style={styles.walletIconImage}/>
 												<Text
 													style={styles.walletcreditText}>${parseFloat(credits).toFixed(2)}</Text>
-												<Text
-													style={styles.walletText}>Wallet</Text>
+												<View style={{
+													flexDirection: "row", 
+													marginTop: 5 * alpha}}>
+													<Text style={styles.walletText}>Balance</Text>
+													<Image
+														source={require("./../../assets/images/next.png")}
+														style={styles.infoArrow}/>
+												</View>
 											</View>
 										</TouchableOpacity>
 									</View>
@@ -551,17 +614,17 @@ export default class Profile extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							position: "absolute",
-							left: 19 * alpha,
+							left: 20 * alpha,
 							width: 290 * alpha,
-							top: 70 * alpha,
-							height: 252 * alpha,
+							top: 80 * alpha,
+							height: 250 * alpha,
 							alignItems: "flex-start",
 						}}>
 						<View
 							style={styles.notificationView}>
 						</View>
 						<Text
-							style={styles.welcomeSomebodyText}>Welcome {display_name}!</Text>
+							style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
 						<Text
 							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 					</View>
@@ -569,50 +632,40 @@ export default class Profile extends React.Component {
 				<TouchableOpacity
 					onPress={() => this.onMissionCenterPressed()}
 					style={styles.missioncenterbuttonButton}>
+					<Image
+						source={require("./../../assets/images/mission_center.png")}
+						style={styles.missionCenterBackground}/>
+						<Animated.View style={[this.moveAnimation.getLayout(), hasShimmered ? {opacity: 1} : {opacity: 0}]} >
+							<Image
+								source={require("./../../assets/images/reflection.png")}
+								style={styles.missionCenterReflection}/>
+						</Animated.View>
 					<View
 						style={styles.missionCentreView}>
 						<View
-							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
+								flex: 1,
+								flexDirection: "row",
+								alignItems: "center"
 							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 103 * alpha,
-									marginLeft: 25 * alpha,
-									marginRight: 28 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.missionlabelText}>MISSION CENTRE</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								<Image
-									source={require("./../../assets/images/mission.png")}
-									style={styles.missioniconImage}/>
-							</View>
-						</View>
-						
+							<Image
+								source={require("./../../assets/images/crown.png")}
+								style={styles.missioniconImage}/>
 							<Text
-								style={styles.missioncenterbuttonButtonText}></Text>
-						
+								style={styles.missioncenterbuttonButtonText}>Claim Rewards</Text>
 						</View>
+						
+						<Image
+							source={require("./../../assets/images/next.png")}
+							style={styles.missionArrow}/>
+					</View>
 				</TouchableOpacity>
 				
 				
 				<View
 					style={styles.menuView}>
-						<TouchableOpacity
-							onPress={() => this.onLogoutButtonPress()}
+					<TouchableOpacity
+							onPress={() => this.onProfileButtonPress()}
 							style={styles.menuRowbuttonButton}>
 						<View
 							style={styles.menuRowView}>
@@ -631,18 +684,18 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.menuRowLabelText}>{isLogin ? "My Profile" : "Signup/Login"}</Text>
+										style={styles.menuRowLabelText}>My Profile</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
+											source={require("./../../assets/images/next.png")}
 											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -681,7 +734,7 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
@@ -692,7 +745,7 @@ export default class Profile extends React.Component {
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
+											source={require("./../../assets/images/next.png")}
 											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -734,18 +787,18 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={isLogin ? styles.menuRowLabelText : styles.menuRowDisableLabelText}>Order History</Text>
+										style={styles.menuRowLabelText}>Order History</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
+											source={require("./../../assets/images/next.png")}
 											style={styles.menuRowArrowImage}/>
 								</View>
 							</View>
@@ -764,6 +817,7 @@ export default class Profile extends React.Component {
 							</View>
 						</View>
 					</TouchableOpacity>
+					
 					<TouchableOpacity
 							onPress={() => this.onAboutButtonPressed()}
 							style={styles.menuRowbuttonButton}>
@@ -784,19 +838,20 @@ export default class Profile extends React.Component {
 									style={{
 										height: 24 * alpha,
 										marginLeft: 20 * alpha,
-										marginRight: 20 * alpha,
+										marginRight: 30 * alpha,
 										flexDirection: "row",
 										alignItems: "center",
 									}}>
 									<Text
-										style={styles.menuRowLabelText}>About Brew9</Text>
+										style={styles.menuRowLabelText}>Brew9 Inspiration</Text>
 									<View
 										style={{
 											flex: 1,
 										}}/>
 									<Image
-											source={require("./../../assets/images/forward.png")}
-											style={styles.menuRowArrowImage}/>
+										source={require("./../../assets/images/next.png")}
+										style={styles.menuRowArrowImage}/>
+									
 								</View>
 							</View>
 							<View
@@ -806,8 +861,9 @@ export default class Profile extends React.Component {
 									left: 0 * alpha,
 									right: 0 * alpha,
 									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
+									bottom: 0,}}>
+								<Text
+									style={styles.menuRowDescriptionText}></Text>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -817,18 +873,9 @@ export default class Profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	amendedCopy3View: {
+	profileView: {
 		backgroundColor: "white",
 		flex: 1,
-	},
-	membersectionView: {
-		backgroundColor: "transparent",
-		opacity: 0.99,
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		height: 500 * alpha,
 	},
 	topbackgroundView: {
 		backgroundColor: "transparent",
@@ -870,8 +917,8 @@ const styles = StyleSheet.create({
 	memberDetailView: {
 		backgroundColor: "transparent",
 		position: "absolute",
-		left: 19 * alpha,
-		right: 19 * alpha,
+		left: 20 * alpha,
+		right: 20 * alpha,
 		top: 308 * alpha,
 		height: 199 * alpha,
 	},
@@ -898,9 +945,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	membershipinfoView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		width: 193 * alpha,
-		height: 51 * alpha,
+		height: 61 * alpha,
 		marginTop: 28 * alpha,
 		alignItems: "flex-start",
 		elevation: 2 * alpha,
@@ -917,7 +964,7 @@ const styles = StyleSheet.create({
 	},
 	membershipstatusButton: {
 		backgroundColor: "rgba(181, 181, 181, 0.28)",
-		borderRadius: 11.5,
+		borderRadius: 11.5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -981,6 +1028,25 @@ const styles = StyleSheet.create({
 		paddingTop: 0,
 		elevation: 2 * alpha,
 	},
+	levelInfoView: {
+		width: 40 * alpha,
+		height: 14 * alpha,
+		marginRight: 20 * alpha,
+		position: "absolute",
+		right: -60 * alpha,
+		top: 14 * alpha,
+		justifyContent: "center",
+		alignItems: "center",
+		flexDirection: "row"
+	},
+	levelInfoText: {
+		color: "rgb(151, 151, 151)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
 	group4Image: {
 		resizeMode: "cover",
 		backgroundColor: "transparent",
@@ -993,6 +1059,13 @@ const styles = StyleSheet.create({
 		width: 144 * alpha,
 		height: 8 * alpha,
 		marginLeft: 2 * alpha,
+	},
+	levelInfo: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		position: "absolute",
+		fontSize: 10 * alpha,
+		top: 25 * alpha,
 	},
 	levelexpText: {
 		color: "rgb(54, 54, 54)",
@@ -1047,7 +1120,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 5 * alpha,
+		marginLeft: 14 * alpha,
 	},
 	walletButtonView: {
 		backgroundColor: "transparent",
@@ -1087,7 +1160,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 5 * alpha,
+		marginLeft: 14 * alpha,
 	},
 	pointButtonView: {
 		alignSelf: "center",
@@ -1143,7 +1216,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 5 * alpha,
+		marginLeft: 14 * alpha,
 	},
 	notificationView: {
 		alignSelf: "center",
@@ -1169,7 +1242,7 @@ const styles = StyleSheet.create({
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 		marginTop: 176 * alpha,
 	},
 	companySloganText: {
@@ -1179,57 +1252,8 @@ const styles = StyleSheet.create({
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		textAlign: "left",
 		marginTop: 3 * alpha,
-	},
-	missionCentreView: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		bottom: 0,
-	},
-	missionlabelText: {
-		backgroundColor: "transparent",
-		color: PRIMARY_COLOR,
-		fontFamily: TITLE_FONT,
-		fontSize: 20 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	missioniconImage: {
-		backgroundColor: "transparent",
-		resizeMode: "contain",
-		width: 93 * alpha,
-		height: 103 * alpha,
-	},
-	missioncenterbuttonButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	missioncenterbuttonButtonImage: {
-		resizeMode: "contain",
-	},
-	missioncenterbuttonButton: {
-		backgroundColor: "white",
-		shadowColor: "rgba(217, 217, 217, 0.5)",
-		shadowRadius: 10,
-		shadowOpacity: 1,
-		height: 120 * alpha,
-		marginLeft: 18 * alpha,
-		marginRight: 18 * alpha,
-		marginTop: 177 * alpha,
-		elevation: 2 * alpha,
 	},
 	
 	menuView: {
@@ -1302,4 +1326,95 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 
+	missionlabelText: {
+		backgroundColor: "transparent",
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 20 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	
+	missioniconImage: {
+		backgroundColor: "transparent",
+		resizeMode: "contain",
+		width: 35 * alpha,
+		height: 35 * alpha,
+		marginLeft: 20 * alpha,
+	},
+	missioncenterbuttonButtonText: {
+		color: "white",
+		fontFamily: TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		marginLeft: 10 * alpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	missioncenterbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	missioncenterbuttonButton: {
+		// backgroundColor: "white",
+		// shadowColor: "rgba(217, 217, 217, 0.5)",
+		// shadowRadius: 10,
+		// shadowOpacity: 1,
+		flex: 1,
+		marginLeft: 20 * alpha,
+		marginRight: 20 * alpha,
+		height: 67 * alpha,
+		// marginTop: 177 * alpha,
+	},
+	
+	missionCenterBackground: {
+		resizeMode: "contain",
+		position: "absolute",
+		width: "100%",
+		height: 67 * alpha,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+	},
+
+	missionCenterReflection: {
+		resizeMode: "contain",
+		position: "absolute",
+		height: 67 * alpha,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+	},
+	missionCentreView: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		flex: 1,
+		padding: 0,
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0,
+	},
+	missionArrow: {
+		width: 10 * alpha,
+		marginRight: 10 * alpha,
+		tintColor: "white",
+		resizeMode: "contain",
+	},
+
+	infoArrow: {
+		width: 9 * alpha,
+		marginLeft: 5 * alpha,
+		height: "100%",
+		tintColor: "rgb(54, 54, 54)",
+		resizeMode: "contain",
+	},
+	howToUseButtonImage: {
+        resizeMode: "contain",
+		tintColor: "rgb(151, 151, 151)",
+		width: 9 * alpha,
+		marginRight: 3 * alpha,
+    },
 })

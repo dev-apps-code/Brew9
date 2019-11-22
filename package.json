@@ -26,10 +26,12 @@
     "geolib": "^3.1.0",
     "json5": "^2.1.1",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "parse-json": "^5.0.0",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.2.tar.gz",
+    "react-native-24h-timepicker": "^1.1.0",
     "react-native-alert-async": "^1.0.3",
     "react-native-auto-height-image": "^1.1.1",
     "react-native-confirmation-code-input": "^1.0.4",
@@ -51,6 +53,7 @@
     "react-native-progress-hud": "^1.0.4",
     "react-native-qrcode-svg": "^5.2.0",
     "react-native-reanimated": "~1.1.0",
+    "react-native-shimmer-placeholder": "git+https://github.com/tomzaku/react-native-shimmer-placeholder.git#expo",
     "react-native-simple-radio-button": "^2.7.3",
     "react-native-snap-carousel": "^3.8.0",
     "react-native-spinkit": "^1.4.1",
@@ -61,6 +64,7 @@
     "react-navigation": "3.11.1",
     "react-redux": "^5.0.2",
     "redux": "3.7.2",
+    "rn-scrollable-picker": "^0.1.12",
     "sentry-expo": "^2.0.1"
   },
   "devDependencies": {

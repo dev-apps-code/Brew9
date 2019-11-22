@@ -7,7 +7,7 @@
 //
 
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, 
-	Keyboard } from "react-native"
+	Keyboard} from "react-native"
 import React from "react"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -20,8 +20,7 @@ import {createAction, Storage} from "../Utils"
 import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
-import Brew9Modal from "../Components/Brew9Modal"
+import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -52,13 +51,6 @@ export default class VerifyUser extends React.Component {
 			code_from_server:"",
 			is_counting: false,
 			count_down: 3,
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "Brew9",
-			modal_cancelable: false,
-			modal_ok_text: null,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 		}
 
 	}
@@ -84,10 +76,7 @@ export default class VerifyUser extends React.Component {
 	onSendPressed = () => {
 		Keyboard.dismiss()
 		if (this.state.is_counting){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please wait for 2 minutes before trying to resend.",
-			})
+			this.refs.toast.show("Please wait for 2 minutes before trying to resend.", TOAST_DURATION)
 			return
 		}
 		this.loadLogin()
@@ -101,43 +90,22 @@ export default class VerifyUser extends React.Component {
 		})
 	}
 
-	renderPopupModal() {
-		return <Brew9Modal
-            title={this.state.modal_title}
-            description={this.state.modal_description}
-            visible={this.state.modal_visible}
-            confirm_text={this.state.modal_ok_text}
-            cancelable={this.state.modal_cancelable}
-            okayButtonAction={this.state.modal_ok_action}
-            cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	loadLogin(){
 		const { dispatch } = this.props
 		const {phone_no, country_code} = this.state
 
 		if (phone_no == null || phone_no == ''){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please ensure you have enter your phone number!",
-			})
+			this.refs.toast.show("Please ensure you have enter your phone number!", TOAST_DURATION)
 			return
 		}
 
 		if (phone_no.length < 7){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Your phone number is too short",
-			})
+			this.refs.toast.show("Your phone number is too short", TOAST_DURATION)
 			return
 		}
 
 		if (country_code == null || country_code == ''){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please ensure you have enter a country code!",
-			})
+			this.refs.toast.show("Please ensure you have enter a country code!", TOAST_DURATION)
 			return
 		}
 
@@ -198,7 +166,9 @@ export default class VerifyUser extends React.Component {
         const { dispatch } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-			
+			this.setState({
+				loading: false,
+			})
             if (eventObject.success) {
 
 				var obj = eventObject.result
@@ -206,19 +176,18 @@ export default class VerifyUser extends React.Component {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
-
-					const { navigate } = this.props.navigation
-					navigate('TabGroupOne')
+					// const { navigate } = this.props.navigation
+					// navigate('Home', {
+					// 	hasLogin: true
+					// })
+					const { navigation } = this.props
+					const { routeName, key } = navigation.getParam('returnToRoute')
+					navigation.navigate({ routeName, key})
 				}                
             }else{
-				this.setState({
-					modal_visible:true,
-					modal_description: eventObject.message,
-				})
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
-			this.setState({
-				loading: false,
-			})
+			
         }
         const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
         dispatch(
@@ -394,7 +363,6 @@ export default class VerifyUser extends React.Component {
 						</Text>
 						</Hyperlink>
 			</View>
-			{this.renderPopupModal()}
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast" position="center"/>
 		</View>

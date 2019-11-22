@@ -17,9 +17,9 @@ import MissionCell from "./MissionCell"
 import MissionCategoryCell from "./MissionCategoryCell"
 import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
-import Brew9Modal from "../Components/Brew9Modal"
-import HudLoading from "../Components/HudLoading"
-import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
+import MissionLoginRequestObject from "../Requests/mission_login_request_object"
+import Toast, {DURATION} from 'react-native-easy-toast'
+import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -58,12 +58,6 @@ export default class MissionCenter extends React.Component {
             loading: false,
             missions: [],
             mission_statements: [],
-            modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
         }
     }
 
@@ -79,17 +73,6 @@ export default class MissionCenter extends React.Component {
         this.props.navigation.goBack()
     }
 
-    renderPopup(){
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-    }
-    
     loadProfile(){
 		const { dispatch, currentMember } = this.props
 
@@ -113,6 +96,7 @@ export default class MissionCenter extends React.Component {
         const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
+            console.log(eventObject)
             if (eventObject.success) {
 
                 var mission_categories = eventObject.result
@@ -128,10 +112,6 @@ export default class MissionCenter extends React.Component {
                     this.loadMissionStatements()
                 })     
             }
-
-            // this.setState({
-            //     loading: false,
-            // })  
         }
         const obj = new MissionRequestObject()
         obj.setUrlId(company_id)
@@ -147,8 +127,7 @@ export default class MissionCenter extends React.Component {
         const { dispatch } = this.props
         this.setState({ loading_list: true })
         const callback = eventObject => {
-            console.log("MissionStatement", eventObject.result)
-            if (eventObject.success) {
+             if (eventObject.success) {
                 this.setState({
                     mission_statements: eventObject.result,
                 }, function(){
@@ -168,24 +147,44 @@ export default class MissionCenter extends React.Component {
         )
     }
 
-    missionRewardClaim = (statement_id) => {
+    missionLogin = () => {
+        console.log("Login")
+        const { dispatch, currentMember } = this.props
+        
+        this.setState({ loading: true })
+        const callback = eventObject => {
+            this.refs.toast.show(eventObject.message, TOAST_DURATION)
+            this.setState({
+                loading: false,
+                mission_statements: eventObject.result,
+            }, function(){
+                this.loadMissionStatements()
+            })
+        }
+        const obj = new MissionLoginRequestObject()
+        obj.setUrlId(currentMember.id);
+        dispatch(
+            createAction('members/missionLogin')({
+                object:obj,
+                callback,
+            })
+        )
+    }
 
+    missionRewardClaim = (statement_id) => {
+        console.log("Claim")
         if (statement_id != undefined) {
             const { dispatch } = this.props
         
             this.setState({ loading: true })
             const callback = eventObject => {
-
-                if (eventObject.success) {
-                    this.update_claim(eventObject.result)
-                    // this.loadProfile()
-                }
+                this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
                     loading: false,
-                    modal_visible: true,
-                    modal_title: "Brew9",
-                    modal_description: eventObject.message
-                })   
+                    mission_statements: eventObject.result,
+                }, function(){
+                    this.loadMissionStatements()
+                })
             }
             const obj = new MissionRewardClaimRequestObject()
             obj.setUrlId(statement_id)
@@ -246,8 +245,9 @@ export default class MissionCenter extends React.Component {
                 point={item.points}
                 status={item.status}
                 progress={item.progress}
+                mission_type={item.mission_type}
                 statement_id={item.statement_id}
-                onStatusPressed={this.missionRewardClaim}
+                onStatusPressed={item.mission_type == "Login" ? this.missionLogin : this.missionRewardClaim}
                 mission_task_count={item.mission_task_count}
                 vouchers={item.mission_vouchers}
                 navigation={this.props.navigation}/>
@@ -277,7 +277,7 @@ export default class MissionCenter extends React.Component {
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
                 }
-                {this.renderPopup()}
+                <Toast ref="toast" position="center"/>
         </View>
     }
 }

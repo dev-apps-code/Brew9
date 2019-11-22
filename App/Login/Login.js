@@ -17,8 +17,7 @@ import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
-import Brew9Modal from "../Components/Brew9Modal"
+import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -75,43 +74,22 @@ export default class Login extends React.Component {
 		}
 	}
 	
-	renderPopupModal() {
-		return <Brew9Modal
-            title={this.state.modal_title}
-            description={this.state.modal_description}
-            visible={this.state.modal_visible}
-            confirm_text={this.state.modal_ok_text}
-            cancelable={this.state.modal_cancelable}
-            okayButtonAction={this.state.modal_ok_action}
-            cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-	
 	loadLogin(){
 		const { dispatch } = this.props
 		const {phone_no, country_code} = this.state
 
 		if (phone_no == null || phone_no == ''){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please ensure you have enter your phone number!",
-			})
+			this.refs.toast.show("Please ensure you have enter your phone number!", TOAST_DURATION)
 			return
 		}
 
 		if (phone_no.length < 7){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Your phone number is too short",
-			})
+			this.refs.toast.show("Your phone number is too short", TOAST_DURATION)
 			return
 		}
 
 		if (country_code == null || country_code == ''){
-			this.setState({
-				modal_visible:true,
-				modal_description: "Please ensure you have enter a country code!",
-			})
+			this.refs.toast.show("Please ensure you have enter a country code!", TOAST_DURATION)
 			return
 		}
 
@@ -320,9 +298,7 @@ export default class Login extends React.Component {
 						</View>
 				</TouchableOpacity>
 			</View>
-			{this.renderPopupModal()}
-			<Toast ref="toast"
-            position="center"/>
+			<Toast ref="toast" position="center"/>
 			<HudLoading isLoading={this.state.loading}/>
 		</View>
 	}

@@ -25,7 +25,7 @@ export default class CreditsHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Credits",
+			title: "Wallet History",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -185,7 +185,7 @@ export default class CreditsHistory extends React.Component {
 						/> :<View
 						style={styles.blankView}>
 						<Text
-							style={styles.noLabelText}>No Point History</Text>
+							style={styles.noLabelText}>No Credit History</Text>
 					</View>
 						}
 				</View> 

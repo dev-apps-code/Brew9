@@ -21,6 +21,11 @@ export function updateProfile(authtoken,object) {
    return postMultipartMethod(authtoken,object)
 }
 
+export function updateAvatar(authtoken,object) {
+   console.log("Service")
+   return postMultipartMethod(authtoken,object)
+}
+
 export function updatePhoneNumber(authtoken,object) {
    return postMethod(authtoken,object)
 }
@@ -30,7 +35,6 @@ export function verifyPhoneNumberUpdate(authtoken,object) {
 }
 
 export function login(authtoken,object) {
-   console.log("return yes")
    return postMethod(authtoken,object)
 }
 
@@ -67,5 +71,9 @@ export function missionStatements(authtoken,object) {
 }
 
 export function missionRewardClaim(authtoken,object) {
+   return postMethod(authtoken,object)
+}
+
+export function missionLogin(authtoken, object) {
    return postMethod(authtoken,object)
 }

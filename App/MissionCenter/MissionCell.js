@@ -24,33 +24,32 @@ export default class MissionCell extends React.Component {
 	}
 
 	onStatusPressed = (statement_id) => {
+		
 		if (this.props.status != undefined && this.props.status != "") {
 			if (this.props.status == "Completed") {
 				this.props.onStatusPressed(statement_id)
 			}
 		}
-		
+		if (this.props.mission_type == "Login") {
+			this.props.onStatusPressed()
+		}
 	}
 
 	render() {
 	
-		var reward_string = ""
-		var mission_vouchers = this.props.vouchers
+		var status_string = ""
+		var voucher_length = this.props.vouchers.length
 
-		if (this.props.point > 0) {
-			reward_string += `+${this.props.point} points `
-		}
-
-		if (this.props.vouchers.length > 0) {
-			for (var index in mission_vouchers) {
-				var voucher = mission_vouchers[index]
-				reward_string += (voucher.voucher.name + " x" + voucher.quantity)
-				if (index < mission_vouchers.length) {
-					reward_string += ", "
-				}
-			}
+		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
+			status_string = "Check In"
+		} else {
+			status_string = this.props.status
 		}
 		
+		const vouchers = this.props.vouchers.map((item, key) => {
+			return <Text key={key}>{item.voucher.name} x <Text style={styles.highlight}>{item.quantity}</Text>{key < voucher_length - 1 ? ", " : ""}</Text>
+		})
+
 		progress = this.props.progress != undefined ? this.props.progress : 0
 		mission_progress_text = (this.props.mission_task_count != null && this.props.mission_task_count != "") ?`(${progress}/${this.props.mission_task_count})` : ""
 
@@ -72,11 +71,13 @@ export default class MissionCell extends React.Component {
 						<Text
 							style={styles.titleText}>{this.props.title} {mission_progress_text}</Text>
 						
-							<Text
-								style={styles.descriptionText}>{reward_string}</Text>
 							{/* <Text
-								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text> */}
-						
+								style={styles.descriptionText}>{reward_string}</Text> */}
+							{this.props.point != null && (<Text
+								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text>)}
+							{this.props.vouchers.length > 0 && (<Text
+								style={styles.voucherText}>{vouchers}</Text>)}
+							<View style={styles.spacer} />
 						<View
 							style={{
 								flex: 1,
@@ -99,7 +100,7 @@ export default class MissionCell extends React.Component {
 						<View
 							style={this.props.status != "Pending" ? styles.statusCompleteView : styles.statusView}>
 							<Text
-								style={styles.completeText}>{this.props.status}</Text>
+								style={styles.completeText}>{status_string}</Text>
 						</View>
 						</TouchableOpacity>
 					</View>
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -126,14 +127,24 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		width: 250 * alpha,
 		backgroundColor: "transparent",
-		color: "black",
+		color: "rgb(54, 54, 54)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		marginTop: 2 * alpha,
-		marginBottom: 18 * alpha,
+	},
+	voucherText: {
+		width: 250 * alpha,
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		marginTop: 2 * alpha,
 	},
 	lineView: {
 		backgroundColor: "rgb(241, 241, 241)",
@@ -152,9 +163,9 @@ const styles = StyleSheet.create({
 	},
 	statusCompleteView: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 9.5 * alpha,
-		width: 70 * alpha,
-		height: 19 * alpha,
+		borderRadius: 11 * alpha,
+		width: 80 * alpha,
+		height: 22 * alpha,
 		marginRight: 20 * alpha,
 		justifyContent: "center",
 		alignItems: "center",
@@ -162,13 +173,16 @@ const styles = StyleSheet.create({
 	completeText: {
 		backgroundColor: "transparent",
 		color: "white",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 	},
 	highlight: {
 		color: PRIMARY_COLOR,
+	},
+	spacer: {
+		marginBottom: 18 * alpha,
 	}
 })

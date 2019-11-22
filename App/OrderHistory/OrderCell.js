@@ -86,7 +86,7 @@ export default class OrderCell extends React.Component {
 							<Text
 								style={styles.completeButtonText}>{this.props.status}</Text>
 							<Image
-								source={require("./../../assets/images/group-2.png")}
+								source={require("./../../assets/images/next.png")}
 								style={styles.completeButtonImage}/>
 						</TouchableOpacity>
 					</View>
@@ -212,7 +212,9 @@ const styles = StyleSheet.create({
 		marginRight: 15 * alpha,
 	},
 	completeButtonImage: {
+		tintColor: "rgb(149, 149, 149)",
 		resizeMode: "contain",
+		width: 10 * alpha,
 		marginLeft: 10 * alpha,
 	},
 	orderitemsView: {

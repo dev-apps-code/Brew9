@@ -336,7 +336,7 @@ export default class CheckoutVoucher extends React.Component {
                         onPress={this.onHowToUsePressed}
                         style={styles.howToUseButton}>
                         <Image
-                            source={require("./../../assets/images/group-15-2.png")}
+                            source={require("./../../assets/images/exclaimation.png")}
                             style={styles.howToUseButtonImage}/>
                         <Text
                             style={styles.howToUseButtonText}>How to use</Text>
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     availableButtonText: {
         color: "rgb(68, 68, 68)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         textAlign: "center",
     },
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     usedButtonText: {
         color: "rgb(118, 118, 118)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         textAlign: "center",
     },
@@ -501,7 +501,9 @@ const styles = StyleSheet.create({
     },
     howToUseButtonImage: {
         resizeMode: "contain",
-        marginRight: 10 * alpha,
+		tintColor: "rgb(151, 151, 151)",
+		width: 10 * alpha,
+		marginRight: 5 * alpha,
     },
     howToUseButtonText: {
         color: "rgb(151, 151, 151)",

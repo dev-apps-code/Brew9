@@ -15,7 +15,9 @@ import {
   currentOrder,
   qrCodeScan,
   missionStatements,
-  missionRewardClaim
+  missionRewardClaim,
+  missionLogin,
+  updateAvatar
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -148,6 +150,24 @@ export default {
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             updateProfile,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadUpdateAvatar({ payload }, { call, put, select })
+    {
+      console.log("Avatar")
+      try{
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            updateAvatar,
             authtoken,
             object,
         )
@@ -366,7 +386,6 @@ export default {
     *missionRewardClaim({ payload }, { call, put, select }) 
     {
     try{
-        console.log("MemberClaimReward")
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
@@ -381,6 +400,23 @@ export default {
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     }, 
-
+    *missionLogin({ payload }, { call, put, select }) 
+    {
+      console.log("missionLogin")
+    try{
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            missionLogin,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result.member))
+        }
+        typeof callback === 'function' && callback(eventObject)
+        } catch (err) { }
+    }, 
   },
 }

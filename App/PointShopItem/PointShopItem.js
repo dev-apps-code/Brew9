@@ -8,7 +8,7 @@
 
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
-import {commonStyles} from "../Common/common_style"
+import {commonStyles, TOAST_DURATION} from "../Common/common_style"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import PointProductsItemRequestObject from "../Requests/point_products_item_request_object"
 import {createAction, toTitleCase} from "../Utils";
@@ -16,7 +16,6 @@ import {connect} from "react-redux";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import RedeemRequestObject from "../Requests/redeem_request_object"
-import Brew9Modal from "../Components/Brew9Modal"
 import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 @connect(({ members,shops }) => ({
@@ -55,9 +54,6 @@ export default class PointShopItem extends React.Component {
 		this.state = {
 			loading: false,
 			data: [],
-			modal_title:'',
-			modal_description:'',
-			modal_visible:false
 		}
 	}
 
@@ -69,21 +65,7 @@ export default class PointShopItem extends React.Component {
 		})	
 	}
 
-	renderModal(){
-		
-		return (
-			<Brew9Modal
-				title={this.state.modal_title}
-				description={this.state.modal_description}
-				visible={this.state.modal_visible}
-				okayButtonAction={()=> {
-					this.setState({modal_visible:false})
-					this.props.navigation.goBack()
-				}}
-			/>
-		)
-	}
-
+	
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
@@ -121,13 +103,9 @@ export default class PointShopItem extends React.Component {
 			}) 
 
 			if (eventObject.success) {
-				this.setState({
-					modal_title:'Successful',
-					modal_description:eventObject.message,
-					modal_visible:true
-				})		
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}else{
-				this.refs.toast.show(eventObject.message);
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}		
 		}
 		const obj = new RedeemRequestObject(selectedShop.id)
@@ -201,9 +179,7 @@ export default class PointShopItem extends React.Component {
 					<Text
 						style={styles.purchaseButtonText}>Purchase</Text>
 				</TouchableOpacity>
-				{this.renderModal()}
-				<Toast ref="toast"
-            position="center"/>
+				<Toast ref="toast" position="center"/>
 			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}

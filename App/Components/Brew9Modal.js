@@ -10,6 +10,7 @@ class Brew9Modal extends Component {
   
     return (
         <Modal
+            style={styles.customStyle}
             width={windowWidth*0.8}
             visible={this.props.visible}
             footer={
@@ -44,7 +45,9 @@ class Brew9Modal extends Component {
 }
 
 const styles = StyleSheet.create({
-
+  customStyle: {
+    backgroundColor: "transparent"
+  },
   container: {
     flex: 1,
     alignItems: 'center',

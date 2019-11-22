@@ -104,7 +104,7 @@ export default class PointsCell extends React.Component {
 							style={this.props.shop ? styles.pointsText : styles.pointsText2 }>{this.props.value}</Text>
 						{this.props.shop ?
 							<Image
-								source={require("./../../assets/images/group-2.png")}
+								source={require("./../../assets/images/next.png")}
 								style={styles.arrowImage}/> : null
 						}
 					</View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(61, 61, 61)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "left",
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(61, 61, 61)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "left",
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(151, 151, 151)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -210,8 +210,7 @@ const styles = StyleSheet.create({
 	arrowImage: {
 		backgroundColor: "transparent",
 		resizeMode: "contain",
-		width: 9 * alpha,
-		height: 10 * alpha,
+		width: 10 * alpha,
 	},
 })
 

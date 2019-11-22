@@ -6,16 +6,20 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native"
+import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList} from "react-native"
 import React from "react"
+import {createAction} from "../Utils";
 import {connect} from "react-redux";
 import {KURL_INFO} from "../Utils/server";
-
 import { alpha, fontAlpha} from "../Common/size";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DEFAULT_GREY_BACKGROUND, BUTTONBOTTOMPADDING} from "../Common/common_style";
+import TopUpCard from "./TopUpCard"
+import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
+import TopUpOrderRequestObject from "../Requests/top_up_order_request_object";
 
-@connect(({ members }) => ({
-	members: members.profile
+@connect(({ members, shops }) => ({
+	members: members.profile,
+	selectedShop: shops.selectedShop
 }))
 export default class MemberWallet extends React.Component {
 
@@ -23,7 +27,7 @@ export default class MemberWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Wallet",
+			title: "Balance",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -45,15 +49,93 @@ export default class MemberWallet extends React.Component {
 
 	constructor(props) {
 		super(props)
+		this.state = {
+			loading_list: false,
+			data: [],
+			selectedTopUpProduct: null,
+			selected: 0,
+			order:null,
+			toggleTopUp: false,
+		}
 	}
 
 	componentDidMount() {
+		this.loadTopUpProducts()
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
 	}
 
+	loadTopUpProducts(){
+		const { dispatch, members } = this.props
+
+		this.setState({ loading_list: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				console.log("Top Up", eventObject.result)
+				this.setState({
+					data: eventObject.result,
+				},function () {
+					if (eventObject.result.length > 0) {
+						this.setState({
+							selectedTopUpProduct: eventObject.result[0]
+						})
+					}
+				}.bind(this))
+			}
+			this.setState({
+				loading_list: false,
+			})
+		}
+		const obj = new TopUpProductsRequestObject()
+		obj.setUrlId(members.company_id)
+		dispatch(
+			createAction('companies/loadTopUpProducts')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
+	loadMakeOrder(topUpProductId){
+		const { navigate } = this.props.navigation
+		const { dispatch, selectedShop } = this.props
+		const {selectedTopUpProduct} = this.state
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			this.setState({
+				loading: false,
+			})       
+			if (eventObject.success) {
+
+				const order = eventObject.result
+				this.setState({order:order})
+				navigate("PaymentsWebview", {
+					name: `Top Up - ${selectedTopUpProduct.price}`,
+					order_id: order.receipt_no,
+					session_id:order.session_id,
+					amount: order.total,
+					type:'top_up',
+				})
+			}else{
+				this.setState({
+					modal_visible:true,
+					modal_description: eventObject.message,
+				})
+			}
+		}
+		const obj = new TopUpOrderRequestObject(selectedShop.id)
+		obj.setUrlId(topUpProductId) 
+		dispatch(
+			createAction('top_up/loadMakeOrder')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+	
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
@@ -67,179 +149,100 @@ export default class MemberWallet extends React.Component {
 	}
 
 	onTopUpPressed = () => {
-		const { navigate } = this.props.navigation
 
-		navigate("TopUpWallet")
+		const {selectedTopUpProduct} = this.state
+		
+		this.loadMakeOrder(selectedTopUpProduct.id)
 	}
+	
+	onTopUpCardPressed = (topUpProduct,index) => {
 
-	onFaqPressed = () => {
-		const { navigate } = this.props.navigation
-		const { members } = this.props
-
-		navigate("WebCommon", {
-			title: 'FAQs',
-			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
+		this.setState({
+			selectedTopUpProduct: topUpProduct,
+			selected: index,
+			toggleTopUp: true
 		})
+	}
+	
+	renderTopuplistFlatListCell = ({ item, index }) => {
+	
+		return <TopUpCard
+			navigation={this.props.navigation}
+			image={item.image}
+			price={item.price}
+			index={index}
+			item={item}
+			currency={this.props.members.currency}
+			selected={this.state.selected}
+			onPressItem={this.onTopUpCardPressed}
+		/>
 	}
 
 	render() {
 
 		const { members } = this.props
-
+		const { toggleTopUp } = this.state
 		return <View
 			style={styles.walletView}>
 			<ScrollView
-				style={styles.viewScrollView}>
+				style={styles.walletScrollView}>
 				<View
-					style={styles.cardviewView}>
+					style={styles.walletSummaryView}>
 					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							right: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 15 * alpha,
-						}}>
-						<View
-							style={styles.greyblockView}/>
-						<View
-							style={styles.rightblockView}/>
-					</View>
-					<Image
-						source={require("./../../assets/images/card-04-2.png")}
-						style={styles.card04Image}/>
-				</View>
-				<View
-					style={styles.infoView}>
-					<View
-						style={styles.balanceView}>
+						style={styles.walletCreditView}>
 						<Text
-							style={styles.availableBalanceText}>Available Balance</Text>
-						<View
-							style={styles.creditView}>
-							<Text
-								style={styles.textText}>${parseFloat(members.credits).toFixed(2)}</Text>
-						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<TouchableOpacity
-							onPress={() => this.onTopUpPressed()}
-							style={styles.topUpButton}>
-							<Text
-								style={styles.topUpButtonText}>Top Up</Text>
-						</TouchableOpacity>
+							style={styles.walletCreditText}>Balance</Text>
+						<Text
+							style={styles.creditsText}>${parseFloat(members.credits).toFixed(2)}</Text>
+						
 					</View>
-					
-					
+					<View
+						style={{
+							flex: 1,
+						}}/>
+					<TouchableOpacity
+						onPress={() => this.onTransactionHistoryPressed()}
+						style={styles.creditHistoryButton}>
+						<Image
+							source={require("./../../assets/images/icon-rule.png")}
+							style={styles.creditHistoryButtonImage}/>
+						<Text
+							style={styles.creditHistoryButtonText}>Balance History</Text>
+					</TouchableOpacity>
 				</View>
 				<View
-						style={styles.menuView}>
-					
-						<TouchableOpacity
-							onPress={() => this.onTransactionHistoryPressed()}
-							style={styles.menuRowbuttonButton}>
-							<View
-								style={styles.menuRowView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											height: 24 * alpha,
-											marginLeft: 20 * alpha,
-											marginRight: 20 * alpha,
-											flexDirection: "row",
-											alignItems: "center",
-										}}>
-										<Text
-											style={styles.menuRowLabelText}>Credit History</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<Image
-												source={require("./../../assets/images/forward.png")}
-												style={styles.menuRowArrowImage}/>
-									</View>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-									}}>
-									
-										<Text
-											style={styles.menuRowDescriptionText}></Text>
-									
-									<View
-										style={styles.menuRowLineView}/>
-								</View>
-							</View>
-						</TouchableOpacity>
-						<TouchableOpacity
-								onPress={() => this.onFaqPressed()}
-								style={styles.menuRowbuttonButton}>
-							<View
-								style={styles.menuRowView}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-										justifyContent: "center",
-									}}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											height: 24 * alpha,
-											marginLeft: 20 * alpha,
-											marginRight: 20 * alpha,
-											flexDirection: "row",
-											alignItems: "center",
-										}}>
-										<Text
-											style={styles.menuRowLabelText}>FAQs</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<Image
-												source={require("./../../assets/images/forward.png")}
-												style={styles.menuRowArrowImage}/>
-									</View>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										height: 58 * alpha,
-									}}>
-								</View>
-							</View>
-						</TouchableOpacity>
-					</View>
+					style={styles.headerView}>
+					<Text
+						style={styles.transactionHistoryText}>TopUp Amount</Text>
+				</View>
+				<View
+					style={styles.topuplistFlatListViewWrapper}>
+					<FlatList
+						renderItem={this.renderTopuplistFlatListCell}
+						data={this.state.data}
+						numColumns={2}
+						style={styles.topuplistFlatList}
+						selected={this.state.selected}
+						keyExtractor={(item, index) => index.toString()}/>
+				</View>
 			</ScrollView>
+			{ toggleTopUp == true && (
+				<View
+				style={styles.topUpView}>
+				<Text
+					style={styles.selectedValueText}>${this.state.selectedTopUpProduct ? this.state.selectedTopUpProduct.price : '' }</Text>
+				<View
+					style={{
+						flex: 1,
+					}}/>
+				<TouchableOpacity
+					onPress={() => this.onTopUpPressed()}
+					style={styles.topupButton}>
+					<Text
+						style={styles.topupButtonText}>Top Up</Text>
+				</TouchableOpacity>
+			</View>
+			)}
 		</View>
 	}
 }
@@ -265,329 +268,132 @@ const styles = StyleSheet.create({
 		tintColor: "black",
 	},
 	walletView: {
-		backgroundColor: "white",
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		flex: 1,
 	},
-	viewScrollView: {
+	walletScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
 		marginBottom: 1 * alpha,
 	},
-	cardviewView: {
-		backgroundColor: "transparent",
-		height: 211 * alpha,
-		marginLeft: 0 * alpha,
-		marginRight: 0 * alpha,
-	},
-	greyblockView: {
-		backgroundColor: "rgb(248, 248, 248)",
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		height: 123 * alpha,
-	},
-	rightblockView: {
+	walletSummaryView: {
 		backgroundColor: "white",
-		borderRadius: 10 * alpha,
-		shadowColor: "rgba(144, 144, 144, 0.5)",
-		shadowRadius: 2 * alpha,
-		shadowOpacity: 1,
-		position: "absolute",
-		right: -12 * alpha,
-		width: 24 * alpha,
-		top: 52 * alpha,
-		bottom: 0 * alpha,
+		height: 130 * alpha,
+		marginRight: 1 * alpha,
+		alignItems: "flex-end",
 	},
-	card04Image: {
-		resizeMode: "cover",
+	walletCreditView: {
 		backgroundColor: "transparent",
-		position: "absolute",
 		alignSelf: "center",
-		width: 304 * alpha,
-		top: 34 * alpha,
-		height: 177 * alpha,
-	},
-	infoView: {
-		backgroundColor: "transparent",
+		flexDirection: "column",
+		width: 300 * alpha,
 		flex: 1,
-		marginRight: 10 * alpha,
+		marginTop: 18 * alpha,
 	},
-	balanceView: {
-		backgroundColor: "transparent",
-		alignSelf: "center",
-		width: 158 * alpha,
-		height: 113 * alpha,
-		marginTop: 16 * alpha,
-		alignItems: "center",
-	},
-	availableBalanceText: {
-		color: "rgb(58, 58, 58)",
+	walletCreditText: {
+		color: "rgb(59, 59, 59)",
 		fontFamily: TITLE_FONT,
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		alignItems: "center",
-		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	creditView: {
-		backgroundColor: "transparent",
-		alignSelf: "center",
-		width: 200 * alpha,
-		height: 34 * alpha,
-		marginTop: 7 * alpha,
-		alignItems: "center",
-	},
-	textText: {
-		backgroundColor: "transparent",
-		color: "rgb(58, 58, 58)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 15 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
-		marginTop: 7 * alpha,
-	},
-	currencyText: {
 		backgroundColor: "transparent",
-		color: "rgb(58, 58, 58)",
+		alignSelf: "center",
+	},
+	creditsText: {
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 31 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
+		alignSelf: "center",
+		top: 5 * alpha,
+	},
+	creditHistoryButtonImage: {
+		resizeMode: "contain",
+		marginRight: 5 * alpha,
+	},
+	creditHistoryButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 15 * alpha,
+		marginRight: 19 * alpha,
+		marginBottom: 18 * alpha,
+	},
+	creditHistoryButtonText: {
+		color: "rgb(30, 29, 29)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
+		fontWeight: "normal",
 		textAlign: "left",
-		alignSelf: "flex-start",
-		marginTop: 7 * alpha,
-	},
-	userCreditText: {
 		backgroundColor: "transparent",
-		color: "rgb(58, 58, 58)",
-		fontFamily: TITLE_FONT,
-		fontSize: 27 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
 	},
-	topUpButton: {
-		backgroundColor: "rgb(70, 70, 70)",
-		borderRadius: 3 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
+	headerView: {
+		backgroundColor: "white",
+		height: 47 * alpha,
+		marginRight: 1 * alpha,
+		marginTop: 10 * alpha,
 		justifyContent: "center",
-		padding: 0,
-		width: 158 * alpha,
-		height: 36 * alpha,
+		alignItems: "flex-start",
 	},
-	topUpButtonImage: {
-		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
-	topUpButtonText: {
-		color: "white",
-		fontFamily: NON_TITLE_FONT,
+	transactionHistoryText: {
+		backgroundColor: "transparent",
+		color: "rgb(59, 59, 59)",
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "left",
+		marginLeft: 26 * alpha,
 	},
-	optionsView: {
-		backgroundColor: "transparent",
-		height: 248 * alpha,
+	topuplistFlatListViewWrapper: {
+		flex: 1,
+		backgroundColor: "white"
 	},
-	seperatorView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		alignSelf: "center",
-		width: 354 * alpha,
-		height: 1 * alpha,
-		marginTop: 48 * alpha,
+	topuplistFlatList: {
+		width: "100%",
+		height: "100%",
 	},
-	transactionHistoryView: {
-		backgroundColor: "transparent",
-		height: 51 * alpha,
-		marginLeft: 1 * alpha,
-		marginRight: 1 * alpha,
-	},
-	transactionhistoryButton: {
-		backgroundColor: "transparent",
+	topUpView: {
+		height: 52 * alpha ,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		height: 51 * alpha,
+		marginBottom: BUTTONBOTTOMPADDING
 	},
-	transactionhistoryButtonText: {
-		color: "black",
-		fontSize: 12 * fontAlpha,
+	selectedValueText: {
+		color: "rgb(59, 59, 59)",
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-	},
-	transactionhistoryButtonImage: {
-		resizeMode: "contain",
-	},
-	
-	seperatorTwoView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		width: 356 * alpha,
-		height: 1 * alpha,
-		marginTop: 22 * alpha,
-	},
-	transactionHistoryText: {
 		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-		marginLeft: 20 * alpha,
+		marginLeft: 21 * alpha,
 	},
-	faqView: {
-		backgroundColor: "transparent",
-		height: 51 * alpha,
-		marginRight: 1 * alpha,
-	},
-	faqButtonImage: {
-		resizeMode: "contain",
-	},
-	faqButton: {
-		backgroundColor: "transparent",
+	topupButton: {
+		backgroundColor: "rgb(0, 178, 227)",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
-		height: 51 * alpha,
+		width: 129 * alpha,
+		height: 52 * alpha,
 	},
-	faqButtonText: {
+	topupButtonText: {
 		color: "white",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	
-	seperatorThreeView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		width: 354 * alpha,
-		height: 1 * alpha,
-		marginTop: 17 * alpha,
-	},
-	faqText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 20 * alpha,
 	},
-	changePasswordView: {
-		backgroundColor: "transparent",
-		height: 51 * alpha,
-	},
-	
-	seperatorFourView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		width: 356 * alpha,
-		height: 1 * alpha,
-		marginTop: 23 * alpha,
-	},
-	changePasswordText: {
-		color: "rgb(41, 41, 41)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 20 * alpha,
-	},
-	resetPasswordView: {
-		backgroundColor: "transparent",
-		height: 51 * alpha,
-		marginRight: 1 * alpha,
-	},
-	
-	seperatorFiveView: {
-		backgroundColor: "rgb(244, 244, 244)",
-		width: 356 * alpha,
-		height: 1 * alpha,
-	},
-	resetPasswordText: {
-		backgroundColor: "transparent",
-		color: "rgb(41, 41, 41)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		textAlign: "left",
-		marginLeft: 20 * alpha,
-	},
-
-	menuView: {
-		backgroundColor: "transparent",
-		flex: 1,
-		marginTop: 13 * alpha,
-		marginBottom: 13 * alpha,
-	},
-
-	menuRowView: {
-		backgroundColor: "transparent",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	menuRowLabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	menuRowDisableLabelText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	menuRowDescriptionText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginRight: 23 * alpha,
-	},
-	arrowTwoView: {
-		backgroundColor: "transparent",
-		width: 7 * alpha,
-		height: 8 * alpha,
-	},
-	menuRowbuttonButton: {
-		backgroundColor: "transparent",
-		flex: 1,
-	},
-	
-	menuRowLineView: {
-		backgroundColor: "rgb(245, 245, 245)",
-		position: "absolute",
-		alignSelf: "center",
-		width: 375 * alpha,
-		top: 57 * alpha,
-		height: 1 * alpha,
-		left: 20 * alpha,
-	},
-	menuRowArrowImage: {
-		width: 10 * alpha,
-		tintColor: "rgb(195, 195, 195)",
+	topupButtonImage: {
 		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
 })

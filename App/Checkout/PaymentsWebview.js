@@ -10,11 +10,11 @@ import { View, StyleSheet, TouchableOpacity, Image, Text, ActivityIndicator } fr
 import React from "react";
 import {connect} from "react-redux";
 import ProfileRequestObject from '../Requests/profile_request_object'
-import Brew9Modal from "../Components/Brew9Modal"
 import {createAction} from '../Utils'
 import { alpha, fontAlpha } from "../Common/size";
 import { WebView } from "react-native-webview";
-import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT,TOAST_DURATION } from "../Common/common_style";
+import Toast, {DURATION} from 'react-native-easy-toast'
 import {KPAYMENTYURL} from '../Utils/server.js'
 @connect(({ members }) => ({
 	currentMember: members.profile,
@@ -61,11 +61,6 @@ export default class PaymentsWebview extends React.Component {
       name,
       type,
       session_id,
-      modal_visible: false,
-      modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_text: null,
     }
   }
 
@@ -84,18 +79,7 @@ export default class PaymentsWebview extends React.Component {
     this.props.navigation.goBack();
   };
 
-	renderPopup() {
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			confirm_text={this.state.modal_ok_text}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
+	
   render() {
     const { name , amount, order_id, type,session_id} = this.state
 
@@ -107,7 +91,7 @@ export default class PaymentsWebview extends React.Component {
           style={styles.webviewWebView}          
           source={{ uri:  `${KPAYMENTYURL}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}` }}
         />    
-        {this.renderPopup()}  
+        <Toast ref="toast" position="center"/>
       </View>
     );
   }
@@ -148,6 +132,7 @@ export default class PaymentsWebview extends React.Component {
         }
 
         if (params.success == "true"){
+          this.refs.toast.show(eventObject.message, 500)
           this.setState({
             modal_title:'Brew9',
             modal_description:decodeURIComponent(params.message),

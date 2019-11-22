@@ -14,7 +14,7 @@ import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
 import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND} from "../Common/common_style";
 @connect(({ members }) => ({
 	members: members.profile
 }))
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
 		padding: 10 * alpha,
 	},
 	pointHistoryView: {
-		backgroundColor: "rgb(243, 243, 243)",
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		flex: 1,
 	},
 	contentView: {
@@ -289,10 +289,10 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		top: 5 * alpha,
 	},
-	pointsExpiryText: {
+pointsExpiryText: {
 		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
 	},
 	pointRuleButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10 * alpha,
+		marginRight: 5 * alpha,
 	},
 	pointRuleButton: {
 		backgroundColor: "transparent",

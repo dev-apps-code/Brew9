@@ -23,7 +23,7 @@ import {
 	Alert,
 	Linking,
 	AppState,
-	Keyboard	
+	Keyboard,
 } from "react-native"
 import React from "react"
 import Modal from "react-native-modal"
@@ -48,10 +48,9 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
-import Brew9Modal from "../Components/Brew9Modal";
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
-import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
 import ProfileRequestObject from '../Requests/profile_request_object'
@@ -147,12 +146,6 @@ export default class Home extends React.Component {
 			isPromoToggle: false,
 			ignoreVersion: false,
 			appState: AppState.currentState,
-			modal_visible: false,
-			modal_description: "",
-			modal_title: "",
-			modal_cancelable: false,
-			modal_ok_action: ()=> {this.setState({modal_visible:false})},
-			modal_cancel_action: ()=> {this.setState({modal_visible:false})},
 			image_isHorizontal: false,
 			image_check: false,
 			image_isLong: false,
@@ -160,6 +153,7 @@ export default class Home extends React.Component {
 			first_time_buy: false,
 			location: null,
 			distance: "-",
+			member_distance: 1000,
 			first_promo_popup: false,
 			monitorLocation: null,
 		}
@@ -174,18 +168,16 @@ export default class Home extends React.Component {
 		if (currentMember != null){
 			navigate("ScanQr")
 		}else{			
-			this.setState({
-				modal_visible: true, 
-				modal_title: "Brew9",
-				modal_description: "You need to login before you can topup" , 
-				modal_ok_action: ()=> {
-					this.setState({modal_visible:false})
-					this.props.navigation.navigate("VerifyUserStack")
-				},				
-			})	
+			this.refs.toast.show("You need to login before you can topup", TOAST_DURATION, () => {
+				this.props.navigation.navigate("VerifyUserStack")
+			});
 		}
 	}
 
+	componentDidUpdate() {
+		this.check_promotion_trigger()
+	}
+	
 	registerForPushNotificationsAsync = async() => {
 		const { status: existingStatus } = await Permissions.getAsync(
 		  Permissions.NOTIFICATIONS
@@ -260,7 +252,7 @@ export default class Home extends React.Component {
 			const prevLongInRad = location.coords.longitude
 			const latInRad = shop.latitude
 			const longInRad = shop.longitude
-			console.log("Shop", latInRad, longInRad, "User", prevLatInRad, prevLongInRad)
+			// console.log("Shop", latInRad, longInRad, "User", prevLatInRad, prevLongInRad)
 			var pdis = getPreciseDistance(
 				{ latitude: prevLatInRad, longitude: prevLongInRad },
 				{ latitude: latInRad, longitude: longInRad }
@@ -272,14 +264,14 @@ export default class Home extends React.Component {
 		
 	setDistanceString(calculated_distance) {
 		var distance_string = ""
-		console.log(calculated_distance)
-		var parseDistance = parseFloat(calculated_distance).toFixed(2)
+		// console.log(calculated_distance)
+		var parseDistance = calculated_distance
 		if (parseDistance > 1000 ) {
-			distance_string = `${parseDistance/1000}km`
+			distance_string = `${parseFloat(parseDistance/1000).toFixed(1)}km`
 		} else {
 			distance_string = `${parseDistance}m`
 		}
-		this.setState({distance : distance_string})
+		this.setState({distance : distance_string, member_distance: (parseDistance/1000)})
 	}
 
 	toRad(angle) {
@@ -295,7 +287,7 @@ export default class Home extends React.Component {
 			this.getLocationAsync();
 		  }
 		const { dispatch } = this.props
-		
+		this.setState({isPromoToggle: false,})
 		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
@@ -384,6 +376,7 @@ export default class Home extends React.Component {
 					shop: eventObject.result,
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
+					this.check_promotion_trigger()
 					if (loadProducts){
 						this.loadStoreProducts()
 						this.getLocationAsync()
@@ -412,17 +405,6 @@ export default class Home extends React.Component {
 		
 	}
 
-	renderPopup(){
-		return <Brew9Modal
-			title={this.state.modal_title}
-			description={this.state.modal_description}
-			visible={this.state.modal_visible}
-			cancelable={this.state.modal_cancelable}
-			okayButtonAction={this.state.modal_ok_action}
-			cancelButtonAction={this.state.modal_cancel_action}
-		/>
-	}
-
 	loadStoreProducts() {
 
 		const { dispatch, company_id } = this.props
@@ -431,22 +413,9 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				if (eventObject.result.force_upgrade) {
-
-					this.setState({
-						modal_visible: true, 
-						modal_title: "Brew9",
-						modal_description: eventObject.message, 
-						modal_cancelable: eventObject.result.force_upgrade, 
-						modal_ok_action: ()=> {
-							this.setState({modal_visible:false})
-							Linking.openURL(this.state.app_url)
-						},
-						modal_cancel_action: ()=> {
-							this.setState({modal_visible:false})
-							this.loadStoreProducts()
-						},
-						app_url:eventObject.result.url
-					})								
+					this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+						Linking.openURL(eventObject.result.url)
+					});			
 				} else {
 				this.setState({
 					data: eventObject.result,
@@ -503,22 +472,14 @@ export default class Home extends React.Component {
 	}
 
 	onCheckoutPressed = () => {
-		const { cart, promotion } = this.state
+		const { cart, promotion, member_distance } = this.state
 		const { navigate } = this.props.navigation
 		const { navigation } = this.props
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
-			if (selectedShop.distance > selectedShop.max_order_distance_in_km){
-				this.setState({
-					modal_visible: true, 
-					modal_title: "Brew9",
-					modal_description: "You are too far away", 
-					modal_cancelable: false, 
-					modal_ok_action: ()=> {
-						this.setState({modal_visible:false})
-					},
-				})
+			if (member_distance > selectedShop.max_order_distance_in_km){
+				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
@@ -531,6 +492,7 @@ export default class Home extends React.Component {
 						this.onClearPress()
 						this.loadProfile()
 						this.loadShops()
+						navigate("PickUp")
 					}
 				})
 		
@@ -546,6 +508,13 @@ export default class Home extends React.Component {
 				})
 			}
 		} else {
+			this.navigationListener = navigation.addListener('willFocus', payload => {
+				this.removeNavigationListener()
+				const { state } = payload
+				const { params } = state
+				
+				this.loadShops()
+			})
 			navigate("VerifyUserStack")
 		}
 	}
@@ -576,20 +545,12 @@ export default class Home extends React.Component {
 	_toggleDelivery = (value) => {
 		
 		if (value == 1) {
-			this.setState({
-				modal_visible: true, 
-				modal_title: "Brew9",
-				modal_description: "Delivery Option Coming Soon", 
-				modal_cancelable: false, 
-				delivery: value,
-				modal_ok_action: ()=> {
-					this.setState({
-						delivery: 0
-					}, function () {
-						this.setState({modal_visible:false})
-					})
-				}
-			})
+
+			this.refs.toast.show("Delivery not yet available", TOAST_DURATION, () => {
+                this.setState({
+					delivery: 0
+				})
+            })
 		}
 		
 	}
@@ -971,7 +932,7 @@ export default class Home extends React.Component {
 		var promotions_item = []
 		var final_cart_value = cart_total
 
-		if (shop.all_promotions != undefined && shop.all_promotions.length > 0) {
+		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
 			
 			for (var index in shop.all_promotions) {
 
@@ -1545,7 +1506,6 @@ export default class Home extends React.Component {
 
 		return <View style={styles.page1View}>	
 			
-			
 			<View style={styles.topsectionView}>
 				
 				<View
@@ -1695,48 +1655,15 @@ export default class Home extends React.Component {
 									description={shop.location}
 									/>
 							</MapView>
-					{/* <View
-						style={styles.deliveryView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								alignItems: "flex-start",
-							}}>
-							<Text
-								style={styles.deliveryTwoText}>Delivery</Text>
-							<Text
-								style={styles.freeWithRm40SpendText}>Free with RM40 spend</Text>
-							<Text
-								style={styles.deliveredByBrew9Text}>Delivered by Brew9, deliver within 3000m from branch</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.deliverAreaAffectText}>(Deliver area affected by location, weather and other factors,{"\n"}based on the actual distance)</Text>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Text
-								style={styles.deliveryRm5ExtraText}>Delivery RM5 (Extra charge delivery after 21:14)</Text>
-						</View>
-					</View> */}
 					<View
 						style={styles.branchInfoView}>
 						<Text
 							style={styles.branchInfoText}>Outlet Info</Text>
+						{/* { (shop != null && shop.image != null) && ( */}
+						<Image
+							source={{uri: shop.image.thumb.url}}
+							style={styles.shopImage}/>
+						{/* ) } */}
 						<Text
 							style={styles.branchHeaderAddress}>Address:</Text>
 						<Text
@@ -1780,7 +1707,6 @@ export default class Home extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 					</View>
 				</Animated.View>
-				{this.renderPopup()}
 				
 			
 			<View style={styles.bottomAlertView}>
@@ -1788,14 +1714,13 @@ export default class Home extends React.Component {
 				{this.renderBottomBar(cart,shop)}	
 						
 			</View>
-
-			<Toast ref="toast"
-				position="center"/>
 				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
 					{this.renderModalContent(selected_product, shop)}
 				</Modal> : null }
 			
 			{this.renderGallery()}
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+			
 			
 		</View>
 	}
@@ -1892,7 +1817,7 @@ export default class Home extends React.Component {
 		const {currentMember} = this.props
 
 		if (cart.length > 0) {
-			if (shop.all_promotions != undefined && shop.all_promotions.length > 0) {
+			if (shop.all_promotions != null && shop.all_promotions.length > 0) {
 				
 				var has_promo = false
 
@@ -2077,6 +2002,11 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		tintColor: TABBAR_INACTIVE_TINT,
 	},
+	shopImage: {
+		resizeMode: "contain",
+		width: 80 * alpha,
+		height: 45 * alpha,
+	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
@@ -2097,7 +2027,6 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		height: 67 * alpha,
-		// height: 50 * alpha,
 	},
 	branchView: {
 		backgroundColor: "transparent",
@@ -2269,7 +2198,7 @@ const styles = StyleSheet.create({
 	totalAmountView: {
 		backgroundColor: "transparent",
 		width: 280 * alpha,
-		height: 51 * alpha,
+		height: 70 * alpha,
 	},
 	rectangleView: {
 		backgroundColor: "rgb(231, 230, 230)",
@@ -2277,7 +2206,7 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 20 * alpha,
-		height: 41 * alpha,
+		height: 46 * alpha,
 	},
 	shopppingCartView: {
 		backgroundColor: "white",
@@ -2288,7 +2217,7 @@ const styles = StyleSheet.create({
 	},
 	shopppingCartButton: {
 		backgroundColor: "transparent",
-		borderRadius: 22.5,
+		borderRadius: 22.5 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -2332,7 +2261,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginTop: 20 * alpha,
+		marginTop: 25 * alpha,
 	},
 	badgeView: {
 		backgroundColor: "rgb(0, 178, 227)",
@@ -2366,15 +2295,14 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 25 * alpha,
-		height: 36 * alpha,
+		top: 15 * alpha,
+		height: 46 * alpha,
 	},
 	checkoutButtonText: {
 		color: "white",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 	},
 	checkoutButtonImage: {
@@ -2386,7 +2314,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 41 * alpha,
+		bottom: 35 * alpha,
 		flex: 1,
 	},
 	clearAllView: {
@@ -2422,6 +2350,7 @@ const styles = StyleSheet.create({
 	popOutCartFlatList: {
 		backgroundColor: "white",
 		width: "100%",
+		marginBottom: 20 * alpha,
 		flex: 1
 	},
 	popOutCartFlatListViewWrapper: {
@@ -3076,7 +3005,7 @@ const styles = StyleSheet.create({
 		width: windowWidth - 100 *alpha,
 		height: 76 * alpha,
 		marginLeft: 10 * alpha,
-		marginTop: 25 * alpha,
+		marginTop: 15 * alpha,
 		alignItems: "flex-start",
 	},
 	branchInfoText: {
@@ -3162,13 +3091,13 @@ const styles = StyleSheet.create({
 		left: 10 * alpha,
 	},
 	featuredpromoButtonPosition1: {	
-		bottom: 10 * alpha,
+		bottom: 0 * alpha,
 	},
 	featuredpromoButtonPosition2: {	
-		bottom: 50 * alpha,	
+		bottom: 40 * alpha,	
 	},
 	featuredpromoButtonPosition3: {
-		bottom: 100 * alpha,
+		bottom: 90 * alpha,
 	},
 	featuredpromoButtonImage: {
 		resizeMode: "contain",

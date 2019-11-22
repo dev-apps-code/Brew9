@@ -50,7 +50,7 @@ export default class OrderHistory extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading_list: true,
+			loading_list: false,
 			orders_initial: true,
 			orders_data: [],
 			orders_page: 1,
@@ -97,11 +97,15 @@ export default class OrderHistory extends React.Component {
 
 
 	componentDidMount() {
+		const { currentMember } = this.props
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
-		this.loadOrders(this.state.orders_page)
+		if (currentMember != null) {
+			this.loadOrders(this.state.orders_page)
+		}
+		
 	}
 
 	loadGetOrders(){

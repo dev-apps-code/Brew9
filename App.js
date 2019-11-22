@@ -9,7 +9,7 @@ import * as Font from "expo-font";
 import { DangerZone, AppLoading } from "expo";
 import React from "react";
 import * as Sentry from 'sentry-expo';
-import { createBottomTabNavigator } from "react-navigation";
+import { createBottomTabNavigator, NavigationActions } from "react-navigation";
 import Constants from 'expo-constants'
 import {
   createStackNavigator,
@@ -40,7 +40,6 @@ import PayByWallet from "./App/PayByWallet/PayByWallet";
 import MemberCenter from "./App/MemberCenter/MemberCenter";
 import WebCommon from "./App/WebCommon/WebCommon";
 import WebCommonModal from "./App/WebCommonModal/WebCommonModal";
-import TopUpWallet from "./App/TopUpWallet/TopUpWallet";
 import OrderReceipt from "./App/OrderReceipt/OrderReceipt";
 import OrderReview from "./App/OrderReview/OrderReview";
 import OrderInvoice from "./App/OrderInvoice/OrderInvoice";
@@ -58,6 +57,7 @@ import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail";
 import ScanQr from "./App/Home/ScanQr";
 import PayByCard from "./App/PayByCard/PayByCard"
 import CreditHistory from "./App/CreditHistory/CreditHistory"
+import About from "./App/About/About"
 
 import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
@@ -70,6 +70,7 @@ Sentry.init({
   enableInExpoDevelopment: true,
   debug: true
 });
+
 const VerifyUserStack = createStackNavigator(
   {
     VerifyUser: {
@@ -87,7 +88,6 @@ const VerifyUserStack = createStackNavigator(
   },
   {
     initialRouteName: "VerifyUser",
-    mode: "modal",
     header: "none"
   }
 );
@@ -151,25 +151,25 @@ const PushOrder = createStackNavigator(
 );
 
 
-export const VerifyStack = createStackNavigator(
-  {
-    VerifyUser: {
-      screen: VerifyUser
-    },
-    Register: {
-      screen: Register
-    },
-    WebCommonModal: {
-      screen: WebCommonModal
-    },
-    WebCommon: {
-      screen: WebCommon
-    }
-  },
-  {
-    initialRouteName: "VerifyUser"
-  }
-);
+// export const VerifyStack = createStackNavigator(
+//   {
+//     VerifyUser: {
+//       screen: VerifyUser
+//     },
+//     Register: {
+//       screen: Register
+//     },
+//     WebCommonModal: {
+//       screen: WebCommonModal
+//     },
+//     WebCommon: {
+//       screen: WebCommon
+//     }
+//   },
+//   {
+//     initialRouteName: "VerifyUser",
+//   }
+// );
 
 const PushPickup = createStackNavigator(
   {
@@ -252,9 +252,6 @@ const PushProfile = createStackNavigator(
     WebCommon: {
       screen: WebCommon
     },
-    TopUpWallet: {
-      screen: TopUpWallet
-    },
     OrderReceipt: {
       screen: OrderReceipt
     },
@@ -275,14 +272,26 @@ const PushProfile = createStackNavigator(
     },
     VoucherDetail: {
       screen: VoucherDetail
-    }
+    },
+    About: {
+      screen: About
+    },
   },
   {
     initialRouteName: "Profile"
   }
 );
 
+const defaultStackGetStateForAction = PushProfile.router.getStateForAction;
 
+PushProfile.router.getStateForAction = (action, state) => {
+  if (state != undefined) {
+    if(state.index === 0 && action.type === 'Navigation/BACK'){
+      return state;
+    }
+  }
+  return defaultStackGetStateForAction(action, state);
+};
 
 PushOrder.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
@@ -296,12 +305,36 @@ PushOrder.navigationOptions = ({ navigation }) => {
   };
 };
 
+const prevGetStateForVerify = VerifyUserStack.router.getStateForAction;
+VerifyUserStack.router.getStateForAction = (action, state) => {
+
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'VerifyUser') {
+    const routes = [
+      state.routes[state.index]
+    ];
+    return {
+      ...state,
+      routes,
+      index: routes.length - 1,
+    };
+  }
+
+  return prevGetStateForVerify(action, state);
+}
+
 
 const prevGetStateForHome = PushOrder.router.getStateForAction;
 PushOrder.router.getStateForAction = (action, state) => {
 
   if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Home') {
-    return state;
+    const routes = [
+      state.routes[state.index]
+    ];
+    return {
+      ...state,
+      routes,
+      index: routes.length - 1,
+    };
   }
 
   return prevGetStateForHome(action, state);
@@ -446,9 +479,9 @@ const RootNavigator = createStackNavigator(
     TabGroupOne: {
       screen: TabGroupOne
     },
-    VerifyStack: {
-      screen: VerifyStack
-    },
+    // VerifyStack: {
+    //   screen: VerifyStack
+    // },
     VerifyUserStack:{
       screen: VerifyUserStack,
     
@@ -456,7 +489,6 @@ const RootNavigator = createStackNavigator(
   },
   {
     initialRouteName: "FirstScreen",
-    mode: "modal",
     headerMode: "none"
   }
 );
