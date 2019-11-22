@@ -16,7 +16,8 @@ import {
   qrCodeScan,
   missionStatements,
   missionRewardClaim,
-  missionLogin
+  missionLogin,
+  updateAvatar
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -149,6 +150,24 @@ export default {
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             updateProfile,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadUpdateAvatar({ payload }, { call, put, select })
+    {
+      console.log("Avatar")
+      try{
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            updateAvatar,
             authtoken,
             object,
         )

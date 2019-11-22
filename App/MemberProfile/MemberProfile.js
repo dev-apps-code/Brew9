@@ -11,6 +11,7 @@ import React from "react"
 import { alpha, fontAlpha} from "../Common/size"
 import { createAction } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
+import UpdateAvatarRequestObject from "../Requests/update_avatar_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
 import VerifyPhoneNumberUpdateRequestObject from "../Requests/verify_phone_number_update_request_object"
 import * as SecureStore from "expo-secure-store"
@@ -126,6 +127,31 @@ export default class MemberProfile extends React.Component {
 		)
 	}
 	
+	loadUpdateAvatar(formData){
+		const { dispatch } = this.props
+
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.refs.toast.show("Avatar Update Successful", TOAST_DURATION)
+				
+			} else {
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+			}
+			this.setState({
+				loading: false,
+			})
+		}
+		const obj = new UpdateAvatarRequestObject(formData.image)
+		obj.setUrlId(this.state.members.id)
+		dispatch(
+			createAction('members/loadUpdateAvatar')({
+				object:obj,
+				callback,
+			})
+		)
+	}
+
 	loadUpdatePhoneNumber(formData){
 		const { dispatch } = this.props
 		this.setState({ loading: true })
@@ -215,6 +241,9 @@ export default class MemberProfile extends React.Component {
 				}
 				this.setState({
 					image: data
+				}, function () {
+					console.log("Avatar Selected")
+					this.uploadAvatar()
 				})
 			}
 		} else {
@@ -301,6 +330,14 @@ export default class MemberProfile extends React.Component {
 		}
 
 		this.loadVerifyPhoneNumberUpdate(phoneFormData)
+	}
+
+	uploadAvatar = () => {
+		const profileFormData = {
+			image: this.state.image,
+		}
+		// console.log("Save", profileFormData)
+		this.loadUpdateAvatar(profileFormData)
 	}
 
 	onSavePressed = () => {

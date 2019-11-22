@@ -16,9 +16,10 @@ import {createAction, Storage} from "../Utils"
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
-import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
 import Moment from 'moment';
 import TimePicker from "react-native-24h-timepicker";
+import ScrollPicker from 'rn-scrollable-picker';
 
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
@@ -64,16 +65,19 @@ export default class Checkout extends React.Component {
 			promotion_ids: this.props.navigation.getParam("promotion_ids", []),
 			cart:this.props.navigation.getParam("cart", []),
 			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
-			payment_toggle: false,
-			payment_model_visible: false,
+			isPaymentToggle: false,
 			payment_view_height: 0 * alpha,
 			selected_payment: '',
 			pick_up_time: null,
 			pick_up_date: null,
-			selected_hour: "10",
+			selected_hour: "00",
 			selected_minute: "00",
+			hour_range: [],
+			minute_range: [],
+			isPickupToogle: false,
+			pickup_view_height: 150 * alpha,
 		}
-
+		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 	}
 
@@ -87,16 +91,42 @@ export default class Checkout extends React.Component {
 	}
 
 	setTimePickerDefault() {
-		var time_now = new Date()
 
-		var hour = time_now.getHours();
-		var min = time_now.getMinutes();
+		const { selectedShop } = this.props
+
+		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
+		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+		var time_now = Moment(new Date(), 'h:mm')
+
+		var hour = time_now.hours();
+		var min = time_now.minutes();
+
+		var first_hour = hour > opening.hours() ? hour : opening.hours()
+		var last_hour = closing.hours()
+		
+		var hour_array = _.range(first_hour, last_hour);
 
 		this.setState({
-			selected_hour: min >= 30 ? `${hour+1}` : `${hour}`,
-			selected_minute: min >= 30 ? "00" : "30"
+			selected_hour: first_hour,
+			selected_minute: "00",
+			minute_range: [ "00", "15", "30", "45", "00"],
+			hour_range: hour_array
 		})
 	}
+
+
+	onHourValueChange = (option) => {
+		this.setState({
+			selected_hour: option,
+		})
+	}
+
+	onMinuteValueChange = (option) => {
+		this.setState({
+			selected_minute: option
+		})
+	}
+
 
 	loadValidVouchers(){
 		const { dispatch,currentMember,selectedShop } = this.props
@@ -129,18 +159,14 @@ export default class Checkout extends React.Component {
 		this.props.navigation.goBack()
 	}
 	
-	onCancelTimePicker() {
-		this.TimePicker.close();
-	}
 	
-	onConfirmTimePicker(hour, minute) {
+	onConfirmTimePicker() {
+		const { selected_hour, selected_minute} = this.state
 		this.setState({ 
-			pick_up_time: `${hour}:${minute}` ,
-			pick_up_date: `${hour}:${minute}` ,
-			selected_hour: `${hour}`,
-			selected_minute: `${minute}`,
+			pick_up_time: `${selected_hour}:${selected_minute}` ,
+			pick_up_date: `${selected_hour}:${selected_minute}` ,
 		}, function () {
-			this.TimePicker.close();
+			this.tooglePickup()
 		});
 	}
 
@@ -346,7 +372,7 @@ export default class Checkout extends React.Component {
 
 		if (currentMember != undefined) {
 			if ( pick_up_date == null) {
-				this.TimePicker.open()
+				this.tooglePickup()
 				return
 			} else {
 				if (selectedShop != null) {
@@ -401,17 +427,10 @@ export default class Checkout extends React.Component {
 	}
 
 	onClosePressed = () => {
-
-	
 		this.setState({ 
 			loginModalVisible: false, 
 			registerModalVisible: false, 
 		})
-		
-
-		// navigate("Transaction", {
-		// 	amount: cart_total
-		// })
 	}
 
 	onDirectionPressed(shop) {
@@ -424,6 +443,28 @@ export default class Checkout extends React.Component {
 	
 	onCallPressed = (phone_no) => {
 		Linking.openURL(`tel:${phone_no}`)
+	}
+
+	tooglePickup = () => {
+		const { isPickupToogle, pickup_view_height } = this.state
+
+		var product_checkout_height = pickup_view_height
+		var content = 247 * alpha
+		var finalheight = pickup_view_height - content - BUTTONBOTTOMPADDING
+
+		if (isPickupToogle) {
+			this.setState({ isPickupToogle: false }, function(){
+				Animated.spring(this.movePickAnimation, {
+					toValue: {x: 0, y: windowHeight},
+				}).start()
+			})
+		} else {
+			this.setState({ isPickupToogle: true }, function(){
+				Animated.spring(this.movePickAnimation, {
+					toValue: {x: 0, y: 0},
+				}).start()
+			})
+		}
 	}
 
 	tooglePayment = () => {
@@ -742,7 +783,7 @@ export default class Checkout extends React.Component {
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
-					onPress={() => this.onVoucherButtonPressed()}
+					onPress={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? () => this.onVoucherButtonPressed() : () => null }
 					style={styles.voucherButton}>
 					<View
 						style={styles.drinksView}>
@@ -761,7 +802,7 @@ export default class Checkout extends React.Component {
 								<View style={styles.spacer} />
 							</View>
 							<Text
-								style={styles.productVoucherText}>{this.state.valid_vouchers != null? this.state.valid_vouchers.length : '-'} available</Text>
+								style={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? styles.productVoucherText : styles.productVoucherDisableText}>{this.state.valid_vouchers != null ? this.state.valid_vouchers.length : '-'} available</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage}/>
@@ -814,12 +855,13 @@ export default class Checkout extends React.Component {
 			</View>
 		</View>
 	}
+
 	renderPickupTime() {
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
 					// onPress={() => this.showDateTimePicker()}
-					onPress={() => this.TimePicker.open()}
+					onPress={() => this.tooglePickup()}
 					style={styles.voucherButton}>
 					<View
 						style={styles.drinksView}>
@@ -895,6 +937,102 @@ export default class Checkout extends React.Component {
 			{order_items}
 		</View>
 		</View>
+	}
+
+	renderPickupTimeScroll() {
+		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
+		let {currentMember, selectedShop} = this.props
+
+		return <Animated.View style={this.movePickAnimation.getLayout()}>
+			<View style={{flex: 1,flexDirection: "column"}}>
+			<View style={{
+				position: "absolute", 
+				bottom: 150 * alpha, 
+				width: "100%", 
+				height: 50 * alpha, 
+				alignItems: "center", 
+				justifyContent: "center", 
+				flexDirection: "row",
+				backgroundColor: "white"
+				}}>
+				<TouchableOpacity onPress={() => this.tooglePickup()}><Text style={styles.popOutTimePickerViewCancel}>Cancel</Text></TouchableOpacity>
+				<View style={{flex: 1}}/>
+				<TouchableOpacity onPress={() => this.onConfirmTimePicker()}><Text style={styles.popOutTimePickerViewDone}>Done</Text></TouchableOpacity>
+			</View>
+			<View style={{
+				backgroundColor: "rgb(245, 245, 245)",
+				position: "absolute",
+				alignSelf: "center",
+				width: "100%",
+				bottom: 150 * alpha, 
+				height: 1 * alpha,
+			}} />
+			<View style={styles.popOutTimePickerView}>
+			<View style={styles.timepickerTopBar} />	
+			<ScrollPicker
+				ref={(sp) => {this.sp = sp}}
+				dataSource={hour_range}
+				selectedIndex={0}
+				itemHeight={50 * alpha}
+				wrapperHeight={150 * alpha}
+				wrapperStyle={{
+					backgroundColor: 'transparent',
+					flex: 1,
+				}}
+				renderItem={(data, index, isSelected) => {
+					return(
+						<TouchableOpacity onPress={ console.log() } 
+							style={styles.timePickerRow}>
+								<Text style={isSelected ? 
+										styles.timePickerSelected
+									 : 
+									 	styles.timePickerUnselected
+									}
+								>
+									{data}
+								</Text>
+							</TouchableOpacity>
+						)
+					}}
+					onValueChange={(data, selectedIndex) => {
+						this.onHourValueChange(hour_range[selectedIndex]);
+				}}
+			/>
+			<ScrollPicker
+				ref={(sp) => {this.sp = sp}}
+				dataSource={minute_range}
+				selectedIndex={0}
+				itemHeight={50 * alpha}
+				wrapperHeight={150 * alpha}
+				wrapperStyle={{
+					backgroundColor: 'transparent',
+					flex: 1,
+				}}
+				renderItem={(data, index, isSelected) => {
+					return(
+						<TouchableOpacity onPress={console.log()} 
+						style={{height: 50 * alpha, alignItems: "center",
+						justifyContent: "center",}}>
+							<Text style={isSelected ? 
+									styles.timePickerSelected
+									: 
+									styles.timePickerUnselected
+								}
+							>
+								{data}
+							</Text>
+						</TouchableOpacity>
+					)
+				}}
+				onValueChange={(data, selectedIndex) => {
+					this.onMinuteValueChange(minute_range[selectedIndex]);
+				}}
+			/>
+			</View>
+			<View style={styles.timepickerBottomBar} />	
+		</View>
+		
+	</Animated.View>
 	}
 
 	renderCheckoutReceipt(){
@@ -1030,8 +1168,9 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity} = this.state
+		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
 		let {currentMember, selectedShop} = this.props
+
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0
@@ -1039,7 +1178,6 @@ export default class Checkout extends React.Component {
 		final_price = final_price.toFixed(2)
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
-		
 		return <View
 			style={styles.checkoutView}>
 			<ScrollView
@@ -1053,7 +1191,7 @@ export default class Checkout extends React.Component {
 				
 			</ScrollView>
 			{this.renderPaymentMethod()}
-			
+			{this.renderPickupTimeScroll()}
 			<View
 				style={styles.totalPayNowView}>
 					{/* <TouchableOpacity
@@ -1075,7 +1213,7 @@ export default class Checkout extends React.Component {
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			
-			<TimePicker
+			{/* <TimePicker
 				ref={ref => {
 					this.TimePicker = ref;
 				}}
@@ -1085,7 +1223,9 @@ export default class Checkout extends React.Component {
 				selectedHour={this.state.selected_hour}
 				selectedMinute={this.state.selected_minute}
 				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
-			/>
+			/> */}
+			
+			
 		</View>
 	}
 }
@@ -1781,13 +1921,12 @@ const styles = StyleSheet.create({
 		marginTop: 10 * alpha,
 	},
 
-
 	popOutPaymentView: {
 		backgroundColor: "white",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 72 * alpha,
+		bottom: 0 * alpha,
 		height: 247 * alpha,
 	},
 	paymentMethodTwoView: {
@@ -2460,7 +2599,16 @@ const styles = StyleSheet.create({
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+	},
+	productVoucherDisableText: {
+		color: "rgb(163, 163, 163)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -2515,7 +2663,7 @@ const styles = StyleSheet.create({
 		width: 10 * alpha,
 		height: 10 * alpha,
 		marginLeft: 5 * alpha,
-		marginTop: 3 * alpha,
+		marginTop: 4 * alpha,
 		tintColor: "rgb(50, 50, 50)",
 		resizeMode: "contain",
 	},
@@ -2536,5 +2684,64 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		paddingLeft: 5 * alpha,
 		paddingRight: 5 * alpha,
-	}
+	},
+
+	popOutTimePickerView: {
+		backgroundColor: "white",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		bottom: 0 * alpha,
+		height: 150 * alpha,
+		flexDirection: "row"
+	},
+	popOutTimePickerViewDone: {
+		fontFamily: TITLE_FONT,
+		color: PRIMARY_COLOR,
+		marginRight: 30 * alpha,
+		fontSize: 16 * alpha,
+	},
+	popOutTimePickerViewCancel: {
+		fontFamily: TITLE_FONT,
+		color: "rgb(50, 50, 50)",
+		marginLeft: 30 * alpha,
+		fontSize: 16 * alpha,
+	},
+	timePickerSelected: {
+		color: "rgb(54, 54, 54)",
+		textAlign: 'center',
+		fontSize: 24 * fontAlpha,
+		fontFamily: TITLE_FONT,
+	},
+	timePickerUnselected: {
+		color: "rgb(54, 54, 54)",
+		textAlign: 'center',
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 18 * fontAlpha,
+	},
+	timePickerRow: {
+		height: 50 * alpha,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	timepickerTopBar: {
+		backgroundColor: "rgb(230, 230, 230)",
+		position: "absolute",
+		alignSelf: "center",
+		flex: 1,
+		bottom: 50 * alpha, 
+		left: 20 * alpha,
+		right: 20 * alpha,
+		height: 1 * alpha,
+	},
+	timepickerBottomBar: {
+		backgroundColor: "rgb(230, 230, 230)",
+		position: "absolute",
+		alignSelf: "center",
+		flex: 1,
+		bottom: 100 * alpha, 
+		left: 20 * alpha,
+		right: 20 * alpha,
+		height: 1 * alpha,
+	},
 })

@@ -64,6 +64,7 @@
     "react-navigation": "3.11.1",
     "react-redux": "^5.0.2",
     "redux": "3.7.2",
+    "rn-scrollable-picker": "^0.1.12",
     "sentry-expo": "^2.0.1"
   },
   "devDependencies": {

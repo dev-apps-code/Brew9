@@ -21,6 +21,11 @@ export function updateProfile(authtoken,object) {
    return postMultipartMethod(authtoken,object)
 }
 
+export function updateAvatar(authtoken,object) {
+   console.log("Service")
+   return postMultipartMethod(authtoken,object)
+}
+
 export function updatePhoneNumber(authtoken,object) {
    return postMethod(authtoken,object)
 }
