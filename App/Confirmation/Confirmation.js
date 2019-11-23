@@ -76,7 +76,7 @@ export default class Confirmation extends React.Component {
         const callback = eventObject => {
 
             if (eventObject.success) {
-                this.props.navigation.navigate("TabGroupOne")
+                this.props.navigation.navigate("Home")
             }else{
                 this.refs.toast.show(eventObject.message);
             }

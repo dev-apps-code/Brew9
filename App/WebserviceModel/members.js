@@ -21,8 +21,10 @@ import {
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
+import * as SecureStore from "expo-secure-store";
 import {createAction} from "../Utils"
-
+import { create } from 'uuid-js'
+import _ from 'lodash'
 function getCurrentUser() {
   return AsyncStorage.getItem("profile", (err, result) => {
     if (result != null) {
@@ -41,6 +43,17 @@ function clearCurrentUser() {
   AsyncStorage.clear()
 }
 
+function getLastRead() {
+  console.log("getlast")
+  return AsyncStorage.getItem("notification_key", (err, result) => {
+    if (result != null) {
+      return result
+    }
+    return null
+  })
+  
+}
+
 export default {
 
   namespace: 'members',
@@ -52,7 +65,7 @@ export default {
     company_id:1,
     currency:'$',
     location:null,
-
+    notifications: []
   },
   
   reducers: {
@@ -65,7 +78,25 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
+      console.log("LoadUser")
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
+    },
+    loadNotification(state, {payload}) {
+      
+      if (payload.currentUser != null) {
+        if (payload.last_read != null) {
+          var notifications = _.filter(payload.currentUser.notifications, function(o) { 
+            return o.id > payload.last_read; 
+          })
+          
+          return { ...state, notifications : notifications }
+        } else {
+          return { ...state, notifications : payload.currentUser.notifications }
+        }
+      } else {
+        return { ...state, notifications : [] }
+      }
+      
     },
     destroyCurrentUser(state, {payload}) {
       clearCurrentUser()
@@ -113,6 +144,7 @@ export default {
     },
     *loadNotifications({ payload }, { call, put, select })
     {
+      console.log("Here")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -269,9 +301,11 @@ export default {
     *loadCurrentUserFromCache({ payload }, { call, put, select }) {
       try {
         const json = yield call(getCurrentUser)
+        const last_read = yield call(getLastRead)
         const currentUser = JSON.parse(json)
 
         yield put(createAction('loadCurrentUser')(currentUser))
+        yield put(createAction('loadNotification')({currentUser, last_read}))
 
       } catch (err) {
         console.log('loadingCurrentUser', err)

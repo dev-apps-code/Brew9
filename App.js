@@ -87,6 +87,7 @@ const VerifyUserStack = createStackNavigator(
     }
   },
   {
+    mode: 'modal',
     initialRouteName: "VerifyUser",
     header: "none"
   }
@@ -143,7 +144,10 @@ const PushOrder = createStackNavigator(
     },
     ScanQr: {
       screen: ScanQr
-    },   
+    }, 
+    VerifyUser: {
+      screen: VerifyUser
+    },  
   },
   {
     initialRouteName: "Home"

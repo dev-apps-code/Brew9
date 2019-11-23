@@ -70,7 +70,7 @@ export default class Login extends React.Component {
 
 	componentDidUpdate() {
         if(this.state.isSuccess && this.props.members) {
-			this.props.navigation.navigate("TabGroupOne")
+			this.props.navigation.navigate("Home")
 		}
 	}
 	

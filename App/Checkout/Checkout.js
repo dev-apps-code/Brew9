@@ -20,6 +20,8 @@ import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND
 import Moment from 'moment';
 import TimePicker from "react-native-24h-timepicker";
 import ScrollPicker from 'rn-scrollable-picker';
+import { Analytics, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members,shops }) => ({
 	currentMember: members.profile,
@@ -200,7 +202,8 @@ export default class Checkout extends React.Component {
 
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Checkout', 'Click', "Select Voucher"))
 		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.state.cart,addVoucherAction:this.addVoucherItemsToCart})
 	}
 
@@ -256,6 +259,8 @@ export default class Checkout extends React.Component {
 	}
 
 	onPaymentButtonPressed = () => {
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Checkout', 'Click', "Select Payment"))
 		this.tooglePayment()
 	}
 
@@ -362,6 +367,7 @@ export default class Checkout extends React.Component {
 	clearCart = () => {
 		const {navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
+		
 		navigation.navigate({ routeName, key, params: { clearCart: true } })
 	}
 
@@ -369,7 +375,8 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 		const {cart_total, selected_payment, pick_up_date} = this.state
 		const {currentMember,selectedShop} = this.props
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
 		if (currentMember != undefined) {
 			if ( pick_up_date == null) {
 				this.tooglePickup()
@@ -415,7 +422,9 @@ export default class Checkout extends React.Component {
 			}
 			
 		} else {
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 			return
 		}
 	}
@@ -1202,7 +1211,7 @@ export default class Checkout extends React.Component {
 						`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"}</Text>
 					</TouchableOpacity> */}
 					<View style={styles.paymentButton}><Text
-						style={styles.paymentButtonText}>${cart_total}</Text></View>
+						style={styles.paymentButtonText}>${final_price}</Text></View>
 				<TouchableOpacity
 					onPress={() => this.onPayNowPressed()}
 					style={styles.payNowButton}>

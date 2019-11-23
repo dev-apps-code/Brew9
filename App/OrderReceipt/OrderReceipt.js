@@ -79,7 +79,7 @@ export default class OrderReceipt extends React.Component {
 		Linking.openURL(`tel:${phone_no}`)
 	}
 
-	renderOrderItems(items, vouchers) {
+	renderOrderItems(items, vouchers, order) {
 
 		const order_items = items.map((item, key) => {
 			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -121,6 +121,16 @@ export default class OrderReceipt extends React.Component {
 
 		const voucher_items = vouchers.map((item, key) => {
 
+			let cart_total = parseFloat(order.total) + parseFloat(order.discount)
+			var voucher_discount = ''
+
+				if (item.voucher.discount_type == "fixed") {
+					voucher_discount = `-$${item.voucher.discount_price}`
+				} else if (item.voucher.discount_type == "percent") {
+					voucher_discount = `-$${parseFloat(cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
+					
+				}
+
 			return <View
 				style={styles.voucherView}
 				key={key}>
@@ -131,7 +141,7 @@ export default class OrderReceipt extends React.Component {
 						flex: 1,
 					}}/>
 				<Text
-					style={styles.voucherDescriptionText}>{ item.voucher.discount_price ? `-$${parseFloat(item.voucher.discount_price).toFixed(2)}` : ""}</Text>
+					style={styles.voucherDescriptionText}>{voucher_discount}</Text>
 			</View>
 		})
 
@@ -245,7 +255,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.sectionSeperatorView}/>
 							</View>
-							{this.renderOrderItems(order.order_items, order.voucher_items)}
+							{this.renderOrderItems(order.order_items, order.voucher_items, order)}
 							<View style={styles.receiptSectionSeperator}>
 								<Image
 									source={require("./../../assets/images/curve_in_background.png")}
@@ -500,7 +510,7 @@ const styles = StyleSheet.create({
 	},
 	voucherDescriptionText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -673,7 +683,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12* fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "left",
 	},
@@ -716,7 +726,7 @@ const styles = StyleSheet.create({
 	productQuantityText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",
@@ -727,7 +737,7 @@ const styles = StyleSheet.create({
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "right",

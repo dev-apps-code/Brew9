@@ -127,7 +127,7 @@ export default class Register extends React.Component {
 
 	onClosePressed = () => {
 		const { navigate } = this.props.navigation
-		navigate('TabGroupOne')
+		navigate('Home')
 	}
 
 	onUpdateCode(iso2){
