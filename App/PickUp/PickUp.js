@@ -131,6 +131,8 @@ export default class PickUp extends React.Component {
 
 		const queues = current_order.map((item, key) => {
 
+			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
+
 			const order_items = item.order_items.map((item, key) => {
 
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -172,6 +174,14 @@ export default class PickUp extends React.Component {
 
 			const voucher_items = item.voucher_items.map((item, key) => {
 
+				var voucher_discount = ''
+
+				if (item.voucher.discount_type == "fixed") {
+					voucher_discount = `-$${item.voucher.discount_price}`
+				} else if (item.voucher.discount_type == "percent") {
+					voucher_discount = `-$${parseFloat(cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
+					
+				}
 				return <View
 					style={styles.drinksView}
 					key={key}>
@@ -193,7 +203,7 @@ export default class PickUp extends React.Component {
 								</View>
 								
 								<Text
-									style={styles.productPriceText}>{ item.voucher.discount_price ? `-$${item.voucher.discount_price}` : ""}</Text>
+									style={styles.productPriceText}>{ voucher_discount}</Text>
 								{ item.voucher_items != null && key < item.voucher_items.length - 1 && (<Image
 									source={require("./../../assets/images/group-109-copy.png")}
 								style={styles.dottedLineImage}/> )}
@@ -1211,7 +1221,6 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "left",
 		marginBottom: 5 * alpha,
 	},

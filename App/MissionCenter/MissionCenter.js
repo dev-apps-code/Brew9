@@ -20,6 +20,8 @@ import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_re
 import MissionLoginRequestObject from "../Requests/mission_login_request_object"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
+import { Analytics, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -172,7 +174,8 @@ export default class MissionCenter extends React.Component {
     }
 
     missionRewardClaim = (statement_id) => {
-        console.log("Claim")
+        const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
         if (statement_id != undefined) {
             const { dispatch } = this.props
         

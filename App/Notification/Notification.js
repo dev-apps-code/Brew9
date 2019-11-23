@@ -22,12 +22,17 @@ import { connect } from "react-redux";
 import { createAction } from "../Utils";
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import NotificationsCell from "./NotificationsCell";
+import NotificationBadgeIcon from "./NotificationBadgeIcon"
 import * as SecureStore from "expo-secure-store";
-import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR } from "../Common/common_style";
+import IconBadge from 'react-native-icon-badge';
+import { AsyncStorage } from 'react-native'
 
 @connect(({ members }) => ({
-  members: members.profile
+  members: members.profile,
+  notifications: members.profile.notifications
 }))
+
 export default class Notification extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
@@ -38,23 +43,13 @@ export default class Notification extends React.Component {
         textAlign: "center",
         flex: 1
       },
-      headerLeft: (
-        <View style={styles.headerLeftContainer}>
-          {/* <TouchableOpacity
-                    onPress={params.onBackPressed ? params.onBackPressed : () => null}
-                    style={styles.navigationBarItem}>
-                    <Image
-                        source={require("./../../assets/images/back.png")}
-                        style={styles.navigationBarItemIcon}/>
-                </TouchableOpacity> */}
-        </View>
-      ),
       headerRight: null,
       headerLeft: null
     };
   };
 
   static tabBarItemOptions = (navigation,store ) => {
+    const badgeCount = navigation.state.params && navigation.state.params.badgeCount || 0
     return {
       tabBarLabel: "Inbox",
       tabBarOnPress: ({ navigation, defaultHandler }) => {
@@ -68,10 +63,12 @@ export default class Notification extends React.Component {
           : require("./../../assets/images/inbox_tab.png");
 
         return (
-          <Image
-            source={image}
-            style={{ resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }}
-          />
+          <View style={styles.tabIconWrapper}>
+            
+            <NotificationBadgeIcon image={image} focused={focused}/>
+            
+        </View>
+          
         );
       }
     };
@@ -83,13 +80,14 @@ export default class Notification extends React.Component {
       data: [],
       unread: 0,
       last_read: 0,
+      count: this.props.notifications.count,
       appState: AppState.currentState,
     };
     
   }
 
   componentDidMount() {
-    this.loadLocalStore();
+    // this.loadLocalStore();
     const { members } = this.props;
     AppState.addEventListener('change', this._handleAppStateChange);	
     if (members != null) {
@@ -101,7 +99,7 @@ export default class Notification extends React.Component {
 
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
-      onItemPressed: this.onItemPressed
+      onItemPressed: this.onItemPressed,
     });
   }
 
@@ -123,31 +121,13 @@ export default class Notification extends React.Component {
   };
 
   loadNotifications = () => {
-    console.log("Ntofication")
         
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
-      this.loadLocalStore()
+      
       if (eventObject.success) {
-
-        let unread= 0
-        let data = eventObject.result
-
-        for(var index in data) {
-          let item = data[index]
-          let read = item.id <= this.state.last_read ? true : false   
-          data[index].read = read
-          if (read == false){
-            unread = unread + 1
-          }
-        }
-        this.setState(
-          {
-            data,
-            unread
-          }        
-        );
+        this.loadLocalStore(eventObject.result)
       }
       this.setState({
         loading: false
@@ -163,22 +143,35 @@ export default class Notification extends React.Component {
     );
   }
 
-  loadLocalStore() {
-    SecureStore.getItemAsync("notification_key")
-      .then(result => {
-        if (isNaN(result)) {
-          this.setState({
-            last_read: 0
-          });
-        } else {
-          this.setState({
-            last_read: result
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  loadLocalStore(notifications) {
+
+    console.log("load local")
+    return AsyncStorage.getItem("notification_key", (err, result) => {
+      let data = notifications
+      let unread= 0
+       
+      if (result != null) {
+       for(var index in data) {
+         let item = data[index]
+         let read = item.id <= result ? true : false   
+         data[index].read = read
+         if (read == false){
+           unread = unread + 1
+         }
+       }
+       this.setState({
+         data,
+         unread: unread,
+         last_read: result
+       });
+      } else {
+        this.setState({
+          last_read: 0,
+          unread: data.length,
+          data,
+        });
+      }
+    })
   }
 
   onBackPressed = () => {
@@ -203,7 +196,7 @@ export default class Notification extends React.Component {
   onReadAllPressed = () => {
 
     const { data} = this.state
-
+    const { dispatch } = this.props
     if (data.length > 0){
       let data = [...this.state.data]
       for(var index in data) {
@@ -213,14 +206,10 @@ export default class Notification extends React.Component {
       const last_read = data[0].id
 
       this.setState({data,unread:0})
-      SecureStore.setItemAsync(
-        "notification_key",
-        `${last_read}`
-      ).catch(error => {
-        console.log(error);
-      });
+      AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
+      
     }
- 
+    dispatch(createAction('members/loadCurrentUserFromCache')({}))
   };
 
   render() {

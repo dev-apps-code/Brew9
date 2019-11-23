@@ -70,7 +70,16 @@ export default class VerifyUser extends React.Component {
 	}
 
 	onClosePressed = () => {
-		this.props.navigation.navigate('TabGroupOne')
+		const { navigation } = this.props
+		
+		if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
+			const { routeName, key } = navigation.getParam('returnToRoute')
+			navigation.navigate({ routeName, key })
+		} else {
+			this.props.navigation.navigate('TabGroupOne')
+		}
+		
+
 	}
 
 	onSendPressed = () => {

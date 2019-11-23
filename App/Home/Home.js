@@ -53,6 +53,7 @@ import CategoryHeaderCell from "./CategoryHeaderCell"
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 import ProfileRequestObject from '../Requests/profile_request_object'
 import { getDistance, getPreciseDistance } from 'geolib';
 
@@ -370,7 +371,7 @@ export default class Home extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
-
+			console.log("Shop", eventObject.result)
 			if (eventObject.success) {			
 				this.setState({
 					shop: eventObject.result,
@@ -478,6 +479,8 @@ export default class Home extends React.Component {
 		const {currentMember,selectedShop } = this.props
 
 		if (currentMember != undefined) {
+			const analytics = new Analytics(ANALYTICS_ID)
+	  		analytics.event(new Event('Home', 'Click', "Checkout"))
 			if (member_distance > selectedShop.max_order_distance_in_km){
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
@@ -489,6 +492,7 @@ export default class Home extends React.Component {
 					const { clearCart } = params
 					
 					if (clearCart) {
+						
 						this.onClearPress()
 						this.loadProfile()
 						this.loadShops()
@@ -515,7 +519,9 @@ export default class Home extends React.Component {
 				
 				this.loadShops()
 			})
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 		}
 	}
 
@@ -528,7 +534,8 @@ export default class Home extends React.Component {
 
 	onBannerPressed = (item,index) => {
 		const { navigate } = this.props.navigation
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Home', 'Click', "Featured Promo"))
 		if (item.banner_detail_image != undefined && item.banner_detail_image != "") {
 			this.setState({
 				selected_promotion: item.banner_detail_image
@@ -543,7 +550,8 @@ export default class Home extends React.Component {
 	}
 
 	_toggleDelivery = (value) => {
-		
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Home', 'Click', "Delivery"))
 		if (value == 1) {
 
 			this.refs.toast.show("Delivery not yet available", TOAST_DURATION, () => {
@@ -604,7 +612,8 @@ export default class Home extends React.Component {
 	onMorePressed = () => {
 
 		const {isToggleShopLocation, dispatch} = this.props
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Home', 'Click', "More"))
 		if (isToggleShopLocation) {
 			dispatch(createAction("config/setToggleShopLocation")(false))
 		} else {
@@ -613,7 +622,8 @@ export default class Home extends React.Component {
 	}
 
 	toogleCart = (isUpdate) => {
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Home', 'Click', "View Cart"))
 		const { isCartToggle, product_view_height } = this.state
 
 		var product_checkout_height = product_view_height

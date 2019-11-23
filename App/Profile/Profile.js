@@ -17,6 +17,8 @@ import LogoutRequestObject from "../Requests/logout_request_object"
 import Constants from 'expo-constants';
 import {LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE} from "../Common/common_style";
 import { LinearGradient } from 'expo-linear-gradient';
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
 	members:members,
@@ -127,7 +129,9 @@ export default class Profile extends React.Component {
 
 		const callback = eventObject => {
 			if (eventObject.success) {
-				navigate("VerifyUserStack")
+				navigate("VerifyUser" , {
+					returnToRoute: navigation.state
+				})
 			}
 			this.setState({
 				loading: false,
@@ -156,6 +160,9 @@ export default class Profile extends React.Component {
 		const { navigate } = this.props.navigation
 		const {  company_id } = this.props
 
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Level Info"))
+	  
 		navigate("WebCommon", {
             title: 'Membership Info',
             web_url: KURL_INFO + '?page=level_info&id=' + company_id,
@@ -170,10 +177,14 @@ export default class Profile extends React.Component {
 
 		const {  currentMember } = this.props
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Mission Center"))
 		if (currentMember !== null) {
 			navigate("MissionCenter")
 		} else {
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 		}
 
 	}
@@ -198,36 +209,49 @@ export default class Profile extends React.Component {
 		const {  currentMember } = this.props
 		const {validVouchers} = this.state
 		const { navigate } = this.props.navigation
-			
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', "Member Voucher"))
 		if (currentMember !== null) {
 			navigate("MemberVoucher",{validVouchers:validVouchers})
 		} else {
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 		}
 	}
 
 	onPointButtonPressed = () => {
 		const {  currentMember } = this.props
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Member Point"))
 		if (currentMember !== null) {
 			navigate("PointHistory")
 		} else {
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 		}
 	}
 
 	onWalletButtonPressed = () => {
 		const {  currentMember } = this.props
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Member Wallet"))
 		if (currentMember !== null) {
 			navigate("MemberWallet")
 		} else {
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 		}
 	}
 
 	onMemberButtonPressed = () => {
 		const {  currentMember } = this.props
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 			navigate("MemberProfile")
@@ -237,23 +261,30 @@ export default class Profile extends React.Component {
 	onOrderButtonPressed = () => {
 		const {  currentMember } = this.props
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Order History"))
 		navigate("OrderHistory")
 	}
 
 	onPersonalButtonPressed = () => {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+	  	analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			navigate("MemberProfile")
 		} else {
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 		}
 	}
 
 	onLevelInfoPressed = () => {
 		const { navigate } = this.props.navigation
 		const { members } = this.props
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', "Level Info"))
 		navigate("WebCommon", {
 			title: 'FAQs',
 			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
@@ -300,20 +331,24 @@ export default class Profile extends React.Component {
 
 	onAboutButtonPressed = () => {
 		const { navigate } = this.props.navigation
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', "About"))
 		navigate("About")
 	}
 
 	onProfileButtonPress = () => {
 		const {  currentMember } = this.props
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			// this.loadDestroy()
 			const { navigate } = this.props.navigation
 			navigate("MemberProfile")
 		}else{
 			const { navigate } = this.props.navigation
-			navigate("VerifyUserStack")
+			navigate("VerifyUser" , {
+				returnToRoute: navigation.state
+			})
 			return
 		}
 	}
