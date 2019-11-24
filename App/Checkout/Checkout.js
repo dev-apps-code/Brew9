@@ -18,7 +18,6 @@ import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object
 import _ from 'lodash'
 import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
 import Moment from 'moment';
-import TimePicker from "react-native-24h-timepicker";
 import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
@@ -506,7 +505,7 @@ export default class Checkout extends React.Component {
 			
 		} else {
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 			return
 		}

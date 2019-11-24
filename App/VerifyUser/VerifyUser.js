@@ -73,8 +73,7 @@ export default class VerifyUser extends React.Component {
 		const { navigation } = this.props
 		
 		if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
-			const { routeName, key } = navigation.getParam('returnToRoute')
-			navigation.navigate({ routeName, key })
+			navigation.navigate("Home")
 		} else {
 			this.props.navigation.navigate('TabGroupOne')
 		}
@@ -190,8 +189,11 @@ export default class VerifyUser extends React.Component {
 					// 	hasLogin: true
 					// })
 					const { navigation } = this.props
-					const { routeName, key } = navigation.getParam('returnToRoute')
-					navigation.navigate({ routeName, key})
+					if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
+						navigation.navigate("Home")
+					} else {
+						this.props.navigation.navigate('TabGroupOne')
+					}
 				}                
             }else{
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)

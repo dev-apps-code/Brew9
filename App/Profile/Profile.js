@@ -130,7 +130,7 @@ export default class Profile extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				navigate("VerifyUser" , {
-					returnToRoute: navigation.state
+					returnToRoute: this.props.navigation.state
 				})
 			}
 			this.setState({
@@ -175,7 +175,7 @@ export default class Profile extends React.Component {
 
 	onMissionCenterPressed = () => {
 
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 	  	analytics.event(new Event('Profile', 'Click', "Mission Center"))
@@ -183,7 +183,7 @@ export default class Profile extends React.Component {
 			navigate("MissionCenter")
 		} else {
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 		}
 
@@ -215,7 +215,7 @@ export default class Profile extends React.Component {
 			navigate("MemberVoucher",{validVouchers:validVouchers})
 		} else {
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
@@ -229,7 +229,7 @@ export default class Profile extends React.Component {
 			navigate("PointHistory")
 		} else {
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
@@ -243,7 +243,7 @@ export default class Profile extends React.Component {
 			navigate("MemberWallet")
 		} else {
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
@@ -275,7 +275,7 @@ export default class Profile extends React.Component {
 			navigate("MemberProfile")
 		} else {
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
@@ -347,7 +347,7 @@ export default class Profile extends React.Component {
 		}else{
 			const { navigate } = this.props.navigation
 			navigate("VerifyUser" , {
-				returnToRoute: navigation.state
+				returnToRoute: this.props.navigation.state
 			})
 			return
 		}
@@ -412,7 +412,7 @@ export default class Profile extends React.Component {
 			next_level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.next_level_name : currentMember.free_membership.membership_level.next_level_name
 		}else{
 			background_photo =  {uri:''}
-			level_name = ''
+			level_name = 'Level 1'
 			display_name = ''
 			points = 0
 			avatar = require("./../../assets/images/user.png")
@@ -421,7 +421,7 @@ export default class Profile extends React.Component {
 			membership_name = ""
 			member_exp = 0
 			exp_needed = 1
-			next_level_name = ""
+			next_level_name = "Level 2"
 		}
 
 		if (currentMember === null) {

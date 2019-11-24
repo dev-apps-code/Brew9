@@ -581,7 +581,7 @@ export default class Home extends React.Component {
 		analytics.event(new Event('Home', 'Click', "Delivery"))
 		if (value == 1) {
 
-			this.refs.toast.show("Delivery not yet available", TOAST_DURATION, () => {
+			this.refs.toast.show("Delivery not available yet", TOAST_DURATION, () => {
                 this.setState({
 					delivery: 0
 				})

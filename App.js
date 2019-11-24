@@ -182,7 +182,7 @@ const PushPickup = createStackNavigator(
     },
     OrderHistory: {
       screen: OrderHistory
-    }
+    },
   },
   {
     initialRouteName: "PickUp"
