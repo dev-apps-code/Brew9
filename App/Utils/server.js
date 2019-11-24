@@ -10,7 +10,7 @@ export const KPAYMENTYURL = "http://brew9.dreamcode.solutions/payments/baiduri"
 // export const KSERVERURL ='https://e40faa49.ngrok.io/api'
 // export const KURL_INFO = 'https://e40faa49.ngrok.io/info'
 
-export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=1";
+export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';

@@ -131,7 +131,7 @@ export default class CheckoutVoucher extends React.Component {
         obj.setPage(page_no)
         obj.setStatus(1)
         dispatch(
-            createAction('vouchers/loadValidVoucher')({
+            createAction('vouchers/loadUsedVoucher')({
                 object: obj,
                 callback
             })

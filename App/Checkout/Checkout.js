@@ -20,7 +20,7 @@ import {TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND
 import Moment from 'moment';
 import TimePicker from "react-native-24h-timepicker";
 import ScrollPicker from 'rn-scrollable-picker';
-import { Analytics, PageHit } from 'expo-analytics';
+import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members,shops }) => ({
@@ -71,13 +71,15 @@ export default class Checkout extends React.Component {
 			payment_view_height: 0 * alpha,
 			selected_payment: '',
 			pick_up_time: null,
-			pick_up_date: null,
+			pick_up_status: null,
 			selected_hour: "00",
 			selected_minute: "00",
 			hour_range: [],
 			minute_range: [],
 			isPickupToogle: false,
 			pickup_view_height: 150 * alpha,
+			selected_hour_index: 0,
+			selected_minute_index: 0,
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -102,31 +104,103 @@ export default class Checkout extends React.Component {
 
 		var hour = time_now.hours();
 		var min = time_now.minutes();
+		var minute_array = ["00", "15", "30", "45"]
+		
+		var selected_minute = ""
 
-		var first_hour = hour > opening.hours() ? hour : opening.hours()
+		if (hour > opening.hours() && min < 45) {
+			minute_array = _.filter(["00", "15", "30", "45"], function(o) { 
+				return parseInt(o) > min; 
+			})
+		}
+		selected_minute = minute_array[0]
+
+		if (minute_array.length == 2) {
+			minute_array.push("00")
+		}
+		
+		if (minute_array.length == 1) {
+			minute_array = ["45", "00", ""]
+		}
+
+		selected_minute = minute_array[0]
+
+		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
 		
 		var hour_array = _.range(first_hour, last_hour);
 
 		this.setState({
 			selected_hour: first_hour,
-			selected_minute: "00",
-			minute_range: [ "00", "15", "30", "45", "00"],
+			selected_minute: selected_minute,
+			minute_range: minute_array,
 			hour_range: hour_array
 		})
 	}
 
+	checkAvailableMinute(option) {
+		const { selectedShop } = this.props
+		var minute_array = ["00", "15", "30", "45"]
+		var time_now = Moment(new Date(), 'h:mm')
 
-	onHourValueChange = (option) => {
+		var hour = time_now.hours();
+		var min = time_now.minutes();
+
+		if (hour == option) {
+			minute_array = _.filter(["00", "15", "30", "45"], function(o) { 
+				return parseInt(o) > min; 
+			})
+			if (minute_array.length == 2) {
+				minute_array.push("00")
+			}
+			
+			this.setState({
+				minute_range: minute_array,
+			})
+		} else {
+			minute_array = ["00", "15", "30", "45"]
+			this.setState({
+				minute_range: minute_array,
+				selected_minute: minute_array[0],
+			})
+		}
+		
+	}
+
+	onHourValueChange = (option, index) => {
+		
+		this.checkAvailableMinute(option)
 		this.setState({
 			selected_hour: option,
+			selected_hour_index: index,
 		})
 	}
 
-	onMinuteValueChange = (option) => {
-		this.setState({
-			selected_minute: option
-		})
+	onMinuteValueChange = (option, index) => {
+
+		const { selected_hour_index, selected_hour, hour_range} = this.state
+		if (option != "") {
+			var time_now = Moment(new Date(), 'h:mm')
+	
+			var hour = time_now.hours();
+			var min = time_now.minutes();
+	
+			if (hour == selected_hour && min > 15 && option == "00") {
+				this.sphour.scrollToIndex(selected_hour_index+1)
+				this.setState({
+					minute_range: ["00", "15", "30", "45"],
+					selected_hour: hour_range[selected_hour_index+1]
+				}, function () {
+					this.spminute.scrollToIndex(0)
+				})
+			}
+			this.setState({
+				selected_minute: option
+			})
+		} else {
+			this.spminute.scrollToIndex(index-1)
+		}
+		
 	}
 
 
@@ -166,12 +240,22 @@ export default class Checkout extends React.Component {
 		const { selected_hour, selected_minute} = this.state
 		this.setState({ 
 			pick_up_time: `${selected_hour}:${selected_minute}` ,
-			pick_up_date: `${selected_hour}:${selected_minute}` ,
+			pick_up_status: `Pick Later` ,
 		}, function () {
 			this.tooglePickup()
 		});
 	}
 
+	onOrderNow() {
+		var now = new Moment().format("h:mm");
+		this.setState({ 
+			pick_up_time: `${now}` ,
+			pick_up_status: `Order Now` ,
+		}, function () {
+			this.tooglePickup()
+		});
+	}
+	
 	onBranchButtonPressed = () => {
 
 	}
@@ -301,7 +385,7 @@ export default class Checkout extends React.Component {
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
 		const { navigate } = this.props.navigation
-		const {cart,vouchers_to_use, selected_payment, promotion_ids, pick_up_date} = this.state
+		const {cart,vouchers_to_use, selected_payment, promotion_ids, pick_up_status, pick_up_time} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
@@ -339,8 +423,7 @@ export default class Checkout extends React.Component {
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		console.log("Promotions", promotion_ids)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids, pick_up_date)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids, pick_up_status ,pick_up_time)
 		obj.setUrlId(selectedShop.id) 
 		dispatch(
 			createAction('shops/loadMakeOrder')({
@@ -373,19 +456,19 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const {cart_total, selected_payment, pick_up_date} = this.state
+		const {cart_total, selected_payment, pick_up_status} = this.state
 		const {currentMember,selectedShop} = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
 		if (currentMember != undefined) {
-			if ( pick_up_date == null) {
+			if ( pick_up_status == null) {
 				this.tooglePickup()
 				return
 			} else {
 				if (selectedShop != null) {
 					var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
 					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
-					var pickup = Moment(pick_up_date, 'h:mm')
+					var pickup = Moment(pick_up_status, 'h:mm')
 					var now = Moment(new Date(), 'h:mm')
 
 					// console.log("Opening", opening, "Closing", closing, "Pickup", pickup, "Now", now)
@@ -966,6 +1049,8 @@ export default class Checkout extends React.Component {
 				}}>
 				<TouchableOpacity onPress={() => this.tooglePickup()}><Text style={styles.popOutTimePickerViewCancel}>Cancel</Text></TouchableOpacity>
 				<View style={{flex: 1}}/>
+				<TouchableOpacity onPress={() => this.onOrderNow()} style={styles.popOutTimePickerOrderNowButton}><Text style={styles.popOutTimePickerOrderNow}>Order Now</Text></TouchableOpacity>
+				<View style={{flex: 1}}/>
 				<TouchableOpacity onPress={() => this.onConfirmTimePicker()}><Text style={styles.popOutTimePickerViewDone}>Done</Text></TouchableOpacity>
 			</View>
 			<View style={{
@@ -979,7 +1064,7 @@ export default class Checkout extends React.Component {
 			<View style={styles.popOutTimePickerView}>
 			<View style={styles.timepickerTopBar} />	
 			<ScrollPicker
-				ref={(sp) => {this.sp = sp}}
+				ref={(sphour) => {this.sphour = sphour}}
 				dataSource={hour_range}
 				selectedIndex={0}
 				itemHeight={50 * alpha}
@@ -1004,11 +1089,12 @@ export default class Checkout extends React.Component {
 						)
 					}}
 					onValueChange={(data, selectedIndex) => {
-						this.onHourValueChange(hour_range[selectedIndex]);
+
+						this.onHourValueChange(hour_range[selectedIndex], selectedIndex);
 				}}
 			/>
 			<ScrollPicker
-				ref={(sp) => {this.sp = sp}}
+				ref={(spminute) => {this.spminute = spminute}}
 				dataSource={minute_range}
 				selectedIndex={0}
 				itemHeight={50 * alpha}
@@ -1034,7 +1120,7 @@ export default class Checkout extends React.Component {
 					)
 				}}
 				onValueChange={(data, selectedIndex) => {
-					this.onMinuteValueChange(minute_range[selectedIndex]);
+					this.onMinuteValueChange(minute_range[selectedIndex], selectedIndex);
 				}}
 			/>
 			</View>
@@ -2715,6 +2801,20 @@ const styles = StyleSheet.create({
 		color: "rgb(50, 50, 50)",
 		marginLeft: 30 * alpha,
 		fontSize: 16 * alpha,
+	},
+	popOutTimePickerOrderNowButton: {
+		backgroundColor: PRIMARY_COLOR,
+		alignItems: "center",
+		justifyContent: "center",
+		height: 35 * alpha,
+		borderRadius: 10 * alpha,
+	},
+	popOutTimePickerOrderNow: {
+		fontFamily: TITLE_FONT,
+		color: "white",
+		fontSize: 16 * alpha,
+		marginLeft: 10 * alpha,
+		marginRight: 10 * alpha,
 	},
 	timePickerSelected: {
 		color: "rgb(54, 54, 54)",

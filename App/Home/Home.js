@@ -52,7 +52,7 @@ import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
 import { select } from "redux-saga/effects"
-import { Analytics, PageHit } from 'expo-analytics';
+import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import ProfileRequestObject from '../Requests/profile_request_object'
 import { getDistance, getPreciseDistance } from 'geolib';
@@ -371,7 +371,7 @@ export default class Home extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({ loading: false })
-			console.log("Shop", eventObject.result)
+			// console.log("Shop", eventObject.result)
 			if (eventObject.success) {			
 				this.setState({
 					shop: eventObject.result,
@@ -481,10 +481,10 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > selectedShop.max_order_distance_in_km){
-				this.refs.toast.show("You are too far away", TOAST_DURATION)
-				return
-			} else {
+			// if (member_distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
+			// 	return
+			// } else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -510,7 +510,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			}
+			// }
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -737,6 +737,7 @@ export default class Home extends React.Component {
 					item={item}
 					navigation={this.props.navigation}
 					bannerImage={item.image}
+					bannerDescription={item.description}
 					detailImage={item.banner_detail_image}
 					onPressItem={this.onBannerPressed}
 				/>
@@ -1286,7 +1287,7 @@ export default class Home extends React.Component {
 		var enabled = selected_product.enabled
 
 
-		if (!shop.is_opened) {
+		if (!shop.is_opened || !shop.can_order) {
 			enabled = false
 		}
 		
@@ -1492,7 +1493,7 @@ export default class Home extends React.Component {
 		let fullList = [...cart,...promotion]
 
 		if (shop !== null ){
-			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+			if (shop.is_opened == false || shop.can_order == false){
 				if (shop.featured_promotion !== null) {
 					categoryBottomSpacer = styles.categoryListPosition3
 				} else {
@@ -1746,7 +1747,7 @@ export default class Home extends React.Component {
 					</View>)
 			}
 
-			if (shop.shop_busy_template_message != null){
+			if (shop.can_order == false){
 				const template = shop.shop_busy_template_message.template
 
 				return (
@@ -1783,7 +1784,7 @@ export default class Home extends React.Component {
 		const { currentMember } = this.props
 
 		if (shop !== null ){
-			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+			if (shop.is_opened == false || shop.can_order == false){
 				if (cart.length > 0 ){
 					style = styles.featuredpromoButtonPosition3
 				}else{

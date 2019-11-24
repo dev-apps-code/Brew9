@@ -24,7 +24,7 @@ export default class BannerCell extends React.Component {
 
     onBannerCellPress = () => {
         const analytics = new Analytics(ANALYTICS_ID)
-        analytics.event(new Event('Banner', 'Click', `Banner ${this.props.index}`))
+        analytics.event(new Event('Banner', 'Click', `${this.props.bannerDescription}`))
         this.props.onPressItem(this.props.item,this.props.index)
     }
 

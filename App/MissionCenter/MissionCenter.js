@@ -20,7 +20,7 @@ import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_re
 import MissionLoginRequestObject from "../Requests/mission_login_request_object"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
-import { Analytics, PageHit } from 'expo-analytics';
+import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
@@ -155,6 +155,7 @@ export default class MissionCenter extends React.Component {
         
         this.setState({ loading: true })
         const callback = eventObject => {
+            console.log("Login Mission", eventObject)
             this.refs.toast.show(eventObject.message, TOAST_DURATION)
             this.setState({
                 loading: false,

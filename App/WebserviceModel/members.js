@@ -436,7 +436,6 @@ export default {
     }, 
     *missionLogin({ payload }, { call, put, select }) 
     {
-      console.log("missionLogin")
     try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
