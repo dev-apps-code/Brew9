@@ -2,11 +2,10 @@ import BaseRequestObject from "./base_request_object";
 
 class UpdateProfileRequestObject extends BaseRequestObject{
 
-    constructor(dob, nickname, image, gender, email){
+    constructor(dob, nickname, gender, email){
         super();
         this.dob = dob
         this.nickname = nickname
-        this.image = image
         this.gender = gender
         this.email = email
     }
@@ -24,9 +23,6 @@ class UpdateProfileRequestObject extends BaseRequestObject{
         }
         if (this.nickname != null) {
             data.append('nickname',this.nickname)
-        }
-        if (this.image!=null){
-            data.append('image', this.image)
         }
 
         if (this.gender!=null){

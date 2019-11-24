@@ -50,6 +50,7 @@ import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
+import NotificationsRequestObject from "../Requests/notifications_request_object";
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, Event, PageHit } from 'expo-analytics';
@@ -299,6 +300,7 @@ export default class Home extends React.Component {
 		})
 
 		this.loadShops(true)
+		this.loadNotifications()
 		AppState.addEventListener('change', this._handleAppStateChange);	
 		await this.registerForPushNotificationsAsync()
 
@@ -310,13 +312,38 @@ export default class Home extends React.Component {
 	}
 
 	_handleAppStateChange = nextAppState => {
+		const {currentMember} = this.props
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
-			
+			if (currentMember != null) {
+				this.loadNotifications();
+			  }
 		}
 		this.setState({ appState: nextAppState });
 	  };
 
+	  loadNotifications = () => {
+        
+		const { dispatch, currentMember } = this.props;
+		this.setState({ loading: true });
+		const callback = eventObject => {
+		  
+		  if (eventObject.success) {
+			this.loadLocalStore(eventObject.result)
+		  }
+		  this.setState({
+			loading: false
+		  });
+		};
+		const obj = new NotificationsRequestObject();
+		obj.setUrlId(currentMember.id);
+		dispatch(
+		  createAction("members/loadNotifications")({
+			object: obj,
+			callback
+		  })
+		);
+	  }
 
 	loadProfile(){
 		const { dispatch, currentMember } = this.props
@@ -481,10 +508,10 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			// if (member_distance > selectedShop.max_order_distance_in_km){
-			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
-			// 	return
-			// } else {
+			if (member_distance > selectedShop.max_order_distance_in_km){
+				this.refs.toast.show("You are too far away", TOAST_DURATION)
+				return
+			} else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -510,7 +537,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			// }
+			}
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()

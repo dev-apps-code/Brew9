@@ -83,15 +83,19 @@ export default {
     },
     loadNotification(state, {payload}) {
       
-      if (payload.currentUser != null) {
+      console.log("Payload", payload.result)
+      if (payload.result != null && payload.result.length > 0) {
         if (payload.last_read != null) {
-          var notifications = _.filter(payload.currentUser.notifications, function(o) { 
+
+          console.log("Raw", payload.result)
+          console.log("Last", payload.last_read)
+          var notifications = _.filter(payload.result, function(o) { 
             return o.id > payload.last_read; 
           })
-          
+          console.log("Filtered", notifications)
           return { ...state, notifications : notifications }
         } else {
-          return { ...state, notifications : payload.currentUser.notifications }
+          return { ...state, notifications : payload.result }
         }
       } else {
         return { ...state, notifications : [] }
@@ -153,13 +157,19 @@ export default {
             authtoken,
             object,
         )
+        const last_read = yield call(getLastRead)
+       
         const eventObject = new EventObject(json)
+        const result = eventObject.result
+        yield put(createAction('loadNotification')({result, last_read}))
+
         if (eventObject.success == true) {}
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
     *loadProfile({ payload }, { call, put, select })
     {
+      console.log("New user data")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -301,11 +311,11 @@ export default {
     *loadCurrentUserFromCache({ payload }, { call, put, select }) {
       try {
         const json = yield call(getCurrentUser)
-        const last_read = yield call(getLastRead)
+        // const last_read = yield call(getLastRead)
         const currentUser = JSON.parse(json)
 
         yield put(createAction('loadCurrentUser')(currentUser))
-        yield put(createAction('loadNotification')({currentUser, last_read}))
+        // yield put(createAction('loadNotification')({currentUser, last_read}))
 
       } catch (err) {
         console.log('loadingCurrentUser', err)

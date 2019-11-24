@@ -117,7 +117,7 @@ export default class MemberProfile extends React.Component {
 				loading: false,
 			})
 		}
-		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.image, formData.gender, formData.email)
+		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.gender, formData.email)
 		obj.setUrlId(this.state.members.id)
 		dispatch(
 			createAction('members/loadUpdateProfile')({
