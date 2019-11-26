@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator, RefreshControl } from "react-native"
+import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator, RefreshControl, AppState } from "react-native"
 import React from "react"
 import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { ScrollView } from "react-native-gesture-handler";
@@ -15,6 +15,8 @@ import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR} from "../Common/common_style";
+import Moment from 'moment';
+import NotificationsRequestObject from "../Requests/notifications_request_object";
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -72,7 +74,61 @@ export default class PickUp extends React.Component {
 
 	componentDidMount() {
 		this.loadCurrentOrder()
-		console.log("did mount")
+		const {currentMember } = this.props
+		const { navigation } = this.props
+		AppState.addEventListener('change', this._handleAppStateChange);	
+		this.navigationListener = navigation.addListener('willFocus', payload => {
+			if (currentMember != null) {
+				this.loadCurrentOrder();
+			  }
+		})
+	}
+
+	componentWillUnmount() {
+		this.removeNavigationListener()
+		AppState.removeEventListener('change', this._handleAppStateChange);
+	}
+
+	_handleAppStateChange = nextAppState => {
+		const {currentMember} = this.props
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			
+			if (currentMember != null) {
+				this.loadProfile();
+				this.loadNotifications();
+			  }
+		}
+		this.setState({ appState: nextAppState });
+	};
+	
+	loadNotifications = () => {
+        
+		const { dispatch, currentMember } = this.props;
+		this.setState({ loading: true });
+		const callback = eventObject => {
+		  
+		  if (eventObject.success) {
+			this.loadLocalStore(eventObject.result)
+		  }
+		  this.setState({
+			loading: false
+		  });
+		};
+		const obj = new NotificationsRequestObject();
+		obj.setUrlId(currentMember.id);
+		dispatch(
+		  createAction("members/loadNotifications")({
+			object: obj,
+			callback
+		  })
+		);
+	  }
+
+	removeNavigationListener() {
+		if (this.navigationListener) {
+		  this.navigationListener.remove()
+		  this.navigationListener = null
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -264,7 +320,9 @@ export default class PickUp extends React.Component {
 							<Text
 								style={styles.pickupTimeheaderText}>Pick Up</Text>
 							<Text
-								style={styles.pickupTimeText}>{item.pickup_time}</Text>
+								style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}</Text>
+							<Text
+								style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text>
 						</View>
 					</View>
 					<View
@@ -756,6 +814,18 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginTop: 5 * alpha,
 		alignSelf: "center"
+	},
+	pickupTimeAMPMText: {
+		backgroundColor: "transparent",
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		bottom: 6 * alpha,
+		right: -23 * alpha,
+		position: "absolute"
 	},
 	pickupTimeheaderText: {
 		color: "rgb(50, 50, 50)",

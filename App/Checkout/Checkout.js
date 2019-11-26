@@ -236,23 +236,32 @@ export default class Checkout extends React.Component {
 	
 	
 	onConfirmTimePicker() {
-		const { selected_hour, selected_minute} = this.state
+		const { selected_hour, selected_minute, pick_up_status} = this.state
+		var now = new Moment().format("HH:mm");
+		if (pick_up_status == "Order Now") {
+			this.setState({
+				pick_up_time: `${now}` ,
+			}, function () {
+				this.tooglePickup()
+			});
+		} else if (pick_up_status == "Pick Later")
 		this.setState({ 
 			pick_up_time: `${selected_hour}:${selected_minute}` ,
-			pick_up_status: `Pick Later` ,
 		}, function () {
 			this.tooglePickup()
 		});
 	}
 
-	onOrderNow() {
-		var now = new Moment().format("h:mm");
+	onSelectPickLater() {
 		this.setState({ 
-			pick_up_time: `${now}` ,
+			pick_up_status: `Pick Later` ,
+		})
+	}
+
+	onSelectOrderNow() {
+		this.setState({ 
 			pick_up_status: `Order Now` ,
-		}, function () {
-			this.tooglePickup()
-		});
+		})
 	}
 	
 	onBranchButtonPressed = () => {
@@ -388,14 +397,22 @@ export default class Checkout extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
-			this.setState({
-				loading: false,
-			})
+			
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits'){
-					this.clearCart()
+					setTimeout(function () {
+						console.log("Time Out")
+						this.clearCart()
+						this.setState({
+							loading: false,
+						})
+					  }.bind(this), 2000);
+					
 				}else{
+					this.setState({
+						loading: false,
+					})
 					const order = eventObject.result
 					navigate("PaymentsWebview", {
 						name: `Brew9 Order`,
@@ -407,7 +424,9 @@ export default class Checkout extends React.Component {
 				}
 			}
 			else{
-
+				this.setState({
+					loading: false,
+				})
 				if (Array.isArray(eventObject.result)){
 					if (eventObject.result.length > 0){
 						let item = eventObject.result[0]
@@ -468,7 +487,7 @@ export default class Checkout extends React.Component {
 					var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
 					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
 					var pickup = Moment(pick_up_status, 'h:mm')
-					var now = Moment(new Date(), 'h:mm')
+					var now = Moment(new Date(), 'HH:mm')
 
 					// console.log("Opening", opening, "Closing", closing, "Pickup", pickup, "Now", now)
 
@@ -603,14 +622,12 @@ export default class Checkout extends React.Component {
 					</View>
 					<View
 						pointerEvents="box-none"
-						style={{
-							height: 150 * alpha,
-						}}>
+						style={{ height: 150 * alpha }}>
 						<View
 							style={styles.brew9walletView}>
-								<TouchableOpacity
-									onPress={() => this.onWalletButtonPressed()}
-									style={styles.walletbuttonButton}>
+							<TouchableOpacity
+								onPress={() => this.onWalletButtonPressed()}
+								style={styles.walletbuttonButton}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -633,36 +650,28 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.walletView}>
 										<Text
-											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 Wallet</Text>
+											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 Balance</Text>
 										<View
 											style={{
 												flex: 1,
 											}}/>
 										<Text
-											style={styles.balanceText}>Balance: ${credits}</Text>
+											style={styles.balanceText}>${credits}</Text>
 									</View>
 									<View
 										style={{
 											flex: 1,
 										}}/>
-									{
+										{
 										this.state.selected_payment == "credits" ?
 										<View
 											style={styles.selectTwoView}/>
 										: <View
 										style={styles.selectView}/>
-									}
+										}
+									</View>
 								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 1 * alpha,
-									bottom: 0 * alpha,
-								}}>
+							
 								<View
 									pointerEvents="box-none"
 									style={{
@@ -671,13 +680,9 @@ export default class Checkout extends React.Component {
 										right: 0 * alpha,
 										bottom: 0 * alpha,
 										height: 52 * alpha,
-										alignItems: "flex-start",
 									}}>
 									<View
 										style={styles.walleticonView}>
-										<Image
-											source={require("./../../assets/images/fill-1-8.png")}
-											style={styles.fill1Image}/>
 										<View
 											pointerEvents="box-none"
 											style={{
@@ -689,13 +694,11 @@ export default class Checkout extends React.Component {
 												justifyContent: "center",
 											}}>
 											<Image
-												source={require("./../../assets/images/group-9-13.png")}
-												style={styles.group9Image}/>
+												source={require("./../../assets/images/wallet_center.png")}
+												style={styles.walletImage}/>
 										</View>
 									</View>
 									
-								</View>
-								
 							</View>
 							<View
 										style={{
@@ -711,16 +714,7 @@ export default class Checkout extends React.Component {
 								<TouchableOpacity
 										onPress={() => this.onCreditButtonPressed()}
 										style={styles.creditbuttonButton}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 1 * alpha,
-									top: 0 * alpha,
-									bottom: 2 * alpha,
-									alignItems: "flex-end",
-								}}>
+							
 								<View
 									pointerEvents="box-none"
 									style={{
@@ -749,28 +743,16 @@ export default class Checkout extends React.Component {
 													justifyContent: "center",
 												}}>
 												<Image
-													source={require("./../../assets/images/group-3-31.png")}
-													style={styles.group3TwoImage}/>
-											</View>
-											<View
-												pointerEvents="box-none"
-												style={{
-													position: "absolute",
-													left: 0 * alpha,
-													right: 0 * alpha,
-													top: 0 * alpha,
-													bottom: 0 * alpha,
-													justifyContent: "center",
-												}}>
-												<Image
-													source={require("./../../assets/images/group-6-25.png")}
-													style={styles.group6TwoImage}/>
+													source={require("./../../assets/images/credit_card.png")}
+													style={styles.creditCardImage}/>
 											</View>
 										</View>
 									</View>
 									
-								
-								</View>
+									<View
+										style={{
+											flex: 1,
+										}}/>
 								<View
 									style={styles.menuRowLineView}/>
 							</View>
@@ -910,6 +892,8 @@ export default class Checkout extends React.Component {
 	renderPaymentSection() {
 
 		const { currentMember } = this.props
+		const { selected_payment } = this.state
+
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 
 		return <View style={styles.drinksViewWrapper}>
@@ -930,13 +914,17 @@ export default class Checkout extends React.Component {
 							}}>
 							<View
 								style={styles.productDetailView}>
-								<Text
-									style={styles.productNameText}>Payment Method</Text>
+								<View style={{flexDirection: "row", alignItems: "center"}}>
+									<View style={selected_payment != "" ? styles.greenCircle : styles.redCircle} />
+									<Text
+										style={styles.productNameText}>Payment</Text>
+										
+								</View>
 								<View style={styles.spacer} />
 							</View>
 							<Text
-								style={styles.productVoucherText}>{ this.state.selected_payment == '' ? "Select payment" : this.state.selected_payment == "credits" ? 
-								`Brew9 Credit ${this.props.members.currency}${credits}` : "Credit Card"}</Text>
+								style={styles.productVoucherText}>{ this.state.selected_payment == '' ? "Please select" : this.state.selected_payment == "credits" ? 
+								`Balance ${this.props.members.currency}${credits}` : "Credit Card"}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage}/>
@@ -948,6 +936,7 @@ export default class Checkout extends React.Component {
 	}
 
 	renderPickupTime() {
+		const { pick_up_status } = this.state
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
@@ -966,12 +955,15 @@ export default class Checkout extends React.Component {
 							}}>
 							<View
 								style={styles.productDetailView}>
-								<Text
-									style={styles.productNameText}>Pickup Time</Text>
-								<View style={styles.spacer} />
+								<View style={{flexDirection: "row", alignItems: "center"}}>
+									<View style={pick_up_status != null ? styles.greenCircle : styles.redCircle} />
+									<Text
+										style={styles.productNameText}>Pick Up Time</Text>
+										
+								</View>
 							</View>
 							<Text
-								style={styles.productVoucherText}>{this.state.pick_up_time != null? this.state.pick_up_time : 'Select pick up time'}</Text>
+								style={styles.productVoucherText}>{this.state.pick_up_time != null? Moment(this.state.pick_up_time, "HH:mm").format('LT') : 'Please select'}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage}/>
@@ -1035,32 +1027,191 @@ export default class Checkout extends React.Component {
 		let {currentMember, selectedShop} = this.props
 
 		return <Animated.View style={this.movePickAnimation.getLayout()}>
-			<View style={{flex: 1,flexDirection: "column"}}>
-			<View style={{
-				position: "absolute", 
-				bottom: 150 * alpha, 
-				width: "100%", 
-				height: 50 * alpha, 
-				alignItems: "center", 
-				justifyContent: "center", 
-				flexDirection: "row",
-				backgroundColor: "white"
-				}}>
-				<TouchableOpacity onPress={() => this.tooglePickup()}><Text style={styles.popOutTimePickerViewCancel}>Cancel</Text></TouchableOpacity>
-				<View style={{flex: 1}}/>
-				<TouchableOpacity onPress={() => this.onOrderNow()} style={styles.popOutTimePickerOrderNowButton}><Text style={styles.popOutTimePickerOrderNow}>Order Now</Text></TouchableOpacity>
-				<View style={{flex: 1}}/>
-				<TouchableOpacity onPress={() => this.onConfirmTimePicker()}><Text style={styles.popOutTimePickerViewDone}>Done</Text></TouchableOpacity>
-			</View>
-			<View style={{
-				backgroundColor: "rgb(245, 245, 245)",
-				position: "absolute",
-				alignSelf: "center",
-				width: "100%",
-				bottom: 150 * alpha, 
-				height: 1 * alpha,
-			}} />
-			<View style={styles.popOutTimePickerView}>
+				<View
+					style={styles.popOutPickupView}>
+					<View
+						style={styles.paymentMethodTwoView}>
+						<TouchableOpacity
+							onPress={() => this.tooglePickup()}
+							style={styles.closeButton}>
+							<Image
+								source={require("./../../assets/images/x-3.png")}
+								style={styles.closeButtonImage}/>
+						</TouchableOpacity>
+						<Text
+							style={styles.paymentMethodTwoText}></Text>
+						<TouchableOpacity
+							onPress={() => this.onConfirmTimePicker()}
+							style={styles.pickupConfirmButton}>
+							<Text style={styles.pickupConfirmButtonText}>Confirm</Text>
+						</TouchableOpacity>
+					</View>
+					<View
+						pointerEvents="box-none"
+						style={{
+							height: 160 * alpha,
+						}}>
+						<View
+							style={styles.pickupNowView}>
+								<TouchableOpacity
+									onPress={() => this.onSelectOrderNow()}
+									style={styles.pickupNowbuttonButton}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 61 * alpha,
+										marginRight: 17 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									
+										<Text
+											style={this.state.pick_up_status == "Order Now" ? styles.pickupNowSelectedText : styles.pickupNowText}>Pick Up Now</Text>
+								
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									{
+										this.state.pick_up_status == "Order Now" ?
+										<View
+											style={styles.selectTwoView}/>
+										: <View
+										style={styles.selectView}/>
+									}
+								</View>
+							</View>
+							
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 17 * alpha,
+										right: 0 * alpha,
+										bottom: 0 * alpha,
+										height: 52 * alpha,
+										alignItems: "flex-start",
+									}}>
+									<View
+										style={styles.walleticonView}>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0 * alpha,
+												right: 0 * alpha,
+												top: 0 * alpha,
+												bottom: 0 * alpha,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/pickup_now.png")}
+												style={styles.walletImage}/>
+										</View>
+									</View>
+									
+								</View>
+								
+							<View
+								style={{
+									flex: 1,
+								}}/>
+							<View
+							style={styles.menuRowLineView}/>
+							</TouchableOpacity>
+						</View>
+						<View
+							style={styles.pickLaterView}>
+								<TouchableOpacity
+									onPress={() => this.onSelectPickLater()}
+									style={styles.pickupNowbuttonButton}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0 * alpha,
+									justifyContent: "center",
+								}}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 61 * alpha,
+										marginRight: 17 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									
+										<Text
+											style={this.state.pick_up_status == "Pick Later" ? styles.pickupNowSelectedText : styles.pickupNowText}>Pick Up Later</Text>
+										
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									{
+										this.state.pick_up_status == "Pick Later" ?
+										<View
+											style={styles.selectTwoView}/>
+										: <View
+										style={styles.selectView}/>
+									}
+									
+								</View>
+								
+								
+							</View>
+							
+							</TouchableOpacity>
+							
+								<View
+									pointerEvents="box-none"
+									style={{
+										position: "absolute",
+										left: 17 * alpha,
+										right: 0 * alpha,
+										bottom: 0 * alpha,
+										height: 52 * alpha,
+										alignItems: "flex-start",
+									}}>
+									<View
+										style={styles.walleticonView}>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0 * alpha,
+												right: 0 * alpha,
+												top: 0 * alpha,
+												bottom: 0 * alpha,
+												justifyContent: "center",
+											}}>
+											<Image
+												source={require("./../../assets/images/pickup_later.png")}
+												style={styles.walletImage}/>
+										</View>
+									</View>
+									
+								
+							</View>
+						</View>
+					</View>
+					<View style={styles.menuRowLine2View}/>
+					<View style={styles.popOutTimePickerView}>
 			<View style={styles.timepickerTopBar} />	
 			<ScrollPicker
 				ref={(sphour) => {this.sphour = sphour}}
@@ -1124,9 +1275,9 @@ export default class Checkout extends React.Component {
 			/>
 			</View>
 			<View style={styles.timepickerBottomBar} />	
-		</View>
-		
-	</Animated.View>
+				</View>
+				
+		</Animated.View>
 	}
 
 	renderCheckoutReceipt(){
@@ -1259,10 +1410,29 @@ export default class Checkout extends React.Component {
 			</View>
 	}
 
+	renderPayNow(final_price) {
+		const { pick_up_time, selected_payment } = this.state
+		
+		if (pick_up_time != null && selected_payment != "") {
+			return <View
+				style={styles.totalPayNowView}>
+					
+					<View style={styles.paymentButton}><Text
+						style={styles.paymentButtonText}>${final_price}</Text></View>
+				<TouchableOpacity
+					onPress={() => this.onPayNowPressed()}
+					style={styles.payNowButton}>
+					<Text
+						style={styles.payNowButtonText}>Pay Now</Text>
+				</TouchableOpacity>
+			</View>
+		}
+		return
+	}
 
 	render() {
 
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
+		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range,pick_up_time, selected_payment} = this.state
 		let {currentMember, selectedShop} = this.props
 
 		var final_price = cart_total - discount 
@@ -1273,7 +1443,7 @@ export default class Checkout extends React.Component {
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
 		return <View
-			style={styles.checkoutView}>
+			style={pick_up_time != null && selected_payment != "" ? styles.checkoutViewPadding : styles.checkoutView}>
 			<ScrollView
 				style={styles.scrollviewScrollView}
 				onLayout={(event) => this.measureView(event)}>
@@ -1286,24 +1456,8 @@ export default class Checkout extends React.Component {
 			</ScrollView>
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
-			<View
-				style={styles.totalPayNowView}>
-					{/* <TouchableOpacity
-						onPress={() => this.onPaymentButtonPressed()}
-						style={styles.paymentButton}>
-					<Text
-						style={styles.paymentButtonText}>{ this.state.selected_payment == '' ? "Select a payment method" : this.state.selected_payment == "credits" ? 
-						`Brew9 Credit ${this.props.members.currency} ${credits}` : "Credit Card"}</Text>
-					</TouchableOpacity> */}
-					<View style={styles.paymentButton}><Text
-						style={styles.paymentButtonText}>${final_price}</Text></View>
-				<TouchableOpacity
-					onPress={() => this.onPayNowPressed()}
-					style={styles.payNowButton}>
-					<Text
-						style={styles.payNowButtonText}>Pay Now</Text>
-				</TouchableOpacity>
-			</View>
+			{this.renderPayNow(final_price)}
+			
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			
@@ -1345,14 +1499,17 @@ const styles = StyleSheet.create({
 	},
 	checkoutView: {
 		backgroundColor: DEFAULT_GREY_BACKGROUND,
+		// paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
+		flex: 1,
+	},
+	checkoutViewPadding: {
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
 		flex: 1,
 	},
 	scrollviewScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		top: 0 * alpha,
-		bottom: 57 * alpha,
 	},
 	branchView: {
 		backgroundColor: "white",
@@ -1829,15 +1986,7 @@ const styles = StyleSheet.create({
 		width: 24 * alpha,
 		height: 24 * alpha,
 	},
-	group6TwoImage: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		position: "absolute",
-		alignSelf: "center",
-		width: 26 * alpha,
-		top: 0 * alpha,
-		height: 24 * alpha,
-	},
+	
 	paymenttypeText: {
 		color: 'rgb(85,85,85)',
 		fontFamily: NON_TITLE_FONT,
@@ -2020,8 +2169,9 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
+		// bottom: (47 + BUTTONBOTTOMPADDING) * alpha,
 		bottom: 0 * alpha,
-		height: 247 * alpha,
+		height: 250 * alpha,
 	},
 	paymentMethodTwoView: {
 		backgroundColor: "transparent",
@@ -2116,8 +2266,8 @@ const styles = StyleSheet.create({
 	},
 	walleticonView: {
 		backgroundColor: "transparent",
-		width: 26 * alpha,
-		height: 23 * alpha,
+		width: 40 * alpha,
+		height: 40 * alpha,
 	},
 	fill1Image: {
 		backgroundColor: "transparent",
@@ -2128,12 +2278,7 @@ const styles = StyleSheet.create({
 		top: 2 * alpha,
 		height: 1 * alpha,
 	},
-	group9Image: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		width: null,
-		height: 22 * alpha,
-	},
+	
 	lineImage: {
 		backgroundColor: "transparent",
 		resizeMode: "cover",
@@ -2174,8 +2319,8 @@ const styles = StyleSheet.create({
 	},
 	cardiconView: {
 		backgroundColor: "transparent",
-		width: 28 * alpha,
-		height: 26 * alpha,
+		width: 40 * alpha,
+		height: 40 * alpha,
 		marginLeft: 17 * alpha,
 	},
 	group3TwoImage: {
@@ -2186,12 +2331,7 @@ const styles = StyleSheet.create({
 		marginLeft: 1 * alpha,
 		marginRight: 3 * alpha,
 	},
-	group6TwoImage: {
-		resizeMode: "contain",
-		backgroundColor: "transparent",
-		width: null,
-		height: 25 * alpha,
-	},
+	
 	creditbuttonButtonImage: {
 		resizeMode: "contain",
 	},
@@ -2692,7 +2832,7 @@ const styles = StyleSheet.create({
 	},
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",
-		fontFamily: TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2701,7 +2841,7 @@ const styles = StyleSheet.create({
 	},
 	productVoucherDisableText: {
 		color: "rgb(163, 163, 163)",
-		fontFamily: TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2752,6 +2892,15 @@ const styles = StyleSheet.create({
 		height: 1 * alpha,
 		left: 20 * alpha,
 	},
+	menuRowLine2View: {
+		backgroundColor: "rgb(245, 245, 245)",
+		width: 375 * alpha,
+		height: 1 * alpha,
+		left: 20 * alpha,
+		position: "absolute",
+		alignSelf: "center",
+		bottom: 200 * alpha, 
+	},
 
 	menuRowArrowImage: {
 		width: 10 * alpha,
@@ -2785,9 +2934,9 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 0 * alpha,
+		bottom: 50 * alpha,
 		height: 150 * alpha,
-		flexDirection: "row"
+		flexDirection: "row",
 	},
 	popOutTimePickerViewDone: {
 		fontFamily: TITLE_FONT,
@@ -2847,9 +2996,226 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		alignSelf: "center",
 		flex: 1,
-		bottom: 100 * alpha, 
+		bottom: 150 * alpha, 
 		left: 20 * alpha,
 		right: 20 * alpha,
 		height: 1 * alpha,
 	},
+
+
+	popOutPickupView: {
+		backgroundColor: "white",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		// bottom: (47 + BUTTONBOTTOMPADDING) * alpha,
+		bottom: 0 * alpha,
+		height: 400 * alpha,
+	},
+
+	pickupConfirmButton: {
+		backgroundColor: "white",
+		borderRadius: 10.5 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		right: 12 * alpha,
+		top: 19 * alpha,
+		height: 21 * alpha,
+	},
+	pickupConfirmButtonText: {
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		fontSize: 17 * alpha,
+	},
+
+	pickupNowView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		height: 80 * alpha,
+	},
+	nowView: {
+		backgroundColor: "transparent",
+		width: 200 * alpha,
+		height: 30 * alpha,
+
+	},
+	pickupNowText: {
+		backgroundColor: "transparent",
+		color: "rgb(186, 183, 183)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	pickupNowSelectedText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	selectView: {
+		backgroundColor: "transparent",
+		borderRadius: 9 * alpha,
+		borderWidth: 1 * alpha,
+		borderColor: "rgb(186, 183, 183)",
+		borderStyle: "solid",
+		width: 18 * alpha,
+		height: 18 * alpha,
+	},
+	walleticonView: {
+		backgroundColor: "transparent",
+		width: 26 * alpha,
+		height: 23 * alpha,
+	},
+	fill1Image: {
+		backgroundColor: "transparent",
+		resizeMode: "contain",
+		position: "absolute",
+		left: 3 * alpha,
+		right: 4 * alpha,
+		top: 2 * alpha,
+		height: 1 * alpha,
+	},
+	walletImage: {
+		resizeMode: "contain",
+		backgroundColor: "transparent",
+		width: null,
+		height: 30 * alpha,
+	},
+	lineImage: {
+		backgroundColor: "transparent",
+		resizeMode: "cover",
+		alignSelf: "flex-end",
+		width: 316 * alpha,
+		height: 3 * alpha,
+	},
+	pickupNowbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 1 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	walletbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	walletbuttonButtonText: {
+		color: "white",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	pickLaterView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 80 * alpha,
+		height: 80 * alpha,
+	},
+	cardiconView: {
+		backgroundColor: "transparent",
+		width: 28 * alpha,
+		height: 26 * alpha,
+		marginLeft: 17 * alpha,
+	},
+	group3TwoImage: {
+		resizeMode: "contain",
+		backgroundColor: "transparent",
+		width: null,
+		height: 24 * alpha,
+		marginLeft: 1 * alpha,
+		marginRight: 3 * alpha,
+	},
+	creditCardImage: {
+		resizeMode: "contain",
+		backgroundColor: "transparent",
+		width: null,
+		height: 30 * alpha,
+	},
+	creditbuttonButtonImage: {
+		resizeMode: "contain",
+	},
+	pickLaterbuttonButton: {
+		backgroundColor: "transparent",
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 0 * alpha,
+		bottom: 0 * alpha,
+	},
+	creditbuttonButtonText: {
+		color: "white",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+	},
+	line10View: {
+		backgroundColor: "rgb(237, 235, 235)",
+		width: 314 * alpha,
+		height: 1 * alpha,
+	},
+	creditCardText: {
+		color: "rgb(186, 183, 183)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	creditCardSelectedText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 15 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+	},
+	selectTwoView: {
+		backgroundColor: "rgb(0, 178, 227)",
+		borderRadius: 9 * alpha,
+		width: 18 * alpha,
+		height: 18 * alpha,
+	},
+	redCircle: {
+		backgroundColor: "red",
+		width: 10 * alpha,
+		height: 10 * alpha,
+		borderRadius: 5 * alpha,
+		marginRight: 5 * alpha,
+		marginBottom: 5 * alpha,
+	},
+	greenCircle: {
+		backgroundColor: "green",
+		width: 10 * alpha,
+		height: 10 * alpha,
+		borderRadius: 5 * alpha,
+		marginRight: 5 * alpha,
+		marginBottom: 5 * alpha,
+	}
 })

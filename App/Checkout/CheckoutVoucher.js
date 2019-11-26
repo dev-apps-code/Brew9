@@ -20,7 +20,8 @@ import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members,shops }) => ({
     currentMember: members.profile,
-    selectedShop: shops.selectedShop
+    selectedShop: shops.selectedShop,
+    company_id: members.company_id,
 }))
 export default class CheckoutVoucher extends React.Component {
 
@@ -196,11 +197,11 @@ export default class CheckoutVoucher extends React.Component {
 
     onHowToUsePressed = () => {
         const { navigate } = this.props.navigation
-        const { currentMember } = this.props
+        const { company_id } = this.props
 
         navigate("WebCommon", {
             title: 'How To Use',
-            web_url: KURL_INFO + '?page=voucher_uses&id=' + currentMember.company_id,
+            web_url: KURL_INFO + '?page=voucher_uses&id=' + company_id,
         })
     }
 

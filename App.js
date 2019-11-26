@@ -87,9 +87,9 @@ const VerifyUserStack = createStackNavigator(
     }
   },
   {
-    mode: 'modal',
     initialRouteName: "VerifyUser",
-    header: "none"
+    header: "none",
+    
   }
 );
 
@@ -97,7 +97,7 @@ const VerifyUserStack = createStackNavigator(
 const PushOrder = createStackNavigator(
   {
     Home: {
-      screen: Home
+      screen: Home,
     },
     PaymentsWebview:{
       screen: PaymentsWebview
@@ -150,7 +150,10 @@ const PushOrder = createStackNavigator(
     },  
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Home",
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
+    },
   }
 );
 
@@ -185,7 +188,10 @@ const PushPickup = createStackNavigator(
     },
   },
   {
-    initialRouteName: "PickUp"
+    initialRouteName: "PickUp",
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
+    },
   }
 );
 
@@ -199,7 +205,10 @@ const PushInbox = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Notification"
+    initialRouteName: "Notification",
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
+    },
   }
 );
 
@@ -282,7 +291,10 @@ const PushProfile = createStackNavigator(
     },
   },
   {
-    initialRouteName: "Profile"
+    initialRouteName: "Profile",
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
+    },
   }
 );
 
@@ -305,7 +317,7 @@ PushOrder.navigationOptions = ({ navigation }) => {
     }
   }
   return {
-    tabBarVisible
+    tabBarVisible,
   };
 };
 

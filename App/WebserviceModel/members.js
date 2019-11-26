@@ -44,7 +44,6 @@ function clearCurrentUser() {
 }
 
 function getLastRead() {
-  console.log("getlast")
   return AsyncStorage.getItem("notification_key", (err, result) => {
     if (result != null) {
       return result
@@ -78,21 +77,16 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      console.log("LoadUser")
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     loadNotification(state, {payload}) {
       
-      console.log("Payload", payload.result)
       if (payload.result != null && payload.result.length > 0) {
         if (payload.last_read != null) {
 
-          console.log("Raw", payload.result)
-          console.log("Last", payload.last_read)
           var notifications = _.filter(payload.result, function(o) { 
             return o.id > payload.last_read; 
           })
-          console.log("Filtered", notifications)
           return { ...state, notifications : notifications }
         } else {
           return { ...state, notifications : payload.result }

@@ -17,7 +17,8 @@ import PointsProductsRequestObject from "../Requests/points_products_request_obj
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id,
 }))
 export default class PointShop extends React.Component {
 
@@ -103,10 +104,10 @@ export default class PointShop extends React.Component {
 
 	onRulesPressed = () => {
 		const { navigate } = this.props.navigation
-
+		const { company_id } = this.props
 		navigate("WebCommon", {
 			title: 'Point Rules',
-			web_url: KURL_INFO + '?page=point_rules&id=1',
+			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
 		})
 	}
 

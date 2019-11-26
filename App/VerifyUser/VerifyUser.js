@@ -21,6 +21,8 @@ import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
 import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
+import NotificationsRequestObject from "../Requests/notifications_request_object";
+import ProfileRequestObject from '../Requests/profile_request_object'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -52,7 +54,6 @@ export default class VerifyUser extends React.Component {
 			is_counting: false,
 			count_down: 3,
 		}
-
 	}
 
 	componentDidMount() {
@@ -77,8 +78,6 @@ export default class VerifyUser extends React.Component {
 		} else {
 			this.props.navigation.navigate('TabGroupOne')
 		}
-		
-
 	}
 
 	onSendPressed = () => {
@@ -184,10 +183,7 @@ export default class VerifyUser extends React.Component {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
-					// const { navigate } = this.props.navigation
-					// navigate('Home', {
-					// 	hasLogin: true
-					// })
+					
 					const { navigation } = this.props
 					if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
 						navigation.navigate("Home")

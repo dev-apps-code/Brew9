@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import {connect} from "react-redux";
@@ -14,6 +14,7 @@ import {KURL_INFO, KURL_MEMBERSHIP_INFO} from "../Utils/server";
 import {createAction} from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
+import NotificationsRequestObject from "../Requests/notifications_request_object";
 import Constants from 'expo-constants';
 import {LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE} from "../Common/common_style";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -67,6 +68,7 @@ export default class Profile extends React.Component {
 		super(props)
 		this.state = {
 			hasShimmered: false,
+			appState: AppState.currentState,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: 0 })
 	}
@@ -75,11 +77,48 @@ export default class Profile extends React.Component {
 		this.loadProfile()	
 		this.loopShimmer()
 		this.timer = setInterval(()=> this.loopShimmer(), 3000)
+		AppState.addEventListener('change', this._handleAppStateChange);	
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.timer);
+		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
+
+	_handleAppStateChange = nextAppState => {
+		const {currentMember} = this.props
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			
+			if (currentMember != null) {
+				this.loadProfile();
+				this.loadNotifications();
+			  }
+		}
+		this.setState({ appState: nextAppState });
+	};
+
+	loadNotifications = () => {
+        
+		const { dispatch, currentMember } = this.props;
+		this.setState({ loading: true });
+		const callback = eventObject => {
+		  
+		  if (eventObject.success) {
+			this.loadLocalStore(eventObject.result)
+		  }
+		  this.setState({
+			loading: false
+		  });
+		};
+		const obj = new NotificationsRequestObject();
+		obj.setUrlId(currentMember.id);
+		dispatch(
+		  createAction("members/loadNotifications")({
+			object: obj,
+			callback
+		  })
+		);
+	  }
 
 	loopShimmer() {
 		const { hasShimmered } = this.state
@@ -282,12 +321,12 @@ export default class Profile extends React.Component {
 
 	onLevelInfoPressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { members, company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', "Level Info"))
 		navigate("WebCommon", {
-			title: 'FAQs',
-			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
+			title: 'Membership Info',
+			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
 		})
 	}
 

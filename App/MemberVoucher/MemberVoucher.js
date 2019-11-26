@@ -19,7 +19,8 @@ import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id,
 }))
 export default class MemberVoucher extends React.Component {
 
@@ -241,11 +242,11 @@ export default class MemberVoucher extends React.Component {
 
 	onHowToUsePressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'How To Use',
-			web_url: KURL_INFO + '?page=voucher_uses&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=voucher_uses&id=' + company_id,
 		})
 	}
 

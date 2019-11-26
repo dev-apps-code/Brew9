@@ -17,7 +17,8 @@ import MembershipPointsProductRequestObject from "../Requests/membership_points_
 import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 @connect(({ members }) => ({
-    members: members.profile
+    members: members.profile,
+    company_id: members.company_id,
 }))
 export default class PointShopFullList extends React.Component {
 
@@ -101,11 +102,11 @@ export default class PointShopFullList extends React.Component {
 
     onRulesPressed = () => {
         const { navigate } = this.props.navigation
-
-        navigate("WebCommon", {
-            title: 'Rules',
-            web_url: KURL_INFO + '?page=point_rules&id=1',
-        })
+        const { company_id } = this.props
+		navigate("WebCommon", {
+			title: 'Point Rules',
+			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
+		})
     }
 
     renderPointproductlistFlatListCell = ({ item, index }) => {

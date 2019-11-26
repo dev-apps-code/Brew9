@@ -17,7 +17,8 @@ import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY} from "../Common/common_style";
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id,
 }))
 export default class CreditsHistory extends React.Component {
 
@@ -116,11 +117,11 @@ export default class CreditsHistory extends React.Component {
 
 	onPointRulePressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Point Rules',
-			web_url: KURL_INFO + '?page=point_rules&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
 		})
 	}
 

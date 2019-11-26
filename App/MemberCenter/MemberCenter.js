@@ -15,7 +15,8 @@ import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id,
 }))
 export default class MemberCenter extends React.Component {
 
@@ -61,11 +62,11 @@ export default class MemberCenter extends React.Component {
 
 	onMemberServicePressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Member Services',
-			web_url: KURL_INFO + '?page=member_services&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=member_services&id=' + company_id,
 		})
 	}
 
@@ -77,11 +78,11 @@ export default class MemberCenter extends React.Component {
 
 	onUpgradePressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Brew9',
-			web_url: KURL_INFO + '?page=level_info&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
 		})
 	}
 
@@ -99,11 +100,11 @@ export default class MemberCenter extends React.Component {
 
 	onOtherLevelBenefitsPressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Member Services',
-			web_url: KURL_INFO + '?page=level_benefits&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=level_benefits&id=' + company_id,
 		})
 	}
 
