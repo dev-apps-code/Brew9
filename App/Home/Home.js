@@ -58,6 +58,7 @@ import { ANALYTICS_ID } from "../Common/config"
 import ProfileRequestObject from '../Requests/profile_request_object'
 import { getDistance, getPreciseDistance } from 'geolib';
 import { AsyncStorage } from 'react-native'
+import Moment from 'moment';
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -401,6 +402,7 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			console.log("Shop", eventObject.result)
 			this.setState({ loading: false })
 			// console.log("Shop", eventObject.result)
 			if (eventObject.success) {			
@@ -719,6 +721,7 @@ export default class Home extends React.Component {
 				navigation={this.props.navigation}
 				name={item.name}
 				price={item.price}
+				type={item.type}
 			/>
 		}
 		
@@ -999,6 +1002,7 @@ export default class Home extends React.Component {
 								name: promotion.cart_text,
 								description:  "",
 								price: price,
+								type: promotion.reward_type
 							}
 							promotions_item.push(cartItem)
 							// console.log("Add", cartItem.name)
@@ -1721,7 +1725,7 @@ export default class Home extends React.Component {
 						<Text
 							style={styles.businessHeaderHourText}>Business Hour:</Text>
 							<Text
-							style={styles.businessHourText}>{shop ? shop.opening_hour.start_time : ""} - {shop ? shop.opening_hour.end_time : ""}</Text>
+							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
 					</View>
 				</View>
 				)}
@@ -3170,7 +3174,7 @@ const styles = StyleSheet.create({
 	promotionTopBarText: {
 		fontFamily: TITLE_FONT,
 		color: "white",
-		fontSize: 10 * alpha,
+		fontSize: 12 * alpha,
 		alignSelf: "center",
 		paddingLeft: 10 * alpha,
 		paddingRight: 10 * alpha,

@@ -13,7 +13,7 @@ export const DISABLED_COLOR = "rgb(191, 191, 191)"
 export const TABBAR_INACTIVE_TINT = "rgb(85, 85, 85)"
 export const TABBAR_ACTIVE_TINT = "black"
 export const BUTTONBOTTOMPADDING = Platform.OS === "ios" ? 40 * alpha : 0
-export const TOAST_DURATION = 2000
+export const TOAST_DURATION = 3000
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: "blue",

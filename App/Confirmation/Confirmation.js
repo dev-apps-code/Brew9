@@ -8,7 +8,7 @@
 
 import { TouchableOpacity, StyleSheet, Image, Text, View } from "react-native"
 import React from "react"
-import { alpha, fontAlpha} from "../Common/size"
+import { alpha, fontAlpha, windowHeight} from "../Common/size"
 import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils"
 import CodeInput from 'react-native-confirmation-code-input'
@@ -177,8 +177,7 @@ export default class Confirmation extends React.Component {
                     style={styles.reSendButtonText}>Re-send</Text>
             </TouchableOpacity>
             }
-            <Toast ref="toast"
-            position="center"/>
+            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			<HudLoading isLoading={this.state.loading}/>
          
         </View>

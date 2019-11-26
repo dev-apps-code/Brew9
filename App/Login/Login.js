@@ -298,7 +298,7 @@ export default class Login extends React.Component {
 						</View>
 				</TouchableOpacity>
 			</View>
-			<Toast ref="toast" position="center"/>
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			<HudLoading isLoading={this.state.loading}/>
 		</View>
 	}

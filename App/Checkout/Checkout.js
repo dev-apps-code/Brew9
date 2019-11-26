@@ -980,7 +980,7 @@ export default class Checkout extends React.Component {
 		const order_items = fullList.map((item, key) => {
 			var price_string = item.price != undefined && item.price > 0 && item.clazz == "product" ? `$${parseFloat(item.price).toFixed(2)}` 
 			: item.price != undefined && item.price > 0 && item.clazz == "promotion" ? `-$${parseFloat(item.price).toFixed(2)}` 
-			: item.price != undefined && item.price == 0 ? "Free" : ""
+			: item.type != undefined && item.type == "Free Items and vouchers" ? "Free" : ""
 			let filtered = item.selected_variants != null ? item.selected_variants.filter(function(el) { return el }) : []
 			let variant_array = filtered.map(a => a.value)
 			return <View

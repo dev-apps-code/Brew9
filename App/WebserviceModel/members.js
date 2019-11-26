@@ -142,7 +142,6 @@ export default {
     },
     *loadNotifications({ payload }, { call, put, select })
     {
-      console.log("Here")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -309,6 +308,26 @@ export default {
         const currentUser = JSON.parse(json)
 
         yield put(createAction('loadCurrentUser')(currentUser))
+        // yield put(createAction('loadNotification')({currentUser, last_read}))
+
+      } catch (err) {
+        console.log('loadingCurrentUser', err)
+      }
+    },
+    *reloadNotifications({ payload }, { call, put, select }) {
+      try {
+        const json = yield call(getCurrentUser)
+        // const last_read = yield call(getLastRead)
+        const currentUser = JSON.parse(json)
+
+        const last_read = yield call(getLastRead)
+       
+        
+        if (currentUser != null) {
+          const notifications = currentUser.notifications
+          yield put(createAction('loadNotification')({notifications, last_read}))
+        }
+        
         // yield put(createAction('loadNotification')({currentUser, last_read}))
 
       } catch (err) {

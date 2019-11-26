@@ -8,7 +8,7 @@
 
 import { Alert, Text, Button, StyleSheet, Image, TouchableOpacity, View } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size"
+import { alpha, fontAlpha, windowHeight } from "../Common/size"
 import * as Permissions from 'expo-permissions'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import QrCodeScanRequestObject from '../Requests/qr_code_scan_request_object'
@@ -141,7 +141,7 @@ export default class ScanQr extends React.Component {
             {scanned && (
                 <Button title={'Tap to Scan Again'} onPress={() => this.setState({ scanned: false })} />
             )}
-            <Toast ref="toast" position="center"/>
+            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
             <HudLoading isLoading={this.state.loading}/>
             </View>
         )

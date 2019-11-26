@@ -8,7 +8,7 @@
 
 import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import MissionRequestObject from '../Requests/mission_request_object'
 import GetMissionStatementRequestObject from "../Requests/get_mission_statement_request_object"
 import { connect } from 'react-redux'
@@ -150,12 +150,10 @@ export default class MissionCenter extends React.Component {
     }
 
     missionLogin = () => {
-        console.log("Login")
         const { dispatch, currentMember } = this.props
         
         this.setState({ loading: true })
         const callback = eventObject => {
-            console.log("Login Mission", eventObject)
             this.refs.toast.show(eventObject.message, TOAST_DURATION)
             this.setState({
                 loading: false,
@@ -281,7 +279,7 @@ export default class MissionCenter extends React.Component {
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
                 }
-                <Toast ref="toast" position="center"/>
+                <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
         </View>
     }
 }

@@ -143,7 +143,6 @@ export default class Notification extends React.Component {
 
   loadLocalStore(notifications) {
 
-    console.log("load local")
     return AsyncStorage.getItem("notification_key", (err, result) => {
       let data = notifications
       let unread= 0
@@ -207,7 +206,7 @@ export default class Notification extends React.Component {
       AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
       
     }
-    dispatch(createAction('members/loadCurrentUserFromCache')({}))
+    dispatch(createAction('members/reloadNotifications')({}))
   };
 
   render() {

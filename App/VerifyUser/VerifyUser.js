@@ -9,7 +9,7 @@
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, 
 	Keyboard} from "react-native"
 import React from "react"
-import { alpha, fontAlpha,windowWidth } from "../Common/size";
+import { alpha, fontAlpha,windowWidth, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
 import PhoneInput from 'react-native-phone-input' // react-native-phone-input@0.2.2
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -371,7 +371,7 @@ export default class VerifyUser extends React.Component {
 						</Hyperlink>
 			</View>
 			<HudLoading isLoading={this.state.loading}/>
-			<Toast ref="toast" position="center"/>
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 		</View>
 	}
 }
