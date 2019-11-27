@@ -29,8 +29,7 @@ import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
 
 @connect(({ members }) => ({
-  members: members.profile,
-  notifications: members.profile.notifications
+  members: members.profile
 }))
 
 export default class Notification extends React.Component {
@@ -80,7 +79,6 @@ export default class Notification extends React.Component {
       data: [],
       unread: 0,
       last_read: 0,
-      count: this.props.notifications.count,
       appState: AppState.currentState,
     };
     
@@ -145,7 +143,6 @@ export default class Notification extends React.Component {
 
   loadLocalStore(notifications) {
 
-    console.log("load local")
     return AsyncStorage.getItem("notification_key", (err, result) => {
       let data = notifications
       let unread= 0
@@ -209,7 +206,7 @@ export default class Notification extends React.Component {
       AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
       
     }
-    dispatch(createAction('members/loadCurrentUserFromCache')({}))
+    dispatch(createAction('members/reloadNotifications')({}))
   };
 
   render() {

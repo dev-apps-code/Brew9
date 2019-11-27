@@ -60,9 +60,8 @@ export default class ValidVoucher extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.valueText}>{discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
-							<Text
-								style={styles.currencyText}>{members.currency}</Text> 	
+								style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
+								
 						</View>
 					</View>
 				)
@@ -76,10 +75,9 @@ export default class ValidVoucher extends React.Component {
 							style={{
 								justifyContent: "center",
 							}}>
+							
 							<Text
-								style={styles.percentText}>%</Text> 
-							<Text
-								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}</Text>
+								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
 							
 						</View>
 					</View>
@@ -128,7 +126,7 @@ export default class ValidVoucher extends React.Component {
 							<View
 								pointerEvents="box-none"
 								style={{
-									height: 30 * alpha,
+									height: 25 * alpha,
 									flexDirection: "row",
 								}}>
 								<Text
@@ -170,7 +168,7 @@ export default class ValidVoucher extends React.Component {
 											style={styles.termsButtonText}>Terms & Conditions</Text>
 									</TouchableOpacity>
 									<Image
-										source={require("./../../assets/images/forward.png")}
+										source={require("./../../assets/images/next.png")}
 										style={styles.arrowImage}/>
 								</View>
 							</View>
@@ -242,7 +240,7 @@ const styles = StyleSheet.create({
 	percentText: {
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -259,7 +257,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		marginRight: 15 * alpha,
 	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
@@ -276,7 +273,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: null,
 		height: 2 * alpha,
-		marginTop: 5 * alpha,
+		marginTop: 18 * alpha,
 	},
 	dateText: {
 		color: "rgb(149, 148, 148)",
@@ -322,8 +319,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flex: 1,
 		alignSelf: "flex-end",
-		height: 7 * alpha,
+		height: 8 * alpha,
 		marginLeft: 4 * alpha,
-		marginBottom: 2 * alpha,
+		marginBottom: 3 * alpha,
 	},
 })

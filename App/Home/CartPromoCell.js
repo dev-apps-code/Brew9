@@ -26,6 +26,11 @@ export default class CartPromoCell extends React.Component {
 
 		var filtered = []
 		var variants = []
+		var type = ""
+
+		if (this.props.type != undefined && this.props.type != null) {
+			type = this.props.type
+		}
 
 		if (this.props.variations) {
 			filtered = this.props.variations.filter(function(el) { return el })
@@ -79,7 +84,7 @@ export default class CartPromoCell extends React.Component {
 									justifyContent: "center",
 								}}>
 								<Text
-									style={styles.quantityText}>{this.props.price != 0 ? `-$${parseFloat(this.props.price).toFixed(2)}` : "Free"}</Text>
+									style={styles.quantityText}>{this.props.price != 0 ? `-$${parseFloat(this.props.price).toFixed(2)}` : type == "Free Items and vouchers" ? "Free" : ""}</Text>
 							</View>
 							
 						</View>

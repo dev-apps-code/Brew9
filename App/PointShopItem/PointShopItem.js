@@ -8,7 +8,7 @@
 
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
-import {commonStyles, TOAST_DURATION} from "../Common/common_style"
+import {commonStyles, TOAST_DURATION, windowHeight} from "../Common/common_style"
 import { alpha, fontAlpha,windowWidth } from "../Common/size";
 import PointProductsItemRequestObject from "../Requests/point_products_item_request_object"
 import {createAction, toTitleCase} from "../Utils";
@@ -179,7 +179,7 @@ export default class PointShopItem extends React.Component {
 					<Text
 						style={styles.purchaseButtonText}>Purchase</Text>
 				</TouchableOpacity>
-				<Toast ref="toast" position="center"/>
+				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}

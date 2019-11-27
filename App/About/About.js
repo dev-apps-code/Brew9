@@ -15,7 +15,8 @@ import { alpha, fontAlpha} from "../Common/size";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
 @connect(({ members }) => ({
-	members: members.profile
+	members: members.profile,
+	company_id: members.company_id,
 }))
 export default class MemberWallet extends React.Component {
 
@@ -61,11 +62,11 @@ export default class MemberWallet extends React.Component {
 
 	onFaqPressed = () => {
 		const { navigate } = this.props.navigation
-		const { members } = this.props
+		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'FAQs',
-			web_url: KURL_INFO + '?page=faqs&id=' + members.company_id,
+			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
 		})
     }
     

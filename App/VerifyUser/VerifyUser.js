@@ -9,7 +9,7 @@
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, 
 	Keyboard} from "react-native"
 import React from "react"
-import { alpha, fontAlpha,windowWidth } from "../Common/size";
+import { alpha, fontAlpha,windowWidth, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
 import PhoneInput from 'react-native-phone-input' // react-native-phone-input@0.2.2
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -21,6 +21,8 @@ import CountDown from 'react-native-countdown-component'
 import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
 import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
+import NotificationsRequestObject from "../Requests/notifications_request_object";
+import ProfileRequestObject from '../Requests/profile_request_object'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -52,7 +54,6 @@ export default class VerifyUser extends React.Component {
 			is_counting: false,
 			count_down: 3,
 		}
-
 	}
 
 	componentDidMount() {
@@ -73,13 +74,10 @@ export default class VerifyUser extends React.Component {
 		const { navigation } = this.props
 		
 		if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
-			const { routeName, key } = navigation.getParam('returnToRoute')
-			navigation.navigate({ routeName, key })
+			navigation.navigate("Home")
 		} else {
 			this.props.navigation.navigate('TabGroupOne')
 		}
-		
-
 	}
 
 	onSendPressed = () => {
@@ -185,13 +183,13 @@ export default class VerifyUser extends React.Component {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
-					// const { navigate } = this.props.navigation
-					// navigate('Home', {
-					// 	hasLogin: true
-					// })
+					
 					const { navigation } = this.props
-					const { routeName, key } = navigation.getParam('returnToRoute')
-					navigation.navigate({ routeName, key})
+					if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
+						navigation.navigate("Home")
+					} else {
+						this.props.navigation.navigate('TabGroupOne')
+					}
 				}                
             }else{
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
@@ -373,7 +371,7 @@ export default class VerifyUser extends React.Component {
 						</Hyperlink>
 			</View>
 			<HudLoading isLoading={this.state.loading}/>
-			<Toast ref="toast" position="center"/>
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 		</View>
 	}
 }

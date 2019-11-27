@@ -8,7 +8,7 @@
 
 import React from "react"
 import { StyleSheet, Image, TouchableOpacity, Text, View, TextInput } from "react-native"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import {connect} from "react-redux";
 import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -201,7 +201,7 @@ export default class PayByCard extends React.Component {
 							style={styles.payNowButtonText}>Pay Now</Text>
 					</TouchableOpacity>
 				</View>
-				<Toast ref="toast" position="center"/>
+				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}

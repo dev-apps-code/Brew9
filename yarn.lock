@@ -813,9 +813,9 @@
     regenerator-runtime "^0.13.2"
 
 "@babel/runtime@^7.2.0", "@babel/runtime@^7.5.5":
-  version "7.7.2"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.2.tgz#111a78002a5c25fc8e3361bedc9529c696b85a6a"
-  integrity sha512-JONRbXbTXc9WQE2mAZd1p0Z3DZ/6vaQIkgYMSTP3KjRCyd7rCZCcfhCyX+YjwcKxcZ82UrxbRD358bpExNgrjw==
+  version "7.7.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.4.tgz#b23a856751e4bf099262f867767889c0e3fe175b"
+  integrity sha512-r24eVUUr0QqNZa+qrImUk8fn5SPhHq+IfYvIoIMg0do3GdK9sMdiLKP3GYVVaxpPKORgm8KRKaNTEhAjgIpLMw==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -6121,13 +6121,6 @@ react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-native-24h-timepicker@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-24h-timepicker/-/react-native-24h-timepicker-1.1.0.tgz#b95a86339c0bd7261216956d16c3f41b7bbfb8dd"
-  integrity sha512-rnOHWmKcSbbdpYBVl2MxkQY7IU83f/5K6NB8iq4nmWdq8WfHklnkfvfpjnga8uY6sqLDAK11j+dQHo0XVK+QIg==
-  dependencies:
-    react-native-raw-bottom-sheet "^1.0.0"
-
 react-native-alert-async@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/react-native-alert-async/-/react-native-alert-async-1.0.3.tgz#f89d90c636af2096c9995f6be4c7f570c6cd462e"
@@ -6210,6 +6203,11 @@ react-native-hyperlink@0.0.16:
   dependencies:
     linkify-it "^2.2.0"
     mdurl "^1.0.0"
+
+react-native-icon-badge@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-icon-badge/-/react-native-icon-badge-1.1.3.tgz#43de0c923afe4968dfcff127ec5c57057b16f787"
+  integrity sha1-Q94Mkjr+SWjfz/En7FxXBXsW94c=
 
 react-native-image-pan-zoom@^2.1.9:
   version "2.1.11"
@@ -6299,13 +6297,6 @@ react-native-qrcode-svg@^5.2.0:
   dependencies:
     prop-types "^15.5.10"
     qrcode "^1.2.0"
-
-react-native-raw-bottom-sheet@^1.0.0:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/react-native-raw-bottom-sheet/-/react-native-raw-bottom-sheet-1.1.4.tgz#1f79bd1bf5b74fec3c9a97b108a5a527d5157318"
-  integrity sha512-rn9KZuxWLE/EwxuoVzVBrzuTTcUZyhUfOOmAXScuGc90W6sf2NgM38vx6+SkZ0pqWgXmAKnUALmjE3kdNnxAFQ==
-  dependencies:
-    prop-types "^15.6.2"
 
 react-native-reanimated@~1.1.0:
   version "1.1.0"

@@ -8,7 +8,7 @@
 
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
 import React from "react"
-import { alpha, fontAlpha} from "../Common/size"
+import { alpha, fontAlpha, windowHeight} from "../Common/size"
 import { createAction } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
@@ -428,8 +428,7 @@ export default class Register extends React.Component {
 						style={styles.navigationBarItemIcon}/>
 				</TouchableOpacity>
 		</View>
-		<Toast ref="toast"
-            position="center"/>
+		<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			<HudLoading isLoading={this.state.loading}/>
 		</KeyboardAvoidingView>
 

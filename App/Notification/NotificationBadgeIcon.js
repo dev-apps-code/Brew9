@@ -19,7 +19,7 @@ const NotificationBadgeIcon = props => (
         style={{ resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: props.focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }}
         /> }
         BadgeElement={
-        <Text style={{color:'#FFFFFF', fontSize: 10 * alpha}}>{props.notificationCount}</Text>
+        <Text style={{color:'#FFFFFF', fontSize: 10 * alpha, fontFamily: TITLE_FONT}}>{props.notificationCount}</Text>
         }
         IconBadgeStyle={
         {position:'absolute',
@@ -34,8 +34,7 @@ const NotificationBadgeIcon = props => (
         opacity: 1,}
         }
         Hidden={props.notificationCount == 0}
-    />
-  : null )
+    />)
 
 export default connect(
   ({ members }) => ({ 

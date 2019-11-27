@@ -1,6 +1,6 @@
-export const KSERVERURL = "http://brew9.dreamcode.solutions/api"
-export const KURL_INFO = "http://brew9.dreamcode.solutions/info"
-export const KPAYMENTYURL = "http://brew9.dreamcode.solutions/payments/baiduri"
+export const KSERVERURL = "https://app.brew9.co/api"
+export const KURL_INFO = "https://app.brew9.co/info"
+export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
 // export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO ='http://localhost:3000/info'
@@ -10,7 +10,7 @@ export const KPAYMENTYURL = "http://brew9.dreamcode.solutions/payments/baiduri"
 // export const KSERVERURL ='https://e40faa49.ngrok.io/api'
 // export const KURL_INFO = 'https://e40faa49.ngrok.io/info'
 
-export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=1";
+export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';

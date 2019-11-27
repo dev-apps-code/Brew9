@@ -8,7 +8,7 @@
 
 import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import MissionRequestObject from '../Requests/mission_request_object'
 import GetMissionStatementRequestObject from "../Requests/get_mission_statement_request_object"
 import { connect } from 'react-redux'
@@ -20,7 +20,7 @@ import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_re
 import MissionLoginRequestObject from "../Requests/mission_login_request_object"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
-import { Analytics, PageHit } from 'expo-analytics';
+import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
@@ -150,7 +150,6 @@ export default class MissionCenter extends React.Component {
     }
 
     missionLogin = () => {
-        console.log("Login")
         const { dispatch, currentMember } = this.props
         
         this.setState({ loading: true })
@@ -280,7 +279,7 @@ export default class MissionCenter extends React.Component {
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
                 }
-                <Toast ref="toast" position="center"/>
+                <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
         </View>
     }
 }

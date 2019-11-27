@@ -44,7 +44,6 @@ function clearCurrentUser() {
 }
 
 function getLastRead() {
-  console.log("getlast")
   return AsyncStorage.getItem("notification_key", (err, result) => {
     if (result != null) {
       return result
@@ -78,20 +77,19 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      console.log("LoadUser")
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     loadNotification(state, {payload}) {
       
-      if (payload.currentUser != null) {
+      if (payload.result != null && payload.result.length > 0) {
         if (payload.last_read != null) {
-          var notifications = _.filter(payload.currentUser.notifications, function(o) { 
+
+          var notifications = _.filter(payload.result, function(o) { 
             return o.id > payload.last_read; 
           })
-          
           return { ...state, notifications : notifications }
         } else {
-          return { ...state, notifications : payload.currentUser.notifications }
+          return { ...state, notifications : payload.result }
         }
       } else {
         return { ...state, notifications : [] }
@@ -144,7 +142,6 @@ export default {
     },
     *loadNotifications({ payload }, { call, put, select })
     {
-      console.log("Here")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -153,13 +150,19 @@ export default {
             authtoken,
             object,
         )
+        const last_read = yield call(getLastRead)
+       
         const eventObject = new EventObject(json)
+        const result = eventObject.result
+        yield put(createAction('loadNotification')({result, last_read}))
+
         if (eventObject.success == true) {}
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
     *loadProfile({ payload }, { call, put, select })
     {
+      console.log("New user data")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -301,11 +304,31 @@ export default {
     *loadCurrentUserFromCache({ payload }, { call, put, select }) {
       try {
         const json = yield call(getCurrentUser)
-        const last_read = yield call(getLastRead)
+        // const last_read = yield call(getLastRead)
         const currentUser = JSON.parse(json)
 
         yield put(createAction('loadCurrentUser')(currentUser))
-        yield put(createAction('loadNotification')({currentUser, last_read}))
+        // yield put(createAction('loadNotification')({currentUser, last_read}))
+
+      } catch (err) {
+        console.log('loadingCurrentUser', err)
+      }
+    },
+    *reloadNotifications({ payload }, { call, put, select }) {
+      try {
+        const json = yield call(getCurrentUser)
+        // const last_read = yield call(getLastRead)
+        const currentUser = JSON.parse(json)
+
+        const last_read = yield call(getLastRead)
+       
+        
+        if (currentUser != null) {
+          const notifications = currentUser.notifications
+          yield put(createAction('loadNotification')({notifications, last_read}))
+        }
+        
+        // yield put(createAction('loadNotification')({currentUser, last_read}))
 
       } catch (err) {
         console.log('loadingCurrentUser', err)
@@ -436,7 +459,6 @@ export default {
     }, 
     *missionLogin({ payload }, { call, put, select }) 
     {
-      console.log("missionLogin")
     try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)

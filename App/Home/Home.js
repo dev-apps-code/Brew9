@@ -50,12 +50,15 @@ import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import {Notifications} from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
+import NotificationsRequestObject from "../Requests/notifications_request_object";
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
 import { select } from "redux-saga/effects"
-import { Analytics, PageHit } from 'expo-analytics';
+import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import ProfileRequestObject from '../Requests/profile_request_object'
 import { getDistance, getPreciseDistance } from 'geolib';
+import { AsyncStorage } from 'react-native'
+import Moment from 'moment';
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -70,7 +73,9 @@ export default class Home extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		
 		const { params = {} } = navigation.state
+		
 		return {
+			
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -206,14 +211,17 @@ export default class Home extends React.Component {
 		this.loadStorePushToken(token)
 	  }
 
-	 
+	getNotificationAsync = async () => {
+		await this.registerForPushNotificationsAsync()
+	}
+
 	getLocationAsync = async () => {
 
 		const {dispatch} = this.props
 
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
-			 this.refs.toast.show('Permission to access location was denied')
+			 this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
 			 return
 		}
 
@@ -280,6 +288,7 @@ export default class Home extends React.Component {
 	}
 
 	componentWillMount() {
+		this.getNotificationAsync()
 		if (Platform.OS === 'android') {
 			this.setState({
 			  errorMessage: 'Oops, this will not work in an Android emulator. Try it on your device!',
@@ -297,10 +306,11 @@ export default class Home extends React.Component {
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
-
+		this.loadProfile()
 		this.loadShops(true)
+		
 		AppState.addEventListener('change', this._handleAppStateChange);	
-		await this.registerForPushNotificationsAsync()
+		
 
 	}
 
@@ -310,19 +320,43 @@ export default class Home extends React.Component {
 	}
 
 	_handleAppStateChange = nextAppState => {
+		const {currentMember} = this.props
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
-			
+			if (currentMember != null) {
+				this.loadNotifications();
+			  }
 		}
 		this.setState({ appState: nextAppState });
 	  };
 
+	  loadNotifications = () => {
+        
+		const { dispatch, currentMember } = this.props;
+		this.setState({ loading: true });
+		const callback = eventObject => {
+		  
+		  if (eventObject.success) {
+			this.loadLocalStore(eventObject.result)
+		  }
+		  this.setState({
+			loading: false
+		  });
+		};
+		const obj = new NotificationsRequestObject();
+		obj.setUrlId(currentMember.id);
+		dispatch(
+		  createAction("members/loadNotifications")({
+			object: obj,
+			callback
+		  })
+		);
+	  }
 
 	loadProfile(){
 		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log("Profile", eventObject)
 			if (eventObject.success) {
 				
 			}
@@ -370,8 +404,9 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			this.setState({ loading: false })
 			console.log("Shop", eventObject.result)
+			this.setState({ loading: false })
+			// console.log("Shop", eventObject.result)
 			if (eventObject.success) {			
 				this.setState({
 					shop: eventObject.result,
@@ -382,10 +417,7 @@ export default class Home extends React.Component {
 						this.loadStoreProducts()
 						this.getLocationAsync()
 						if (first_promo_popup == false) {
-							let should_show = this.shouldShowFeatured(this.state.shop)
-							if (should_show == true) {
-								this.onFeaturedPromotionPressed(eventObject.result.featured_promotion)
-							}
+							this.shouldShowFeatured(this.state.shop)
 						}
 					}					
 				})		
@@ -495,6 +527,7 @@ export default class Home extends React.Component {
 						
 						this.onClearPress()
 						this.loadProfile()
+						this.loadNotifications()
 						this.loadShops()
 						navigate("PickUp")
 					}
@@ -518,6 +551,8 @@ export default class Home extends React.Component {
 				const { params } = state
 				
 				this.loadShops()
+				this.loadProfile()
+				this.loadNotifications()
 			})
 			navigate("VerifyUser" , {
 				returnToRoute: navigation.state
@@ -554,7 +589,7 @@ export default class Home extends React.Component {
 		analytics.event(new Event('Home', 'Click', "Delivery"))
 		if (value == 1) {
 
-			this.refs.toast.show("Delivery not yet available", TOAST_DURATION, () => {
+			this.refs.toast.show("Delivery not available yet", TOAST_DURATION, () => {
                 this.setState({
 					delivery: 0
 				})
@@ -688,6 +723,7 @@ export default class Home extends React.Component {
 				navigation={this.props.navigation}
 				name={item.name}
 				price={item.price}
+				type={item.type}
 			/>
 		}
 		
@@ -737,6 +773,7 @@ export default class Home extends React.Component {
 					item={item}
 					navigation={this.props.navigation}
 					bannerImage={item.image}
+					bannerDescription={item.description}
 					detailImage={item.banner_detail_image}
 					onPressItem={this.onBannerPressed}
 				/>
@@ -967,6 +1004,7 @@ export default class Home extends React.Component {
 								name: promotion.cart_text,
 								description:  "",
 								price: price,
+								type: promotion.reward_type
 							}
 							promotions_item.push(cartItem)
 							// console.log("Add", cartItem.name)
@@ -1286,7 +1324,7 @@ export default class Home extends React.Component {
 		var enabled = selected_product.enabled
 
 
-		if (!shop.is_opened) {
+		if (!shop.can_order) {
 			enabled = false
 		}
 		
@@ -1492,7 +1530,7 @@ export default class Home extends React.Component {
 		let fullList = [...cart,...promotion]
 
 		if (shop !== null ){
-			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+			if (shop.can_order == false){
 				if (shop.featured_promotion !== null) {
 					categoryBottomSpacer = styles.categoryListPosition3
 				} else {
@@ -1689,7 +1727,7 @@ export default class Home extends React.Component {
 						<Text
 							style={styles.businessHeaderHourText}>Business Hour:</Text>
 							<Text
-							style={styles.businessHourText}>{shop ? shop.opening_hour.start_time : ""} - {shop ? shop.opening_hour.end_time : ""}</Text>
+							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
 					</View>
 				</View>
 				)}
@@ -1739,14 +1777,14 @@ export default class Home extends React.Component {
 
 		const style =  (cart.length > 0)  ? styles.alertViewCart : styles.alertView
 		if (shop !== null)  {
-			if ( shop.is_opened === false){
-				return (
-					<View style={style}>
-						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
-					</View>)
-			}
+			// if ( shop.is_opened === false){
+			// 	return (
+			// 		<View style={style}>
+			// 			<Text style={styles.alertViewText}>{shop.alert_message}</Text>
+			// 		</View>)
+			// }
 
-			if (shop.shop_busy_template_message != null){
+			if (shop.can_order == false && shop.shop_busy_template_message != null){
 				const template = shop.shop_busy_template_message.template
 
 				return (
@@ -1760,21 +1798,27 @@ export default class Home extends React.Component {
 	}
 
 	shouldShowFeatured(shop) {
+		const { currentMember} = this.props
+
 		if (shop != null) {
-			const { currentMember} = this.props
-			if (currentMember != null) {
-				if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
-					return true
-				} else if (shop.featured_promotion.for_new_user == false) {
-					return true
-				} else {
-					return false
+			AsyncStorage.getItem("featured", (err, result) => {
+				if (result == null || result != shop.featured_promotion.id) {
+					if (currentMember != null) {
+						if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+							AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+							this.onFeaturedPromotionPressed(shop.featured_promotion)
+						} else if (shop.featured_promotion.for_new_user == false) {
+							AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+							this.onFeaturedPromotionPressed(shop.featured_promotion)
+						}
+					} else {
+						AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+						this.onFeaturedPromotionPressed(shop.featured_promotion)
+					}
 				}
-			} else {
-				return true
-			}
+			})
 		}
-		return false
+
 	}
 
 	renderFeaturedPromo(shop, cart) {
@@ -1783,7 +1827,7 @@ export default class Home extends React.Component {
 		const { currentMember } = this.props
 
 		if (shop !== null ){
-			if (shop.is_opened == false || shop.shop_busy_template_message != null){
+			if (shop.can_order == false){
 				if (cart.length > 0 ){
 					style = styles.featuredpromoButtonPosition3
 				}else{
@@ -3132,7 +3176,7 @@ const styles = StyleSheet.create({
 	promotionTopBarText: {
 		fontFamily: TITLE_FONT,
 		color: "white",
-		fontSize: 10 * alpha,
+		fontSize: 12 * alpha,
 		alignSelf: "center",
 		paddingLeft: 10 * alpha,
 		paddingRight: 10 * alpha,

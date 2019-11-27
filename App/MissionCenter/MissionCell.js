@@ -30,7 +30,7 @@ export default class MissionCell extends React.Component {
 				this.props.onStatusPressed(statement_id)
 			}
 		}
-		if (this.props.mission_type == "Login") {
+		if (this.props.mission_type == "Login" && this.props.status != "Claimed") {
 			this.props.onStatusPressed()
 		}
 	}

@@ -11,7 +11,7 @@ import React from "react";
 import {connect} from "react-redux";
 import ProfileRequestObject from '../Requests/profile_request_object'
 import {createAction} from '../Utils'
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import { WebView } from "react-native-webview";
 import { TITLE_FONT, NON_TITLE_FONT,TOAST_DURATION } from "../Common/common_style";
 import Toast, {DURATION} from 'react-native-easy-toast'
@@ -91,7 +91,7 @@ export default class PaymentsWebview extends React.Component {
           style={styles.webviewWebView}          
           source={{ uri:  `${KPAYMENTYURL}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}` }}
         />    
-        <Toast ref="toast" position="center"/>
+        <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
       </View>
     );
   }

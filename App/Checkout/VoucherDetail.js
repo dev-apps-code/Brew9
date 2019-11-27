@@ -90,8 +90,7 @@ export default class VoucherDetail extends React.Component {
 			return (
 				<View
 				style={styles.valueView}>
-					<Text
-						style={styles.currencyText}>{members.currency}</Text> 			
+							
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -103,7 +102,7 @@ export default class VoucherDetail extends React.Component {
 							justifyContent: "center",
 						}}>
 						<Text
-							style={styles.valueText}>{display_value}</Text>
+							style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
 					</View>
 				</View>
 			)
@@ -112,8 +111,7 @@ export default class VoucherDetail extends React.Component {
 				return (
 					<View
 					style={styles.valueView}>
-						<Text
-							style={styles.currencyText}>{members.currency}</Text> 			
+								
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -125,7 +123,7 @@ export default class VoucherDetail extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.valueText}>{discount_price}</Text>
+								style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
 						</View>
 					</View>
 				)
@@ -146,9 +144,8 @@ export default class VoucherDetail extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.percentvalueText}>{discount_price}</Text>
-							<Text
-								style={styles.percentText}>%</Text> 
+								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
+							
 						</View>
 					</View>
 				)
@@ -193,8 +190,7 @@ export default class VoucherDetail extends React.Component {
 									<View
 										pointerEvents="box-none"
 										style={{
-											height: 31 * alpha,
-											marginRight: 1 * alpha,
+											height: 25 * alpha,
 											flexDirection: "row",
 											alignItems: "flex-start",
 										}}>
@@ -349,13 +345,12 @@ const styles = StyleSheet.create({
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginLeft: 16 * alpha,
 	},
 	percentText: {
 		color: "rgb(0, 178, 227)",
@@ -371,13 +366,12 @@ const styles = StyleSheet.create({
 	},
 	percentvalueText: {
 		color: "rgb(0, 178, 227)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 24 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		backgroundColor: "transparent",
-		marginRight: 15 * alpha,
 	},
 	voucherDetailView: {
 		backgroundColor: "white",
@@ -411,7 +405,7 @@ const styles = StyleSheet.create({
 	},
 	titleText: {
 		color: "rgb(68, 68, 68)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
@@ -436,16 +430,6 @@ const styles = StyleSheet.create({
 		left: 0 * alpha,
 		top: 3 * alpha,
 	},
-	valueText: {
-		color: "rgb(0, 178, 227)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 24 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		marginLeft: 14 * alpha,
-	},
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
 		fontFamily: NON_TITLE_FONT,
@@ -461,7 +445,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: null,
 		height: 2 * alpha,
-		marginTop: 20 * alpha,
+		marginTop: 18 * alpha,
 	},
 	dateText: {
 		color: "rgb(149, 148, 148)",
