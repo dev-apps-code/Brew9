@@ -36,6 +36,8 @@ export default class Profile extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
+			gesturesEnabled:false,
+			swipeEnabled: false,
 			header: null,
 			headerLeft: null,
 			headerRight: null,
