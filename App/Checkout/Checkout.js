@@ -402,7 +402,6 @@ export default class Checkout extends React.Component {
 
 				if (selected_payment == 'credits'){
 					setTimeout(function () {
-						console.log("Time Out")
 						this.clearCart()
 						this.setState({
 							loading: false,
@@ -479,6 +478,21 @@ export default class Checkout extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
 		if (currentMember != undefined) {
+			if ( selected_payment == "") {
+				this.tooglePayment()
+				return
+			}
+
+			if ( selected_payment == "credits") {
+				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
+					this.refs.toast.show("Oops, insufficient credit. Please top up at our counter.", TOAST_DURATION, () => {
+						navigate("MemberWallet")
+					})
+					return
+				}
+				return
+			}
+
 			if ( pick_up_status == null) {
 				this.tooglePickup()
 				return
@@ -504,23 +518,10 @@ export default class Checkout extends React.Component {
 					}
 				}
 			}
-
-			if ( selected_payment == "") {
-				this.tooglePayment()
-				return
-			}
 			
-			if ( selected_payment == "credits") {
-				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
-					this.refs.toast.show("Oops, insufficient credit. Please top up at our counter.", TOAST_DURATION)
-					return
-				}
-				this.loadMakeOrder()
-				return
-			} else if ( selected_payment == "credit_card") {
-				this.loadMakeOrder()
-				return
-			}
+			
+			this.loadMakeOrder()
+			return
 			
 		} else {
 			navigate("VerifyUser" , {
@@ -571,7 +572,7 @@ export default class Checkout extends React.Component {
 		} else {
 			this.setState({ isPickupToogle: true }, function(){
 				Animated.spring(this.movePickAnimation, {
-					toValue: {x: 0, y: 0},
+					toValue: {x: 0, y:  47 * alpha},
 				}).start()
 			})
 		}
@@ -594,7 +595,7 @@ export default class Checkout extends React.Component {
 		} else {
 			this.setState({ isPaymentToggle: true }, function(){
 				Animated.spring(this.moveAnimation, {
-					toValue: {x: 0, y: 0},
+					toValue: {x: 0, y: 47 * alpha},
 				}).start()
 			})
 		}
@@ -695,7 +696,7 @@ export default class Checkout extends React.Component {
 											}}>
 											<Image
 												source={require("./../../assets/images/wallet_center.png")}
-												style={styles.walletImage}/>
+												style={this.state.selected_payment == "credits" ? styles.walletSelectImage : styles.walletImage}/>
 										</View>
 									</View>
 									
@@ -744,7 +745,7 @@ export default class Checkout extends React.Component {
 												}}>
 												<Image
 													source={require("./../../assets/images/credit_card.png")}
-													style={styles.creditCardImage}/>
+													style={this.state.selected_payment == "credit_card" ? styles.creditCardSelectImage : styles.creditCardImage}/>
 											</View>
 										</View>
 									</View>
@@ -976,12 +977,15 @@ export default class Checkout extends React.Component {
 
 	renderOrderItems(items, promotions) {
 
-		let fullList = [...items,...promotions] 
+		let fullList = [...items,...promotions]
+		let last_item = fullList[fullList.length -1]
+
 		const order_items = fullList.map((item, key) => {
 			var price_string = item.price != undefined && item.price > 0 && item.clazz == "product" ? `$${parseFloat(item.price).toFixed(2)}` 
 			: item.price != undefined && item.price > 0 && item.clazz == "promotion" ? `-$${parseFloat(item.price).toFixed(2)}` 
 			: item.type != undefined && item.type == "Free Items and vouchers" ? "Free" : ""
 			let filtered = item.selected_variants != null ? item.selected_variants.filter(function(el) { return el }) : []
+			
 			let variant_array = filtered.map(a => a.value)
 			return <View
 					style={styles.drinksView}
@@ -1008,9 +1012,10 @@ export default class Checkout extends React.Component {
 									style={styles.productQuantityText}>{ item.quantity != null && item.quantity > 0 && (`x${item.quantity}`)}</Text>
 								<Text
 									style={styles.productPriceText}>{price_string}</Text>
-								<Image
+								{ item.id != last_item.id && (<Image
 									source={require("./../../assets/images/group-109-copy.png")}
-									style={styles.dottedLineImage}/>
+									style={styles.dottedLineImage}/>)}
+								
 							</View>
 				</View>
 				
@@ -1117,7 +1122,7 @@ export default class Checkout extends React.Component {
 											}}>
 											<Image
 												source={require("./../../assets/images/pickup_now.png")}
-												style={styles.walletImage}/>
+												style={this.state.pick_up_status == "Order Now" ? styles.walletSelectImage : styles.walletImage }/>
 										</View>
 									</View>
 									
@@ -1202,7 +1207,7 @@ export default class Checkout extends React.Component {
 											}}>
 											<Image
 												source={require("./../../assets/images/pickup_later.png")}
-												style={styles.walletImage}/>
+												style={this.state.pick_up_status == "Pick Later" ? styles.walletSelectImage : styles.walletImage}/>
 										</View>
 									</View>
 									
@@ -1411,23 +1416,20 @@ export default class Checkout extends React.Component {
 	}
 
 	renderPayNow(final_price) {
-		const { pick_up_time, selected_payment } = this.state
 		
-		if (pick_up_time != null && selected_payment != "") {
-			return <View
-				style={styles.totalPayNowView}>
-					
-					<View style={styles.paymentButton}><Text
-						style={styles.paymentButtonText}>${final_price}</Text></View>
-				<TouchableOpacity
-					onPress={() => this.onPayNowPressed()}
-					style={styles.payNowButton}>
-					<Text
-						style={styles.payNowButtonText}>Pay Now</Text>
-				</TouchableOpacity>
-			</View>
-		}
-		return
+		return <View
+			style={styles.totalPayNowView}>
+				
+				<View style={styles.paymentButton}><Text
+					style={styles.paymentButtonText}>${final_price}</Text></View>
+			<TouchableOpacity
+				onPress={() => this.onPayNowPressed()}
+				style={styles.payNowButton}>
+				<Text
+					style={styles.payNowButtonText}>Pay Now</Text>
+			</TouchableOpacity>
+		</View>
+		
 	}
 
 	render() {
@@ -1443,7 +1445,7 @@ export default class Checkout extends React.Component {
 		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
 		return <View
-			style={pick_up_time != null && selected_payment != "" ? styles.checkoutViewPadding : styles.checkoutView}>
+			style={styles.checkoutViewPadding}>
 			<ScrollView
 				style={styles.scrollviewScrollView}
 				onLayout={(event) => this.measureView(event)}>
@@ -1454,10 +1456,10 @@ export default class Checkout extends React.Component {
 				</View>
 				
 			</ScrollView>
+			
+			{this.renderPayNow(final_price)}
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
-			{this.renderPayNow(final_price)}
-			
 			<HudLoading isLoading={this.state.loading}/>
 			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 			
@@ -2247,7 +2249,7 @@ const styles = StyleSheet.create({
 	balanceText: {
 		color: "rgb(186, 183, 183)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2863,14 +2865,16 @@ const styles = StyleSheet.create({
 
 	receiptSectionSeperator: {
 		flex: 1,
-		backgroundColor: "transparent",
+		height: 14 * alpha,
+		marginTop: -1 * alpha,
+		marginBottom: -1 * alpha,
 		alignContent: "center",
 		justifyContent: "center",
 	}, 
 
 	curve_in: {
 		height: 14 * alpha,
-		resizeMode: "stretch",
+		resizeMode: "cover",
 		width: "100%",
 		backgroundColor: "transparent",
 	},
@@ -3088,6 +3092,14 @@ const styles = StyleSheet.create({
 	},
 	walletImage: {
 		resizeMode: "contain",
+		tintColor: "rgb(186, 183, 183)",
+		backgroundColor: "transparent",
+		width: null,
+		height: 30 * alpha,
+	},
+	walletSelectImage: {
+		resizeMode: "contain",
+		tintColor: PRIMARY_COLOR,
 		backgroundColor: "transparent",
 		width: null,
 		height: 30 * alpha,
@@ -3144,8 +3156,16 @@ const styles = StyleSheet.create({
 		marginLeft: 1 * alpha,
 		marginRight: 3 * alpha,
 	},
+	creditCardSelectImage: {
+		resizeMode: "contain",
+		tintColor: PRIMARY_COLOR,
+		backgroundColor: "transparent",
+		width: null,
+		height: 30 * alpha,
+	},
 	creditCardImage: {
 		resizeMode: "contain",
+		tintColor: "rgb(186, 183, 183)",
 		backgroundColor: "transparent",
 		width: null,
 		height: 30 * alpha,

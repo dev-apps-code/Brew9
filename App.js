@@ -151,9 +151,6 @@ const PushOrder = createStackNavigator(
   },
   {
     initialRouteName: "Home",
-    defaultNavigationOptions: {
-      gesturesEnabled: false,
-    },
   }
 );
 
@@ -189,9 +186,6 @@ const PushPickup = createStackNavigator(
   },
   {
     initialRouteName: "PickUp",
-    defaultNavigationOptions: {
-      gesturesEnabled: false,
-    },
   }
 );
 
@@ -206,9 +200,6 @@ const PushInbox = createStackNavigator(
   },
   {
     initialRouteName: "Notification",
-    defaultNavigationOptions: {
-      gesturesEnabled: false,
-    },
   }
 );
 
@@ -292,9 +283,6 @@ const PushProfile = createStackNavigator(
   },
   {
     initialRouteName: "Profile",
-    defaultNavigationOptions: {
-      gesturesEnabled: false,
-    },
   }
 );
 

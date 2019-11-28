@@ -747,7 +747,7 @@ export default class MemberProfile extends React.Component {
 						date={this.state.dob}
 						mode="date"
 						placeholder="Birthday"
-						format="YYYY-MM-DD"
+						format="DD-MM-YYYY"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
 						showIcon={false}
