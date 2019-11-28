@@ -287,7 +287,6 @@ const PushProfile = createStackNavigator(
   },
   {
     initialRouteName: "Profile",
-  
   }
 );
 

@@ -225,6 +225,11 @@ export default class MemberWallet extends React.Component {
 						selected={this.state.selected}
 						keyExtractor={(item, index) => index.toString()}/>
 				</View>
+				<View style={styles.shopTopUp}>
+					<Text style={styles.shopTopUpText}>
+						TopUp is also available at our store counter.
+					</Text>
+				</View>
 			</ScrollView>
 			{ toggleTopUp == true && (
 				<View
@@ -360,6 +365,7 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	topUpView: {
+		backgroundColor:"white",
 		height: 52 * alpha ,
 		flexDirection: "row",
 		alignItems: "center",
@@ -389,11 +395,21 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
 		textAlign: "left",
 	},
 	topupButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
+	shopTopUp: {
+		flex: 1,
+		backgroundColor: "white"
+	},
+	shopTopUpText: {
+		margin: 20 * alpha,
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+	}
 })

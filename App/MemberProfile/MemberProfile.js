@@ -570,7 +570,7 @@ export default class MemberProfile extends React.Component {
 								style={styles.emailText}>Email</Text>
 							<TextInput
 								autoCorrect={false}
-								placeholder="Email (Optional)"
+								placeholder="Email (optional)"
 								style={styles.emailTextInput}
 								returnKeyType={'done'}
 								onChangeText={(email) => this.setState({email})}
@@ -747,7 +747,7 @@ export default class MemberProfile extends React.Component {
 						date={this.state.dob}
 						mode="date"
 						placeholder="Birthday"
-						format="YYYY-MM-DD"
+						format="DD-MM-YYYY"
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
 						showIcon={false}

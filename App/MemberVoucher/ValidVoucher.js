@@ -11,7 +11,7 @@ import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import {KURL_INFO} from "../Utils/server";
 import { connect } from "react-redux";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
 
 @connect(({ members }) => ({
 	company_id: members.company_id,
@@ -277,9 +277,9 @@ const styles = StyleSheet.create({
 		marginTop: 18 * alpha,
 	},
 	dateText: {
-		color: "rgb(149, 148, 148)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

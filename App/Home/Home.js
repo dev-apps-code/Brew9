@@ -331,8 +331,10 @@ export default class Home extends React.Component {
 	  };
 
 	  loadNotifications = () => {
-        
+		
 		const { dispatch, currentMember } = this.props;
+		console.log("Notificatio", currentMember)
+		
 		this.setState({ loading: true });
 		const callback = eventObject => {
 		  
@@ -513,10 +515,10 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > selectedShop.max_order_distance_in_km){
-				this.refs.toast.show("You are too far away", TOAST_DURATION)
-				return
-			} else {
+			// if (member_distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
+			// 	return
+			// } else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -526,8 +528,12 @@ export default class Home extends React.Component {
 					if (clearCart) {
 						
 						this.onClearPress()
-						this.loadProfile()
-						this.loadNotifications()
+
+						if (currentMember != null) {
+							this.loadProfile()
+							this.loadNotifications()
+						}
+						
 						this.loadShops()
 						navigate("PickUp")
 					}
@@ -543,7 +549,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			}
+			// }
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -551,8 +557,10 @@ export default class Home extends React.Component {
 				const { params } = state
 				
 				this.loadShops()
-				this.loadProfile()
-				this.loadNotifications()
+				if (currentMember != null) {
+					this.loadProfile()
+					this.loadNotifications()
+				}
 			})
 			navigate("VerifyUser" , {
 				returnToRoute: navigation.state
@@ -985,7 +993,7 @@ export default class Home extends React.Component {
 
 				var promotion = shop.all_promotions[index]
 
-				if (currentMember != null) {
+				if (currentMember != null && promotion.has_triggered != true) {
 
 					if (promotion.trigger_price != null) {
 						var price = 0
@@ -1004,7 +1012,7 @@ export default class Home extends React.Component {
 								name: promotion.cart_text,
 								description:  "",
 								price: price,
-								type: promotion.reward_type
+								// type: promotion.reward_type
 							}
 							promotions_item.push(cartItem)
 							// console.log("Add", cartItem.name)
@@ -1016,6 +1024,7 @@ export default class Home extends React.Component {
 								promotion: newpromotion.concat(promotions_item),
 								promotion_ids: promotion_ids
 							}, function(){
+								
 							})
 									
 						} else if (remaining >= 0 && search_cart_promo_index > 0){

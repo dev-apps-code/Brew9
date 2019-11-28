@@ -528,23 +528,19 @@ export default class Profile extends React.Component {
 											<View
 												pointerEvents="box-none"
 												style={{
-													width: 191 * alpha,
+													width: 250 * alpha,
 													height: 23 * alpha,
 													marginLeft: 2 * alpha,
 													flexDirection: "row",
-													alignItems: "flex-start",
+													alignItems: "center",
 												}}>
 												<Text
 													style={styles.membershiplabelText}>{membership_name}</Text>
-												{/* <TouchableOpacity
-													onPress={this.onMembershipStatusPressed}
-													style={styles.membershipstatusButton}>
+												{ membership_name != "" && (<View
+													style={styles.membershiplevelButton}>
 													<Text
-														style={styles.membershipstatusButtonText}>2020-06-19 expired</Text>
-													<Image
-														source={require("./../../assets/images/group-6-31.png")}
-														style={styles.membershipstatusButtonImage}/>
-												</TouchableOpacity> */}
+														style={styles.membershiplevelText}>{level_name}</Text>
+												</View>)}
 											</View>
 											<View
 												style={styles.expbarView}>
@@ -581,20 +577,22 @@ export default class Profile extends React.Component {
 														style={styles.progressbarView}>
 															{this.renderProgressBar(membership_progress ? membership_progress : 0)}
 													</View>
-													<TouchableOpacity onPress={()=> this.onLevelInfoPressed()}>
-														<View
-															style={styles.levelInfoView}>
-															<Image
-																source={require("./../../assets/images/exclaimation.png")}
-																style={styles.howToUseButtonImage}/>
-															<Text
-																style={styles.levelInfoText}>Info</Text>
-														</View>
-													</TouchableOpacity>
+													
 												</View>
 												<Text
 													style={styles.levelexpText}>{member_exp} / {exp_needed}</Text>
 											</View>
+											<TouchableOpacity onPress={()=> this.onLevelInfoPressed()}
+												style={styles.levelInfoButton}>
+												<View
+													style={styles.levelInfoView}>
+													<Image
+														source={require("./../../assets/images/exclaimation.png")}
+														style={styles.howToUseButtonImage}/>
+													<Text
+														style={styles.levelInfoText}>Info</Text>
+												</View>
+											</TouchableOpacity>
 										</View>
 										<View
 											style={{
@@ -1021,8 +1019,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	membershipinfoView: {
-		backgroundColor: "white",
-		width: 193 * alpha,
+		backgroundColor: "transparent",
+		width: 250 * alpha,
 		height: 61 * alpha,
 		marginTop: 28 * alpha,
 		alignItems: "flex-start",
@@ -1037,6 +1035,26 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 2 * alpha,
+	},
+	membershiplevelButton: {
+		backgroundColor: "transparent",
+		borderWidth: 1 * alpha,
+		borderColor: "rgba(181, 181, 181, 0.5)",
+		borderRadius: 8 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		height: 16 * alpha,
+		marginLeft: 6 * alpha,
+	},
+	membershiplevelText: {
+		color: "rgb(108, 108, 108)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		textAlign: "center",
+		marginLeft: 10 * alpha,
+		marginRight: 10 * alpha,
 	},
 	membershipstatusButton: {
 		backgroundColor: "rgba(181, 181, 181, 0.28)",
@@ -1104,16 +1122,21 @@ const styles = StyleSheet.create({
 		paddingTop: 0,
 		elevation: 2 * alpha,
 	},
-	levelInfoView: {
+	levelInfoButton: {
 		width: 40 * alpha,
 		height: 14 * alpha,
 		marginRight: 20 * alpha,
+		right: -10 * alpha,
 		position: "absolute",
-		right: -60 * alpha,
-		top: 14 * alpha,
+		top: 40 * alpha,
+		backgroundColor: "transparent"
+	},
+	levelInfoView: {
+		width: 40 * alpha,
+		height: 14 * alpha,
 		justifyContent: "center",
 		alignItems: "center",
-		flexDirection: "row"
+		flexDirection: "row",
 	},
 	levelInfoText: {
 		color: "rgb(151, 151, 151)",

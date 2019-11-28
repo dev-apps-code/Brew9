@@ -12,6 +12,7 @@ import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
+import ProfileRequestObject from '../Requests/profile_request_object'
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
 import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR} from "../Common/common_style";
@@ -69,6 +70,7 @@ export default class PickUp extends React.Component {
 			loading: false,
 			current_order: [],
 			refreshing: false,
+			appState: AppState.currentState,
 		}
 	}
 
@@ -123,6 +125,30 @@ export default class PickUp extends React.Component {
 		  })
 		);
 	  }
+
+	  loadProfile(){
+		const { dispatch, currentMember } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				
+			}
+			this.setState({
+				loading: false,
+			})
+		}
+		const obj = new ProfileRequestObject()
+		if (currentMember != null){
+			obj.setUrlId(currentMember.id)
+		}
+		
+		dispatch(
+			createAction('members/loadProfile')({
+				object:obj,
+				callback,
+			})
+		)
+	}
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
@@ -455,8 +481,8 @@ export default class PickUp extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							
-							<Text
-								style={styles.pleaseCallBranchFText}>Please call branch for refund</Text>
+							{/* <Text
+								style={styles.pleaseCallBranchFText}>Please call branch for refund</Text> */}
 							<View
 								pointerEvents="box-none"
 								style={{
