@@ -151,10 +151,7 @@ const PushOrder = createStackNavigator(
   },
   {
     initialRouteName: "Home",
-<<<<<<< HEAD
-=======
     
->>>>>>> a87166f49595633b33d8acbe60c5491733f9ef54
   }
 );
 
@@ -190,12 +187,9 @@ const PushPickup = createStackNavigator(
   },
   {
     initialRouteName: "PickUp",
-<<<<<<< HEAD
-=======
     navigationOptions: {
       gesturesEnabled: false,
   },
->>>>>>> a87166f49595633b33d8acbe60c5491733f9ef54
   }
 );
 
@@ -293,10 +287,6 @@ const PushProfile = createStackNavigator(
   },
   {
     initialRouteName: "Profile",
-<<<<<<< HEAD
-=======
-  
->>>>>>> a87166f49595633b33d8acbe60c5491733f9ef54
   }
 );
 
