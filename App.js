@@ -151,6 +151,10 @@ const PushOrder = createStackNavigator(
   },
   {
     initialRouteName: "Home",
+<<<<<<< HEAD
+=======
+    
+>>>>>>> a87166f49595633b33d8acbe60c5491733f9ef54
   }
 );
 
@@ -186,6 +190,12 @@ const PushPickup = createStackNavigator(
   },
   {
     initialRouteName: "PickUp",
+<<<<<<< HEAD
+=======
+    navigationOptions: {
+      gesturesEnabled: false,
+  },
+>>>>>>> a87166f49595633b33d8acbe60c5491733f9ef54
   }
 );
 
@@ -206,7 +216,7 @@ const PushInbox = createStackNavigator(
 const PushProfile = createStackNavigator(
   {
     Profile: {
-      screen: Profile
+      screen: Profile,
     },
     PaymentsWebview:{
       screen: PaymentsWebview
@@ -218,7 +228,7 @@ const PushProfile = createStackNavigator(
       screen: Transaction
     },
     MembershipInfo: {
-      screen: MembershipInfo
+      screen: MembershipInfo,
     },
     MemberVoucher: {
       screen: MemberVoucher
@@ -283,6 +293,10 @@ const PushProfile = createStackNavigator(
   },
   {
     initialRouteName: "Profile",
+<<<<<<< HEAD
+=======
+  
+>>>>>>> a87166f49595633b33d8acbe60c5491733f9ef54
   }
 );
 
@@ -430,6 +444,8 @@ const TabGroupOne = createBottomTabNavigator(
   },
   {
     tabBarPosition: "bottom",
+    swipeEnabled:false,
+    gesturesEnabled:false,
     animationEnabled: true,
     tabBarOptions: {
 
@@ -443,7 +459,7 @@ const TabGroupOne = createBottomTabNavigator(
       style: {
         backgroundColor: "rgb(224, 224, 224)"
       }
-    },
+    },    
     defaultNavigationOptions: ({ navigation }) => {
       const { routeName } = navigation.state;
 
@@ -478,10 +494,16 @@ const AuthenticationStack = createStackNavigator(
 const RootNavigator = createStackNavigator(
   {
     FirstScreen: {
-      screen: FirstScreen
+      screen: FirstScreen,
+      navigationOptions: {
+        gesturesEnabled: false,
+    },
     },
     TabGroupOne: {
-      screen: TabGroupOne
+      screen: TabGroupOne,
+      navigationOptions: {
+        gesturesEnabled: false,
+    },
     },
     // VerifyStack: {
     //   screen: VerifyStack
@@ -493,7 +515,17 @@ const RootNavigator = createStackNavigator(
   },
   {
     initialRouteName: "FirstScreen",
-    headerMode: "none"
+    headerMode: "none",
+    animationEnabled:false,
+    transitionConfig: () => ({
+      transitionSpec: {
+        duration: 0,  // Set the animation duration time as 0 !!
+      },
+    }),
+    navigationOptions: {
+      
+      gesturesEnabled: false,
+  },
   }
 );
 

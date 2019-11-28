@@ -73,7 +73,9 @@ export default class Home extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		
 		const { params = {} } = navigation.state
+		
 		return {
+			
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
