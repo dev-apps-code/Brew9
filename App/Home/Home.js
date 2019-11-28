@@ -1667,6 +1667,7 @@ export default class Home extends React.Component {
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
+								initialNumToRender={7}
 								onScrollToIndexFailed={(info) => { /* handle error here /*/ }}
 								ref={(ref) => { this.flatListRef = ref }}
 								style={styles.productlistFlatList}
