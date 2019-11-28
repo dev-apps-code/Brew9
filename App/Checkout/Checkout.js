@@ -299,6 +299,19 @@ export default class Checkout extends React.Component {
 		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.state.cart,addVoucherAction:this.addVoucherItemsToCart})
 	}
 
+	onCancelVoucher = (item) => {
+		let new_voucher_list = [...this.state.vouchers_to_use]
+		const search_voucher_index = new_voucher_list.findIndex(element => element.id == item.id)
+
+		
+		new_voucher_list.splice(search_voucher_index, 1)
+		this.setState({
+			vouchers_to_use: new_voucher_list
+		}, function(){
+			this.calculateVoucherDiscount(new_voucher_list)
+		})
+	}
+
 	addVoucherItemsToCart =(voucher_item) => {
 
 		const {vouchers_to_use} = this.state
@@ -846,6 +859,12 @@ export default class Checkout extends React.Component {
 									style={styles.productQuantityText}></Text>
 								<Text
 									style={styles.productPriceText}>{ discount_value ? `-$${parseFloat(discount_value).toFixed(2)}` : ""}</Text>
+								<TouchableOpacity onPress={() => this.onCancelVoucher(item)} style={styles.cancelVoucherButton}>
+									<Image
+										source={require("./../../assets/images/cancel.png")}
+										style={styles.cancelImage}/>
+								</TouchableOpacity>
+								
 								<Image
 									source={require("./../../assets/images/group-109-copy.png")}
 									style={styles.dottedLineImage}/>
@@ -3005,8 +3024,6 @@ const styles = StyleSheet.create({
 		right: 20 * alpha,
 		height: 1 * alpha,
 	},
-
-
 	popOutPickupView: {
 		backgroundColor: "white",
 		position: "absolute",
@@ -3237,5 +3254,15 @@ const styles = StyleSheet.create({
 		borderRadius: 5 * alpha,
 		marginRight: 5 * alpha,
 		marginBottom: 5 * alpha,
+	},
+	cancelVoucherButton: {
+		width: 15 * alpha,
+		height: 15 * alpha,
+		marginLeft: 5 * alpha,
+	},
+	cancelImage: {
+		width: 15 * alpha,
+		height: 15 * alpha,
+		resizeMode: "contain"
 	}
 })

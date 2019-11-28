@@ -570,7 +570,7 @@ export default class MemberProfile extends React.Component {
 								style={styles.emailText}>Email</Text>
 							<TextInput
 								autoCorrect={false}
-								placeholder="Email (Optional)"
+								placeholder="Email (optional)"
 								style={styles.emailTextInput}
 								returnKeyType={'done'}
 								onChangeText={(email) => this.setState({email})}

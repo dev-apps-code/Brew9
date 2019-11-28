@@ -515,10 +515,10 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > selectedShop.max_order_distance_in_km){
-				this.refs.toast.show("You are too far away", TOAST_DURATION)
-				return
-			} else {
+			// if (member_distance > selectedShop.max_order_distance_in_km){
+			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
+			// 	return
+			// } else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -549,7 +549,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			}
+			// }
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
