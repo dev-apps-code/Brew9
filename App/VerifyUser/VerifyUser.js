@@ -148,7 +148,6 @@ export default class VerifyUser extends React.Component {
 
 	loadShops(){
 
-		// console.log("Status", loadProducts)
 		const { dispatch,company_id,location } = this.props
 
 		const callback = eventObject => {

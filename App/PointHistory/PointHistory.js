@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		top: 5 * alpha,
 	},
-pointsExpiryText: {
+	pointsExpiryText: {
 		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,

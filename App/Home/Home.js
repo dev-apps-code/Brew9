@@ -103,7 +103,7 @@ export default class Home extends React.Component {
 	static tabBarItemOptions = ( navigation,store ) => {
 	
 		return {
-			tabBarLabel: "Order",
+			tabBarLabel: "Menu",
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
 
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
@@ -333,7 +333,6 @@ export default class Home extends React.Component {
 	  loadNotifications = () => {
 		
 		const { dispatch, currentMember } = this.props;
-		console.log("Notificatio", currentMember)
 		
 		this.setState({ loading: true });
 		const callback = eventObject => {
@@ -406,7 +405,7 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log("Shop", eventObject.result)
+			// console.log("Shop", eventObject.result)
 			this.setState({ loading: false })
 			// console.log("Shop", eventObject.result)
 			if (eventObject.success) {			
@@ -515,10 +514,10 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			// if (member_distance > selectedShop.max_order_distance_in_km){
-			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
-			// 	return
-			// } else {
+			if (member_distance > selectedShop.max_order_distance_in_km){
+				this.refs.toast.show("You are too far away", TOAST_DURATION)
+				return
+			} else {
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
@@ -536,6 +535,13 @@ export default class Home extends React.Component {
 						
 						this.loadShops()
 						navigate("PickUp")
+					} else {
+						this.setState({
+							cart: params.cart,
+							promotion: params.promotion
+						}, function() {
+							this.recalculate_total()
+						})
 					}
 				})
 		
@@ -549,7 +555,7 @@ export default class Home extends React.Component {
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
-			// }
+			}
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -566,6 +572,22 @@ export default class Home extends React.Component {
 				returnToRoute: navigation.state
 			})
 		}
+	}
+
+	recalculate_total() {
+		const { cart } = this.state
+		var total = 0
+		for (item of cart) {
+			if (item.clazz == "product") {
+				var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
+				total += calculated
+			}
+		}
+		this.setState({
+			cart_total: total
+		}, function(){
+			this.check_promotion_trigger()
+		})
 	}
 
 	removeNavigationListener() {
@@ -995,7 +1017,7 @@ export default class Home extends React.Component {
 
 				if (currentMember != null && promotion.has_triggered != true) {
 
-					if (promotion.trigger_price != null) {
+					if (promotion.trigger_price != null){
 						var price = 0
 		
 						var trigger_price = parseFloat(promotion.trigger_price)
@@ -1005,6 +1027,7 @@ export default class Home extends React.Component {
 		
 						if (remaining <= 0 && search_cart_promo_index < 0) {
 		
+							console.log("add trigger")
 							shop.all_promotions[index].has_triggered = true
 							let cartItem = {
 								clazz: "promotion",
@@ -1012,7 +1035,7 @@ export default class Home extends React.Component {
 								name: promotion.cart_text,
 								description:  "",
 								price: price,
-								// type: promotion.reward_type
+								type: promotion.reward_type
 							}
 							promotions_item.push(cartItem)
 							// console.log("Add", cartItem.name)
@@ -1027,14 +1050,10 @@ export default class Home extends React.Component {
 								
 							})
 									
-						} else if (remaining >= 0 && search_cart_promo_index > 0){
-							newpromotion.splice(search_cart_promo_index, 1)
-							this.setState({
-								promotion: newpromotion
-							})
 						}
-					} else {
+					} else if (newcart.length > 0) {
 
+						console.log("non trigger")
 						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
 						var price = 0
 		
@@ -1059,15 +1078,14 @@ export default class Home extends React.Component {
 
 							if (search_cart_promo_index < 0) {
 		
-								shop.all_promotions[index].has_triggered = true
-								let cartItem = {
+								let cartItem2 = {
 									clazz: "promotion",
 									id: promotion.id,
 									name: promotion.cart_text,
 									description:  "",
 									price: price,
 								}
-								promotions_item.push(cartItem)
+								promotions_item.push(cartItem2)
 								this.setState({
 									promotion: newpromotion.concat(promotions_item),
 									promotion_ids: promotion_ids
@@ -1076,36 +1094,45 @@ export default class Home extends React.Component {
 							} else {
 								var item = newpromotion[search_cart_promo_index]
 								item.price = price
-								this.setState({
-									promotion: newpromotion,
-									promotion_ids: promotion_ids
-								}, function(){
-								})
+								
 							}
 						}
 						else {
 							
 							if (search_cart_promo_index < 0) {
 			
-								shop.all_promotions[index].has_triggered = true
-								let cartItem = {
+								let cartItem3 = {
 									clazz: "promotion",
 									id: promotion.id,
 									name: promotion.cart_text,
 									description:  "",
 									price: price,
 								}
-								promotions_item.push(cartItem)
-								this.setState({
-									promotion: newpromotion.concat(promotions_item),
-									promotion_ids: promotion_ids
-								}, function(){
+								promotions_item.push(cartItem3)
 								
-								})
 										
 							} 
 						}
 						
+					}
+				} else if (currentMember != null && promotion.has_triggered == true) {
+
+					if (promotion.trigger_price != null){
+
+						var price = 0
+		
+						var trigger_price = parseFloat(promotion.trigger_price)
+						var remaining = trigger_price - cart_total
+		
+						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
+						
+						if (remaining > 0 && search_cart_promo_index >= 0){
+							newpromotion.splice(search_cart_promo_index, 1)
+							shop.all_promotions[index].has_triggered = false
+							this.setState({
+								promotion: newpromotion
+							})
+						}
 					}
 				}
 			}
@@ -1594,7 +1621,7 @@ export default class Home extends React.Component {
 						}}/>
 						<SwitchSelector
 							options={[
-								{ label: "PickUp", value: 0 },
+								{ label: "Pick Up", value: 0 },
 								{ label: "Delivery", value: 1 }]}
 							initial={0}
 							value={delivery}
@@ -1788,12 +1815,12 @@ export default class Home extends React.Component {
 
 		const style =  (cart.length > 0)  ? styles.alertViewCart : styles.alertView
 		if (shop !== null)  {
-			// if ( shop.is_opened === false){
-			// 	return (
-			// 		<View style={style}>
-			// 			<Text style={styles.alertViewText}>{shop.alert_message}</Text>
-			// 		</View>)
-			// }
+			if ( shop.is_opened === false){
+				return (
+					<View style={style}>
+						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
+					</View>)
+			}
 
 			if (shop.can_order == false && shop.shop_busy_template_message != null){
 				const template = shop.shop_busy_template_message.template

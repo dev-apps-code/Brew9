@@ -162,7 +162,6 @@ export default {
     },
     *loadProfile({ payload }, { call, put, select })
     {
-      console.log("New user data")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -197,7 +196,6 @@ export default {
     },
     *loadUpdateAvatar({ payload }, { call, put, select })
     {
-      console.log("Avatar")
       try{
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -361,7 +359,6 @@ export default {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
-        console.log("Auth", authtoken)
         const json = yield call(
             orders,
             authtoken,
@@ -411,7 +408,6 @@ export default {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
-        console.log("Authtoken", authtoken)
         const json = yield call(
             qrCodeScan,
             authtoken,

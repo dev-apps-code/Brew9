@@ -73,7 +73,6 @@ export default class MemberWallet extends React.Component {
 		this.setState({ loading_list: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log("Top Up", eventObject.result)
 				this.setState({
 					data: eventObject.result,
 				},function () {

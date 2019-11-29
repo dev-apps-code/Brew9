@@ -98,7 +98,6 @@ export default class MissionCenter extends React.Component {
         const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-            console.log(eventObject)
             if (eventObject.success) {
 
                 var mission_categories = eventObject.result

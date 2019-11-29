@@ -84,7 +84,6 @@ export default class FeaturedPromotionDetail extends React.Component {
     }
     
 
-    console.log(this.state.imageHeight,this.state.imageWidth)
     return (
       <ScrollView style={styles.promotiondetailView}>
         <Text style={styles.titleText}>{promo.title}</Text>

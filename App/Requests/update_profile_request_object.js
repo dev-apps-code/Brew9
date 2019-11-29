@@ -16,7 +16,6 @@ class UpdateProfileRequestObject extends BaseRequestObject{
 
    getFormData(){
     
-        console.log("Profile Multi")
         const data = new FormData()
         if (this.dob != null) {
             data.append('dob',this.dob)

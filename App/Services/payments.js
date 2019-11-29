@@ -9,7 +9,6 @@ export function getSession(authtoken,object) {
 export function updateSession(session_id,object) {
 
    const urlString = `${getPaymentServer()}/api/rest/version/47/merchant/${getMerchantId()}/session/${session_id}`
-console.log("url string",urlString)
    return fetch(urlString, {
    method: 'PUT',
    headers: {
