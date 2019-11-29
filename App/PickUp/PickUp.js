@@ -15,9 +15,10 @@ import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_
 import ProfileRequestObject from '../Requests/profile_request_object'
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
-import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, LIGHT_BLUE} from "../Common/common_style";
 import Moment from 'moment';
 import NotificationsRequestObject from "../Requests/notifications_request_object";
+import { LinearGradient } from 'expo-linear-gradient';
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -32,7 +33,7 @@ export default class PickUp extends React.Component {
 		// const {dispatch} = this.props
 		const { params = {} } = navigation.state
 		return {
-			title: "PickUp",
+			title: "Your Order",
 			headerTintColor: "black",     
 			headerLeft: null,
 			headerRight: null,
@@ -46,7 +47,7 @@ export default class PickUp extends React.Component {
 	static tabBarItemOptions = ( navigation,store ) => {
 
 		return {
-			tabBarLabel: "Pickup",
+			tabBarLabel: "Order",
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
 				store.dispatch(createAction("config/setTab")("pickup"))
@@ -187,7 +188,6 @@ export default class PickUp extends React.Component {
 		if (currentMember != null){
 			this.setState({ loading: true })
 			const callback = eventObject => {
-				console.log(eventObject)
 				if (eventObject.success) {
 					this.setState({
 						current_order: eventObject.result
@@ -214,6 +214,7 @@ export default class PickUp extends React.Component {
 		const queues = current_order.map((item, key) => {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
+			var progress =  item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 :  item.status == "ready" ? 1 : 0
 
 			const order_items = item.order_items.map((item, key) => {
 
@@ -338,13 +339,13 @@ export default class PickUp extends React.Component {
 						}}>
 						<View style={styles.queueHeaderBlock}>
 							<Text
-								style={styles.queueheaderText}>Queue Number</Text>
+								style={styles.queueheaderText}>Order Number</Text>
 							<Text
 								style={styles.queuenumberText}>{item.queue_no}</Text>
 						</View>
 						<View style={styles.queueHeaderBlock}>
 							<Text
-								style={styles.pickupTimeheaderText}>Pick Up</Text>
+								style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
 							<Text
 								style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}</Text>
 							<Text
@@ -395,6 +396,10 @@ export default class PickUp extends React.Component {
 									<Text
 										style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
 								</View>
+						</View>
+						<View
+							style={styles.progressbarView}>
+								{this.renderProgressBar(progress)}
 						</View>
 				</View>
 				<View
@@ -507,9 +512,7 @@ export default class PickUp extends React.Component {
 								</TouchableOpacity> */}
 							</View>
 							<Text
-								style={styles.orderNo020028201Text}>Order no.: {item.receipt_no}</Text>
-							<Text
-								style={styles.remarkNoPackingText}>Remark:</Text>
+								style={styles.orderNo020028201Text}>Receipt no.: {item.receipt_no}</Text>
 						</View>
 					</View>
 					</View>
@@ -539,6 +542,33 @@ export default class PickUp extends React.Component {
 		let longitude = shop ? parseFloat(shop.longitude) : 0.0
 
 		openMap({ latitude: latitude, longitude: longitude });
+	}
+
+	renderProgressBar(progress) {
+
+		progress_percent = progress * 100
+		return (
+			<View style={{flexDirection: "row", height: 10 * alpha,  flex: 1}}>
+			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha}}>
+				<View
+				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
+				/>
+				<LinearGradient
+					colors={[LIGHT_BLUE, PRIMARY_COLOR]}
+					start={[0,0]}
+					end={[1,0]}
+					style={{
+						position: "absolute",
+						left: 0,
+						top: 0,
+						bottom: 0,
+						borderRadius: 4 * alpha,
+						width: `${progress_percent}%`,
+					}}
+				/>
+			  </View>
+			</View>
+		  )
 	}
 
 	renderEmpty() {
@@ -867,7 +897,7 @@ const styles = StyleSheet.create({
 		width: 300 * alpha,
 		height: 53 * alpha,
 		marginTop: 20 * alpha,
-		marginBottom: 20 * alpha,
+		marginBottom: 5 * alpha,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignSelf: "center"
@@ -1198,7 +1228,7 @@ const styles = StyleSheet.create({
 	remarkView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		height: 116 * alpha,
+		height: 70 * alpha,
 		paddingBottom: 10 * alpha,
 	},
 	bottomFillImage: {
@@ -1499,6 +1529,13 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		marginLeft: 10 * alpha, 
 		marginRight: 10 * alpha,
-	}
+	},
+	progressbarView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		width: 250 * alpha,
+		height: 10 * alpha,
+		marginBottom: 20 * alpha,
+	},
 	
 })

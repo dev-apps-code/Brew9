@@ -18,6 +18,8 @@ import {
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 export default class PointProductCell extends React.Component {
   constructor(props) {
@@ -28,10 +30,12 @@ export default class PointProductCell extends React.Component {
 
   onPointProductCellPress = (item_id, item_name) => {
     const { navigate } = this.props.navigation;
-    navigate("PointShopItem", {
-      item_id: item_id,
-      item_name: item_name
-    });
+
+    const analytics = new Analytics(ANALYTICS_ID)
+    analytics.event(new Event('Point Product', 'Click', `${item_name}`))
+    this.props.onPressItem(item_id,item_name)
+
+    
   };
 
   onViewMorePressed = (plan_id, title) => {
@@ -91,7 +95,7 @@ export default class PointProductCell extends React.Component {
                   flex: 1
                 }}
               />
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => this.onViewMorePressed(sectionId, sectionHeader)}
                 style={styles.viewmoreButton}
               >
@@ -100,7 +104,7 @@ export default class PointProductCell extends React.Component {
                   source={require("./../../assets/images/next.png")}
                   style={styles.viewmoreButtonImage}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View
               style={
@@ -136,14 +140,14 @@ const styles = StyleSheet.create({
   itemBlockView: {
     backgroundColor: "transparent",
     flex: 1,
-    height: 250 * alpha,
+    height: 160 * alpha,
     top: 40 * alpha,
     flexWrap: "wrap"
   },
   itemBlockView2: {
     backgroundColor: "transparent",
     flex: 1,
-    height: 500 * alpha,
+    height: 320 * alpha,
     marginTop: 40 * alpha,
     flexWrap: "wrap"
   },
@@ -179,7 +183,7 @@ const styles = StyleSheet.create({
     tintColor: "rgb(164, 164, 164)",
     resizeMode: "contain",
     width: 10 * alpha,
-    marginLeft: 10 * alpha
+    marginLeft: 5 * alpha
   },
   itemView: {
     backgroundColor: "transparent",
@@ -187,22 +191,22 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   imageImage: {
-    resizeMode: "cover",
-    backgroundColor: "#f6f4f5",
-    width: 170 * alpha,
-    height: 170 * alpha
+    resizeMode: "contain",
+    backgroundColor: "transparent",
+    width: "100%",
+    height: 100 * alpha
   },
   viewView: {
     backgroundColor: "transparent",
-    width: 187 * alpha,
-    height: 80 * alpha,
+    width: "100%",
+    height: 60 * alpha,
     alignItems: "flex-start"
   },
   titleText: {
     backgroundColor: "transparent",
     color: "black",
     fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -213,10 +217,11 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     color: "rgb(0, 178, 227)",
     fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
-    textAlign: "left"
+    textAlign: "left",
+    marginTop: 3 * alpha,
   },
   pointsText: {
     backgroundColor: "transparent",

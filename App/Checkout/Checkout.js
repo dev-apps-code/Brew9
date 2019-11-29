@@ -89,6 +89,7 @@ export default class Checkout extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+
 		this.setTimePickerDefault()
 		this.loadValidVouchers()	
 	}
@@ -209,7 +210,6 @@ export default class Checkout extends React.Component {
 		if (currentMember != null ){
 			const callback = eventObject => {
 
-				// console.log(`--   voucher ${eventObject.result}`)
 				if (eventObject.success) {
 					this.setState({ 
 						valid_vouchers: eventObject.result
@@ -231,7 +231,17 @@ export default class Checkout extends React.Component {
 	
 	onBackPressed = () => {
 
-		this.props.navigation.goBack()
+		// this.props.navigation.goBack()
+		const {navigation } = this.props
+		const { routeName, key } = navigation.getParam('returnToRoute')
+		
+		navigation.navigate({ routeName, key, 
+			params: { 
+				clearCart: false, 
+				cart: this.state.cart, 
+				promotion: this.state.promotion,
+			} 
+		})
 	}
 	
 	
@@ -341,6 +351,98 @@ export default class Checkout extends React.Component {
 		}		
 	}
 
+	check_promotion_trigger = () => {
+
+		const { shop, cart_total, promotion, promotion_ids } = this.state
+
+		const { currentMember } = this.props
+
+		let newPromo = [...promotion]
+		
+		var promotions_item = []
+		var final_cart_value = cart_total
+
+		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
+			
+			for (var index in shop.all_promotions) {
+
+				var promo = shop.all_promotions[index]
+
+				if (currentMember != null) {
+
+					if (promo.trigger_price != null){
+						
+						console.log("trigger")
+						var trigger_price = parseFloat(promo.trigger_price)
+						var remaining = trigger_price - cart_total
+		
+						console.log("REmaining", remaining, "trigger", trigger_price)
+						console.log("Promo cart_text", promo.cart_text)
+						const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
+				
+						console.log("Search", search_cart_promo_index)
+						if (remaining > 0 && search_cart_promo_index >= 0){
+							promotion.splice(search_cart_promo_index, 1)
+							this.setState({
+								promotion: newPromo
+							})
+						}
+					}
+					const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
+					var price = 0
+					if (promo.reward_type != null && promo.reward_type == "Discount") {
+							console.log("discount")
+						if (!promotion_ids.includes(promo.id)) {
+							promotion_ids.push(promo.id)
+						}
+						if (promo.value_type != null && promo.value_type == "percent") {
+							var discount_value = promo.value ? promo.value : 0
+							price = cart_total * discount_value / 100
+							console.log("percent")
+							if (promo.maximum_discount_allow != null && price > promo.maximum_discount_allow) {
+								price = promo.maximum_discount_allow
+							}
+							final_cart_value = cart_total - price
+							
+						} else if (promo.value_type != null && promo.value_type == "fixed") {
+							var discount_value = promo.value ? promo.value : 0
+							price = cart_total - discount_value
+							console.log("fixed")
+						}
+
+						if (search_cart_promo_index < 0) {
+	
+							let cartItem2 = {
+								clazz: "promotion",
+								id: promo.id,
+								name: promo.cart_text,
+								description:  "",
+								price: price,
+							}
+							promotions_item.push(cartItem2)
+							this.setState({
+								promotion: newPromo.concat(promotions_item),
+								promotion_ids: promotion_ids,
+								cart_total: final_cart_value,
+							}, function(){
+							})
+						} else {
+							var item = newPromo[search_cart_promo_index]
+							item.price = price
+						}
+					}
+				}
+			}
+			
+		}
+		this.setState({
+			cart_total: final_cart_value
+		}, function () {
+			this.calculateVoucherDiscount(this.state.vouchers_to_use)
+		})
+		
+	}
+
 	calculateVoucherDiscount(vouchers_to_use){
 		const {cart_total} = this.state
 		var discount = 0
@@ -350,7 +452,6 @@ export default class Checkout extends React.Component {
 			if (voucher.voucher_type == "Cash Voucher"){
 				discount = voucher.discount_price
 			}else{				
-				// console.log(`voucher ${voucher.discount_price} ${voucher.discount_type}`)
 				if (voucher.discount_type != null && voucher.discount_type != '' && voucher.discount_price != null && voucher.discount_price != 0){
 					if (voucher.discount_type.toLowerCase() == "fixed"){
 						discount = voucher.discount_price
@@ -369,39 +470,79 @@ export default class Checkout extends React.Component {
 		this.tooglePayment()
 	}
 
-
 	removeItemFromCart(products,description) {
-
-		let cart = this.state.cart
-
-		let newCart = [];
-		let product_ids = products.map(item => item.id);
-		
-		let cart_total = 0
-		let cart_total_quantity = 0
-		for (x of cart) {
-			if (!product_ids.includes(x.id)){
-				newCart.push(x)
-				cart_total_quantity = cart_total_quantity + cartItem.quantity
-				cart_total = (parseFloat(cart_total) + parseFloat(x.price)).toFixed(2)
+		let newcart = [...this.state.cart]
+		let product_ids = products.map(item => item.id)
+		for (item of newcart) {
+			if (product_ids.includes(item.id)) {
+				item.cannot_order = true
 			}
 		}
-				
-		let removed_item_name = `${description} \n\n`
-
-		for (var index in products) {
-			let product = products[index];
-			removed_item_name = removed_item_name.concat(product.name)
-			if (index > 0) {
-				removed_item_name = removed_item_name.concat("\n")
-			}
-		}
-
-		this.refs.toast.show(removed_item_name, TOAST_DURATION)
-		if (newCart.length == 0){
-			this.props.navigation.goBack()
-		}
+		this.setState({ cart: newcart})
 	}
+
+	onRemoveItem(item) {
+		let new_cart = [...this.state.cart]
+		const search_product_index = new_cart.findIndex(element => element.id == item.id)
+
+		new_cart.splice(search_product_index, 1)
+		
+		this.setState({
+			cart: new_cart
+		}, function(){
+			this.recalculate_total()
+			
+		})
+	}
+
+	recalculate_total() {
+		const { cart } = this.state
+		var total = 0
+		for (item of cart) {
+			if (item.clazz == "product") {
+				var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
+				total += calculated
+			}
+		}
+		this.setState({
+			cart_total: total
+		}, function(){
+			this.check_promotion_trigger()
+		})
+	}
+	// removeItemFromCart(products,description) {
+
+	// 	console.log("remove", products)
+	// 	let cart = [...this.state.cart]
+
+	// 	let newCart = [];
+	// 	let product_ids = products.map(item => item.id);
+		
+	// 	let cart_total = 0
+	// 	let cart_total_quantity = 0
+	// 	for (x of cart) {
+	// 		if (!product_ids.includes(x.id)){
+	// 			newCart.push(x)
+	// 			cart_total_quantity = cart_total_quantity + cartItem.quantity
+	// 			cart_total = (parseFloat(cart_total) + parseFloat(x.price)).toFixed(2)
+	// 		}
+	// 	}
+				
+	// 	let removed_item_name = `${description} \n\n`
+
+	// 	for (var index in products) {
+	// 		let product = products[index];
+	// 		removed_item_name = removed_item_name.concat(product.name)
+	// 		if (index > 0) {
+	// 			removed_item_name = removed_item_name.concat("\n")
+	// 		}
+	// 	}
+
+	// 	this.refs.toast.show(removed_item_name, TOAST_DURATION)
+	// 	if (newCart.length == 0){
+	// 		this.props.navigation.goBack()
+	// 	}
+	// }
 
 	loadMakeOrder(){
 		const { dispatch, selectedShop } = this.props
@@ -410,7 +551,7 @@ export default class Checkout extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
-			
+			console.log("Checkout", eventObject)
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits'){
@@ -436,11 +577,15 @@ export default class Checkout extends React.Component {
 				}
 			}
 			else{
+				console.log("Error", eventObject.message)
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 				this.setState({
 					loading: false,
 				})
 				if (Array.isArray(eventObject.result)){
+					console.log("Array")
 					if (eventObject.result.length > 0){
+						console.log("Greater")
 						let item = eventObject.result[0]
 						if (item.clazz = "product"){
 							this.removeItemFromCart(eventObject.result,eventObject.message)
@@ -448,7 +593,6 @@ export default class Checkout extends React.Component {
 						}
 					}
 				}
-				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 		}
 		filtered_cart = _.filter(cart, {clazz: 'product'});
@@ -486,9 +630,13 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const {cart_total, selected_payment, pick_up_status} = this.state
+		const {cart_total, selected_payment, pick_up_status, discount} = this.state
 		const {currentMember,selectedShop} = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
+		var final_price = cart_total - discount 
+		if (final_price < 0){
+			final_price = 0
+		}
 		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
 		if (currentMember != undefined) {
 			if ( selected_payment == "") {
@@ -497,13 +645,12 @@ export default class Checkout extends React.Component {
 			}
 
 			if ( selected_payment == "credits") {
-				if (parseFloat(cart_total) > parseFloat(currentMember.credits).toFixed(2)){
+				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)){
 					this.refs.toast.show("Oops, insufficient credit. Please top up at our counter.", TOAST_DURATION, () => {
 						navigate("MemberWallet")
 					})
 					return
 				}
-				return
 			}
 
 			if ( pick_up_status == null) {
@@ -515,8 +662,6 @@ export default class Checkout extends React.Component {
 					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
 					var pickup = Moment(pick_up_status, 'h:mm')
 					var now = Moment(new Date(), 'HH:mm')
-
-					// console.log("Opening", opening, "Closing", closing, "Pickup", pickup, "Now", now)
 
 					if (pickup < now) {
 						this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
@@ -1020,7 +1165,7 @@ export default class Checkout extends React.Component {
 								<View
 									style={styles.productDetailView}>
 									<Text
-										style={styles.productNameText}>{item.name}</Text>
+										style={item.cannot_order != undefined && item.cannot_order == true ? styles.productNameDisabledText : styles.productNameText}>{item.name}</Text>
 									{(variant_array.length > 0) ?
 									<Text
 										style={styles.productVariantText}>{variant_array.join(", ")}</Text> :
@@ -1031,6 +1176,13 @@ export default class Checkout extends React.Component {
 									style={styles.productQuantityText}>{ item.quantity != null && item.quantity > 0 && (`x${item.quantity}`)}</Text>
 								<Text
 									style={styles.productPriceText}>{price_string}</Text>
+								{item.cannot_order != undefined && item.cannot_order == true && (
+								<TouchableOpacity onPress={() => this.onRemoveItem(item)} style={styles.cancelVoucherButton}>
+									<Image
+										source={require("./../../assets/images/cancel.png")}
+										style={styles.cancelImage}/>
+								</TouchableOpacity> 
+								)}
 								{ item.id != last_item.id && (<Image
 									source={require("./../../assets/images/group-109-copy.png")}
 									style={styles.dottedLineImage}/>)}
@@ -2813,6 +2965,15 @@ const styles = StyleSheet.create({
 	productNameText: {
 		backgroundColor: "transparent",
 		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		marginBottom: 5 * alpha,
+	},
+	productNameDisabledText: {
+		backgroundColor: "transparent",
+		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",

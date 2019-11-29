@@ -73,7 +73,6 @@ export default class MemberWallet extends React.Component {
 		this.setState({ loading_list: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log("Top Up", eventObject.result)
 				this.setState({
 					data: eventObject.result,
 				},function () {
@@ -227,7 +226,7 @@ export default class MemberWallet extends React.Component {
 				</View>
 				<View style={styles.shopTopUp}>
 					<Text style={styles.shopTopUpText}>
-						TopUp is also available at our store counter.
+						Top up is also available at our store counter.
 					</Text>
 				</View>
 			</ScrollView>

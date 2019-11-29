@@ -98,7 +98,6 @@ export default class MissionCenter extends React.Component {
         const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-            console.log(eventObject)
             if (eventObject.success) {
 
                 var mission_categories = eventObject.result
@@ -130,6 +129,7 @@ export default class MissionCenter extends React.Component {
         this.setState({ loading_list: true })
         const callback = eventObject => {
              if (eventObject.success) {
+                console.log("Statement", eventObject.result)
                 this.setState({
                     mission_statements: eventObject.result,
                 }, function(){

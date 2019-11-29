@@ -267,7 +267,7 @@ export default class Profile extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 	  	analytics.event(new Event('Profile', 'Click', "Member Point"))
 		if (currentMember !== null) {
-			navigate("PointHistory")
+			navigate("PointShop")
 		} else {
 			navigate("VerifyUser" , {
 				returnToRoute: this.props.navigation.state
@@ -420,6 +420,7 @@ export default class Profile extends React.Component {
 			</View>
 		  )
 	}
+
 	render() {
 
 		const { currentMember ,members} = this.props

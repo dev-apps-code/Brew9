@@ -17,9 +17,7 @@ export function getBasicAuthentication(authToken) {
 
 export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
-  // console.log(urlString)
-  // console.log(authtoken)
-
+  
   return fetch(urlString, {
     method: 'GET',
     headers: {
@@ -65,7 +63,6 @@ export function postMethod(authtoken,object) {
 export function postJsonMethod(authtoken,object) {
 
   const urlString = `${KSERVERURL}/${object.getUrlString()}`
-  console.log(urlString)
   return fetch(urlString, {
   method: 'POST',
   headers: {
@@ -85,9 +82,7 @@ export function postJsonMethod(authtoken,object) {
 }
 
 export function postMultipartMethod(authtoken, object) {
-     const urlString = `${KSERVERURL}/${object.getUrlString()}`
-     console.log(urlString)
-    console.log("MultiPart", object.getFormData())
+    const urlString = `${KSERVERURL}/${object.getUrlString()}`
     return fetch(urlString, {
     method: 'POST',
     headers: {
@@ -108,9 +103,6 @@ export function postMultipartMethod(authtoken, object) {
 
 export function deleteMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
-  // console.log(urlString)
-  // console.log(authtoken)
-
   return fetch(urlString, {
     method: 'DELETE',
     headers: {

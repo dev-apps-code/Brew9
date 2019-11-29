@@ -66,15 +66,15 @@ export default class PointProductNoHeaderCell extends React.Component {
 
 const styles = StyleSheet.create({
     pointproductcell: {
-        backgroundColor: "transparent",
+        backgroundColor: "yellow",
         width: "50%",
-        height: 250 * alpha,
+        height: 200 * alpha,
     },
     imageImage: {
-        resizeMode: "cover",
-        backgroundColor: "#f6f4f5",
-        width: 170 * alpha,
-        height: 170 * alpha,
+        resizeMode: "contain",
+        backgroundColor: "transparent",
+        width: "100%",
+        height: 100 * alpha,
         alignSelf: "center",
     },
     viewView: {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     titleText: {
         color: "black",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
         textAlign: "left",
@@ -96,11 +96,12 @@ const styles = StyleSheet.create({
     valueText: {
         color: "rgb(0, 178, 227)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         fontStyle: "normal",
         fontWeight: "normal",
         textAlign: "left",
         backgroundColor: "transparent",
+        marginTop: 3 * alpha,
     },
     pointsText: {
         color: "black",

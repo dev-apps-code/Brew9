@@ -273,7 +273,7 @@ export default class OrderReceipt extends React.Component {
 											flex: 1,
 										}}/>
 									<Text
-										style={styles.totalText}>${parseFloat(order.total).toFixed(2)}</Text>
+										style={styles.totalText}>${order.total >= 0 ? parseFloat(order.total).toFixed(2) : "0.00"}</Text>
 								</View>
 							</View>
 							{/* <Text

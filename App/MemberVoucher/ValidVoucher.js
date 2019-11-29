@@ -154,7 +154,7 @@ export default class ValidVoucher extends React.Component {
 									alignItems: "flex-end",
 								}}>
 								<Text
-									style={styles.dateText}>{this.props.item.available_date}</Text>
+									style={styles.dateText}>Expiration: <Text style={styles.highlight}>{this.props.item.available_date}</Text></Text>
 								<View
 									style={{
 										flex: 1,
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
 		marginTop: 18 * alpha,
 	},
 	dateText: {
-		color: PRIMARY_COLOR,
+		color: "rgb(68, 68, 68)",
 		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
@@ -324,4 +324,7 @@ const styles = StyleSheet.create({
 		marginLeft: 4 * alpha,
 		marginBottom: 3 * alpha,
 	},
+	highlight: {
+		color: PRIMARY_COLOR
+	}
 })

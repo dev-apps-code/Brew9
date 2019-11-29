@@ -28,6 +28,11 @@
     },
     "android": {
       "package": "com.brew9.brew9",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDAJsylYVu_i2yPaOVtqVnVtP9wjlOlxPo"
+        }
+      },
       "googleServicesFile": "./assets/fcm/google-services.json",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"

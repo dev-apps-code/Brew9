@@ -78,6 +78,7 @@ export default class Notification extends React.Component {
       loading: false,
       data: [],
       unread: 0,
+      isRefreshing: false,
       last_read: 0,
       timestamp: undefined,
       appState: AppState.currentState,
@@ -127,6 +128,9 @@ export default class Notification extends React.Component {
        const date = new Date()
        const diff = date.getTime() - timestamp
        if (diff < 10000){
+         this.setState({
+          isRefreshing: false
+         })
         return false;
        }
     }
@@ -134,12 +138,13 @@ export default class Notification extends React.Component {
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
-      
+      console.log("Nothific")
       if (eventObject.success) {
         this.loadLocalStore(eventObject.result)
       }
       this.setState({
-        loading: false
+        loading: false,
+        isRefreshing: false
       });
     };
     const obj = new NotificationsRequestObject();
@@ -150,6 +155,14 @@ export default class Notification extends React.Component {
         callback
       })
     );
+  }
+
+  onRefresh() {
+    
+    this.setState({
+        isRefreshing: true,
+    })
+    this.loadNotifications()
   }
 
   loadLocalStore(notifications) {
@@ -254,6 +267,8 @@ export default class Notification extends React.Component {
                 renderItem={this.renderPointhistoryFlatListCell}
                 data={this.state.data}
                 style={styles.pointhistoryFlatList}
+                refreshing={this.state.isRefreshing}
+                onRefresh={this.onRefresh.bind(this)}
                 keyExtractor={(item, index) => index.toString()}
               />
             ) : (
