@@ -79,6 +79,7 @@ export default class Notification extends React.Component {
       data: [],
       unread: 0,
       last_read: 0,
+      timestamp: undefined,
       appState: AppState.currentState,
     };
     
@@ -120,6 +121,16 @@ export default class Notification extends React.Component {
 
   loadNotifications = () => {
         
+    const {timestamp} =  this.state
+
+    if (timestamp != undefined) {
+       const date = new Date()
+       const diff = date.getTime() - timestamp
+       if (diff < 10000){
+        return false;
+       }
+    }
+
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
@@ -143,6 +154,8 @@ export default class Notification extends React.Component {
 
   loadLocalStore(notifications) {
 
+    const date = new Date()
+    this.setState({timestamp:date.getTime()})
     return AsyncStorage.getItem("notification_key", (err, result) => {
       let data = notifications
       let unread= 0
