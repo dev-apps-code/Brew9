@@ -77,7 +77,6 @@ export default class ScanQr extends React.Component {
 
         this.setState({ loading: true })
         const callback = eventObject => {
-            console.log(eventObject)
             this.setState({
                 loading: false,
             })  

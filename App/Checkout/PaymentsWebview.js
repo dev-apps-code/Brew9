@@ -118,8 +118,7 @@ export default class PaymentsWebview extends React.Component {
 
 
   _onNavigationStateChange(webViewState){
-    console.log(webViewState.url)
-
+    
     const url = webViewState.url
     if (url.includes('hc-action-cancel')){
       this.props.navigation.goBack()

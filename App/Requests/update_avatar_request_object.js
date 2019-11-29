@@ -13,7 +13,6 @@ class UpdateAvatarRequestObject extends BaseRequestObject{
 
    getFormData(){
     
-        console.log("Profile Multi")
         const data = new FormData()
         if (this.image!=null){
             data.append('image', this.image)

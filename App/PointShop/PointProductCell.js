@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     tintColor: "rgb(164, 164, 164)",
     resizeMode: "contain",
     width: 10 * alpha,
-    marginLeft: 10 * alpha
+    marginLeft: 5 * alpha
   },
   itemView: {
     backgroundColor: "transparent",

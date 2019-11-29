@@ -242,7 +242,6 @@ export default class MemberProfile extends React.Component {
 				this.setState({
 					image: data
 				}, function () {
-					console.log("Avatar Selected")
 					this.uploadAvatar()
 				})
 			}
@@ -336,7 +335,6 @@ export default class MemberProfile extends React.Component {
 		const profileFormData = {
 			image: this.state.image,
 		}
-		// console.log("Save", profileFormData)
 		this.loadUpdateAvatar(profileFormData)
 	}
 
@@ -352,7 +350,6 @@ export default class MemberProfile extends React.Component {
 				gender: this.state.gender,
 				email: this.state.email,
 			}
-			// console.log("Save", profileFormData)
 			this.loadUpdateProfile(profileFormData)
 		}
 	}

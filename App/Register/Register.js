@@ -117,7 +117,6 @@ export default class Register extends React.Component {
 	}
 
 	onBackPressed = () => {
-		console.log("back")
 		this.props.navigation.goBack()
 	}
 
@@ -276,7 +275,6 @@ export default class Register extends React.Component {
 								<RadioForm formHorizontal={true} animation={true} >
 									{this.state.gender_options.map((obj, i) => {
 										var onPress = (value, index) => {
-											console.log("Gender",value)
 											this.setState({
 												gender: value,
 												genderIndex: index

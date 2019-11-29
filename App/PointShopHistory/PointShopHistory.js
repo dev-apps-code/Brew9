@@ -75,7 +75,6 @@ export default class PointShopHistory extends React.Component {
 		const { page_no } = this.state
 		this.setState({ loading_list: true })
 		const callback = eventObject => {
-			console.log("Point", eventObject)
 			if (eventObject.success) {
 				this.setState({
 				orders_initial: false,
