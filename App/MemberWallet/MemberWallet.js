@@ -226,7 +226,7 @@ export default class MemberWallet extends React.Component {
 				</View>
 				<View style={styles.shopTopUp}>
 					<Text style={styles.shopTopUpText}>
-						TopUp is also available at our store counter.
+						Top up is also available at our store counter.
 					</Text>
 				</View>
 			</ScrollView>

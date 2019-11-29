@@ -109,7 +109,7 @@ export default class OrderCell extends React.Component {
 					<View
 						style={styles.ordernoView}>
 						<Text
-							style={styles.orderNoText}>Order No. :</Text>
+							style={styles.orderNoText}>Receipt No. :</Text>
 						<Text
 							style={styles.ordernumberText}>{this.props.receipt_no}</Text>
 					</View>

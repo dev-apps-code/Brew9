@@ -103,7 +103,7 @@ export default class UsedVoucher extends React.Component {
 										style={styles.termsButtonText}>Terms & Conditions</Text>
 								</TouchableOpacity>
 								<Image
-									source={require("./../../assets/images/group-18.png")}
+									source={require("./../../assets/images/next.png")}
 									style={styles.arrowImage}/>
 							</View>
 						</View>
@@ -163,67 +163,67 @@ const styles = StyleSheet.create({
 	},
 	dateText: {
 		color: "rgb(132, 132, 132)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",
-	},
-	lineImage: {
+		backgroundColor: "transparent"
+	  },
+	  lineImage: {
 		resizeMode: "cover",
 		backgroundColor: "transparent",
 		width: null,
-		height: 2 * alpha,
-	},
-	termsView: {
+		height: 2 * alpha
+	  },
+	  termsView: {
 		backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 118 * alpha,
-		height: 13 * alpha,
-		marginRight: 1 * alpha,
-		marginTop: 14 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	termsButton: {
+			alignSelf: "flex-end",
+			width: 140 * alpha,
+			height: 13 * alpha,
+			marginRight: 1 * alpha,
+			marginTop: 14 * alpha,
+			flexDirection: "row",
+			alignItems: "center",
+	  },
+	  termsButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0 * alpha,
-		width: 95 * alpha,
-		height: 12 * alpha,
-		marginLeft: 13 * alpha,
-	},
-	termsButtonText: {
+		height: 13 * alpha,
+			width: 120 * alpha,
+		marginRight: 4 * alpha
+	  },
+	  termsButtonText: {
 		color: "rgb(136, 133, 133)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
-	},
-	termsButtonImage: {
+			fontFamily: TITLE_FONT,
+			fontSize: 10 * fontAlpha,
+			fontStyle: "normal",
+			width: 120 * alpha,
+			textAlign: "right",
+	  },
+	  termsButtonImage: {
 		resizeMode: "contain",
-		marginRight: 10 * alpha,
-	},
-	arrowImage: {
+		marginRight: 10 * alpha
+	  },
+	  arrowImage: {
+		resizeMode: "contain",
 		backgroundColor: "transparent",
-		resizeMode: "contain",
 		flex: 1,
 		alignSelf: "flex-end",
-		height: 7 * alpha,
+		height: 8 * alpha,
 		marginLeft: 4 * alpha,
-		marginBottom: 2 * alpha,
-	},
-	usedImage: {
+		marginBottom: 3 * alpha,
+	  },
+	  usedImage: {
 		backgroundColor: "transparent",
 		resizeMode: "contain",
 		position: "absolute",
 		width: 75 * alpha,
 		right: 0,
 		top: 0,
-		height: 88 * alpha,
-	},
+		height: 88 * alpha
+	  }
 })

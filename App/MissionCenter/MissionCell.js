@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	titleText: {
+		width: 250 * alpha,
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,

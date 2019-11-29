@@ -140,14 +140,14 @@ const styles = StyleSheet.create({
   itemBlockView: {
     backgroundColor: "transparent",
     flex: 1,
-    height: 250 * alpha,
+    height: 160 * alpha,
     top: 40 * alpha,
     flexWrap: "wrap"
   },
   itemBlockView2: {
     backgroundColor: "transparent",
     flex: 1,
-    height: 500 * alpha,
+    height: 320 * alpha,
     marginTop: 40 * alpha,
     flexWrap: "wrap"
   },
@@ -199,14 +199,14 @@ const styles = StyleSheet.create({
   viewView: {
     backgroundColor: "transparent",
     width: "100%",
-    height: 80 * alpha,
+    height: 60 * alpha,
     alignItems: "flex-start"
   },
   titleText: {
     backgroundColor: "transparent",
     color: "black",
     fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
@@ -217,10 +217,11 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     color: "rgb(0, 178, 227)",
     fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
-    textAlign: "left"
+    textAlign: "left",
+    marginTop: 3 * alpha,
   },
   pointsText: {
     backgroundColor: "transparent",

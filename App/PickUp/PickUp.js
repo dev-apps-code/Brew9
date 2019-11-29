@@ -512,9 +512,7 @@ export default class PickUp extends React.Component {
 								</TouchableOpacity> */}
 							</View>
 							<Text
-								style={styles.orderNo020028201Text}>Order no.: {item.receipt_no}</Text>
-							<Text
-								style={styles.remarkNoPackingText}>Remark:</Text>
+								style={styles.orderNo020028201Text}>Receipt no.: {item.receipt_no}</Text>
 						</View>
 					</View>
 					</View>
@@ -1230,7 +1228,7 @@ const styles = StyleSheet.create({
 	remarkView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		height: 116 * alpha,
+		height: 70 * alpha,
 		paddingBottom: 10 * alpha,
 	},
 	bottomFillImage: {

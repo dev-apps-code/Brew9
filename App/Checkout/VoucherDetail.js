@@ -11,7 +11,7 @@ import React from "react"
 import { alpha, fontAlpha } from "../Common/size"
 import { connect } from "react-redux";
 import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
 @connect(({ members }) => ({
 	currentMember: members.profile,
 	members:members,
@@ -94,11 +94,6 @@ export default class VoucherDetail extends React.Component {
 					<View
 						pointerEvents="box-none"
 						style={{
-							position: "absolute",
-							left: 0,
-							right: 0,
-							top: 0,
-							bottom: 0,
 							justifyContent: "center",
 						}}>
 						<Text
@@ -115,11 +110,6 @@ export default class VoucherDetail extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
 								justifyContent: "center",
 							}}>
 							<Text
@@ -136,11 +126,6 @@ export default class VoucherDetail extends React.Component {
 						<View
 							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
 								justifyContent: "center",
 							}}>
 							<Text
@@ -207,19 +192,17 @@ export default class VoucherDetail extends React.Component {
 									<Image
 										source={require("./../../assets/images/line-16-copy-5.png")}
 										style={styles.lineImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
+									
 									<View
 										pointerEvents="box-none"
 										style={{
 											height: 14 * alpha,
 											flexDirection: "row",
 											alignItems: "flex-end",
+											marginTop: 10 * alpha
 										}}>
 										<Text
-											style={styles.dateText}>{item.available_date}</Text>
+											style={styles.dateText}>Expiration: <Text style={styles.highlight}>{item.available_date}</Text></Text>
 										<View
 											style={{
 												flex: 1,
@@ -233,7 +216,7 @@ export default class VoucherDetail extends React.Component {
 													style={styles.termsButtonText}>Terms & Conditions</Text>
 											</TouchableOpacity>
 											<Image
-												source={require("./../../assets/images/group-18.png")}
+												source={require("./../../assets/images/next.png")}
 												style={styles.arrowImage}/>
 										</View>
 									</View>
@@ -298,15 +281,14 @@ export default class VoucherDetail extends React.Component {
 						</View>
 					</View>
 				</ScrollView>
-				{/* { this.state.valid ?  */}
+				{ this.state.valid ? 
 					<TouchableOpacity
 					onPress={this.onUsePessed}
 					style={styles.useButton}>
 					<Text
 						style={styles.useButtonText}>Apply Voucher</Text>
 				</TouchableOpacity>
-				{/* : undefined} */}
-			
+				 : undefined }			
 			</View>
 	}
 }
@@ -349,7 +331,7 @@ const styles = StyleSheet.create({
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "right",
 		backgroundColor: "transparent",
 	},
 	percentText: {
@@ -415,7 +397,7 @@ const styles = StyleSheet.create({
 	},
 	valueView: {
 		backgroundColor: "transparent",
-		width: 70 * alpha,
+		flex: 1,
 		height: 31 * alpha,
 	},
 	currenrcyText: {
@@ -448,53 +430,52 @@ const styles = StyleSheet.create({
 		marginTop: 18 * alpha,
 	},
 	dateText: {
-		color: "rgb(149, 148, 148)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
+		color: "rgb(68, 68, 68)",
+		fontFamily: TITLE_FONT,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginBottom: 1 * alpha,
+		marginBottom: 1,
 	},
 	termsView: {
 		backgroundColor: "transparent",
-		width: 118 * alpha,
+		width: 140 * alpha,
 		height: 13 * alpha,
 		flexDirection: "row",
-		justifyContent: "flex-end",
 		alignItems: "center",
 	},
 	termsButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
+		// justifyContent: "center",
 		padding: 0,
-		width: 95 * alpha,
-		height: 12 * alpha,
+		height: 13 * alpha,
+		width: 120 * alpha,
 		marginRight: 4 * alpha,
+	},
+	termsButtonText: {
+		color: "rgb(136, 133, 133)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		width: 120 * alpha,
+		textAlign: "right",
 	},
 	termsButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
-	},
-	termsButtonText: {
-		color: "rgb(136, 133, 133)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		
-		textAlign: "left",
 	},
 	arrowImage: {
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		flex: 1,
 		alignSelf: "flex-end",
-		height: 7 * alpha,
+		height: 8 * alpha,
 		marginLeft: 4 * alpha,
-		marginBottom: 2 * alpha,
+		marginBottom: 3 * alpha,
 	},
 	rm10Copy2View: {
 		backgroundColor: "transparent",
@@ -677,4 +658,8 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
+
+	highlight: {
+		color: PRIMARY_COLOR
+	}
 })

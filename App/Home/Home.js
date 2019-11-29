@@ -1211,7 +1211,7 @@ export default class Home extends React.Component {
 	}
 
 	onClosePressed = () => {
-		this.setState({ modalVisible: false , isPromoToggle: false, image_check: false})
+		this.setState({ modalVisible: false , isPromoToggle: false, image_check: false, select_quantity: 1})
 	}
 
 	onClearPress = () => {
@@ -1621,23 +1621,27 @@ export default class Home extends React.Component {
 						style={{
 							flex: 1,
 						}}/>
-						<SwitchSelector
-							options={[
-								{ label: "Pick Up", value: 0 },
-								{ label: "Delivery", value: 1 }]}
-							initial={0}
-							value={delivery}
-							textColor={"#4E4D4D"}
-							selectedColor={"#FFFFFF"}
-							buttonColor={"#2A2929"}
-							borderColor={"#979797"}
-							backgroundColor={"rgb(240,240,240)"}
-							style={styles.pickUpDeliveryView}
-							textStyle={styles.optionText}
-							fontSize={10 * alpha}
-							height={32 * alpha}
-							onPress={(value) => this._toggleDelivery(value)}
-						/>
+						<View style={styles.pickUpDeliveryView}>
+							<SwitchSelector
+								options={[
+									{ label: "Pick Up", value: 0 },
+									{ label: "Delivery", value: 1 }]}
+								initial={0}
+								value={delivery}
+								textColor={"#4E4D4D"}
+								selectedColor={"#FFFFFF"}
+								buttonColor={"#2A2929"}
+								borderColor={"#979797"}
+								backgroundColor={"rgb(240,240,240)"}
+								style={styles.pickUpDeliveryViewTemp}
+								textStyle={styles.optionText}
+								fontSize={10 * alpha}
+								height={32 * alpha}
+								onPress={(value) => this}
+							/>
+							<TouchableOpacity style={styles.pickUpDeliveryViewTemp} onPress={() => this._toggleDelivery(1)}></TouchableOpacity>
+							
+						</View>
 					</View>
 					<View
 						pointerEvents="box-none"
@@ -2158,6 +2162,15 @@ const styles = StyleSheet.create({
 		height: 32 * alpha,
 	},
 	
+	pickUpDeliveryViewTemp: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		borderRadius: 16 * alpha,
+		width: 96 * alpha,
+		height: 32 * alpha,
+	},
+
 	pickUpView: {
 		backgroundColor: "rgba(42, 41, 41, 0.89)",
 		borderRadius: 14.5 * alpha,

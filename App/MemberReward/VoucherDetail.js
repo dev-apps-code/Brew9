@@ -68,8 +68,6 @@ export default class VoucherDetail extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-
-
 	onHowToUsePressed = () => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
@@ -79,8 +77,6 @@ export default class VoucherDetail extends React.Component {
 			web_url: KURL_INFO + '?page=voucher_uses&id=' + company_id,
 		})
 	}
-
-
 
 	renderVoucherHeader(item){
 
