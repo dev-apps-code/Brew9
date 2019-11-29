@@ -9,12 +9,13 @@
 import {Text, View, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndicator} from "react-native"
 import React from "react"
 import PointProductCell from "./PointProductCell"
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import { KURL_INFO } from "../../App/Utils/server.js"
 import {createAction} from "../Utils";
 import {connect} from "react-redux";
 import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND} from "../Common/common_style";
+import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
+import Toast, {DURATION} from 'react-native-easy-toast'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -77,6 +78,15 @@ export default class PointShop extends React.Component {
 		})
 	}
 	
+	onItemPressed = (item_id, item_name) => {
+
+		this.refs.toast.show("Point redemption coming soon", TOAST_DURATION)
+		// navigate("PointShopItem", {
+		// 	item_id: item_id,
+		// 	item_name: item_name
+		//   });
+	}
+
 	loadPointsProducts(){
 		const { dispatch, members } = this.props
 		this.setState({ loading: true })
@@ -128,6 +138,7 @@ export default class PointShop extends React.Component {
 				sectionId={item.id}
 				sectionHeader={item.name}
 				products={item.points_products}
+				onPressItem={this.onItemPressed}
 				index={index}/>
 	}
 
@@ -198,6 +209,7 @@ export default class PointShop extends React.Component {
 							keyExtractor={(item, index) => index.toString()}/>
 						}
 			</View>
+			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
 		</View>
 	}
 }

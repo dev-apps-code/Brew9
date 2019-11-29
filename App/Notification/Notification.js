@@ -78,7 +78,9 @@ export default class Notification extends React.Component {
       loading: false,
       data: [],
       unread: 0,
+      isRefreshing: false,
       last_read: 0,
+      timestamp: undefined,
       appState: AppState.currentState,
     };
     
@@ -120,15 +122,29 @@ export default class Notification extends React.Component {
 
   loadNotifications = () => {
         
+    const {timestamp} =  this.state
+
+    if (timestamp != undefined) {
+       const date = new Date()
+       const diff = date.getTime() - timestamp
+       if (diff < 10000){
+         this.setState({
+          isRefreshing: false
+         })
+        return false;
+       }
+    }
+
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
-      
+      console.log("Nothific")
       if (eventObject.success) {
         this.loadLocalStore(eventObject.result)
       }
       this.setState({
-        loading: false
+        loading: false,
+        isRefreshing: false
       });
     };
     const obj = new NotificationsRequestObject();
@@ -141,8 +157,18 @@ export default class Notification extends React.Component {
     );
   }
 
+  onRefresh() {
+    
+    this.setState({
+        isRefreshing: true,
+    })
+    this.loadNotifications()
+  }
+
   loadLocalStore(notifications) {
 
+    const date = new Date()
+    this.setState({timestamp:date.getTime()})
     return AsyncStorage.getItem("notification_key", (err, result) => {
       let data = notifications
       let unread= 0
@@ -241,6 +267,8 @@ export default class Notification extends React.Component {
                 renderItem={this.renderPointhistoryFlatListCell}
                 data={this.state.data}
                 style={styles.pointhistoryFlatList}
+                refreshing={this.state.isRefreshing}
+                onRefresh={this.onRefresh.bind(this)}
                 keyExtractor={(item, index) => index.toString()}
               />
             ) : (

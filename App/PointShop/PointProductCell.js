@@ -18,6 +18,8 @@ import {
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 export default class PointProductCell extends React.Component {
   constructor(props) {
@@ -28,10 +30,12 @@ export default class PointProductCell extends React.Component {
 
   onPointProductCellPress = (item_id, item_name) => {
     const { navigate } = this.props.navigation;
-    navigate("PointShopItem", {
-      item_id: item_id,
-      item_name: item_name
-    });
+
+    const analytics = new Analytics(ANALYTICS_ID)
+    analytics.event(new Event('Point Product', 'Click', `${item_name}`))
+    this.props.onPressItem(item_id,item_name)
+
+    
   };
 
   onViewMorePressed = (plan_id, title) => {
