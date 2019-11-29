@@ -415,7 +415,6 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          yield put(createAction('saveCurrentUser')(eventObject.result.member))
         }
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }

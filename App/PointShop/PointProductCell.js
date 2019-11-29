@@ -95,7 +95,7 @@ export default class PointProductCell extends React.Component {
                   flex: 1
                 }}
               />
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => this.onViewMorePressed(sectionId, sectionHeader)}
                 style={styles.viewmoreButton}
               >
@@ -104,7 +104,7 @@ export default class PointProductCell extends React.Component {
                   source={require("./../../assets/images/next.png")}
                   style={styles.viewmoreButtonImage}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View
               style={
@@ -191,14 +191,14 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   imageImage: {
-    resizeMode: "cover",
-    backgroundColor: "#f6f4f5",
-    width: 170 * alpha,
-    height: 170 * alpha
+    resizeMode: "contain",
+    backgroundColor: "transparent",
+    width: "100%",
+    height: 100 * alpha
   },
   viewView: {
     backgroundColor: "transparent",
-    width: 187 * alpha,
+    width: "100%",
     height: 80 * alpha,
     alignItems: "flex-start"
   },

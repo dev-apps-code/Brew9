@@ -136,7 +136,7 @@ export default class PointShop extends React.Component {
 		return <PointProductCell
 				navigation={this.props.navigation}
 				sectionId={item.id}
-				sectionHeader={item.name}
+				sectionHeader={"Redemption Zone"}
 				products={item.points_products}
 				onPressItem={this.onItemPressed}
 				index={index}/>

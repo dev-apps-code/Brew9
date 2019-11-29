@@ -71,10 +71,10 @@ const styles = StyleSheet.create({
         height: 250 * alpha,
     },
     imageImage: {
-        resizeMode: "cover",
-        backgroundColor: "#f6f4f5",
-        width: 170 * alpha,
-        height: 170 * alpha,
+        resizeMode: "contain",
+        backgroundColor: "transparent",
+        width: "100%",
+        height: 100 * alpha,
         alignSelf: "center",
     },
     viewView: {

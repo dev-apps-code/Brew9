@@ -7,8 +7,8 @@ export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 // export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
 
 // export const KPAYMENTYURL ='http://payment.brew9.com'
-// export const KSERVERURL ='https://e40faa49.ngrok.io/api'
-// export const KURL_INFO = 'https://e40faa49.ngrok.io/info'
+// export const KSERVERURL ='https://5d521e74.ngrok.io/api'
+// export const KURL_INFO = 'https://5d521e74.ngrok.io/info'
 
 export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";

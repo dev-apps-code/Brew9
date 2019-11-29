@@ -625,7 +625,9 @@ export default class Home extends React.Component {
 				})
             })
 		}
-		
+		this.setState({
+			delivery: 0
+		})
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
