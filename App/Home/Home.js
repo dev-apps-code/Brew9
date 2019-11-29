@@ -296,9 +296,8 @@ export default class Home extends React.Component {
 		  } else {
 			this.getLocationAsync();
 		  }
-		const { dispatch } = this.props
+		
 		this.setState({isPromoToggle: false,})
-		// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 	}
 
 	async componentDidMount() {
@@ -309,9 +308,7 @@ export default class Home extends React.Component {
 		this.loadProfile()
 		this.loadShops(true)
 		
-		AppState.addEventListener('change', this._handleAppStateChange);	
-		
-
+		AppState.addEventListener('change', this._handleAppStateChange);			
 	}
 
 	componentWillUnmount() {
@@ -333,7 +330,6 @@ export default class Home extends React.Component {
 	  loadNotifications = () => {
 		
 		const { dispatch, currentMember } = this.props;
-		console.log("Notificatio", currentMember)
 		
 		this.setState({ loading: true });
 		const callback = eventObject => {

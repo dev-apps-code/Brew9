@@ -28,8 +28,8 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, P
 import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
 
-@connect(({ members }) => ({
-  members: members.profile
+@connect(({ members,config }) => ({
+  selectedTab:config.selectedTab
 }))
 
 export default class Notification extends React.Component {
@@ -107,12 +107,12 @@ export default class Notification extends React.Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    const { members } = this.props;
+    const { members,selectedTab } = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      if (members != null) {
+      if (members != null ) {
         this.loadNotifications();
       }
     }

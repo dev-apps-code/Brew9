@@ -21,7 +21,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
-@connect(({ members }) => ({
+@connect(({ members,config }) => ({
+	selectedTab:config.selectedTab,
 	members:members,
 	company_id:members.company_id,
 	currentMember: members.profile,
@@ -89,8 +90,7 @@ export default class Profile extends React.Component {
 
 	_handleAppStateChange = nextAppState => {
 		const {currentMember} = this.props
-		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {			
 			if (currentMember != null) {
 				this.loadProfile();
 				this.loadNotifications();
