@@ -17,6 +17,7 @@ import {
   missionStatements,
   missionRewardClaim,
   missionLogin,
+  scanStatus,
   updateAvatar
 } from '../Services/members'
 import EventObject from './event_object'
@@ -132,6 +133,22 @@ export default {
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
             qrCode,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {}
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadScanStatus({ payload }, { call, put, select })
+    {
+      try{
+
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            scanStatus,
             authtoken,
             object,
         )

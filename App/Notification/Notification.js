@@ -104,7 +104,7 @@ export default class Notification extends React.Component {
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+    // AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   _handleAppStateChange = (nextAppState) => {
@@ -138,7 +138,7 @@ export default class Notification extends React.Component {
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
-      console.log("Nothific")
+
       if (eventObject.success) {
         this.loadLocalStore(eventObject.result)
       }

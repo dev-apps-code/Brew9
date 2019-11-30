@@ -8,7 +8,7 @@
 
 import { StyleSheet, TouchableWithoutFeedback, View, Text } from "react-native"
 import React from "react"
-import { alpha, fontAlpha } from "../Common/size"
+import { alpha, fontAlpha, windowWidth } from "../Common/size"
 import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT } from "../Common/common_style"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
@@ -37,12 +37,13 @@ export default class MissionCell extends React.Component {
 
 	render() {
 	
-		var status_string = ""
+		var status_string = "status_string"
 		var voucher_length = this.props.vouchers.length
 
 		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
 			status_string = "Check In"
 		} else {
+			console.log(`this.props.status ${this.props.status}`)
 			status_string = this.props.status
 		}
 		
@@ -62,14 +63,13 @@ export default class MissionCell extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							marginLeft: 20 * alpha,
-							width: 335 * alpha,
+							width:  windowWidth - 20 * alpha,
 							flex: 1,
 							marginTop: 18 * alpha,
-							bottom: 1 * alpha,
 							alignItems: "flex-start",
 						}}>
 						<Text
-							style={styles.titleText}>{this.props.title} {mission_progress_text}</Text>
+							style={styles.titleText} numberOfLines={2}>{this.props.title} {mission_progress_text}</Text>
 						
 							{/* <Text
 								style={styles.descriptionText}>{reward_string}</Text> */}

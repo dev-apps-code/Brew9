@@ -182,7 +182,7 @@ export default class MissionCenter extends React.Component {
             const callback = eventObject => {
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
-                    loading: false,
+                    loading: false ,
                     mission_statements: eventObject.result,
                 }, function(){
                     this.loadMissionStatements()
@@ -210,6 +210,7 @@ export default class MissionCenter extends React.Component {
                     missions[index].progress = mission_statement.task_progress
                     missions[index].status = mission_statement.status   
                 }
+
             }
             this.setState({
                 missions
@@ -228,6 +229,7 @@ export default class MissionCenter extends React.Component {
             var found_mission = _.find(statements, {mission_id:missions[index].id})
             
             if (found_mission != undefined) {
+
                 missions[index].statement_id = found_mission.id
                 missions[index].progress = found_mission.task_progress
                 missions[index].status = found_mission.status

@@ -93,34 +93,10 @@ export default class Profile extends React.Component {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {			
 			if (currentMember != null) {
 				this.loadProfile();
-				this.loadNotifications();
 			  }
 		}
 		this.setState({ appState: nextAppState });
 	};
-
-	loadNotifications = () => {
-        
-		const { dispatch, currentMember } = this.props;
-		this.setState({ loading: true });
-		const callback = eventObject => {
-		  
-		  if (eventObject.success) {
-			this.loadLocalStore(eventObject.result)
-		  }
-		  this.setState({
-			loading: false
-		  });
-		};
-		const obj = new NotificationsRequestObject();
-		obj.setUrlId(currentMember.id);
-		dispatch(
-		  createAction("members/loadNotifications")({
-			object: obj,
-			callback
-		  })
-		);
-	  }
 
 	loopShimmer() {
 		const { hasShimmered } = this.state

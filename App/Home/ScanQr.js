@@ -12,6 +12,8 @@ import { alpha, fontAlpha, windowHeight } from "../Common/size"
 import * as Permissions from 'expo-permissions'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import QrCodeScanRequestObject from '../Requests/qr_code_scan_request_object'
+import ScanStatusRequestObject from '../Requests/scan_status_request_object.js'
+
 import { connect } from 'react-redux'
 import { createAction, dispatch } from '../Utils/index'
 import HudLoading from "../Components/HudLoading"
@@ -57,6 +59,7 @@ export default class ScanQr extends React.Component {
             hasCameraPermission: null,
             scanned: false,
         }
+        this.loadScanStatus = this.loadScanStatus.bind(this)
     }
 
     async componentDidMount() {
@@ -72,18 +75,46 @@ export default class ScanQr extends React.Component {
 		navigate("Profile")
     }
     
+    loadScanStatus(qr_code){
+        const { dispatch, currentMember } = this.props
+        
+        const callback = eventObject => {        
+            if (eventObject.success) {
+                this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+
+                    if (eventObject.result.code != null) {
+                        this.onSuccessfulScan()
+                    }                     
+                })
+                this.setState({ loading: false })
+            }
+            else {
+                setTimeout(function () {
+                    this.loadScanStatus(qr_code)
+                  }.bind(this), 5000);                     
+            }   
+        }
+        const obj = new ScanStatusRequestObject(qr_code)
+        obj.setUrlId(currentMember.id) 
+        dispatch(
+            createAction('members/loadScanStatus')({
+                object:obj,
+                callback,
+            })
+        )
+    }
+
     loadQrCodeScan(qr_code){
         const { dispatch, currentMember } = this.props
 
         this.setState({ loading: true })
-        const callback = eventObject => {
-            this.setState({
-                loading: false,
-            })  
+        const callback = eventObject => {        
             if (eventObject.success) {
-                this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
-                    this.onSuccessfulScan()
-                })
+                this.loadScanStatus(qr_code)
+
+                setTimeout(function () {
+                    this.loadScanStatus(qr_code)
+                  }.bind(this), 5000);                            
             }
             else {
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)

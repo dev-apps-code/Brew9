@@ -307,7 +307,6 @@ export default class Home extends React.Component {
 		})
 		this.loadProfile()
 		this.loadShops(true)
-		
 		AppState.addEventListener('change', this._handleAppStateChange);			
 	}
 
@@ -330,16 +329,9 @@ export default class Home extends React.Component {
 	  loadNotifications = () => {
 		
 		const { dispatch, currentMember } = this.props;
-		
-		this.setState({ loading: true });
 		const callback = eventObject => {
-		  
 		  if (eventObject.success) {
-			this.loadLocalStore(eventObject.result)
 		  }
-		  this.setState({
-			loading: false
-		  });
 		};
 		const obj = new NotificationsRequestObject();
 		obj.setUrlId(currentMember.id);
@@ -350,6 +342,8 @@ export default class Home extends React.Component {
 		  })
 		);
 	  }
+
+
 
 	loadProfile(){
 		const { dispatch, currentMember } = this.props
@@ -1713,7 +1707,6 @@ export default class Home extends React.Component {
 								refreshing={this.state.isRefreshing}
 								onRefresh={this.onRefresh.bind(this)}
 								onViewableItemsChanged={this.reachProductIndex}
-								windowSize={3}
 								keyExtractor={(item, index) => index.toString()}/>
 							}
 						</View>						
