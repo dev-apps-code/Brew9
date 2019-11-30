@@ -129,7 +129,7 @@ export default class MissionCenter extends React.Component {
         this.setState({ loading_list: true })
         const callback = eventObject => {
              if (eventObject.success) {
-                console.log("Statement", eventObject.result)
+                // console.log("Statement", eventObject.result)
                 this.setState({
                     mission_statements: eventObject.result,
                 }, function(){
