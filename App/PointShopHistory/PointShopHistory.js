@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {FlatList, View, StyleSheet, TouchableOpacity, Image} from "react-native"
+import {FlatList, View, StyleSheet, TouchableOpacity, Image, Text} from "react-native"
 import Cell from "./Cell"
 import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
@@ -115,14 +115,21 @@ export default class PointShopHistory extends React.Component {
 
 		return <View
 				style={styles.pointPurchaseHistoryView}>
+				
 				<View
 					style={styles.tableViewFlatListViewWrapper}>
+					{(!this.state.loading_list && this.state.orders_data.length > 0) ?
 					<FlatList
 						renderItem={this.renderTableViewFlatListCell}
 						data={orders_data}
 						style={styles.tableViewFlatList}
 						keyExtractor={(item, index) => index.toString()}/>
-				</View>
+					: <View
+							style={styles.blankView}>
+						<Text style={styles.noLabelText}>You have not make any redemption yet</Text>
+				</View> 
+				}
+				</View> 
 			</View>
 	}
 }
@@ -157,5 +164,20 @@ const styles = StyleSheet.create({
 	},
 	tableViewFlatListViewWrapper: {
 		flex: 1,
+	},
+	blankView: {
+		backgroundColor: "transparent",
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	noLabelText: {
+		color: "rgb(149, 149, 149)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+		backgroundColor: "transparent",
 	},
 })

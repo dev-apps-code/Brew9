@@ -190,9 +190,10 @@ export default class MemberWallet extends React.Component {
 					<View
 						style={styles.walletCreditView}>
 						<Text
-							style={styles.walletCreditText}>Balance</Text>
-						<Text
 							style={styles.creditsText}>${parseFloat(members.credits).toFixed(2)}</Text>
+						
+						<Text
+							style={styles.walletCreditText}>Spendable cash</Text>
 						
 					</View>
 					<View
@@ -212,7 +213,7 @@ export default class MemberWallet extends React.Component {
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.transactionHistoryText}>TopUp Amount</Text>
+						style={styles.transactionHistoryText}>Top Up Zone</Text>
 				</View>
 				<View
 					style={styles.topuplistFlatListViewWrapper}>
@@ -302,6 +303,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "center",
+		marginTop: 5 *alpha,
 	},
 	creditsText: {
 		color: PRIMARY_COLOR,
@@ -347,11 +349,10 @@ const styles = StyleSheet.create({
 	},
 	transactionHistoryText: {
 		backgroundColor: "transparent",
-		color: "rgb(59, 59, 59)",
+		color: "rgb(0, 178, 227)",
 		fontFamily: TITLE_FONT,
-		fontSize: 15 * fontAlpha,
-		fontStyle: "normal",
-		
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",		
 		textAlign: "left",
 		marginLeft: 26 * alpha,
 	},

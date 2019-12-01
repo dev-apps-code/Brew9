@@ -6,6 +6,12 @@ export const delay = time => new Promise(resolve => setTimeout(resolve, time))
 
 export const createAction = type => payload => ({ type, payload })
 
+export function validateEmail(email) 
+{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,

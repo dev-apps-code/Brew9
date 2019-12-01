@@ -162,6 +162,7 @@ export default class Home extends React.Component {
 			member_distance: 1000,
 			first_promo_popup: false,
 			monitorLocation: null,
+			remaining:0,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -521,7 +522,7 @@ export default class Home extends React.Component {
 
 						if (currentMember != null) {
 							this.loadProfile()
-							this.loadNotifications()
+							// this.loadNotifications()
 						}
 						
 						this.loadShops()
@@ -1269,14 +1270,6 @@ export default class Home extends React.Component {
 				})
 			// }
 		}
-
-		
-
-		// const { navigate } = this.props.navigation
-
-		// navigate("FeaturedPromotionDetail", {
-		// 	details: item,
-		// })
 	}
 
 	get_product(index) {
@@ -1612,7 +1605,7 @@ export default class Home extends React.Component {
 						style={{
 							flex: 1,
 						}}/>
-						<View style={styles.pickUpDeliveryView}>
+						{/* <View style={styles.pickUpDeliveryView}>
 							<SwitchSelector
 								options={[
 									{ label: "Pick Up", value: 0 },
@@ -1632,7 +1625,7 @@ export default class Home extends React.Component {
 							/>
 							<TouchableOpacity style={styles.pickUpDeliveryViewTemp} onPress={() => this._toggleDelivery(1)}></TouchableOpacity>
 							
-						</View>
+						</View> */}
 					</View>
 					<View
 						pointerEvents="box-none"

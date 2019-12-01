@@ -233,14 +233,18 @@ export default class VerifyUser extends React.Component {
 						}}>
 						<View
 							style={styles.countryCodeView}>
-								<PhoneInput
+							
+									<Text
+										style={styles.countrycodeButtonText}>+673</Text>
+
+								{/* <PhoneInput
 									ref={(ref) => { this.phone = ref }}
 									initialCountry={this.state.country}
 									style={{marginLeft: 10 * alpha}}
 									textStyle={styles.phoneCountryCodeText}
 									textProps={{keyboardType:"number-pad", editable:false}}
 									onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
-									offset={10}/>
+									offset={10}/> */}
 							</View>
 						<View
 							style={{
@@ -456,11 +460,22 @@ const styles = StyleSheet.create({
 		height: 100 * alpha,
 		marginTop: 16 * alpha,
 	},
+	countrycodeButtonText: {
+		width: 60*alpha,
+		color: "rgb(0, 178, 227)",
+		fontFamily: NON_TITLE_FONT,
+		textAlign: "center",	
+		marginRight:10*alpha,
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "center",
+	},
 	countryCodeView: {
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
 		borderWidth: 0.5,	
-		width: 102 * alpha,
+		width: 60 * alpha,
 		height: 41 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -471,7 +486,7 @@ const styles = StyleSheet.create({
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
 		borderWidth: 0.5,
-		width: 214 * alpha,
+		width: 259 * alpha,
 		height: 42 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -485,7 +500,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		backgroundColor: "transparent",
 		padding: 0,
-		width: 114 * alpha,
+		width: 140 * alpha,
 		height: 25 * alpha,
 		marginLeft: 15 * alpha,
 	},

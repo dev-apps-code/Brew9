@@ -27,7 +27,7 @@ export default class PointShop extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Point Reward",
+			title: "Reward Points",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -80,7 +80,7 @@ export default class PointShop extends React.Component {
 	
 	onItemPressed = (item_id, item_name) => {
 
-		this.refs.toast.show("Point redemption coming soon", TOAST_DURATION)
+		this.refs.toast.show("Insufficient points for redemption", TOAST_DURATION)
 		// navigate("PointShopItem", {
 		// 	item_id: item_id,
 		// 	item_name: item_name
@@ -162,10 +162,10 @@ export default class PointShop extends React.Component {
 					<View
 						style={styles.pointCollectedTwoView}>
 						<Text
-							style={styles.pointsCollectedText}>Points Collected</Text>
-						<Text
 							style={styles.pointsText}>{members.points}</Text>
 							{members.point_expiry_date != undefined}
+						<Text
+							style={styles.pointsCollectedText}>Reedemable Points</Text>					
 						<Text
 							style={styles.pointsExpiryText}>{expiry_date}</Text>
 					</View>
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "center",
+		marginTop:5*alpha,
 	},
 	pointsText: {
 		color: PRIMARY_COLOR,

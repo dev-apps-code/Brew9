@@ -65,7 +65,7 @@ export default {
     company_id:1,
     currency:'$',
     location:null,
-    notifications: []
+    notifications: [],
   },
   
   reducers: {
@@ -256,7 +256,9 @@ export default {
             object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },

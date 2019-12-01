@@ -99,21 +99,7 @@ export default class ExpiredVoucher extends React.Component {
                 <Image
                   source={require("./../../assets/images/line-16-copy-5.png")}
                   style={styles.lineImage}
-                />
-                <View style={styles.termsView}>
-                  <TouchableOpacity
-                    onPress={this.onTermsPressed}
-                    style={styles.termsButton}
-                  >
-                    <Text style={styles.termsButtonText}>
-                      Terms & Conditions
-                    </Text>
-                  </TouchableOpacity>
-                  <Image
-                    source={require("./../../assets/images/next.png")}
-                    style={styles.arrowImage}
-                  />
-                </View>
+                />               
               </View>
               <Image
                 source={require("./../../assets/images/bitmap-9.png")}

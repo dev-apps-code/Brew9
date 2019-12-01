@@ -231,7 +231,6 @@ export default class Checkout extends React.Component {
 	
 	onBackPressed = () => {
 
-		// this.props.navigation.goBack()
 		const {navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
@@ -809,7 +808,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.walletView}>
 										<Text
-											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Brew9 Balance</Text>
+											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Balance</Text>
 										<View
 											style={{
 												flex: 1,
@@ -1608,6 +1607,7 @@ export default class Checkout extends React.Component {
 		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range,pick_up_time, selected_payment} = this.state
 		let {currentMember, selectedShop} = this.props
 
+		console.log(`cart total ${cart_total} vs ${discount}`)
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0
@@ -2391,8 +2391,16 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		top: 70 * alpha,
+		top: 0 * alpha,
 		height: 80 * alpha,
+	},	
+	creditCardView: {
+		backgroundColor: "transparent",
+		position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 70 * alpha,
+		height: 71 * alpha,
 	},
 	walletView: {
 		backgroundColor: "transparent",
@@ -2418,9 +2426,9 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	balanceText: {
-		color: "rgb(186, 183, 183)",
+		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -2481,15 +2489,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-	},
-	creditCardView: {
-		backgroundColor: "transparent",
-		position: "absolute",
-		left: 0 * alpha,
-		right: 0 * alpha,
-		top: 0 * alpha,
-		height: 71 * alpha,
-	},
+	},	
 	cardiconView: {
 		backgroundColor: "transparent",
 		width: 40 * alpha,

@@ -557,7 +557,7 @@ export default class Profile extends React.Component {
 													
 												</View>
 												<Text
-													style={styles.levelexpText}>{member_exp} / {exp_needed}</Text>
+													style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
 											</View>
 											<TouchableOpacity onPress={()=> this.onLevelInfoPressed()}
 												style={styles.levelInfoButton}>
@@ -1065,7 +1065,7 @@ const styles = StyleSheet.create({
 		elevation: 2 * alpha,
 	},
 	initiallevelText: {
-		color: PRIMARY_COLOR,
+		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
@@ -1075,7 +1075,7 @@ const styles = StyleSheet.create({
 		elevation: 2 * alpha,
 	},
 	nextlevelText: {
-		color: PRIMARY_COLOR,
+		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
@@ -1144,9 +1144,9 @@ const styles = StyleSheet.create({
 		top: 25 * alpha,
 	},
 	levelexpText: {
-		color: "rgb(54, 54, 54)",
+		color: PRIMARY_COLOR,
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 11 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

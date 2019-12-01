@@ -207,18 +207,6 @@ export default class VoucherDetail extends React.Component {
 											style={{
 												flex: 1,
 											}}/>
-										<View
-											style={styles.termsView}>
-											<TouchableOpacity
-												onPress={this.onTermsPressed}
-												style={styles.termsButton}>
-												<Text
-													style={styles.termsButtonText}>Terms & Conditions</Text>
-											</TouchableOpacity>
-											<Image
-												source={require("./../../assets/images/next.png")}
-												style={styles.arrowImage}/>
-										</View>
 									</View>
 								</View>
 							</View>

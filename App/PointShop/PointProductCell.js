@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   sectionheadertitleText: {
     color: "rgb(0, 178, 227)",
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",

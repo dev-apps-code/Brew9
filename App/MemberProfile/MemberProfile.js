@@ -9,7 +9,7 @@
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowHeight} from "../Common/size"
-import { createAction } from "../Utils"
+import { createAction,validateEmail } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdateAvatarRequestObject from "../Requests/update_avatar_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
@@ -25,6 +25,7 @@ import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
+import {Image as ExpoImage} from "react-native-expo-image-cache";
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
 
 @connect(({ members }) => ({
@@ -105,10 +106,11 @@ export default class MemberProfile extends React.Component {
 	loadUpdateProfile(formData){
 		const { dispatch } = this.props
 
+		
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.refs.toast.show("Profile Update Successful", TOAST_DURATION)
+				this.refs.toast.show("Your profile has been updated successfully", TOAST_DURATION)
 				
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
@@ -156,11 +158,12 @@ export default class MemberProfile extends React.Component {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			if (eventObject.success) {
-				this.refs.toast.show("Phone Update Successful", TOAST_DURATION)
+			if (eventObject.message) {
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			this.setState({
 				loading: false,
+				has_send_code:true
 			})
 		}
 		const obj = new UpdatePhoneNumberRequestObject(formData.phone_no, formData.country_code)
@@ -259,12 +262,18 @@ export default class MemberProfile extends React.Component {
 			return false
 		}
 		else if (!this.state.dob) {
-			this.refs.toast.show("Please select enter your Birthday", 500)
+			this.refs.toast.show("Please select your Birthday", 500)
 			return false
 		}
-		else {
-			return true
+		else if (this.state.email != null && this.state.email.length > 0){
+			if (!validateEmail(this.state.email)){
+				this.refs.toast.show("Please enter a valid email", 500)
+				return false
+			}
 		}
+
+		return true
+
 	}
 
 	onBackPressed = () => {
@@ -278,7 +287,7 @@ export default class MemberProfile extends React.Component {
 
 	onClosePressed = () => {
 		Keyboard.dismiss()
-		this.setState({ modalVisible: false })
+		this.setState({ modalVisible: false, phone_no:'',has_send_code:false })
 	}
 
 	onUpdateCode(iso2){
@@ -311,8 +320,11 @@ export default class MemberProfile extends React.Component {
 
 	onConfirmButtonPressed = () => {
 
-		const {verification_code, phone_no} = this.state 
+		const {verification_code, has_send_code} = this.state 
 
+		if (!has_send_code){
+			return
+		}
 		if (verification_code == '' || verification_code == undefined) {
 			this.refs.toast.show("Please fill in sms code", TOAST_DURATION)
 			return
@@ -382,7 +394,7 @@ export default class MemberProfile extends React.Component {
 						<Text
 							style={styles.titleText}>Tips</Text>
 						<Text
-							style={styles.contentText}>To ensure undisrupted use of Brew9 App, please ensure the new phone number is not used.</Text>
+							style={styles.contentText}>To ensure undisrupted use of Brew9 App, please ensure the new phone number is not in used.</Text>
 					</View>
 				</View>
 				<View
@@ -403,21 +415,21 @@ export default class MemberProfile extends React.Component {
 								alignItems: "center",
 								justifyContent: "center",
 							}}>
-							{/* <TouchableOpacity
-								onPress={this.onButtonTwoPressed}
+							<TouchableOpacity								
 								style={styles.countrycodeButton}>
 								<Text
 									style={styles.countrycodeButtonText}>+673</Text>
-							</TouchableOpacity> */}
-							<PhoneInput
+							</TouchableOpacity>
+							{/* <PhoneInput
 								ref={(ref) => { this.phone = ref }}
 								initialCountry={this.state.country}
 								textStyle={styles.phoneCountryCodeText}
+								disabled={true}
 								textProps={{keyboardType:"number-pad", editable:false}}
 								onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
 								offset={10}
 
-							/>
+							/> */}
 							<View
 								style={styles.lineView}/>
 						</View>
@@ -474,7 +486,9 @@ export default class MemberProfile extends React.Component {
 	render() {
 
 		const { members, image, dob, nickname, gender, member_phone_number, email, selected_image } = this.state;
-
+		const preview = { uri: require("./../../assets/images/user.png")};
+		const uri = image.uri
+		
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
 			keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
@@ -488,9 +502,11 @@ export default class MemberProfile extends React.Component {
 					<View
 						pointerEvents="box-none"
 						>
-						<Image
-							source={image.uri != null ? {uri: image.uri} : require("./../../assets/images/user.png")}
-							style={styles.avatarImage}/>
+						<View style={styles.avatarImageContainer}>						
+						{ image.uri != null ? <ExpoImage style={styles.avatarImage } {...{uri, uri}} />		 : <Image
+							source={require("./../../assets/images/user.png")}
+							style={styles.avatarImage}/>}											
+						</View>												
 						<TouchableOpacity
 							onPress={this._pickImage}
 							style={styles.imagebuttonButton}>
@@ -831,12 +847,22 @@ const styles = StyleSheet.create({
 		marginTop: 27 * alpha,
 		alignItems: "center",
 	},
-	avatarImage: {
-		backgroundColor: "white",
+	avatarImageContainer: {
+		backgroundColor: "gray",
 		borderRadius: 40 * alpha,
 		resizeMode: "contain",
 		alignSelf: "center",
 		width: 80 * alpha,
+		height: 80 * alpha,
+	},
+	avatarImage: {
+		backgroundColor: "transparent",
+		borderRadius: 40 * alpha,
+		resizeMode: "contain",
+		alignSelf: "center",
+		width: 80 * alpha,
+		position: "absolute",
+		left:0,
 		top: 0,
 		height: 80 * alpha,
 	},
