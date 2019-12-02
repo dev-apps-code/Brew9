@@ -100,6 +100,9 @@ export default {
       }
       return { ...state, unreadNotificationCount:0, notifications:data, last_read:last_read }
     },
+    updateUnreadNotification(state, {payload}) {
+      return { ...state, unreadNotificationCount:payload }
+    },
     updateNotifications(state, {payload}) {
       let unread= 0
       let notifications = payload.result
@@ -346,6 +349,7 @@ export default {
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('saveCurrentUser')(eventObject.result))
+          yield put(createAction('updateUnreadNotification')(eventObject.result.badges_count))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }

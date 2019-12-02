@@ -20,6 +20,7 @@ import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKG
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import Constants from 'expo-constants';
+import {Image as ExpoImage} from "react-native-expo-image-cache";
 
 export default class ProductCell extends React.Component {
   constructor(props) {
@@ -100,7 +101,7 @@ export default class ProductCell extends React.Component {
     });
 
     var hasPrice = this.props.productprice > 0.00 && this.props.productprice ? true : false
-
+    const uri = this.props.productimage
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
         
@@ -123,12 +124,12 @@ export default class ProductCell extends React.Component {
                   justifyContent: "center"
                 }}
               >
-                { this.props.productHidden ? <Image
+                { this.props.productHidden ? <Image                  
                   source={{ uri: this.props.productimage }}
                   style={styles.productblurimageImage}
                   blurRadius={10}
-                /> :  <Image
-                source={{ uri: this.props.productimage }}
+                /> :  <ExpoImage
+                {...{uri}}
                 style={styles.productimageImage}
                 
               />}
