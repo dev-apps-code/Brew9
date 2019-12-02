@@ -29,7 +29,10 @@ import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
 
 @connect(({ members,config }) => ({
-  selectedTab:config.selectedTab
+  selectedTab:config.selectedTab,
+  members:members.profile,
+  notifications: members.notifications,
+  unreadNotificationCount:members.unreadNotificationCount
 }))
 
 export default class Notification extends React.Component {
@@ -76,10 +79,7 @@ export default class Notification extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      data: [],
-      unread: 0,
       isRefreshing: false,
-      last_read: 0,
       timestamp: undefined,
       appState: AppState.currentState,
     };
@@ -87,14 +87,13 @@ export default class Notification extends React.Component {
   }
 
   componentDidMount() {
-    // this.loadLocalStore();
+
     const { members } = this.props;
     AppState.addEventListener('change', this._handleAppStateChange);	
     if (members != null) {
       this.props.navigation.addListener('didFocus', this.loadNotifications)
     
-      // this.props.navigation.addListener('didFocus', this.loadNotifications())
-      // this.loadNotifications();
+      this.loadNotifications();
     }
 
     this.props.navigation.setParams({
@@ -121,7 +120,7 @@ export default class Notification extends React.Component {
   };
 
   loadNotifications = () => {
-        
+    
     const {timestamp} =  this.state
 
     if (timestamp != undefined) {
@@ -134,14 +133,13 @@ export default class Notification extends React.Component {
         return false;
        }
     }
+    const date = new Date()
+    this.setState({timestamp:date.getTime()})
 
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
-
-      if (eventObject.success) {
-        this.loadLocalStore(eventObject.result)
-      }
+     
       this.setState({
         loading: false,
         isRefreshing: false
@@ -165,37 +163,7 @@ export default class Notification extends React.Component {
     this.loadNotifications()
   }
 
-  loadLocalStore(notifications) {
-
-    const date = new Date()
-    this.setState({timestamp:date.getTime()})
-    return AsyncStorage.getItem("notification_key", (err, result) => {
-      let data = notifications
-      let unread= 0
-       
-      if (result != null) {
-       for(var index in data) {
-         let item = data[index]
-         let read = item.id <= result ? true : false   
-         data[index].read = read
-         if (read == false){
-           unread = unread + 1
-         }
-       }
-       this.setState({
-         data,
-         unread: unread,
-         last_read: result
-       });
-      } else {
-        this.setState({
-          last_read: 0,
-          unread: data.length,
-          data,
-        });
-      }
-    })
-  }
+  
 
   onBackPressed = () => {
     this.props.navigation.goBack();
@@ -217,38 +185,26 @@ export default class Notification extends React.Component {
   };
 
   onReadAllPressed = () => {
-
-    const { data} = this.state
     const { dispatch } = this.props
-    if (data.length > 0){
-      let data = [...this.state.data]
-      for(var index in data) {
-        data[index].read = true
-      }
-
-      const last_read = data[0].id
-
-      this.setState({data,unread:0})
-      AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
-      
-    }
-    dispatch(createAction('members/reloadNotifications')({}))
+    dispatch(createAction('members/markAllNotificationAsRead')({}))
   };
 
   render() {
+
+    const {unreadNotificationCount, notifications} = this.props
     return (
       <View style={styles.notificationView}>
         <View style={styles.contentView}>
           <View style={styles.noticeView}>
             <Text style={styles.noticeText}>
-              You have {this.state.unread} unread notifications
+              You have {unreadNotificationCount} unread notifications
             </Text>
             <View
               style={{
                 flex: 1
               }}
             />
-            {this.state.unread > 0 ? (
+            {unreadNotificationCount > 0 ? (
               <TouchableOpacity
                 onPress={this.onReadAllPressed}
                 style={styles.readallButton}
@@ -262,10 +218,10 @@ export default class Notification extends React.Component {
               <View style={[styles.container, styles.horizontal]}>
                 <ActivityIndicator size="large" />
               </View>
-            ) : !this.state.loading && this.state.data.length > 0 ? (
+            ) : !this.state.loading && notifications.length > 0 ? (
               <FlatList
                 renderItem={this.renderPointhistoryFlatListCell}
-                data={this.state.data}
+                data={notifications}
                 style={styles.pointhistoryFlatList}
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.onRefresh.bind(this)}

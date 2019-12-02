@@ -61,11 +61,13 @@ export default {
   state: {
     userAuthToken: "",
     profile: null,
+    last_read:null,
     isReady: false,
     company_id:1,
     currency:'$',
     location:null,
     notifications: [],
+    unreadNotificationCount:0,
   },
   
   reducers: {
@@ -80,20 +82,46 @@ export default {
     loadCurrentUser(state, { payload }) {
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
-    loadNotification(state, {payload}) {
+    markAllNotificationAsRead(state, { payload }) {
       
-      if (payload.result != null && payload.result.length > 0) {
-        if (payload.last_read != null) {
+      const notifications =  state.notifications
+      let data = [...notifications]
 
-          var notifications = _.filter(payload.result, function(o) { 
-            return o.id > payload.last_read; 
-          })
-          return { ...state, notifications : notifications }
-        } else {
-          return { ...state, notifications : payload.result }
+      var last_read = null
+      if (data.length > 0){
+
+        for(var index in data) {
+          data[index].read = true
         }
+  
+         last_read = data[0].id
+  
+        AsyncStorage.setItem("notification_key", JSON.stringify(last_read))        
+      }
+      return { ...state, unreadNotificationCount:0, notifications:data, last_read:last_read }
+    },
+    updateNotifications(state, {payload}) {
+      let unread= 0
+      let notifications = payload.result
+      if (notifications != null && notifications.length > 0) {
+        if (payload.last_read != null) {
+          for(var index in notifications) {
+            let item = notifications[index]
+            let read = item.id <= payload.last_read ? true : false   
+            notifications[index].read = read
+            if (read == false){
+              unread = unread + 1
+            }
+          }
+        } else {
+          for(var index in notifications) {
+            notifications[index].read = false
+            unread = unread + 1
+          }
+        }
+        return { ...state, notifications : notifications, unreadNotificationCount:unread, last_read:last_read }
       } else {
-        return { ...state, notifications : [] }
+        return { ...state, notifications : [], unreadNotificationCount:unread , last_read:last_read}
       }
       
     },
@@ -105,7 +133,7 @@ export default {
       return { ...state, location: payload}
     },
     saveCurrentUser(state,{payload}) {
-      saveCurrentUserToStorage(payload)
+     
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
   },
@@ -171,7 +199,7 @@ export default {
        
         const eventObject = new EventObject(json)
         const result = eventObject.result
-        yield put(createAction('loadNotification')({result, last_read}))
+        yield put(createAction('updateNotifications')({result, last_read}))
 
         if (eventObject.success == true) {}
         typeof callback === 'function' && callback(eventObject)
@@ -330,27 +358,7 @@ export default {
       } catch (err) {
         console.log('loadingCurrentUser', err)
       }
-    },
-    *reloadNotifications({ payload }, { call, put, select }) {
-      try {
-        const json = yield call(getCurrentUser)
-        // const last_read = yield call(getLastRead)
-        const currentUser = JSON.parse(json)
-
-        const last_read = yield call(getLastRead)
-       
-        
-        if (currentUser != null) {
-          const notifications = currentUser.notifications
-          yield put(createAction('loadNotification')({notifications, last_read}))
-        }
-        
-        // yield put(createAction('loadNotification')({currentUser, last_read}))
-
-      } catch (err) {
-        console.log('loadingCurrentUser', err)
-      }
-    },
+    },    
     *loadDestroy({ payload }, { call, put, select }) 
     {
     try{

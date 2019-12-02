@@ -38,6 +38,6 @@ const NotificationBadgeIcon = props => (
 
 export default connect(
   ({ members }) => ({ 
-      notificationCount: members.notifications.length
+      notificationCount: members.unreadNotificationCount
   })
 )(NotificationBadgeIcon);
