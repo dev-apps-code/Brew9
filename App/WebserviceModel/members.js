@@ -119,9 +119,9 @@ export default {
             unread = unread + 1
           }
         }
-        return { ...state, notifications : notifications, unreadNotificationCount:unread, last_read:last_read }
+        return { ...state, notifications : notifications, unreadNotificationCount:unread }
       } else {
-        return { ...state, notifications : [], unreadNotificationCount:unread , last_read:last_read}
+        return { ...state, notifications : [], unreadNotificationCount:unread}
       }
       
     },

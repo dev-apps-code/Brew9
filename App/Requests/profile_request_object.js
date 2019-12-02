@@ -5,6 +5,7 @@ class ProfileRequestObject extends BaseRequestObject{
    getUrlString() {
        return `members/${this.url_id}/profile`
    }
+
 }
 export default ProfileRequestObject
 
