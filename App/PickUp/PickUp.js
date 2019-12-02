@@ -96,37 +96,11 @@ export default class PickUp extends React.Component {
 		const {currentMember} = this.props
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			
-			if (currentMember != null) {
-				this.loadProfile();
-			  }
+			
 		}
 		this.setState({ appState: nextAppState });
 	};
 	
-
-	  loadProfile(){
-		const { dispatch, currentMember } = this.props
-		this.setState({ loading: true })
-		const callback = eventObject => {
-			if (eventObject.success) {
-				
-			}
-			this.setState({
-				loading: false,
-			})
-		}
-		const obj = new ProfileRequestObject()
-		if (currentMember != null){
-			obj.setUrlId(currentMember.id)
-		}
-		
-		dispatch(
-			createAction('members/loadProfile')({
-				object:obj,
-				callback,
-			})
-		)
-	}
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
