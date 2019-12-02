@@ -306,7 +306,6 @@ export default class Home extends React.Component {
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
-		this.loadProfile()
 		this.loadShops(true)
 		AppState.addEventListener('change', this._handleAppStateChange);			
 	}
@@ -343,32 +342,6 @@ export default class Home extends React.Component {
 		  })
 		);
 	  }
-
-
-
-	loadProfile(){
-		const { dispatch, currentMember } = this.props
-		this.setState({ loading: true })
-		const callback = eventObject => {
-			if (eventObject.success) {
-				
-			}
-			this.setState({
-				loading: false,
-			})
-		}
-		const obj = new ProfileRequestObject()
-		if (currentMember != null){
-			obj.setUrlId(currentMember.id)
-		}
-		
-		dispatch(
-			createAction('members/loadProfile')({
-				object:obj,
-				callback,
-			})
-		)
-	}
 
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
@@ -518,13 +491,7 @@ export default class Home extends React.Component {
 					
 					if (clearCart) {
 						
-						this.onClearPress()
-
-						if (currentMember != null) {
-							this.loadProfile()
-							// this.loadNotifications()
-						}
-						
+						this.onClearPress()									
 						this.loadShops()
 						navigate("PickUp")
 					} else {
@@ -555,10 +522,6 @@ export default class Home extends React.Component {
 				const { params } = state
 				
 				this.loadShops()
-				if (currentMember != null) {
-					this.loadProfile()
-					this.loadNotifications()
-				}
 			})
 			navigate("VerifyUser" , {
 				returnToRoute: navigation.state

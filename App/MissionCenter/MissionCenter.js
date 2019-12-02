@@ -75,25 +75,7 @@ export default class MissionCenter extends React.Component {
         this.props.navigation.goBack()
     }
 
-    loadProfile(){
-		const { dispatch, currentMember } = this.props
 
-		const callback = eventObject => {
-
-		}
-		const obj = new ProfileRequestObject()
-		if (currentMember != null){
-			obj.setUrlId(currentMember.id)
-		}
-		
-		dispatch(
-			createAction('members/loadProfile')({
-				object:obj,
-				callback,
-			})
-		)
-    }
-    
     loadMissions(){
         const { dispatch, selectedShop, company_id } = this.props
         this.setState({ loading: true })
@@ -217,7 +199,7 @@ export default class MissionCenter extends React.Component {
             })
         }
 
-        // this.loadProfile()
+
     }
 
     update_mission() {

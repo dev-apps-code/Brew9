@@ -133,7 +133,7 @@ export default {
       return { ...state, location: payload}
     },
     saveCurrentUser(state,{payload}) {
-     
+      saveCurrentUserToStorage(payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
   },
