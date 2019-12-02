@@ -68,7 +68,7 @@ export default class ScanQr extends React.Component {
             onBackPressed: this.onBackPressed,
         })
 
-        this.loadQrCodeScan("tup_4ff72b58-e2be-43b6-b5ed-ca8c8a5bf60d")
+        this.loadQrCodeScan("tup_61530c7d-443f-4b55-9a37-33ccdf53c90a")
     }
 
     onSuccessfulScan= () => {
@@ -82,9 +82,9 @@ export default class ScanQr extends React.Component {
         
         const callback = eventObject => {        
             if (eventObject.success) {
-                this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+                this.refs.toast.show(eventObject.message, 1500, () => {
 
-                    if (eventObject.result.code != null) {
+                    if (eventObject.result.clazz == "member") {
                         this.onSuccessfulScan()
                     }                     
                 })
@@ -111,14 +111,13 @@ export default class ScanQr extends React.Component {
 
         this.setState({ loading: true })
         const callback = eventObject => {        
-            if (eventObject.success) {
-                this.loadScanStatus(qr_code)
-
+            if (eventObject.success) {                
                 setTimeout(function () {
                     this.loadScanStatus(qr_code)
-                  }.bind(this), 5000);                            
+                  }.bind(this), 3000);                            
             }
             else {
+                this.setState({ loading: false })
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
             }   
         }
