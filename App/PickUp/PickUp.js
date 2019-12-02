@@ -97,12 +97,36 @@ export default class PickUp extends React.Component {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			
 			if (currentMember != null) {
-
+				this.loadProfile();
 			  }
 		}
 		this.setState({ appState: nextAppState });
 	};
 	
+
+	  loadProfile(){
+		const { dispatch, currentMember } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
+			if (eventObject.success) {
+				
+			}
+			this.setState({
+				loading: false,
+			})
+		}
+		const obj = new ProfileRequestObject()
+		if (currentMember != null){
+			obj.setUrlId(currentMember.id)
+		}
+		
+		dispatch(
+			createAction('members/loadProfile')({
+				object:obj,
+				callback,
+			})
+		)
+	}
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
@@ -299,10 +323,12 @@ export default class PickUp extends React.Component {
 						<View style={styles.queueHeaderBlock}>
 							<Text
 								style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
+							<View style={{flexDirection: "row"}} >
 							<Text
 								style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}</Text>
 							<Text
 								style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text>
+								</View>
 						</View>
 					</View>
 					<View
@@ -832,9 +858,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "center",
-		bottom: 6 * alpha,
-		right: -23 * alpha,
-		position: "absolute"
+		marginTop: 26 * alpha,
 	},
 	pickupTimeheaderText: {
 		color: "rgb(50, 50, 50)",

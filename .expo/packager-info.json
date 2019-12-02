@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://4f-vpg.tonyvoon.brew9-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.4f-vpg.tonyvoon.brew9-app.exp.direct",
-  "ngrokPid": 15286,
-  "packagerPort": 19001,
-  "packagerPid": 15263,
+  "expoServerNgrokUrl": "https://si-ira.tonyvoon.brew9-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.si-ira.tonyvoon.brew9-app.exp.direct",
+  "ngrokPid": 33151,
+  "packagerPort": 19004,
+  "packagerPid": 33133,
   "webpackServerPort": null,
-  "devToolsPort": 19002
+  "devToolsPort": 19005
 }
