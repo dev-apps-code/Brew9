@@ -12,6 +12,10 @@ export function validateEmail(email)
     return re.test(email);
 }
 
+export function	toRad(angle) {
+  return (angle * Math.PI) / 180;
+}
+
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,

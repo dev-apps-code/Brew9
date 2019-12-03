@@ -29,7 +29,7 @@ import React from "react"
 import Modal from "react-native-modal"
 import PushRequestObject from '../Requests/push_request_object'
 import { connect } from 'react-redux'
-import { createAction, dispatch } from '../Utils/index'
+import { createAction, dispatch, toRad } from '../Utils/index'
 import ProductCell from "./ProductCell"
 import CategoryCell from "./CategoryCell"
 import BannerCell from "./BannerCell"
@@ -60,12 +60,19 @@ import { getDistance, getPreciseDistance } from 'geolib';
 import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
 
-@connect(({ members, shops, config }) => ({
+@connect(({ members, shops, config, orders }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
 	location: members.location,
 	selectedShop: shops.selectedShop,
-	isToggleShopLocation: config.isToggleShopLocation
+	isToggleShopLocation: config.isToggleShopLocation,
+	cart_total_quantity: orders.cart_total_quantity,
+	promotion_trigger_count: orders.promotion_trigger_count,
+	cart: orders.cart,
+	promotion: orders.promotion,
+	cart_total: orders.cart_total,
+	toggle_update_count:orders.toggle_update_count,
+	discount_cart_total:orders.discount_cart_total
 }))
 
 export default class Home extends React.Component {
@@ -127,19 +134,12 @@ export default class Home extends React.Component {
 		this.state = {
 			isCartToggle: false,
 			page: 1,
-			data: [],
-			cart: [],
-			promotion:[],
-			promotion_ids: [],
-			cart_total: 0,
-			cart_total_quantity: 0,
-			discount_cart_total: 0,
+			data: [],				
 			product_category:[],
 			products:[],
 			loading: true,
 			isRefreshing: false,
 			selected_category: 0,
-			profile: [],
 			menu_banners: [],
 			product_view_height: 0 * alpha,
 			modalVisible: false,
@@ -156,13 +156,10 @@ export default class Home extends React.Component {
 			image_check: false,
 			image_isLong: false,
 			app_url: '',
-			first_time_buy: false,
 			location: null,
 			distance: "-",
 			member_distance: 1000,
-			first_promo_popup: false,
-			monitorLocation: null,
-			remaining:0,
+			first_promo_popup: false,					
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -181,9 +178,7 @@ export default class Home extends React.Component {
 		}
 	}
 
-	componentDidUpdate() {
-		this.check_promotion_trigger()
-	}
+
 	
 	registerForPushNotificationsAsync = async() => {
 		const { status: existingStatus } = await Permissions.getAsync(
@@ -241,16 +236,22 @@ export default class Home extends React.Component {
 	
 		let location = await Location.getCurrentPositionAsync({});
 		dispatch(createAction("members/setLocation")(location));
-	  };
+	};
 	
-	  componentDidUpdate(prevProps, prevState) {
+	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.location != this.props.location ){
 			if (prevProps.location != null){
 				this.loadShops(false)
 			}
 			this.computeDistance()
-		}	
-	  }
+		}
+		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count){
+			this.check_promotion_trigger()
+		}
+		if (prevProps.toggle_update_count != this.props.toggle_update_count){
+			this.toogleCart(true)
+		}
+	}
 
 	computeDistance() {
 
@@ -284,10 +285,6 @@ export default class Home extends React.Component {
 		this.setState({distance : distance_string, member_distance: (parseDistance/1000)})
 	}
 
-	toRad(angle) {
-		return (angle * Math.PI) / 180;
-	}
-
 	componentWillMount() {
 		this.getNotificationAsync()
 		if (Platform.OS === 'android') {
@@ -298,7 +295,7 @@ export default class Home extends React.Component {
 			this.getLocationAsync();
 		  }
 		
-		this.setState({isPromoToggle: false,})
+		this.setState({isPromoToggle: false})
 	}
 
 	async componentDidMount() {
@@ -316,40 +313,15 @@ export default class Home extends React.Component {
 	}
 
 	_handleAppStateChange = nextAppState => {
-		const {currentMember} = this.props
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
-			if (currentMember != null) {
-				this.loadNotifications();
-			  }
 		}
 		this.setState({ appState: nextAppState });
 	  };
 
-	  loadNotifications = () => {
-		
-		const { dispatch, currentMember } = this.props;
-		const callback = eventObject => {
-		  if (eventObject.success) {
-		  }
-		};
-		const obj = new NotificationsRequestObject();
-		obj.setUrlId(currentMember.id);
-		dispatch(
-		  createAction("members/loadNotifications")({
-			object: obj,
-			callback
-		  })
-		);
-	  }
-
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
-		const callback = eventObject => {
-		  if (eventObject.success) {
-			
-		  }
-		}
+		const callback = eventObject => {}
 
 		if (currentMember != null){
 			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
@@ -471,10 +443,10 @@ export default class Home extends React.Component {
 	}
 
 	onCheckoutPressed = () => {
-		const { cart, promotion, member_distance } = this.state
+		const {  member_distance } = this.state
 		const { navigate } = this.props.navigation
 		const { navigation } = this.props
-		const {currentMember,selectedShop } = this.props
+		const {currentMember,selectedShop, cart, promotion } = this.props
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
@@ -508,8 +480,6 @@ export default class Home extends React.Component {
 					cart: cart,
 					promotion: promotion,
 					promotion_ids: this.state.promotion_ids,
-					cart_total_quantity: this.state.cart_total_quantity,
-					cart_total: this.state.discount_cart_total,
 					shop: this.state.shop,
 					returnToRoute: navigation.state,
 					clearCart: false
@@ -519,7 +489,6 @@ export default class Home extends React.Component {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
 				const { state } = payload
-				const { params } = state
 				
 				this.loadShops()
 			})
@@ -530,7 +499,7 @@ export default class Home extends React.Component {
 	}
 
 	recalculate_total() {
-		const { cart } = this.state
+		const { cart } = this.props
 		var total = 0
 		for (item of cart) {
 			if (item.clazz == "product") {
@@ -553,7 +522,7 @@ export default class Home extends React.Component {
 	}
 
 	onBannerPressed = (item,index) => {
-		const { navigate } = this.props.navigation
+		// const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "Featured Promo"))
 		if (item.banner_detail_image != undefined && item.banner_detail_image != "") {
@@ -647,23 +616,25 @@ export default class Home extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "View Cart"))
 		const { isCartToggle, product_view_height } = this.state
+		const {cart} = this.props
 
 		var product_checkout_height = product_view_height
 		var headerHeight = 31 * alpha
-		var height = (this.state.cart.length * 71) * alpha + (this.state.promotion.length * 71) * alpha
+		var height = (cart.length * 71) * alpha + (this.state.promotion.length * 71) * alpha
 		var checkoutHeight = 51 * alpha
 		var content = headerHeight + height + checkoutHeight
 		var finalheight = product_checkout_height - content
 		var height_cap = product_view_height * 0.4
 
+		
 		if (finalheight < height_cap) {
 			finalheight = height_cap
 		}
 
 		if (isUpdate) {
-			if(isCartToggle) {
+			if(!isCartToggle) {
 				Animated.spring(this.moveAnimation, {
-					toValue: {x: 0, y: this.state.cart.length == 0 ? windowHeight : finalheight},
+					toValue: {x: 0, y: cart.length == 0 ? windowHeight : finalheight},
 				}).start()
 			}
 		} else {
@@ -713,7 +684,6 @@ export default class Home extends React.Component {
 				type={item.type}
 			/>
 		}
-		
 	}
 
 	renderCategorylistFlatListCell = ({ item, index }) => {
@@ -786,7 +756,9 @@ export default class Home extends React.Component {
 
 	onChangeQuantityPress = (item,index,operation,isCart) => {
 
-		let cart = [...this.state.cart]
+		const {cart_total,dispatch,cart_total_quantity } = this.props
+
+		let cart = [...this.props.cart]
 
 		if (isCart) {
 
@@ -820,25 +792,21 @@ export default class Home extends React.Component {
 
 				if (index >= 0) {
 					cart[index] = cartItem
-					this.setState({ cart }, function(){
-						this.toogleCart(true)
-						this.check_promotion_trigger()
-					})
+					dispatch(createAction("orders/update_cart")({
+						cart
+					}));	
 				} else {
-					this.setState({
-						cart: this.state.cart.concat(cartItem)
-					}, function(){
-						this.toogleCart(true)
-					})
+					dispatch(createAction("orders/update_cart")({
+						cart: this.props.cart.concat(cartItem)
+					}));		
 				}
-				var calculated_total = (parseFloat(this.state.cart_total) + parseFloat(cartItem.price)).toFixed(2)
-				this.setState({
-					cart_total_quantity: (parseInt(this.state.cart_total_quantity) + 1),
+				var calculated_total = (parseFloat(cart_total) + parseFloat(cartItem.price)).toFixed(2)
+
+				dispatch(createAction("orders/update_cart_value")({
+					cart_total_quantity: (parseInt(cart_total_quantity) + 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
-				}, function(){
-					this.check_promotion_trigger()
-				})
+				}));				
 			} else {
 
 				if (cartItem.quantity > 1) {
@@ -861,17 +829,18 @@ export default class Home extends React.Component {
 					cart.splice(index, 1)
 				}
 
-				var calculated_total =  (parseFloat(this.state.cart_total) - parseFloat(cartItem.price)).toFixed(2)
-				this.setState({ cart }, function(){
-					this.toogleCart(true)
-				})
-				this.setState({
-					cart_total_quantity: (parseInt(this.state.cart_total_quantity) - 1),
+				var calculated_total =  (parseFloat(cart_total) - parseFloat(cartItem.price)).toFixed(2)
+
+				dispatch(createAction("orders/update_cart")({
+					cart
+				}));	
+
+				dispatch(createAction("orders/update_cart_value")({
+					cart_total_quantity: (parseInt(cart_total_quantity) - 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
-				}, function(){
-					this.check_promotion_trigger()
-				})
+				}));		
+
 			}
 			this.forceUpdate()
 			
@@ -904,22 +873,21 @@ export default class Home extends React.Component {
 
 				if (cart_index >= 0) {
 					cart[cart_index] = cartItem
-					this.setState({ cart }, function(){this.toogleCart(true)})
+					dispatch(createAction("orders/update_cart")({
+						cart
+					}));	
 				} else {
-					this.setState({
-						cart: this.state.cart.concat(cartItem)
-					}, function(){
-						this.toogleCart(true)
-					})
+					dispatch(createAction("orders/update_cart")({
+						cart: this.props.cart.concat(cartItem)
+					}));	
 				}
-				var calculated_total = (parseFloat(this.state.cart_total) + parseFloat(item.price)).toFixed(2)
-				this.setState({
-					cart_total_quantity: (parseInt(this.state.cart_total_quantity) + 1),
+				var calculated_total = (parseFloat(cart_total) + parseFloat(item.price)).toFixed(2)
+				
+				dispatch(createAction("orders/update_cart_value")({
+					cart_total_quantity: (parseInt(cart_total_quantity) + 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
-				}, function(){
-					this.check_promotion_trigger()
-				})
+				}));		
 			} else {
 				if (item.quantity > 1) {
 					item.quantity = item.quantity - 1
@@ -938,15 +906,15 @@ export default class Home extends React.Component {
 				if (item.quantity === null) {
 					cart.splice(cart_index, 1)
 				}
-				var calculated_total = (parseFloat(this.state.cart_total) - parseFloat(item.price)).toFixed(2)
-				this.setState({ cart }, function(){this.toogleCart(true)})
-				this.setState({
-					cart_total_quantity: (parseInt(this.state.cart_total_quantity) - 1),
+				var calculated_total = (parseFloat(cart_total) - parseFloat(item.price)).toFixed(2)
+				dispatch(createAction("orders/update_cart")({
+					cart
+				}));	
+				dispatch(createAction("orders/update_cart_value")({
+					cart_total_quantity: (parseInt(cart_total_quantity) - 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
-				}, function(){
-					this.check_promotion_trigger()
-				})
+				}));		
 			}
 
 			this.forceUpdate()
@@ -956,12 +924,12 @@ export default class Home extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { shop, cart_total, promotion_ids } = this.state
+		const { shop, cart_total } = this.state
 
-		const { currentMember } = this.props
+		const { currentMember,dispatch } = this.props
 
-		let newcart = [...this.state.cart]
-		let newpromotion = [...this.state.promotion]
+		let newcart = [...this.props.cart]
+		let newpromotion = [...this.props.promotion]
 
 		var promotions_item = []
 		var final_cart_value = cart_total
@@ -984,7 +952,6 @@ export default class Home extends React.Component {
 		
 						if (remaining <= 0 && search_cart_promo_index < 0) {
 		
-							console.log("add trigger")
 							shop.all_promotions[index].has_triggered = true
 							let cartItem = {
 								clazz: "promotion",
@@ -995,11 +962,7 @@ export default class Home extends React.Component {
 								type: promotion.reward_type
 							}
 							promotions_item.push(cartItem)
-							// console.log("Add", cartItem.name)
-							// console.log("Items", promotions_item)
-							// // this.setState({
-							// // 	cart: newcart.concat(cartItem),
-							// // })
+						
 							this.setState({
 								promotion: newpromotion.concat(promotions_item),
 								promotion_ids: promotion_ids
@@ -1015,10 +978,7 @@ export default class Home extends React.Component {
 						var price = 0
 		
 						if (promotion.reward_type != null && promotion.reward_type == "Discount") {
-							
-							if (!promotion_ids.includes(promotion.id)) {
-								promotion_ids.push(promotion.id)
-							}
+						
 							if (promotion.value_type != null && promotion.value_type == "percent") {
 								var discount_value = promotion.value ? promotion.value : 0
 								price = cart_total * discount_value / 100
@@ -1050,8 +1010,7 @@ export default class Home extends React.Component {
 								})
 							} else {
 								var item = newpromotion[search_cart_promo_index]
-								item.price = price
-								
+								item.price = price								
 							}
 						}
 						else {
@@ -1065,9 +1024,7 @@ export default class Home extends React.Component {
 									description:  "",
 									price: price,
 								}
-								promotions_item.push(cartItem3)
-								
-										
+								promotions_item.push(cartItem3)										
 							} 
 						}
 						
@@ -1105,21 +1062,21 @@ export default class Home extends React.Component {
 		if (check_has_product == false) {
 			this.onClearPress()
 		}
-		// console.log("Items", promotions_item)
-		this.setState({
+
+		dispatch(createAction("orders/update_discount_cart_total")({
 			discount_cart_total: final_cart_value
-		})
+		}));	
 	}
 
 	onAddToCartPressed = (product) => {
-
-		const { shop } = this.state
-		let cart = [...this.state.cart]
-
+		
+		let cart = [...this.props.cart]
+		const {dispatch} = this.props
+		const {cart_total, cart_total_quantity,} = this.props
 		const clone_variants = _.cloneDeep(product.selected_variants)
 		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
 
-		var search_cart = this.state.cart[search_cart_index]
+		var search_cart = this.props.cart[search_cart_index]
 
 		let cartItem = {
 			clazz: product.clazz,
@@ -1132,36 +1089,31 @@ export default class Home extends React.Component {
 			selected_variants: clone_variants
 		}
 
-		// console.log("cart", cartItem)
-		
-
 		product.total_quantity = parseInt(product.total_quantity) + parseInt(this.state.select_quantity)
 
 		let total_price = product.calculated_price * this.state.select_quantity
 
 		if (search_cart) {
 			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
-			this.setState({ cart, select_quantity: 1 }, function(){
-				this.check_promotion_trigger()
-			})
+			this.setState({select_quantity: 1 })
 		} else {
-			this.setState({
-				cart: this.state.cart.concat(cartItem),
+			dispatch(createAction("orders/update_cart")({
+				cart: this.props.cart.concat(cartItem),
+			}));	
+			this.setState({	
 				products: this.state.products,
-				select_quantity: 1,
-			}, function(){
-				this.toogleCart(true)
+				select_quantity: 1, 
 			})
 		}
-		var calculated_total = (parseFloat(this.state.cart_total) + parseFloat(total_price)).toFixed(2)
+		var calculated_total = (parseFloat(cart_total) + parseFloat(total_price)).toFixed(2)
 		this.setState({
 			modalVisible: false,
-			cart_total_quantity: (parseInt(this.state.cart_total_quantity) + parseInt(this.state.select_quantity)),
+		})
+		dispatch(createAction("orders/update_cart_value")({
+			cart_total_quantity: (parseInt(cart_total_quantity) + parseInt(this.state.select_quantity)),
 			cart_total: calculated_total,
 			discount_cart_total: calculated_total
-		}, function(){
-			this.check_promotion_trigger()
-		})
+		}));		
 		
 	}
 
@@ -1170,17 +1122,14 @@ export default class Home extends React.Component {
 	}
 
 	onClearPress = () => {
+
+		const {dispatch} = this.props
 		if (this.state.isCartToggle) {
 			this.toogleCart(false)
 		}
 
-		this.setState({
-			cart_total_quantity: 0,
-			cart_total: 0,
-			cart:[],
-			promotion:[],
-			promotion_ids:[]
-		})
+		dispatch(createAction("orders/reset_cart")());
+		
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
 			this.state.products[index].total_quantity = 0
@@ -1507,8 +1456,8 @@ export default class Home extends React.Component {
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,cart,delivery,distance, promotion} = this.state
-		let {isToggleShopLocation} = this.props
+		let {shop,delivery,distance, promotion} = this.state
+		let {isToggleShopLocation,cart} = this.props
 		let categoryBottomSpacer = undefined
 		// let should_show = this.shouldShowFeatured(shop)
 
@@ -1905,6 +1854,7 @@ export default class Home extends React.Component {
 
 	renderBottomBar(cart,shop){
 		
+		const {cart_total,cart_total_quantity,discount_cart_total} = this.props
 		if (cart.length > 0) 
 		{
 			return(<View
@@ -1965,12 +1915,12 @@ export default class Home extends React.Component {
 									flex: 1,
 								}}/>
 							<Text
-								style={styles.totalpriceText}>${parseFloat(this.state.discount_cart_total).toFixed(2)}</Text>
+								style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
 						</View>
 						<View
 							style={styles.badgeView}>
 							<Text
-								style={styles.numberofitemText}>{this.state.cart_total_quantity}</Text>
+								style={styles.numberofitemText}>{cart_total_quantity}</Text>
 						</View>
 					</View>
 				</View>

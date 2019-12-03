@@ -841,24 +841,13 @@ export default class Checkout extends React.Component {
 									}}>
 									<View
 										style={styles.walleticonView}>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0 * alpha,
-												right: 0 * alpha,
-												top: 0 * alpha,
-												bottom: 0 * alpha,
-												justifyContent: "center",
-											}}>
+										
 											<Image
 												source={require("./../../assets/images/wallet_center.png")}
 												style={this.state.selected_payment == "credits" ? styles.walletSelectImage : styles.walletImage}/>
-										</View>
-									</View>
-									
-							</View>
-							<View
+									</View>		
+								</View>
+								<View
 										style={{
 											flex: 1,
 										}}/>
@@ -879,15 +868,6 @@ export default class Checkout extends React.Component {
 										flex: 1,
 										alignSelf: "stretch",
 									}}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0 * alpha,
-											top: 0 * alpha,
-											bottom: 0 * alpha,
-											justifyContent: "center",
-										}}>
 										<View
 											style={styles.cardiconView}>
 											<View
@@ -913,7 +893,6 @@ export default class Checkout extends React.Component {
 										}}/>
 								<View
 									style={styles.menuRowLineView}/>
-							</View>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -950,8 +929,32 @@ export default class Checkout extends React.Component {
 								</View>
 							</View>
 							</TouchableOpacity>
-						</View>
 						
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 18 * alpha,
+										marginLeft: 61 * alpha,
+										marginRight: 17 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
+									}}>
+									<Text
+										style={this.state.selected_payment == "credit_card" ? styles.creditCardSelectedText : styles.creditCardText}>Credit Card</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									{
+										this.state.selected_payment == "credit_card" ?
+										<View
+											style={styles.selectTwoView}/>
+										: <View
+										style={styles.selectView}/>
+									}
+									
+								</View>
+							</View>
 						
 					</View>
 				</View>
