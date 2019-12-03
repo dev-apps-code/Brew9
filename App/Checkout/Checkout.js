@@ -31,6 +31,7 @@ import openMap from "react-native-open-maps";
 	promotion_trigger_count: orders.promotion_trigger_count,
 	cart: orders.cart,
 	promotions: orders.promotions,
+	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
 }))
 export default class Checkout extends React.Component {
@@ -242,11 +243,7 @@ export default class Checkout extends React.Component {
 		const {navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
-		navigation.navigate({ routeName, key, 
-			params: { 
-				clearCart: false,
-			} 
-		})
+		navigation.navigate({ routeName, key})
 	}
 	
 	
