@@ -302,7 +302,7 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Checkout', 'Click', "Select Voucher"))
-		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.state.cart,addVoucherAction:this.addVoucherItemsToCart})
+		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.props.cart,addVoucherAction:this.addVoucherItemsToCart})
 	}
 
 	onCancelVoucher = (item) => {
@@ -461,14 +461,16 @@ export default class Checkout extends React.Component {
 	}
 
 	removeItemFromCart(products,description) {
-		let newcart = [...this.state.cart]
+		let newcart = [...this.props.cart]
 		let product_ids = products.map(item => item.id)
 		for (item of newcart) {
 			if (product_ids.includes(item.id)) {
 				item.cannot_order = true
 			}
 		}
-		this.setState({ cart: newcart})
+		dispatch(createAction("orders/updateCart")({
+			cart: newcart
+		}));		
 	}
 
 	onRemoveItem(item) {
@@ -489,7 +491,7 @@ export default class Checkout extends React.Component {
 	}
 
 	recalculate_total() {
-		const { cart } = this.state
+		const { cart } = this.props
 		var total = 0
 		for (item of cart) {
 			if (item.clazz == "product") {
@@ -1452,8 +1454,8 @@ export default class Checkout extends React.Component {
 	}
 
 	renderCheckoutReceipt(){
-		const { cart, promotion, vouchers_to_use, shop , cart_total, discount} = this.state
-		let {currentMember, selectedShop} = this.props
+		const { vouchers_to_use, shop , discount} = this.state
+		let {currentMember, selectedShop, cart, promotions, cart_total} = this.props
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0
@@ -1542,7 +1544,7 @@ export default class Checkout extends React.Component {
 									style={styles.sectionSeperatorView}/>
 							</View>
 							
-							{this.renderOrderItems(cart, promotion)}
+							{this.renderOrderItems(cart, promotions)}
 							<View style={styles.receiptSectionSeperator}>
 								<Image
 									source={require("./../../assets/images/curve_in_background.png")}
