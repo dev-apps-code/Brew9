@@ -479,15 +479,9 @@ export default class Checkout extends React.Component {
 
 		new_cart.splice(search_product_index, 1)
 		
-		dispatch(createAction("orders/updatePromotions")({
+		dispatch(createAction("orders/updateCart")({
 			cart: new_cart
-		}));
-		this.setState({
-			cart: new_cart
-		}, function(){
-			this.recalculate_total()
-			
-		})
+		}));	
 	}
 
 	recalculate_total() {
@@ -499,6 +493,9 @@ export default class Checkout extends React.Component {
 				total += calculated
 			}
 		}
+		dispatch(createAction("orders/updatePromotions")({
+			promotions: newpromotion
+		}));
 		this.setState({
 			cart_total: total
 		}, function(){

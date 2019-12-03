@@ -794,14 +794,7 @@ export default class Home extends React.Component {
 					dispatch(createAction("orders/updateCart")({
 						cart: this.props.cart.concat(cartItem)
 					}));		
-				}
-				var calculated_total = (parseFloat(cart_total) + parseFloat(cartItem.price)).toFixed(2)
-
-				dispatch(createAction("orders/updateCartValue")({
-					cart_total_quantity: (parseInt(cart_total_quantity) + 1),
-					cart_total: calculated_total,
-					discount_cart_total: calculated_total
-				}));				
+				}							
 			} else {
 
 				if (cartItem.quantity > 1) {
@@ -828,13 +821,7 @@ export default class Home extends React.Component {
 
 				dispatch(createAction("orders/updateCart")({
 					cart
-				}));	
-
-				dispatch(createAction("orders/updateCartValue")({
-					cart_total_quantity: (parseInt(cart_total_quantity) - 1),
-					cart_total: calculated_total,
-					discount_cart_total: calculated_total
-				}));		
+				}));						
 
 			}
 			this.forceUpdate()
@@ -875,14 +862,7 @@ export default class Home extends React.Component {
 					dispatch(createAction("orders/updateCart")({
 						cart: this.props.cart.concat(cartItem)
 					}));	
-				}
-				var calculated_total = (parseFloat(cart_total) + parseFloat(item.price)).toFixed(2)
-				
-				dispatch(createAction("orders/updateCartValue")({
-					cart_total_quantity: (parseInt(cart_total_quantity) + 1),
-					cart_total: calculated_total,
-					discount_cart_total: calculated_total
-				}));		
+				}						
 			} else {
 				if (item.quantity > 1) {
 					item.quantity = item.quantity - 1
@@ -904,12 +884,7 @@ export default class Home extends React.Component {
 				var calculated_total = (parseFloat(cart_total) - parseFloat(item.price)).toFixed(2)
 				dispatch(createAction("orders/updateCart")({
 					cart
-				}));	
-				dispatch(createAction("orders/updateCartValue")({
-					cart_total_quantity: (parseInt(cart_total_quantity) - 1),
-					cart_total: calculated_total,
-					discount_cart_total: calculated_total
-				}));		
+				}));					
 			}
 
 			this.forceUpdate()
@@ -1061,7 +1036,7 @@ export default class Home extends React.Component {
 		
 		let cart = [...this.props.cart]
 		const {dispatch} = this.props
-		const {cart_total, cart_total_quantity,} = this.props
+		const {cart_total, cart_total_quantity} = this.props
 		const clone_variants = _.cloneDeep(product.selected_variants)
 		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
 
@@ -1094,15 +1069,11 @@ export default class Home extends React.Component {
 				select_quantity: 1, 
 			})
 		}
-		var calculated_total = (parseFloat(cart_total) + parseFloat(total_price)).toFixed(2)
+
 		this.setState({
 			modalVisible: false,
 		})
-		dispatch(createAction("orders/updateCartValue")({
-			cart_total_quantity: (parseInt(cart_total_quantity) + parseInt(this.state.select_quantity)),
-			cart_total: calculated_total,
-			discount_cart_total: calculated_total
-		}));		
+		
 		
 	}
 

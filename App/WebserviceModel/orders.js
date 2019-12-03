@@ -47,8 +47,19 @@ import {
         updateCart(state, { payload }) {
 
             const {cart} = payload
+            var promotion_trigger_count = state.promotion_trigger_count + 1
+            var total= 0
+            var quantity = 0
+            for (item of cart) {
+                if (item.clazz == "product") {
+                    var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
+                    total += calculated
+                    quantity = quantity + parseInt(item.quantity)
+                }
+            }
+
             return {
-                ...state,cart,toggle_update_count:state.toggle_update_count+1
+                ...state,cart,toggle_update_count:state.toggle_update_count+1,cart_total_quantity:quantity,cart_total:total,promotion_trigger_count
             }
         },
         updateDiscountCartTotal(state, { payload }) {
@@ -57,14 +68,7 @@ import {
             return {
                 ...state,discount_cart_total
             }
-        },
-        updateCartValue(state, { payload }) {
-            const {cart_total_quantity,cart_total,discount_cart_total} = payload
-            var promotion_trigger_count = state.promotion_trigger_count + 1
-            return {
-                ...state,cart_total_quantity,cart_total,discount_cart_total,promotion_trigger_count
-            }
-        },
+        },    
     },
     effects: {
         *loadGetOrders({ payload }, { call, put, select }) 
