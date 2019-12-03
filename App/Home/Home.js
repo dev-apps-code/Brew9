@@ -56,6 +56,7 @@ import { select } from "redux-saga/effects"
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import ProfileRequestObject from '../Requests/profile_request_object'
+import CurrentStatusRequestObject from "../Requests/current_status_request_object"
 import { getDistance, getPreciseDistance } from 'geolib';
 import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
@@ -320,7 +321,7 @@ export default class Home extends React.Component {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
 			if (currentMember != null) {
-				this.loadNotifications();
+				// this.loadNotifications();
 			  }
 		}
 		this.setState({ appState: nextAppState });

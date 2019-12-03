@@ -18,7 +18,8 @@ import {
   missionRewardClaim,
   missionLogin,
   scanStatus,
-  updateAvatar
+  updateAvatar,
+  currentStatus
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -80,7 +81,7 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "", unreadNotificationCount: payload.unread_notification }
     },
     markAllNotificationAsRead(state, { payload }) {
       
@@ -122,10 +123,16 @@ export default {
             unread = unread + 1
           }
         }
-        return { ...state, notifications : notifications, unreadNotificationCount:unread }
-      } else {
-        return { ...state, notifications : [], unreadNotificationCount:unread}
+        
+        let saved_notifications = state.notifications
+        var new_notification_list = _.unionBy(notifications, saved_notifications,'id');
+
+        return { ...state, notifications : new_notification_list, unreadNotificationCount:unread }
       }
+      console.log("No new Notification")
+      //  else {
+      //   return { ...state, notifications : [], unreadNotificationCount:unread}
+      // }
       
     },
     destroyCurrentUser(state, {payload}) {
@@ -137,7 +144,7 @@ export default {
     },
     saveCurrentUser(state,{payload}) {
       saveCurrentUserToStorage(payload)
-      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "", unreadNotificationCount: payload.unread_notification }
     },
   },
   effects: {
@@ -504,5 +511,24 @@ export default {
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
     }, 
+    *loadCurrentStatus({ payload }, { call, put, select })
+    {
+      try{
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+        const json = yield call(
+            currentStatus,
+            authtoken,
+            object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+          yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
+        }
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
   },
+  
 }

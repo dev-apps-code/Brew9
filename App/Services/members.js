@@ -79,3 +79,7 @@ export function missionRewardClaim(authtoken,object) {
 export function missionLogin(authtoken, object) {
    return postMethod(authtoken,object)
 }
+
+export function currentStatus(authtoken, object) {
+   return getMethod(authtoken, object)
+}

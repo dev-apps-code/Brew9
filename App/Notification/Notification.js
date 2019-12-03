@@ -113,7 +113,7 @@ export default class Notification extends React.Component {
       nextAppState === 'active'
     ) {
       if (members != null ) {
-        this.loadNotifications();
+        // this.loadNotifications();
       }
     }
     this.setState({appState: nextAppState});
@@ -139,20 +139,31 @@ export default class Notification extends React.Component {
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
-     
+      if (eventObject.success) {
+        
+		  }
       this.setState({
         loading: false,
         isRefreshing: false
       });
     };
-    const obj = new NotificationsRequestObject();
-    obj.setUrlId(members.id);
-    dispatch(
-      createAction("members/loadNotifications")({
-        object: obj,
-        callback
-      })
-    );
+
+    AsyncStorage.getItem("notification_key", (err, result) => {
+      var last_note = 0
+      if (result != null) {
+        last_note = result
+      }
+      const obj = new NotificationsRequestObject(last_note);
+      obj.setUrlId(members.id);
+      dispatch(
+        createAction("members/loadNotifications")({
+          object: obj,
+          callback
+        })
+      );
+    })
+
+    
   }
 
   onRefresh() {

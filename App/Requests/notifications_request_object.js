@@ -2,6 +2,11 @@ import BaseRequestObject from "./base_request_object";
 
 class NotificationsRequestObject extends BaseRequestObject{
 
+    constructor(last_read){
+        super();
+        this.last_read = last_read
+    }
+
    getUrlString() {
        return `members/${this.url_id}/notifications`
    }
