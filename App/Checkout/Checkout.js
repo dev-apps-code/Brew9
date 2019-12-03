@@ -21,11 +21,17 @@ import Moment from 'moment';
 import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import openMap from "react-native-open-maps";
 
-@connect(({ members,shops }) => ({
+@connect(({ members,shops ,orders}) => ({
 	currentMember: members.profile,
 	members: members,
-	selectedShop: shops.selectedShop
+	selectedShop: shops.selectedShop,
+	cart_total_quantity: orders.cart_total_quantity,
+	promotion_trigger_count: orders.promotion_trigger_count,
+	cart: orders.cart,
+	promotions: orders.promotions,
+	cart_total: orders.cart_total,
 }))
 export default class Checkout extends React.Component {
 
@@ -56,16 +62,11 @@ export default class Checkout extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
 			cart_total: this.props.navigation.getParam("cart_total", 0.00),
 			vouchers_to_use:[],
 			valid_vouchers:[],
 			discount:0,
-			promotion: this.props.navigation.getParam("promotion", []),
-			promotion_ids: this.props.navigation.getParam("promotion_ids", []),
-			cart:this.props.navigation.getParam("cart", []),
-			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
 			isPaymentToggle: false,
 			payment_view_height: 0 * alpha,
 			selected_payment: '',
@@ -92,6 +93,13 @@ export default class Checkout extends React.Component {
 
 		this.setTimePickerDefault()
 		this.loadValidVouchers()	
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	
+		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count){
+			this.check_promotion_trigger()
+		}	
 	}
 
 	setTimePickerDefault() {
@@ -205,8 +213,8 @@ export default class Checkout extends React.Component {
 
 
 	loadValidVouchers(){
-		const { dispatch,currentMember,selectedShop } = this.props
-		const {cart} = this.state
+		const { dispatch,currentMember,selectedShop,cart } = this.props
+
 		if (currentMember != null ){
 			const callback = eventObject => {
 
@@ -236,9 +244,7 @@ export default class Checkout extends React.Component {
 		
 		navigation.navigate({ routeName, key, 
 			params: { 
-				clearCart: false, 
-				cart: this.state.cart, 
-				promotion: this.state.promotion,
+				clearCart: false,
 			} 
 		})
 	}
@@ -281,7 +287,7 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 
 		navigate("DirectionMap", {
-			shop: this.state.shop
+			shop: this.props.selectedShop
 		})
 	}
 
@@ -297,21 +303,18 @@ export default class Checkout extends React.Component {
 		})
 	}
 
-	onAutoFillPressed = () => {
-
-	}
+	onAutoFillPressed = () => {}
 
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Checkout', 'Click', "Select Voucher"))
-		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.state.cart,addVoucherAction:this.addVoucherItemsToCart})
+		navigate("CheckoutVoucher",{valid_vouchers:this.state.valid_vouchers,cart:this.props.cart,addVoucherAction:this.addVoucherItemsToCart})
 	}
 
 	onCancelVoucher = (item) => {
 		let new_voucher_list = [...this.state.vouchers_to_use]
 		const search_voucher_index = new_voucher_list.findIndex(element => element.id == item.id)
-
 		
 		new_voucher_list.splice(search_voucher_index, 1)
 		this.setState({
@@ -335,7 +338,6 @@ export default class Checkout extends React.Component {
 				var v = vouchers_to_use[index]			
 				if (voucher_item.voucher_type == "SkipQueue" && v.voucher.voucher_type !== "SkipQueue"){
 					array.push(v)	
-					
 					continue
 				}
 				if (voucher_item.voucher_type !== "SkipQueue" && v.voucher.voucher_type == "SkipQueue"){
@@ -352,9 +354,7 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { shop, cart_total, promotion, promotion_ids } = this.state
-
-		const { currentMember } = this.props
+		const { shop,currentMember, cart_total, promotion, promotion_ids  } = this.props
 
 		let newPromo = [...promotion]
 		
@@ -371,12 +371,9 @@ export default class Checkout extends React.Component {
 
 					if (promo.trigger_price != null){
 						
-						console.log("trigger")
 						var trigger_price = parseFloat(promo.trigger_price)
 						var remaining = trigger_price - cart_total
 		
-						console.log("REmaining", remaining, "trigger", trigger_price)
-						console.log("Promo cart_text", promo.cart_text)
 						const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
 				
 						console.log("Search", search_cart_promo_index)
@@ -406,7 +403,6 @@ export default class Checkout extends React.Component {
 						} else if (promo.value_type != null && promo.value_type == "fixed") {
 							var discount_value = promo.value ? promo.value : 0
 							price = cart_total - discount_value
-							console.log("fixed")
 						}
 
 						if (search_cart_promo_index < 0) {
@@ -434,11 +430,9 @@ export default class Checkout extends React.Component {
 			}
 			
 		}
-		this.setState({
-			cart_total: final_cart_value
-		}, function () {
-			this.calculateVoucherDiscount(this.state.vouchers_to_use)
-		})
+		dispatch(createAction("orders/updateDiscountCartTotal")({
+			discount_cart_total: final_cart_value
+		}));	
 		
 	}
 
@@ -470,45 +464,30 @@ export default class Checkout extends React.Component {
 	}
 
 	removeItemFromCart(products,description) {
-		let newcart = [...this.state.cart]
+		let newcart = [...this.props.cart]
 		let product_ids = products.map(item => item.id)
 		for (item of newcart) {
 			if (product_ids.includes(item.id)) {
 				item.cannot_order = true
 			}
 		}
-		this.setState({ cart: newcart})
+		dispatch(createAction("orders/updateCart")({
+			cart: newcart
+		}));		
 	}
 
 	onRemoveItem(item) {
-		let new_cart = [...this.state.cart]
+		let new_cart = [...this.props.cart]
 		const search_product_index = new_cart.findIndex(element => element.id == item.id)
 
 		new_cart.splice(search_product_index, 1)
 		
-		this.setState({
+		dispatch(createAction("orders/updateCart")({
 			cart: new_cart
-		}, function(){
-			this.recalculate_total()
-			
-		})
+		}));	
 	}
 
-	recalculate_total() {
-		const { cart } = this.state
-		var total = 0
-		for (item of cart) {
-			if (item.clazz == "product") {
-				var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
-				total += calculated
-			}
-		}
-		this.setState({
-			cart_total: total
-		}, function(){
-			this.check_promotion_trigger()
-		})
-	}
+	
 	// removeItemFromCart(products,description) {
 
 	// 	console.log("remove", products)
@@ -741,7 +720,6 @@ export default class Checkout extends React.Component {
 
 		var product_checkout_height = payment_view_height
 		var content = 247 * alpha
-		var finalheight = product_checkout_height - content - BUTTONBOTTOMPADDING
 
 		if (isPaymentToggle) {
 			this.setState({ isPaymentToggle: false }, function(){
@@ -841,24 +819,13 @@ export default class Checkout extends React.Component {
 									}}>
 									<View
 										style={styles.walleticonView}>
-										<View
-											pointerEvents="box-none"
-											style={{
-												position: "absolute",
-												left: 0 * alpha,
-												right: 0 * alpha,
-												top: 0 * alpha,
-												bottom: 0 * alpha,
-												justifyContent: "center",
-											}}>
+										
 											<Image
 												source={require("./../../assets/images/wallet_center.png")}
 												style={this.state.selected_payment == "credits" ? styles.walletSelectImage : styles.walletImage}/>
-										</View>
-									</View>
-									
-							</View>
-							<View
+									</View>		
+								</View>
+								<View
 										style={{
 											flex: 1,
 										}}/>
@@ -879,15 +846,6 @@ export default class Checkout extends React.Component {
 										flex: 1,
 										alignSelf: "stretch",
 									}}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0 * alpha,
-											top: 0 * alpha,
-											bottom: 0 * alpha,
-											justifyContent: "center",
-										}}>
 										<View
 											style={styles.cardiconView}>
 											<View
@@ -913,7 +871,6 @@ export default class Checkout extends React.Component {
 										}}/>
 								<View
 									style={styles.menuRowLineView}/>
-							</View>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -950,8 +907,8 @@ export default class Checkout extends React.Component {
 								</View>
 							</View>
 							</TouchableOpacity>
-						</View>
-						
+													
+							</View>
 						
 					</View>
 				</View>
@@ -960,7 +917,7 @@ export default class Checkout extends React.Component {
 
 	renderVoucherSection(vouchers) {
 
-		const { cart_total } = this.state
+		const { cart_total } = this.props
 		const voucher_items = vouchers.map((item, key) => {
 
 			var discount_value = null
@@ -1198,8 +1155,8 @@ export default class Checkout extends React.Component {
 	}
 
 	renderPickupTimeScroll() {
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
-		let {currentMember, selectedShop} = this.props
+		let {vouchers_to_use,discount, minute_range, hour_range} = this.state
+		let {currentMember, selectedShop,cart_total_quantity,cart_total,cart} = this.props
 
 		return <Animated.View style={this.movePickAnimation.getLayout()}>
 				<View
@@ -1456,8 +1413,8 @@ export default class Checkout extends React.Component {
 	}
 
 	renderCheckoutReceipt(){
-		const { cart, promotion, vouchers_to_use, shop , cart_total, discount} = this.state
-		let {currentMember, selectedShop} = this.props
+		const { vouchers_to_use, shop , discount} = this.state
+		let {currentMember, selectedShop, cart, promotions, cart_total} = this.props
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0
@@ -1495,10 +1452,10 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.branchView}>
 										<Text
-											style={styles.shopBranchText}>{shop.name}</Text>
+											style={styles.shopBranchText}>{selectedShop.name}</Text>
 										<Text
 											numberOfLines={3}
-											style={styles.shopBranchAddressText}>{shop.address}</Text>
+											style={styles.shopBranchAddressText}>{selectedShop.address}</Text>
 									</View>
 									<View
 										style={{
@@ -1507,7 +1464,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.callView}>
 										<TouchableOpacity
-											onPress={() => this.onCallPressed(shop.phone_no)}
+											onPress={() => this.onCallPressed(selectedShop.phone_no)}
 											style={styles.callIconButton}>
 											<Image
 												source={require("./../../assets/images/group-3-23.png")}
@@ -1523,7 +1480,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.directionView}>
 										<TouchableOpacity
-											onPress={ () => this.onDirectionPressed(shop)}
+											onPress={ () => this.onDirectionPressed(selectedShop)}
 											style={styles.directionIconButton}>
 											<Image
 												source={require("./../../assets/images/group-3-17.png")}
@@ -1546,7 +1503,7 @@ export default class Checkout extends React.Component {
 									style={styles.sectionSeperatorView}/>
 							</View>
 							
-							{this.renderOrderItems(cart, promotion)}
+							{this.renderOrderItems(cart, promotions)}
 							<View style={styles.receiptSectionSeperator}>
 								<Image
 									source={require("./../../assets/images/curve_in_background.png")}
@@ -1604,8 +1561,8 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range,pick_up_time, selected_payment} = this.state
-		let {currentMember, selectedShop} = this.props
+		let {vouchers_to_use,discount, minute_range, hour_range,pick_up_time, selected_payment} = this.state
+		let {cart,cart_total,currentMember, selectedShop,cart_total_quantity} = this.props
 
 		console.log(`cart total ${cart_total} vs ${discount}`)
 		var final_price = cart_total - discount 
@@ -1613,7 +1570,6 @@ export default class Checkout extends React.Component {
 			final_price = 0
 		}
 		final_price = final_price.toFixed(2)
-		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
 		return <View
 			style={styles.checkoutViewPadding}>
