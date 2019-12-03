@@ -249,7 +249,9 @@ export default class Home extends React.Component {
 			this.check_promotion_trigger()
 		}
 		if (prevProps.toggle_update_count != this.props.toggle_update_count){
-			this.toogleCart(true,true)
+			setTimeout(function () {
+				this.toogleCart(true,true)
+			  }.bind(this), 50); 			
 		}
 	}
 
