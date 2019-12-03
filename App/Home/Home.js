@@ -596,11 +596,11 @@ export default class Home extends React.Component {
 		var headerHeight = 31 * alpha
 		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
 		var checkoutHeight = 51 * alpha
-		var content = headerHeight + height + checkoutHeight
+		var content =  height 
 		var finalheight = product_checkout_height - content
 		var height_cap = product_view_height * 0.4
 
-		
+		console.log("content", content)
 		if (finalheight < height_cap) {
 			finalheight = height_cap
 		}
