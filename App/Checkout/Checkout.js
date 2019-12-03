@@ -523,9 +523,9 @@ export default class Checkout extends React.Component {
 	// }
 
 	loadMakeOrder(){
-		const { dispatch, selectedShop } = this.props
+		const {cart, dispatch, selectedShop ,promotion_ids} = this.props
 		const { navigate } = this.props.navigation
-		const {cart,vouchers_to_use, selected_payment, promotion_ids, pick_up_status, pick_up_time} = this.state
+		const {vouchers_to_use, selected_payment, pick_up_status, pick_up_time} = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
@@ -608,8 +608,8 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const {cart_total, selected_payment, pick_up_status, discount} = this.state
-		const {currentMember,selectedShop} = this.props
+		const { selected_payment, pick_up_status, discount} = this.state
+		const {cart_total,currentMember,selectedShop} = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		var final_price = cart_total - discount 
 		if (final_price < 0){
