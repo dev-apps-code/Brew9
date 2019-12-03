@@ -249,7 +249,7 @@ export default class Home extends React.Component {
 			this.check_promotion_trigger()
 		}
 		if (prevProps.toggle_update_count != this.props.toggle_update_count){
-			this.toogleCart(true)
+			this.toogleCart(true,true)
 		}
 	}
 
@@ -604,7 +604,7 @@ export default class Home extends React.Component {
 		}
 	}
 
-	toogleCart = (isUpdate) => {
+	toogleCart = (isUpdate,toggleOn) => {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "View Cart"))
 		const { isCartToggle, product_view_height } = this.state
@@ -624,13 +624,14 @@ export default class Home extends React.Component {
 		}
 
 		if (isUpdate) {
-			if(!isCartToggle) {
+			if(toggleOn) {
+				this.setState({ isCartToggle: true })
 				Animated.spring(this.moveAnimation, {
 					toValue: {x: 0, y: cart.length == 0 ? windowHeight : finalheight},
 				}).start()
 			}
 		} else {
-			if (isCartToggle) {
+			if (!toggleOn) {
 				this.setState({ isCartToggle: false }, function(){
 					Animated.spring(this.moveAnimation, {
 						toValue: {x: 0, y: windowHeight},
@@ -740,7 +741,7 @@ export default class Home extends React.Component {
 
 	onCellPress = (item, index) => {
 		if (this.state.isCartToggle) {
-			this.toogleCart(false)
+			this.toogleCart(false,true)
 		}
 		this.setState({ modalVisible: true, selected_index: index })
 	}
@@ -1110,9 +1111,9 @@ export default class Home extends React.Component {
 	onClearPress = () => {
 
 		const {dispatch} = this.props
-		if (this.state.isCartToggle) {
-			this.toogleCart(false)
-		}
+		
+		this.toogleCart(false,false)
+		
 
 		dispatch(createAction("orders/resetCart")());
 		
@@ -1869,7 +1870,7 @@ export default class Home extends React.Component {
 							<View
 								style={styles.shopppingCartView}>
 								<TouchableOpacity
-									onPress={() => this.toogleCart(false)}
+									onPress={() => this.toogleCart(false,!this.state.isCartToggle)}
 									style={styles.shopppingCartButton}>
 									<View
 										style={styles.group5View}>

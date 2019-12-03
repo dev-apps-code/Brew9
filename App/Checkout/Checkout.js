@@ -296,9 +296,7 @@ export default class Checkout extends React.Component {
 		})
 	}
 
-	onAutoFillPressed = () => {
-
-	}
+	onAutoFillPressed = () => {}
 
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
@@ -310,7 +308,6 @@ export default class Checkout extends React.Component {
 	onCancelVoucher = (item) => {
 		let new_voucher_list = [...this.state.vouchers_to_use]
 		const search_voucher_index = new_voucher_list.findIndex(element => element.id == item.id)
-
 		
 		new_voucher_list.splice(search_voucher_index, 1)
 		this.setState({
@@ -334,7 +331,6 @@ export default class Checkout extends React.Component {
 				var v = vouchers_to_use[index]			
 				if (voucher_item.voucher_type == "SkipQueue" && v.voucher.voucher_type !== "SkipQueue"){
 					array.push(v)	
-					
 					continue
 				}
 				if (voucher_item.voucher_type !== "SkipQueue" && v.voucher.voucher_type == "SkipQueue"){
@@ -402,7 +398,6 @@ export default class Checkout extends React.Component {
 						} else if (promo.value_type != null && promo.value_type == "fixed") {
 							var discount_value = promo.value ? promo.value : 0
 							price = cart_total - discount_value
-							console.log("fixed")
 						}
 
 						if (search_cart_promo_index < 0) {
