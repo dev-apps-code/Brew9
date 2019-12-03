@@ -92,7 +92,7 @@ export default class Profile extends React.Component {
 		const {currentMember} = this.props
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {			
 			if (currentMember != null) {
-				this.loadProfile();
+				// this.loadProfile();
 			  }
 		}
 		this.setState({ appState: nextAppState });

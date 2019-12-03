@@ -81,11 +81,7 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      var unread = 0
-      if (payload != null) {
-        unread = payload.unread_notification
-      }
-      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "", unreadNotificationCount: unread}
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : ""}
     },
     markAllNotificationAsRead(state, { payload }) {
       
