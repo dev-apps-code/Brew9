@@ -95,6 +95,13 @@ export default class Checkout extends React.Component {
 		this.loadValidVouchers()	
 	}
 
+	componentDidUpdate(prevProps, prevState) {
+	
+		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count){
+			this.check_promotion_trigger()
+		}	
+	}
+
 	setTimePickerDefault() {
 
 		const { selectedShop } = this.props
@@ -347,9 +354,7 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { shop} = this.state
-
-		const { currentMember, cart_total, promotion, promotion_ids  } = this.props
+		const { shop,currentMember, cart_total, promotion, promotion_ids  } = this.props
 
 		let newPromo = [...promotion]
 		
@@ -425,11 +430,9 @@ export default class Checkout extends React.Component {
 			}
 			
 		}
-		this.setState({
-			cart_total: final_cart_value
-		}, function () {
-			this.calculateVoucherDiscount(this.state.vouchers_to_use)
-		})
+		dispatch(createAction("orders/updateDiscountCartTotal")({
+			discount_cart_total: final_cart_value
+		}));	
 		
 	}
 
@@ -484,24 +487,7 @@ export default class Checkout extends React.Component {
 		}));	
 	}
 
-	recalculate_total() {
-		const { cart } = this.props
-		var total = 0
-		for (item of cart) {
-			if (item.clazz == "product") {
-				var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
-				total += calculated
-			}
-		}
-		dispatch(createAction("orders/updatePromotions")({
-			promotions: newpromotion
-		}));
-		this.setState({
-			cart_total: total
-		}, function(){
-			this.check_promotion_trigger()
-		})
-	}
+	
 	// removeItemFromCart(products,description) {
 
 	// 	console.log("remove", products)

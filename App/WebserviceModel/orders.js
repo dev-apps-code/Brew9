@@ -50,16 +50,18 @@ import {
             var promotion_trigger_count = state.promotion_trigger_count + 1                        
           
 
-            var total= 0
+            var total= 0.0
             var quantity = 0
             for (item of cart) {
                 if (item.clazz == "product") {
                     var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
-                    total += calculated
+                    console.log(`quantity ${item.quantity} vs ${item.price} vs ${calculated}`)
+                    total = total +  parseFloat(calculated)
                     quantity = quantity + parseInt(item.quantity)
                 }
             }
 
+            console.log(`total ${total} vs ${quantity}`)
             return {
                 ...state,cart,toggle_update_count:state.toggle_update_count+1,cart_total_quantity:quantity,cart_total:total,promotion_trigger_count
             }

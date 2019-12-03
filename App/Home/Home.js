@@ -605,7 +605,7 @@ export default class Home extends React.Component {
 		}
 
 		if (isUpdate) {
-			if(toggleOn && !this.state.isCartToggle) {
+			if(toggleOn ) {
 				this.setState({ isCartToggle: true })
 				Animated.spring(this.moveAnimation, {
 					toValue: {x: 0, y: cart.length == 0 ? windowHeight : finalheight},
@@ -730,7 +730,7 @@ export default class Home extends React.Component {
 
 	onChangeQuantityPress = (item,index,operation,isCart) => {
 
-		const {cart_total,dispatch,cart_total_quantity } = this.props
+		const {cart_total,dispatch } = this.props
 
 		let cart = [...this.props.cart]
 
@@ -1010,12 +1010,11 @@ export default class Home extends React.Component {
 	onAddToCartPressed = (product) => {
 		
 		let cart = [...this.props.cart]
-		const {dispatch} = this.props
-		const {cart_total, cart_total_quantity} = this.props
+		const {dispatch} = this.props		
 		const clone_variants = _.cloneDeep(product.selected_variants)
 		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
 
-		var search_cart = this.props.cart[search_cart_index]
+		var search_cart = cart[search_cart_index]
 
 		let cartItem = {
 			clazz: product.clazz,
@@ -1030,14 +1029,15 @@ export default class Home extends React.Component {
 
 		product.total_quantity = parseInt(product.total_quantity) + parseInt(this.state.select_quantity)
 
-		let total_price = product.calculated_price * this.state.select_quantity
-
 		if (search_cart) {
 			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
 			this.setState({select_quantity: 1 })
+			dispatch(createAction("orders/updateCart")({
+				cart: cart,
+			}));
 		} else {
 			dispatch(createAction("orders/updateCart")({
-				cart: this.props.cart.concat(cartItem),
+				cart: cart.concat(cartItem),
 			}));	
 			this.setState({	
 				products: this.state.products,
