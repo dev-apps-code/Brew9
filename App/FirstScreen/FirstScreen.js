@@ -13,6 +13,10 @@ import {createAction, Storage} from "../Utils"
 import CurrentStatusRequestObject from "../Requests/current_status_request_object"
 import { AsyncStorage } from 'react-native'
 
+import Toast, {DURATION} from 'react-native-easy-toast'
+import {TOAST_DURATION} from "../Common/common_style";
+import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
+
 @connect(({ members }) => ({
     members: members.profile,
     isReady: members.isReady
@@ -35,6 +39,7 @@ export default class FirstScreen extends React.Component {
             loading: false,
             isSignedIn: false,
             appState: AppState.currentState,
+            checked: false
         }
     }
 
@@ -49,7 +54,15 @@ export default class FirstScreen extends React.Component {
     }
     
     componentDidUpdate() {
-        this.checkLoginStatus()
+        const { checked } = this.state
+        if (checked == false) {
+            this.setState({
+                checked: true
+            }, function(){
+                this.loadCurrentStatus()
+            })
+        }
+        // this.checkLoginStatus()
     }
 
     checkLoginStatus() {
@@ -85,9 +98,13 @@ export default class FirstScreen extends React.Component {
                     loading: false,
                 })
                 if (eventObject.result.force_upgrade) {
+                    console.log("Force")
 					Linking.openURL(eventObject.result.url)	
 				} else if (eventObject.result.maintenance) {
-
+                    console.log("Maintenance")
+                    this.refs.toast.show("App is currently under maintenance", TOAST_DURATION)
+                } else {
+                    this.checkLoginStatus()
                 }
             }
             AsyncStorage.getItem("notification_key", (err, result) => {
@@ -104,13 +121,15 @@ export default class FirstScreen extends React.Component {
                     })
                 )
               })
-            
+        } else {
+            this.checkLoginStatus()
         }
+        
     }
 
     render() {
       
-        return <View></View>
+        return <View><Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/></View>
     }
 }
 
