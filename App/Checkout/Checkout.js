@@ -84,6 +84,7 @@ export default class Checkout extends React.Component {
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
+		
 	}
 
 	componentDidMount() {
@@ -92,8 +93,10 @@ export default class Checkout extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 
+		const {dispatch} = this.props
 		this.setTimePickerDefault()
 		this.loadValidVouchers()	
+		dispatch(createAction("orders/noClearCart")());	
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -597,10 +600,10 @@ export default class Checkout extends React.Component {
 	}
 
 	clearCart = () => {
-		const {navigation } = this.props
+		const {navigation,dispatch } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
-		navigation.navigate({ routeName, key, params: { clearCart: true } })
+		navigation.navigate({ routeName, key})
 	}
 
 	onPayNowPressed = () => {
@@ -1561,7 +1564,6 @@ export default class Checkout extends React.Component {
 		let {vouchers_to_use,discount, minute_range, hour_range,pick_up_time, selected_payment} = this.state
 		let {cart,cart_total,currentMember, selectedShop,cart_total_quantity} = this.props
 
-		console.log(`cart total ${cart_total} vs ${discount}`)
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0

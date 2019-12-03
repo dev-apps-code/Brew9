@@ -73,7 +73,8 @@ import Moment from 'moment';
 	promotions: orders.promotions,
 	cart_total: orders.cart_total,
 	toggle_update_count:orders.toggle_update_count,
-	discount_cart_total:orders.discount_cart_total
+	discount_cart_total:orders.discount_cart_total,
+	clearCart:orders.clearCart
 }))
 
 export default class Home extends React.Component {
@@ -446,7 +447,7 @@ export default class Home extends React.Component {
 	onCheckoutPressed = () => {
 		const {  member_distance } = this.state
 		const { navigate } = this.props.navigation
-		const { navigation } = this.props
+		const { navigation,dispatch } = this.props
 		const {currentMember,shop, cart, promotions } = this.props
 
 		if (currentMember != undefined) {
@@ -456,24 +457,25 @@ export default class Home extends React.Component {
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
+				const { clearCart } = this.props
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { state } = payload
 					const { params } = state
-					const { clearCart } = params
 					
-					if (clearCart) {						
-						this.onClearPress()									
-						this.loadShops()
-						navigate("PickUp")
+					console.log(`clearcart ${clearCart}`)
+					if (clearCart== true) {						
+						// this.onClearPress()									
+						// this.loadShops()
+						// dispatch(createAction("orders/noClearCart")({}));
+						// navigate("PickUp")
 					} else {
 
 					}
 				})
 		
 				navigate("Checkout", {					
-					returnToRoute: navigation.state,
-					clearCart: false
+					returnToRoute: navigation.state
 				})
 			}
 		} else {
@@ -1000,7 +1002,7 @@ export default class Home extends React.Component {
 		}
 
 		if (check_has_product == false) {
-			this.onClearPress()
+			 this.onClearPress()
 		}
 
 		dispatch(createAction("orders/updateDiscountCartTotal")({
@@ -1058,7 +1060,6 @@ export default class Home extends React.Component {
 	}
 
 	onClearPress = () => {
-
 		const {dispatch} = this.props
 		
 		this.toogleCart(false,false)
