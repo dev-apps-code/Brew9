@@ -81,7 +81,11 @@ export default {
         }
      },
     loadCurrentUser(state, { payload }) {
-      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "", unreadNotificationCount: payload.unread_notification }
+      var unread = 0
+      if (payload != null) {
+        unread = payload.unread_notification
+      }
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "", unreadNotificationCount: unread}
     },
     markAllNotificationAsRead(state, { payload }) {
       
