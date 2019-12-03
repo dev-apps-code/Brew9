@@ -45,9 +45,11 @@ import {
             }
         },
         updateCart(state, { payload }) {
-
+            
             const {cart} = payload
-            var promotion_trigger_count = state.promotion_trigger_count + 1
+            var promotion_trigger_count = state.promotion_trigger_count + 1                        
+          
+
             var total= 0
             var quantity = 0
             for (item of cart) {

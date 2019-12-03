@@ -21,6 +21,7 @@ import Moment from 'moment';
 import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import openMap from "react-native-open-maps";
 
 @connect(({ members,shops ,orders}) => ({
 	currentMember: members.profile,
@@ -61,7 +62,6 @@ export default class Checkout extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			shop: this.props.navigation.getParam("shop", null),
 			delivery_options: 'pickup',
 			cart_total: this.props.navigation.getParam("cart_total", 0.00),
 			vouchers_to_use:[],
@@ -280,7 +280,7 @@ export default class Checkout extends React.Component {
 		const { navigate } = this.props.navigation
 
 		navigate("DirectionMap", {
-			shop: this.state.shop
+			shop: this.props.selectedShop
 		})
 	}
 
@@ -921,31 +921,7 @@ export default class Checkout extends React.Component {
 								</View>
 							</View>
 							</TouchableOpacity>
-						
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 18 * alpha,
-										marginLeft: 61 * alpha,
-										marginRight: 17 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={this.state.selected_payment == "credit_card" ? styles.creditCardSelectedText : styles.creditCardText}>Credit Card</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									{
-										this.state.selected_payment == "credit_card" ?
-										<View
-											style={styles.selectTwoView}/>
-										: <View
-										style={styles.selectView}/>
-									}
-									
-								</View>
+													
 							</View>
 						
 					</View>
@@ -1490,10 +1466,10 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.branchView}>
 										<Text
-											style={styles.shopBranchText}>{shop.name}</Text>
+											style={styles.shopBranchText}>{selectedShop.name}</Text>
 										<Text
 											numberOfLines={3}
-											style={styles.shopBranchAddressText}>{shop.address}</Text>
+											style={styles.shopBranchAddressText}>{selectedShop.address}</Text>
 									</View>
 									<View
 										style={{
@@ -1502,7 +1478,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.callView}>
 										<TouchableOpacity
-											onPress={() => this.onCallPressed(shop.phone_no)}
+											onPress={() => this.onCallPressed(selectedShop.phone_no)}
 											style={styles.callIconButton}>
 											<Image
 												source={require("./../../assets/images/group-3-23.png")}
@@ -1518,7 +1494,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.directionView}>
 										<TouchableOpacity
-											onPress={ () => this.onDirectionPressed(shop)}
+											onPress={ () => this.onDirectionPressed(selectedShop)}
 											style={styles.directionIconButton}>
 											<Image
 												source={require("./../../assets/images/group-3-17.png")}

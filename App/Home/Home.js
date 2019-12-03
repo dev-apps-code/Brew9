@@ -64,7 +64,7 @@ import Moment from 'moment';
 	currentMember: members.profile,
 	company_id: members.company_id,
 	location: members.location,
-	selectedShop: shops.selectedShop,
+	shop: shops.selectedShop,
 	isToggleShopLocation: config.isToggleShopLocation,
 	cart_total_quantity: orders.cart_total_quantity,
 	promotion_trigger_count: orders.promotion_trigger_count,
@@ -145,7 +145,6 @@ export default class Home extends React.Component {
 			modalVisible: false,
 			selected_index: null,
 			select_quantity: 1,
-			shop: null,
 			delivery:1,
 			modalGalleryVisible: true,
 			selected_promotion: "",
@@ -257,8 +256,8 @@ export default class Home extends React.Component {
 
 	computeDistance() {
 
-		const { shop } = this.state
-		const { location } = this.props
+
+		const { location,shop } = this.props
 
 		if (location != null && shop != null) {
 			const prevLatInRad = location.coords.latitude
@@ -348,8 +347,7 @@ export default class Home extends React.Component {
 			this.setState({ loading: false })
 			// console.log("Shop", eventObject.result)
 			if (eventObject.success) {			
-				this.setState({
-					shop: eventObject.result,
+				this.setState({					
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
 					this.check_promotion_trigger()
@@ -357,7 +355,7 @@ export default class Home extends React.Component {
 						this.loadStoreProducts()
 						this.getLocationAsync()
 						if (first_promo_popup == false) {
-							this.shouldShowFeatured(this.state.shop)
+							this.shouldShowFeatured(this.props.shop)
 						}
 					}					
 				})		
@@ -448,12 +446,12 @@ export default class Home extends React.Component {
 		const {  member_distance } = this.state
 		const { navigate } = this.props.navigation
 		const { navigation } = this.props
-		const {currentMember,selectedShop, cart, promotions } = this.props
+		const {currentMember,shop, cart, promotions } = this.props
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > selectedShop.max_order_distance_in_km){
+			if (member_distance > shop.max_order_distance_in_km){
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
@@ -468,12 +466,11 @@ export default class Home extends React.Component {
 						this.loadShops()
 						navigate("PickUp")
 					} else {
-						this.recalculate_total()
+
 					}
 				})
 		
-				navigate("Checkout", {
-					shop: this.state.shop,
+				navigate("Checkout", {					
 					returnToRoute: navigation.state,
 					clearCart: false
 				})
@@ -481,7 +478,6 @@ export default class Home extends React.Component {
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
-				
 				this.loadShops()
 			})
 			navigate("VerifyUser" , {
@@ -490,23 +486,6 @@ export default class Home extends React.Component {
 		}
 	}
 
-	recalculate_total() {
-		const { cart } = this.props
-		var total = 0
-		for (item of cart) {
-			if (item.clazz == "product") {
-				var calculated = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2)
-				total += calculated
-			}
-		}
-
-
-		this.setState({
-			cart_total: total
-		}, function(){
-			this.check_promotion_trigger()
-		})
-	}
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
@@ -626,7 +605,7 @@ export default class Home extends React.Component {
 		}
 
 		if (isUpdate) {
-			if(toggleOn) {
+			if(toggleOn && !this.state.isCartToggle) {
 				this.setState({ isCartToggle: true })
 				Animated.spring(this.moveAnimation, {
 					toValue: {x: 0, y: cart.length == 0 ? windowHeight : finalheight},
@@ -816,15 +795,13 @@ export default class Home extends React.Component {
 				if (cartItem.quantity === null) {
 					cart.splice(index, 1)
 				}
-
-				var calculated_total =  (parseFloat(cart_total) - parseFloat(cartItem.price)).toFixed(2)
-
+		
 				dispatch(createAction("orders/updateCart")({
 					cart
 				}));						
 
 			}
-			this.forceUpdate()
+
 			
 		} else {
 
@@ -893,9 +870,7 @@ export default class Home extends React.Component {
 
 	check_promotion_trigger = () => {
 		
-		const { shop } = this.state
-		
-		const { currentMember,dispatch,promotions ,cart_total} = this.props
+		const { currentMember,dispatch,promotions ,cart_total,shop} = this.props
 
 		let newcart = [...this.props.cart]
 		let newpromotion = [...promotions]
@@ -1128,7 +1103,7 @@ export default class Home extends React.Component {
 
 		const { currentMember } = this.props
 		if (item.image.url != undefined && item.image.url != "") {
-			// let should_show = this.shouldShowFeatured(this.state.shop)
+			// let should_show = this.shouldShowFeatured(this.props.shop)
 			// if (should_show == true) {
 				this.setState({
 					selected_promotion: item.image.url,
@@ -1414,8 +1389,8 @@ export default class Home extends React.Component {
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,delivery,distance, } = this.state
-		let {isToggleShopLocation,cart,promotions} = this.props
+		let {delivery,distance } = this.state
+		let {isToggleShopLocation,cart,promotions,shop} = this.props
 		let categoryBottomSpacer = undefined
 		// let should_show = this.shouldShowFeatured(shop)
 
