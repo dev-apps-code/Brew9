@@ -301,11 +301,15 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
+		const {currentMember} = this.props
 		Keyboard.dismiss()
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
 		this.loadShops(true)
+		if ( currentMember != null) {
+			this.loadCurrentStatus()
+		}
 		AppState.addEventListener('change', this._handleAppStateChange);			
 	}
 
@@ -321,6 +325,37 @@ export default class Home extends React.Component {
 		this.setState({ appState: nextAppState });
 	  };
 
+	  loadCurrentStatus(){
+       
+        console.log("load")
+        const { dispatch, currentMember } = this.props
+        if (currentMember != null){
+            console.log("Not")
+            this.setState({ loading: true })
+            const callback = eventObject => {
+                console.log("Event", eventObject)
+                this.setState({
+                    loading: false,
+                })
+            }
+            AsyncStorage.getItem("notification_key", (err, result) => {
+                var last_note = 0
+                if (result != null) {
+                  last_note = result
+                }
+                const obj = new CurrentStatusRequestObject(last_note)
+                obj.setUrlId(currentMember.id)
+                console.log("obj", obj)
+                dispatch(
+                    createAction('members/loadCurrentStatus')({
+                        object:obj,
+                        callback,
+                    })
+                )
+              })
+            
+        }
+    }
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => {}

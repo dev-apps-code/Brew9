@@ -77,13 +77,10 @@ export default class FirstScreen extends React.Component {
       
     loadCurrentStatus(){
        
-        console.log("load")
         const { dispatch, members } = this.props
         if (members != null){
-            console.log("Not")
             this.setState({ loading: true })
             const callback = eventObject => {
-                console.log("Event", eventObject)
                 this.setState({
                     loading: false,
                 })
@@ -95,7 +92,6 @@ export default class FirstScreen extends React.Component {
                 }
                 const obj = new CurrentStatusRequestObject(last_note)
                 obj.setUrlId(members.id)
-                console.log("obj", obj)
                 dispatch(
                     createAction('members/loadCurrentStatus')({
                         object:obj,
