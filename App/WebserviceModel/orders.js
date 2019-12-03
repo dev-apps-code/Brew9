@@ -27,29 +27,40 @@ import {
                 ...state,
             }
         },
-        reset_cart(state, { payload }) {
+        updatePromotions(state, { payload }) {
+
+            const {promotions} = payload
+            const promotion_ids = []
+            for (var index in promotions) {
+                const promotion = promotions[index]
+                promotion_ids.push(promotion.id)
+            }    
             return {
-                ...state,cart:[],promotion:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,
+                ...state,promotions,promotion_ids
             }
         },
-        update_cart(state, { payload }) {
+        resetCart(state, { payload }) {
+            return {
+                ...state,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,
+            }
+        },
+        updateCart(state, { payload }) {
 
             const {cart} = payload
             return {
                 ...state,cart,toggle_update_count:state.toggle_update_count+1
             }
         },
-        update_discount_cart_total(state, { payload }) {
+        updateDiscountCartTotal(state, { payload }) {
 
             const {discount_cart_total} = payload
             return {
-                ...state,cart,discount_cart_total
+                ...state,discount_cart_total
             }
         },
-        update_cart_value(state, { payload }) {
+        updateCartValue(state, { payload }) {
             const {cart_total_quantity,cart_total,discount_cart_total} = payload
-            var promotion_trigger_count = state.promotion_trigger_count
-            promotion_trigger_count = promotion_trigger_count + 1
+            var promotion_trigger_count = state.promotion_trigger_count + 1
             return {
                 ...state,cart_total_quantity,cart_total,discount_cart_total,promotion_trigger_count
             }

@@ -69,7 +69,7 @@ import Moment from 'moment';
 	cart_total_quantity: orders.cart_total_quantity,
 	promotion_trigger_count: orders.promotion_trigger_count,
 	cart: orders.cart,
-	promotion: orders.promotion,
+	promotions: orders.promotions,
 	cart_total: orders.cart_total,
 	toggle_update_count:orders.toggle_update_count,
 	discount_cart_total:orders.discount_cart_total
@@ -159,7 +159,7 @@ export default class Home extends React.Component {
 			location: null,
 			distance: "-",
 			member_distance: 1000,
-			first_promo_popup: false,					
+			first_promo_popup: false,		
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -446,7 +446,7 @@ export default class Home extends React.Component {
 		const {  member_distance } = this.state
 		const { navigate } = this.props.navigation
 		const { navigation } = this.props
-		const {currentMember,selectedShop, cart, promotion } = this.props
+		const {currentMember,selectedShop, cart, promotions } = this.props
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
@@ -461,25 +461,16 @@ export default class Home extends React.Component {
 					const { params } = state
 					const { clearCart } = params
 					
-					if (clearCart) {
-						
+					if (clearCart) {						
 						this.onClearPress()									
 						this.loadShops()
 						navigate("PickUp")
 					} else {
-						this.setState({
-							cart: params.cart,
-							promotion: params.promotion
-						}, function() {
-							this.recalculate_total()
-						})
+						this.recalculate_total()
 					}
 				})
 		
 				navigate("Checkout", {
-					cart: cart,
-					promotion: promotion,
-					promotion_ids: this.state.promotion_ids,
 					shop: this.state.shop,
 					returnToRoute: navigation.state,
 					clearCart: false
@@ -488,7 +479,6 @@ export default class Home extends React.Component {
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
-				const { state } = payload
 				
 				this.loadShops()
 			})
@@ -507,6 +497,8 @@ export default class Home extends React.Component {
 				total += calculated
 			}
 		}
+
+
 		this.setState({
 			cart_total: total
 		}, function(){
@@ -616,11 +608,11 @@ export default class Home extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "View Cart"))
 		const { isCartToggle, product_view_height } = this.state
-		const {cart} = this.props
+		const {cart,promotions} = this.props
 
 		var product_checkout_height = product_view_height
 		var headerHeight = 31 * alpha
-		var height = (cart.length * 71) * alpha + (this.state.promotion.length * 71) * alpha
+		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
 		var checkoutHeight = 51 * alpha
 		var content = headerHeight + height + checkoutHeight
 		var finalheight = product_checkout_height - content
@@ -792,17 +784,17 @@ export default class Home extends React.Component {
 
 				if (index >= 0) {
 					cart[index] = cartItem
-					dispatch(createAction("orders/update_cart")({
+					dispatch(createAction("orders/updateCart")({
 						cart
 					}));	
 				} else {
-					dispatch(createAction("orders/update_cart")({
+					dispatch(createAction("orders/updateCart")({
 						cart: this.props.cart.concat(cartItem)
 					}));		
 				}
 				var calculated_total = (parseFloat(cart_total) + parseFloat(cartItem.price)).toFixed(2)
 
-				dispatch(createAction("orders/update_cart_value")({
+				dispatch(createAction("orders/updateCartValue")({
 					cart_total_quantity: (parseInt(cart_total_quantity) + 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
@@ -831,11 +823,11 @@ export default class Home extends React.Component {
 
 				var calculated_total =  (parseFloat(cart_total) - parseFloat(cartItem.price)).toFixed(2)
 
-				dispatch(createAction("orders/update_cart")({
+				dispatch(createAction("orders/updateCart")({
 					cart
 				}));	
 
-				dispatch(createAction("orders/update_cart_value")({
+				dispatch(createAction("orders/updateCartValue")({
 					cart_total_quantity: (parseInt(cart_total_quantity) - 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
@@ -873,17 +865,17 @@ export default class Home extends React.Component {
 
 				if (cart_index >= 0) {
 					cart[cart_index] = cartItem
-					dispatch(createAction("orders/update_cart")({
+					dispatch(createAction("orders/updateCart")({
 						cart
 					}));	
 				} else {
-					dispatch(createAction("orders/update_cart")({
+					dispatch(createAction("orders/updateCart")({
 						cart: this.props.cart.concat(cartItem)
 					}));	
 				}
 				var calculated_total = (parseFloat(cart_total) + parseFloat(item.price)).toFixed(2)
 				
-				dispatch(createAction("orders/update_cart_value")({
+				dispatch(createAction("orders/updateCartValue")({
 					cart_total_quantity: (parseInt(cart_total_quantity) + 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
@@ -907,10 +899,10 @@ export default class Home extends React.Component {
 					cart.splice(cart_index, 1)
 				}
 				var calculated_total = (parseFloat(cart_total) - parseFloat(item.price)).toFixed(2)
-				dispatch(createAction("orders/update_cart")({
+				dispatch(createAction("orders/updateCart")({
 					cart
 				}));	
-				dispatch(createAction("orders/update_cart_value")({
+				dispatch(createAction("orders/updateCartValue")({
 					cart_total_quantity: (parseInt(cart_total_quantity) - 1),
 					cart_total: calculated_total,
 					discount_cart_total: calculated_total
@@ -919,17 +911,16 @@ export default class Home extends React.Component {
 
 			this.forceUpdate()
 		}
-
 	}
 
 	check_promotion_trigger = () => {
-
-		const { shop, cart_total } = this.state
-
-		const { currentMember,dispatch } = this.props
+		
+		const { shop } = this.state
+		
+		const { currentMember,dispatch,promotions ,cart_total} = this.props
 
 		let newcart = [...this.props.cart]
-		let newpromotion = [...this.props.promotion]
+		let newpromotion = [...promotions]
 
 		var promotions_item = []
 		var final_cart_value = cart_total
@@ -963,17 +954,13 @@ export default class Home extends React.Component {
 							}
 							promotions_item.push(cartItem)
 						
-							this.setState({
-								promotion: newpromotion.concat(promotions_item),
-								promotion_ids: promotion_ids
-							}, function(){
-								
-							})
+							dispatch(createAction("orders/updatePromotions")({
+								promotions: newpromotion.concat(promotions_item),
+							}));	
 									
 						}
 					} else if (newcart.length > 0) {
 
-						console.log("non trigger")
 						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
 						var price = 0
 		
@@ -1003,11 +990,10 @@ export default class Home extends React.Component {
 									price: price,
 								}
 								promotions_item.push(cartItem2)
-								this.setState({
-									promotion: newpromotion.concat(promotions_item),
-									promotion_ids: promotion_ids
-								}, function(){
-								})
+								dispatch(createAction("orders/updatePromotions")({
+									promotions: newpromotion.concat(promotions_item),
+								}));		
+
 							} else {
 								var item = newpromotion[search_cart_promo_index]
 								item.price = price								
@@ -1043,9 +1029,9 @@ export default class Home extends React.Component {
 						if (remaining > 0 && search_cart_promo_index >= 0){
 							newpromotion.splice(search_cart_promo_index, 1)
 							shop.all_promotions[index].has_triggered = false
-							this.setState({
-								promotion: newpromotion
-							})
+							dispatch(createAction("orders/updatePromotions")({
+								promotions: newpromotion
+							}));	
 						}
 					}
 				}
@@ -1063,7 +1049,7 @@ export default class Home extends React.Component {
 			this.onClearPress()
 		}
 
-		dispatch(createAction("orders/update_discount_cart_total")({
+		dispatch(createAction("orders/updateDiscountCartTotal")({
 			discount_cart_total: final_cart_value
 		}));	
 	}
@@ -1097,7 +1083,7 @@ export default class Home extends React.Component {
 			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
 			this.setState({select_quantity: 1 })
 		} else {
-			dispatch(createAction("orders/update_cart")({
+			dispatch(createAction("orders/updateCart")({
 				cart: this.props.cart.concat(cartItem),
 			}));	
 			this.setState({	
@@ -1109,7 +1095,7 @@ export default class Home extends React.Component {
 		this.setState({
 			modalVisible: false,
 		})
-		dispatch(createAction("orders/update_cart_value")({
+		dispatch(createAction("orders/updateCartValue")({
 			cart_total_quantity: (parseInt(cart_total_quantity) + parseInt(this.state.select_quantity)),
 			cart_total: calculated_total,
 			discount_cart_total: calculated_total
@@ -1128,7 +1114,7 @@ export default class Home extends React.Component {
 			this.toogleCart(false)
 		}
 
-		dispatch(createAction("orders/reset_cart")());
+		dispatch(createAction("orders/resetCart")());
 		
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
@@ -1448,20 +1434,18 @@ export default class Home extends React.Component {
 				}
 				
 			</View>
-
-
 		</View>
 	}
 
 	render() {
 
 		let selected_product = this.get_product(this.state.selected_index)
-		let {shop,delivery,distance, promotion} = this.state
-		let {isToggleShopLocation,cart} = this.props
+		let {shop,delivery,distance, } = this.state
+		let {isToggleShopLocation,cart,promotions} = this.props
 		let categoryBottomSpacer = undefined
 		// let should_show = this.shouldShowFeatured(shop)
 
-		let fullList = [...cart,...promotion]
+		let fullList = [...cart,...promotions]
 
 		if (shop !== null ){
 			if (shop.can_order == false){
@@ -1806,8 +1790,7 @@ export default class Home extends React.Component {
 
 	renderPromotionTopBar(shop, cart) {
 
-		const {cart_total} = this.state
-		const {currentMember} = this.props
+		const {currentMember,cart_total} = this.props
 
 		if (cart.length > 0) {
 			if (shop.all_promotions != null && shop.all_promotions.length > 0) {

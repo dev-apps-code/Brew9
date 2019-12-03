@@ -37,14 +37,12 @@ export default class FirstScreen extends React.Component {
         }
     }
 
-
     componentDidMount() {
         const { dispatch } = this.props
         dispatch(createAction('members/loadCurrentUserFromCache')({}))
     }
 
     componentDidUpdate() {
-        
         this.checkLoginStatus()
     }
 

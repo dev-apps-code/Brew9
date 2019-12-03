@@ -22,10 +22,15 @@ import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
-@connect(({ members,shops }) => ({
+@connect(({ members,shops ,orders}) => ({
 	currentMember: members.profile,
 	members: members,
-	selectedShop: shops.selectedShop
+	selectedShop: shops.selectedShop,
+	cart_total_quantity: orders.cart_total_quantity,
+	promotion_trigger_count: orders.promotion_trigger_count,
+	cart: orders.cart,
+	promotions: orders.promotions,
+	cart_total: orders.cart_total,
 }))
 export default class Checkout extends React.Component {
 
@@ -62,10 +67,6 @@ export default class Checkout extends React.Component {
 			vouchers_to_use:[],
 			valid_vouchers:[],
 			discount:0,
-			promotion: this.props.navigation.getParam("promotion", []),
-			promotion_ids: this.props.navigation.getParam("promotion_ids", []),
-			cart:this.props.navigation.getParam("cart", []),
-			cart_total_quantity:this.props.navigation.getParam("cart_total_quantity",0),
 			isPaymentToggle: false,
 			payment_view_height: 0 * alpha,
 			selected_payment: '',
@@ -205,8 +206,8 @@ export default class Checkout extends React.Component {
 
 
 	loadValidVouchers(){
-		const { dispatch,currentMember,selectedShop } = this.props
-		const {cart} = this.state
+		const { dispatch,currentMember,selectedShop,cart } = this.props
+
 		if (currentMember != null ){
 			const callback = eventObject => {
 
@@ -236,9 +237,7 @@ export default class Checkout extends React.Component {
 		
 		navigation.navigate({ routeName, key, 
 			params: { 
-				clearCart: false, 
-				cart: this.state.cart, 
-				promotion: this.state.promotion,
+				clearCart: false,
 			} 
 		})
 	}
@@ -352,9 +351,9 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { shop, cart_total, promotion, promotion_ids } = this.state
+		const { shop} = this.state
 
-		const { currentMember } = this.props
+		const { currentMember, cart_total, promotion, promotion_ids  } = this.props
 
 		let newPromo = [...promotion]
 		
@@ -371,12 +370,9 @@ export default class Checkout extends React.Component {
 
 					if (promo.trigger_price != null){
 						
-						console.log("trigger")
 						var trigger_price = parseFloat(promo.trigger_price)
 						var remaining = trigger_price - cart_total
 		
-						console.log("REmaining", remaining, "trigger", trigger_price)
-						console.log("Promo cart_text", promo.cart_text)
 						const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
 				
 						console.log("Search", search_cart_promo_index)
@@ -481,11 +477,14 @@ export default class Checkout extends React.Component {
 	}
 
 	onRemoveItem(item) {
-		let new_cart = [...this.state.cart]
+		let new_cart = [...this.props.cart]
 		const search_product_index = new_cart.findIndex(element => element.id == item.id)
 
 		new_cart.splice(search_product_index, 1)
 		
+		dispatch(createAction("orders/updatePromotions")({
+			cart: new_cart
+		}));
 		this.setState({
 			cart: new_cart
 		}, function(){
@@ -741,7 +740,6 @@ export default class Checkout extends React.Component {
 
 		var product_checkout_height = payment_view_height
 		var content = 247 * alpha
-		var finalheight = product_checkout_height - content - BUTTONBOTTOMPADDING
 
 		if (isPaymentToggle) {
 			this.setState({ isPaymentToggle: false }, function(){
@@ -963,7 +961,7 @@ export default class Checkout extends React.Component {
 
 	renderVoucherSection(vouchers) {
 
-		const { cart_total } = this.state
+		const { cart_total } = this.props
 		const voucher_items = vouchers.map((item, key) => {
 
 			var discount_value = null
@@ -1201,8 +1199,8 @@ export default class Checkout extends React.Component {
 	}
 
 	renderPickupTimeScroll() {
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range} = this.state
-		let {currentMember, selectedShop} = this.props
+		let {vouchers_to_use,discount, minute_range, hour_range} = this.state
+		let {currentMember, selectedShop,cart_total_quantity,cart_total,cart} = this.props
 
 		return <Animated.View style={this.movePickAnimation.getLayout()}>
 				<View
@@ -1607,8 +1605,8 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let {cart,cart_total,vouchers_to_use,discount,cart_total_quantity, minute_range, hour_range,pick_up_time, selected_payment} = this.state
-		let {currentMember, selectedShop} = this.props
+		let {vouchers_to_use,discount, minute_range, hour_range,pick_up_time, selected_payment} = this.state
+		let {cart,cart_total,currentMember, selectedShop,cart_total_quantity} = this.props
 
 		console.log(`cart total ${cart_total} vs ${discount}`)
 		var final_price = cart_total - discount 
@@ -1616,7 +1614,6 @@ export default class Checkout extends React.Component {
 			final_price = 0
 		}
 		final_price = final_price.toFixed(2)
-		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
 
 		return <View
 			style={styles.checkoutViewPadding}>
