@@ -786,7 +786,7 @@ export default class Checkout extends React.Component {
 									<View
 										style={styles.walletView}>
 										<Text
-											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Balance</Text>
+											style={this.state.selected_payment == "credits" ? styles.brew9WalletSelectedText : styles.brew9WalletText}>Wallet</Text>
 										<View
 											style={{
 												flex: 1,

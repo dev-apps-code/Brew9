@@ -649,7 +649,7 @@ export default class Profile extends React.Component {
 												<View style={{
 													flexDirection: "row", 
 													marginTop: 5 * alpha}}>
-													<Text style={styles.walletText}>Balance</Text>
+													<Text style={styles.walletText}>Wallet</Text>
 													<Image
 														source={require("./../../assets/images/next.png")}
 														style={styles.infoArrow}/>
