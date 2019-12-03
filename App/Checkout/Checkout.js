@@ -31,6 +31,7 @@ import openMap from "react-native-open-maps";
 	promotion_trigger_count: orders.promotion_trigger_count,
 	cart: orders.cart,
 	promotions: orders.promotions,
+	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
 }))
 export default class Checkout extends React.Component {
@@ -83,6 +84,7 @@ export default class Checkout extends React.Component {
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
+		
 	}
 
 	componentDidMount() {
@@ -91,8 +93,10 @@ export default class Checkout extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 
+		const {dispatch} = this.props
 		this.setTimePickerDefault()
 		this.loadValidVouchers()	
+		dispatch(createAction("orders/noClearCart")());	
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -242,11 +246,7 @@ export default class Checkout extends React.Component {
 		const {navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
-		navigation.navigate({ routeName, key, 
-			params: { 
-				clearCart: false,
-			} 
-		})
+		navigation.navigate({ routeName, key})
 	}
 	
 	
@@ -600,10 +600,10 @@ export default class Checkout extends React.Component {
 	}
 
 	clearCart = () => {
-		const {navigation } = this.props
+		const {navigation,dispatch } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
-		navigation.navigate({ routeName, key, params: { clearCart: true } })
+		navigation.navigate({ routeName, key})
 	}
 
 	onPayNowPressed = () => {
@@ -1564,7 +1564,6 @@ export default class Checkout extends React.Component {
 		let {vouchers_to_use,discount, minute_range, hour_range,pick_up_time, selected_payment} = this.state
 		let {cart,cart_total,currentMember, selectedShop,cart_total_quantity} = this.props
 
-		console.log(`cart total ${cart_total} vs ${discount}`)
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0

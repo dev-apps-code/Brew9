@@ -19,6 +19,7 @@ import {
         toggle_update_count:0,
         promotions:[],
         promotion_ids:[],
+        clearCart:false
     },
 
     reducers: {
@@ -39,9 +40,14 @@ import {
                 ...state,promotions,promotion_ids
             }
         },
-        resetCart(state, { payload }) {
+        resetCart(state, { payload }) {            
             return {
-                ...state,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,
+                ...state,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,clearCart:true
+            }
+        },
+        noClearCart(state, { payload }) {            
+            return {
+                ...state,clearCart:false
             }
         },
         updateCart(state, { payload }) {
