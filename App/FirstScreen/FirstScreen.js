@@ -84,6 +84,11 @@ export default class FirstScreen extends React.Component {
                 this.setState({
                     loading: false,
                 })
+                if (eventObject.result.force_upgrade) {
+					Linking.openURL(eventObject.result.url)	
+				} else if (eventObject.result.maintenance) {
+
+                }
             }
             AsyncStorage.getItem("notification_key", (err, result) => {
                 var last_note = 0
