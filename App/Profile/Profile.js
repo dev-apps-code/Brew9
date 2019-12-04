@@ -201,8 +201,15 @@ export default class Profile extends React.Component {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
 				const { state } = payload
+				const { params } = state
+				const { updated } = params
 
-				this.loadProfile()
+				console.log("Status", updated)
+				if (updated) {
+					console.log("update")
+					this.loadProfile()
+				}
+				
 				// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 			})
 			navigate("MissionCenter", {					

@@ -407,12 +407,12 @@ export default class PickUp extends React.Component {
 							</View>
 							</View>
 							<View style={styles.receiptSectionSeperator}>
-							<Image
-								source={require("./../../assets/images/curve_in_background.png")}
-								style={styles.curve_in}/>
-							<View
-								style={styles.sectionSeperatorView}/>
-						</View>
+								<Image
+									source={require("./../../assets/images/curve_in_background.png")}
+									style={styles.curve_in}/>
+								<View
+									style={styles.sectionSeperatorView}/>
+							</View>
 						<View
 							style={styles.drinksViewWrapper}>
 							{order_items}
@@ -425,49 +425,70 @@ export default class PickUp extends React.Component {
 							<View
 								style={styles.sectionSeperatorView}/>
 						</View>
-						<View style={styles.remarkViewWrapper}>
-					<View
-						style={styles.remarkView}>
-						 
 						<View
-							pointerEvents="box-none"
-							style={{
-								left: 22 * alpha,
-								right: 21 * alpha,
-								top: 11 * alpha,
-								bottom: 11 * alpha,
-								alignItems: "flex-start",
-							}}>
-							
-							{/* <Text
-								style={styles.pleaseCallBranchFText}>Please call branch for refund</Text> */}
+							style={styles.totalViewWrapper}>
 							<View
-								pointerEvents="box-none"
-								style={{
-									alignSelf: "stretch", 
-									height: 19 * alpha,
-									marginLeft: 3 * alpha,
-									marginRight: 4 * alpha,
-									flexDirection: "row",
-									alignItems: "flex-start",
-								}}>
+								style={styles.orderTotalView}>
 								<Text
-									style={styles.orderTime100717Text}>Order time: {item.payment_time}</Text>
+									style={styles.totallabelText}>TOTAL</Text>
 								<View
 									style={{
 										flex: 1,
 									}}/>
-								{/* <TouchableOpacity
-									onPress={this.onCopyPressed}
-									style={styles.copyButton}>
-									<Text
-										style={styles.copyButtonText}>Copy</Text>
-								</TouchableOpacity> */}
+								<Text
+									style={styles.orderTotalText}>${parseFloat(item.total).toFixed(2)}</Text>
 							</View>
-							<Text
-								style={styles.orderNo020028201Text}>Receipt no.: {item.receipt_no}</Text>
 						</View>
-					</View>
+						<View style={styles.receiptSectionSeperator}>
+							<Image
+								source={require("./../../assets/images/curve_in_background.png")}
+								style={styles.curve_in}/>
+							<View
+								style={styles.sectionSeperatorView}/>
+						</View>
+						<View style={styles.remarkViewWrapper}>
+						<View
+							style={styles.remarkView}>
+							
+							<View
+								pointerEvents="box-none"
+								style={{
+									left: 22 * alpha,
+									right: 21 * alpha,
+									top: 11 * alpha,
+									bottom: 11 * alpha,
+									alignItems: "flex-start",
+								}}>
+								
+								{/* <Text
+									style={styles.pleaseCallBranchFText}>Please call branch for refund</Text> */}
+								<View
+									pointerEvents="box-none"
+									style={{
+										alignSelf: "stretch", 
+										height: 19 * alpha,
+										marginLeft: 3 * alpha,
+										marginRight: 4 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
+									}}>
+									<Text
+										style={styles.orderTime100717Text}>Order time: {item.payment_time}</Text>
+									<View
+										style={{
+											flex: 1,
+										}}/>
+									{/* <TouchableOpacity
+										onPress={this.onCopyPressed}
+										style={styles.copyButton}>
+										<Text
+											style={styles.copyButtonText}>Copy</Text>
+									</TouchableOpacity> */}
+								</View>
+								<Text
+									style={styles.orderNo020028201Text}>Receipt no.: {item.receipt_no}</Text>
+							</View>
+						</View>
 					</View>
 				</View>
 			</View>
@@ -1131,6 +1152,36 @@ const styles = StyleSheet.create({
 		width: windowWidth - 80 *alpha,
 		height: 2* alpha,
 		alignSelf: "center",
+	},
+	totalViewWrapper: {
+		backgroundColor: "rgb(245,245,245)",
+		flex: 1,
+	},
+	orderTotalView: {
+		backgroundColor: "transparent",
+		height: 21 * alpha,
+		marginLeft: 25 * alpha,
+		marginRight: 25 * alpha,
+		marginTop: 10 * alpha,
+		marginBottom: 10 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	totallabelText: {
+		backgroundColor: "transparent",
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+	},
+	orderTotalText: {
+		color: "rgb(54, 54, 54)",
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
 	},
 	drinksViewWrapper: {
 		backgroundColor: "rgb(245,245,245)",

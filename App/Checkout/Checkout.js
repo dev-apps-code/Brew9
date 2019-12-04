@@ -353,18 +353,18 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { shop,currentMember, promotions, promotion_ids  } = this.props
+		const { selectedShop,currentMember, promotions, promotion_ids  } = this.props
 		const {cart_total} = this.props
 		let newPromo = [...promotions]
 		
 		var promotions_item = []
 		var final_cart_value = cart_total
 
-		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
+		if (selectedShop.all_promotions != null && selectedShop.all_promotions.length > 0) {
 			
-			for (var index in shop.all_promotions) {
+			for (var index in selectedShop.all_promotions) {
 
-				var promo = shop.all_promotions[index]
+				var promo = selectedShop.all_promotions[index]
 
 				if (currentMember != null) {
 
