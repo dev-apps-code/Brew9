@@ -921,7 +921,6 @@ export default class Checkout extends React.Component {
 				} else if (item.voucher.discount_type == "percent") {
 					discount_value = cart_total * item.voucher.discount_price/100.0	
 				}
-
 			} 
 			
 			return <View
