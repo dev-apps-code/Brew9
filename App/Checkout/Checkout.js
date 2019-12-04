@@ -64,7 +64,6 @@ export default class Checkout extends React.Component {
 		super(props)
 		this.state = {
 			delivery_options: 'pickup',
-			cart_total: this.props.navigation.getParam("cart_total", 0.00),
 			vouchers_to_use:[],
 			valid_vouchers:[],
 			discount:0,
@@ -354,8 +353,8 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { shop,currentMember, cart_total, promotion, promotion_ids  } = this.props
-
+		const { shop,currentMember, promotions, promotion_ids  } = this.props
+		const {cart_total} = this.props
 		let newPromo = [...promotion]
 		
 		var promotions_item = []
@@ -378,19 +377,16 @@ export default class Checkout extends React.Component {
 				
 						console.log("Search", search_cart_promo_index)
 						if (remaining > 0 && search_cart_promo_index >= 0){
-							promotion.splice(search_cart_promo_index, 1)
-							this.setState({
-								promotion: newPromo
-							})
+							promotions.splice(search_cart_promo_index, 1)
+							dispatch(createAction("orders/updatePromotions")({
+								promotions:newPromo
+							}))							
 						}
 					}
 					const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
 					var price = 0
 					if (promo.reward_type != null && promo.reward_type == "Discount") {
-							console.log("discount")
-						if (!promotion_ids.includes(promo.id)) {
-							promotion_ids.push(promo.id)
-						}
+							console.log("discount")						
 						if (promo.value_type != null && promo.value_type == "percent") {
 							var discount_value = promo.value ? promo.value : 0
 							price = cart_total * discount_value / 100
@@ -415,29 +411,26 @@ export default class Checkout extends React.Component {
 								price: price,
 							}
 							promotions_item.push(cartItem2)
-							this.setState({
-								promotion: newPromo.concat(promotions_item),
-								promotion_ids: promotion_ids,
-								cart_total: final_cart_value,
-							}, function(){
-							})
+
+							dispatch(createAction("orders/updatePromotions")({
+								promotions: newPromo.concat(promotions_item)
+							}));							
 						} else {
 							var item = newPromo[search_cart_promo_index]
 							item.price = price
 						}
 					}
 				}
-			}
-			
+			}			
 		}
-		dispatch(createAction("orders/updateDiscountCartTotal")({
-			discount_cart_total: final_cart_value
-		}));	
+		// dispatch(createAction("orders/updateDiscountCartTotal")({
+		// 	discount_cart_total: final_cart_value
+		// }));	
 		
 	}
 
 	calculateVoucherDiscount(vouchers_to_use){
-		const {cart_total} = this.state
+		const {cart_total} = this.props
 		var discount = 0
 		for (var index in vouchers_to_use){
 			var item = vouchers_to_use[index]
@@ -930,7 +923,6 @@ export default class Checkout extends React.Component {
 				} else if (item.voucher.discount_type == "percent") {
 					discount_value = cart_total * item.voucher.discount_price/100.0	
 				}
-
 			} 
 			
 			return <View
@@ -1421,8 +1413,7 @@ export default class Checkout extends React.Component {
 		if (final_price < 0){
 			final_price = 0
 		}
-		final_price = final_price.toFixed(2)
-		let credits = (currentMember != undefined && currentMember.credits != undefined) ? parseFloat(currentMember.credits).toFixed(2) : 0
+		final_price = final_price.toFixed(2)	
 
 		return <View
 				style={styles.orderReceiptView}>
