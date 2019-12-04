@@ -355,7 +355,7 @@ export default class Checkout extends React.Component {
 
 		const { shop,currentMember, promotions, promotion_ids  } = this.props
 		const {cart_total} = this.props
-		let newPromo = [...promotion]
+		let newPromo = [...promotions]
 		
 		var promotions_item = []
 		var final_cart_value = cart_total
