@@ -464,6 +464,7 @@ export default class Checkout extends React.Component {
 	}
 
 	removeItemFromCart(products,description) {
+		const {dispatch} = this.props
 		let newcart = [...this.props.cart]
 		let product_ids = products.map(item => item.id)
 		for (item of newcart) {
@@ -477,6 +478,7 @@ export default class Checkout extends React.Component {
 	}
 
 	onRemoveItem(item) {
+		const {dispatch} = this.props
 		let new_cart = [...this.props.cart]
 		const search_product_index = new_cart.findIndex(element => element.id == item.id)
 

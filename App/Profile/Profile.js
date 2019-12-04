@@ -195,15 +195,32 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
+		const { navigation,dispatch } = this.props
 	  	analytics.event(new Event('Profile', 'Click', "Mission Center"))
 		if (currentMember !== null) {
-			navigate("MissionCenter")
+			this.navigationListener = navigation.addListener('willFocus', payload => {
+				this.removeNavigationListener()
+				const { state } = payload
+
+				this.loadProfile()
+				// dispatch(createAction('members/loadCurrentUserFromCache')({}))
+			})
+			navigate("MissionCenter", {					
+				returnToRoute: navigation.state
+			})
 		} else {
 			navigate("VerifyUser" , {
 				returnToRoute: this.props.navigation.state
 			})
 		}
 
+	}
+
+	removeNavigationListener() {
+		if (this.navigationListener) {
+		  this.navigationListener.remove()
+		  this.navigationListener = null
+		}
 	}
 
 	onVIPPressed = () => {

@@ -133,9 +133,10 @@ export default class MissionCenter extends React.Component {
 
     missionLogin = () => {
         const { dispatch, currentMember } = this.props
-        
+        console.log("Login mission")
         this.setState({ loading: true })
         const callback = eventObject => {
+            console.log("Login", eventObject)
             this.refs.toast.show(eventObject.message, TOAST_DURATION)
             this.setState({
                 loading: false,
@@ -156,12 +157,14 @@ export default class MissionCenter extends React.Component {
 
     missionRewardClaim = (statement_id) => {
         const analytics = new Analytics(ANALYTICS_ID)
+        console.log("Log mission")
 	  	analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
         if (statement_id != undefined) {
             const { dispatch } = this.props
         
             this.setState({ loading: true })
             const callback = eventObject => {
+                console.log("mission", eventObject)
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
                     loading: false ,

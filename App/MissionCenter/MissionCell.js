@@ -43,7 +43,7 @@ export default class MissionCell extends React.Component {
 		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
 			status_string = "Check In"
 		} else {
-			console.log(`this.props.status ${this.props.status}`)
+			// console.log(`this.props.status ${this.props.status}`)
 			status_string = this.props.status
 		}
 		
