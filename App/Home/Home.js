@@ -497,13 +497,14 @@ export default class Home extends React.Component {
 					this.removeNavigationListener()
 					const { state } = payload
 					const { params } = state
-					
+					const { clearCart } = params
+
 					console.log(`clearcart ${clearCart}`)
-					if (clearCart== true) {						
-						// this.onClearPress()									
-						// this.loadShops()
-						// dispatch(createAction("orders/noClearCart")({}));
-						// navigate("PickUp")
+					if (params != undefined && params.clearCart == true) {
+										
+						this.loadShops()
+						dispatch(createAction("orders/resetCart")({}));
+						navigate("PickUp")
 					} else {
 
 					}
@@ -615,7 +616,7 @@ export default class Home extends React.Component {
 
 		const {isToggleShopLocation, dispatch} = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "More"))
+		analytics.event(new Event('Home', 'Click', "Location"))
 		if (isToggleShopLocation) {
 			dispatch(createAction("config/setToggleShopLocation")(false))
 		} else {
@@ -1531,7 +1532,7 @@ export default class Home extends React.Component {
 								onPress={this.onMorePressed}
 								style={styles.moreButton}>
 								<Text
-									style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "More"}</Text>
+									style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "Location"}</Text>
 							</TouchableOpacity>
 							{ isToggleShopLocation ? 
 								<Image
@@ -1622,11 +1623,11 @@ export default class Home extends React.Component {
 							style={styles.shopImage}/>
 						{/* ) } */}
 						<Text
-							style={styles.branchHeaderAddress}>Address:</Text>
+							style={styles.branchHeaderAddress}>Address </Text>
 						<Text
 							style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
 						<Text
-							style={styles.branchHeaderContact}>Contact:</Text>
+							style={styles.branchHeaderContact}>Contact </Text>
 						<Text
 							style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
 						<View
@@ -1634,7 +1635,7 @@ export default class Home extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={styles.businessHeaderHourText}>Business Hour:</Text>
+							style={styles.businessHeaderHourText}>Business Hour</Text>
 							<Text
 							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
 					</View>
@@ -1847,7 +1848,7 @@ export default class Home extends React.Component {
 								position: "absolute",
 								left: 28 * alpha,
 								right: 13 * alpha,
-								top: 7 * alpha,
+								top: 12 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
@@ -2078,7 +2079,7 @@ const styles = StyleSheet.create({
 	},
 	moreView: {
 		backgroundColor: "transparent",
-		width: 40 * alpha,
+		width: 65 * alpha,
 		height: 12 * alpha,
 		marginTop: 1 * alpha,
 		flexDirection: "row",
@@ -2214,7 +2215,7 @@ const styles = StyleSheet.create({
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * alpha,
+		fontSize: 14 * alpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		marginLeft: 10 * alpha,
@@ -2228,7 +2229,7 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		textAlign: "left",
@@ -2891,7 +2892,7 @@ const styles = StyleSheet.create({
 	alertViewText:{
 		color: "white",
 		fontFamily:  TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		paddingTop: 7 * alpha,

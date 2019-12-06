@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginRight: 23 * alpha,
+		marginRight: 14 * alpha,
 	},
 	arrowImage: {
 		backgroundColor: "transparent",
