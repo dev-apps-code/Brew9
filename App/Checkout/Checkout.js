@@ -603,8 +603,12 @@ export default class Checkout extends React.Component {
 	clearCart = () => {
 		const { navigation, dispatch } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
-
-		navigation.navigate({ routeName, key })
+		
+		navigation.navigate({ routeName, key, 
+			params: { 
+				clearCart: true, 
+			} 
+		})
 	}
 
 	onPayNowPressed = () => {
@@ -623,9 +627,9 @@ export default class Checkout extends React.Component {
 				return
 			}
 
-			if (selected_payment == "credits") {
-				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					this.refs.toast.show("Oops, insufficient credit. Please top up at our counter.", TOAST_DURATION, () => {
+			if ( selected_payment == "credits") {
+				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)){
+					this.refs.toast.show("Oops, insufficient credit. Please top up to purchase.", TOAST_DURATION, () => {
 						navigate("MemberWallet")
 					})
 					return
@@ -709,7 +713,7 @@ export default class Checkout extends React.Component {
 		} else {
 			this.setState({ isPickupToogle: true }, function () {
 				Animated.spring(this.movePickAnimation, {
-					toValue: { x: 0, y: 47 * alpha },
+					toValue: {x: 0, y:  52 * alpha},
 				}).start()
 			})
 		}
@@ -731,7 +735,7 @@ export default class Checkout extends React.Component {
 		} else {
 			this.setState({ isPaymentToggle: true }, function () {
 				Animated.spring(this.moveAnimation, {
-					toValue: { x: 0, y: 47 * alpha },
+					toValue: {x: 0, y: 52 * alpha},
 				}).start()
 			})
 		}
@@ -1654,8 +1658,8 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let { vouchers_to_use, discount, minute_range, hour_range, pick_up_time, selected_payment } = this.state
-		let { cart, cart_total, currentMember, selectedShop, cart_total_quantity } = this.props
+		let {isPaymentToggle,discount, isPickupToogle} = this.state
+		let {cart_total} = this.props
 
 		var final_price = cart_total - discount
 		if (final_price < 0) {
@@ -1665,6 +1669,7 @@ export default class Checkout extends React.Component {
 
 		return <View
 			style={styles.checkoutViewPadding}>
+			
 			<ScrollView
 				style={styles.scrollviewScrollView}
 				onLayout={(event) => this.measureView(event)}>
@@ -1675,7 +1680,10 @@ export default class Checkout extends React.Component {
 				</View>
 
 			</ScrollView>
-
+			
+			{(isPaymentToggle == true || isPickupToogle == true) && (
+				<View style={styles.checkoutViewOverlay}/>)}
+			
 			{this.renderPayNow(final_price)}
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
@@ -1722,6 +1730,15 @@ const styles = StyleSheet.create({
 		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		// paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
 		flex: 1,
+	},
+	checkoutViewOverlay: {
+		backgroundColor: "rgba(0, 0, 0, 0.5)",
+		flex: 1,
+		position: "absolute",
+		top: 0, 
+		right: 0, 
+		left: 0, 
+		bottom: 0
 	},
 	checkoutViewPadding: {
 		backgroundColor: DEFAULT_GREY_BACKGROUND,
@@ -2234,7 +2251,7 @@ const styles = StyleSheet.create({
 	},
 	paymentButtonText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2467,7 +2484,7 @@ const styles = StyleSheet.create({
 	brew9WalletSelectedText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2592,7 +2609,7 @@ const styles = StyleSheet.create({
 	},
 	creditCardSelectedText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3287,7 +3304,7 @@ const styles = StyleSheet.create({
 	pickupNowSelectedText: {
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",

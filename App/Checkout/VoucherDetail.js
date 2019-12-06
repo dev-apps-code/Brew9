@@ -641,7 +641,7 @@ const styles = StyleSheet.create({
 	useButtonText: {
 		color: "white",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

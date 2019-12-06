@@ -202,10 +202,8 @@ export default class Profile extends React.Component {
 				this.removeNavigationListener()
 				const { state } = payload
 				const { params } = state
-				const { updated } = params
 
-				console.log("Status", updated)
-				if (updated) {
+				if (params != undefined && params.updated == true) {
 					console.log("update")
 					this.loadProfile()
 				}
@@ -552,7 +550,7 @@ export default class Profile extends React.Component {
 														left: 0,
 														right: 0,
 														top: 0,
-														height: 22 * alpha,
+														height: 24 * alpha,
 													}}>
 													<View
 														pointerEvents="box-none"
@@ -1169,15 +1167,15 @@ const styles = StyleSheet.create({
 	},
 	levelexpText: {
 		color: PRIMARY_COLOR,
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		alignSelf: "center",
-		top: 1 * alpha,
+		top: 0 * alpha,
 	},
 	profileImage: {
 		resizeMode: "contain",

@@ -196,7 +196,7 @@ export default class PointShop extends React.Component {
 							onPress={this.onTransactionHistoryPressed}
 							style={styles.transactionHistoryButton}>
 							<Text
-								style={styles.transactionHistoryButtonText}>Purchase History</Text>
+								style={styles.transactionHistoryButtonText}>Redemption History</Text>
 						</TouchableOpacity>
 				</View> 
 				{this.state.loading ?
@@ -322,8 +322,7 @@ const styles = StyleSheet.create({
 	headerView: {
 		backgroundColor: "transparent",
 		height: 47 * alpha,
-		marginTop: 1 * alpha,
-		marginBottom: 1 * alpha,
+		marginBottom: 10 * alpha,
 		justifyContent: "center",
 		flexDirection: "row"
 	},
@@ -364,9 +363,9 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	pointproductlistFlatList: {
-		backgroundColor: "white",
+		backgroundColor: DEFAULT_GREY_BACKGROUND,
 		width: "100%",
-		height: "100%",
+		height: "100%"
 	},
 	pointproductlistFlatListViewWrapper: {
 		flex: 1,

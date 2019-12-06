@@ -341,8 +341,7 @@ const styles = StyleSheet.create({
 	},
 	headerView: {
 		backgroundColor: "white",
-		height: 47 * alpha,
-		marginRight: 1 * alpha,
+		height: 40 * alpha,
 		marginTop: 10 * alpha,
 		justifyContent: "center",
 		alignItems: "flex-start",
@@ -354,7 +353,7 @@ const styles = StyleSheet.create({
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",		
 		textAlign: "left",
-		marginLeft: 26 * alpha,
+		marginLeft: 10 * alpha,
 	},
 	topuplistFlatListViewWrapper: {
 		flex: 1,

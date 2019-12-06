@@ -124,7 +124,7 @@ export default class PointProductCell extends React.Component {
 
 const styles = StyleSheet.create({
   pointproductcell: {
-    backgroundColor: "transparent",
+    backgroundColor: "white",
     width: "100%"
   },
   headerView: {
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     textAlign: "center",
     backgroundColor: "transparent",
-    marginLeft: 13 * alpha
+    marginLeft: 10 * alpha
   },
   viewmoreButtonText: {
     color: "rgb(164, 164, 164)",

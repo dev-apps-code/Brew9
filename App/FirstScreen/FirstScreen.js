@@ -91,9 +91,11 @@ export default class FirstScreen extends React.Component {
     loadCurrentStatus(){
        
         const { dispatch, members } = this.props
+        
         if (members != null){
             this.setState({ loading: true })
             const callback = eventObject => {
+                console.log("Status", eventObject.result)
                 this.setState({
                     loading: false,
                 })
