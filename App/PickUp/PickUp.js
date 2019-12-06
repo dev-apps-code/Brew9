@@ -6,16 +6,16 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator, RefreshControl, AppState } from "react-native"
+import { StyleSheet, View, Image, TouchableOpacity, Text, Linking, ActivityIndicator, RefreshControl, AppState, Modal, TouchableWithoutFeedback } from "react-native"
 import React from "react"
-import {alpha, fontAlpha, windowWidth} from "../Common/size";
+import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from 'react-redux'
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import { createAction } from '../Utils/index'
 import openMap from 'react-native-open-maps';
-import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, LIGHT_BLUE} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, LIGHT_BLUE } from "../Common/common_style";
 import Moment from 'moment';
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -25,7 +25,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 	company_id: members.company_id,
 	location: members.location,
 	selectedShop: shops.selectedShop,
-	selectedTab:config.selectedTab
+	selectedTab: config.selectedTab
 }))
 export default class PickUp extends React.Component {
 
@@ -34,17 +34,17 @@ export default class PickUp extends React.Component {
 		const { params = {} } = navigation.state
 		return {
 			title: "Your Order",
-			headerTintColor: "black",     
+			headerTintColor: "black",
 			headerLeft: null,
 			headerRight: null,
-			headerTitleStyle: { 
-				textAlign:"center", 
-				flex:1 
+			headerTitleStyle: {
+				textAlign: "center",
+				flex: 1
 			},
 		}
 	}
 
-	static tabBarItemOptions = ( navigation,store ) => {
+	static tabBarItemOptions = (navigation, store) => {
 
 		return {
 			tabBarLabel: "Order",
@@ -54,13 +54,13 @@ export default class PickUp extends React.Component {
 				defaultHandler()
 			},
 			tabBarIcon: ({ iconTintColor, focused }) => {
-				const image = focused 
-				? require('./../../assets/images/pickup_selected_tab.png') 
-				: require('./../../assets/images/pickup_tab.png')
+				const image = focused
+					? require('./../../assets/images/pickup_selected_tab.png')
+					: require('./../../assets/images/pickup_tab.png')
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT}}/>
+					style={{ resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }} />
 			},
 		}
 	}
@@ -72,19 +72,22 @@ export default class PickUp extends React.Component {
 			current_order: [],
 			refreshing: false,
 			appState: AppState.currentState,
+			popUp: false
 		}
 	}
 
 	componentDidMount() {
 		this.loadCurrentOrder()
-		const {currentMember } = this.props
+		const { currentMember } = this.props
 		const { navigation } = this.props
-		AppState.addEventListener('change', this._handleAppStateChange);	
+		AppState.addEventListener('change', this._handleAppStateChange);
 		this.navigationListener = navigation.addListener('willFocus', payload => {
 			if (currentMember != null) {
 				this.loadCurrentOrder();
-			  }
+			}
 		})
+		this.setState({ popUp: true })
+
 	}
 
 	componentWillUnmount() {
@@ -93,34 +96,34 @@ export default class PickUp extends React.Component {
 	}
 
 	_handleAppStateChange = nextAppState => {
-		const {currentMember} = this.props
+		const { currentMember } = this.props
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			
-			
+
+
 		}
 		this.setState({ appState: nextAppState });
 	};
-	
+
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
-		  this.navigationListener.remove()
-		  this.navigationListener = null
+			this.navigationListener.remove()
+			this.navigationListener = null
 		}
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 
 		if (prevProps.selectedTab != this.props.selectedTab) {
-		  	this.loadCurrentOrder()
+			this.loadCurrentOrder()
 		}
-	  }
+	}
 
 	onOrderHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
 		navigate("OrderHistory")
-		
+
 	}
 
 	onCallPressed = (phone_no) => {
@@ -133,10 +136,10 @@ export default class PickUp extends React.Component {
 		navigate("Home")
 	}
 
-	loadCurrentOrder(){
+	loadCurrentOrder() {
 		const { dispatch, currentMember } = this.props
 
-		if (currentMember != null){
+		if (currentMember != null) {
 			this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
@@ -153,7 +156,7 @@ export default class PickUp extends React.Component {
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadCurrentOrder')({
-					object:obj,
+					object: obj,
 					callback,
 				})
 			)
@@ -165,45 +168,45 @@ export default class PickUp extends React.Component {
 		const queues = current_order.map((item, key) => {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
-			var progress =  item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 :  item.status == "ready" ? 1 : 0
+			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 
 			const order_items = item.order_items.map((item, key) => {
 
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
-				
+
 				return <View
 					style={styles.drinksView}
 					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							justifyContent: "center",
+							backgroundColor: "transparent",
+							flex: 1,
+							flexDirection: "row"
+						}}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								justifyContent: "center",
-								backgroundColor:"transparent",
-								flex: 1,
-								flexDirection: "row"
-							}}>
-								<View
-									style={styles.productDetailView}>
-									<Text
-										style={styles.productNameText}>{item.product_name}</Text>
-									{(item.variations != null && item.variations != "") ?
-									<Text
-										style={styles.productVariantText}>{item.variations}</Text> :
-										<View style={styles.spacer} />
-									}
-								</View>
+							style={styles.productDetailView}>
+							<Text
+								style={styles.productNameText}>{item.product_name}</Text>
+							{(item.variations != null && item.variations != "") ?
 								<Text
-									style={styles.productQuantityText}>x{item.quantity}</Text>
-								
-								<Text
-									style={styles.productPriceText}>{price_string}</Text>
-								{ item.order_items != null &&  key < item.order_items.length - 1 && (<Image
-									source={require("./../../assets/images/group-109-copy.png")}
-								style={styles.dottedLineImage}/> )}
-							</View>
+									style={styles.productVariantText}>{item.variations}</Text> :
+								<View style={styles.spacer} />
+							}
+						</View>
+						<Text
+							style={styles.productQuantityText}>x{item.quantity}</Text>
+
+						<Text
+							style={styles.productPriceText}>{price_string}</Text>
+						{item.order_items != null && key < item.order_items.length - 1 && (<Image
+							source={require("./../../assets/images/group-109-copy.png")}
+							style={styles.dottedLineImage} />)}
+					</View>
 				</View>
-				
-				
+
+
 			})
 
 			const voucher_items = item.voucher_items.map((item, key) => {
@@ -214,37 +217,37 @@ export default class PickUp extends React.Component {
 					voucher_discount = `-$${item.voucher.discount_price}`
 				} else if (item.voucher.discount_type == "percent") {
 					voucher_discount = `-$${parseFloat(cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
-					
+
 				}
 				return <View
 					style={styles.drinksView}
 					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							justifyContent: "center",
+							backgroundColor: "transparent",
+							flex: 1,
+							flexDirection: "row"
+						}}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								justifyContent: "center",
-								backgroundColor:"transparent",
-								flex: 1,
-								flexDirection: "row"
-							}}>
-								<View
-									style={styles.productDetailView}>
-									<Text
-										style={styles.productNameText}>{item.voucher.name}</Text>
-									
-										<View style={styles.spacer} />
-									
-								</View>
-								
-								<Text
-									style={styles.productPriceText}>{ voucher_discount}</Text>
-								{ item.voucher_items != null && key < item.voucher_items.length - 1 && (<Image
-									source={require("./../../assets/images/group-109-copy.png")}
-								style={styles.dottedLineImage}/> )}
-							</View>
+							style={styles.productDetailView}>
+							<Text
+								style={styles.productNameText}>{item.voucher.name}</Text>
+
+							<View style={styles.spacer} />
+
+						</View>
+
+						<Text
+							style={styles.productPriceText}>{voucher_discount}</Text>
+						{item.voucher_items != null && key < item.voucher_items.length - 1 && (<Image
+							source={require("./../../assets/images/group-109-copy.png")}
+							style={styles.dottedLineImage} />)}
+					</View>
 				</View>
-				
-				
+
+
 			})
 
 			return <View
@@ -286,7 +289,7 @@ export default class PickUp extends React.Component {
 						style={{
 							flex: 1,
 							marginTop: 19 * alpha,
-							flexDirection:"row"
+							flexDirection: "row"
 						}}>
 						<View style={styles.queueHeaderBlock}>
 							<Text
@@ -307,149 +310,149 @@ export default class PickUp extends React.Component {
 					</View>
 					<View
 						style={styles.progressView}>
-							<View
-									style={styles.orderedView}>
-									<Image
-										source={require("./../../assets/images/group-9-copy-13.png")}
-										style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
-								</View>
-								<Image
-									source={require("./../../assets/images/group-11-copy-5.png")}
-									style={styles.dividerImage}/>
-								<View
-									style={styles.processingView}>
-									<Image
-										source={require("./../../assets/images/group-13-11.png")}
-										style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
-								</View>
-								<Image
-									source={require("./../../assets/images/group-11-copy-5.png")}
-									style={styles.dividerImage}/>
-								<View
-									style={styles.pickUpView}>
-									<Image
-										source={require("./../../assets/images/group-7-copy-8.png")}
-										style={item.status === "ready" ? styles.pickupSelectedImage  : styles.pickupImage}/>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
-								</View>
-						</View>
 						<View
-							style={styles.progressbarView}>
-								{this.renderProgressBar(progress)}
+							style={styles.orderedView}>
+							<Image
+								source={require("./../../assets/images/group-9-copy-13.png")}
+								style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage} />
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
 						</View>
+						<Image
+							source={require("./../../assets/images/group-11-copy-5.png")}
+							style={styles.dividerImage} />
+						<View
+							style={styles.processingView}>
+							<Image
+								source={require("./../../assets/images/group-13-11.png")}
+								style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage} />
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
+						</View>
+						<Image
+							source={require("./../../assets/images/group-11-copy-5.png")}
+							style={styles.dividerImage} />
+						<View
+							style={styles.pickUpView}>
+							<Image
+								source={require("./../../assets/images/group-7-copy-8.png")}
+								style={item.status === "ready" ? styles.pickupSelectedImage : styles.pickupImage} />
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
+						</View>
+					</View>
+					<View
+						style={styles.progressbarView}>
+						{this.renderProgressBar(progress)}
+					</View>
 				</View>
 				<View
 					style={styles.orderDetailView}>
 					<View style={styles.locationWrapperView}>
+						<View
+							style={styles.locationView}>
 							<View
-								style={styles.locationView}>
-								<View
-									style={styles.branchView}>
-									<Text
-										style={styles.shopBranchText}>{item.shop.name}</Text>
-									<Text
-										numberOfLines={3}
-										style={styles.shopBranchAddressText}>{item.shop.address}</Text>
-								</View>
+								style={styles.branchView}>
+								<Text
+									style={styles.shopBranchText}>{item.shop.name}</Text>
+								<Text
+									numberOfLines={3}
+									style={styles.shopBranchAddressText}>{item.shop.address}</Text>
+							</View>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<View
+								style={styles.callView}>
+								<TouchableOpacity
+									onPress={() => this.onCallPressed(item.shop.phone_no)}
+									style={styles.callIconButton}>
+									<Image
+										source={require("./../../assets/images/group-3-23.png")}
+										style={styles.callIconButtonImage} />
+								</TouchableOpacity>
 								<View
 									style={{
 										flex: 1,
-									}}/>
-								<View
-									style={styles.callView}>
-									<TouchableOpacity
-										onPress={() => this.onCallPressed(item.shop.phone_no)}
-										style={styles.callIconButton}>
-										<Image
-											source={require("./../../assets/images/group-3-23.png")}
-											style={styles.callIconButtonImage}/>
-									</TouchableOpacity>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.callText}>Call</Text>
-								</View>
-								<View
-									style={styles.directionView}>
-									<TouchableOpacity
-										onPress={ () => this.onDirectionPressed(item.shop)}
-										style={styles.directionIconButton}>
-										<Image
-											source={require("./../../assets/images/group-3-17.png")}
-											style={styles.directionIconButtonImage}/>
-									</TouchableOpacity>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.directionText}>Direction</Text>
-								</View>
-							</View>
-							</View>
-							<View style={styles.receiptSectionSeperator}>
-								<Image
-									source={require("./../../assets/images/curve_in_background.png")}
-									style={styles.curve_in}/>
-								<View
-									style={styles.sectionSeperatorView}/>
-							</View>
-						<View
-							style={styles.drinksViewWrapper}>
-							{order_items}
-							{voucher_items}
-						</View>
-						<View style={styles.receiptSectionSeperator}>
-							<Image
-								source={require("./../../assets/images/curve_in_background.png")}
-								style={styles.curve_in}/>
-							<View
-								style={styles.sectionSeperatorView}/>
-						</View>
-						<View
-							style={styles.totalViewWrapper}>
-							<View
-								style={styles.orderTotalView}>
+									}} />
 								<Text
-									style={styles.totallabelText}>TOTAL</Text>
+									style={styles.callText}>Call</Text>
+							</View>
+							<View
+								style={styles.directionView}>
+								<TouchableOpacity
+									onPress={() => this.onDirectionPressed(item.shop)}
+									style={styles.directionIconButton}>
+									<Image
+										source={require("./../../assets/images/group-3-17.png")}
+										style={styles.directionIconButtonImage} />
+								</TouchableOpacity>
 								<View
 									style={{
 										flex: 1,
-									}}/>
+									}} />
 								<Text
-									style={styles.orderTotalText}>${parseFloat(item.total).toFixed(2)}</Text>
+									style={styles.directionText}>Direction</Text>
 							</View>
 						</View>
-						<View style={styles.receiptSectionSeperator}>
-							<Image
-								source={require("./../../assets/images/curve_in_background.png")}
-								style={styles.curve_in}/>
+					</View>
+					<View style={styles.receiptSectionSeperator}>
+						<Image
+							source={require("./../../assets/images/curve_in_background.png")}
+							style={styles.curve_in} />
+						<View
+							style={styles.sectionSeperatorView} />
+					</View>
+					<View
+						style={styles.drinksViewWrapper}>
+						{order_items}
+						{voucher_items}
+					</View>
+					<View style={styles.receiptSectionSeperator}>
+						<Image
+							source={require("./../../assets/images/curve_in_background.png")}
+							style={styles.curve_in} />
+						<View
+							style={styles.sectionSeperatorView} />
+					</View>
+					<View
+						style={styles.totalViewWrapper}>
+						<View
+							style={styles.orderTotalView}>
+							<Text
+								style={styles.totallabelText}>TOTAL</Text>
 							<View
-								style={styles.sectionSeperatorView}/>
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={styles.orderTotalText}>${parseFloat(item.total).toFixed(2)}</Text>
 						</View>
-						<View style={styles.remarkViewWrapper}>
+					</View>
+					<View style={styles.receiptSectionSeperator}>
+						<Image
+							source={require("./../../assets/images/curve_in_background.png")}
+							style={styles.curve_in} />
+						<View
+							style={styles.sectionSeperatorView} />
+					</View>
+					<View style={styles.remarkViewWrapper}>
 						<View
 							style={styles.remarkView}>
-							
+
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -459,13 +462,13 @@ export default class PickUp extends React.Component {
 									bottom: 11 * alpha,
 									alignItems: "flex-start",
 								}}>
-								
+
 								{/* <Text
 									style={styles.pleaseCallBranchFText}>Please call branch for refund</Text> */}
 								<View
 									pointerEvents="box-none"
 									style={{
-										alignSelf: "stretch", 
+										alignSelf: "stretch",
 										height: 19 * alpha,
 										marginLeft: 3 * alpha,
 										marginRight: 4 * alpha,
@@ -477,7 +480,7 @@ export default class PickUp extends React.Component {
 									<View
 										style={{
 											flex: 1,
-										}}/>
+										}} />
 									{/* <TouchableOpacity
 										onPress={this.onCopyPressed}
 										style={styles.copyButton}>
@@ -494,11 +497,11 @@ export default class PickUp extends React.Component {
 			</View>
 		})
 
-		return <ScrollView style={{flex: 1}}
+		return <ScrollView style={{ flex: 1 }}
 			refreshControl={
 				<RefreshControl
-				refreshing={this.state.refreshing}
-				onRefresh={this.onRefresh}
+					refreshing={this.state.refreshing}
+					onRefresh={this.onRefresh}
 				/>
 			}>
 			{queues}
@@ -506,9 +509,9 @@ export default class PickUp extends React.Component {
 	}
 
 	onRefresh = () => {
-		this.setState({refreshing: true})
+		this.setState({ refreshing: true })
 		this.loadCurrentOrder()
-	  }
+	}
 
 	onDirectionPressed(shop) {
 
@@ -518,31 +521,35 @@ export default class PickUp extends React.Component {
 		openMap({ latitude: latitude, longitude: longitude });
 	}
 
+	closePopUp = () => {
+		this.setState({ popUp: false })
+	}
+
 	renderProgressBar(progress) {
 
 		progress_percent = progress * 100
 		return (
-			<View style={{flexDirection: "row", height: 10 * alpha,  flex: 1}}>
-			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha}}>
-				<View
-				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
-				/>
-				<LinearGradient
-					colors={[LIGHT_BLUE, PRIMARY_COLOR]}
-					start={[0,0]}
-					end={[1,0]}
-					style={{
-						position: "absolute",
-						left: 0,
-						top: 0,
-						bottom: 0,
-						borderRadius: 4 * alpha,
-						width: `${progress_percent}%`,
-					}}
-				/>
-			  </View>
+			<View style={{ flexDirection: "row", height: 10 * alpha, flex: 1 }}>
+				<View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha }}>
+					<View
+						style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
+					/>
+					<LinearGradient
+						colors={[LIGHT_BLUE, PRIMARY_COLOR]}
+						start={[0, 0]}
+						end={[1, 0]}
+						style={{
+							position: "absolute",
+							left: 0,
+							top: 0,
+							bottom: 0,
+							borderRadius: 4 * alpha,
+							width: `${progress_percent}%`,
+						}}
+					/>
+				</View>
 			</View>
-		  )
+		)
 	}
 
 	renderEmpty() {
@@ -564,7 +571,7 @@ export default class PickUp extends React.Component {
 							style={styles.centerView}>
 							<Image
 								source={require("./../../assets/images/cup_icon.png")}
-								style={styles.logoImage}/>
+								style={styles.logoImage} />
 							<View
 								style={styles.messageView}>
 								<Text
@@ -598,7 +605,7 @@ export default class PickUp extends React.Component {
 								style={styles.orderHistoryButtonText}>Order History</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
-								style={styles.orderHistoryButtonImage}/>
+								style={styles.orderHistoryButtonImage} />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -606,21 +613,99 @@ export default class PickUp extends React.Component {
 		</View>
 	}
 	render() {
-		
+
 		const { current_order } = this.state
 		return <View
-				style={styles.pickUpMainView}>
-				{ this.state.loading ? 
-					<View style={[styles.container, styles.horizontal]}>
-						<ActivityIndicator size="large" />
-					</View>  : 
-					current_order.length > 0 ? this.renderQueueView(current_order) : 
-					this.renderEmpty() }
-			</View>
+			style={styles.pickUpMainView}>
+			{this.state.loading ?
+				<View style={[styles.container, styles.horizontal]}>
+					<ActivityIndicator size="large" />
+				</View> :
+				current_order.length > 0 ? this.renderQueueView(current_order) :
+					this.renderEmpty()}
+			<Modal
+				animationType="slide"
+				transparent={true}
+				visible={this.state.popUp}
+				onRequestClose={this.closePopUp}>
+				<TouchableWithoutFeedback onPress={this.closePopUp}>
+
+					<View style={[styles.popUpBackground]}>
+						<View style={[styles.popUpContent]}>
+							<Text style={{ paddingBottom: 5, textAlign: 'center' }}>QWERTY</Text>
+							<View style={{ marginBottom: 10 }}>
+								<View style={styles.popUpInput1}>
+									<Text>asasas</Text>
+									<Text style={{ color: '#deb887' }}>+3</Text>
+								</View>
+								<View style={styles.popUpInput2}>
+									<Text>asasasasa</Text>
+									<Text style={{ color: '#deb887' }}>+1</Text>
+								</View>
+							</View>
+							<TouchableOpacity
+								onPress={() => console.log('onpress')}
+								style={styles.popUpInput3}>
+								<Text
+									style={styles.orderButtonText}>Order</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</TouchableWithoutFeedback>
+			</Modal>
+		</View>
 	}
 }
 
 const styles = StyleSheet.create({
+
+	popUpBackground: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.4)',
+		justifyContent: 'center'
+	},
+	popUpContent: {
+		backgroundColor: 'white',
+		minHeight: windowHeight / 4,
+		maxHeight: windowHeight / 2,
+		paddingVertical: 30,
+		marginHorizontal: 30,
+		paddingHorizontal: 20,
+		justifyContent: 'space-between',
+		borderRadius: 5 * alpha,
+
+	},
+	popUpInput1: {
+		backgroundColor: '#fff5ee',
+		paddingHorizontal: 10 * alpha,
+		paddingVertical: 15 * alpha,
+		borderRadius: 5 * alpha,
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginTop: 10,
+		flexDirection: 'row'
+	},
+	popUpInput2: {
+		backgroundColor: '#f5f5f5',
+		paddingHorizontal: 10 * alpha,
+		paddingVertical: 15 * alpha,
+		borderRadius: 5 * alpha,
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginTop: 10,
+		flexDirection: 'row'
+
+	},
+	popUpInput3: {
+		backgroundColor: 'rgb(0, 178, 227)',
+		paddingHorizontal: 10 * alpha,
+		paddingVertical: 10 * alpha,
+		borderRadius: 5 * alpha,
+		alignItems: 'center',
+		justifyContent: 'center',
+		// flex: 1,
+		marginTop: 10
+	},
 	pickUpMainView: {
 		backgroundColor: "rgb(239, 239, 239)",
 		flex: 1,
@@ -652,14 +737,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    horizontal: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 10 * alpha,
-    },
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
+	},
 	logoImage: {
 		resizeMode: "contain",
 		backgroundColor: "transparent",
@@ -668,14 +753,14 @@ const styles = StyleSheet.create({
 	},
 	messageView: {
 		backgroundColor: "transparent",
-		width: windowWidth - 40*alpha,
+		width: windowWidth - 40 * alpha,
 		height: 35 * alpha,
 		marginTop: 16 * alpha,
 		alignItems: "center",
 	},
 	youHavenTMakeAnyText: {
 		color: "rgb(134, 134, 134)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -685,7 +770,7 @@ const styles = StyleSheet.create({
 	grabYoursNowText: {
 		backgroundColor: "transparent",
 		color: "rgb(134, 134, 134)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -709,7 +794,7 @@ const styles = StyleSheet.create({
 	},
 	orderButtonText: {
 		color: "rgb(254, 254, 254)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -726,7 +811,7 @@ const styles = StyleSheet.create({
 	},
 	orderHistoryButtonText: {
 		color: "rgb(176, 176, 176)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -738,10 +823,10 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginLeft: 5 * alpha,
 	},
-	loadingIndicator:{
-		marginTop:100 * alpha,
+	loadingIndicator: {
+		marginTop: 100 * alpha,
 	},
-	
+
 
 
 
@@ -814,7 +899,7 @@ const styles = StyleSheet.create({
 		marginTop: 16 * alpha,
 		alignItems: "center",
 	},
-	
+
 	queuenumberText: {
 		backgroundColor: "transparent",
 		color: PRIMARY_COLOR,
@@ -1049,7 +1134,7 @@ const styles = StyleSheet.create({
 	topFillImage: {
 		resizeMode: "cover",
 		position: "absolute",
-		width: windowWidth-40*alpha,
+		width: windowWidth - 40 * alpha,
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 0 * alpha,
@@ -1065,7 +1150,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginRight: 35 * alpha,
@@ -1143,14 +1228,14 @@ const styles = StyleSheet.create({
 	lineView: {
 		backgroundColor: "rgb(231, 231, 231)",
 		height: 2 * alpha,
-		width: windowWidth - 80 *alpha,
+		width: windowWidth - 80 * alpha,
 		marginTop: 10 * alpha,
 		alignSelf: "center",
 	},
 	lineTwoView: {
-		backgroundColor: "rgb(231, 231, 231)",	
-		width: windowWidth - 80 *alpha,
-		height: 2* alpha,
+		backgroundColor: "rgb(231, 231, 231)",
+		width: windowWidth - 80 * alpha,
+		height: 2 * alpha,
 		alignSelf: "center",
 	},
 	totalViewWrapper: {
@@ -1194,7 +1279,7 @@ const styles = StyleSheet.create({
 		marginRight: 25 * alpha,
 		marginTop: 10 * alpha,
 	},
-	
+
 	dottedLineImageTwo: {
 		backgroundColor: "transparent",
 		resizeMode: "cover",
@@ -1218,13 +1303,13 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "center",
 	},
 	remarkViewWrapper: {
 		backgroundColor: "rgb(245,245,245)",
 		flex: 1,
-		borderBottomRightRadius: 14 * alpha, 
+		borderBottomRightRadius: 14 * alpha,
 		borderBottomLeftRadius: 14 * alpha,
 	},
 	remarkView: {
@@ -1306,7 +1391,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginLeft: 3 * alpha,
 	},
-	
+
 
 	voucherView: {
 		backgroundColor: "transparent",
@@ -1321,9 +1406,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,
-		fontSize: 12* fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	descriptionThreeText: {
@@ -1509,7 +1594,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignContent: "center",
 		justifyContent: "center",
-	}, 
+	},
 
 	curve_in: {
 		height: 14 * alpha,
@@ -1524,12 +1609,12 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		width: 300 * alpha,
 		height: 1 * alpha,
-		
+
 	},
 
 	queueHeaderBlock: {
 		backgroundColor: "transparent",
-		marginLeft: 10 * alpha, 
+		marginLeft: 10 * alpha,
 		marginRight: 10 * alpha,
 	},
 	progressbarView: {
@@ -1539,5 +1624,5 @@ const styles = StyleSheet.create({
 		height: 10 * alpha,
 		marginBottom: 20 * alpha,
 	},
-	
+
 })
