@@ -1543,37 +1543,25 @@ export default class Home extends React.Component {
 						style={styles.distance1kmText}>Distance {distance}</Text>
 					<View
 						style={{
-							height: 14 * alpha,
-							marginLeft: 10 * alpha,
-							marginRight: 19 * alpha,
-							marginTop: 7 * alpha,
-							flexDirection: "row",
-							alignItems: "flex-start",
-						}}>
-						<Text
-							style={styles.distance1kmText}>Distance {distance}</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<View
-							style={styles.moreView}>
-							<TouchableOpacity
-								onPress={this.onMorePressed}
-								style={styles.moreButton}>
-								<Text
-									style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "Location"}</Text>
-							</TouchableOpacity>
-							{ isToggleShopLocation ? 
-								<Image
-									source={require("./../../assets/images/bitmap-15.png")}
-									style={styles.bitmapImage}/> :
-								<Image
-									source={require("./../../assets/images/bitmap-14.png")}
-									style={styles.bitmapImage}/>
-							}
-							
-						</View>
+							flex: 1,
+						}}/>
+					<View
+						style={styles.moreView}>
+						<TouchableOpacity
+							onPress={this.onMorePressed}
+							style={styles.moreButton}>
+							<Text
+								style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "Location"}</Text>
+						</TouchableOpacity>
+						{ isToggleShopLocation ? 
+							<Image
+								source={require("./../../assets/images/bitmap-15.png")}
+								style={styles.bitmapImage}/> :
+							<Image
+								source={require("./../../assets/images/bitmap-14.png")}
+								style={styles.bitmapImage}/>
+						}
+						
 					</View>
 				</View>
 
