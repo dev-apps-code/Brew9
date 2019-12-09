@@ -6,13 +6,13 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList} from "react-native"
+import { Image, View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native"
 import React from "react"
-import {createAction} from "../Utils";
-import {connect} from "react-redux";
-import {KURL_INFO} from "../Utils/server";
-import { alpha, fontAlpha} from "../Common/size";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DEFAULT_GREY_BACKGROUND, BUTTONBOTTOMPADDING} from "../Common/common_style";
+import { createAction } from "../Utils";
+import { connect } from "react-redux";
+import { KURL_INFO } from "../Utils/server";
+import { alpha, fontAlpha } from "../Common/size";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DEFAULT_GREY_BACKGROUND, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import TopUpCard from "./TopUpCard"
 import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
 import TopUpOrderRequestObject from "../Requests/top_up_order_request_object";
@@ -36,7 +36,7 @@ export default class MemberWallet extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -54,7 +54,7 @@ export default class MemberWallet extends React.Component {
 			data: [],
 			selectedTopUpProduct: null,
 			selected: 0,
-			order:null,
+			order: null,
 			toggleTopUp: false,
 		}
 	}
@@ -67,7 +67,7 @@ export default class MemberWallet extends React.Component {
 		})
 	}
 
-	loadTopUpProducts(){
+	loadTopUpProducts() {
 		const { dispatch, members } = this.props
 
 		this.setState({ loading_list: true })
@@ -75,7 +75,7 @@ export default class MemberWallet extends React.Component {
 			if (eventObject.success) {
 				this.setState({
 					data: eventObject.result,
-				},function () {
+				}, function () {
 					if (eventObject.result.length > 0) {
 						this.setState({
 							selectedTopUpProduct: eventObject.result[0]
@@ -91,50 +91,50 @@ export default class MemberWallet extends React.Component {
 		obj.setUrlId(members.company_id)
 		dispatch(
 			createAction('companies/loadTopUpProducts')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
 
-	loadMakeOrder(topUpProductId){
+	loadMakeOrder(topUpProductId) {
 		const { navigate } = this.props.navigation
 		const { dispatch, selectedShop } = this.props
-		const {selectedTopUpProduct} = this.state
+		const { selectedTopUpProduct } = this.state
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({
 				loading: false,
-			})       
+			})
 			if (eventObject.success) {
 
 				const order = eventObject.result
-				this.setState({order:order})
+				this.setState({ order: order })
 				navigate("PaymentsWebview", {
 					name: `Top Up - ${selectedTopUpProduct.price}`,
 					order_id: order.receipt_no,
-					session_id:order.session_id,
+					session_id: order.session_id,
 					amount: order.total,
-					type:'top_up',
+					type: 'top_up',
 				})
-			}else{
+			} else {
 				this.setState({
-					modal_visible:true,
+					modal_visible: true,
 					modal_description: eventObject.message,
 				})
 			}
 		}
 		const obj = new TopUpOrderRequestObject(selectedShop.id)
-		obj.setUrlId(topUpProductId) 
+		obj.setUrlId(topUpProductId)
 		dispatch(
 			createAction('top_up/loadMakeOrder')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
-	
+
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
@@ -149,12 +149,12 @@ export default class MemberWallet extends React.Component {
 
 	onTopUpPressed = () => {
 
-		const {selectedTopUpProduct} = this.state
-		
+		const { selectedTopUpProduct } = this.state
+
 		this.loadMakeOrder(selectedTopUpProduct.id)
 	}
-	
-	onTopUpCardPressed = (topUpProduct,index) => {
+
+	onTopUpCardPressed = (topUpProduct, index) => {
 
 		this.setState({
 			selectedTopUpProduct: topUpProduct,
@@ -162,9 +162,9 @@ export default class MemberWallet extends React.Component {
 			toggleTopUp: true
 		})
 	}
-	
+
 	renderTopuplistFlatListCell = ({ item, index }) => {
-	
+
 		return <TopUpCard
 			navigation={this.props.navigation}
 			image={item.image}
@@ -191,21 +191,21 @@ export default class MemberWallet extends React.Component {
 						style={styles.walletCreditView}>
 						<Text
 							style={styles.creditsText}>${parseFloat(members.credits).toFixed(2)}</Text>
-						
+
 						<Text
 							style={styles.walletCreditText}>Spendable cash</Text>
-						
+
 					</View>
 					<View
 						style={{
 							flex: 1,
-						}}/>
+						}} />
 					<TouchableOpacity
 						onPress={() => this.onTransactionHistoryPressed()}
 						style={styles.creditHistoryButton}>
 						<Image
 							source={require("./../../assets/images/icon-rule.png")}
-							style={styles.creditHistoryButtonImage}/>
+							style={styles.creditHistoryButtonImage} />
 						<Text
 							style={styles.creditHistoryButtonText}>Wallet History</Text>
 					</TouchableOpacity>
@@ -213,7 +213,7 @@ export default class MemberWallet extends React.Component {
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.transactionHistoryText}>Top Up Zone</Text>
+						style={styles.transactionHistoryText}>Online Top Up</Text>
 				</View>
 				<View
 					style={styles.topuplistFlatListViewWrapper}>
@@ -223,30 +223,30 @@ export default class MemberWallet extends React.Component {
 						numColumns={2}
 						style={styles.topuplistFlatList}
 						selected={this.state.selected}
-						keyExtractor={(item, index) => index.toString()}/>
+						keyExtractor={(item, index) => index.toString()} />
 				</View>
 				<View style={styles.shopTopUp}>
 					<Text style={styles.shopTopUpText}>
-						Top up is also available at our store counter.
+						Top up is also available in-store.
 					</Text>
 				</View>
 			</ScrollView>
-			{ toggleTopUp == true && (
+			{toggleTopUp == true && (
 				<View
-				style={styles.topUpView}>
-				<Text
-					style={styles.selectedValueText}>${this.state.selectedTopUpProduct ? this.state.selectedTopUpProduct.price : '' }</Text>
-				<View
-					style={{
-						flex: 1,
-					}}/>
-				<TouchableOpacity
-					onPress={() => this.onTopUpPressed()}
-					style={styles.topupButton}>
+					style={styles.topUpView}>
 					<Text
-						style={styles.topupButtonText}>Top Up</Text>
-				</TouchableOpacity>
-			</View>
+						style={styles.selectedValueText}>${this.state.selectedTopUpProduct ? this.state.selectedTopUpProduct.price : ''}</Text>
+					<View
+						style={{
+							flex: 1,
+						}} />
+					<TouchableOpacity
+						onPress={() => this.onTopUpPressed()}
+						style={styles.topupButton}>
+						<Text
+							style={styles.topupButtonText}>Top Up</Text>
+					</TouchableOpacity>
+				</View>
 			)}
 		</View>
 	}
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		marginTop: 5 *alpha,
+		marginTop: 5 * alpha,
 	},
 	creditsText: {
 		color: PRIMARY_COLOR,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
 		color: "rgb(0, 178, 227)",
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",		
+		fontStyle: "normal",
 		textAlign: "left",
 		marginLeft: 10 * alpha,
 	},
@@ -364,8 +364,8 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	topUpView: {
-		backgroundColor:"white",
-		height: 52 * alpha ,
+		backgroundColor: "white",
+		height: 52 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		marginBottom: BUTTONBOTTOMPADDING
