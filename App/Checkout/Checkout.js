@@ -1091,7 +1091,7 @@ export default class Checkout extends React.Component {
 							<View
 								style={styles.productDetailView}>
 								<Text
-									style={styles.productNameText}>Available Voucher</Text>
+									style={styles.productNameText}>Brew9 Vouchers</Text>
 								<View style={styles.spacer} />
 							</View>
 							<Text
