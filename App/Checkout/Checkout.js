@@ -603,11 +603,12 @@ export default class Checkout extends React.Component {
 	clearCart = () => {
 		const { navigation, dispatch } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
-		
-		navigation.navigate({ routeName, key, 
-			params: { 
-				clearCart: true, 
-			} 
+
+		navigation.navigate({
+			routeName, key,
+			params: {
+				clearCart: true,
+			}
 		})
 	}
 
@@ -627,11 +628,13 @@ export default class Checkout extends React.Component {
 				return
 			}
 
-			if ( selected_payment == "credits") {
-				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)){
-					this.refs.toast.show("Oops, insufficient credit. Please top up to purchase.", TOAST_DURATION, () => {
-						navigate("MemberWallet")
-					})
+			if (selected_payment == "credits") {
+				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
+					this.refs.toast.show("Oops. Insufficient Wallet credit.\nPlease select other payment method.", TOAST_DURATION,
+						// () => {
+						// 	navigate("MemberWallet")
+						// }
+					)
 					return
 				}
 			}
@@ -713,7 +716,7 @@ export default class Checkout extends React.Component {
 		} else {
 			this.setState({ isPickupToogle: true }, function () {
 				Animated.spring(this.movePickAnimation, {
-					toValue: {x: 0, y:  52 * alpha},
+					toValue: { x: 0, y: 52 * alpha },
 				}).start()
 			})
 		}
@@ -735,7 +738,7 @@ export default class Checkout extends React.Component {
 		} else {
 			this.setState({ isPaymentToggle: true }, function () {
 				Animated.spring(this.moveAnimation, {
-					toValue: {x: 0, y: 52 * alpha},
+					toValue: { x: 0, y: 52 * alpha },
 				}).start()
 			})
 		}
@@ -1141,7 +1144,7 @@ export default class Checkout extends React.Component {
 							</View>
 							<Text
 								style={styles.productVoucherText}>{this.state.selected_payment == '' ? "Please select" : this.state.selected_payment == "credits" ?
-									`Balance ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? "Pay at counter " : "Credit Card")}</Text>
+									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? "Pay at counter " : "Credit Card")}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage} />
@@ -1297,7 +1300,7 @@ export default class Checkout extends React.Component {
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 18 * alpha,
+										// height: 18 * alpha,
 										marginLeft: 61 * alpha,
 										marginRight: 17 * alpha,
 										flexDirection: "row",
@@ -1658,8 +1661,8 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let {isPaymentToggle,discount, isPickupToogle} = this.state
-		let {cart_total} = this.props
+		let { isPaymentToggle, discount, isPickupToogle } = this.state
+		let { cart_total } = this.props
 
 		var final_price = cart_total - discount
 		if (final_price < 0) {
@@ -1669,7 +1672,6 @@ export default class Checkout extends React.Component {
 
 		return <View
 			style={styles.checkoutViewPadding}>
-			
 			<ScrollView
 				style={styles.scrollviewScrollView}
 				onLayout={(event) => this.measureView(event)}>
@@ -1680,10 +1682,9 @@ export default class Checkout extends React.Component {
 				</View>
 
 			</ScrollView>
-			
+
 			{(isPaymentToggle == true || isPickupToogle == true) && (
-				<View style={styles.checkoutViewOverlay}/>)}
-			
+				<View style={styles.checkoutViewOverlay} />)}
 			{this.renderPayNow(final_price)}
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
@@ -1735,9 +1736,9 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgba(0, 0, 0, 0.5)",
 		flex: 1,
 		position: "absolute",
-		top: 0, 
-		right: 0, 
-		left: 0, 
+		top: 0,
+		right: 0,
+		left: 0,
 		bottom: 0
 	},
 	checkoutViewPadding: {
@@ -3270,6 +3271,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 12 * alpha,
 		top: 19 * alpha,
+		// paddingVertical: 10 * alpha
 		height: 21 * alpha,
 	},
 	pickupConfirmButtonText: {
