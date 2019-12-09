@@ -288,6 +288,7 @@ export default class Home extends React.Component {
 			distance_string = `${parseDistance}m`
 		}
 		this.setState({ distance: distance_string, member_distance: (parseDistance / 1000) })
+		// this.setState({ distance: distance_string, member_distance: 1 })
 	}
 
 	componentWillMount() {
@@ -521,7 +522,7 @@ export default class Home extends React.Component {
 
 					console.log(`clearcart ${clearCart}`)
 					if (params != undefined && params.clearCart == true) {
-										
+
 						this.loadShops()
 						dispatch(createAction("orders/resetCart")({}));
 						navigate("PickUp")
@@ -1538,41 +1539,43 @@ export default class Home extends React.Component {
 						marginTop: 7 * alpha,
 						flexDirection: "row",
 						alignItems: "flex-start",
+						justifyContent: 'space-between',
+						// backgroundColor: 'red'
 					}}>
 					<Text
 						style={styles.distance1kmText}>Distance {distance}</Text>
 					<View
 						style={{
-							height: 14 * alpha,
-							marginLeft: 10 * alpha,
-							marginRight: 19 * alpha,
-							marginTop: 7 * alpha,
+							// height: 14 * alpha,
+							// marginLeft: 10 * alpha,
+							// marginRight: 19 * alpha,
+							// marginTop: 7 * alpha,
 							flexDirection: "row",
-							alignItems: "flex-start",
+							// alignItems: "flex-start",
 						}}>
-						<Text
-							style={styles.distance1kmText}>Distance {distance}</Text>
-						<View
+						{/* <Text
+							style={styles.distance1kmText}>Distance {distance}</Text> */}
+						{/* <View
 							style={{
 								flex: 1,
-							}}/>
+							}} /> */}
 						<View
 							style={styles.moreView}>
 							<TouchableOpacity
 								onPress={this.onMorePressed}
 								style={styles.moreButton}>
 								<Text
-									style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "Location"}</Text>
+									style={styles.distance1kmText}>{isToggleShopLocation ? "Hide" : "Location"}</Text>
 							</TouchableOpacity>
-							{ isToggleShopLocation ? 
+							{isToggleShopLocation ?
 								<Image
 									source={require("./../../assets/images/bitmap-15.png")}
-									style={styles.bitmapImage}/> :
+									style={styles.bitmapImage} /> :
 								<Image
 									source={require("./../../assets/images/bitmap-14.png")}
-									style={styles.bitmapImage}/>
+									style={styles.bitmapImage} />
 							}
-							
+
 						</View>
 					</View>
 				</View>
@@ -1646,29 +1649,33 @@ export default class Home extends React.Component {
 					</MapView>
 					<View
 						style={styles.branchInfoView}>
-						<Text
-							style={styles.branchInfoText}>Outlet Info</Text>
+						{/* <Text
+							style={styles.branchInfoText}>Outlet Info</Text> */}
 						{/* { (shop != null && shop.image != null) && ( */}
+
 						<Image
 							source={{ uri: shop.image.thumb.url }}
 							style={styles.shopImage} />
 						{/* ) } */}
-						<Text
-							style={styles.branchHeaderAddress}>Address </Text>
-						<Text
-							style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
-						<Text
-							style={styles.branchHeaderContact}>Contact </Text>
-						<Text
-							style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
-						<View
-							style={{
-								flex: 1,
-							}} />
-						<Text
-							style={styles.businessHeaderHourText}>Business Hour</Text>
+						<View style={{ marginHorizontal: 10 * alpha }}>
 							<Text
-							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
+								style={styles.branchHeaderAddress}>Address </Text>
+							<Text
+								style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
+							<Text
+								style={styles.branchHeaderContact}>Contact </Text>
+							<Text
+								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={styles.businessHeaderHourText}>Business Hour</Text>
+							<Text
+								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
+
+						</View>
 					</View>
 				</View>
 			)}
@@ -1998,9 +2005,11 @@ const styles = StyleSheet.create({
 		tintColor: TABBAR_INACTIVE_TINT,
 	},
 	shopImage: {
-		resizeMode: "contain",
-		width: 80 * alpha,
-		height: 45 * alpha,
+		resizeMode: "cover",
+		width: windowWidth,
+		aspectRatio: 2 / 1,
+		marginRight: 50
+		// height: 45 * alpha,
 	},
 	headerLeftContainer: {
 		flexDirection: "row",
@@ -2106,7 +2115,7 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		// textAlign: "left",
 	},
 	moreView: {
 		backgroundColor: "transparent",
@@ -2922,7 +2931,7 @@ const styles = StyleSheet.create({
 	},
 	alertViewText: {
 		color: "white",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2943,11 +2952,13 @@ const styles = StyleSheet.create({
 	},
 	showLocationView: {
 		backgroundColor: "white",
-		width: "100%",
-		height: "100%",
+		// width: "100%",
+		// height: "100%",
 		position: "absolute",
 		marginTop: 67 * alpha,
 		alignItems: "flex-start",
+		flex: 1,
+		// marginHorizontal:10
 	},
 	deliveryView: {
 		backgroundColor: "transparent",
@@ -3006,10 +3017,11 @@ const styles = StyleSheet.create({
 	},
 	branchInfoView: {
 		backgroundColor: "transparent",
-		width: windowWidth - 100 * alpha,
-		height: 76 * alpha,
-		marginLeft: 10 * alpha,
-		marginTop: 15 * alpha,
+		// flex: 1,
+		// width: windowWidth - 100 * alpha,
+		// height: 76 * alpha,
+		// marginHorizontal: 10 * alpha,
+		// marginTop: 15 * alpha,
 		alignItems: "flex-start",
 	},
 	branchInfoText: {
@@ -3020,6 +3032,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		marginLeft: 10 * alpha
 	},
 	branchHeaderAddress: {
 		backgroundColor: "transparent",
