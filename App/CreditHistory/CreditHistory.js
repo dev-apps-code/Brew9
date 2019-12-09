@@ -165,7 +165,7 @@ export default class CreditsHistory extends React.Component {
 				<View
 					style={styles.headerView}>
 					<Text
-						style={styles.transactionHistoryText}>Credit History</Text>
+						style={styles.transactionHistoryText}>Wallet History</Text>
 				</View>
 
 				{this.state.loading ?
@@ -186,7 +186,7 @@ export default class CreditsHistory extends React.Component {
 						/> :<View
 						style={styles.blankView}>
 						<Text
-							style={styles.noLabelText}>No Credit History</Text>
+							style={styles.noLabelText}>No Wallet History</Text>
 					</View>
 						}
 				</View> 

@@ -20,11 +20,11 @@ export default class MissionCell extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onStatusPressed = (statement_id) => {
-		
+
 		if (this.props.status != undefined && this.props.status != "") {
 			if (this.props.status == "Completed") {
 				this.props.onStatusPressed(statement_id)
@@ -36,76 +36,77 @@ export default class MissionCell extends React.Component {
 	}
 
 	render() {
-	
+
 		var status_string = "status_string"
 		var voucher_length = this.props.vouchers.length
 
 		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
 			status_string = "Check In"
 		} else {
-			console.log(`this.props.status ${this.props.status}`)
+			// console.log(`this.props.status ${this.props.status}`)
 			status_string = this.props.status
 		}
-		
+		console.log('this.props.point', this.props.point)
+		const point = this.props.point > 1 ? 'points' : 'point'
 		const vouchers = this.props.vouchers.map((item, key) => {
 			return <Text key={key}>{item.voucher.name} x <Text style={styles.highlight}>{item.quantity}</Text>{key < voucher_length - 1 ? ", " : ""}</Text>
 		})
 
 		progress = this.props.progress != undefined ? this.props.progress : 0
-		mission_progress_text = (this.props.mission_task_count != null && this.props.mission_task_count != "") ?`(${progress}/${this.props.mission_task_count})` : ""
+		mission_progress_text = (this.props.mission_task_count != null && this.props.mission_task_count != "") ? `(${progress}/${this.props.mission_task_count})` : ""
 
 		return <TouchableWithoutFeedback
-				onPress={this.onCellTwoPress}>
+			onPress={this.onCellTwoPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.missioncell}>
 				<View
-					navigation={this.props.navigation}
-					style={styles.missioncell}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							marginLeft: 20 * alpha,
-							width:  windowWidth - 20 * alpha,
-							flex: 1,
-							marginTop: 18 * alpha,
-							alignItems: "flex-start",
-						}}>
-						<Text
-							style={styles.titleText} numberOfLines={2}>{this.props.title} {mission_progress_text}</Text>
-						
-							{/* <Text
+					pointerEvents="box-none"
+					style={{
+						marginLeft: 20 * alpha,
+						width: windowWidth - 20 * alpha,
+						flex: 1,
+						marginTop: 18 * alpha,
+						alignItems: "flex-start",
+					}}>
+					<Text
+						style={styles.titleText} numberOfLines={2}>{this.props.title} {mission_progress_text}</Text>
+
+					{/* <Text
 								style={styles.descriptionText}>{reward_string}</Text> */}
-							{this.props.point != null && (<Text
-								style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> points</Text>)}
-							{this.props.vouchers.length > 0 && (<Text
-								style={styles.voucherText}>{vouchers}</Text>)}
-							<View style={styles.spacer} />
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<View
-							style={styles.lineView}/>
-					</View>
+					{this.props.point != null && (<Text
+						style={styles.descriptionText}><Text style={styles.highlight}>+{this.props.point}</Text> {point}</Text>)}
+					{this.props.vouchers.length > 0 && (<Text
+						style={styles.voucherText}>{vouchers}</Text>)}
+					<View style={styles.spacer} />
 					<View
-						pointerEvents="box-none"
 						style={{
-							position: "absolute",
-							right: 0,
-							top: 0,
-							bottom: 0,
-							justifyContent: "center",
-						}}>
-						<TouchableOpacity
-							onPress={() => this.onStatusPressed(this.props.statement_id)}
-						>
+							flex: 1,
+						}} />
+					<View
+						style={styles.lineView} />
+				</View>
+				<View
+					pointerEvents="box-none"
+					style={{
+						position: "absolute",
+						right: 0,
+						top: 0,
+						bottom: 0,
+						justifyContent: "center",
+					}}>
+					<TouchableOpacity
+						onPress={() => this.onStatusPressed(this.props.statement_id)}
+					>
 						<View
 							style={this.props.status != "Pending" ? styles.statusCompleteView : styles.statusView}>
 							<Text
 								style={styles.completeText}>{status_string}</Text>
 						</View>
-						</TouchableOpacity>
-					</View>
+					</TouchableOpacity>
 				</View>
-			</TouchableWithoutFeedback>
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 

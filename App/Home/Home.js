@@ -5,6 +5,8 @@
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import Constants from 'expo-constants';
 import {
 	Text,
@@ -16,7 +18,7 @@ import {
 	Animated,
 	TouchableHighlight,
 	TextInput,
-	ScrollView, 
+	ScrollView,
 	TouchableWithoutFeedback,
 	ActivityIndicator,
 	Platform,
@@ -24,7 +26,9 @@ import {
 	Linking,
 	AppState,
 	Keyboard,
+	BackHandler
 } from "react-native"
+import Brew9Modal from '../Components/Brew9Modal'
 import React from "react"
 import Modal from "react-native-modal"
 import PushRequestObject from '../Requests/push_request_object'
@@ -40,7 +44,7 @@ import ProductRequestObject from "../Requests/product_request_object"
 import NearestShopRequestObject from "../Requests/nearest_shop_request_object"
 import LogoutRequestObject from "../Requests/logout_request_object.js"
 import SwitchSelector from "react-native-switch-selector"
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import _ from 'lodash'
 import AutoHeightImage from 'react-native-auto-height-image'
@@ -48,10 +52,10 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
-import {Notifications} from 'expo';
+import { Notifications } from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
 import NotificationsRequestObject from "../Requests/notifications_request_object";
-import {TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
 import { select } from "redux-saga/effects"
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
@@ -72,19 +76,19 @@ import Moment from 'moment';
 	cart: orders.cart,
 	promotions: orders.promotions,
 	cart_total: orders.cart_total,
-	toggle_update_count:orders.toggle_update_count,
-	discount_cart_total:orders.discount_cart_total,
-	clearCart:orders.clearCart
+	toggle_update_count: orders.toggle_update_count,
+	discount_cart_total: orders.discount_cart_total,
+	clearCart: orders.clearCart
 }))
 
 export default class Home extends React.Component {
-	
+
 	static navigationOptions = ({ navigation }) => {
-		
+
 		const { params = {} } = navigation.state
-		
+
 		return {
-			
+
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -93,7 +97,7 @@ export default class Home extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/logo.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: <View
@@ -103,14 +107,14 @@ export default class Home extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/scan_qr_button.png")}
-						style={styles.navigationBarRightItemIcon}/>
+						style={styles.navigationBarRightItemIcon} />
 				</TouchableOpacity>
 			</View>,
 		}
 	}
 
-	static tabBarItemOptions = ( navigation,store ) => {
-	
+	static tabBarItemOptions = (navigation, store) => {
+
 		return {
 			tabBarLabel: "Menu",
 			tabBarOnPress: ({ navigation, defaultHandler }) => {
@@ -118,15 +122,15 @@ export default class Home extends React.Component {
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
 				store.dispatch(createAction("config/setTab")("home"))
 				defaultHandler()
-			  },
+			},
 			tabBarIcon: ({ iconTintColor, focused }) => {
-				const image = focused 
-				? require('./../../assets/images/order_selected_tab.png') 
-				: require('./../../assets/images/order_tab.png')
+				const image = focused
+					? require('./../../assets/images/order_selected_tab.png')
+					: require('./../../assets/images/order_tab.png')
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }}/>
+					style={{ resizeMode: "contain", width: 30, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }} />
 			},
 		}
 	}
@@ -134,11 +138,12 @@ export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			visible: false,
 			isCartToggle: false,
 			page: 1,
-			data: [],				
-			product_category:[],
-			products:[],
+			data: [],
+			product_category: [],
+			products: [],
 			loading: true,
 			isRefreshing: false,
 			selected_category: 0,
@@ -147,7 +152,7 @@ export default class Home extends React.Component {
 			modalVisible: false,
 			selected_index: null,
 			select_quantity: 1,
-			delivery:1,
+			delivery: 1,
 			modalGalleryVisible: true,
 			selected_promotion: "",
 			isPromoToggle: false,
@@ -160,7 +165,7 @@ export default class Home extends React.Component {
 			location: null,
 			distance: "-",
 			member_distance: 1000,
-			first_promo_popup: false,		
+			first_promo_popup: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 
@@ -168,11 +173,11 @@ export default class Home extends React.Component {
 
 	onQrScanPressed = () => {
 		const { navigate } = this.props.navigation
-		const {currentMember} = this.props
+		const { currentMember } = this.props
 
-		if (currentMember != null){
+		if (currentMember != null) {
 			navigate("ScanQr")
-		}else{			
+		} else {
 			this.refs.toast.show("You need to login before you can topup", TOAST_DURATION, () => {
 				this.props.navigation.navigate("VerifyUserStack")
 			});
@@ -180,33 +185,33 @@ export default class Home extends React.Component {
 	}
 
 
-	
-	registerForPushNotificationsAsync = async() => {
+
+	registerForPushNotificationsAsync = async () => {
 		const { status: existingStatus } = await Permissions.getAsync(
-		  Permissions.NOTIFICATIONS
+			Permissions.NOTIFICATIONS
 		);
 		let finalStatus = existingStatus;
-	  
+
 		// only ask if permissions have not already been determined, because
 		// iOS won't necessarily prompt the user a second time.
 		if (existingStatus !== 'granted') {
-		  // Android remote notification permissions are granted during the app
-		  // install, so this will only ask on iOS
-		  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-		  finalStatus = status;
+			// Android remote notification permissions are granted during the app
+			// install, so this will only ask on iOS
+			const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+			finalStatus = status;
 		}
-	  
+
 		// Stop here if the user did not grant permissions
 		if (finalStatus !== 'granted') {
-		  return;
+			return;
 		}
-	  
+
 		// Get the token that uniquely identifies this device
 		let token = await Notifications.getExpoPushTokenAsync();
-	  
+
 		// POST the token to your backend server from where you can retrieve it to send push notifications.
 		this.loadStorePushToken(token)
-	  }
+	}
 
 	getNotificationAsync = async () => {
 		await this.registerForPushNotificationsAsync()
@@ -214,12 +219,12 @@ export default class Home extends React.Component {
 
 	getLocationAsync = async () => {
 
-		const {dispatch} = this.props
+		const { dispatch } = this.props
 
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
-			 this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
-			 return
+			this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
+			return
 		}
 
 		Location.watchPositionAsync(
@@ -229,38 +234,35 @@ export default class Home extends React.Component {
 			},
 			newLocation => {
 				dispatch(createAction("members/setLocation")(newLocation));
-				
-			// this.props.getMyLocation sets my redu
-		  },
-		  error => console.log(error)
+
+				// this.props.getMyLocation sets my redu
+			},
+			error => console.log(error)
 		);
-	
+
 		let location = await Location.getCurrentPositionAsync({});
 		dispatch(createAction("members/setLocation")(location));
 	};
-	
+
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.location != this.props.location ){
-			if (prevProps.location != null){
+		if (prevProps.location != this.props.location) {
+			if (prevProps.location != null) {
 				this.loadShops(false)
 			}
 			this.computeDistance()
 		}
-		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count){
+		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count) {
 			this.check_promotion_trigger()
 		}
-		if (prevProps.toggle_update_count != this.props.toggle_update_count){
+		if (prevProps.toggle_update_count != this.props.toggle_update_count) {
 			setTimeout(function () {
-				this.toogleCart(true,true)
-			  }.bind(this), 50); 			
+				this.toogleCart(true, true)
+			}.bind(this), 50);
 		}
 	}
 
 	computeDistance() {
-
-
-		const { location,shop } = this.props
-
+		const { location, shop } = this.props
 		if (location != null && shop != null) {
 			const prevLatInRad = location.coords.latitude
 			const prevLongInRad = location.coords.longitude
@@ -270,53 +272,69 @@ export default class Home extends React.Component {
 			var pdis = getPreciseDistance(
 				{ latitude: prevLatInRad, longitude: prevLongInRad },
 				{ latitude: latInRad, longitude: longInRad }
-			  );
-		
+			);
+
 			this.setDistanceString(pdis)
 		}
 	}
-		
+
 	setDistanceString(calculated_distance) {
 		var distance_string = ""
 		// console.log(calculated_distance)
 		var parseDistance = calculated_distance
-		if (parseDistance > 1000 ) {
-			distance_string = `${parseFloat(parseDistance/1000).toFixed(1)}km`
+		if (parseDistance > 1000) {
+			distance_string = `${parseFloat(parseDistance / 1000).toFixed(1)}km`
 		} else {
 			distance_string = `${parseDistance}m`
 		}
-		this.setState({distance : distance_string, member_distance: (parseDistance/1000)})
+		this.setState({ distance: distance_string, member_distance: (parseDistance / 1000) })
+		// this.setState({ distance: distance_string, member_distance: 1 })
 	}
 
 	componentWillMount() {
 		this.getNotificationAsync()
 		if (Platform.OS === 'android') {
 			this.setState({
-			  errorMessage: 'Oops, this will not work in an Android emulator. Try it on your device!',
+				errorMessage: 'Oops, this will not work in an Android emulator. Try it on your device!',
 			});
-		  } else {
+		} else {
 			this.getLocationAsync();
-		  }
-		
-		this.setState({isPromoToggle: false})
+		}
+
+		this.setState({ isPromoToggle: false })
 	}
 
 	async componentDidMount() {
-		const {currentMember} = this.props
+		console.log('BackHandler', BackHandler)
+		const { currentMember } = this.props
 		Keyboard.dismiss()
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
 		})
 		this.loadShops(true)
-		if ( currentMember != null) {
+		if (currentMember != null) {
 			this.loadCurrentStatus()
 		}
-		AppState.addEventListener('change', this._handleAppStateChange);			
+		AppState.addEventListener('change', this._handleAppStateChange);
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
+
 
 	componentWillUnmount() {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+	}
+	onBackPress() {
+		const { dispatch, navigation } = this.props;
+		console.log("Back pressed", navigation);
+		const activeRoute = navigation.state.routeName == "Home" ? true : false;
+		if (activeRoute) {
+			this.handleBackPress()
+			return false;
+		}
+		dispatch(NavigationActions.back());
+		return true;
 	}
 
 	_handleAppStateChange = nextAppState => {
@@ -324,150 +342,153 @@ export default class Home extends React.Component {
 			this.getLocationAsync();
 		}
 		this.setState({ appState: nextAppState });
-	  };
+	};
+	handleBackPress = () => {
+		this.setState({ visible: true })
+	}
 
-	  loadCurrentStatus(){
-       
-        console.log("load")
-        const { dispatch, currentMember } = this.props
-        if (currentMember != null){
-            console.log("Not")
-            this.setState({ loading: true })
-            const callback = eventObject => {
-                console.log("Event", eventObject)
-                this.setState({
-                    loading: false,
-                })
-            }
-            AsyncStorage.getItem("notification_key", (err, result) => {
-                var last_note = 0
-                if (result != null) {
-                  last_note = result
-                }
-                const obj = new CurrentStatusRequestObject(last_note)
-                obj.setUrlId(currentMember.id)
-                console.log("obj", obj)
-                dispatch(
-                    createAction('members/loadCurrentStatus')({
-                        object:obj,
-                        callback,
-                    })
-                )
-              })
-            
-        }
-    }
+	loadCurrentStatus() {
+
+		console.log("load")
+		const { dispatch, currentMember } = this.props
+		if (currentMember != null) {
+			console.log("Not")
+			this.setState({ loading: true })
+			const callback = eventObject => {
+				console.log("Event", eventObject)
+				this.setState({
+					loading: false,
+				})
+			}
+			AsyncStorage.getItem("notification_key", (err, result) => {
+				var last_note = 0
+				if (result != null) {
+					last_note = result
+				}
+				const obj = new CurrentStatusRequestObject(last_note)
+				obj.setUrlId(currentMember.id)
+				console.log("obj", obj)
+				dispatch(
+					createAction('members/loadCurrentStatus')({
+						object: obj,
+						callback,
+					})
+				)
+			})
+
+		}
+	}
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
-		const callback = eventObject => {}
+		const callback = eventObject => { }
 
-		if (currentMember != null){
+		if (currentMember != null) {
 			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('members/loadStorePushToken')({
-				object:obj,
-				callback,
+					object: obj,
+					callback,
 				})
 			)
 		}
 	}
 
-	loadShops(loadProducts){
+	loadShops(loadProducts) {
 
 		// console.log("Status", loadProducts)
-		const { dispatch,company_id,location } = this.props
+		const { dispatch, company_id, location } = this.props
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
 			this.setState({ loading: false })
 			// console.log("Shop", eventObject.result)
-			if (eventObject.success) {			
-				this.setState({					
+			if (eventObject.success) {
+				this.setState({
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
 					this.check_promotion_trigger()
-					if (loadProducts){
+					if (loadProducts) {
 						this.loadStoreProducts()
 						this.getLocationAsync()
 						if (first_promo_popup == false) {
 							this.shouldShowFeatured(this.props.shop)
 						}
-					}					
-				})		
+					}
+				})
 			}
 		}
 
 		var latitude = location != null ? location.coords.latitude : null
-		var longitude = location != null ? location.coords.longitude  : null
-	
+		var longitude = location != null ? location.coords.longitude : null
+
 		const obj = new NearestShopRequestObject(latitude, longitude)
 		obj.setUrlId(company_id)
 		dispatch(
 			createAction('shops/loadShops')({
-				object:obj,
+				object: obj,
 				callback,
 			}
-		))
-		
+			))
+
 	}
 
 	loadStoreProducts() {
 
 		const { dispatch, company_id } = this.props
-		const { menu_banners } =  this.state
+		const { menu_banners } = this.state
 
 		const callback = eventObject => {
 			if (eventObject.success) {
 				if (eventObject.result.force_upgrade) {
 					this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
 						Linking.openURL(eventObject.result.url)
-					});			
+					});
 				} else {
-				this.setState({
-					data: eventObject.result,
-					total: eventObject.total,
-					page: this.state.page + 1,
-				},function () {
-					let data = [...this.state.data]
-					// console.log("Data",data)
-					var items = []
-					var index_length = menu_banners.length
-					for(var index in data) {
-						data[index].selected = index == 0 ? true : false
-						data[index].scroll_index = index_length
-						// console.log("Index",data[index])
-						items = items.concat(data[index])
-						index_length = index_length + 1
-						items = items.concat(data[index].products)						
-						index_length = index_length + data[index].products.length
-					}
 					this.setState({
-						products: menu_banners.concat(items),
-						data: data
+						data: eventObject.result,
+						total: eventObject.total,
+						page: this.state.page + 1,
 					}, function () {
-						
-					})
-				}.bind(this))
-			}
+						let data = [...this.state.data]
+						// console.log("Data",data)
+						var items = []
+						var index_length = menu_banners.length
+						for (var index in data) {
+							data[index].selected = index == 0 ? true : false
+							data[index].scroll_index = index_length
+							// console.log("Index",data[index])
+							items = items.concat(data[index])
+							index_length = index_length + 1
+							items = items.concat(data[index].products)
+							index_length = index_length + data[index].products.length
+						}
+						this.setState({
+							products: menu_banners.concat(items),
+							data: data
+						}, function () {
+
+						})
+					}.bind(this))
+				}
 			}
 			this.setState({
 				isRefreshing: false,
 				loading: false,
 			})
-			
+
 		}
-		
-			const obj = new ProductRequestObject()
-			obj.setUrlId(company_id)
-			dispatch(
-				createAction('products/loadStoreProducts')({
-					object: obj,
-					callback
-				})
-			)
-		
+
+		const obj = new ProductRequestObject()
+		obj.setUrlId(company_id)
+		dispatch(
+			createAction('products/loadStoreProducts')({
+				object: obj,
+				callback
+			})
+		)
+
 	}
 
 	onRefresh() {
@@ -480,15 +501,15 @@ export default class Home extends React.Component {
 	}
 
 	onCheckoutPressed = () => {
-		const {  member_distance } = this.state
+		const { member_distance } = this.state
 		const { navigate } = this.props.navigation
-		const { navigation,dispatch } = this.props
-		const {currentMember,shop, cart, promotions } = this.props
+		const { navigation, dispatch } = this.props
+		const { currentMember, shop, cart, promotions } = this.props
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
-	  		analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > shop.max_order_distance_in_km){
+			analytics.event(new Event('Home', 'Click', "Checkout"))
+			if (member_distance > shop.max_order_distance_in_km) {
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
@@ -497,19 +518,20 @@ export default class Home extends React.Component {
 					this.removeNavigationListener()
 					const { state } = payload
 					const { params } = state
-					
+					const { clearCart } = params
+
 					console.log(`clearcart ${clearCart}`)
-					if (clearCart== true) {						
-						// this.onClearPress()									
-						// this.loadShops()
-						// dispatch(createAction("orders/noClearCart")({}));
-						// navigate("PickUp")
+					if (params != undefined && params.clearCart == true) {
+
+						this.loadShops()
+						dispatch(createAction("orders/resetCart")({}));
+						navigate("PickUp")
 					} else {
 
 					}
 				})
-		
-				navigate("Checkout", {					
+
+				navigate("Checkout", {
 					returnToRoute: navigation.state
 				})
 			}
@@ -518,7 +540,7 @@ export default class Home extends React.Component {
 				this.removeNavigationListener()
 				this.loadShops()
 			})
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: navigation.state
 			})
 		}
@@ -527,19 +549,19 @@ export default class Home extends React.Component {
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
-		  this.navigationListener.remove()
-		  this.navigationListener = null
+			this.navigationListener.remove()
+			this.navigationListener = null
 		}
 	}
 
-	onBannerPressed = (item,index) => {
+	onBannerPressed = (item, index) => {
 		// const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "Featured Promo"))
 		if (item.banner_detail_image != undefined && item.banner_detail_image != "") {
 			this.setState({
 				selected_promotion: item.banner_detail_image
-			}, function(){
+			}, function () {
 				// console.log(item.banner_detail_image)
 				this.setState({
 					isPromoToggle: true
@@ -555,10 +577,10 @@ export default class Home extends React.Component {
 		if (value == 1) {
 
 			this.refs.toast.show("Delivery not available yet", TOAST_DURATION, () => {
-                this.setState({
+				this.setState({
 					delivery: 0
 				})
-            })
+			})
 		}
 		this.setState({
 			delivery: 0
@@ -570,19 +592,19 @@ export default class Home extends React.Component {
 
 		let data = [...this.state.data]
 
-		this.setState( { data, selected_category: selected_index })
-		if (scroll_index < this.state.products.length){
-			this.flatListRef.scrollToIndex({animated: true, index: scroll_index})
-		}		
+		this.setState({ data, selected_category: selected_index })
+		if (scroll_index < this.state.products.length) {
+			this.flatListRef.scrollToIndex({ animated: true, index: scroll_index })
+		}
 	}
 
-	reachProductIndex = ( viewableItems, changed ) => {
+	reachProductIndex = (viewableItems, changed) => {
 
 		let viewable = viewableItems.viewableItems
 		let data = [...this.state.data]
 
 		var first_index = viewable[0].index
-		var last_index = viewable[viewable.length-1].index
+		var last_index = viewable[viewable.length - 1].index
 
 		for (var index in data) {
 			data[index].selected = false
@@ -597,25 +619,25 @@ export default class Home extends React.Component {
 			}
 			else if (data[parseInt(next_index)]) {
 				// console.log("First", first_index, "Previous",data[index].scroll_index)
-				if ( second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index) ) {
+				if (second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index)) {
 					data[index].selected = true
 					break
 				}
 			} else {
-				data[data.length-1].selected = true
+				data[data.length - 1].selected = true
 				break
 			}
-			
+
 		}
-		this.setState( { data })
+		this.setState({ data })
 
 	}
 
 	onMorePressed = () => {
 
-		const {isToggleShopLocation, dispatch} = this.props
+		const { isToggleShopLocation, dispatch } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "More"))
+		analytics.event(new Event('Home', 'Click', "Location"))
 		if (isToggleShopLocation) {
 			dispatch(createAction("config/setToggleShopLocation")(false))
 		} else {
@@ -623,17 +645,17 @@ export default class Home extends React.Component {
 		}
 	}
 
-	toogleCart = (isUpdate,toggleOn) => {
+	toogleCart = (isUpdate, toggleOn) => {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "View Cart"))
 		const { isCartToggle, product_view_height } = this.state
-		const {cart,promotions} = this.props
+		const { cart, promotions } = this.props
 
 		var product_checkout_height = product_view_height
 		var headerHeight = 31 * alpha
 		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
 		var checkoutHeight = 51 * alpha
-		var content =  height 
+		var content = height
 		var finalheight = product_checkout_height - content
 		var height_cap = product_view_height * 0.4
 
@@ -643,23 +665,23 @@ export default class Home extends React.Component {
 		}
 
 		if (isUpdate) {
-			if(toggleOn ) {
-				this.setState({ isCartToggle: true })
-				Animated.spring(this.moveAnimation, {
-					toValue: {x: 0, y: cart.length == 0 ? windowHeight : finalheight},
-				}).start()
+			if (toggleOn) {
+				// this.setState({ isCartToggle: true })
+				// Animated.spring(this.moveAnimation, {
+				// 	toValue: { x: 0, y: cart.length == 0 ? windowHeight : finalheight },
+				// }).start()
 			}
 		} else {
 			if (!toggleOn) {
-				this.setState({ isCartToggle: false }, function(){
+				this.setState({ isCartToggle: false }, function () {
 					Animated.spring(this.moveAnimation, {
-						toValue: {x: 0, y: windowHeight},
+						toValue: { x: 0, y: windowHeight },
 					}).start()
 				})
 			} else {
-				this.setState({ isCartToggle: true }, function(){
+				this.setState({ isCartToggle: true }, function () {
 					Animated.spring(this.moveAnimation, {
-						toValue: {x: 0, y: finalheight},
+						toValue: { x: 0, y: finalheight },
 					}).start()
 				})
 			}
@@ -760,15 +782,15 @@ export default class Home extends React.Component {
 
 	onCellPress = (item, index) => {
 		if (this.state.isCartToggle) {
-			this.toogleCart(false,true)
+			this.toogleCart(false, true)
 		}
 		this.setState({ modalVisible: true, selected_index: index })
 	}
 
 
-	onChangeQuantityPress = (item,index,operation,isCart) => {
+	onChangeQuantityPress = (item, index, operation, isCart) => {
 
-		const {cart_total,dispatch } = this.props
+		const { cart_total, dispatch } = this.props
 
 		let cart = [...this.props.cart]
 
@@ -806,12 +828,12 @@ export default class Home extends React.Component {
 					cart[index] = cartItem
 					dispatch(createAction("orders/updateCart")({
 						cart
-					}));	
+					}));
 				} else {
 					dispatch(createAction("orders/updateCart")({
 						cart: this.props.cart.concat(cartItem)
-					}));		
-				}							
+					}));
+				}
 			} else {
 
 				if (cartItem.quantity > 1) {
@@ -833,14 +855,14 @@ export default class Home extends React.Component {
 				if (cartItem.quantity === null) {
 					cart.splice(index, 1)
 				}
-		
+
 				dispatch(createAction("orders/updateCart")({
 					cart
-				}));						
+				}));
 
 			}
 
-			
+
 		} else {
 
 			var item = this.state.products[index]
@@ -872,12 +894,12 @@ export default class Home extends React.Component {
 					cart[cart_index] = cartItem
 					dispatch(createAction("orders/updateCart")({
 						cart
-					}));	
+					}));
 				} else {
 					dispatch(createAction("orders/updateCart")({
 						cart: this.props.cart.concat(cartItem)
-					}));	
-				}						
+					}));
+				}
 			} else {
 				if (item.quantity > 1) {
 					item.quantity = item.quantity - 1
@@ -899,7 +921,7 @@ export default class Home extends React.Component {
 				var calculated_total = (parseFloat(cart_total) - parseFloat(item.price)).toFixed(2)
 				dispatch(createAction("orders/updateCart")({
 					cart
-				}));					
+				}));
 			}
 
 			this.forceUpdate()
@@ -907,8 +929,8 @@ export default class Home extends React.Component {
 	}
 
 	check_promotion_trigger = () => {
-		
-		const { currentMember,dispatch,promotions ,cart_total,shop} = this.props
+
+		const { currentMember, dispatch, promotions, cart_total, shop } = this.props
 
 		let newcart = [...this.props.cart]
 		let newpromotion = [...promotions]
@@ -917,46 +939,46 @@ export default class Home extends React.Component {
 		var final_cart_value = cart_total
 
 		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
-			
+
 			for (var index in shop.all_promotions) {
 
 				var promotion = shop.all_promotions[index]
 
 				if (currentMember != null && promotion.has_triggered != true) {
 
-					if (promotion.trigger_price != null){
+					if (promotion.trigger_price != null) {
 						var price = 0
-		
+
 						var trigger_price = parseFloat(promotion.trigger_price)
 						var remaining = trigger_price - cart_total
-		
+
 						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
-		
+
 						if (remaining <= 0 && search_cart_promo_index < 0) {
-		
+
 							shop.all_promotions[index].has_triggered = true
 							let cartItem = {
 								clazz: "promotion",
 								id: promotion.id,
 								name: promotion.cart_text,
-								description:  "",
+								description: "",
 								price: price,
 								type: promotion.reward_type
 							}
 							promotions_item.push(cartItem)
-						
+
 							dispatch(createAction("orders/updatePromotions")({
 								promotions: newpromotion.concat(promotions_item),
-							}));	
-									
+							}));
+
 						}
 					} else if (newcart.length > 0) {
 
 						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
 						var price = 0
-		
+
 						if (promotion.reward_type != null && promotion.reward_type == "Discount") {
-						
+
 							if (promotion.value_type != null && promotion.value_type == "percent") {
 								var discount_value = promotion.value ? promotion.value : 0
 								price = cart_total * discount_value / 100
@@ -965,64 +987,64 @@ export default class Home extends React.Component {
 									price = promotion.maximum_discount_allow
 								}
 								final_cart_value = cart_total - price
-								
+
 							} else if (promotion.value_type != null && promotion.value_type == "fixed") {
 								var discount_value = promotion.value ? promotion.value : 0
 								price = cart_total - discount_value
 							}
 
 							if (search_cart_promo_index < 0) {
-		
+
 								let cartItem2 = {
 									clazz: "promotion",
 									id: promotion.id,
 									name: promotion.cart_text,
-									description:  "",
+									description: "",
 									price: price,
 								}
 								promotions_item.push(cartItem2)
 								dispatch(createAction("orders/updatePromotions")({
 									promotions: newpromotion.concat(promotions_item),
-								}));		
+								}));
 
 							} else {
 								var item = newpromotion[search_cart_promo_index]
-								item.price = price								
+								item.price = price
 							}
 						}
 						else {
-							
+
 							if (search_cart_promo_index < 0) {
-			
+
 								let cartItem3 = {
 									clazz: "promotion",
 									id: promotion.id,
 									name: promotion.cart_text,
-									description:  "",
+									description: "",
 									price: price,
 								}
-								promotions_item.push(cartItem3)										
-							} 
+								promotions_item.push(cartItem3)
+							}
 						}
-						
+
 					}
 				} else if (currentMember != null && promotion.has_triggered == true) {
 
-					if (promotion.trigger_price != null){
+					if (promotion.trigger_price != null) {
 
 						var price = 0
-		
+
 						var trigger_price = parseFloat(promotion.trigger_price)
 						var remaining = trigger_price - cart_total
-		
+
 						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
-						
-						if (remaining > 0 && search_cart_promo_index >= 0){
+
+						if (remaining > 0 && search_cart_promo_index >= 0) {
 							newpromotion.splice(search_cart_promo_index, 1)
 							shop.all_promotions[index].has_triggered = false
 							dispatch(createAction("orders/updatePromotions")({
 								promotions: newpromotion
-							}));	
+							}));
 						}
 					}
 				}
@@ -1037,18 +1059,18 @@ export default class Home extends React.Component {
 		}
 
 		if (check_has_product == false) {
-			 this.onClearPress()
+			this.onClearPress()
 		}
 
 		dispatch(createAction("orders/updateDiscountCartTotal")({
 			discount_cart_total: final_cart_value
-		}));	
+		}));
 	}
 
 	onAddToCartPressed = (product) => {
-		
+
 		let cart = [...this.props.cart]
-		const {dispatch} = this.props		
+		const { dispatch } = this.props
 		const clone_variants = _.cloneDeep(product.selected_variants)
 		const search_cart_index = cart.findIndex(element => element.id == product.id && _.isEqual(product.selected_variants, element.selected_variants))
 
@@ -1069,47 +1091,47 @@ export default class Home extends React.Component {
 
 		if (search_cart) {
 			search_cart.quantity = parseInt(search_cart.quantity) + parseInt(this.state.select_quantity)
-			this.setState({select_quantity: 1 })
+			this.setState({ select_quantity: 1 })
 			dispatch(createAction("orders/updateCart")({
 				cart: cart,
 			}));
 		} else {
 			dispatch(createAction("orders/updateCart")({
 				cart: cart.concat(cartItem),
-			}));	
-			this.setState({	
+			}));
+			this.setState({
 				products: this.state.products,
-				select_quantity: 1, 
+				select_quantity: 1,
 			})
 		}
 
 		this.setState({
 			modalVisible: false,
 		})
-		
-		
+
+
 	}
 
 	onClosePressed = () => {
-		this.setState({ modalVisible: false , isPromoToggle: false, image_check: false, select_quantity: 1})
+		this.setState({ modalVisible: false, isPromoToggle: false, image_check: false, select_quantity: 1 })
 	}
 
 	onClearPress = () => {
-		const {dispatch} = this.props
-		
-		this.toogleCart(false,false)
-		
+		const { dispatch } = this.props
+
+		this.toogleCart(false, false)
+
 
 		dispatch(createAction("orders/resetCart")());
-		
+
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
 			this.state.products[index].total_quantity = 0
 		}
-		
+
 	}
 
-	calculateImageDimension(selected_promotion){
+	calculateImageDimension(selected_promotion) {
 
 		const { image_check } = this.state
 		let image_width = 0
@@ -1120,38 +1142,38 @@ export default class Home extends React.Component {
 			Image.getSize(selected_promotion, (width, height) => {
 				image_width = width, image_height = height
 
-				var ratio =  windowWidth / image_width
+				var ratio = windowWidth / image_width
 				var calculated_height = image_height * ratio
 
 				if (calculated_height > windowHeight) {
 					image_long = true
 				}
 				if (image_width > image_height) {
-					this.setState({image_isHorizontal:true, image_check: true, image_isLong: image_long})
+					this.setState({ image_isHorizontal: true, image_check: true, image_isLong: image_long })
 				} else {
-					this.setState({image_isHorizontal:false, image_check: true, image_isLong: image_long})
+					this.setState({ image_isHorizontal: false, image_check: true, image_isLong: image_long })
 				}
 			});
 		}
-			
+
 	}
 
-	onFeaturedPromotionPressed (item) {
+	onFeaturedPromotionPressed(item) {
 
 		const { currentMember } = this.props
 		if (item.image.url != undefined && item.image.url != "") {
 			// let should_show = this.shouldShowFeatured(this.props.shop)
 			// if (should_show == true) {
+			this.setState({
+				selected_promotion: item.image.url,
+				first_promo_popup: true
+			}, function () {
+				// console.log(item.banner_detail_image)
 				this.setState({
-					selected_promotion: item.image.url,
-					first_promo_popup: true
-				}, function(){
-					// console.log(item.banner_detail_image)
-					this.setState({
-						isPromoToggle: true
-					})
-					this.calculateImageDimension(item.image.url)
+					isPromoToggle: true
 				})
+				this.calculateImageDimension(item.image.url)
+			})
 			// }
 		}
 	}
@@ -1189,7 +1211,7 @@ export default class Home extends React.Component {
 				}
 				return product
 			}
-			
+
 		}
 		return null
 
@@ -1202,7 +1224,7 @@ export default class Home extends React.Component {
 			selected_item = null
 		}
 		selected_variants[key] = selected_item
-		let filtered = selected_variants.filter(function(el) { return el })
+		let filtered = selected_variants.filter(function (el) { return el })
 		let total = filtered.reduce((a, b) => +a + +b.price, 0)
 		selected_product.calculated_price = (parseFloat(selected_product.price) + parseFloat(total)).toFixed(2)
 		this.setState({
@@ -1211,16 +1233,16 @@ export default class Home extends React.Component {
 	}
 
 	dismissProduct() {
-		this.setState({ modalVisible: false})
+		this.setState({ modalVisible: false })
 	}
-	
+
 	renderModalContent = (selected_product, shop) => {
 
 		let select_quantity = this.state.select_quantity
 
-		let filtered = selected_product.selected_variants.filter(function(el) { return el })
-		let variant_array = filtered.map(a => a.value)	
-		
+		let filtered = selected_product.selected_variants.filter(function (el) { return el })
+		let variant_array = filtered.map(a => a.value)
+
 		let order_limit = 100
 
 		if (selected_product.product_settings[0].order_limit) {
@@ -1233,7 +1255,7 @@ export default class Home extends React.Component {
 		if (!shop.can_order) {
 			enabled = false
 		}
-		
+
 		const ingredients = selected_product.ingredients.map((item, key) => {
 			return <View
 				style={item.highlight ? styles.ingredientHighlightView : styles.ingredientView}
@@ -1262,13 +1284,13 @@ export default class Home extends React.Component {
 
 							return <TouchableOpacity
 								key={value_key}
-								onPress={() => this.onVariantPressed(selected_product,selected_variants, key, value, required_variant)}
-								style={ selected ? styles.selectedButton : styles.unselectedButton}>
-								{ value.recommended && (<Image
+								onPress={() => this.onVariantPressed(selected_product, selected_variants, key, value, required_variant)}
+								style={selected ? styles.selectedButton : styles.unselectedButton}>
+								{value.recommended && (<Image
 									source={require("./../../assets/images/star.png")}
-									style={styles.recommendedStarImage}/>)}
+									style={styles.recommendedStarImage} />)}
 								<Text
-									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} { value.price > 0 && (`$${value.price}`)}</Text>
+									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} {value.price > 0 && (`$${value.price}`)}</Text>
 							</TouchableOpacity>
 						})
 					}
@@ -1278,31 +1300,31 @@ export default class Home extends React.Component {
 
 		return <View
 			style={styles.popOutView}>
-				<View
-					style={styles.topbuttonView}>
-					{/* <TouchableOpacity
+			<View
+				style={styles.topbuttonView}>
+				{/* <TouchableOpacity
 						onPress={this.onFavouritePressed}
 						style={styles.favouriteButton}>
 						<Image
 							source={require("./../../assets/images/group-9-11.png")}
 							style={styles.favouriteButtonImage}/>
 					</TouchableOpacity> */}
-					<TouchableOpacity
-						onPress={this.onClosePressed}
-						style={styles.closeButton}>
-						<Text
-							style={styles.closeButtonText}>X</Text>
-					</TouchableOpacity>
+				<TouchableOpacity
+					onPress={this.onClosePressed}
+					style={styles.closeButton}>
+					<Text
+						style={styles.closeButtonText}>X</Text>
+				</TouchableOpacity>
 
-				</View>
+			</View>
 			<View
 				style={styles.imageblockView}>
 				<Image
-					source={{uri : selected_product.image.url}}
-					style={styles.productimageImage}/>
+					source={{ uri: selected_product.image.url }}
+					style={styles.productimageImage} />
 			</View>
 			<View
-				pointerEvents="box-none">				
+				pointerEvents="box-none">
 				<ScrollView
 					style={styles.contentScrollView}>
 					<View style={styles.productView}>
@@ -1311,130 +1333,129 @@ export default class Home extends React.Component {
 						<View
 							style={{
 								flex: 1,
-							}}/>
-							{
-								selected_product.ingredients && (
-									<View
-										pointerEvents="box-none"
-										style={{
-											alignSelf: "flex-start",
-											flex: 1,
-											marginLeft: 1 * alpha,
-											flexDirection: "row",
-											flexWrap: "wrap"
-										}}>
-										{ingredients}
-									</View>
-								)
-							}
-							
-							{ (selected_product.description!=null && selected_product.description != '') && (
-								<Text style={styles.descriptionText}>{selected_product.description}</Text>
-							)}
-						</View>
+							}} />
+						{
+							selected_product.ingredients && (
+								<View
+									pointerEvents="box-none"
+									style={{
+										alignSelf: "flex-start",
+										flex: 1,
+										marginLeft: 1 * alpha,
+										flexDirection: "row",
+										flexWrap: "wrap"
+									}}>
+									{ingredients}
+								</View>
+							)
+						}
+
+						{(selected_product.description != null && selected_product.description != '') && (
+							<Text style={styles.descriptionText}>{selected_product.description}</Text>
+						)}
+					</View>
 					{variants}
 				</ScrollView>
 				{
 					(selected_product.price > 0.00 && selected_product.price) ?
-					<View
-						style={styles.bottomView}>
 						<View
-							style={styles.lineView}/>
-						<View
-							style={styles.summaryView}>
+							style={styles.bottomView}>
 							<View
-								pointerEvents="box-none"
-								style={{
-									height: 32 * alpha,
-									flexDirection: "row",
-									// alignItems: "center",
-								}}>
-								<Text
-									style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
+								style={styles.lineView} />
+							<View
+								style={styles.summaryView}>
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 32 * alpha,
+										flexDirection: "row",
+										// alignItems: "center",
+									}}>
+									<Text
+										style={styles.priceText}>${selected_product.calculated_price ? parseFloat(selected_product.calculated_price).toFixed(2) : 0.00}</Text>
+									<View
+										style={{
+											flex: 1,
+										}} />
+									<View
+										style={styles.controlView}>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												alignSelf: "center",
+												top: 0 * alpha,
+												bottom: 0 * alpha,
+												justifyContent: "center",
+											}}>
+											<Text
+												style={styles.quantityText}>{select_quantity}</Text>
+										</View>
+										<View
+											pointerEvents="box-none"
+											style={{
+												position: "absolute",
+												left: 0 * alpha,
+												right: 0 * alpha,
+												top: 0 * alpha,
+												height: 23 * alpha,
+												flexDirection: "row",
+												alignItems: "flex-start",
+											}}>
+											<TouchableOpacity
+												onPress={() => { if (select_quantity > 1) this.setState({ select_quantity: select_quantity -= 1 }) }}
+												style={styles.removeButton}>
+												<Image
+													source={require("./../../assets/images/button-4.png")}
+													style={styles.removeButtonImage} />
+											</TouchableOpacity>
+											<View
+												style={{
+													flex: 1,
+												}} />
+											<TouchableOpacity
+												onPress={() => { if (select_quantity < order_limit) this.setState({ select_quantity: select_quantity += 1 }) }}
+												style={styles.addButton}>
+												<Image
+													source={require("./../../assets/images/add-18.png")}
+													style={styles.addButtonImage} />
+											</TouchableOpacity>
+										</View>
+									</View>
+								</View>
 								<View
 									style={{
 										flex: 1,
-									}}/>
-								<View
-									style={styles.controlView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											alignSelf: "center",
-											top: 0 * alpha,
-											bottom: 0 * alpha,
-											justifyContent: "center",
-										}}>
-										<Text
-											style={styles.quantityText}>{select_quantity}</Text>
-									</View>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0 * alpha,
-											right: 0 * alpha,
-											top: 0 * alpha,
-											height: 23 * alpha,
-											flexDirection: "row",
-											alignItems: "flex-start",
-										}}>
-										<TouchableOpacity
-											onPress={() => { if (select_quantity > 1) this.setState({select_quantity: select_quantity -= 1}) }}
-											style={styles.removeButton}>
-											<Image
-												source={require("./../../assets/images/button-4.png")}
-												style={styles.removeButtonImage}/>
-										</TouchableOpacity>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<TouchableOpacity
-											onPress={() => { if (select_quantity < order_limit) this.setState({select_quantity: select_quantity += 1}) }}
-											style={styles.addButton}>
-											<Image
-												source={require("./../../assets/images/add-18.png")}
-												style={styles.addButtonImage}/>
-										</TouchableOpacity>
-									</View>
-								</View>
+									}} />
+								<Text
+									style={styles.optionsText}>{variant_array.join(", ")}</Text>
 							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.optionsText}>{variant_array.join(", ")}</Text>
+							<TouchableOpacity
+								disabled={!enabled}
+								onPress={() => this.onAddToCartPressed(selected_product)}
+								style={enabled ? [styles.addToCartButton, styles.normal] : [styles.addToCartButton, styles.disabled]}>
+								<Text
+									style={styles.addToCartButtonText}>Add to Cart</Text>
+							</TouchableOpacity>
 						</View>
-						<TouchableOpacity
-							disabled={!enabled}
-							onPress={() => this.onAddToCartPressed(selected_product)}
-							style={enabled ? [styles.addToCartButton,styles.normal] : [styles.addToCartButton,styles.disabled] }>
-							<Text
-								style={styles.addToCartButtonText}>Add to Cart</Text>
-						</TouchableOpacity>
-					</View>
-					: <View style={{height: 10 * alpha}}></View>
+						: <View style={{ height: 10 * alpha }}></View>
 				}
-				
+
 			</View>
 		</View>
 	}
 
 	render() {
-
 		let selected_product = this.get_product(this.state.selected_index)
-		let {delivery,distance } = this.state
-		let {isToggleShopLocation,cart,promotions,shop} = this.props
+		let { delivery, distance } = this.state
+		let { isToggleShopLocation, cart, promotions, shop } = this.props
 		let categoryBottomSpacer = undefined
 		// let should_show = this.shouldShowFeatured(shop)
 
-		let fullList = [...cart,...promotions]
+		let fullList = [...cart, ...promotions]
 
-		if (shop !== null ){
-			if (shop.can_order == false){
+		if (shop !== null) {
+			if (shop.can_order == false) {
 				if (shop.featured_promotion !== null) {
 					categoryBottomSpacer = styles.categoryListPosition3
 				} else {
@@ -1446,7 +1467,7 @@ export default class Home extends React.Component {
 				} else if (shop.featured_promotion !== null && cart.length == 0) { //Have Feature No Cart
 					categoryBottomSpacer = styles.categoryListPosition2
 				} else if (shop.featured_promotion == null && cart.length > 0) { //No Feature Have Cart
-					
+
 					categoryBottomSpacer = styles.categoryListPosition2
 				} else { //All no
 					categoryBottomSpacer = styles.categoryListPosition1
@@ -1456,10 +1477,10 @@ export default class Home extends React.Component {
 			categoryBottomSpacer = styles.categoryListPosition1
 		}
 
-		return <View style={styles.page1View}>	
-			
+		return <View style={styles.page1View}>
+
 			<View style={styles.topsectionView}>
-				
+
 				<View
 					pointerEvents="box-none"
 					style={{
@@ -1469,25 +1490,25 @@ export default class Home extends React.Component {
 						marginTop: 8 * alpha,
 						flexDirection: "row",
 					}}>
-						
+
 					<View
 						style={styles.branchView}>
 						{/* <TouchableOpacity
 							onPress={this.onBranchPressed}
 							style={styles.branchButton}> */}
-							<Text
-								style={styles.branchButtonText}>{shop ? shop.name : ""}</Text>
-							{/* <Image
+						<Text
+							style={styles.branchButtonText}>{shop ? shop.name : ""}</Text>
+						{/* <Image
 							source={require("./../../assets/images/group-22.png")}
 							style={styles.branchButtonImage}/> */}
 						{/* </TouchableOpacity> */}
 					</View>
-					
+
 					<View
 						style={{
 							flex: 1,
-						}}/>
-						{/* <View style={styles.pickUpDeliveryView}>
+						}} />
+					{/* <View style={styles.pickUpDeliveryView}>
 							<SwitchSelector
 								options={[
 									{ label: "Pick Up", value: 0 },
@@ -1508,70 +1529,84 @@ export default class Home extends React.Component {
 							<TouchableOpacity style={styles.pickUpDeliveryViewTemp} onPress={() => this._toggleDelivery(1)}></TouchableOpacity>
 							
 						</View> */}
-					</View>
+				</View>
+				<View
+					pointerEvents="box-none"
+					style={{
+						height: 14 * alpha,
+						marginLeft: 10 * alpha,
+						marginRight: 19 * alpha,
+						marginTop: 7 * alpha,
+						flexDirection: "row",
+						alignItems: "flex-start",
+						justifyContent: 'space-between',
+						// backgroundColor: 'red'
+					}}>
+					<Text
+						style={styles.distance1kmText}>Distance {distance}</Text>
 					<View
-						pointerEvents="box-none"
 						style={{
-							height: 14 * alpha,
-							marginLeft: 10 * alpha,
-							marginRight: 19 * alpha,
-							marginTop: 7 * alpha,
+							// height: 14 * alpha,
+							// marginLeft: 10 * alpha,
+							// marginRight: 19 * alpha,
+							// marginTop: 7 * alpha,
 							flexDirection: "row",
-							alignItems: "flex-start",
+							// alignItems: "flex-start",
 						}}>
-						<Text
-							style={styles.distance1kmText}>Distance {distance}</Text>
-						<View
+						{/* <Text
+							style={styles.distance1kmText}>Distance {distance}</Text> */}
+						{/* <View
 							style={{
 								flex: 1,
-							}}/>
+							}} /> */}
 						<View
 							style={styles.moreView}>
 							<TouchableOpacity
 								onPress={this.onMorePressed}
 								style={styles.moreButton}>
 								<Text
-									style={styles.moreButtonText}>{isToggleShopLocation ? "Hide" : "More"}</Text>
+									style={styles.distance1kmText}>{isToggleShopLocation ? "Hide" : "Location"}</Text>
 							</TouchableOpacity>
-							{ isToggleShopLocation ? 
+							{isToggleShopLocation ?
 								<Image
 									source={require("./../../assets/images/bitmap-15.png")}
-									style={styles.bitmapImage}/> :
+									style={styles.bitmapImage} /> :
 								<Image
 									source={require("./../../assets/images/bitmap-14.png")}
-									style={styles.bitmapImage}/>
+									style={styles.bitmapImage} />
 							}
-							
+
 						</View>
 					</View>
-					
 				</View>
-				{this.renderPromotionTopBar(shop, cart)}
-				{this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>
-					:
-					<View
-						style={styles.productsectionView}
-						onLayout={(event) => this.measureView(event)}>
-						<View
-							style={[styles.categorylistFlatListViewWrapper]}>
-							<FlatList
-								renderItem={this.renderCategorylistFlatListCell}
-								data={this.state.data}
-								style={styles.categorylistFlatList}
-								keyExtractor={(item, index) => index.toString()}/>
 
-								<View style={categoryBottomSpacer}/>
-								{this.renderFeaturedPromo(shop,cart)}
-						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<View
-							style={styles.productlistFlatListViewWrapper}>
-							{this.state.loading ?
-								undefined
-								:
+			</View>
+			{this.renderPromotionTopBar(shop, cart)}
+			{this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>
+				:
+				<View
+					style={styles.productsectionView}
+					onLayout={(event) => this.measureView(event)}>
+					<View
+						style={[styles.categorylistFlatListViewWrapper]}>
+						<FlatList
+							renderItem={this.renderCategorylistFlatListCell}
+							data={this.state.data}
+							style={styles.categorylistFlatList}
+							keyExtractor={(item, index) => index.toString()} />
+
+						<View style={categoryBottomSpacer} />
+						{this.renderFeaturedPromo(shop, cart)}
+					</View>
+					<View
+						style={{
+							flex: 1,
+						}} />
+					<View
+						style={styles.productlistFlatListViewWrapper}>
+						{this.state.loading ?
+							undefined
+							:
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
@@ -1582,118 +1617,123 @@ export default class Home extends React.Component {
 								refreshing={this.state.isRefreshing}
 								onRefresh={this.onRefresh.bind(this)}
 								onViewableItemsChanged={this.reachProductIndex}
-								keyExtractor={(item, index) => index.toString()}/>
-							}
-						</View>						
+								keyExtractor={(item, index) => index.toString()} />
+						}
 					</View>
-				}
-				{ this.props.isToggleShopLocation && (
-					<View
+				</View>
+			}
+			{this.props.isToggleShopLocation && (
+				<View
 					style={styles.showLocationView}>
-						
-						<MapView
+
+					<MapView
 						style={styles.mapImage}
 						initialRegion={{
 							latitude: shop ? parseFloat(shop.latitude) : 0.0,
 							longitude: shop ? parseFloat(shop.longitude) : 0.0,
-							latitudeDelta:0.1,
-							longitudeDelta:0.1,
-						}}					
-						onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}			  
-						>
-								<MapView.Marker
-									ref={marker => (this.marker = marker)}
-									coordinate={{
-										latitude: shop ? parseFloat(shop.latitude) : 0.0,
-										longitude: shop ? parseFloat(shop.longitude) : 0.0,
-									}
-									}
-									title={shop.name}
-									description={shop.location}
-									/>
-							</MapView>
+							latitudeDelta: 0.1,
+							longitudeDelta: 0.1,
+						}}
+						onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}
+					>
+						<MapView.Marker
+							ref={marker => (this.marker = marker)}
+							coordinate={{
+								latitude: shop ? parseFloat(shop.latitude) : 0.0,
+								longitude: shop ? parseFloat(shop.longitude) : 0.0,
+							}
+							}
+							title={shop.name}
+							description={shop.location}
+						/>
+					</MapView>
 					<View
 						style={styles.branchInfoView}>
-						<Text
-							style={styles.branchInfoText}>Outlet Info</Text>
+						{/* <Text
+							style={styles.branchInfoText}>Outlet Info</Text> */}
 						{/* { (shop != null && shop.image != null) && ( */}
+
 						<Image
-							source={{uri: shop.image.thumb.url}}
-							style={styles.shopImage}/>
+							source={{ uri: shop.image.thumb.url }}
+							style={styles.shopImage} />
 						{/* ) } */}
-						<Text
-							style={styles.branchHeaderAddress}>Address:</Text>
-						<Text
-							style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
-						<Text
-							style={styles.branchHeaderContact}>Contact:</Text>
-						<Text
-							style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<Text
-							style={styles.businessHeaderHourText}>Business Hour:</Text>
+						<View style={{ marginHorizontal: 10 * alpha }}>
 							<Text
-							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
+								style={styles.branchHeaderAddress}>Address </Text>
+							<Text
+								style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
+							<Text
+								style={styles.branchHeaderContact}>Contact </Text>
+							<Text
+								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={styles.businessHeaderHourText}>Business Hour</Text>
+							<Text
+								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
+
+						</View>
 					</View>
 				</View>
-				)}
-				
-				<Animated.View
-					style={[styles.cartsummaryviewView,this.moveAnimation.getLayout()]} >
-					<View
-						style={styles.clearAllView}>
-						<TouchableOpacity
-							onPress={this.onClearPress}
-							style={styles.clearButton}>
-							<Image
-								source={require("./../../assets/images/group-14-13.png")}
-								style={styles.clearButtonImage}/>
-							<Text
-								style={styles.clearButtonText}>Clear</Text>
-						</TouchableOpacity>
-					</View>
-					<View
-						style={styles.popOutCartFlatListViewWrapper}>
-						<FlatList							
-							renderItem={this.renderPopOutCartFlatListCell}
-							data={fullList}
-							style={styles.popOutCartFlatList}
-							keyExtractor={(item, index) => index.toString()}/>
-					</View>
-				</Animated.View>
-				
-			
+			)}
+
+			<Animated.View
+				style={[styles.cartsummaryviewView, this.moveAnimation.getLayout()]} >
+				<View
+					style={styles.clearAllView}>
+					<TouchableOpacity
+						onPress={this.onClearPress}
+						style={styles.clearButton}>
+						<Image
+							source={require("./../../assets/images/group-14-13.png")}
+							style={styles.clearButtonImage} />
+						<Text
+							style={styles.clearButtonText}>Clear</Text>
+					</TouchableOpacity>
+				</View>
+				<View
+					style={styles.popOutCartFlatListViewWrapper}>
+					<FlatList
+						renderItem={this.renderPopOutCartFlatListCell}
+						data={fullList}
+						style={styles.popOutCartFlatList}
+						keyExtractor={(item, index) => index.toString()} />
+				</View>
+			</Animated.View>
+
+
 			<View style={styles.bottomAlertView}>
-				{this.renderAlertBar(cart,shop)}
-				{this.renderBottomBar(cart,shop)}	
-						
+				{this.renderAlertBar(cart, shop)}
+				{this.renderBottomBar(cart, shop)}
+
 			</View>
-				{ selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
-					{this.renderModalContent(selected_product, shop)}
-				</Modal> : null }
-			
+			{selected_product ? <Modal isVisible={this.state.modalVisible} onBackdropPress={() => this.dismissProduct()} hideModalContentWhileAnimating={true}>
+				{this.renderModalContent(selected_product, shop)}
+			</Modal> : null}
+
 			{this.renderGallery()}
-			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
-			
-			
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
+			<Brew9Modal visible={this.state.visible} cancelable={true} title={"Exit App "} description={"exit the  application?"} okayButtonAction={() => { BackHandler.exitApp() }} cancelButtonAction={() => this.setState({ visible: false })} />
+
+
 		</View>
 	}
 
-	renderAlertBar(cart,shop){	
+	renderAlertBar(cart, shop) {
 
-		const style =  (cart.length > 0)  ? styles.alertViewCart : styles.alertView
-		if (shop !== null)  {
-			if ( shop.is_opened === false){
+		const style = (cart.length > 0) ? styles.alertViewCart : styles.alertView
+		if (shop !== null) {
+			if (shop.is_opened === false) {
 				return (
 					<View style={style}>
 						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
 					</View>)
 			}
 
-			if (shop.can_order == false && shop.shop_busy_template_message != null){
+			if (shop.can_order == false && shop.shop_busy_template_message != null) {
 				const template = shop.shop_busy_template_message.template
 
 				return (
@@ -1702,12 +1742,12 @@ export default class Home extends React.Component {
 					</View>)
 			}
 		}
-		
+
 		return undefined
 	}
 
 	shouldShowFeatured(shop) {
-		const { currentMember} = this.props
+		const { currentMember } = this.props
 
 		if (shop != null) {
 			AsyncStorage.getItem("featured", (err, result) => {
@@ -1735,52 +1775,52 @@ export default class Home extends React.Component {
 
 		const { currentMember } = this.props
 
-		if (shop !== null ){
-			if (shop.can_order == false){
-				if (cart.length > 0 ){
+		if (shop !== null) {
+			if (shop.can_order == false) {
+				if (cart.length > 0) {
 					style = styles.featuredpromoButtonPosition3
-				}else{
+				} else {
 					style = styles.featuredpromoButtonPosition2
 				}
-			}else{
-				if (cart.length > 0 ){
+			} else {
+				if (cart.length > 0) {
 					style = styles.featuredpromoButtonPosition2
-				}else{
+				} else {
 					style = styles.featuredpromoButtonPosition1
 				}
 			}
-		}else{
-			if (cart.length > 0 ){
+		} else {
+			if (cart.length > 0) {
 				style = styles.featuredpromoButtonPosition2
-			}else{
+			} else {
 				style = styles.featuredpromoButtonPosition1
 			}
 		}
 
 		if (shop !== null && shop.featured_promotion !== null) {
-			
+
 			// let should_show = this.shouldShowFeatured(shop)
 			// if (should_show == true) {
-				return <TouchableOpacity
-					onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
-					style={[style,styles.featuredpromoButton]}>
-					<Image
-						source={{uri: shop.featured_promotion.icon.url}}
-						style={styles.featuredpromoButtonImage}/>
-				</TouchableOpacity>
+			return <TouchableOpacity
+				onPress={() => this.onFeaturedPromotionPressed(shop.featured_promotion)}
+				style={[style, styles.featuredpromoButton]}>
+				<Image
+					source={{ uri: shop.featured_promotion.icon.url }}
+					style={styles.featuredpromoButtonImage} />
+			</TouchableOpacity>
 			// }
 		}
-		
+
 		return undefined
 	}
 
 	renderPromotionTopBar(shop, cart) {
 
-		const {currentMember,cart_total} = this.props
+		const { currentMember, cart_total } = this.props
 
 		if (cart.length > 0) {
 			if (shop.all_promotions != null && shop.all_promotions.length > 0) {
-				
+
 				var has_promo = false
 
 				const promos = shop.all_promotions.map((item, key) => {
@@ -1788,25 +1828,25 @@ export default class Home extends React.Component {
 					if (currentMember != null) {
 						var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
 						var remaining = trigger_price - cart_total
-	
+
 						if (remaining <= 0) {
 							has_promo = false
 							return
 						}
-	
+
 						var display_text = item.display_text
 						var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
-	
+
 						if (!has_promo) {
 							has_promo = true
 							return <View style={styles.promotionBarView}
-							key={key}>
-							<Text
-								numberOfLines={2}
-								style={styles.promotionTopBarText}>
-								{final_text}
-							</Text>
-						</View>
+								key={key}>
+								<Text
+									numberOfLines={2}
+									style={styles.promotionTopBarText}>
+									{final_text}
+								</Text>
+							</View>
 						}
 						return
 					}
@@ -1815,18 +1855,17 @@ export default class Home extends React.Component {
 				return <View style={styles.promotionTopBarView}>
 					{promos}
 				</View>
-				
+
 			}
 		}
 		return
 	}
 
-	renderBottomBar(cart,shop){
-		
-		const {cart_total,cart_total_quantity,discount_cart_total} = this.props
-		if (cart.length > 0) 
-		{
-			return(<View
+	renderBottomBar(cart, shop) {
+
+		const { cart_total, cart_total_quantity, discount_cart_total } = this.props
+		if (cart.length > 0) {
+			return (<View
 				style={styles.cartView}>
 				<View
 					pointerEvents="box-none"
@@ -1840,14 +1879,14 @@ export default class Home extends React.Component {
 					<View
 						style={styles.totalAmountView}>
 						<View
-							style={styles.rectangleView}/>
+							style={styles.rectangleView} />
 						<View
 							pointerEvents="box-none"
 							style={{
 								position: "absolute",
 								left: 28 * alpha,
 								right: 13 * alpha,
-								top: 7 * alpha,
+								top: 12 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "flex-start",
@@ -1855,7 +1894,7 @@ export default class Home extends React.Component {
 							<View
 								style={styles.shopppingCartView}>
 								<TouchableOpacity
-									onPress={() => this.toogleCart(false,!this.state.isCartToggle)}
+									onPress={() => this.toogleCart(false, !this.state.isCartToggle)}
 									style={styles.shopppingCartButton}>
 									<View
 										style={styles.group5View}>
@@ -1867,13 +1906,13 @@ export default class Home extends React.Component {
 												marginBottom: 4 * alpha,
 											}}>
 											<Image
-													source={require("./../../assets/images/shopping-bag.png")}
-													style={styles.cartImage}/>
+												source={require("./../../assets/images/shopping-bag.png")}
+												style={styles.cartImage} />
 										</View>
 										<View
 											style={{
 												flex: 1,
-											}}/>
+											}} />
 										<Text
 											style={styles.shoppingCartText}>Cart</Text>
 									</View>
@@ -1882,7 +1921,7 @@ export default class Home extends React.Component {
 							<View
 								style={{
 									flex: 1,
-								}}/>
+								}} />
 							<Text
 								style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
 						</View>
@@ -1897,7 +1936,7 @@ export default class Home extends React.Component {
 					onPress={() => this.onCheckoutPressed()}
 					style={styles.checkoutButton}
 					underlayColor='cyan'
-					>
+				>
 					<Text
 						style={styles.checkoutButtonText}>Checkout</Text>
 				</TouchableHighlight>
@@ -1908,47 +1947,47 @@ export default class Home extends React.Component {
 
 	renderGallery() {
 
-		const { image_isHorizontal, isPromoToggle, image_isLong , selected_promotion} = this.state
+		const { image_isHorizontal, isPromoToggle, image_isLong, selected_promotion } = this.state
 
 		// console.log(image_isHorizontal, isPromoToggle, image_isLong , selected_promotion)
 		// const images = [{
 		// 	url: selected_promotion,
 		// }]	 
-		
+
 		if (selected_promotion) {
-			
-			return <Modal visible={isPromoToggle} style={{margin: 0, flex:1, backgroundColor: "rgba(0, 0, 0, 0.8)"}}>		
+
+			return <Modal visible={isPromoToggle} style={{ margin: 0, flex: 1, backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
 				{/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
 				<View style={styles.loading}>
 					<ActivityIndicator size="large" color="white" />
-					</View>
+				</View>
 				<ScrollView
-            		style={{ horizontal: true, flex: 1}}>
-					<View style={image_isHorizontal ? styles.bannerContainImage : 
-						!image_isHorizontal && !image_isLong ? styles.bannerShortImage : 
-						styles.bannerImage}>
+					style={{ horizontal: true, flex: 1 }}>
+					<View style={image_isHorizontal ? styles.bannerContainImage :
+						!image_isHorizontal && !image_isLong ? styles.bannerShortImage :
+							styles.bannerImage}>
 						<AutoHeightImage
-							source={{uri: selected_promotion}}
-							width={windowWidth}/>
-				    </View>         
-				</ScrollView>		
+							source={{ uri: selected_promotion }}
+							width={windowWidth} />
+					</View>
+				</ScrollView>
 				<TouchableOpacity
 					onPress={() => this.onClosePressed()}
 					style={styles.closeGalleryButton}>
 					<Text style={styles.closeGalleryButtonText}>X</Text>
 				</TouchableOpacity>
-				</Modal>
+			</Modal>
 		}
-		
-		
+
+
 	}
-			
+
 }
 
 const styles = StyleSheet.create({
 	navigationBarItem: {
 	},
-	loadingIndicator:{
+	loadingIndicator: {
 		marginTop: 100 * alpha,
 	},
 	loading: {
@@ -1966,9 +2005,11 @@ const styles = StyleSheet.create({
 		tintColor: TABBAR_INACTIVE_TINT,
 	},
 	shopImage: {
-		resizeMode: "contain",
-		width: 80 * alpha,
-		height: 45 * alpha,
+		resizeMode: "cover",
+		width: windowWidth,
+		aspectRatio: 2 / 1,
+		marginRight: 50
+		// height: 45 * alpha,
 	},
 	headerLeftContainer: {
 		flexDirection: "row",
@@ -2015,7 +2056,7 @@ const styles = StyleSheet.create({
 	},
 	branchButtonText: {
 		color: "rgb(99, 97, 97)",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2026,7 +2067,7 @@ const styles = StyleSheet.create({
 		width: 96 * alpha,
 		height: 32 * alpha,
 	},
-	
+
 	pickUpDeliveryViewTemp: {
 		position: "absolute",
 		top: 0,
@@ -2044,12 +2085,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	optionText: {
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 	},
 	pickUpText: {
 		color: "rgb(253, 253, 253)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2060,7 +2101,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryText: {
 		color: "rgb(78, 77, 77)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2070,15 +2111,15 @@ const styles = StyleSheet.create({
 	distance1kmText: {
 		backgroundColor: "transparent",
 		color: "rgb(188, 181, 181)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		// textAlign: "left",
 	},
 	moreView: {
 		backgroundColor: "transparent",
-		width: 40 * alpha,
+		width: 65 * alpha,
 		height: 12 * alpha,
 		marginTop: 1 * alpha,
 		flexDirection: "row",
@@ -2096,7 +2137,7 @@ const styles = StyleSheet.create({
 	},
 	moreButtonText: {
 		color: "rgb(162, 162, 162)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2106,7 +2147,7 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		marginRight: 10 * alpha,
 	},
-	
+
 	productsectionView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -2117,7 +2158,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 	},
-	
+
 	categorylistFlatListViewWrapper: {
 		width: 85 * alpha,
 	},
@@ -2150,7 +2191,7 @@ const styles = StyleSheet.create({
 		bottom: 0 * alpha,
 		height: 60 * alpha,
 	},
-	bannerImage:{
+	bannerImage: {
 		alignItems: "center",
 		justifyContent: "center",
 		flex: 1,
@@ -2205,7 +2246,7 @@ const styles = StyleSheet.create({
 		marginRight: 12 * alpha,
 		flexDirection: "row",
 	},
-	
+
 	line8View: {
 		backgroundColor: "rgb(85, 85, 85)",
 		width: 9 * alpha,
@@ -2214,7 +2255,7 @@ const styles = StyleSheet.create({
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * alpha,
+		fontSize: 14 * alpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		marginLeft: 10 * alpha,
@@ -2228,7 +2269,7 @@ const styles = StyleSheet.create({
 	},
 	totalpriceText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
 		textAlign: "left",
@@ -2299,7 +2340,7 @@ const styles = StyleSheet.create({
 	},
 	clearButtonText: {
 		color: "rgb(144, 141, 141)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2382,7 +2423,7 @@ const styles = StyleSheet.create({
 	},
 	closeButtonText: {
 		color: "white",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2407,7 +2448,7 @@ const styles = StyleSheet.create({
 	},
 	closeGalleryButtonText: {
 		color: "white",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2428,7 +2469,7 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "rgb(54, 54, 54)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 17 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2438,7 +2479,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionHeaderText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2449,7 +2490,7 @@ const styles = StyleSheet.create({
 	},
 	descriptionText: {
 		color: "rgb(130, 130, 130)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2477,8 +2518,8 @@ const styles = StyleSheet.create({
 		marginLeft: 4 * alpha,
 		marginTop: 4 * alpha,
 		marginBottom: 4 * alpha
-	  },
-	  ingredientHighlightView: {
+	},
+	ingredientHighlightView: {
 		backgroundColor: LIGHT_BLUE_BACKGROUND,
 		justifyContent: "center",
 		marginRight: 5 * alpha,
@@ -2496,11 +2537,11 @@ const styles = StyleSheet.create({
 		marginLeft: 4 * alpha,
 		marginTop: 4 * alpha,
 		marginBottom: 4 * alpha
-	  },
-	
+	},
+
 	milkText: {
 		color: "rgb(167, 167, 167)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2514,12 +2555,12 @@ const styles = StyleSheet.create({
 		marginTop: 5 * alpha,
 		marginBottom: 5 * alpha,
 		alignItems: "flex-start",
-		borderRadius:7.0,
+		borderRadius: 7.0,
 		overflow: "hidden",
 	},
 	optiontitleTwoText: {
 		color: "rgb(141, 141, 141)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2554,7 +2595,7 @@ const styles = StyleSheet.create({
 	},
 	unselectedButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2581,7 +2622,7 @@ const styles = StyleSheet.create({
 	},
 	selectedButtonText: {
 		color: "white",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2601,7 +2642,7 @@ const styles = StyleSheet.create({
 	},
 	optiontitleText: {
 		color: "rgb(141, 141, 141)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2625,7 +2666,7 @@ const styles = StyleSheet.create({
 	},
 	recommendedButtonText: {
 		color: "white",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2637,7 +2678,7 @@ const styles = StyleSheet.create({
 	},
 	unavailableButtonText: {
 		color: "rgb(201, 201, 201)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2670,7 +2711,7 @@ const styles = StyleSheet.create({
 	},
 	choiceThreeButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2693,7 +2734,7 @@ const styles = StyleSheet.create({
 	},
 	choiceTwoButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2716,7 +2757,7 @@ const styles = StyleSheet.create({
 	},
 	choiceButtonText: {
 		color: "rgb(82, 80, 80)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 9 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2743,7 +2784,7 @@ const styles = StyleSheet.create({
 	priceText: {
 		backgroundColor: "transparent",
 		color: "rgb(0, 178, 227)",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2758,7 +2799,7 @@ const styles = StyleSheet.create({
 	quantityText: {
 		backgroundColor: "transparent",
 		color: "rgb(85, 83, 81)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 21 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2814,14 +2855,14 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-start",
 		marginLeft: 1 * alpha,
 	},
-	normal:{
+	normal: {
 		backgroundColor: "rgb(0, 178, 227)",
 	},
-	disabled:{
+	disabled: {
 		backgroundColor: "rgba(0, 178, 227, 0.3)",
 	},
 	addToCartButton: {
-		
+
 		borderRadius: 4 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
@@ -2838,7 +2879,7 @@ const styles = StyleSheet.create({
 	},
 	addToCartButtonText: {
 		color: "white",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2858,7 +2899,7 @@ const styles = StyleSheet.create({
 		height: 150 * alpha,
 		alignItems: "center",
 	},
-	bottomAlertView:{
+	bottomAlertView: {
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
@@ -2866,56 +2907,58 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: windowWidth
 	},
-	alertViewCart:{
+	alertViewCart: {
 		backgroundColor: "darkgray",
-		marginBottom:35 * alpha,
+		marginBottom: 35 * alpha,
 		paddingBottom: 10 * alpha,
 		// position: "absolute",
 		// left: 0 * alpha,
 		// right: 0 * alpha,
 		// bottom: 60 * alpha,		
 	},
-	alertView:{
+	alertView: {
 		backgroundColor: "darkgray",
 	},
-	alertViewTitle:{
+	alertViewTitle: {
 		color: "white",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		paddingTop: 10*alpha,
-		paddingBottom: 5*alpha,
+		paddingTop: 10 * alpha,
+		paddingBottom: 5 * alpha,
 		alignSelf: "center",
 	},
-	alertViewText:{
+	alertViewText: {
 		color: "white",
-		fontFamily:  TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		paddingTop: 7 * alpha,
 		paddingLeft: 7 * alpha,
 		paddingRight: 7 * alpha,
-		paddingBottom: 7* alpha,
+		paddingBottom: 7 * alpha,
 		alignSelf: "center",
 	},
 	container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    horizontal: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 10 * alpha,
+		flex: 1,
+		justifyContent: 'center',
+	},
+	horizontal: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		padding: 10 * alpha,
 	},
 	showLocationView: {
 		backgroundColor: "white",
-		width: "100%",
-		height: "100%",
+		// width: "100%",
+		// height: "100%",
 		position: "absolute",
 		marginTop: 67 * alpha,
 		alignItems: "flex-start",
+		flex: 1,
+		// marginHorizontal:10
 	},
 	deliveryView: {
 		backgroundColor: "transparent",
@@ -2927,7 +2970,7 @@ const styles = StyleSheet.create({
 	deliveryTwoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2936,7 +2979,7 @@ const styles = StyleSheet.create({
 	freeWithRm40SpendText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2946,7 +2989,7 @@ const styles = StyleSheet.create({
 	deliveredByBrew9Text: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2956,7 +2999,7 @@ const styles = StyleSheet.create({
 	deliverAreaAffectText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2966,7 +3009,7 @@ const styles = StyleSheet.create({
 	deliveryRm5ExtraText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -2974,25 +3017,27 @@ const styles = StyleSheet.create({
 	},
 	branchInfoView: {
 		backgroundColor: "transparent",
-		width: windowWidth - 100 *alpha,
-		height: 76 * alpha,
-		marginLeft: 10 * alpha,
-		marginTop: 15 * alpha,
+		// flex: 1,
+		// width: windowWidth - 100 * alpha,
+		// height: 76 * alpha,
+		// marginHorizontal: 10 * alpha,
+		// marginTop: 15 * alpha,
 		alignItems: "flex-start",
 	},
 	branchInfoText: {
 		backgroundColor: "transparent",
 		color: "rgb(55, 55, 55)",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		marginLeft: 10 * alpha
 	},
 	branchHeaderAddress: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3002,7 +3047,7 @@ const styles = StyleSheet.create({
 	branchAddress: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3012,7 +3057,7 @@ const styles = StyleSheet.create({
 	branchHeaderContact: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3022,7 +3067,7 @@ const styles = StyleSheet.create({
 	branchContact: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3032,7 +3077,7 @@ const styles = StyleSheet.create({
 	businessHeaderHourText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3043,7 +3088,7 @@ const styles = StyleSheet.create({
 	businessHourText: {
 		backgroundColor: "transparent",
 		color: "rgb(160, 160, 160)",
-		fontFamily:  NON_TITLE_FONT,
+		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -3051,7 +3096,7 @@ const styles = StyleSheet.create({
 		alignSelf: "stretch",
 		marginTop: 3 * alpha,
 	},
-	featuredpromoButton:{
+	featuredpromoButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
@@ -3062,11 +3107,11 @@ const styles = StyleSheet.create({
 		height: 60 * alpha,
 		left: 10 * alpha,
 	},
-	featuredpromoButtonPosition1: {	
+	featuredpromoButtonPosition1: {
 		bottom: 0 * alpha,
 	},
-	featuredpromoButtonPosition2: {	
-		bottom: 40 * alpha,	
+	featuredpromoButtonPosition2: {
+		bottom: 40 * alpha,
 	},
 	featuredpromoButtonPosition3: {
 		bottom: 90 * alpha,

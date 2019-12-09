@@ -195,15 +195,37 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
+		const { navigation,dispatch } = this.props
 	  	analytics.event(new Event('Profile', 'Click', "Mission Center"))
 		if (currentMember !== null) {
-			navigate("MissionCenter")
+			this.navigationListener = navigation.addListener('willFocus', payload => {
+				this.removeNavigationListener()
+				const { state } = payload
+				const { params } = state
+
+				if (params != undefined && params.updated == true) {
+					console.log("update")
+					this.loadProfile()
+				}
+				
+				// dispatch(createAction('members/loadCurrentUserFromCache')({}))
+			})
+			navigate("MissionCenter", {					
+				returnToRoute: navigation.state
+			})
 		} else {
 			navigate("VerifyUser" , {
 				returnToRoute: this.props.navigation.state
 			})
 		}
 
+	}
+
+	removeNavigationListener() {
+		if (this.navigationListener) {
+		  this.navigationListener.remove()
+		  this.navigationListener = null
+		}
 	}
 
 	onVIPPressed = () => {
@@ -528,7 +550,7 @@ export default class Profile extends React.Component {
 														left: 0,
 														right: 0,
 														top: 0,
-														height: 22 * alpha,
+														height: 24 * alpha,
 													}}>
 													<View
 														pointerEvents="box-none"
@@ -1145,15 +1167,15 @@ const styles = StyleSheet.create({
 	},
 	levelexpText: {
 		color: PRIMARY_COLOR,
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
 		position: "absolute",
 		alignSelf: "center",
-		top: 1 * alpha,
+		top: 0 * alpha,
 	},
 	profileImage: {
 		resizeMode: "contain",

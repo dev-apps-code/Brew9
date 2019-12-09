@@ -60,6 +60,7 @@ export default class MissionCenter extends React.Component {
             loading: false,
             missions: [],
             mission_statements: [],
+            updated: false
         }
     }
 
@@ -71,8 +72,13 @@ export default class MissionCenter extends React.Component {
     }
 
     onBackPressed = () => {
-
-        this.props.navigation.goBack()
+        const {navigation,dispatch } = this.props
+		const { routeName, key } = navigation.getParam('returnToRoute')
+		navigation.navigate({ routeName, key, 
+			params: { 
+				updated: this.state.updated, 
+			} 
+		})
     }
 
 
@@ -133,13 +139,13 @@ export default class MissionCenter extends React.Component {
 
     missionLogin = () => {
         const { dispatch, currentMember } = this.props
-        
         this.setState({ loading: true })
         const callback = eventObject => {
             this.refs.toast.show(eventObject.message, TOAST_DURATION)
             this.setState({
                 loading: false,
                 mission_statements: eventObject.result,
+                updated: true,
             }, function(){
                 this.loadMissionStatements()
             })
@@ -156,7 +162,7 @@ export default class MissionCenter extends React.Component {
 
     missionRewardClaim = (statement_id) => {
         const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
+        analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
         if (statement_id != undefined) {
             const { dispatch } = this.props
         
@@ -164,6 +170,7 @@ export default class MissionCenter extends React.Component {
             const callback = eventObject => {
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
+                    updated: true,
                     loading: false ,
                     mission_statements: eventObject.result,
                 }, function(){

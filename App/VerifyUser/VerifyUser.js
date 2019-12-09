@@ -6,21 +6,23 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, 
-	Keyboard} from "react-native"
+import {
+	View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert,
+	Keyboard
+} from "react-native"
 import React from "react"
-import { alpha, fontAlpha,windowWidth, windowHeight } from "../Common/size";
-import {connect} from "react-redux";
+import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
+import { connect } from "react-redux";
 import PhoneInput from 'react-native-phone-input' // react-native-phone-input@0.2.2
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object'
 import LoginWithSmsRequestObject from "../Requests/login_with_sms_request_object"
-import {createAction, Storage} from "../Utils"
+import { createAction, Storage } from "../Utils"
 import CountDown from 'react-native-countdown-component'
-import {KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA} from "../Utils/server"
+import { KURL_INFO, KURL_TERMS_OF_SERVICE, KURL_PRIVACY_POLICY, KURL_EULA } from "../Utils/server"
 import Hyperlink from 'react-native-hyperlink'
-import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from "../Common/common_style";
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import ProfileRequestObject from '../Requests/profile_request_object'
 
@@ -32,13 +34,13 @@ import ProfileRequestObject from '../Requests/profile_request_object'
 export default class VerifyUser extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-	
+
 		const { params = {} } = navigation.state
 		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+			header: null,
+			headerLeft: null,
+			headerRight: null,
+		}
 	}
 
 	constructor(props) {
@@ -47,10 +49,12 @@ export default class VerifyUser extends React.Component {
 			loading: false,
 			phone_no: null,
 			country_code: "673",
+			// country_code: "60",
 			country: "bn",
+			// country: 'MY',
 			login_success: false,
 			code: "",
-			code_from_server:"",
+			code_from_server: "",
 			is_counting: false,
 			count_down: 3,
 		}
@@ -58,21 +62,21 @@ export default class VerifyUser extends React.Component {
 
 	componentDidMount() {
 	}
-	  
+
 	componentWillMount() {
 	}
 
-	onTermsAndConditionsPressed = (url,title) => {
+	onTermsAndConditionsPressed = (url, title) => {
 		const { navigate } = this.props.navigation
 		navigate("WebCommon", {
-            title: title,
-            web_url: url + '&id=' + this.props.company_id,
-        })
+			title: title,
+			web_url: url + '&id=' + this.props.company_id,
+		})
 	}
 
 	onClosePressed = () => {
 		const { navigation } = this.props
-		
+
 		if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
 			navigation.navigate("Home")
 		} else {
@@ -82,14 +86,14 @@ export default class VerifyUser extends React.Component {
 
 	onSendPressed = () => {
 		Keyboard.dismiss()
-		if (this.state.is_counting){
+		if (this.state.is_counting) {
 			this.refs.toast.show("Please wait for 2 minutes before trying to resend.", TOAST_DURATION)
 			return
 		}
 		this.loadLogin()
 	}
 
-	onUpdateCode(iso2){
+	onUpdateCode(iso2) {
 		var country_code = this.phone.getCountryCode()
 		this.setState({
 			country: iso2,
@@ -97,21 +101,21 @@ export default class VerifyUser extends React.Component {
 		})
 	}
 
-	loadLogin(){
+	loadLogin() {
 		const { dispatch } = this.props
-		const {phone_no, country_code} = this.state
+		const { phone_no, country_code } = this.state
 
-		if (phone_no == null || phone_no == ''){
+		if (phone_no == null || phone_no == '') {
 			this.refs.toast.show("Please ensure you have enter your phone number!", TOAST_DURATION)
 			return
 		}
 
-		if (phone_no.length < 7){
+		if (phone_no.length < 7) {
 			this.refs.toast.show("Your phone number is too short", TOAST_DURATION)
 			return
 		}
 
-		if (country_code == null || country_code == ''){
+		if (country_code == null || country_code == '') {
 			this.refs.toast.show("Please ensure you have enter a country code!", TOAST_DURATION)
 			return
 		}
@@ -135,7 +139,7 @@ export default class VerifyUser extends React.Component {
 		const obj = new LoginWithSmsRequestObject(phone_no, country_code)
 		dispatch(
 			createAction('members/loadLogin')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -146,62 +150,62 @@ export default class VerifyUser extends React.Component {
 		this.loadActivateAccount()
 	}
 
-	loadShops(){
+	loadShops() {
 
-		const { dispatch,company_id,location } = this.props
+		const { dispatch, company_id, location } = this.props
 
 		const callback = eventObject => {
-			if (eventObject.success) {		
+			if (eventObject.success) {
 			}
 		}
 
 		var latitude = location != null ? location.coords.latitude : null
-		var longitude = location != null ? location.coords.longitude  : null
-	
+		var longitude = location != null ? location.coords.longitude : null
+
 		const obj = new NearestShopRequestObject(latitude, longitude)
 		obj.setUrlId(company_id)
 		dispatch(
 			createAction('shops/loadShops')({
-				object:obj,
+				object: obj,
 				callback,
 			}
-		))
-		
+			))
+
 	}
-	loadActivateAccount(){
-        const { dispatch } = this.props
-        this.setState({ loading: true })
-        const callback = eventObject => {
+	loadActivateAccount() {
+		const { dispatch } = this.props
+		this.setState({ loading: true })
+		const callback = eventObject => {
 			this.setState({
 				loading: false,
 			})
-            if (eventObject.success) {
+			if (eventObject.success) {
 
 				var obj = eventObject.result
 				if (obj.name == "" || obj.name == null) {
 					const { navigate } = this.props.navigation
 					navigate("Register")
 				} else {
-					
+
 					const { navigation } = this.props
 					if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
 						navigation.navigate("Home")
 					} else {
 						this.props.navigation.navigate('TabGroupOne')
 					}
-				}                
-            }else{
+				}
+			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
-			
-        }
-        const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
-        dispatch(
-            createAction('members/loadActivateAccount')({
-                object:obj,
-                callback,
-            })
-        )
+
+		}
+		const obj = new ActivateAccountRequestObject(this.state.phone_no, this.state.country_code, this.referral_code, this.state.code)
+		dispatch(
+			createAction('members/loadActivateAccount')({
+				object: obj,
+				callback,
+			})
+		)
 	}
 
 	render() {
@@ -217,7 +221,7 @@ export default class VerifyUser extends React.Component {
 				</TouchableOpacity>
 				<Image
 					source={require("./../../assets/images/group-24-4.png")}
-					style={styles.logoImage}/>
+					style={styles.logoImage} />
 				<Text
 					style={styles.welcomeText}>Welcome!</Text>
 				<Text
@@ -233,11 +237,11 @@ export default class VerifyUser extends React.Component {
 						}}>
 						<View
 							style={styles.countryCodeView}>
-							
-									<Text
-										style={styles.countrycodeButtonText}>+673</Text>
 
-								{/* <PhoneInput
+							<Text
+								style={styles.countrycodeButtonText}>+673</Text>
+
+							{/* <PhoneInput
 									ref={(ref) => { this.phone = ref }}
 									initialCountry={this.state.country}
 									style={{marginLeft: 10 * alpha}}
@@ -245,32 +249,32 @@ export default class VerifyUser extends React.Component {
 									textProps={{keyboardType:"number-pad", editable:false}}
 									onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
 									offset={10}/> */}
-							</View>
+						</View>
 						<View
 							style={{
 								flex: 1,
-							}}/>
+							}} />
 						<View
 							style={styles.numberView}>
 							<TextInput
 								autoCorrect={false}
 								keyboardType="phone-pad"
-								placeholder="123456789"								
+								placeholder="123456789"
 								style={styles.textInputTextInput}
-								onChangeText={(phone_no) => this.setState({phone_no})}/>
+								onChangeText={(phone_no) => this.setState({ phone_no })} />
 							<View
 								style={{
 									flex: 1,
-								}}/>
-							 <TouchableOpacity
+								}} />
+							<TouchableOpacity
 								onPress={this.onSendPressed}
 								style={styles.sendButton}>
 								<Text
 									style={styles.sendButtonText}>Send</Text>
-							</TouchableOpacity> 
+							</TouchableOpacity>
 						</View>
-					</View>										
-					{ this.state.login_success ? <View
+					</View>
+					{this.state.login_success ? <View
 						style={styles.activationView}>
 						<TextInput
 							autoCorrect={false}
@@ -278,9 +282,9 @@ export default class VerifyUser extends React.Component {
 							keyboardType="phone-pad"
 							value={this.state.code}
 							style={styles.activationCodeTextInput}
-							onChangeText={(code) => this.setState({code: code})}/>
+							onChangeText={(code) => this.setState({ code: code })} />
 
-					{/* <OTPInputView
+						{/* <OTPInputView
 						style={styles.activationCodeTextInput}
 						pinCount={6}
 						// code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
@@ -295,36 +299,36 @@ export default class VerifyUser extends React.Component {
 						<View
 							style={{
 								flex: 1,
-							}}/>
+							}} />
 						<TouchableOpacity
 							onPress={this.onVerifyPressed}
 							style={styles.verifyButton}>
 							<Text
 								style={styles.verifyButtonText}>Verify</Text>
 						</TouchableOpacity>
-					</View> : null }
+					</View> : null}
 					<View style={styles.countDownContainer} >
 						<View style={styles.countDownWrapper}>
-						{ this.state.is_counting  ?
+							{this.state.is_counting ?
 								<CountDown
-								until={120}
-								onFinish={() => 
-									this.setState({is_counting:false})
-								}
-								running={this.state.is_counting}
-								style={this.state.is_counting ? styles.sendCountdown : styles.hidden}
-								size={12}
-								digitStyle={{backgroundColor: 'transparent'}}
-								digitTxtStyle={styles.countdownText}
-								separatorStyle={{color: '#FFFFFF'}}
-								timeToShow={['M', 'S']}
-								timeLabels={{m: null, s: null}}
-								showSeparator
-							/>
-							: undefined}
-						
-							</View>
+									until={120}
+									onFinish={() =>
+										this.setState({ is_counting: false })
+									}
+									running={this.state.is_counting}
+									style={this.state.is_counting ? styles.sendCountdown : styles.hidden}
+									size={12}
+									digitStyle={{ backgroundColor: 'transparent' }}
+									digitTxtStyle={styles.countdownText}
+									separatorStyle={{ color: '#FFFFFF' }}
+									timeToShow={['M', 'S']}
+									timeLabels={{ m: null, s: null }}
+									showSeparator
+								/>
+								: undefined}
+
 						</View>
+					</View>
 				</View>
 				{/* {this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
@@ -334,54 +338,54 @@ export default class VerifyUser extends React.Component {
 				<View
 					style={{
 						flex: 1,
-					}}/>
-					
-					{/* <TouchableOpacity
+					}} />
+
+				{/* <TouchableOpacity
 						onPress={this.onTermsAndConditionsPressed}
 						style={styles.termsAndConditionsButton}>
 						<Text
 							style={styles.termsAndConditionsButtonText}>Terms and Conditions</Text>
 					</TouchableOpacity> */}
-					<Hyperlink
-						onPress={url => this.onTermsAndConditionsPressed(url,url === KURL_TERMS_OF_SERVICE
-							? 'Terms of Service'
-							: url === KURL_PRIVACY_POLICY
-								? 'Privacy Policy'
-								: url === KURL_EULA ? 'End User License Agreement' : url)}
-						linkStyle={[{ color: '#0000EE' }, styles.description_text]}
-						linkText={url =>
-							url === KURL_TERMS_OF_SERVICE
+				<Hyperlink
+					onPress={url => this.onTermsAndConditionsPressed(url, url === KURL_TERMS_OF_SERVICE
+						? 'Terms of Service'
+						: url === KURL_PRIVACY_POLICY
+							? 'Privacy Policy'
+							: url === KURL_EULA ? 'End User License Agreement' : url)}
+					linkStyle={[{ color: '#0000EE' }, styles.description_text]}
+					linkText={url =>
+						url === KURL_TERMS_OF_SERVICE
 							? 'Terms of Service'
 							: url === KURL_PRIVACY_POLICY
 								? 'Privacy Policy'
 								: url === KURL_EULA ? 'End User License Agreement' : url
-						}
-						>
-						<Text style={styles.description_text}
+					}
+				>
+					<Text style={styles.description_text}
 						numberOfLines={2}>
-							By using this app, you agree to our{' '}							
-							<Text style={{ textDecorationLine: 'underline' }}>
+						By using this app, you agree to our{' '}
+						<Text style={{ textDecorationLine: 'underline' }}>
 							{KURL_TERMS_OF_SERVICE}
-							</Text>,{' '}
-							<Text style={{ textDecorationLine: 'underline' }}>
+						</Text>,{' '}
+						<Text style={{ textDecorationLine: 'underline' }}>
 							{KURL_PRIVACY_POLICY}
-							</Text>{' '}
-							and{' '}
-							<Text style={{ textDecorationLine: 'underline' }}>
+						</Text>{' '}
+						and{' '}
+						<Text style={{ textDecorationLine: 'underline' }}>
 							{KURL_EULA}
-							</Text>.
+						</Text>.
 						</Text>
-						</Hyperlink>
+				</Hyperlink>
 			</View>
-			<HudLoading isLoading={this.state.loading}/>
-			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+			<HudLoading isLoading={this.state.loading} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
 		</View>
 	}
 }
 
 const styles = StyleSheet.create({
 	verifyuserView: {
-		backgroundColor: "white", 
+		backgroundColor: "white",
 		flex: 1,
 	},
 	modalView: {
@@ -434,14 +438,14 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 25 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 83 * alpha,
 		marginLeft: 23 * alpha,
 	},
 	messageText: {
-		color: "black", 
+		color: "black",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
@@ -455,17 +459,17 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		alignSelf: "center",
 		width: 330 * alpha,
-		marginLeft: 10*alpha,
-		marginRight: 10*alpha,
+		marginLeft: 10 * alpha,
+		marginRight: 10 * alpha,
 		height: 100 * alpha,
 		marginTop: 16 * alpha,
 	},
 	countrycodeButtonText: {
-		width: 60*alpha,
+		width: 60 * alpha,
 		color: "rgb(0, 178, 227)",
 		fontFamily: NON_TITLE_FONT,
-		textAlign: "center",	
-		marginRight:10*alpha,
+		textAlign: "center",
+		marginRight: 10 * alpha,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
@@ -474,7 +478,7 @@ const styles = StyleSheet.create({
 	countryCodeView: {
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
-		borderWidth: 0.5,	
+		borderWidth: 0.5,
 		width: 60 * alpha,
 		height: 41 * alpha,
 		flexDirection: "row",
@@ -482,7 +486,7 @@ const styles = StyleSheet.create({
 	},
 
 	numberView: {
-		backgroundColor: "white", 
+		backgroundColor: "white",
 		borderRadius: 7 * alpha,
 		borderColor: "rgb(140, 140, 140)",
 		borderWidth: 0.5,
@@ -504,7 +508,7 @@ const styles = StyleSheet.create({
 		height: 25 * alpha,
 		marginLeft: 15 * alpha,
 	},
-	countDownContainer:{
+	countDownContainer: {
 		marginTop: 20 * alpha,
 		width: 330 * alpha,
 		alignItems: "center",
@@ -539,7 +543,7 @@ const styles = StyleSheet.create({
 	hidden: {
 		width: 0,
 		height: 0,
-	  },
+	},
 	sendCountdown: {
 		flexDirection: "row",
 		alignItems: "center",
@@ -549,14 +553,14 @@ const styles = StyleSheet.create({
 		height: 40 * alpha,
 	},
 	countdownText: {
-        color: "white",
-        fontFamily: NON_TITLE_FONT,
-        fontSize: 19 * fontAlpha,
-        fontStyle: "normal",
-        fontWeight: "normal",
+		color: "white",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 19 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
 		textAlign: "center",
 		width: 100 * alpha,
-    },
+	},
 	activationView: {
 		backgroundColor: "white",
 		borderRadius: 7 * alpha,
@@ -584,7 +588,7 @@ const styles = StyleSheet.create({
 	verifyButton: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 4 * alpha,
-	
+
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -621,7 +625,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "center",
 	},
 	termsAndConditionsButtonImage: {
@@ -631,7 +635,7 @@ const styles = StyleSheet.create({
 	description_text: {
 		width: windowWidth,
 		marginBottom: 40 * alpha,
-		color: "rgb(90, 90, 90)", 
+		color: "rgb(90, 90, 90)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
@@ -665,10 +669,10 @@ const styles = StyleSheet.create({
 		padding: 10 * alpha,
 	},
 	reSendButtonImage: {
-        resizeMode: "contain",
-        marginRight: 10 * alpha,
+		resizeMode: "contain",
+		marginRight: 10 * alpha,
 	},
-	
+
 	underlineStyleBase: {
 		backgroundColor: "transparent",
 		fontFamily: TITLE_FONT,
@@ -679,9 +683,9 @@ const styles = StyleSheet.create({
 		paddingRight: 0,
 		marginLeft: 0,
 		marginRight: 0,
-	  },
-	
-	  underlineStyleHighLighted: {
+	},
+
+	underlineStyleHighLighted: {
 		borderColor: "#03DAC6",
-	  },
+	},
 })

@@ -98,10 +98,11 @@ const styles = StyleSheet.create({
 		width: windowWidth / 2,
 		flex: 1,
 		flexDirection: "column",
-		padding: 10 * alpha,
+		paddingLeft: 10 * alpha,
+		paddingBottom: 10 * alpha,
+		paddingRight: 10 * alpha,
 	},
 	cardImage: {
-		marginTop: 10 * alpha,
 		backgroundColor: "transparent",
 		resizeMode: "contain",
 		alignSelf: "center",
