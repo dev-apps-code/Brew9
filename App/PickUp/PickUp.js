@@ -86,8 +86,6 @@ export default class PickUp extends React.Component {
 				this.loadCurrentOrder();
 			}
 		})
-		this.setState({ popUp: true })
-
 	}
 
 	componentWillUnmount() {
