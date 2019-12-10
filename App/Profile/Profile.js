@@ -460,7 +460,7 @@ export default class Profile extends React.Component {
 			credits = 0
 			membership_name = ""
 			member_exp = 0
-			exp_needed = 1
+			exp_needed = 300
 			next_level_name = "Level 2"
 		}
 
