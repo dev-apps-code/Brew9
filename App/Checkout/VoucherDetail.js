@@ -235,13 +235,13 @@ export default class VoucherDetail extends React.Component {
 						<View
 							style={styles.conditionsView}>
 							<Text
-								style={styles.titleTwoText}>Voucher Limitation</Text>
+								style={styles.titleTwoText}>Terms and Conditions</Text>
 							{/* <Text
 								style={styles.usableshopText}>Shop</Text>
 							<Text
 								style={styles.usableshopcontentText}>- Usable on all Brew9 Shop in Brunei</Text> */}
 							<Text
-								style={styles.usabletimeText}>Time</Text>
+								style={styles.usabletimeText}>Applicable Time Period</Text>
 							<Text
 								style={styles.usabletimecontentText}>- {item.voucher.when_use}</Text>
 							{/* <Text
@@ -250,7 +250,7 @@ export default class VoucherDetail extends React.Component {
 								style={styles.usableitemcontentText}>- All Hot Drinks</Text> */}
 							{ (item.voucher.how_to_use != null && item.voucher.how_to_use != '') ? 
 							<View> 
-								<Text style={styles.usablescenarioText}>How to Use</Text>
+								<Text style={styles.usablescenarioText}>Terms</Text>
 								<Text style={styles.usablescenariocontentText}> 
 									{item.voucher.how_to_use}
 								</Text>
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
 	usabletimecontentText: {
 		color: "rgb(151, 151, 151)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
 	usablescenariocontentText: {
 		color: "rgb(151, 151, 151)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",

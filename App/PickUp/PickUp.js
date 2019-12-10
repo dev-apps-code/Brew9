@@ -72,7 +72,9 @@ export default class PickUp extends React.Component {
 			current_order: [],
 			refreshing: false,
 			appState: AppState.currentState,
-			popUp: false
+			popUp: false,
+			total_exp: 0,
+			total_point: 0,
 		}
 	}
 
@@ -116,7 +118,7 @@ export default class PickUp extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 
 		if (prevProps.selectedTab != this.props.selectedTab) {
-			this.loadCurrentOrder()
+			// this.loadCurrentOrder()
 		}
 		console.log(JSON.stringify('current',this.state.current_order))
 		console.log(JSON.stringify('prev',prevState.current_order))
@@ -151,6 +153,10 @@ export default class PickUp extends React.Component {
 				if (eventObject.success) {
 					this.setState({
 						current_order: eventObject.result
+					}, function(){
+						if (this.state.current_order.length > 0) {
+							this.calculate_point_exp(this.state.current_order)
+						}
 					})
 				}
 				this.setState({
@@ -168,6 +174,21 @@ export default class PickUp extends React.Component {
 			)
 
 		}
+	}
+
+	calculate_point_exp(orders) {
+
+		var exp = 0
+		var point = 0
+		
+		for(order of orders) {
+			point += parseFloat(order.awarded_point)
+			exp += parseFloat(order.awarded_exp)
+		}
+		
+		this.setState({ total_point: point, total_exp: exp }, function(){
+			this.setState({popUp: true })
+		})
 	}
 
 	renderQueueView(current_order) {
@@ -632,6 +653,42 @@ export default class PickUp extends React.Component {
 			</View>
 		</View>
 	}
+
+	renderPointExpModal(){
+
+		return <Modal
+			animationType="slide"
+			transparent={true}
+			visible={this.state.popUp}
+			onRequestClose={this.closePopUp}>
+			<TouchableWithoutFeedback onPress={this.closePopUp}>
+
+				<View style={[styles.popUpBackground]}>
+					<View style={[styles.popUpContent]}>
+						<Text style={styles.pointExpModalTitle}>Current Order Award</Text>
+						<View style={{ marginBottom: 10 }}>
+							<View style={styles.popUpInput1}>
+								<Text>Point</Text>
+								<Text style={styles.pointExpModalPointText}>+{this.state.total_point}</Text>
+							</View>
+							<View style={styles.popUpInput2}>
+								<Text>Experience</Text>
+								<Text style={styles.pointExpModalExpText}>+{this.state.total_exp}</Text>
+							</View>
+						</View>
+						<TouchableOpacity
+							onPress={() => this.closePopUp()}
+							style={styles.popUpInput3}>
+							<Text
+								style={styles.orderButtonText}>OK</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
+		</Modal>
+
+	}
+
 	render() {
 
 		const { current_order } = this.state
@@ -643,36 +700,7 @@ export default class PickUp extends React.Component {
 				</View> :
 				current_order.length > 0 ? this.renderQueueView(current_order) :
 					this.renderEmpty()}
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={this.state.popUp}
-				onRequestClose={this.closePopUp}>
-				<TouchableWithoutFeedback onPress={this.closePopUp}>
-
-					<View style={[styles.popUpBackground]}>
-						<View style={[styles.popUpContent]}>
-							<Text style={{ paddingBottom: 5, textAlign: 'center' }}>QWERTY</Text>
-							<View style={{ marginBottom: 10 }}>
-								<View style={styles.popUpInput1}>
-									<Text>asasas</Text>
-									<Text style={{ color: '#deb887' }}>+3</Text>
-								</View>
-								<View style={styles.popUpInput2}>
-									<Text>asasasasa</Text>
-									<Text style={{ color: '#deb887' }}>+1</Text>
-								</View>
-							</View>
-							<TouchableOpacity
-								onPress={() => console.log('onpress')}
-								style={styles.popUpInput3}>
-								<Text
-									style={styles.orderButtonText}>Order</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</TouchableWithoutFeedback>
-			</Modal>
+				{this.renderPointExpModal()}
 		</View>
 	}
 }
@@ -1655,4 +1683,18 @@ const styles = StyleSheet.create({
 		marginBottom: 20 * alpha,
 	},
 
+	pointExpModalTitle: {
+		paddingBottom: 5, 
+		textAlign: 'center',
+		fontFamily: TITLE_FONT,
+
+	}, 
+	pointExpModalPointText: {
+		color: '#deb887',
+		fontFamily: NON_TITLE_FONT,
+	},
+	pointExpModalExpText: {
+		color: '#deb887' ,
+		fontFamily: NON_TITLE_FONT,
+	},
 })

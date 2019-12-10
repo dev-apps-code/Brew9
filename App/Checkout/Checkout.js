@@ -62,6 +62,10 @@ export default class Checkout extends React.Component {
 
 	constructor(props) {
 		super(props)
+		_.throttle(
+			this.onPayNowPressed.bind(this),
+			500, // no new clicks within 500ms time window
+		);
 		this.state = {
 			delivery_options: 'pickup',
 			vouchers_to_use: [],
@@ -80,6 +84,7 @@ export default class Checkout extends React.Component {
 			pickup_view_height: 150 * alpha,
 			selected_hour_index: 0,
 			selected_minute_index: 0,
+			paynow_clicked: false,
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -244,8 +249,12 @@ export default class Checkout extends React.Component {
 
 		const { navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
-
-		navigation.navigate({ routeName, key })
+		
+		navigation.navigate({ routeName, key, 
+			params: { 
+				clearCart: false, 
+			} 
+		})
 	}
 
 
@@ -534,7 +543,14 @@ export default class Checkout extends React.Component {
 							loading: false,
 						})
 					}.bind(this), 2000);
-
+				}
+				else if (selected_payment == 'counter') {
+					setTimeout(function () {
+						this.clearCart()
+						this.setState({
+							loading: false,
+						})
+					}.bind(this), 2000);
 				} else {
 					this.setState({
 						loading: false,
@@ -567,6 +583,7 @@ export default class Checkout extends React.Component {
 					}
 				}
 			}
+			
 		}
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
@@ -2410,7 +2427,7 @@ const styles = StyleSheet.create({
 		right: 0 * alpha,
 		// bottom: (47 + BUTTONBOTTOMPADDING) * alpha,
 		bottom: 0 * alpha,
-		height: 250 * alpha,
+		height: 265 * alpha,
 	},
 	paymentMethodTwoView: {
 		backgroundColor: "transparent",
