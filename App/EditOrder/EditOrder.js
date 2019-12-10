@@ -242,11 +242,11 @@ export default class Checkout extends React.Component {
 	}
 
 	onBackPressed = () => {
+		this.props.navigation.navigate("PickUp")
+		// const { navigation } = this.props
+		// const { routeName, key } = navigation.getParam('returnToRoute')
 
-		const { navigation } = this.props
-		const { routeName, key } = navigation.getParam('returnToRoute')
-
-		navigation.navigate({ routeName, key })
+		// navigation.navigate({ routeName, key })
 	}
 
 

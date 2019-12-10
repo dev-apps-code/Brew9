@@ -149,9 +149,7 @@ const PushOrder = createStackNavigator(
     VerifyUser: {
       screen: VerifyUser
     },
-    EditOrder: {
-      screen: EditOrder
-    }
+    
   },
   {
     initialRouteName: "Home",
@@ -188,6 +186,9 @@ const PushPickup = createStackNavigator(
     OrderHistory: {
       screen: OrderHistory
     },
+    EditOrder: {
+      screen: EditOrder
+    }
   },
   {
     initialRouteName: "PickUp",
