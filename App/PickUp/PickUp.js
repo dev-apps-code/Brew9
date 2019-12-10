@@ -77,6 +77,7 @@ export default class PickUp extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log('load current order')
 		this.loadCurrentOrder()
 		const { currentMember } = this.props
 		const { navigation } = this.props
@@ -116,6 +117,11 @@ export default class PickUp extends React.Component {
 
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			this.loadCurrentOrder()
+		}
+		console.log(JSON.stringify('current',this.state.current_order))
+		console.log(JSON.stringify('prev',prevState.current_order))
+		if (JSON.stringify(this.state.current_order) == JSON.stringify(prevState.current_order)) {
+			console.log('prevState', prevState)
 		}
 	}
 
@@ -160,6 +166,7 @@ export default class PickUp extends React.Component {
 					callback,
 				})
 			)
+
 		}
 	}
 
@@ -361,7 +368,7 @@ export default class PickUp extends React.Component {
 							{this.renderProgressBar(progress)}
 						</View>
 					</View>
-					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
+					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(item) }}>
 						<Text style={{ color: 'lightgray' }}>Update Order</Text>
 					</TouchableOpacity>
 				</View>
@@ -521,6 +528,7 @@ export default class PickUp extends React.Component {
 	}
 
 	onEditOrder = (current_order) => {
+		console.log('press')
 		const { navigate } = this.props.navigation
 		navigate("EditOrder", { params: current_order })
 	}

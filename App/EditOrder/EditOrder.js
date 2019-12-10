@@ -34,7 +34,7 @@ import openMap from "react-native-open-maps";
 	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
 }))
-export default class Checkout extends React.Component {
+export default class EditOrder extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
@@ -88,6 +88,7 @@ export default class Checkout extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log('current_order', this.state.current_order)
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -1599,60 +1600,61 @@ export default class Checkout extends React.Component {
 
 	}
 	renderQueueView(current_order) {
-		const queues = current_order.map((item, key) => {
-			const order_items = item.order_items.map((item, key) => {
-				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
-				return <View
-					style={[styles.drinksView]}
-					key={key}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							// justifyContent: "center",
-							backgroundColor: "transparent",
-							flex: 1,
-							flexDirection: "row",
-							alignItems: 'center',
-							paddingHorizontal: 25
-						}}>
-						<View
-							style={[styles.productDetailView, { paddingVertical: 10 }]}>
-							<Text
-								style={styles.productNameText}>{item.product_name}</Text>
-							{(item.variations != null && item.variations != "") ?
-								<Text
-									style={styles.productVariantText}>{item.variations}</Text> :
-								undefined
-								// <View style={styles.spacer} />
-							}
-						</View>
-						<Text
-							style={styles.productQuantityText}>x{item.quantity}</Text>
-
-						<Text
-							style={styles.productPriceText}>{price_string}</Text>
-						{item.order_items != null && key < item.order_items.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
-							style={styles.dottedLineImage} />)}
-					</View>
-				</View>
-
-
-			})
-
-
-
+		console.log('current_order', current_order)
+		// const queues = current_order.map((item, key) => {
+		const order_items = current_order.order_items.map((item, key) => {
+			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
 			return <View
-				style={styles.orderDetailView}>
+				style={[styles.drinksView]}
+				key={key}>
 				<View
-					style={styles.drinksViewWrapper}>
-					{order_items}
-				</View>
+					pointerEvents="box-none"
+					style={{
+						// justifyContent: "center",
+						backgroundColor: "transparent",
+						flex: 1,
+						flexDirection: "row",
+						alignItems: 'center',
+						paddingHorizontal: 25
+					}}>
+					<View
+						style={[styles.productDetailView, { paddingVertical: 10 }]}>
+						<Text
+							style={styles.productNameText}>{item.product_name}</Text>
+						{(item.variations != null && item.variations != "") ?
+							<Text
+								style={styles.productVariantText}>{item.variations}</Text> :
+							undefined
+							// <View style={styles.spacer} />
+						}
+					</View>
+					<Text
+						style={styles.productQuantityText}>x{item.quantity}</Text>
 
+					<Text
+						style={styles.productPriceText}>{price_string}</Text>
+					{item.order_items != null && key < item.order_items.length - 1 && (<Image
+						source={require("./../../assets/images/group-109-copy.png")}
+						style={styles.dottedLineImage} />)}
+				</View>
 			</View>
+
+
 		})
 
-		return <View >{queues}</View>
+
+
+		return <View
+			style={styles.orderDetailView}>
+			<View
+				style={styles.drinksViewWrapper}>
+				{order_items}
+			</View>
+
+		</View>
+		// })
+
+		// return <View >{queues}</View>
 
 	}
 
