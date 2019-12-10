@@ -1,14 +1,14 @@
-export const KSERVERURL = "https://app.brew9.co/api"
-export const KURL_INFO = "https://app.brew9.co/info"
-export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
+// export const KSERVERURL = "https://app.brew9.co/api"
+// export const KURL_INFO = "https://app.brew9.co/info"
+// export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
 // export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO ='http://localhost:3000/info'
 // export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
 
-// export const KPAYMENTYURL ='http://payment.brew9.com'
-// export const KSERVERURL ='https://18624bd1.ngrok.io/api'
-// export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
+export const KPAYMENTYURL ='http://payment.brew9.com'
+export const KSERVERURL ='https://18624bd1.ngrok.io/api'
+export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
 
 export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";

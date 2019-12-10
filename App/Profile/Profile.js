@@ -9,22 +9,22 @@
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
-import {connect} from "react-redux";
-import {KURL_INFO, KURL_MEMBERSHIP_INFO} from "../Utils/server";
-import {createAction} from '../Utils'
+import { connect } from "react-redux";
+import { KURL_INFO, KURL_MEMBERSHIP_INFO } from "../Utils/server";
+import { createAction } from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import Constants from 'expo-constants';
-import {LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE} from "../Common/common_style";
+import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE } from "../Common/common_style";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
-@connect(({ members,config }) => ({
-	selectedTab:config.selectedTab,
-	members:members,
-	company_id:members.company_id,
+@connect(({ members, config }) => ({
+	selectedTab: config.selectedTab,
+	members: members,
+	company_id: members.company_id,
 	currentMember: members.profile,
 	free_membership: members.free_membership,
 	premium_membership: members.premium_membership
@@ -37,7 +37,7 @@ export default class Profile extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			gesturesEnabled:false,
+			gesturesEnabled: false,
 			swipeEnabled: false,
 			header: null,
 			headerLeft: null,
@@ -45,7 +45,7 @@ export default class Profile extends React.Component {
 		}
 	}
 
-	static tabBarItemOptions = ( navigation,store ) => {
+	static tabBarItemOptions = (navigation, store) => {
 
 		return {
 			tabBarLabel: "Profile",
@@ -54,15 +54,15 @@ export default class Profile extends React.Component {
 				store.dispatch(createAction("config/setToggleShopLocation")(false))
 				store.dispatch(createAction("config/setTab")("profile"))
 				defaultHandler()
-			  },
+			},
 			tabBarIcon: ({ iconTintColor, focused }) => {
-				const image = focused 
-				? require('./../../assets/images/profile_selected_tab.png') 
-				: require('./../../assets/images/profile_tab.png')
+				const image = focused
+					? require('./../../assets/images/profile_selected_tab.png')
+					: require('./../../assets/images/profile_tab.png')
 
 				return <Image
 					source={image}
-					style={{resizeMode: "contain", width: 30 * alpha, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }}/>
+					style={{ resizeMode: "contain", width: 30 * alpha, height: 30 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }} />
 			},
 		}
 	}
@@ -77,10 +77,10 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadProfile()	
+		this.loadProfile()
 		this.loopShimmer()
-		this.timer = setInterval(()=> this.loopShimmer(), 3000)
-		AppState.addEventListener('change', this._handleAppStateChange);	
+		this.timer = setInterval(() => this.loopShimmer(), 3000)
+		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
 	componentWillUnmount() {
@@ -89,34 +89,34 @@ export default class Profile extends React.Component {
 	}
 
 	_handleAppStateChange = nextAppState => {
-		const {currentMember} = this.props
-		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {			
+		const { currentMember } = this.props
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			if (currentMember != null) {
 				// this.loadProfile();
-			  }
+			}
 		}
 		this.setState({ appState: nextAppState });
 	};
 
 	loopShimmer() {
 		const { hasShimmered } = this.state
-		if (hasShimmered == false ) {
+		if (hasShimmered == false) {
 			Animated.timing(this.moveAnimation, {
-				toValue: {x: windowWidth - (40 * alpha), y: 0},
+				toValue: { x: windowWidth - (40 * alpha), y: 0 },
 				duration: 700
 			}).start()
-			this.setState({ hasShimmered: true})
+			this.setState({ hasShimmered: true })
 		} else {
 			Animated.timing(this.moveAnimation, {
-				toValue: {x: 0, y: 0},
+				toValue: { x: 0, y: 0 },
 				duration: 700
 			}).start()
-			this.setState({ hasShimmered: false})
+			this.setState({ hasShimmered: false })
 		}
-		
+
 	}
 
-	loadProfile(){
+	loadProfile() {
 		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
@@ -127,37 +127,37 @@ export default class Profile extends React.Component {
 			}
 		}
 		const obj = new ProfileRequestObject()
-		if (currentMember != null){
+		if (currentMember != null) {
 			obj.setUrlId(currentMember.id)
 		}
-		
+
 		dispatch(
 			createAction('members/loadProfile')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
 
-	loadDestroy(){
+	loadDestroy() {
 		const { dispatch } = this.props
 		const { navigate } = this.props.navigation
 		this.setState({ loading: true })
 
 		const callback = eventObject => {
 			if (eventObject.success) {
-				navigate("VerifyUser" , {
+				navigate("VerifyUser", {
 					returnToRoute: this.props.navigation.state
 				})
 			}
 			this.setState({
 				loading: false,
-			}) 
+			})
 		}
 		const obj = new LogoutRequestObject(Constants.installationId)
 		dispatch(
 			createAction('members/loadDestroy')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -165,7 +165,7 @@ export default class Profile extends React.Component {
 
 	onLevelPressed = () => {
 
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		if (currentMember !== null && currentMember.premium_membership) {
 			const { navigate } = this.props.navigation
 
@@ -175,15 +175,15 @@ export default class Profile extends React.Component {
 
 	onMembershipInfoPressed = () => {
 		const { navigate } = this.props.navigation
-		const {  company_id } = this.props
+		const { company_id } = this.props
 
 		const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Profile', 'Click', "Level Info"))
-	  
+		analytics.event(new Event('Profile', 'Click', "Level Info"))
+
 		navigate("WebCommon", {
-            title: 'Membership Info',
-            web_url: KURL_INFO + '?page=level_info&id=' + company_id,
-        })
+			title: 'Membership Info',
+			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
+		})
 		// navigate("WebCommon", {
 		// 	title: 'Membership Info',
 		// 	web_url: KURL_MEMBERSHIP_INFO,
@@ -195,8 +195,8 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		const { navigation,dispatch } = this.props
-	  	analytics.event(new Event('Profile', 'Click', "Mission Center"))
+		const { navigation, dispatch } = this.props
+		analytics.event(new Event('Profile', 'Click', "Mission Center"))
 		if (currentMember !== null) {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -207,14 +207,14 @@ export default class Profile extends React.Component {
 					console.log("update")
 					this.loadProfile()
 				}
-				
+
 				// dispatch(createAction('members/loadCurrentUserFromCache')({}))
 			})
-			navigate("MissionCenter", {					
+			navigate("MissionCenter", {
 				returnToRoute: navigation.state
 			})
 		} else {
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: this.props.navigation.state
 			})
 		}
@@ -223,8 +223,8 @@ export default class Profile extends React.Component {
 
 	removeNavigationListener() {
 		if (this.navigationListener) {
-		  this.navigationListener.remove()
-		  this.navigationListener = null
+			this.navigationListener.remove()
+			this.navigationListener = null
 		}
 	}
 
@@ -245,52 +245,52 @@ export default class Profile extends React.Component {
 	}
 
 	onRewardButtonPressed = () => {
-		const {  currentMember } = this.props
-		const {validVouchers} = this.state
+		const { currentMember } = this.props
+		const { validVouchers } = this.state
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', "Member Voucher"))
 		if (currentMember !== null) {
-			navigate("MemberVoucher",{validVouchers:validVouchers})
+			navigate("MemberVoucher", { validVouchers: validVouchers })
 		} else {
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
 
 	onPointButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Profile', 'Click', "Member Point"))
+		analytics.event(new Event('Profile', 'Click', "Member Point"))
 		if (currentMember !== null) {
 			navigate("PointShop")
 		} else {
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
 
 	onWalletButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Profile', 'Click', "Member Wallet"))
+		analytics.event(new Event('Profile', 'Click', "Member Wallet"))
 		if (currentMember !== null) {
 			navigate("MemberWallet")
 		} else {
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
 
 	onMemberButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Profile', 'Click', "Member Profile"))
+		analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 			navigate("MemberProfile")
@@ -298,10 +298,10 @@ export default class Profile extends React.Component {
 	}
 
 	onOrderButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Profile', 'Click', "Order History"))
+		analytics.event(new Event('Profile', 'Click', "Order History"))
 		navigate("OrderHistory")
 	}
 
@@ -309,11 +309,11 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-	  	analytics.event(new Event('Profile', 'Click', "Member Profile"))
+		analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			navigate("MemberProfile")
 		} else {
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: this.props.navigation.state
 			})
 		}
@@ -330,10 +330,10 @@ export default class Profile extends React.Component {
 		})
 	}
 
-	
+
 
 	onQRButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
@@ -342,7 +342,7 @@ export default class Profile extends React.Component {
 	}
 
 	onRedeemButtonPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
@@ -351,7 +351,7 @@ export default class Profile extends React.Component {
 	}
 
 	onPointShopPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
@@ -360,7 +360,7 @@ export default class Profile extends React.Component {
 	}
 
 	onClubPressed = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 
@@ -376,16 +376,16 @@ export default class Profile extends React.Component {
 	}
 
 	onProfileButtonPress = () => {
-		const {  currentMember } = this.props
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			// this.loadDestroy()
 			const { navigate } = this.props.navigation
 			navigate("MemberProfile")
-		}else{
+		} else {
 			const { navigate } = this.props.navigation
-			navigate("VerifyUser" , {
+			navigate("VerifyUser", {
 				returnToRoute: this.props.navigation.state
 			})
 			return
@@ -396,32 +396,32 @@ export default class Profile extends React.Component {
 
 		progress_percent = progress * 100
 		return (
-			<View style={{flexDirection: "row", height: 10 * alpha,  flex: 1}}>
-			  <View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha}}>
-				<View
-				  style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
-				/>
-				<LinearGradient
-					colors={[LIGHT_BLUE, PRIMARY_COLOR]}
-					start={[0,0]}
-					end={[1,0]}
-					style={{
-						position: "absolute",
-						left: 0,
-						top: 0,
-						bottom: 0,
-						borderRadius: 4 * alpha,
-						width: `${progress_percent}%`,
-					}}
-				/>
-			  </View>
+			<View style={{ flexDirection: "row", height: 10 * alpha, flex: 1 }}>
+				<View style={{ flex: 1, borderColor: "#000", borderWidth: 1 * alpha, borderRadius: 5 * alpha }}>
+					<View
+						style={[StyleSheet.absoluteFill, { backgroundColor: "transparent" }]}
+					/>
+					<LinearGradient
+						colors={[LIGHT_BLUE, PRIMARY_COLOR]}
+						start={[0, 0]}
+						end={[1, 0]}
+						style={{
+							position: "absolute",
+							left: 0,
+							top: 0,
+							bottom: 0,
+							borderRadius: 4 * alpha,
+							width: `${progress_percent}%`,
+						}}
+					/>
+				</View>
 			</View>
-		  )
+		)
 	}
 
 	render() {
 
-		const { currentMember ,members} = this.props
+		const { currentMember, members } = this.props
 		const { hasShimmered } = this.state
 
 		var background_photo;
@@ -435,23 +435,23 @@ export default class Profile extends React.Component {
 		var membership_progress
 
 		var vouchers_count;
-		if (currentMember != null ){
-			background_photo =    {uri: currentMember.free_membership != null ? currentMember.free_membership.membership_level.image : ''}
+		if (currentMember != null) {
+			background_photo = { uri: currentMember.free_membership != null ? currentMember.free_membership.membership_level.image : '' }
 			level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.name : currentMember.free_membership.membership_level.name
 			display_name = currentMember.name ? currentMember.name : currentMember.phone_no
 			membership_name = currentMember.premium_membership ? currentMember.premium_membership.membership_plan.name : currentMember.free_membership.membership_plan.name
 			points = currentMember.points
-			avatar = currentMember.image != null ? {uri: currentMember.image} : require("./../../assets/images/user.png")
+			avatar = currentMember.image != null ? { uri: currentMember.image } : require("./../../assets/images/user.png")
 			vouchers_count = currentMember.voucher_items_count
 			credits = parseFloat(currentMember.credits).toFixed(2)
 			member_exp = currentMember.premium_membership ? currentMember.premium_membership.experience_points : currentMember.free_membership.experience_points
 			exp_needed = currentMember.premium_membership ? currentMember.premium_membership.membership_level.maximum_experience : currentMember.free_membership.membership_level.maximum_experience
 			membership_progress = currentMember.premium_membership ?
-				currentMember.premium_membership.experience_points/currentMember.premium_membership.membership_level.maximum_experience :
-				currentMember.free_membership.experience_points/currentMember.free_membership.membership_level.maximum_experience
+				currentMember.premium_membership.experience_points / currentMember.premium_membership.membership_level.maximum_experience :
+				currentMember.free_membership.experience_points / currentMember.free_membership.membership_level.maximum_experience
 			next_level_name = currentMember.premium_membership ? currentMember.premium_membership.membership_level.next_level_name : currentMember.free_membership.membership_level.next_level_name
-		}else{
-			background_photo =  {uri:''}
+		} else {
+			background_photo = { uri: '' }
 			level_name = 'Level 1'
 			display_name = ''
 			points = 0
@@ -467,481 +467,486 @@ export default class Profile extends React.Component {
 		if (currentMember === null) {
 			isLogin = false
 		}
-		
+
 		return <ScrollView
-				style={styles.profileView}>
+			style={styles.profileView}>
+			<View
+				pointerEvents="box-none"
+				style={{
+					height: 530 * alpha,
+				}}>
 				<View
-					pointerEvents="box-none"
-					style={{
-						height: 530 * alpha,
-					}}>
+					style={styles.membersectionView}>
 					<View
-						style={styles.membersectionView}>
-						<View
-							style={styles.topbackgroundView}>
-							{/* <View
+						style={styles.topbackgroundView}>
+						{/* <View
 								style={styles.fill1View}/>
 							<Image
 								source={require("./../../assets/images/fill-2.png")}
 								style={styles.fill2Image}/> */}
-							<Image
-								source={require("./../../assets/images/profile_top_banner.png")}
-								style={styles.group133Image}/>
-						</View>
+						<Image
+							source={require("./../../assets/images/profile_top_banner.png")}
+							style={styles.group133Image} />
+					</View>
+					<View
+						style={styles.memberDetailView}>
 						<View
-							style={styles.memberDetailView}>
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 10 * alpha,
+								height: 200 * alpha,
+							}}>
+							<View
+								style={styles.detailsView}>
+								<View
+									style={styles.rectangleTwoView} />
+								<View
+									style={styles.rectangleView} />
+							</View>
 							<View
 								pointerEvents="box-none"
 								style={{
 									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 10 * alpha,
-									height: 200 * alpha,
+									left: 15 * alpha,
+									right: 15 * alpha,
+									top: 0 * alpha,
+									height: 187 * alpha,
 								}}>
-								<View
-									style={styles.detailsView}>
-									<View
-										style={styles.rectangleTwoView}/>
-									<View
-										style={styles.rectangleView}/>
-								</View>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										left: 15 * alpha,
-										right: 15 * alpha,
-										top: 0 * alpha,
-										height: 187 * alpha,
+										height: 79 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
 									}}>
 									<View
-										pointerEvents="box-none"
-										style={{
-											height: 79 * alpha,
-											flexDirection: "row",
-											alignItems: "flex-start",
-										}}>
+										style={styles.membershipinfoView}>
 										<View
-											style={styles.membershipinfoView}>
+											pointerEvents="box-none"
+											style={{
+												width: 250 * alpha,
+												height: 23 * alpha,
+												marginLeft: 2 * alpha,
+												flexDirection: "row",
+												alignItems: "center",
+											}}>
+											<Text
+												style={styles.membershiplabelText}>{membership_name}</Text>
+											{membership_name != "" && (<View
+												style={styles.membershiplevelButton}>
+												<Text
+													style={styles.membershiplevelText}>{level_name}</Text>
+											</View>)}
+										</View>
+										<View
+											style={[styles.expbarView]}>
 											<View
 												pointerEvents="box-none"
 												style={{
-													width: 250 * alpha,
-													height: 23 * alpha,
-													marginLeft: 2 * alpha,
-													flexDirection: "row",
-													alignItems: "center",
+													position: "absolute",
+													left: 0,
+													right: 0,
+													top: 0,
+													height: 24 * alpha,
 												}}>
-												<Text
-													style={styles.membershiplabelText}>{membership_name}</Text>
-												{ membership_name != "" && (<View
-													style={styles.membershiplevelButton}>
-													<Text
-														style={styles.membershiplevelText}>{level_name}</Text>
-												</View>)}
-											</View>
-											<View
-												style={styles.expbarView}>
 												<View
 													pointerEvents="box-none"
 													style={{
 														position: "absolute",
-														left: 0,
-														right: 0,
+														left: 0 * alpha,
+														right: 0 * alpha,
 														top: 0,
-														height: 24 * alpha,
+														height: 15 * alpha,
+														flexDirection: "row",
+														alignItems: "flex-start",
 													}}>
-													<View
-														pointerEvents="box-none"
-														style={{
-															position: "absolute",
-															left: 0 * alpha,
-															right: 0 * alpha,
-															top: 0,
-															height: 15 * alpha,
-															flexDirection: "row",
-															alignItems: "flex-start",
-														}}>
-														<Text
-															style={styles.initiallevelText}>{level_name}</Text>
-														<View
-															style={{
-																flex: 1,
-															}}/>
-														<Text
-															style={styles.nextlevelText}>{next_level_name}</Text>
-													</View>
-													<View
-														style={styles.progressbarView}>
-															{this.renderProgressBar(membership_progress ? membership_progress : 0)}
-													</View>
-													
-												</View>
-												<Text
-													style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
-											</View>
-											<TouchableOpacity onPress={()=> this.onLevelInfoPressed()}
-												style={styles.levelInfoButton}>
-												<View
-													style={styles.levelInfoView}>
-													<Image
-														source={require("./../../assets/images/exclaimation.png")}
-														style={styles.howToUseButtonImage}/>
 													<Text
-														style={styles.levelInfoText}>Info</Text>
+														style={styles.initiallevelText}>{level_name}</Text>
+													<View
+														style={{
+															flex: 1,
+														}} />
+													<Text
+														style={styles.nextlevelText}>{next_level_name}</Text>
 												</View>
-											</TouchableOpacity>
+												<View
+													style={styles.progressbarView}>
+													{this.renderProgressBar(membership_progress ? membership_progress : 0)}
+												</View>
+
+											</View>
+											<Text
+												style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
 										</View>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<View style={{elevation: 2 * alpha}}>
-										<TouchableOpacity onPress={()=> this.onMemberButtonPressed()}>
-										<Image
-											source={avatar}
-											style={styles.profileImage}/>
-											</TouchableOpacity>
-										</View>
-										
+										<TouchableOpacity onPress={() => this.onLevelInfoPressed()}
+											style={styles.levelInfoButton}>
+											<View
+												style={styles.levelInfoView}>
+												<Image
+													source={require("./../../assets/images/exclaimation.png")}
+													style={styles.howToUseButtonImage} />
+												<Text
+													style={styles.levelInfoText}>Info</Text>
+											</View>
+										</TouchableOpacity>
 									</View>
 									<View
-										style={styles.dividerView}/>
-									<View
-										pointerEvents="box-none"
 										style={{
-											height: 83 * alpha,
-											marginTop: 15 *alpha,
-											justifyContent: "space-between",
-											flexDirection: "row",
-											alignItems: "flex-start",
-										}}>
-										<TouchableOpacity
-											onPress={() => this.onPointButtonPressed()}
-											style={styles.pointButtonView}
-											>
-											<View
-												style={styles.pointView}>
-												<Image
-													source={require("./../../assets/images/point_center.png")}
-													style={styles.pointiconImage}/>
-												<Text
-													style={styles.pointvalueText}>{points}</Text>
-												<View style={{
-													flexDirection: "row", 
-													marginTop: 5 * alpha}}>
-													<Text style={styles.pointText}>Point</Text>
-													<Image
-														source={require("./../../assets/images/next.png")}
-														style={styles.infoArrow}/>
-												</View>
-											</View>
-										</TouchableOpacity>
-										<TouchableOpacity
-											onPress={() => this.onRewardButtonPressed()}
-												style={styles.rewardButtonView}>
-											<View
-												style={styles.rewardView}>
-												<Image
-													source={require("./../../assets/images/voucher_center.png")}
-													style={styles.rewardiconImage}/>
-												<Text
-													style={styles.rewardvalueText}>{vouchers_count}</Text>
-												<View style={{
-													flexDirection: "row", 
-													marginTop: 5 * alpha}}>
-													<Text style={styles.rewardText}>Voucher</Text>
-													<Image
-														source={require("./../../assets/images/next.png")}
-														style={styles.infoArrow}/>
-												</View>
-											</View>
-										</TouchableOpacity>										
-										<TouchableOpacity
-											onPress={() => this.onWalletButtonPressed()}
-											style={styles.walletButtonView}>
-											<View
-												style={styles.walletView}>
-												<Image
-													source={require("./../../assets/images/wallet_center.png")}
-													style={styles.walletIconImage}/>
-												<Text
-													style={styles.walletcreditText}>${parseFloat(credits).toFixed(2)}</Text>
-												<View style={{
-													flexDirection: "row", 
-													marginTop: 5 * alpha}}>
-													<Text style={styles.walletText}>Wallet</Text>
-													<Image
-														source={require("./../../assets/images/next.png")}
-														style={styles.infoArrow}/>
-												</View>
-											</View>
+											flex: 1,
+										}} />
+									<View style={{ elevation: 2 * alpha }}>
+										<TouchableOpacity onPress={() => this.onMemberButtonPressed()}>
+											<Image
+												source={avatar}
+												style={styles.profileImage} />
 										</TouchableOpacity>
 									</View>
+
 								</View>
-							</View>						
+								<View
+									style={styles.dividerView} />
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 83 * alpha,
+										marginTop: 15 * alpha,
+										justifyContent: "space-between",
+										flexDirection: "row",
+										alignItems: "flex-start",
+									}}>
+									<TouchableOpacity
+										onPress={() => this.onPointButtonPressed()}
+										style={styles.pointButtonView}
+									>
+										<View
+											style={styles.pointView}>
+											<Image
+												source={require("./../../assets/images/point_center.png")}
+												style={styles.pointiconImage} />
+											<Text
+												style={styles.pointvalueText}>{points}</Text>
+											<View style={{
+												flexDirection: "row",
+												marginTop: 5 * alpha
+											}}>
+												<Text style={styles.pointText}>Point</Text>
+												<Image
+													source={require("./../../assets/images/next.png")}
+													style={styles.infoArrow} />
+											</View>
+										</View>
+									</TouchableOpacity>
+									<TouchableOpacity
+										onPress={() => this.onRewardButtonPressed()}
+										style={styles.rewardButtonView}>
+										<View
+											style={styles.rewardView}>
+											<Image
+												source={require("./../../assets/images/voucher_center.png")}
+												style={styles.rewardiconImage} />
+											<Text
+												style={styles.rewardvalueText}>{vouchers_count}</Text>
+											<View style={{
+												flexDirection: "row",
+												marginTop: 5 * alpha
+											}}>
+												<Text style={styles.rewardText}>Voucher</Text>
+												<Image
+													source={require("./../../assets/images/next.png")}
+													style={styles.infoArrow} />
+											</View>
+										</View>
+									</TouchableOpacity>
+									<TouchableOpacity
+										onPress={() => this.onWalletButtonPressed()}
+										style={styles.walletButtonView}>
+										<View
+											style={styles.walletView}>
+											<Image
+												source={require("./../../assets/images/wallet_center.png")}
+												style={styles.walletIconImage} />
+											<Text
+												style={styles.walletcreditText}>${parseFloat(credits).toFixed(2)}</Text>
+											<View style={{
+												flexDirection: "row",
+												marginTop: 5 * alpha
+											}}>
+												<Text style={styles.walletText}>Wallet</Text>
+												<Image
+													source={require("./../../assets/images/next.png")}
+													style={styles.infoArrow} />
+											</View>
+										</View>
+									</TouchableOpacity>
+								</View>
+							</View>
 						</View>
-					</View>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 20 * alpha,
-							width: 290 * alpha,
-							top: 80 * alpha,
-							height: 250 * alpha,
-							alignItems: "flex-start",
-						}}>
-						<View
-							style={styles.notificationView}>
-						</View>
-						<Text
-							style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
-						<Text
-							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 					</View>
 				</View>
-				<TouchableOpacity
-					onPress={() => this.onMissionCenterPressed()}
-					style={styles.missioncenterbuttonButton}>
-					<Image
-						source={require("./../../assets/images/mission_center.png")}
-						style={styles.missionCenterBackground}/>
-						<Animated.View style={[this.moveAnimation.getLayout(), hasShimmered ? {opacity: 1} : {opacity: 0}]} >
-							<Image
-								source={require("./../../assets/images/reflection.png")}
-								style={styles.missionCenterReflection}/>
-						</Animated.View>
+				<View
+					pointerEvents="box-none"
+					style={{
+						position: "absolute",
+						left: 20 * alpha,
+						width: 290 * alpha,
+						top: 80 * alpha,
+						height: 250 * alpha,
+						alignItems: "flex-start",
+					}}>
 					<View
-						style={styles.missionCentreView}>
-						<View
-							style={{
-								flex: 1,
-								flexDirection: "row",
-								alignItems: "center"
-							}}>
-							<Image
-								source={require("./../../assets/images/crown.png")}
-								style={styles.missioniconImage}/>
-							<Text
-								style={styles.missioncenterbuttonButtonText}>Claim Rewards</Text>
-						</View>
-						
+						style={styles.notificationView}>
+					</View>
+					<Text
+						style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
+					<Text
+						style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
+				</View>
+			</View>
+			<TouchableOpacity
+				onPress={() => this.onMissionCenterPressed()}
+				style={styles.missioncenterbuttonButton}>
+				<Image
+					source={require("./../../assets/images/mission_center.png")}
+					style={styles.missionCenterBackground} />
+				<Animated.View style={[this.moveAnimation.getLayout(), hasShimmered ? { opacity: 1 } : { opacity: 0 }]} >
+					<Image
+						source={require("./../../assets/images/reflection.png")}
+						style={styles.missionCenterReflection} />
+				</Animated.View>
+				<View
+					style={styles.missionCentreView}>
+					<View
+						style={{
+							flex: 1,
+							flexDirection: "row",
+							alignItems: "center"
+						}}>
 						<Image
-							source={require("./../../assets/images/next.png")}
-							style={styles.missionArrow}/>
+							source={require("./../../assets/images/crown.png")}
+							style={styles.missioniconImage} />
+						<Text
+							style={styles.missioncenterbuttonButtonText}>Claim Rewards</Text>
+					</View>
+
+					<Image
+						source={require("./../../assets/images/next.png")}
+						style={styles.missionArrow} />
+				</View>
+			</TouchableOpacity>
+
+
+			<View
+				style={styles.menuView}>
+				<TouchableOpacity
+					onPress={() => this.onProfileButtonPress()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>My Profile</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								height: 58 * alpha,
+							}}>
+
+							<View
+								style={styles.menuRowLineView} />
+						</View>
 					</View>
 				</TouchableOpacity>
-				
-				
-				<View
-					style={styles.menuView}>
-					<TouchableOpacity
-							onPress={() => this.onProfileButtonPress()}
-							style={styles.menuRowbuttonButton}>
+				<TouchableOpacity
+					onPress={() => this.onMembershipInfoPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
 						<View
-							style={styles.menuRowView}>
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
 								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.menuRowLabelText}>My Profile</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-											source={require("./../../assets/images/next.png")}
-											style={styles.menuRowArrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
-								
-								<View
-									style={styles.menuRowLineView}/>
-							</View>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => this.onMembershipInfoPressed()}
-						style={styles.menuRowbuttonButton}>
-						<View
-							style={styles.menuRowView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.menuRowLabelText}>Membership Info</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-											source={require("./../../assets/images/next.png")}
-											style={styles.menuRowArrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-								}}>
-								
-									<Text
-										style={styles.menuRowDescriptionText}></Text>
-								
-								<View
-									style={styles.menuRowLineView}/>
-							</View>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => this.onOrderButtonPressed()}
-						style={styles.menuRowbuttonButton}>
-						<View
-							style={styles.menuRowView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.menuRowLabelText}>Order History</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-											source={require("./../../assets/images/next.png")}
-											style={styles.menuRowArrowImage}/>
-								</View>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,}}>
 								<Text
-									style={styles.menuRowDescriptionText}></Text>
+									style={styles.menuRowLabelText}>Membership Info</Text>
 								<View
-									style={styles.menuRowLineView}/>
-							</View>
-						</View>
-					</TouchableOpacity>
-					
-					<TouchableOpacity
-							onPress={() => this.onAboutButtonPressed()}
-							style={styles.menuRowbuttonButton}>
-						<View
-							style={styles.menuRowView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
 									style={{
-										height: 24 * alpha,
-										marginLeft: 20 * alpha,
-										marginRight: 30 * alpha,
-										flexDirection: "row",
-										alignItems: "center",
-									}}>
-									<Text
-										style={styles.menuRowLabelText}>Brew9 Inspiration</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Image
-										source={require("./../../assets/images/next.png")}
-										style={styles.menuRowArrowImage}/>
-									
-								</View>
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
 							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+							}}>
+
+							<Text
+								style={styles.menuRowDescriptionText}></Text>
+
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => this.onOrderButtonPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
 							<View
 								pointerEvents="box-none"
 								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0,}}>
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
 								<Text
-									style={styles.menuRowDescriptionText}></Text>
+									style={styles.menuRowLabelText}>Order History</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
 							</View>
 						</View>
-					</TouchableOpacity>
-				</View>
-			</ScrollView>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+							}}>
+							<Text
+								style={styles.menuRowDescriptionText}></Text>
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => this.onAboutButtonPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>Brew9 Inspiration</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+							}}>
+							<Text
+								style={styles.menuRowDescriptionText}></Text>
+						</View>
+					</View>
+				</TouchableOpacity>
+			</View>
+		</ScrollView>
 	}
 }
 
@@ -960,7 +965,7 @@ const styles = StyleSheet.create({
 	},
 	fill1View: {
 		backgroundColor: PRIMARY_COLOR,
-		position: "absolute",		
+		position: "absolute",
 
 		left: 0 * alpha,
 		right: 0 * alpha,
@@ -1192,7 +1197,7 @@ const styles = StyleSheet.create({
 		marginTop: 9 * alpha,
 		elevation: 2 * alpha,
 	},
-	
+
 	pointiconImage: {
 		tintColor: LIGHT_GREY,
 		resizeMode: "contain",
@@ -1222,14 +1227,14 @@ const styles = StyleSheet.create({
 	},
 	walletButtonView: {
 		backgroundColor: "transparent",
-		width: (windowWidth-60)/3,
+		width: (windowWidth - 60) / 3,
 		height: 83 * alpha,
 		alignItems: "center",
 		elevation: 2 * alpha,
 	},
 	walletView: {
 		backgroundColor: "transparent",
-		width: (windowWidth-60)/3,
+		width: (windowWidth - 60) / 3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1263,21 +1268,21 @@ const styles = StyleSheet.create({
 	pointButtonView: {
 		alignSelf: "center",
 		backgroundColor: "transparent",
-		width: (windowWidth-60)/3,
+		width: (windowWidth - 60) / 3,
 		height: 83 * alpha,
 		alignItems: "center",
 		elevation: 2 * alpha,
 	},
 	pointView: {
 		backgroundColor: "transparent",
-		width: (windowWidth-60)/3,
+		width: (windowWidth - 60) / 3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
 	rewardButtonView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: (windowWidth-60)/3,
+		width: (windowWidth - 60) / 3,
 		height: 83 * alpha,
 		alignItems: "center",
 		elevation: 2 * alpha,
@@ -1285,7 +1290,7 @@ const styles = StyleSheet.create({
 	rewardView: {
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		width: (windowWidth-60)/3,
+		width: (windowWidth - 60) / 3,
 		height: 83 * alpha,
 		alignItems: "center",
 	},
@@ -1353,7 +1358,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		marginTop: 3 * alpha,
 	},
-	
+
 	menuView: {
 		backgroundColor: "transparent",
 		flex: 1,
@@ -1408,7 +1413,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flex: 1,
 	},
-	
+
 	menuRowLineView: {
 		backgroundColor: "rgb(245, 245, 245)",
 		position: "absolute",
@@ -1433,7 +1438,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	
+
 	missioniconImage: {
 		backgroundColor: "transparent",
 		resizeMode: "contain",
@@ -1464,7 +1469,7 @@ const styles = StyleSheet.create({
 		height: 67 * alpha,
 		// marginTop: 177 * alpha,
 	},
-	
+
 	missionCenterBackground: {
 		resizeMode: "contain",
 		position: "absolute",
@@ -1510,9 +1515,9 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 	},
 	howToUseButtonImage: {
-        resizeMode: "contain",
+		resizeMode: "contain",
 		tintColor: "rgb(151, 151, 151)",
 		width: 9 * alpha,
 		marginRight: 3 * alpha,
-    },
+	},
 })

@@ -88,6 +88,7 @@ export default class PickUp extends React.Component {
 				this.loadCurrentOrder();
 			}
 		})
+		// this.setState({ popUp: true })
 
 	}
 
@@ -184,7 +185,6 @@ export default class PickUp extends React.Component {
 	}
 
 	renderQueueView(current_order) {
-
 		const queues = current_order.map((item, key) => {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
@@ -302,81 +302,89 @@ export default class PickUp extends React.Component {
 							style={styles.saySomethingButtonText}>Say{"\n"}Something</Text>
 					</TouchableOpacity> */}
 				</View>
-				<View
-					style={styles.queueView}>
+				<View style={[styles.queueView, { marginTop: 15 * alpha }]}>
+
 					<View
-						pointerEvents="box-none"
-						style={{
-							flex: 1,
-							marginTop: 19 * alpha,
-							flexDirection: "row"
-						}}>
-						<View style={styles.queueHeaderBlock}>
-							<Text
-								style={styles.queueheaderText}>Order Number</Text>
-							<Text
-								style={styles.queuenumberText}>{item.queue_no}</Text>
-						</View>
-						<View style={styles.queueHeaderBlock}>
-							<Text
-								style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
-							<View style={{flexDirection: "row"}} >
-							<Text
-								style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}<Text
-								style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text></Text>
-							
+						style={[styles.queueView, { alignItems: 'center' }]}>
+
+						<View
+							pointerEvents="box-none"
+							style={{
+								flex: 1,
+								marginTop: 19 * alpha,
+								flexDirection: "row",
+							}}>
+
+							<View style={styles.queueHeaderBlock}>
+								<Text
+									style={styles.queueheaderText}>Order Number</Text>
+								<Text
+									style={styles.queuenumberText}>{item.queue_no}</Text>
+							</View>
+							<View style={styles.queueHeaderBlock}>
+								<Text
+									style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
+								<View style={{ flexDirection: "row" }} >
+									<Text
+										style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}<Text
+											style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text></Text>
+
 								</View>
+							</View>
+						</View>
+						<View
+							style={styles.progressView}>
+							<View
+								style={styles.orderedView}>
+								<Image
+									source={require("./../../assets/images/group-9-copy-13.png")}
+									style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage} />
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Text
+									style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
+							</View>
+							<Image
+								source={require("./../../assets/images/group-11-copy-5.png")}
+								style={styles.dividerImage} />
+							<View
+								style={styles.processingView}>
+								<Image
+									source={require("./../../assets/images/group-13-11.png")}
+									style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage} />
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Text
+									style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
+							</View>
+							<Image
+								source={require("./../../assets/images/group-11-copy-5.png")}
+								style={styles.dividerImage} />
+							<View
+								style={styles.pickUpView}>
+								<Image
+									source={require("./../../assets/images/group-7-copy-8.png")}
+									style={item.status === "ready" ? styles.pickupSelectedImage : styles.pickupImage} />
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Text
+									style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
+							</View>
+						</View>
+						<View
+							style={styles.progressbarView}>
+							{this.renderProgressBar(progress)}
 						</View>
 					</View>
-					<View
-						style={styles.progressView}>
-						<View
-							style={styles.orderedView}>
-							<Image
-								source={require("./../../assets/images/group-9-copy-13.png")}
-								style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage} />
-							<View
-								style={{
-									flex: 1,
-								}} />
-							<Text
-								style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
-						</View>
-						<Image
-							source={require("./../../assets/images/group-11-copy-5.png")}
-							style={styles.dividerImage} />
-						<View
-							style={styles.processingView}>
-							<Image
-								source={require("./../../assets/images/group-13-11.png")}
-								style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage} />
-							<View
-								style={{
-									flex: 1,
-								}} />
-							<Text
-								style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
-						</View>
-						<Image
-							source={require("./../../assets/images/group-11-copy-5.png")}
-							style={styles.dividerImage} />
-						<View
-							style={styles.pickUpView}>
-							<Image
-								source={require("./../../assets/images/group-7-copy-8.png")}
-								style={item.status === "ready" ? styles.pickupSelectedImage : styles.pickupImage} />
-							<View
-								style={{
-									flex: 1,
-								}} />
-							<Text
-								style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
-						</View>
-					</View>
-					<View
-						style={styles.progressbarView}>
-						{this.renderProgressBar(progress)}
-					</View>
+					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
+						<Text style={{ color: 'lightgray' }}>Update Order</Text>
+					</TouchableOpacity>
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -533,6 +541,11 @@ export default class PickUp extends React.Component {
 		this.loadCurrentOrder()
 	}
 
+	onEditOrder = (current_order) => {
+		const { navigate } = this.props.navigation
+		navigate("EditOrder", { params: current_order })
+	}
+
 	onDirectionPressed(shop) {
 
 		let latitude = shop ? parseFloat(shop.latitude) : 0.0
@@ -685,6 +698,16 @@ export default class PickUp extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	updateOrder: {
+		borderWidth: 1,
+		borderColor: 'lightgray',
+		// flexDirection: "row-reverse",
+		marginTop: 10,
+		// marginLeft: 10 * alpha,
+		position: 'absolute',
+		padding: 10 * alpha,
+		right: 10 * alpha
+	},
 
 	popUpBackground: {
 		flex: 1,
@@ -923,8 +946,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 16 * alpha,
-		alignItems: "center",
+		marginTop: 40 * alpha,
+		// alignItems: "center",
 	},
 
 	queuenumberText: {

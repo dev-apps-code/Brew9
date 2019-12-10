@@ -40,7 +40,7 @@ export default class Checkout extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Checkout",
+			title: "Update Order",
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -62,10 +62,6 @@ export default class Checkout extends React.Component {
 
 	constructor(props) {
 		super(props)
-		_.throttle(
-			this.onPayNowPressed.bind(this),
-			500, // no new clicks within 500ms time window
-		);
 		this.state = {
 			delivery_options: 'pickup',
 			vouchers_to_use: [],
@@ -84,7 +80,7 @@ export default class Checkout extends React.Component {
 			pickup_view_height: 150 * alpha,
 			selected_hour_index: 0,
 			selected_minute_index: 0,
-			paynow_clicked: false,
+			current_order: this.props.navigation.state.params.params
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -249,12 +245,8 @@ export default class Checkout extends React.Component {
 
 		const { navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
-		
-		navigation.navigate({ routeName, key, 
-			params: { 
-				clearCart: false, 
-			} 
-		})
+
+		navigation.navigate({ routeName, key })
 	}
 
 
@@ -533,7 +525,6 @@ export default class Checkout extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
-			console.log("Checkout", eventObject)
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits') {
@@ -543,14 +534,7 @@ export default class Checkout extends React.Component {
 							loading: false,
 						})
 					}.bind(this), 2000);
-				}
-				else if (selected_payment == 'counter') {
-					setTimeout(function () {
-						this.clearCart()
-						this.setState({
-							loading: false,
-						})
-					}.bind(this), 2000);
+
 				} else {
 					this.setState({
 						loading: false,
@@ -583,7 +567,6 @@ export default class Checkout extends React.Component {
 					}
 				}
 			}
-			
 		}
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
@@ -1120,9 +1103,7 @@ export default class Checkout extends React.Component {
 					</View>
 				</TouchableOpacity>
 			</View>
-			<View style={styles.orderitemsView}>
-				{voucher_items}
-			</View>
+
 		</View>
 	}
 
@@ -1211,64 +1192,6 @@ export default class Checkout extends React.Component {
 		</View>
 	}
 
-	renderOrderItems(items, promotions) {
-
-		let fullList = [...items, ...promotions]
-		let last_item = fullList[fullList.length - 1]
-
-		const order_items = fullList.map((item, key) => {
-			var price_string = item.price != undefined && item.price > 0 && item.clazz == "product" ? `$${parseFloat(item.price).toFixed(2)}`
-				: item.price != undefined && item.price > 0 && item.clazz == "promotion" ? `-$${parseFloat(item.price).toFixed(2)}`
-					: item.type != undefined && item.type == "Free Items and vouchers" ? "Free" : ""
-			let filtered = item.selected_variants != null ? item.selected_variants.filter(function (el) { return el }) : []
-
-			let variant_array = filtered.map(a => a.value)
-			return <View
-				style={styles.drinksView}
-				key={key}>
-				<View
-					pointerEvents="box-none"
-					style={{
-						justifyContent: "center",
-						backgroundColor: "transparent",
-						flex: 1,
-						flexDirection: "row"
-					}}>
-					<View
-						style={styles.productDetailView}>
-						<Text
-							style={item.cannot_order != undefined && item.cannot_order == true ? styles.productNameDisabledText : styles.productNameText}>{item.name}</Text>
-						{(variant_array.length > 0) ?
-							<Text
-								style={styles.productVariantText}>{variant_array.join(", ")}</Text> :
-							<View style={styles.spacer} />
-						}
-					</View>
-					<Text
-						style={styles.productQuantityText}>{item.quantity != null && item.quantity > 0 && (`x${item.quantity}`)}</Text>
-					<Text
-						style={styles.productPriceText}>{price_string}</Text>
-					{item.cannot_order != undefined && item.cannot_order == true && (
-						<TouchableOpacity onPress={() => this.onRemoveItem(item)} style={styles.cancelVoucherButton}>
-							<Image
-								source={require("./../../assets/images/cancel.png")}
-								style={styles.cancelImage} />
-						</TouchableOpacity>
-					)}
-					{item.id != last_item.id && (<Image
-						source={require("./../../assets/images/group-109-copy.png")}
-						style={styles.dottedLineImage} />)}
-
-				</View>
-			</View>
-
-		})
-
-		return <View style={styles.drinksViewWrapper}><View style={styles.orderitemsView}>
-			{order_items}
-		</View>
-		</View>
-	}
 
 	renderPickupTimeScroll() {
 		let { vouchers_to_use, discount, minute_range, hour_range } = this.state
@@ -1531,8 +1454,8 @@ export default class Checkout extends React.Component {
 	}
 
 	renderCheckoutReceipt() {
-		const { vouchers_to_use, shop, discount } = this.state
-		let { currentMember, selectedShop, cart, promotions, cart_total } = this.props
+		const { vouchers_to_use, shop, discount, current_order } = this.state
+		let { currentMember, selectedShop, promotions, cart_total } = this.props
 		var final_price = cart_total - discount
 		if (final_price < 0) {
 			final_price = 0
@@ -1620,7 +1543,7 @@ export default class Checkout extends React.Component {
 								style={styles.sectionSeperatorView} />
 						</View>
 
-						{this.renderOrderItems(cart, promotions)}
+						{this.renderQueueView(current_order)}
 						<View style={styles.receiptSectionSeperator}>
 							<Image
 								source={require("./../../assets/images/curve_in_background.png")}
@@ -1675,12 +1598,68 @@ export default class Checkout extends React.Component {
 		</View>
 
 	}
+	renderQueueView(current_order) {
+		const queues = current_order.map((item, key) => {
+			const order_items = item.order_items.map((item, key) => {
+				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				return <View
+					style={[styles.drinksView]}
+					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							// justifyContent: "center",
+							backgroundColor: "transparent",
+							flex: 1,
+							flexDirection: "row",
+							alignItems: 'center',
+							paddingHorizontal: 25
+						}}>
+						<View
+							style={[styles.productDetailView, { paddingVertical: 10 }]}>
+							<Text
+								style={styles.productNameText}>{item.product_name}</Text>
+							{(item.variations != null && item.variations != "") ?
+								<Text
+									style={styles.productVariantText}>{item.variations}</Text> :
+								undefined
+								// <View style={styles.spacer} />
+							}
+						</View>
+						<Text
+							style={styles.productQuantityText}>x{item.quantity}</Text>
+
+						<Text
+							style={styles.productPriceText}>{price_string}</Text>
+						{item.order_items != null && key < item.order_items.length - 1 && (<Image
+							source={require("./../../assets/images/group-109-copy.png")}
+							style={styles.dottedLineImage} />)}
+					</View>
+				</View>
+
+
+			})
+
+
+
+			return <View
+				style={styles.orderDetailView}>
+				<View
+					style={styles.drinksViewWrapper}>
+					{order_items}
+				</View>
+
+			</View>
+		})
+
+		return <View >{queues}</View>
+
+	}
 
 	render() {
 
 		let { isPaymentToggle, discount, isPickupToogle } = this.state
 		let { cart_total } = this.props
-
 		var final_price = cart_total - discount
 		if (final_price < 0) {
 			final_price = 0
@@ -1707,20 +1686,6 @@ export default class Checkout extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
-
-			{/* <TimePicker
-				ref={ref => {
-					this.TimePicker = ref;
-				}}
-				onCancel={() => this.onCancelTimePicker()}
-				maxHour={20}
-				minuteInterval={30}
-				selectedHour={this.state.selected_hour}
-				selectedMinute={this.state.selected_minute}
-				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
-			/> */}
-
-
 		</View>
 	}
 }
@@ -2427,7 +2392,7 @@ const styles = StyleSheet.create({
 		right: 0 * alpha,
 		// bottom: (47 + BUTTONBOTTOMPADDING) * alpha,
 		bottom: 0 * alpha,
-		height: 265 * alpha,
+		height: 250 * alpha,
 	},
 	paymentMethodTwoView: {
 		backgroundColor: "transparent",
@@ -3031,7 +2996,7 @@ const styles = StyleSheet.create({
 	drinksView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginTop: 10 * alpha,
+		// marginTop: 10 * alpha,
 	},
 
 	productDetailView: {
