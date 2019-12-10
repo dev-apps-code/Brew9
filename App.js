@@ -58,6 +58,7 @@ import ScanQr from "./App/Home/ScanQr";
 import PayByCard from "./App/PayByCard/PayByCard"
 import CreditHistory from "./App/CreditHistory/CreditHistory"
 import About from "./App/About/About"
+import EditOrder from "./App/EditOrder/EditOrder"
 
 import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
@@ -89,7 +90,7 @@ const VerifyUserStack = createStackNavigator(
   {
     initialRouteName: "VerifyUser",
     header: "none",
-    
+
   }
 );
 
@@ -99,7 +100,7 @@ const PushOrder = createStackNavigator(
     Home: {
       screen: Home,
     },
-    PaymentsWebview:{
+    PaymentsWebview: {
       screen: PaymentsWebview
     },
     Checkout: {
@@ -144,14 +145,15 @@ const PushOrder = createStackNavigator(
     },
     ScanQr: {
       screen: ScanQr
-    }, 
+    },
     VerifyUser: {
       screen: VerifyUser
-    },  
+    },
+    
   },
   {
     initialRouteName: "Home",
-    
+
   }
 );
 
@@ -184,12 +186,15 @@ const PushPickup = createStackNavigator(
     OrderHistory: {
       screen: OrderHistory
     },
+    EditOrder: {
+      screen: EditOrder
+    }
   },
   {
     initialRouteName: "PickUp",
     navigationOptions: {
       gesturesEnabled: false,
-  },
+    },
   }
 );
 
@@ -212,7 +217,7 @@ const PushProfile = createStackNavigator(
     Profile: {
       screen: Profile,
     },
-    PaymentsWebview:{
+    PaymentsWebview: {
       screen: PaymentsWebview
     },
     VIPPurchase: {
@@ -294,7 +299,7 @@ const defaultStackGetStateForAction = PushProfile.router.getStateForAction;
 
 PushProfile.router.getStateForAction = (action, state) => {
   if (state != undefined) {
-    if(state.index === 0 && action.type === 'Navigation/BACK'){
+    if (state.index === 0 && action.type === 'Navigation/BACK') {
       return state;
     }
   }
@@ -434,8 +439,8 @@ const TabGroupOne = createBottomTabNavigator(
   },
   {
     tabBarPosition: "bottom",
-    swipeEnabled:false,
-    gesturesEnabled:false,
+    swipeEnabled: false,
+    gesturesEnabled: false,
     animationEnabled: true,
     tabBarOptions: {
 
@@ -449,19 +454,19 @@ const TabGroupOne = createBottomTabNavigator(
       style: {
         backgroundColor: "rgb(224, 224, 224)"
       }
-    },    
+    },
     defaultNavigationOptions: ({ navigation }) => {
       const { routeName } = navigation.state;
 
       switch (routeName) {
         case "PushOrder":
-          return Home.tabBarItemOptions(navigation,store);
+          return Home.tabBarItemOptions(navigation, store);
         case "PushPickup":
-          return PickUp.tabBarItemOptions(navigation,store);
+          return PickUp.tabBarItemOptions(navigation, store);
         case "PushInbox":
-          return Notification.tabBarItemOptions(navigation,store);
+          return Notification.tabBarItemOptions(navigation, store);
         case "PushProfile":
-          return Profile.tabBarItemOptions(navigation,store);
+          return Profile.tabBarItemOptions(navigation, store);
       }
     }
   }
@@ -487,35 +492,35 @@ const RootNavigator = createStackNavigator(
       screen: FirstScreen,
       navigationOptions: {
         gesturesEnabled: false,
-    },
+      },
     },
     TabGroupOne: {
       screen: TabGroupOne,
       navigationOptions: {
         gesturesEnabled: false,
-    },
+      },
     },
     // VerifyStack: {
     //   screen: VerifyStack
     // },
-    VerifyUserStack:{
+    VerifyUserStack: {
       screen: VerifyUserStack,
-    
+
     }
   },
   {
     initialRouteName: "FirstScreen",
     headerMode: "none",
-    animationEnabled:false,
+    animationEnabled: false,
     transitionConfig: () => ({
       transitionSpec: {
         duration: 0,  // Set the animation duration time as 0 !!
       },
     }),
     navigationOptions: {
-      
+
       gesturesEnabled: false,
-  },
+    },
   }
 );
 

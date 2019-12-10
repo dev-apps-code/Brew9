@@ -46,7 +46,6 @@ export default class MissionCell extends React.Component {
 			// console.log(`this.props.status ${this.props.status}`)
 			status_string = this.props.status
 		}
-		console.log('this.props.point', this.props.point)
 		const point = this.props.point > 1 ? 'points' : 'point'
 		const vouchers = this.props.vouchers.map((item, key) => {
 			return <Text key={key}>{item.voucher.name} x <Text style={styles.highlight}>{item.quantity}</Text>{key < voucher_length - 1 ? ", " : ""}</Text>

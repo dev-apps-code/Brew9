@@ -655,7 +655,7 @@ export default class Home extends React.Component {
 		var headerHeight = 31 * alpha
 		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
 		var checkoutHeight = 51 * alpha
-		var content = height
+		var content = height + headerHeight
 		var finalheight = product_checkout_height - content
 		var height_cap = product_view_height * 0.4
 
@@ -1889,7 +1889,8 @@ export default class Home extends React.Component {
 								top: 12 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
-								alignItems: "flex-start",
+								alignItems: "center",
+								justifyContent: "space-between"
 							}}>
 							<View
 								style={styles.shopppingCartView}>
@@ -1918,12 +1919,13 @@ export default class Home extends React.Component {
 									</View>
 								</TouchableOpacity>
 							</View>
-							<View
+							{/* <View
 								style={{
 									flex: 1,
-								}} />
-							<Text
-								style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
+								}} /> */}
+								<Text
+									style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
+
 						</View>
 						<View
 							style={styles.badgeView}>
@@ -2224,8 +2226,9 @@ const styles = StyleSheet.create({
 	shopppingCartView: {
 		backgroundColor: "white",
 		borderRadius: 22.5 * alpha,
-		width: 102 * alpha,
-		height: 35 * alpha,
+		width: 115 * alpha,
+		// aspectRatio: 1 / 2,
+		height: 45 * alpha,
 		justifyContent: "center",
 	},
 	shopppingCartButton: {
@@ -2255,12 +2258,13 @@ const styles = StyleSheet.create({
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * alpha,
+		fontSize: 16 * alpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "center",
+		fontWeight: 'bold'
 	},
 	cartImage: {
 		resizeMode: "contain",
@@ -2272,20 +2276,22 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 18 * alpha,
 		fontStyle: "normal",
-		textAlign: "left",
+		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 25 * alpha,
+		marginTop: 20 * alpha,
+		// fontWeight:'bold'
 	},
 	badgeView: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 10 * alpha,
+		borderRadius: 15 * alpha,
 		borderWidth: 1,
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
-		left: 113 * alpha,
+		left: 115 * alpha,
 		top: 0 * alpha,
-		height: 20 * alpha,
+		height: 30 * alpha,
+		aspectRatio: 1,
 		flex: 1,
 		justifyContent: "center",
 	},
@@ -2312,11 +2318,14 @@ const styles = StyleSheet.create({
 		height: 46 * alpha,
 	},
 	checkoutButtonText: {
+		fontSize: 16 * alpha,
+		fontStyle: "normal",
+		backgroundColor: "transparent",
 		color: "white",
 		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "left",
+		fontWeight: 'bold'
 	},
 	checkoutButtonImage: {
 		resizeMode: "contain",

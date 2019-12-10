@@ -72,7 +72,9 @@ export default class PickUp extends React.Component {
 			current_order: [],
 			refreshing: false,
 			appState: AppState.currentState,
-			popUp: false
+			popUp: false,
+			total_exp: 0,
+			total_point: 0,
 		}
 	}
 
@@ -86,6 +88,11 @@ export default class PickUp extends React.Component {
 				this.loadCurrentOrder();
 			}
 		})
+<<<<<<< HEAD
+=======
+		// this.setState({ popUp: true })
+
+>>>>>>> 6f3ab79ac22842c92b85827e3fe51f190116627e
 	}
 
 	componentWillUnmount() {
@@ -113,7 +120,7 @@ export default class PickUp extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 
 		if (prevProps.selectedTab != this.props.selectedTab) {
-			this.loadCurrentOrder()
+			// this.loadCurrentOrder()
 		}
 	}
 
@@ -143,6 +150,10 @@ export default class PickUp extends React.Component {
 				if (eventObject.success) {
 					this.setState({
 						current_order: eventObject.result
+					}, function(){
+						if (this.state.current_order.length > 0) {
+							this.calculate_point_exp(this.state.current_order)
+						}
 					})
 				}
 				this.setState({
@@ -161,8 +172,22 @@ export default class PickUp extends React.Component {
 		}
 	}
 
-	renderQueueView(current_order) {
+	calculate_point_exp(orders) {
 
+		var exp = 0
+		var point = 0
+		
+		for(order of orders) {
+			point += parseFloat(order.awarded_point)
+			exp += parseFloat(order.awarded_exp)
+		}
+		
+		this.setState({ total_point: point, total_exp: exp }, function(){
+			this.setState({popUp: true })
+		})
+	}
+
+	renderQueueView(current_order) {
 		const queues = current_order.map((item, key) => {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
@@ -280,81 +305,89 @@ export default class PickUp extends React.Component {
 							style={styles.saySomethingButtonText}>Say{"\n"}Something</Text>
 					</TouchableOpacity> */}
 				</View>
-				<View
-					style={styles.queueView}>
+				<View style={[styles.queueView, { marginTop: 15 * alpha }]}>
+
 					<View
-						pointerEvents="box-none"
-						style={{
-							flex: 1,
-							marginTop: 19 * alpha,
-							flexDirection: "row"
-						}}>
-						<View style={styles.queueHeaderBlock}>
-							<Text
-								style={styles.queueheaderText}>Order Number</Text>
-							<Text
-								style={styles.queuenumberText}>{item.queue_no}</Text>
-						</View>
-						<View style={styles.queueHeaderBlock}>
-							<Text
-								style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
-							<View style={{flexDirection: "row"}} >
-							<Text
-								style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}<Text
-								style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text></Text>
-							
+						style={[styles.queueView, { alignItems: 'center' }]}>
+
+						<View
+							pointerEvents="box-none"
+							style={{
+								flex: 1,
+								marginTop: 19 * alpha,
+								flexDirection: "row",
+							}}>
+
+							<View style={styles.queueHeaderBlock}>
+								<Text
+									style={styles.queueheaderText}>Order Number</Text>
+								<Text
+									style={styles.queuenumberText}>{item.queue_no}</Text>
+							</View>
+							<View style={styles.queueHeaderBlock}>
+								<Text
+									style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
+								<View style={{ flexDirection: "row" }} >
+									<Text
+										style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}<Text
+											style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text></Text>
+
 								</View>
+							</View>
+						</View>
+						<View
+							style={styles.progressView}>
+							<View
+								style={styles.orderedView}>
+								<Image
+									source={require("./../../assets/images/group-9-copy-13.png")}
+									style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage} />
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Text
+									style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
+							</View>
+							<Image
+								source={require("./../../assets/images/group-11-copy-5.png")}
+								style={styles.dividerImage} />
+							<View
+								style={styles.processingView}>
+								<Image
+									source={require("./../../assets/images/group-13-11.png")}
+									style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage} />
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Text
+									style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
+							</View>
+							<Image
+								source={require("./../../assets/images/group-11-copy-5.png")}
+								style={styles.dividerImage} />
+							<View
+								style={styles.pickUpView}>
+								<Image
+									source={require("./../../assets/images/group-7-copy-8.png")}
+									style={item.status === "ready" ? styles.pickupSelectedImage : styles.pickupImage} />
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Text
+									style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
+							</View>
+						</View>
+						<View
+							style={styles.progressbarView}>
+							{this.renderProgressBar(progress)}
 						</View>
 					</View>
-					<View
-						style={styles.progressView}>
-						<View
-							style={styles.orderedView}>
-							<Image
-								source={require("./../../assets/images/group-9-copy-13.png")}
-								style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage} />
-							<View
-								style={{
-									flex: 1,
-								}} />
-							<Text
-								style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
-						</View>
-						<Image
-							source={require("./../../assets/images/group-11-copy-5.png")}
-							style={styles.dividerImage} />
-						<View
-							style={styles.processingView}>
-							<Image
-								source={require("./../../assets/images/group-13-11.png")}
-								style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage} />
-							<View
-								style={{
-									flex: 1,
-								}} />
-							<Text
-								style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
-						</View>
-						<Image
-							source={require("./../../assets/images/group-11-copy-5.png")}
-							style={styles.dividerImage} />
-						<View
-							style={styles.pickUpView}>
-							<Image
-								source={require("./../../assets/images/group-7-copy-8.png")}
-								style={item.status === "ready" ? styles.pickupSelectedImage : styles.pickupImage} />
-							<View
-								style={{
-									flex: 1,
-								}} />
-							<Text
-								style={item.status === "ready" ? styles.pickUpSelectedText : styles.pickUpText}>Order Ready</Text>
-						</View>
-					</View>
-					<View
-						style={styles.progressbarView}>
-						{this.renderProgressBar(progress)}
-					</View>
+					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
+						<Text style={{ color: 'lightgray' }}>Update Order</Text>
+					</TouchableOpacity>
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -511,6 +544,11 @@ export default class PickUp extends React.Component {
 		this.loadCurrentOrder()
 	}
 
+	onEditOrder = (current_order) => {
+		const { navigate } = this.props.navigation
+		navigate("EditOrder", { params: current_order })
+	}
+
 	onDirectionPressed(shop) {
 
 		let latitude = shop ? parseFloat(shop.latitude) : 0.0
@@ -610,6 +648,42 @@ export default class PickUp extends React.Component {
 			</View>
 		</View>
 	}
+
+	renderPointExpModal(){
+
+		return <Modal
+			animationType="slide"
+			transparent={true}
+			visible={this.state.popUp}
+			onRequestClose={this.closePopUp}>
+			<TouchableWithoutFeedback onPress={this.closePopUp}>
+
+				<View style={[styles.popUpBackground]}>
+					<View style={[styles.popUpContent]}>
+						<Text style={styles.pointExpModalTitle}>Current Order Award</Text>
+						<View style={{ marginBottom: 10 }}>
+							<View style={styles.popUpInput1}>
+								<Text>Point</Text>
+								<Text style={styles.pointExpModalPointText}>+{this.state.total_point}</Text>
+							</View>
+							<View style={styles.popUpInput2}>
+								<Text>Experience</Text>
+								<Text style={styles.pointExpModalExpText}>+{this.state.total_exp}</Text>
+							</View>
+						</View>
+						<TouchableOpacity
+							onPress={() => this.closePopUp()}
+							style={styles.popUpInput3}>
+							<Text
+								style={styles.orderButtonText}>OK</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
+		</Modal>
+
+	}
+
 	render() {
 
 		const { current_order } = this.state
@@ -621,41 +695,22 @@ export default class PickUp extends React.Component {
 				</View> :
 				current_order.length > 0 ? this.renderQueueView(current_order) :
 					this.renderEmpty()}
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={this.state.popUp}
-				onRequestClose={this.closePopUp}>
-				<TouchableWithoutFeedback onPress={this.closePopUp}>
-
-					<View style={[styles.popUpBackground]}>
-						<View style={[styles.popUpContent]}>
-							<Text style={{ paddingBottom: 5, textAlign: 'center' }}>QWERTY</Text>
-							<View style={{ marginBottom: 10 }}>
-								<View style={styles.popUpInput1}>
-									<Text>asasas</Text>
-									<Text style={{ color: '#deb887' }}>+3</Text>
-								</View>
-								<View style={styles.popUpInput2}>
-									<Text>asasasasa</Text>
-									<Text style={{ color: '#deb887' }}>+1</Text>
-								</View>
-							</View>
-							<TouchableOpacity
-								onPress={() => console.log('onpress')}
-								style={styles.popUpInput3}>
-								<Text
-									style={styles.orderButtonText}>Order</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</TouchableWithoutFeedback>
-			</Modal>
+				{this.renderPointExpModal()}
 		</View>
 	}
 }
 
 const styles = StyleSheet.create({
+	updateOrder: {
+		borderWidth: 1,
+		borderColor: 'lightgray',
+		// flexDirection: "row-reverse",
+		marginTop: 10,
+		// marginLeft: 10 * alpha,
+		position: 'absolute',
+		padding: 10 * alpha,
+		right: 10 * alpha
+	},
 
 	popUpBackground: {
 		flex: 1,
@@ -894,8 +949,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 16 * alpha,
-		alignItems: "center",
+		marginTop: 40 * alpha,
+		// alignItems: "center",
 	},
 
 	queuenumberText: {
@@ -1623,4 +1678,18 @@ const styles = StyleSheet.create({
 		marginBottom: 20 * alpha,
 	},
 
+	pointExpModalTitle: {
+		paddingBottom: 5, 
+		textAlign: 'center',
+		fontFamily: TITLE_FONT,
+
+	}, 
+	pointExpModalPointText: {
+		color: '#deb887',
+		fontFamily: NON_TITLE_FONT,
+	},
+	pointExpModalExpText: {
+		color: '#deb887' ,
+		fontFamily: NON_TITLE_FONT,
+	},
 })
