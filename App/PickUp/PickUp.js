@@ -281,10 +281,8 @@ export default class PickUp extends React.Component {
 							style={styles.saySomethingButtonText}>Say{"\n"}Something</Text>
 					</TouchableOpacity> */}
 				</View>
-				<View style={styles.queueView}>
-					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
-						<Text>Update Order</Text>
-					</TouchableOpacity>
+				<View style={[styles.queueView, { marginTop: 15 * alpha }]}>
+
 					<View
 						style={[styles.queueView, { alignItems: 'center' }]}>
 
@@ -363,6 +361,9 @@ export default class PickUp extends React.Component {
 							{this.renderProgressBar(progress)}
 						</View>
 					</View>
+					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
+						<Text style={{ color: 'lightgray' }}>Update Order</Text>
+					</TouchableOpacity>
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -672,9 +673,12 @@ const styles = StyleSheet.create({
 	updateOrder: {
 		borderWidth: 1,
 		borderColor: 'lightgray',
-		flexDirection: "row-reverse",
+		// flexDirection: "row-reverse",
 		marginTop: 10,
-		marginLeft: 10 * alpha
+		// marginLeft: 10 * alpha,
+		position: 'absolute',
+		padding: 10 * alpha,
+		right: 10 * alpha
 	},
 
 	popUpBackground: {
@@ -914,7 +918,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 16 * alpha,
+		marginTop: 40 * alpha,
 		// alignItems: "center",
 	},
 

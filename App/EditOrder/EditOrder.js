@@ -34,7 +34,7 @@ import openMap from "react-native-open-maps";
 	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
 }))
-export default class EditOrder extends React.Component {
+export default class Checkout extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
@@ -80,6 +80,7 @@ export default class EditOrder extends React.Component {
 			pickup_view_height: 150 * alpha,
 			selected_hour_index: 0,
 			selected_minute_index: 0,
+			current_order: this.props.navigation.state.params.params
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -524,7 +525,6 @@ export default class EditOrder extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
-			console.log("Checkout", eventObject)
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits') {
@@ -1103,9 +1103,7 @@ export default class EditOrder extends React.Component {
 					</View>
 				</TouchableOpacity>
 			</View>
-			<View style={styles.orderitemsView}>
-				{voucher_items}
-			</View>
+
 		</View>
 	}
 
@@ -1194,280 +1192,6 @@ export default class EditOrder extends React.Component {
 		</View>
 	}
 
-	renderOrderItems(current_order) {
-		// return(
-		// 	<View><Text>asasasasas</Text></View>
-		// )
-		console.log('current_order', current_order)
-		const queues = current_order.map((item, key) => {
-			console.log('item', item)
-			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
-			const order_items = item.order_items.map((item, key) => {
-				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
-				return <View
-					style={[styles.drinksView,{backgroundColor:'red'}]}
-					key={key}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							justifyContent: "center",
-							backgroundColor: "transparent",
-							flex: 1,
-							flexDirection: "row"
-						}}>
-						<View
-							style={styles.productDetailView}>
-							<Text
-								style={styles.productNameText}>{item.product_name}</Text>
-							{(item.variations != null && item.variations != "") ?
-								<Text
-									style={styles.productVariantText}>{item.variations}</Text> :
-								<View style={styles.spacer} />
-							}
-						</View>
-						<Text
-							style={styles.productQuantityText}>x{item.quantity}</Text>
-
-						<Text
-							style={styles.productPriceText}>{price_string}</Text>
-						{item.order_items != null && key < item.order_items.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
-							style={styles.dottedLineImage} />)}
-					</View>
-				</View>
-
-
-			})
-
-			// const voucher_items = item.voucher_items.map((item, key) => {
-
-			// 	var voucher_discount = ''
-
-			// 	if (item.voucher.discount_type == "fixed") {
-			// 		voucher_discount = `-$${item.voucher.discount_price}`
-			// 	} else if (item.voucher.discount_type == "percent") {
-			// 		voucher_discount = `-$${parseFloat(cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
-
-			// 	}
-			// 	return <View
-			// 		style={styles.drinksView}
-			// 		key={key}>
-			// 		<View
-			// 			pointerEvents="box-none"
-			// 			style={{
-			// 				justifyContent: "center",
-			// 				backgroundColor: "transparent",
-			// 				flex: 1,
-			// 				flexDirection: "row"
-			// 			}}>
-			// 			<View
-			// 				style={styles.productDetailView}>
-			// 				<Text
-			// 					style={styles.productNameText}>{item.voucher.name}</Text>
-
-			// 				<View style={styles.spacer} />
-
-			// 			</View>
-
-			// 			<Text
-			// 				style={styles.productPriceText}>{voucher_discount}</Text>
-			// 			{item.voucher_items != null && key < item.voucher_items.length - 1 && (<Image
-			// 				source={require("./../../assets/images/group-109-copy.png")}
-			// 				style={styles.dottedLineImage} />)}
-			// 		</View>
-			// 	</View>
-
-
-			// })
-
-			// return <View
-			// 	style={styles.pickUpQueueView}
-			// 	key={key}>
-			// 	<View
-			// 		pointerEvents="box-none"
-			// 		style={{
-			// 			alignSelf: "flex-start",
-			// 			flex: 1,
-			// 			height: 29 * alpha,
-			// 			marginLeft: 19 * alpha,
-			// 			flexDirection: "row",
-			// 			alignItems: "flex-start",
-			// 		}}>
-
-			// 	</View>
-			// 	<View style={styles.queueView}>
-			// 		<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
-			// 			<Text>Update Order</Text>
-			// 		</TouchableOpacity>
-			// 		<View
-			// 			style={[styles.queueView, { alignItems: 'center' }]}>
-
-			// 			<View
-			// 				pointerEvents="box-none"
-			// 				style={{
-			// 					flex: 1,
-			// 					marginTop: 19 * alpha,
-			// 					flexDirection: "row",
-			// 				}}>
-
-			// 				<View style={styles.queueHeaderBlock}>
-			// 					<Text
-			// 						style={styles.queueheaderText}>Order Number</Text>
-			// 					<Text
-			// 						style={styles.queuenumberText}>{item.queue_no}</Text>
-			// 				</View>
-			// 				<View style={styles.queueHeaderBlock}>
-			// 					<Text
-			// 						style={styles.pickupTimeheaderText}>{item.pickup_status == "Order Now" ? "Order Time" : "Pick Up"}</Text>
-			// 					<View style={{ flexDirection: "row" }} >
-			// 						<Text
-			// 							style={styles.pickupTimeText}>{Moment(item.pickup_time, "HH:mm").format('h:mm')}<Text
-			// 								style={styles.pickupTimeAMPMText}>{Moment(item.pickup_time, "HH:mm").format('A')}</Text></Text>
-
-			// 					</View>
-			// 				</View>
-			// 			</View>
-			// 		</View>
-			// 	</View>
-			// 	<View
-			// 		style={styles.orderDetailView}>
-			// 		<View style={styles.locationWrapperView}>
-			// 			<View
-			// 				style={styles.locationView}>
-			// 				<View
-			// 					style={styles.branchView}>
-			// 					<Text
-			// 						style={styles.shopBranchText}>{item.shop.name}</Text>
-			// 					<Text
-			// 						numberOfLines={3}
-			// 						style={styles.shopBranchAddressText}>{item.shop.address}</Text>
-			// 				</View>
-			// 				<View
-			// 					style={{
-			// 						flex: 1,
-			// 					}} />
-			// 				<View
-			// 					style={styles.callView}>
-			// 					<TouchableOpacity
-			// 						onPress={() => this.onCallPressed(item.shop.phone_no)}
-			// 						style={styles.callIconButton}>
-			// 						<Image
-			// 							source={require("./../../assets/images/group-3-23.png")}
-			// 							style={styles.callIconButtonImage} />
-			// 					</TouchableOpacity>
-			// 					<View
-			// 						style={{
-			// 							flex: 1,
-			// 						}} />
-			// 					<Text
-			// 						style={styles.callText}>Call</Text>
-			// 				</View>
-			// 				<View
-			// 					style={styles.directionView}>
-			// 					<TouchableOpacity
-			// 						onPress={() => this.onDirectionPressed(item.shop)}
-			// 						style={styles.directionIconButton}>
-			// 						<Image
-			// 							source={require("./../../assets/images/group-3-17.png")}
-			// 							style={styles.directionIconButtonImage} />
-			// 					</TouchableOpacity>
-			// 					<View
-			// 						style={{
-			// 							flex: 1,
-			// 						}} />
-			// 					<Text
-			// 						style={styles.directionText}>Direction</Text>
-			// 				</View>
-			// 			</View>
-			// 		</View>
-			// 		<View style={styles.receiptSectionSeperator}>
-			// 			<Image
-			// 				source={require("./../../assets/images/curve_in_background.png")}
-			// 				style={styles.curve_in} />
-			// 			<View
-			// 				style={styles.sectionSeperatorView} />
-			// 		</View>
-			// 		<View
-			// 			style={styles.drinksViewWrapper}>
-			// 			{order_items}
-			// 			{voucher_items}
-			// 		</View>
-			// 		<View style={styles.receiptSectionSeperator}>
-			// 			<Image
-			// 				source={require("./../../assets/images/curve_in_background.png")}
-			// 				style={styles.curve_in} />
-			// 			<View
-			// 				style={styles.sectionSeperatorView} />
-			// 		</View>
-			// 		<View
-			// 			style={styles.totalViewWrapper}>
-			// 			<View
-			// 				style={styles.orderTotalView}>
-			// 				<Text
-			// 					style={styles.totallabelText}>TOTAL</Text>
-			// 				<View
-			// 					style={{
-			// 						flex: 1,
-			// 					}} />
-			// 				<Text
-			// 					style={styles.orderTotalText}>${parseFloat(item.total).toFixed(2)}</Text>
-			// 			</View>
-			// 		</View>
-			// 		<View style={styles.receiptSectionSeperator}>
-			// 			<Image
-			// 				source={require("./../../assets/images/curve_in_background.png")}
-			// 				style={styles.curve_in} />
-			// 			<View
-			// 				style={styles.sectionSeperatorView} />
-			// 		</View>
-			// 		<View style={styles.remarkViewWrapper}>
-			// 			<View
-			// 				style={styles.remarkView}>
-
-			// 				<View
-			// 					pointerEvents="box-none"
-			// 					style={{
-			// 						left: 22 * alpha,
-			// 						right: 21 * alpha,
-			// 						top: 11 * alpha,
-			// 						bottom: 11 * alpha,
-			// 						alignItems: "flex-start",
-			// 					}}>
-
-			// 					{/* <Text
-			// 						style={styles.pleaseCallBranchFText}>Please call branch for refund</Text> */}
-			// 					<View
-			// 						pointerEvents="box-none"
-			// 						style={{
-			// 							alignSelf: "stretch",
-			// 							height: 19 * alpha,
-			// 							marginLeft: 3 * alpha,
-			// 							marginRight: 4 * alpha,
-			// 							flexDirection: "row",
-			// 							alignItems: "flex-start",
-			// 						}}>
-			// 						<Text
-			// 							style={styles.orderTime100717Text}>Order time: {item.payment_time}</Text>
-			// 						<View
-			// 							style={{
-			// 								flex: 1,
-			// 							}} />
-			// 						{/* <TouchableOpacity
-			// 							onPress={this.onCopyPressed}
-			// 							style={styles.copyButton}>
-			// 							<Text
-			// 								style={styles.copyButtonText}>Copy</Text>
-			// 						</TouchableOpacity> */}
-			// 					</View>
-			// 					<Text
-			// 						style={styles.orderNo020028201Text}>Receipt no.: {item.receipt_no}</Text>
-			// 				</View>
-			// 			</View>
-			// 		</View>
-			// 	</View>
-			// </View>
-		})
-	}
 
 	renderPickupTimeScroll() {
 		let { vouchers_to_use, discount, minute_range, hour_range } = this.state
@@ -1730,14 +1454,14 @@ export default class EditOrder extends React.Component {
 	}
 
 	renderCheckoutReceipt() {
-		const { vouchers_to_use, shop, discount } = this.state
-		let { currentMember, selectedShop, cart, promotions, cart_total } = this.props
+		const { vouchers_to_use, shop, discount, current_order } = this.state
+		let { currentMember, selectedShop, promotions, cart_total } = this.props
 		var final_price = cart_total - discount
 		if (final_price < 0) {
 			final_price = 0
 		}
 		final_price = final_price.toFixed(2)
-		const order = this.props.navigation.state.params
+
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1819,7 +1543,7 @@ export default class EditOrder extends React.Component {
 								style={styles.sectionSeperatorView} />
 						</View>
 
-						{this.renderOrderItems(order.params, promotions)}
+						{this.renderQueueView(current_order)}
 						<View style={styles.receiptSectionSeperator}>
 							<Image
 								source={require("./../../assets/images/curve_in_background.png")}
@@ -1874,12 +1598,68 @@ export default class EditOrder extends React.Component {
 		</View>
 
 	}
+	renderQueueView(current_order) {
+		const queues = current_order.map((item, key) => {
+			const order_items = item.order_items.map((item, key) => {
+				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				return <View
+					style={[styles.drinksView]}
+					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							// justifyContent: "center",
+							backgroundColor: "transparent",
+							flex: 1,
+							flexDirection: "row",
+							alignItems: 'center',
+							paddingHorizontal: 25
+						}}>
+						<View
+							style={[styles.productDetailView, { paddingVertical: 10 }]}>
+							<Text
+								style={styles.productNameText}>{item.product_name}</Text>
+							{(item.variations != null && item.variations != "") ?
+								<Text
+									style={styles.productVariantText}>{item.variations}</Text> :
+								undefined
+								// <View style={styles.spacer} />
+							}
+						</View>
+						<Text
+							style={styles.productQuantityText}>x{item.quantity}</Text>
+
+						<Text
+							style={styles.productPriceText}>{price_string}</Text>
+						{item.order_items != null && key < item.order_items.length - 1 && (<Image
+							source={require("./../../assets/images/group-109-copy.png")}
+							style={styles.dottedLineImage} />)}
+					</View>
+				</View>
+
+
+			})
+
+
+
+			return <View
+				style={styles.orderDetailView}>
+				<View
+					style={styles.drinksViewWrapper}>
+					{order_items}
+				</View>
+
+			</View>
+		})
+
+		return <View >{queues}</View>
+
+	}
 
 	render() {
 
 		let { isPaymentToggle, discount, isPickupToogle } = this.state
 		let { cart_total } = this.props
-
 		var final_price = cart_total - discount
 		if (final_price < 0) {
 			final_price = 0
@@ -1906,20 +1686,6 @@ export default class EditOrder extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
-
-			{/* <TimePicker
-				ref={ref => {
-					this.TimePicker = ref;
-				}}
-				onCancel={() => this.onCancelTimePicker()}
-				maxHour={20}
-				minuteInterval={30}
-				selectedHour={this.state.selected_hour}
-				selectedMinute={this.state.selected_minute}
-				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
-			/> */}
-
-
 		</View>
 	}
 }
@@ -3230,7 +2996,7 @@ const styles = StyleSheet.create({
 	drinksView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginTop: 10 * alpha,
+		// marginTop: 10 * alpha,
 	},
 
 	productDetailView: {
