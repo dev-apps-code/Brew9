@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator} from "react-native"
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
@@ -15,8 +15,8 @@ import VoucherRequestObject from "../Requests/voucher_request_object";
 import UsedVoucher from "./UsedVoucher"
 import ExpiredVoucher from "./ExpiredVoucher"
 import ValidVoucher from "./ValidVoucher"
-import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { KURL_INFO } from "../Utils/server";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -37,7 +37,7 @@ export default class MemberVoucher extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -85,7 +85,7 @@ export default class MemberVoucher extends React.Component {
 					valid_data: this.state.valid_data.concat(eventObject.result),
 					valid_total: eventObject.total,
 					valid_page: this.state.valid_page + 1,
-				},function () {
+				}, function () {
 					this.setState({
 						current_data: this.state.valid_data,
 					});
@@ -115,7 +115,7 @@ export default class MemberVoucher extends React.Component {
 					used_data: this.state.used_data.concat(eventObject.result),
 					used_total: eventObject.total,
 					used_page: this.state.used_page + 1,
-				},function () {
+				}, function () {
 					this.setState({
 						current_data: this.state.used_data,
 					});
@@ -145,7 +145,7 @@ export default class MemberVoucher extends React.Component {
 					expired_data: this.state.expired_data.concat(eventObject.result),
 					expired_total: eventObject.total,
 					expired_page: this.state.expired_page + 1,
-				},function () {
+				}, function () {
 					this.setState({
 						current_data: this.state.expired_data,
 					});
@@ -314,7 +314,6 @@ export default class MemberVoucher extends React.Component {
 	}
 
 	renderVouchertableFlatListCell = ({ item }) => {
-
 		if (this.state.valid_selected) {
 			return <ValidVoucher
 				navigation={this.props.navigation}
@@ -368,9 +367,9 @@ export default class MemberVoucher extends React.Component {
 					}}>
 					<View
 						style={styles.availableTwoView}>
-						{ this.state.valid_selected && (
+						{this.state.valid_selected && (
 							<View
-								style={styles.availablebarView}/>
+								style={styles.availablebarView} />
 						)}
 						<View
 							pointerEvents="box-none"
@@ -393,12 +392,12 @@ export default class MemberVoucher extends React.Component {
 					<View
 						style={{
 							flex: 1,
-						}}/>
+						}} />
 					<View
 						style={styles.expiredView}>
-						{ this.state.expired_selected && (
+						{this.state.expired_selected && (
 							<View
-								style={styles.expiredbarView}/>
+								style={styles.expiredbarView} />
 						)}
 						<View
 							pointerEvents="box-none"
@@ -420,9 +419,9 @@ export default class MemberVoucher extends React.Component {
 				</View>
 				<View
 					style={styles.usedView}>
-					{ this.state.used_selected && (
+					{this.state.used_selected && (
 						<View
-							style={styles.usedbarView}/>
+							style={styles.usedbarView} />
 					)}
 					<TouchableOpacity
 						onPress={this.onUsedPressed}
@@ -445,37 +444,37 @@ export default class MemberVoucher extends React.Component {
 						style={styles.howToUseButton}>
 						<Image
 							source={require("./../../assets/images/exclaimation.png")}
-							style={styles.howToUseButtonImage}/>
+							style={styles.howToUseButtonImage} />
 						<Text
 							style={styles.howToUseButtonText}>How to use</Text>
 					</TouchableOpacity>
-					{ this.state.loading ? 
+					{this.state.loading ?
 						<View style={[styles.container, styles.horizontal]}>
 							<ActivityIndicator size="large" />
 						</View> :
 						this.state.current_data.length == 0 && !this.state.loading ?
-						<View
-							style={styles.novoucherviewView}> 
-							<Text 
-								style={styles.noRewardAvailableText}>No voucher available</Text> 
-						</View> :
-						<View
-							style={styles.voucherlistviewFlatListViewWrapper}>
-							<FlatList
-								renderItem={this.renderVouchertableFlatListCell}
-								data={this.state.current_data}
-								style={styles.voucherlistviewFlatList}
-								refreshing={this.state.isRefreshing}
-								onRefresh={this.onRefresh.bind(this)}
-								onEndReachedThreshold={0.1}
-								onEndReached={this.loadMore.bind(this)}
-								keyExtractor={(item, index) => index.toString()}/>
-						</View>
+							<View
+								style={styles.novoucherviewView}>
+								<Text
+									style={styles.noRewardAvailableText}>No voucher available</Text>
+							</View> :
+							<View
+								style={styles.voucherlistviewFlatListViewWrapper}>
+								<FlatList
+									renderItem={this.renderVouchertableFlatListCell}
+									data={this.state.current_data}
+									style={styles.voucherlistviewFlatList}
+									refreshing={this.state.isRefreshing}
+									onRefresh={this.onRefresh.bind(this)}
+									onEndReachedThreshold={0.1}
+									onEndReached={this.loadMore.bind(this)}
+									keyExtractor={(item, index) => index.toString()} />
+							</View>
 					}
-					
+
 				</View>
-				
-				
+
+
 			</View>
 			{/* { this.state.valid_selected && (
 				<TouchableOpacity
@@ -720,7 +719,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "right",
 	},
 })

@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator} from "react-native"
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
@@ -15,10 +15,10 @@ import VoucherRequestObject from "../Requests/voucher_request_object";
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import UsedVoucher from "../Checkout/UsedVoucher"
 import ValidVoucher from "../Checkout/ValidVoucher"
-import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { KURL_INFO } from "../Utils/server";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
-@connect(({ members,shops }) => ({
+@connect(({ members, shops }) => ({
     currentMember: members.profile,
     selectedShop: shops.selectedShop,
     company_id: members.company_id,
@@ -38,7 +38,7 @@ export default class CheckoutVoucher extends React.Component {
                     style={styles.navigationBarItem}>
                     <Image
                         source={require("./../../assets/images/back.png")}
-                        style={styles.navigationBarItemIcon}/>
+                        style={styles.navigationBarItemIcon} />
                 </TouchableOpacity>
             </View>,
             headerRight: null,
@@ -62,8 +62,8 @@ export default class CheckoutVoucher extends React.Component {
             used_page: 1,
             valid_total: data.length,
             used_total: 0,
-            current_data:  data,
-            cart:  this.props.navigation.getParam("cart", []),
+            current_data: data,
+            cart: this.props.navigation.getParam("cart", []),
             valid_data: data,
             used_data: [],
             loading: false,
@@ -73,40 +73,40 @@ export default class CheckoutVoucher extends React.Component {
     }
 
     loadValidVoucher(page_no) {
-        const { dispatch,currentMember,selectedShop } = this.props
-        const {cart,valid_data} = this.state
+        const { dispatch, currentMember, selectedShop } = this.props
+        const { cart, valid_data } = this.state
 
-        if (valid_data.length > 0){
+        if (valid_data.length > 0) {
             return
         }
 
-		if (currentMember != null ){
-			this.setState({ loading: true })
-			const callback = eventObject => {
+        if (currentMember != null) {
+            this.setState({ loading: true })
+            const callback = eventObject => {
                 this.setState({
                     loading: false,
-                    valid_initial:false
-                    })  
-				if (eventObject.success) {
+                    valid_initial: false
+                })
+                if (eventObject.success) {
 
-					this.setState({ 
-						valid_data:eventObject.result
-					},function () {
+                    this.setState({
+                        valid_data: eventObject.result
+                    }, function () {
                         this.setState({
                             current_data: this.state.valid_data,
                         });
-                    }.bind(this))	
-				}
+                    }.bind(this))
+                }
             }
-			const obj = new ValidVouchersRequestObject(selectedShop.id,cart)
-			obj.setUrlId(currentMember.id)
-			dispatch(
-				createAction('vouchers/loadVouchersForCart')({
-					object:obj,
-					callback,
-				})
-			)
-		}
+            const obj = new ValidVouchersRequestObject(selectedShop.id, cart)
+            obj.setUrlId(currentMember.id)
+            dispatch(
+                createAction('vouchers/loadVouchersForCart')({
+                    object: obj,
+                    callback,
+                })
+            )
+        }
     }
 
     loadUsedVoucher(page_no) {
@@ -120,7 +120,7 @@ export default class CheckoutVoucher extends React.Component {
                     used_data: this.state.used_data.concat(eventObject.result),
                     used_total: eventObject.total,
                     used_page: this.state.used_page + 1,
-                },function () {
+                }, function () {
                     this.setState({
                         current_data: this.state.used_data,
                     });
@@ -160,7 +160,7 @@ export default class CheckoutVoucher extends React.Component {
         const { valid_initial, valid_data, valid_page } = this.state
 
         if (valid_initial) {
-            this.loadValidVoucher(valid_page)            
+            this.loadValidVoucher(valid_page)
         }
 
         this.setState({
@@ -263,7 +263,7 @@ export default class CheckoutVoucher extends React.Component {
                 display_value={item.voucher.display_value}
                 discount_type={item.voucher.discount_type}
                 used_date={item.used_date}
-                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null) }
+                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null)}
                 company_id={this.props.company_id}
                 expiry_date={item.expiry_date}
             />
@@ -271,7 +271,7 @@ export default class CheckoutVoucher extends React.Component {
             return <UsedVoucher
                 navigation={this.props.navigation}
                 title={item.voucher.name}
-                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null) }
+                addVoucherAction={this.props.navigation.getParam("addVoucherAction", null)}
                 description={item.voucher.description}
                 used_date={item.used_date}
                 expiry_date={item.expiry_date}
@@ -286,9 +286,9 @@ export default class CheckoutVoucher extends React.Component {
                 style={styles.availableView}>
                 <View
                     style={styles.availableTwoView}>
-                    { this.state.valid_selected && (
+                    {this.state.valid_selected && (
                         <View
-                            style={styles.availablebarView}/>
+                            style={styles.availablebarView} />
                     )}
                     <View
                         pointerEvents="box-none"
@@ -311,12 +311,12 @@ export default class CheckoutVoucher extends React.Component {
                 <View
                     style={{
                         flex: 1,
-                    }}/>
+                    }} />
                 <View
                     style={styles.usedView}>
-                    { this.state.used_selected && (
+                    {this.state.used_selected && (
                         <View
-                            style={styles.usedbarView}/>
+                            style={styles.usedbarView} />
                     )}
                     <TouchableOpacity
                         onPress={this.onUsedPressed}
@@ -338,11 +338,11 @@ export default class CheckoutVoucher extends React.Component {
                         style={styles.howToUseButton}>
                         <Image
                             source={require("./../../assets/images/exclaimation.png")}
-                            style={styles.howToUseButtonImage}/>
+                            style={styles.howToUseButtonImage} />
                         <Text
                             style={styles.howToUseButtonText}>How to use</Text>
                     </TouchableOpacity>
-                    { this.state.loading && (
+                    {this.state.loading && (
                         <View style={[styles.container, styles.horizontal]}>
                             <ActivityIndicator size="large" />
                         </View>
@@ -357,7 +357,7 @@ export default class CheckoutVoucher extends React.Component {
                             onRefresh={this.onRefresh.bind(this)}
                             onEndReachedThreshold={0.1}
                             onEndReached={this.loadMore.bind(this)}
-                            keyExtractor={(item, index) => index.toString()}/>
+                            keyExtractor={(item, index) => index.toString()} />
                     </View>
                 </View>
                 {/*<View*/}
@@ -375,23 +375,23 @@ export default class CheckoutVoucher extends React.Component {
 
 const styles = StyleSheet.create({
     headerLeftContainer: {
-		flexDirection: "row",
-		marginLeft: 8 * alpha,
-		width: 70 * alpha,
-	},
-	navigationBarItem: {
-		width: "100%",
-	},
+        flexDirection: "row",
+        marginLeft: 8 * alpha,
+        width: 70 * alpha,
+    },
+    navigationBarItem: {
+        width: "100%",
+    },
     navigationBarItemTitle: {
         color: "black",
         fontFamily: TITLE_FONT,
         fontSize: 16 * fontAlpha,
     },
     navigationBarItemIcon: {
-		width: 18 * alpha,
-		height: 18 * alpha,
-		tintColor: "black",
-	},
+        width: 18 * alpha,
+        height: 18 * alpha,
+        tintColor: "black",
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -502,9 +502,9 @@ const styles = StyleSheet.create({
     },
     howToUseButtonImage: {
         resizeMode: "contain",
-		tintColor: "rgb(151, 151, 151)",
-		width: 10 * alpha,
-		marginRight: 5 * alpha,
+        tintColor: "rgb(151, 151, 151)",
+        width: 10 * alpha,
+        marginRight: 5 * alpha,
     },
     howToUseButtonText: {
         color: "rgb(151, 151, 151)",
@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
         fontFamily: NON_TITLE_FONT,
         fontSize: 15 * fontAlpha,
         fontStyle: "normal",
-        
+
         textAlign: "right",
     },
 })
