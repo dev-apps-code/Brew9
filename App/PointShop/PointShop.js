@@ -6,16 +6,16 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Text, View, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndicator} from "react-native"
+import { Text, View, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndicator } from "react-native"
 import React from "react"
 import PointProductCell from "./PointProductCell"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import { KURL_INFO } from "../../App/Utils/server.js"
-import {createAction} from "../Utils";
-import {connect} from "react-redux";
+import { createAction } from "../Utils";
+import { connect } from "react-redux";
 import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND, TOAST_DURATION} from "../Common/common_style";
-import Toast, {DURATION} from 'react-native-easy-toast'
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
+import Toast, { DURATION } from 'react-native-easy-toast'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -36,7 +36,7 @@ export default class PointShop extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -77,7 +77,7 @@ export default class PointShop extends React.Component {
 			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
 		})
 	}
-	
+
 	onItemPressed = (item_id, item_name) => {
 
 		this.refs.toast.show("Insufficient points for redemption", TOAST_DURATION)
@@ -87,7 +87,7 @@ export default class PointShop extends React.Component {
 		//   });
 	}
 
-	loadPointsProducts(){
+	loadPointsProducts() {
 		const { dispatch, members } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
@@ -103,7 +103,7 @@ export default class PointShop extends React.Component {
 		obj.setUrlId(members.company_id)
 		dispatch(
 			createAction('companies/loadPointsProducts')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -132,14 +132,14 @@ export default class PointShop extends React.Component {
 	}
 
 	renderPointproductlistFlatListCell = ({ item, index }) => {
-	
+
 		return <PointProductCell
-				navigation={this.props.navigation}
-				sectionId={item.id}
-				sectionHeader={"Redemption Zone"}
-				products={item.points_products}
-				onPressItem={this.onItemPressed}
-				index={index}/>
+			navigation={this.props.navigation}
+			sectionId={item.id}
+			sectionHeader={"Redemption Zone"}
+			products={item.points_products}
+			onPressItem={this.onItemPressed}
+			index={index} />
 	}
 
 	render() {
@@ -148,11 +148,11 @@ export default class PointShop extends React.Component {
 
 		var expiry_date = ""
 
-		if (members.point_expiry_date != null && members.point_expiry_date != ""){
+		if (members.point_expiry_date != null && members.point_expiry_date != "") {
 			expiry_date = `Expiry Date: ${members.point_expiry_date}`
 		}
 
-		
+
 		return <View
 			style={styles.pointShopView}>
 			<View
@@ -163,53 +163,56 @@ export default class PointShop extends React.Component {
 						style={styles.pointCollectedTwoView}>
 						<Text
 							style={styles.pointsText}>{members.points}</Text>
-							{members.point_expiry_date != undefined}
+						{members.point_expiry_date != undefined}
 						<Text
-							style={styles.pointsCollectedText}>Reedemable Points</Text>					
+							style={styles.pointsCollectedText}>Reedemable Points</Text>
 						<Text
 							style={styles.pointsExpiryText}>{expiry_date}</Text>
 					</View>
 					<View
 						style={{
 							flex: 1,
-						}}/>
+						}} />
 					<TouchableOpacity
 						onPress={this.onPointRulePressed}
 						style={styles.pointRuleButton}>
 						<Image
 							source={require("./../../assets/images/icon-rule.png")}
-							style={styles.pointRuleButtonImage}/>
+							style={styles.pointRuleButtonImage} />
 						<Text
 							style={styles.pointRuleButtonText}>Point Rule</Text>
 					</TouchableOpacity>
 				</View>
 				<View
 					style={styles.headerView}>
-					
-						<TouchableOpacity
-							onPress={this.onPointHistoryPressed}
-							style={styles.pointHistoryButton}>
-							<Text
-								style={styles.pointHistoryButtonText}>Points History</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={this.onTransactionHistoryPressed}
-							style={styles.transactionHistoryButton}>
-							<Text
-								style={styles.transactionHistoryButtonText}>Redemption History</Text>
-						</TouchableOpacity>
-				</View> 
+
+					<TouchableOpacity
+						onPress={this.onPointHistoryPressed}
+						style={styles.pointHistoryButton}>
+
+						<Text
+							style={styles.pointHistoryButtonText}>Points History</Text>
+						<View style={{ borderBottomColor: PRIMARY_COLOR, borderBottomWidth: 5 * alpha, width: 50, borderRadius: 5 }}></View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={this.onTransactionHistoryPressed}
+						style={styles.pointHistoryButton}
+					>
+						<Text
+							style={styles.transactionHistoryButtonText}>Redemption History</Text>
+					</TouchableOpacity>
+				</View>
 				{this.state.loading ?
 					<View style={[styles.container, styles.horizontal]}>
 						<ActivityIndicator size="large" />
 					</View> : <FlatList
-							renderItem={this.renderPointproductlistFlatListCell}
-							data={this.state.data}
-							style={styles.pointproductlistFlatList}
-							keyExtractor={(item, index) => index.toString()}/>
-						}
+						renderItem={this.renderPointproductlistFlatListCell}
+						data={this.state.data}
+						style={styles.pointproductlistFlatList}
+						keyExtractor={(item, index) => index.toString()} />
+				}
 			</View>
-			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
 		</View>
 	}
 }
@@ -272,7 +275,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		marginTop:5*alpha,
+		marginTop: 5 * alpha,
 	},
 	pointsText: {
 		color: PRIMARY_COLOR,
@@ -320,35 +323,43 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 	},
 	headerView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		height: 47 * alpha,
-		marginBottom: 10 * alpha,
-		justifyContent: "center",
-		flexDirection: "row"
+		marginTop: 10 * alpha,
+		paddingVertical: 10 * alpha,
+		// marginHorizontal: 10 * alpha,
+		// justifyContent: "center",
+		// alignItems: 'center',
+		flexDirection: "row",
+		borderBottomColor: DEFAULT_GREY_BACKGROUND,
+		borderBottomWidth: 1
 	},
 	pointHistoryButtonText: {
-		color: "rgb(59, 59, 59)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
+		paddingBottom: 6 * alpha,
+		// marginRight: 10 * alpha,
 	},
 	pointHistoryButton: {
 		backgroundColor: "white",
-		flexDirection: "row",
+		// flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
-		flex: 1,
-		width: "50%"
+		// justifyContent: "center",
+		paddingHorizontal: 15 * alpha,
+		// flex: 1,
+		// width: "50%"
 	},
 	transactionHistoryButton: {
 		backgroundColor: "white",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		flex: 1,
+		// flex: 1,
 		marginLeft: 1 * alpha,
-		width: "50%"
+		// width: "50%"
 	},
 	transactionHistoryButtonText: {
 		color: "rgb(59, 59, 59)",
