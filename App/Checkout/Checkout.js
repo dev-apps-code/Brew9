@@ -62,6 +62,10 @@ export default class Checkout extends React.Component {
 
 	constructor(props) {
 		super(props)
+		_.throttle(
+			this.onPayNowPressed.bind(this),
+			500, // no new clicks within 500ms time window
+		);
 		this.state = {
 			delivery_options: 'pickup',
 			vouchers_to_use:[],
@@ -80,6 +84,7 @@ export default class Checkout extends React.Component {
 			pickup_view_height: 150 * alpha,
 			selected_hour_index: 0,
 			selected_minute_index: 0,
+			paynow_clicked: false,
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -245,7 +250,11 @@ export default class Checkout extends React.Component {
 		const {navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
-		navigation.navigate({ routeName, key})
+		navigation.navigate({ routeName, key, 
+			params: { 
+				clearCart: false, 
+			} 
+		})
 	}
 	
 	
@@ -520,64 +529,68 @@ export default class Checkout extends React.Component {
 	loadMakeOrder(){
 		const {cart, dispatch, selectedShop ,promotion_ids} = this.props
 		const { navigate } = this.props.navigation
-		const {vouchers_to_use, selected_payment, pick_up_status, pick_up_time} = this.state
-		this.setState({ loading: true })
-		const callback = eventObject => {
+		const {vouchers_to_use, selected_payment, pick_up_status, pick_up_time, paynow_clicked} = this.state
+		
+		if (paynow_clicked == false) {
+			this.setState({ loading: true, paynow_clicked: true })
+			const callback = eventObject => {
+				this.setState({ paynow_clicked: false })
+				console.log("Checkout", eventObject)
+				if (eventObject.success) {
 
-			console.log("Checkout", eventObject)
-			if (eventObject.success) {
-
-				if (selected_payment == 'credits'){
-					setTimeout(function () {
-						this.clearCart()
+					if (selected_payment == 'credits'){
+						setTimeout(function () {
+							this.clearCart()
+							this.setState({
+								loading: false,
+							})
+						}.bind(this), 2000);
+						
+					}else{
 						this.setState({
 							loading: false,
 						})
-					  }.bind(this), 2000);
-					
-				}else{
+						const order = eventObject.result
+						navigate("PaymentsWebview", {
+							name: `Brew9 Order`,
+							order_id: order.receipt_no,
+							session_id:order.session_id,
+							amount: order.total,
+							type:'order',
+						})
+					}
+				}
+				else{
+					console.log("Error", eventObject.message)
+					this.refs.toast.show(eventObject.message, TOAST_DURATION)
 					this.setState({
 						loading: false,
 					})
-					const order = eventObject.result
-					navigate("PaymentsWebview", {
-						name: `Brew9 Order`,
-						order_id: order.receipt_no,
-						session_id:order.session_id,
-						amount: order.total,
-						type:'order',
-					})
-				}
-			}
-			else{
-				console.log("Error", eventObject.message)
-				this.refs.toast.show(eventObject.message, TOAST_DURATION)
-				this.setState({
-					loading: false,
-				})
-				if (Array.isArray(eventObject.result)){
-					console.log("Array")
-					if (eventObject.result.length > 0){
-						console.log("Greater")
-						let item = eventObject.result[0]
-						if (item.clazz = "product"){
-							this.removeItemFromCart(eventObject.result,eventObject.message)
-							return
+					if (Array.isArray(eventObject.result)){
+						console.log("Array")
+						if (eventObject.result.length > 0){
+							console.log("Greater")
+							let item = eventObject.result[0]
+							if (item.clazz = "product"){
+								this.removeItemFromCart(eventObject.result,eventObject.message)
+								return
+							}
 						}
 					}
 				}
 			}
+			filtered_cart = _.filter(cart, {clazz: 'product'});
+			const voucher_item_ids = vouchers_to_use.map(item => item.id)
+			const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids, pick_up_status ,pick_up_time)
+			obj.setUrlId(selectedShop.id) 
+			dispatch(
+				createAction('shops/loadMakeOrder')({
+					object:obj,
+					callback,
+				})
+			)
 		}
-		filtered_cart = _.filter(cart, {clazz: 'product'});
-		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids,this.state.selected_payment, promotion_ids, pick_up_status ,pick_up_time)
-		obj.setUrlId(selectedShop.id) 
-		dispatch(
-			createAction('shops/loadMakeOrder')({
-				object:obj,
-				callback,
-			})
-		)
+		
 	}
 
 	onWalletButtonPressed = () => {
@@ -608,8 +621,10 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const { selected_payment, pick_up_status, discount} = this.state
-		const {cart_total,currentMember,selectedShop} = this.props
+		const { cart_total,currentMember,selectedShop } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
+
+		
 		var final_price = cart_total - discount 
 		if (final_price < 0){
 			final_price = 0
@@ -653,7 +668,6 @@ export default class Checkout extends React.Component {
 					}
 				}
 			}
-			
 			
 			this.loadMakeOrder()
 			return
