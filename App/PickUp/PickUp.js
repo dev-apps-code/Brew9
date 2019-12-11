@@ -120,8 +120,8 @@ export default class PickUp extends React.Component {
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			// this.loadCurrentOrder()
 		}
-		console.log(JSON.stringify('current',this.state.current_order))
-		console.log(JSON.stringify('prev',prevState.current_order))
+		console.log(JSON.stringify('current', this.state.current_order))
+		console.log(JSON.stringify('prev', prevState.current_order))
 		if (JSON.stringify(this.state.current_order) == JSON.stringify(prevState.current_order)) {
 			console.log('prevState', prevState)
 		}
@@ -153,7 +153,7 @@ export default class PickUp extends React.Component {
 				if (eventObject.success) {
 					this.setState({
 						current_order: eventObject.result
-					}, function(){
+					}, function () {
 						if (this.state.current_order.length > 0) {
 							this.calculate_point_exp(this.state.current_order)
 						}
@@ -180,14 +180,14 @@ export default class PickUp extends React.Component {
 
 		var exp = 0
 		var point = 0
-		
-		for(order of orders) {
+
+		for (order of orders) {
 			point += parseFloat(order.awarded_point)
 			exp += parseFloat(order.awarded_exp)
 		}
-		
-		this.setState({ total_point: point, total_exp: exp }, function(){
-			this.setState({popUp: true })
+
+		this.setState({ total_point: point, total_exp: exp }, function () {
+			this.setState({ popUp: true })
 		})
 	}
 
@@ -468,6 +468,27 @@ export default class PickUp extends React.Component {
 						<View
 							style={styles.orderTotalView}>
 							<Text
+								style={styles.totallabelText}>Status</Text>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={styles.orderTotalText}>{item.paid == true ? "paid" : "unpaid"}</Text>
+						</View>
+					</View>
+					<View style={styles.receiptSectionSeperator}>
+						<Image
+							source={require("./../../assets/images/curve_in_background.png")}
+							style={styles.curve_in} />
+						<View
+							style={styles.sectionSeperatorView} />
+					</View>
+					<View
+						style={styles.totalViewWrapper}>
+						<View
+							style={styles.orderTotalView}>
+							<Text
 								style={styles.totallabelText}>TOTAL</Text>
 							<View
 								style={{
@@ -654,7 +675,7 @@ export default class PickUp extends React.Component {
 		</View>
 	}
 
-	renderPointExpModal(){
+	renderPointExpModal() {
 
 		return <Modal
 			animationType="slide"
@@ -700,7 +721,7 @@ export default class PickUp extends React.Component {
 				</View> :
 				current_order.length > 0 ? this.renderQueueView(current_order) :
 					this.renderEmpty()}
-				{this.renderPointExpModal()}
+			{this.renderPointExpModal()}
 		</View>
 	}
 }
@@ -1684,17 +1705,17 @@ const styles = StyleSheet.create({
 	},
 
 	pointExpModalTitle: {
-		paddingBottom: 5, 
+		paddingBottom: 5,
 		textAlign: 'center',
 		fontFamily: TITLE_FONT,
 
-	}, 
+	},
 	pointExpModalPointText: {
 		color: '#deb887',
 		fontFamily: NON_TITLE_FONT,
 	},
 	pointExpModalExpText: {
-		color: '#deb887' ,
+		color: '#deb887',
 		fontFamily: NON_TITLE_FONT,
 	},
 })
