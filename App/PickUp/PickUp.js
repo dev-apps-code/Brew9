@@ -382,9 +382,14 @@ export default class PickUp extends React.Component {
 							{this.renderProgressBar(progress)}
 						</View>
 					</View>
-					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
-						<Text style={{ color: 'lightgray' }}>Update Order</Text>
-					</TouchableOpacity>
+					{
+						item.paid == false && (
+							<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(item.order_items, item) }}>
+								<Text style={{ color: 'lightgray' }}>Edit Order</Text>
+							</TouchableOpacity>
+						)
+					}
+					
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -541,9 +546,15 @@ export default class PickUp extends React.Component {
 		this.loadCurrentOrder()
 	}
 
-	onEditOrder = (current_order) => {
+	onEditOrder = (order_items, current_order) => {
 		const { navigate } = this.props.navigation
-		navigate("EditOrder", { params: current_order })
+		const { dispatch } = this.props
+		console.log("Edit", current_order)
+		dispatch(createAction("orders/editCart")({
+			order_items: order_items,
+			order: current_order
+		}));
+		navigate("Home")
 	}
 
 	onDirectionPressed(shop) {

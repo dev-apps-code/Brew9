@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Checkout/Checkout.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Checkout/Checkout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/PickUp/PickUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PickUp/PickUp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Requests/make_order_request_obj.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Requests/make_order_request_obj.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/WebserviceModel/orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/WebserviceModel/orders.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="51" selection-start-line="2" selection-start-column="51" selection-end-line="2" selection-end-column="51" />
+            <state relative-caret-position="60">
+              <caret line="4" column="51" selection-start-line="4" selection-start-column="51" selection-end-line="4" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -48,8 +50,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+            <state relative-caret-position="72">
+              <caret line="16" column="9" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -57,7 +59,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Home/CartCell.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
+            <state relative-caret-position="435">
               <caret line="38" column="44" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -70,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10440">
-              <caret line="702" column="20" selection-start-line="702" selection-start-column="20" selection-end-line="702" selection-end-column="20" />
+            <state relative-caret-position="15870">
+              <caret line="1064" column="20" selection-start-line="1064" selection-start-column="20" selection-end-line="1064" selection-end-column="20" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -187,10 +189,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="252" />
-    <option name="y" value="345" />
-    <option name="width" value="1280" />
-    <option name="height" value="570" />
+    <option name="x" value="42" />
+    <option name="y" value="70" />
+    <option name="width" value="1544" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -317,16 +319,17 @@
       <workItem from="1570430783367" duration="526000" />
       <workItem from="1570578230333" duration="921000" />
       <workItem from="1571882333755" duration="165000" />
+      <workItem from="1576048396320" duration="5000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439124000" />
+    <option name="totallyTimeSpent" value="439129000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="252" y="345" width="1280" height="570" extended-state="0" />
+    <frame x="42" y="70" width="1544" height="800" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23828755" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19973369" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -343,7 +346,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.5920502" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3997175" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -815,14 +818,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Utils/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="51" selection-start-line="2" selection-start-column="51" selection-end-line="2" selection-end-column="51" />
+        <state relative-caret-position="60">
+          <caret line="4" column="51" selection-start-line="4" selection-start-column="51" selection-end-line="4" selection-end-column="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Home/CartCell.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
+        <state relative-caret-position="435">
           <caret line="38" column="44" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -833,8 +836,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Checkout/Checkout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10440">
-          <caret line="702" column="20" selection-start-line="702" selection-start-column="20" selection-end-line="702" selection-end-column="20" />
+        <state relative-caret-position="15870">
+          <caret line="1064" column="20" selection-start-line="1064" selection-start-column="20" selection-end-line="1064" selection-end-column="20" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -843,8 +846,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Home/Home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+        <state relative-caret-position="72">
+          <caret line="16" column="9" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
         </state>
       </provider>
     </entry>
