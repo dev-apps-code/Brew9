@@ -72,7 +72,9 @@ export default class Profile extends React.Component {
 		this.state = {
 			hasShimmered: false,
 			appState: AppState.currentState,
+			timestamp: undefined,
 		}
+		this.loadProfile = this.loadProfile.bind(this)
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: 0 })
 	}
 
@@ -80,6 +82,7 @@ export default class Profile extends React.Component {
 		this.loadProfile()
 		this.loopShimmer()
 		this.timer = setInterval(() => this.loopShimmer(), 3000)
+		this.props.navigation.addListener('didFocus', this.loadProfile)
 		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
@@ -117,6 +120,16 @@ export default class Profile extends React.Component {
 	}
 
 	loadProfile() {
+		const {timestamp} =  this.state
+
+		if (timestamp != undefined) {
+		   const date = new Date()
+		   const diff = date.getTime() - timestamp
+		   if (diff < 10000){
+			return false;
+		   }
+		}
+
 		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {

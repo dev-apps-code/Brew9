@@ -6,6 +6,8 @@ export default {
 
     state: {
         selectedShop:null,
+        popUp:false,
+        lastOrder:false,
     },
     reducers: {
         setDefaultState(state, { payload }) {
@@ -15,6 +17,9 @@ export default {
         },
         setSelectedShop(state, { payload }) {
             return { ...state, selectedShop: payload}
+        },
+        setPopUp(state, { payload }) {
+            return { ...state, popUp: payload}
         },
     },
     effects: {

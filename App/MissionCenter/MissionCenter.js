@@ -113,7 +113,7 @@ export default class MissionCenter extends React.Component {
     }
 
     loadMissionStatements(){
-        const { dispatch } = this.props
+        const { dispatch,currentMember } = this.props
         this.setState({ loading_list: true })
         const callback = eventObject => {
              if (eventObject.success) {
@@ -129,6 +129,7 @@ export default class MissionCenter extends React.Component {
             })
         }
         const obj = new GetMissionStatementRequestObject()
+        obj.setUrlId(currentMember.id)
         dispatch(
             createAction('members/loadMissionStatements')({
                 object:obj,

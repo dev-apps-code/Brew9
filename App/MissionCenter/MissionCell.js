@@ -37,14 +37,14 @@ export default class MissionCell extends React.Component {
 
 	render() {
 
-		var status_string = "status_string"
+		var status_string = this.props.status
 		var voucher_length = this.props.vouchers.length
 
 		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
 			status_string = "Check In"
-		} else {
+		} else if(this.props.status == "Completed") {
 			// console.log(`this.props.status ${this.props.status}`)
-			status_string = this.props.status
+			status_string = "Claim Now"
 		}
 		const point = this.props.point > 1 ? 'points' : 'point'
 		const vouchers = this.props.vouchers.map((item, key) => {

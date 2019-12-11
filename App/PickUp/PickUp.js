@@ -25,13 +25,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 	company_id: members.company_id,
 	location: members.location,
 	selectedShop: shops.selectedShop,
-	selectedTab: config.selectedTab
+	selectedTab: config.selectedTab,
+	popUp: shops.popUp,
+	lastOrder: shops.lastOrder,
 }))
 export default class PickUp extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-		// const {dispatch} = this.props
-		const { params = {} } = navigation.state
+		
 		return {
 			title: "Your Order",
 			headerTintColor: "black",
@@ -72,7 +73,6 @@ export default class PickUp extends React.Component {
 			current_order: [],
 			refreshing: false,
 			appState: AppState.currentState,
-			popUp: false,
 			total_exp: 0,
 			total_point: 0,
 		}
@@ -88,12 +88,9 @@ export default class PickUp extends React.Component {
 				this.loadCurrentOrder();
 			}
 		})
-<<<<<<< HEAD
-=======
-		// this.setState({ popUp: true })
-
->>>>>>> 6f3ab79ac22842c92b85827e3fe51f190116627e
 	}
+
+
 
 	componentWillUnmount() {
 		this.removeNavigationListener()
@@ -119,9 +116,6 @@ export default class PickUp extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 
-		if (prevProps.selectedTab != this.props.selectedTab) {
-			// this.loadCurrentOrder()
-		}
 	}
 
 	onOrderHistoryPressed = () => {
@@ -151,9 +145,7 @@ export default class PickUp extends React.Component {
 					this.setState({
 						current_order: eventObject.result
 					}, function(){
-						if (this.state.current_order.length > 0) {
-							this.calculate_point_exp(this.state.current_order)
-						}
+					
 					})
 				}
 				this.setState({
@@ -170,22 +162,7 @@ export default class PickUp extends React.Component {
 				})
 			)
 		}
-	}
-
-	calculate_point_exp(orders) {
-
-		var exp = 0
-		var point = 0
-		
-		for(order of orders) {
-			point += parseFloat(order.awarded_point)
-			exp += parseFloat(order.awarded_exp)
-		}
-		
-		this.setState({ total_point: point, total_exp: exp }, function(){
-			this.setState({popUp: true })
-		})
-	}
+	}	
 
 	renderQueueView(current_order) {
 		const queues = current_order.map((item, key) => {
@@ -228,8 +205,6 @@ export default class PickUp extends React.Component {
 							style={styles.dottedLineImage} />)}
 					</View>
 				</View>
-
-
 			})
 
 			const voucher_items = item.voucher_items.map((item, key) => {
@@ -558,6 +533,11 @@ export default class PickUp extends React.Component {
 	}
 
 	closePopUp = () => {
+		
+		const {dispatch} = this.props
+		dispatch(createAction("orders/updatePromotions")({
+			promotions:newPromo
+		}))	
 		this.setState({ popUp: false })
 	}
 
@@ -654,9 +634,9 @@ export default class PickUp extends React.Component {
 		return <Modal
 			animationType="slide"
 			transparent={true}
-			visible={this.state.popUp}
-			onRequestClose={this.closePopUp}>
-			<TouchableWithoutFeedback onPress={this.closePopUp}>
+			visible={this.props.popUp}
+			onRequestClose={()=>this.closePopUp()}>
+			<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
 
 				<View style={[styles.popUpBackground]}>
 					<View style={[styles.popUpContent]}>
