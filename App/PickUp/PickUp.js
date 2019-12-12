@@ -392,11 +392,17 @@ export default class PickUp extends React.Component {
 					{
 						item.paid == false && (
 							<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(item.order_items, item) }}>
-								<Text style={{ color: 'lightgray' }}>Edit Order</Text>
+								<Text style={styles.updateOrderText}>Edit Order</Text>
 							</TouchableOpacity>
 						)
 					}
-					
+					{
+						item.paid == false && (
+							<View style={styles.orderPaidStatus}>
+								<Text style={styles.orderPaidStatusText}>Unpaid</Text>
+							</View>
+						)
+					}
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -738,16 +744,38 @@ export default class PickUp extends React.Component {
 
 const styles = StyleSheet.create({
 	updateOrder: {
-		borderWidth: 1,
-		borderColor: 'lightgray',
-		// flexDirection: "row-reverse",
-		marginTop: 10,
-		// marginLeft: 10 * alpha,
+		backgroundColor: PRIMARY_COLOR,
 		position: 'absolute',
-		padding: 10 * alpha,
-		right: 10 * alpha
+		width: "50%",
+		top:0, 
+		right:0,
+		height: 40 * alpha,
+		alignItems: 'center',
+		justifyContent: "center",
+		borderTopRightRadius: 14 * alpha,
 	},
-
+	updateOrderText: {
+		color: 'white',
+		textAlign: "center",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * alpha,
+	},
+	orderPaidStatus: {
+		position: 'absolute',
+		width: "50%",
+		top:0, 
+		left:0,
+		height: 40 * alpha,
+		alignItems: 'center',
+		justifyContent: "center",
+		borderTopLeftRadius: 14 * alpha,
+	},
+	orderPaidStatusText: {
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
+		textAlign: "center",
+		fontSize: 14 * alpha,
+	},
 	popUpBackground: {
 		flex: 1,
 		backgroundColor: 'rgba(0,0,0,0.4)',
