@@ -30,6 +30,7 @@ import openMap from "react-native-open-maps";
 	cart_total_quantity: orders.cart_total_quantity,
 	promotion_trigger_count: orders.promotion_trigger_count,
 	cart: orders.cart,
+	cart_order_id: orders.cart_order_id,
 	promotions: orders.promotions,
 	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
@@ -250,11 +251,7 @@ export default class Checkout extends React.Component {
 		const { navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
 		
-		navigation.navigate({ routeName, key, 
-			params: { 
-				clearCart: false, 
-			} 
-		})
+		navigation.navigate({ routeName, key, })
 	}
 
 
@@ -432,9 +429,6 @@ export default class Checkout extends React.Component {
 				}
 			}
 		}
-		// dispatch(createAction("orders/updateDiscountCartTotal")({
-		// 	discount_cart_total: final_cart_value
-		// }));	
 
 	}
 
@@ -527,13 +521,12 @@ export default class Checkout extends React.Component {
 	// }
 
 	loadMakeOrder() {
-		const { cart, dispatch, selectedShop, promotion_ids } = this.props
+		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id } = this.props
 		const { navigate } = this.props.navigation
 		const { vouchers_to_use, selected_payment, pick_up_status, pick_up_time } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
 
-			console.log("Checkout", eventObject)
 			if (eventObject.success) {
 
 				if (selected_payment == 'credits') {
@@ -543,6 +536,9 @@ export default class Checkout extends React.Component {
 							loading: false,
 						})
 					}.bind(this), 2000);
+					dispatch(createAction("shops/setPopUp")({
+						popUp:true
+					}))	
 				}
 				else if (selected_payment == 'counter') {
 					setTimeout(function () {
@@ -587,7 +583,8 @@ export default class Checkout extends React.Component {
 		}
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time)
+		console.log("Order_Id", cart_order_id)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time, cart_order_id)
 		obj.setUrlId(selectedShop.id)
 		dispatch(
 			createAction('shops/loadMakeOrder')({
@@ -620,12 +617,9 @@ export default class Checkout extends React.Component {
 	clearCart = () => {
 		const { navigation, dispatch } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
-
+		dispatch(createAction("orders/resetCart")({}));
 		navigation.navigate({
 			routeName, key,
-			params: {
-				clearCart: true,
-			}
 		})
 	}
 

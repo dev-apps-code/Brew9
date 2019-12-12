@@ -8,6 +8,7 @@ import {
     namespace: 'orders',
   
     state: {
+        cart_order_id: null,
         cart: [],
         promotion:[],
         promotion_ids:[],
@@ -42,10 +43,11 @@ import {
         },
         resetCart(state, { payload }) {            
             return {
-                ...state,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,clearCart:true
+                ...state,cart_order_id: null,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,clearCart:true
             }
         },
-        noClearCart(state, { payload }) {            
+        noClearCart(state, { payload }) {     
+            console.log("noclear cart")
             return {
                 ...state,clearCart:false
             }
@@ -70,6 +72,41 @@ import {
             console.log(`total ${total} vs ${quantity}`)
             return {
                 ...state,cart,toggle_update_count:state.toggle_update_count+1,cart_total_quantity:quantity,cart_total:total,promotion_trigger_count
+            }
+        },
+        editCart(state, {payload}) {
+
+            const {order, order_items} = payload
+            var promotion_trigger_count = state.promotion_trigger_count + 1                        
+          
+            var total= 0.0
+            var quantity = 0
+            var new_cart = []
+            
+            console.log("Order", order)
+            for (item of order_items) {
+                if (item.clazz == "order_item") {
+
+                    let cartItem = {
+                        clazz: "product",
+                        id: item.product_id,
+                        name: item.product_name,
+                        description: "",
+                        price: item.final_price,
+                        quantity: item.quantity,
+                        selected_variants: item.selected_variants
+                    }
+                    new_cart.push(cartItem)
+                    var calculated = (parseInt(item.quantity) * parseFloat(item.final_price)).toFixed(2)
+                    console.log(`quantity ${item.quantity} vs ${item.final_price} vs ${calculated}`)
+                    total = total +  parseFloat(calculated)
+                    quantity = quantity + parseInt(item.quantity)
+                }
+            }
+
+            console.log(`total ${total} vs ${quantity}`)
+            return {
+                ...state,cart_order_id: order.id, cart:new_cart,toggle_update_count:state.toggle_update_count+1,cart_total_quantity:quantity,cart_total:total,promotion_trigger_count
             }
         },
         updateDiscountCartTotal(state, { payload }) {

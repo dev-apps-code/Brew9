@@ -553,6 +553,13 @@ export default class Profile extends React.Component {
 												<Text
 													style={styles.membershiplevelText}>{level_name}</Text>
 											</View>)}
+											<TouchableOpacity onPress={() => this.onLevelInfoPressed()}
+												style={styles.levelInfoView}>
+												<Image
+													source={require("./../../assets/images/exclaimation.png")}
+													style={styles.howToUseButtonImage} />
+											</TouchableOpacity>
+
 										</View>
 										<View
 											style={[styles.expbarView]}>
@@ -594,7 +601,7 @@ export default class Profile extends React.Component {
 											<Text
 												style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
 										</View>
-										<TouchableOpacity onPress={() => this.onLevelInfoPressed()}
+										{/* <TouchableOpacity onPress={() => this.onLevelInfoPressed()}
 											style={styles.levelInfoButton}>
 											<View
 												style={styles.levelInfoView}>
@@ -604,7 +611,7 @@ export default class Profile extends React.Component {
 												<Text
 													style={styles.levelInfoText}>Info</Text>
 											</View>
-										</TouchableOpacity>
+										</TouchableOpacity> */}
 									</View>
 									<View
 										style={{
@@ -1145,12 +1152,14 @@ const styles = StyleSheet.create({
 		marginRight: 20 * alpha,
 		right: -10 * alpha,
 		position: "absolute",
-		top: 40 * alpha,
+		top: 20 * alpha,
 		backgroundColor: "transparent"
 	},
 	levelInfoView: {
-		width: 40 * alpha,
-		height: 14 * alpha,
+		// width: 40 * alpha,
+		marginLeft: 5 * alpha,
+		aspectRatio: 1,
+		height: 16 * alpha,
 		justifyContent: "center",
 		alignItems: "center",
 		flexDirection: "row",
@@ -1530,7 +1539,7 @@ const styles = StyleSheet.create({
 	howToUseButtonImage: {
 		resizeMode: "contain",
 		tintColor: "rgb(151, 151, 151)",
-		width: 9 * alpha,
-		marginRight: 3 * alpha,
+		width: 12 * alpha,
+		// marginRight: 3 * alpha,
 	},
 })

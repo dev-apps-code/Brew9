@@ -79,6 +79,7 @@ export default class PickUp extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log('load current order')
 		this.loadCurrentOrder()
 		const { currentMember } = this.props
 		const { navigation } = this.props
@@ -116,13 +117,20 @@ export default class PickUp extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 
+		if (prevProps.selectedTab != this.props.selectedTab) {
+			// this.loadCurrentOrder()
+		}
+		console.log(JSON.stringify('current', this.state.current_order))
+		console.log(JSON.stringify('prev', prevState.current_order))
+		if (JSON.stringify(this.state.current_order) == JSON.stringify(prevState.current_order)) {
+			console.log('prevState', prevState)
+		}
 	}
 
 	onOrderHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
 		navigate("OrderHistory")
-
 	}
 
 	onCallPressed = (phone_no) => {
@@ -144,8 +152,6 @@ export default class PickUp extends React.Component {
 				if (eventObject.success) {
 					this.setState({
 						current_order: eventObject.result
-					}, function(){
-					
 					})
 				}
 				this.setState({
@@ -161,8 +167,23 @@ export default class PickUp extends React.Component {
 					callback,
 				})
 			)
+
 		}
-	}	
+	}
+
+	calculate_point_exp(orders) {
+
+		var exp = 0
+		var point = 0
+
+		const order = orders.first
+
+		point += parseFloat(order.awarded_point)
+		exp += parseFloat(order.awarded_exp)
+		
+
+		this.setState({ total_point: point, total_exp: exp })
+	}
 
 	renderQueueView(current_order) {
 		const queues = current_order.map((item, key) => {
@@ -360,9 +381,14 @@ export default class PickUp extends React.Component {
 							{this.renderProgressBar(progress)}
 						</View>
 					</View>
-					<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(current_order) }}>
-						<Text style={{ color: 'lightgray' }}>Update Order</Text>
-					</TouchableOpacity>
+					{
+						item.paid == false && (
+							<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(item.order_items, item) }}>
+								<Text style={{ color: 'lightgray' }}>Edit Order</Text>
+							</TouchableOpacity>
+						)
+					}
+					
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -426,6 +452,27 @@ export default class PickUp extends React.Component {
 						style={styles.drinksViewWrapper}>
 						{order_items}
 						{voucher_items}
+					</View>
+					<View style={styles.receiptSectionSeperator}>
+						<Image
+							source={require("./../../assets/images/curve_in_background.png")}
+							style={styles.curve_in} />
+						<View
+							style={styles.sectionSeperatorView} />
+					</View>
+					<View
+						style={styles.totalViewWrapper}>
+						<View
+							style={styles.orderTotalView}>
+							<Text
+								style={styles.totallabelText}>Status</Text>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={styles.orderTotalText}>{item.paid == true ? "paid" : "unpaid"}</Text>
+						</View>
 					</View>
 					<View style={styles.receiptSectionSeperator}>
 						<Image
@@ -519,9 +566,15 @@ export default class PickUp extends React.Component {
 		this.loadCurrentOrder()
 	}
 
-	onEditOrder = (current_order) => {
+	onEditOrder = (order_items, current_order) => {
 		const { navigate } = this.props.navigation
-		navigate("EditOrder", { params: current_order })
+		const { dispatch } = this.props
+		console.log("Edit", current_order)
+		dispatch(createAction("orders/editCart")({
+			order_items: order_items,
+			order: current_order
+		}));
+		navigate("Home")
 	}
 
 	onDirectionPressed(shop) {
@@ -535,10 +588,9 @@ export default class PickUp extends React.Component {
 	closePopUp = () => {
 		
 		const {dispatch} = this.props
-		dispatch(createAction("orders/updatePromotions")({
-			promotions:newPromo
+		dispatch(createAction("shops/setPopUp")({
+			popUp:false
 		}))	
-		this.setState({ popUp: false })
 	}
 
 	renderProgressBar(progress) {
@@ -629,7 +681,7 @@ export default class PickUp extends React.Component {
 		</View>
 	}
 
-	renderPointExpModal(){
+	renderPointExpModal() {
 
 		return <Modal
 			animationType="slide"
@@ -675,7 +727,7 @@ export default class PickUp extends React.Component {
 				</View> :
 				current_order.length > 0 ? this.renderQueueView(current_order) :
 					this.renderEmpty()}
-				{this.renderPointExpModal()}
+			{this.renderPointExpModal()}
 		</View>
 	}
 }
@@ -1659,17 +1711,17 @@ const styles = StyleSheet.create({
 	},
 
 	pointExpModalTitle: {
-		paddingBottom: 5, 
+		paddingBottom: 5,
 		textAlign: 'center',
 		fontFamily: TITLE_FONT,
 
-	}, 
+	},
 	pointExpModalPointText: {
 		color: '#deb887',
 		fontFamily: NON_TITLE_FONT,
 	},
 	pointExpModalExpText: {
-		color: '#deb887' ,
+		color: '#deb887',
 		fontFamily: NON_TITLE_FONT,
 	},
 })

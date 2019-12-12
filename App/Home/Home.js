@@ -375,9 +375,9 @@ export default class Home extends React.Component {
 					})
 				)
 			})
-
 		}
 	}
+
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
@@ -516,15 +516,10 @@ export default class Home extends React.Component {
 				const { clearCart } = this.props
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
-					const { state } = payload
-					const { params } = state
-					const { clearCart } = params
+					
+					if (clearCart == true) {
 
-					console.log(`clearcart ${clearCart}`)
-					if (params != undefined && params.clearCart == true) {
-
-						this.loadShops()
-						dispatch(createAction("orders/resetCart")({}));
+						this.loadShops()						
 						navigate("PickUp")
 					} else {
 
@@ -1117,12 +1112,14 @@ export default class Home extends React.Component {
 	}
 
 	onClearPress = () => {
-		const { dispatch } = this.props
+		const { dispatch,cart } = this.props
 
 		this.toogleCart(false, false)
 
 
-		dispatch(createAction("orders/resetCart")());
+		if (cart.length > 0){
+			dispatch(createAction("orders/resetCart")());
+		}
 
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
