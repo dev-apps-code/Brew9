@@ -1,6 +1,6 @@
 class BaseRequestObject {
 
-    setUrlId(url_id){
+    setUrlId(url_id) {
         this.url_id = url_id
     }
 
@@ -8,20 +8,20 @@ class BaseRequestObject {
         this.page_no = page
     }
 
-    getFormData(){
-  
+    getFormData() {
+
         let formBody = []
         Object.entries(this).forEach(entry => {
 
-            if (entry[0] != 'url_id'){
+            if (entry[0] != 'url_id') {
 
                 const encodedKey = encodeURIComponent(entry[0]);
                 const encodedValue = encodeURIComponent(entry[1]);
                 formBody.push(`${encodedKey}=${encodedValue}`)
             }
             //use key and value here
-            });
-            formBody = formBody.join('&')
+        });
+        formBody = formBody.join('&')
         return formBody
     }
 }
