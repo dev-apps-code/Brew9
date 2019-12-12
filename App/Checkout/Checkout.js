@@ -222,7 +222,7 @@ export default class Checkout extends React.Component {
 
 
 	loadValidVouchers() {
-		const { dispatch, currentMember, selectedShop, cart } = this.props
+		const { dispatch, currentMember, selectedShop, cart, promotions } = this.props
 
 		if (currentMember != null) {
 			const callback = eventObject => {
@@ -235,7 +235,7 @@ export default class Checkout extends React.Component {
 			}
 
 			filtered_cart = _.filter(cart, { clazz: 'product' });
-			const obj = new ValidVouchersRequestObject(selectedShop.id, filtered_cart)
+			const obj = new ValidVouchersRequestObject(selectedShop.id, filtered_cart, promotions)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('vouchers/loadVouchersForCart')({

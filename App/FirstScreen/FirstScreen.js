@@ -89,7 +89,6 @@ export default class FirstScreen extends React.Component {
       };
       
     loadCurrentStatus(){
-       
         const { dispatch, members } = this.props
         
         if (members != null){
@@ -116,6 +115,7 @@ export default class FirstScreen extends React.Component {
                 }
                 const obj = new CurrentStatusRequestObject(last_note)
                 obj.setUrlId(members.id)
+                console.log("Loading Current")
                 dispatch(
                     createAction('members/loadCurrentStatus')({
                         object:obj,

@@ -2,10 +2,11 @@ import BaseRequestObject from "./base_request_object";
 
 class ValidVouchersRequestObject extends BaseRequestObject{
     
-    constructor(shop_id,order_items){
+    constructor(shop_id,order_items, promotions){
         super();
         this.shop_id = shop_id
         this.order_items = order_items
+        this.promotions = promotions
     }
 
 
@@ -14,7 +15,7 @@ class ValidVouchersRequestObject extends BaseRequestObject{
    }
 
    getFormData(){
-    var string =  JSON.stringify({'order_items': this.order_items});
+    var string =  JSON.stringify({'order_items': this.order_items, 'promotions': this.promotions});
 
     return string
    }

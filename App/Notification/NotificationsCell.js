@@ -5,7 +5,6 @@
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
-
 import { View, StyleSheet, Text, Image, TouchableWithoutFeedback } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
@@ -18,11 +17,10 @@ export default class NotificationsCell extends React.Component {
 	}
 
 	componentDidMount() {
-	
 	}
 
 	onNotificationsCellPress = (item, type) => {
-
+		console.log('item, type', item, type)
 		if (type == "promo") {
 			const { navigate } = this.props.navigation
 
@@ -30,67 +28,68 @@ export default class NotificationsCell extends React.Component {
 				details: item,
 			})
 		}
+		this.props.onNotificationsCellPress(item, type)
 		
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
-				onPress={() => this.onNotificationsCellPress(this.props.item, this.props.type)}>
-				<View
-					navigation={this.props.navigation}
-					style={styles.notificationcell}>
-						<View style={styles.notificationDetailSection}>
-							<View style={styles.notificationTop}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										flexDirection: "row",
-										alignItems: "flex-start",
-									}}>
-									<Text
-										style={styles.titleText}>{this.props.title}</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<Text
-										style={styles.timeText}>{this.props.time}</Text>
-								</View>
-							</View>
-							<View style={styles.notificationBottom}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										flexDirection: "row",
-										alignItems: "flex-start",
-									}}>
-									<Text
-										numberOfLines={2}
-										style={styles.messageText}>{this.props.text}</Text>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									{ !this.props.read && (
-									<View
-										style={styles.circleView}/>)}
-								</View>
-							</View>
+			onPress={() => this.onNotificationsCellPress(this.props.item, this.props.type)}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.notificationcell}>
+				<View style={styles.notificationDetailSection}>
+					<View style={styles.notificationTop}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
+							<Text
+								style={styles.titleText}>{this.props.title}</Text>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							<Text
+								style={styles.timeText}>{this.props.time}</Text>
 						</View>
-						<View style={styles.arrowView}>
-							{ this.props.type == "promo" && ( 
-							<Image
-								source={require("./../../assets/images/next.png")}
-								style={styles.arrowImage}/>
-							)}
+					</View>
+					<View style={styles.notificationBottom}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								flexDirection: "row",
+								alignItems: "flex-start",
+							}}>
+							<Text
+								numberOfLines={2}
+								style={styles.messageText}>{this.props.text}</Text>
+							<View
+								style={{
+									flex: 1,
+								}} />
+							{!this.props.read && (
+								<View
+									style={styles.circleView} />)}
 						</View>
-						
-						<Image
-						 	source={require("./../../assets/images/line-7.png")}
-						 	style={styles.seperatorImage}/>
+					</View>
 				</View>
-			</TouchableWithoutFeedback>
+				<View style={styles.arrowView}>
+					{this.props.type == "promo" && (
+						<Image
+							source={require("./../../assets/images/next.png")}
+							style={styles.arrowImage} />
+					)}
+				</View>
+
+				<Image
+					source={require("./../../assets/images/line-7.png")}
+					style={styles.seperatorImage} />
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 
