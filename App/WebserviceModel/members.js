@@ -24,7 +24,7 @@ import {
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
 import * as SecureStore from "expo-secure-store";
-import {createAction} from "../Utils"
+import { createAction } from "../Utils"
 import { create } from 'uuid-js'
 import _ from 'lodash'
 
@@ -38,7 +38,7 @@ function getCurrentUser() {
 }
 
 function saveCurrentUserToStorage(profile) {
-  
+
   AsyncStorage.setItem("profile", JSON.stringify(profile))
 }
 
@@ -55,6 +55,16 @@ function getLastRead() {
   })
 }
 
+function getCurrentNotification() {
+  return AsyncStorage.getItem("notifications", (err, result) => {
+    if (result != null) {
+      const current_notification = JSON.parse(result)
+      return current_notification
+    }
+    return null
+  })
+}
+
 export default {
 
   namespace: 'members',
@@ -62,94 +72,116 @@ export default {
   state: {
     userAuthToken: "",
     profile: null,
-    last_read:null,
+    last_read: null,
     isReady: false,
-    company_id:1,
-    currency:'$',
-    location:null,
+    company_id: 1,
+    currency: '$',
+    location: null,
     notifications: [],
-    unreadNotificationCount:0,
+    unreadNotificationCount: 0,
   },
-  
+
   reducers: {
-     setDefaultState(state, { payload }) {
-        return {
-          ...state,
-          profile:null,
-          isReady: false,
-          userAuthToken: "",
-        }
-     },
+    setDefaultState(state, { payload }) {
+      return {
+        ...state,
+        profile: null,
+        isReady: false,
+        userAuthToken: "",
+      }
+    },
     loadCurrentUser(state, { payload }) {
-      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : ""}
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     markAllNotificationAsRead(state, { payload }) {
-      
-      const notifications =  state.notifications
+
+      const notifications = state.notifications
       let data = [...notifications]
-
       var last_read = null
-      if (data.length > 0){
+      if (data.length > 0) {
 
-        for(var index in data) {
+        for (var index in data) {
           data[index].read = true
         }
-  
-         last_read = data[0].id
-  
-        AsyncStorage.setItem("notification_key", JSON.stringify(last_read))        
+
+        last_read = data[0].id
+
+        AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
+        AsyncStorage.setItem("notifications", JSON.stringify(data))
+
       }
-      return { ...state, unreadNotificationCount:0, notifications:data, last_read:last_read }
+      return { ...state, unreadNotificationCount: 0, notifications: data, last_read: last_read }
     },
-    updateUnreadNotification(state, {payload}) {
-      return { ...state, unreadNotificationCount:payload }
+    markOnPressNotificationAsRead(state, { payload }) {
+      const notifications = state.notifications
+      var last_read = null
+      let data = [...notifications]
+      let { item } = payload
+      let tempData = data.map(notification => {
+        if (notification.id == item.id) {
+          last_read = item.id
+          notification.read = true
+        }
+        return notification
+      })
+      let count = tempData.filter(notification => {
+        return notification.read == false
+      })
+      AsyncStorage.setItem("notifications", JSON.stringify(data))
+      AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
+
+      return { ...state, notifications: tempData, unreadNotificationCount: count.length }
+
     },
-    updateNotifications(state, {payload}) {
-      let unread= 0
+    updateUnreadNotification(state, { payload }) {
+      return { ...state, unreadNotificationCount: payload }
+    },
+    updateNotifications(state, { payload }) {
+      let unread = 0
       let notifications = payload.result
       if (notifications != null && notifications.length > 0) {
         if (payload.last_read != null) {
-          for(var index in notifications) {
+          for (var index in notifications) {
             let item = notifications[index]
-            let read = item.id <= payload.last_read ? true : false   
+            let read = item.id <= payload.last_read ? true : false
             notifications[index].read = read
-            if (read == false){
-              unread = unread + 1
-            }
+            // if (read == false) {
+            //   unread = unread + 1
+            // }
           }
         } else {
-          for(var index in notifications) {
+          for (var index in notifications) {
             notifications[index].read = false
-            unread = unread + 1
+            // unread = unread + 1
           }
         }
-        
-        let saved_notifications = state.notifications
-        var new_notification_list = _.unionBy(notifications, saved_notifications,'id');
 
-        return { ...state, notifications : new_notification_list, unreadNotificationCount:unread }
+        let saved_notifications = payload.current_notifications
+        var new_notification_list = _.unionBy(saved_notifications, notifications, 'id');
+        let count = new_notification_list.filter(item => { return item.read == false })
+
+        return { ...state, notifications: new_notification_list, unreadNotificationCount: count.length }
       }
       console.log("No new Notification")
       //  else {
       //   return { ...state, notifications : [], unreadNotificationCount:unread}
       // }
-      
+
     },
-    destroyCurrentUser(state, {payload}) {
+    destroyCurrentUser(state, { payload }) {
       clearCurrentUser()
       return { ...state, profile: null, isReady: true, userAuthToken: "" }
     },
     setLocation(state, { payload }) {
-      return { ...state, location: payload}
+      return { ...state, location: payload }
     },
-    saveCurrentUser(state,{payload}) {
+    saveCurrentUser(state, { payload }) {
       saveCurrentUserToStorage(payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
   },
   effects: {
-    *loadStorePushToken({ payload }, { call, put, select }) 
-    {
+    *loadStorePushToken({ payload }, { call, put, select }) {
       try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
@@ -159,75 +191,72 @@ export default {
           object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadQrCode({ payload }, { call, put, select })
-    {
-      try{
+    *loadQrCode({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            qrCode,
-            authtoken,
-            object,
+          qrCode,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadScanStatus({ payload }, { call, put, select })
-    {
-      try{
+    *loadScanStatus({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            scanStatus,
-            authtoken,
-            object,
+          scanStatus,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          if (eventObject.result.clazz == 'member'){
-              yield put(createAction('saveCurrentUser')(eventObject.result))
+          if (eventObject.result.clazz == 'member') {
+            yield put(createAction('saveCurrentUser')(eventObject.result))
           }
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadNotifications({ payload }, { call, put, select })
-    {
-      try{
+    *loadNotifications({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            notifications,
-            authtoken,
-            object,
+          notifications,
+          authtoken,
+          object,
         )
         const last_read = yield call(getLastRead)
-       
+        const current_notification = yield call(getCurrentNotification)
+        let current_notifications = JSON.parse(current_notification)
         const eventObject = new EventObject(json)
         const result = eventObject.result
-        yield put(createAction('updateNotifications')({result, last_read}))
+        yield put(createAction('updateNotifications')({ result, last_read, current_notifications }))
 
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadProfile({ payload }, { call, put, select })
-    {
-      try{
+    *loadProfile({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            profile,
-            authtoken,
-            object,
+          profile,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
@@ -236,15 +265,14 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadUpdateProfile({ payload }, { call, put, select })
-    {
-      try{
+    *loadUpdateProfile({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            updateProfile,
-            authtoken,
-            object,
+          updateProfile,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
@@ -253,15 +281,14 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadUpdateAvatar({ payload }, { call, put, select })
-    {
-      try{
+    *loadUpdateAvatar({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            updateAvatar,
-            authtoken,
-            object,
+          updateAvatar,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
@@ -270,32 +297,30 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadUpdatePhoneNumber({ payload }, { call, put, select })
-    {
-      try{
+    *loadUpdatePhoneNumber({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            updatePhoneNumber,
-            authtoken,
-            object,
+          updatePhoneNumber,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadVerifyPhoneNumberUpdate({ payload }, { call, put, select })
-    {
-      try{
+    *loadVerifyPhoneNumberUpdate({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            verifyPhoneNumberUpdate,
-            authtoken,
-            object,
+          verifyPhoneNumberUpdate,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
@@ -304,35 +329,33 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadLogin({ payload }, { call, put, select })
-    {
-      try{
+    *loadLogin({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            login,
-            authtoken,
-            object,
+          login,
+          authtoken,
+          object,
         )
 
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {           
+        if (eventObject.success == true) {
           // yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadLoginWithFacebook({ payload }, { call, put, select })
-    {
-      try{
+    *loadLoginWithFacebook({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            loginWithFacebook,
-            authtoken,
-            object,
+          loginWithFacebook,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
 
@@ -342,16 +365,15 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
-    *loadActivateAccount({ payload }, { call, put, select })
-    {
-      try{
+    *loadActivateAccount({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            activateAccount,
-            authtoken,
-            object,
+          activateAccount,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
@@ -373,162 +395,157 @@ export default {
       } catch (err) {
         console.log('loadingCurrentUser', err)
       }
-    },    
-    *loadDestroy({ payload }, { call, put, select }) 
-    {
-    try{
+    },
+    *loadDestroy({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            destroy,
-            authtoken,
-            object,
+          destroy,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
-        
+
         if (eventObject.success == true) {
           yield put(createAction('destroyCurrentUser')(eventObject.result))
-        }else{
+        } else {
           yield put(createAction('destroyCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
-    }, 
-    *loadOrders({ payload }, { call, put, select }) 
-    {
-    try{
+      } catch (err) { }
+    },
+    *loadOrders({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            orders,
-            authtoken,
-            object,
+          orders,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
         }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
+      } catch (err) { }
     },
-    *loadPointProductRedemption({ payload }, { call, put, select }) 
-    {
-    try{
+    *loadPointProductRedemption({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            pointProductRedemption,
-            authtoken,
-            object,
+          pointProductRedemption,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
-    }, 
-    *loadCurrentOrder({ payload }, { call, put, select }) 
-    {
-    try{
+      } catch (err) { }
+    },
+    *loadCurrentOrder({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            currentOrder,
-            authtoken,
-            object,
+          currentOrder,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
-    }, 
-    *loadQrCodeScan({ payload }, { call, put, select })
-    {
-    try{
+      } catch (err) { }
+    },
+    *loadQrCodeScan({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            qrCodeScan,
-            authtoken,
-            object,
+          qrCodeScan,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
         }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
+      } catch (err) { }
     },
-    *loadMissionStatements({ payload }, { call, put, select }) 
-    {
-    try{
+    *loadMissionStatements({ payload }, { call, put, select }) {
+      try {
 
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            missionStatements,
-            authtoken,
-            object,
+          missionStatements,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) {}
+        if (eventObject.success == true) { }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
-    }, 
-    *missionRewardClaim({ payload }, { call, put, select }) 
-    {
-    try{
+      } catch (err) { }
+    },
+    *missionRewardClaim({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            missionRewardClaim,
-            authtoken,
-            object,
+          missionRewardClaim,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('saveCurrentUser')(eventObject.result.member))
         }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
-    }, 
-    *missionLogin({ payload }, { call, put, select }) 
-    {
-    try{
+      } catch (err) { }
+    },
+    *missionLogin({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            missionLogin,
-            authtoken,
-            object,
+          missionLogin,
+          authtoken,
+          object,
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('saveCurrentUser')(eventObject.result.member))
         }
         typeof callback === 'function' && callback(eventObject)
-        } catch (err) { }
-    }, 
-    *loadCurrentStatus({ payload }, { call, put, select })
-    {
-      try{
+      } catch (err) { }
+    },
+    *loadCurrentStatus({ payload }, { call, put, select }) {
+      try {
         const { object, callback } = payload
         const authtoken = yield select(state => state.members.userAuthToken)
         const json = yield call(
-            currentStatus,
-            authtoken,
-            object,
+          currentStatus,
+          authtoken,
+          object,
         )
+        const current_notification = yield call(getCurrentNotification)
+        let current_notifications = JSON.parse(current_notification)
+        let count = current_notifications.filter(item => { return item.read == false })
+
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           // yield put(createAction('saveCurrentUser')(eventObject.result))
-          yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
+          yield put(createAction('updateUnreadNotification')(count.length))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
   },
-  
+
 }

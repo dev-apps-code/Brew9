@@ -28,11 +28,11 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, P
 import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
 
-@connect(({ members,config }) => ({
-  selectedTab:config.selectedTab,
-  members:members.profile,
+@connect(({ members, config }) => ({
+  selectedTab: config.selectedTab,
+  members: members.profile,
   notifications: members.notifications,
-  unreadNotificationCount:members.unreadNotificationCount
+  unreadNotificationCount: members.unreadNotificationCount
 }))
 
 export default class Notification extends React.Component {
@@ -50,7 +50,7 @@ export default class Notification extends React.Component {
     };
   };
 
-  static tabBarItemOptions = (navigation,store ) => {
+  static tabBarItemOptions = (navigation, store) => {
     const badgeCount = navigation.state.params && navigation.state.params.badgeCount || 0
     return {
       tabBarLabel: "Inbox",
@@ -58,7 +58,7 @@ export default class Notification extends React.Component {
         store.dispatch(createAction("config/setToggleShopLocation")(false))
         store.dispatch(createAction("config/setTab")("notification"))
         defaultHandler()
-			},
+      },
       tabBarIcon: ({ iconTintColor, focused }) => {
         const image = focused
           ? require("./../../assets/images/inbox_selected_tab.png")
@@ -66,11 +66,11 @@ export default class Notification extends React.Component {
 
         return (
           <View style={styles.tabIconWrapper}>
-            
-            <NotificationBadgeIcon image={image} focused={focused}/>
-            
-        </View>
-          
+
+            <NotificationBadgeIcon image={image} focused={focused} />
+
+          </View>
+
         );
       }
     };
@@ -83,16 +83,16 @@ export default class Notification extends React.Component {
       timestamp: undefined,
       appState: AppState.currentState,
     };
-    
+
   }
 
   componentDidMount() {
 
     const { members } = this.props;
-    AppState.addEventListener('change', this._handleAppStateChange);	
+    AppState.addEventListener('change', this._handleAppStateChange);
     if (members != null) {
       this.props.navigation.addListener('didFocus', this.loadNotifications)
-    
+
       this.loadNotifications();
     }
 
@@ -107,41 +107,41 @@ export default class Notification extends React.Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    const { members,selectedTab } = this.props;
+    const { members, selectedTab } = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      if (members != null ) {
+      if (members != null) {
         // this.loadNotifications();
       }
     }
-    this.setState({appState: nextAppState});
+    this.setState({ appState: nextAppState });
   };
 
   loadNotifications = () => {
-    
-    const {timestamp} =  this.state
+
+    const { timestamp } = this.state
 
     if (timestamp != undefined) {
-       const date = new Date()
-       const diff = date.getTime() - timestamp
-       if (diff < 10000){
-         this.setState({
+      const date = new Date()
+      const diff = date.getTime() - timestamp
+      if (diff < 10000) {
+        this.setState({
           isRefreshing: false
-         })
+        })
         return false;
-       }
+      }
     }
     const date = new Date()
-    this.setState({timestamp:date.getTime()})
+    this.setState({ timestamp: date.getTime() })
 
     const { dispatch, members } = this.props;
     this.setState({ loading: true });
     const callback = eventObject => {
       if (eventObject.success) {
-        
-		  }
+
+      }
       this.setState({
         loading: false,
         isRefreshing: false
@@ -163,18 +163,22 @@ export default class Notification extends React.Component {
       );
     })
 
-    
+
   }
 
   onRefresh() {
-    
+
     this.setState({
-        isRefreshing: true,
+      isRefreshing: true,
     })
     this.loadNotifications()
   }
+  onNotificationsCellPress = (item, type) => {
+    const { dispatch } = this.props
+    dispatch(createAction('members/markOnPressNotificationAsRead')({ item }))
+  }
 
-  
+
 
   onBackPressed = () => {
     this.props.navigation.goBack();
@@ -183,6 +187,7 @@ export default class Notification extends React.Component {
   renderPointhistoryFlatListCell = ({ item }) => {
     return (
       <NotificationsCell
+        onNotificationsCellPress={this.onNotificationsCellPress}
         navigation={this.props.navigation}
         item={item}
         id={item.id}
@@ -202,7 +207,8 @@ export default class Notification extends React.Component {
 
   render() {
 
-    const {unreadNotificationCount, notifications} = this.props
+    const { unreadNotificationCount, notifications } = this.props
+
     return (
       <View style={styles.notificationView}>
         <View style={styles.contentView}>
@@ -239,10 +245,10 @@ export default class Notification extends React.Component {
                 keyExtractor={(item, index) => index.toString()}
               />
             ) : (
-              <View style={styles.blankView}>
-                <Text style={styles.noLabelText}>No Notifications</Text>
-              </View>
-            )}
+                  <View style={styles.blankView}>
+                    <Text style={styles.noLabelText}>No Notifications</Text>
+                  </View>
+                )}
           </View>
         </View>
       </View>
