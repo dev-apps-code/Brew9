@@ -114,10 +114,12 @@ export default {
     },
     markOnPressNotificationAsRead(state, { payload }) {
       const notifications = state.notifications
+      var last_read = null
       let data = [...notifications]
       let { item } = payload
       let tempData = data.map(notification => {
         if (notification.id == item.id) {
+          last_read = item.id
           notification.read = true
         }
         return notification
@@ -126,6 +128,7 @@ export default {
         return notification.read == false
       })
       AsyncStorage.setItem("notifications", JSON.stringify(data))
+      AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
 
       return { ...state, notifications: tempData, unreadNotificationCount: count.length }
 
@@ -531,10 +534,14 @@ export default {
           authtoken,
           object,
         )
+        const current_notification = yield call(getCurrentNotification)
+        let current_notifications = JSON.parse(current_notification)
+        let count = current_notifications.filter(item => { return item.read == false })
+
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           // yield put(createAction('saveCurrentUser')(eventObject.result))
-          yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
+          yield put(createAction('updateUnreadNotification')(count.length))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
