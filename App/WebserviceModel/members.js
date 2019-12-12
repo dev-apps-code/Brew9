@@ -536,7 +536,7 @@ export default {
         )
         const current_notification = yield call(getCurrentNotification)
         let current_notifications = JSON.parse(current_notification)
-        let count = current_notifications.filter(item => { return item.read == false })
+        let count = current_notifications == null ? 0 : current_notifications.filter(item => { return item.read == false })
 
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
