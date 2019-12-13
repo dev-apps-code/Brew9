@@ -351,10 +351,9 @@ export default class Home extends React.Component {
 
 	loadCurrentStatus() {
 
-		console.log("load")
 		const { dispatch, currentMember } = this.props
 		if (currentMember != null) {
-			console.log("Not")
+			
 			this.setState({ loading: true })
 			const callback = eventObject => {
 				console.log("Event", eventObject)
@@ -369,7 +368,7 @@ export default class Home extends React.Component {
 				}
 				const obj = new CurrentStatusRequestObject(last_note)
 				obj.setUrlId(currentMember.id)
-				console.log("obj", obj)
+				
 				dispatch(
 					createAction('members/loadCurrentStatus')({
 						object: obj,
