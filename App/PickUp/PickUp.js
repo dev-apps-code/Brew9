@@ -33,7 +33,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default class PickUp extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-		
+
 		return {
 			title: "Your Order",
 			headerTintColor: "black",
@@ -121,11 +121,7 @@ export default class PickUp extends React.Component {
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			// this.loadCurrentOrder()
 		}
-		console.log(JSON.stringify('current', this.state.current_order))
-		console.log(JSON.stringify('prev', prevState.current_order))
-		if (JSON.stringify(this.state.current_order) == JSON.stringify(prevState.current_order)) {
-			console.log('prevState', prevState)
-		}
+
 	}
 
 	onOrderHistoryPressed = () => {
@@ -181,8 +177,7 @@ export default class PickUp extends React.Component {
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 
 			const order_items = item.order_items.map((item, key) => {
-
-				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
 
 				return <View
 					style={styles.drinksView}
@@ -196,7 +191,7 @@ export default class PickUp extends React.Component {
 							flexDirection: "row"
 						}}>
 						<View
-							style={styles.productDetailView}>
+							style={[styles.productDetailView, { marginRight: 5 * alpha }]}>
 							<Text
 								style={styles.productNameText}>{item.product_name}</Text>
 							{(item.variations != null && item.variations != "") ?
@@ -205,14 +200,17 @@ export default class PickUp extends React.Component {
 								<View style={styles.spacer} />
 							}
 						</View>
-						<Text
-							style={styles.productQuantityText}>x{item.quantity}</Text>
+						<View style={{ flex: 0.4, flexDirection: 'row', justifyContent: 'space-between' }}>
 
-						<Text
-							style={styles.productPriceText}>{price_string}</Text>
-						{item.order_items != null && key < item.order_items.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
-							style={styles.dottedLineImage} />)}
+							<Text
+								style={styles.productQuantityText}>x{item.quantity}</Text>
+
+							<Text
+								style={styles.productPriceText}>{price_string}</Text>
+							{item.order_items != null && key < item.order_items.length - 1 && (<Image
+								source={require("./../../assets/images/group-109-copy.png")}
+								style={styles.dottedLineImage} />)}
+						</View>
 					</View>
 				</View>
 			})
@@ -581,11 +579,11 @@ export default class PickUp extends React.Component {
 	}
 
 	closePopUp = () => {
-		
-		const {dispatch} = this.props
+
+		const { dispatch } = this.props
 		dispatch(createAction("shops/setPopUp")({
-			popUp:false
-		}))	
+			popUp: false
+		}))
 	}
 
 	renderProgressBar(progress) {
@@ -678,31 +676,31 @@ export default class PickUp extends React.Component {
 
 	renderPointExpModal() {
 
-		const {currentOrder} = this.props
+		const { currentOrder } = this.props
 
-		if (currentOrder == null){
+		if (currentOrder == null) {
 			return undefined
 		}
 
-		const total_points= parseFloat(currentOrder.awarded_point)
-		const total_exp= parseFloat(currentOrder.awarded_exp)
+		const total_points = parseFloat(currentOrder.awarded_point)
+		const total_exp = parseFloat(currentOrder.awarded_exp)
 		return <Modal
 			animationType="slide"
 			transparent={true}
 			visible={this.props.popUp}
-			onRequestClose={()=>this.closePopUp()}>
+			onRequestClose={() => this.closePopUp()}>
 			<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
 
 				<View style={[styles.popUpBackground]}>
 					<View style={[styles.popUpContent]}>
-						<Text style={styles.pointExpModalTitle}>Current Order Award</Text>
+						<Text style={styles.pointExpModalTitle}>You have receive</Text>
 						<View style={{ marginBottom: 10 }}>
 							<View style={styles.popUpInput1}>
-								<Text>Point</Text>
+								<Text>Points</Text>
 								<Text style={styles.pointExpModalPointText}>+{total_points}</Text>
 							</View>
 							<View style={styles.popUpInput2}>
-								<Text>Experience</Text>
+								<Text>XP Experience</Text>
 								<Text style={styles.pointExpModalExpText}>+{total_exp}</Text>
 							</View>
 						</View>
@@ -740,8 +738,8 @@ const styles = StyleSheet.create({
 		backgroundColor: PRIMARY_COLOR,
 		position: 'absolute',
 		width: "50%",
-		top:0, 
-		right:0,
+		top: 0,
+		right: 0,
 		height: 40 * alpha,
 		alignItems: 'center',
 		justifyContent: "center",
@@ -756,8 +754,8 @@ const styles = StyleSheet.create({
 	orderPaidStatus: {
 		position: 'absolute',
 		width: "50%",
-		top:0, 
-		left:0,
+		top: 0,
+		left: 0,
 		height: 40 * alpha,
 		alignItems: 'center',
 		justifyContent: "center",
@@ -772,13 +770,14 @@ const styles = StyleSheet.create({
 	popUpBackground: {
 		flex: 1,
 		backgroundColor: 'rgba(0,0,0,0.4)',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	popUpContent: {
 		backgroundColor: 'white',
-		minHeight: windowHeight / 4,
+		minHeight: windowHeight / 5,
+		// aspectRatio: 1,
 		maxHeight: windowHeight / 2,
-		paddingVertical: 30,
+		paddingVertical: 20,
 		marginHorizontal: 30,
 		paddingHorizontal: 20,
 		justifyContent: 'space-between',
@@ -788,21 +787,21 @@ const styles = StyleSheet.create({
 	popUpInput1: {
 		backgroundColor: '#fff5ee',
 		paddingHorizontal: 10 * alpha,
-		paddingVertical: 15 * alpha,
+		paddingVertical: 10 * alpha,
 		borderRadius: 5 * alpha,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginTop: 10,
+		marginTop: 5,
 		flexDirection: 'row'
 	},
 	popUpInput2: {
 		backgroundColor: '#f5f5f5',
 		paddingHorizontal: 10 * alpha,
-		paddingVertical: 15 * alpha,
+		paddingVertical: 10 * alpha,
 		borderRadius: 5 * alpha,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginTop: 10,
+		marginTop: 5,
 		flexDirection: 'row'
 
 	},
@@ -814,7 +813,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		// flex: 1,
-		marginTop: 10
+		marginTop: 5
 	},
 	pickUpMainView: {
 		backgroundColor: "rgb(239, 239, 239)",
@@ -1566,8 +1565,8 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		marginRight: 4 * alpha,
-		width: 25 * alpha,
+		// marginRight: 4 * alpha,
+		// width: 25 * alpha,
 	},
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
@@ -1577,7 +1576,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		width: 45 * alpha,
+		// width: 45 * alpha,
 	},
 	spacer: {
 		marginBottom: 10 * alpha,
@@ -1742,11 +1741,13 @@ const styles = StyleSheet.create({
 
 	},
 	pointExpModalPointText: {
-		color: '#deb887',
-		fontFamily: NON_TITLE_FONT,
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
 	},
 	pointExpModalExpText: {
-		color: '#deb887',
-		fontFamily: NON_TITLE_FONT,
+		// color: '#deb887',
+		// fontFamily: NON_TITLE_FONT,
+		color: PRIMARY_COLOR,
+		fontFamily: TITLE_FONT,
 	},
 })

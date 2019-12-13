@@ -29,7 +29,7 @@ export default class NotificationsCell extends React.Component {
 			})
 		}
 		this.props.onNotificationsCellPress(item, type)
-		
+
 	}
 
 	render() {
@@ -65,7 +65,8 @@ export default class NotificationsCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								numberOfLines={2}
+								// numberOfLines={2}
+								textAlign='justify'
 								style={styles.messageText}>{this.props.text}</Text>
 							<View
 								style={{

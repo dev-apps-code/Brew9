@@ -504,8 +504,8 @@ export default class Home extends React.Component {
 	onCheckoutPressed = () => {
 		const { member_distance } = this.state
 		const { navigate } = this.props.navigation
-		const { navigation, dispatch,currentMember, shop, cart, promotions  } = this.props
-		
+		const { navigation, dispatch, currentMember, shop, cart, promotions } = this.props
+
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
@@ -514,14 +514,14 @@ export default class Home extends React.Component {
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
-				
+
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
-					const { clearCart} = this.props			
-					
+					const { clearCart } = this.props
+
 					if (clearCart == true) {
 
-						this.loadShops()						
+						this.loadShops()
 						navigate("PickUp")
 					} else {
 
@@ -1114,12 +1114,12 @@ export default class Home extends React.Component {
 	}
 
 	onClearPress = () => {
-		const { dispatch,cart } = this.props
+		const { dispatch, cart } = this.props
 
 		this.toogleCart(false, false)
 
 
-		if (cart.length > 0){
+		if (cart.length > 0) {
 			dispatch(createAction("orders/resetCart")());
 		}
 
@@ -1450,7 +1450,6 @@ export default class Home extends React.Component {
 		let { isToggleShopLocation, cart, promotions, shop } = this.props
 		let categoryBottomSpacer = undefined
 		// let should_show = this.shouldShowFeatured(shop)
-
 		let fullList = [...cart, ...promotions]
 
 		if (shop !== null) {
@@ -1652,9 +1651,9 @@ export default class Home extends React.Component {
 							style={styles.branchInfoText}>Outlet Info</Text> */}
 						{/* { (shop != null && shop.image != null) && ( */}
 
-						<Image
+						{/* <Image
 							source={{ uri: shop.image.thumb.url }}
-							style={styles.shopImage} />
+							style={styles.shopImage} /> */}
 						{/* ) } */}
 						<View style={{ marginHorizontal: 10 * alpha }}>
 							<Text
@@ -1922,8 +1921,8 @@ export default class Home extends React.Component {
 								style={{
 									flex: 1,
 								}} /> */}
-								<Text
-									style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
+							<Text
+								style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
 
 						</View>
 						<View
@@ -2130,7 +2129,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "flex-end",
 		padding: 0,
 		flex: 1,
 		height: 12 * alpha,
@@ -2960,12 +2959,12 @@ const styles = StyleSheet.create({
 	},
 	showLocationView: {
 		backgroundColor: "white",
-		// width: "100%",
-		// height: "100%",
+		width: "100%",
+		height: "100%",
 		position: "absolute",
 		marginTop: 67 * alpha,
 		alignItems: "flex-start",
-		flex: 1,
+		// flex: 1,
 		// marginHorizontal:10
 	},
 	deliveryView: {

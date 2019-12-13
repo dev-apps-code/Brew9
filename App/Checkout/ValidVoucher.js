@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
