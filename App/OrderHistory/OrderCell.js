@@ -117,7 +117,7 @@ export default class OrderCell extends React.Component {
 						pointerEvents="box-none"
 						style={{
 							alignSelf: "stretch",
-							height: 18 * alpha,
+							// height: 18 * alpha,
 							marginLeft: 20 * alpha,
 							marginRight: 0 * alpha,
 							marginTop: 1 * alpha,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
 	ordernoView: {
 		backgroundColor: "transparent",
 		width: 240 * alpha,
-		height: 14 * alpha,
+		// height: 14 * alpha,
 		marginLeft: 20 * alpha,
 		marginTop: 10 * alpha,
 		flexDirection: "row",
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
 	ordertimeView: {
 		backgroundColor: "transparent",
 		width: 240 * alpha,
-		height: 14 * alpha,
+		// height: 14 * alpha,
 		marginTop: 3 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
