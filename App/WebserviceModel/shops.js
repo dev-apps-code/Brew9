@@ -62,7 +62,7 @@ export default {
 
             const eventObject = new EventObject(json)
             if (eventObject.success == true) {
-                yield put(createAction('setCurrentOrder')(eventObject.result))
+                yield put(createAction('setCurrentOrder')({order:eventObject.result}))
                 yield put(createAction('members/saveCurrentUser')(eventObject.result.member))
             }
             typeof callback === 'function' && callback(eventObject)
