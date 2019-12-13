@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		color: "rgb(59, 59, 59)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		
 		textAlign: "left",
