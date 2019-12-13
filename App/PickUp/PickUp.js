@@ -377,13 +377,7 @@ export default class PickUp extends React.Component {
 							</TouchableOpacity>
 						)
 					}
-					{
-						item.paid == false && (
-							<View style={styles.orderPaidStatus}>
-								<Text style={styles.orderPaidStatusText}>Unpaid</Text>
-							</View>
-						)
-					}
+					
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -739,13 +733,14 @@ const styles = StyleSheet.create({
 	updateOrder: {
 		backgroundColor: PRIMARY_COLOR,
 		position: 'absolute',
-		width: "50%",
+		width: "100%",
 		top:0, 
 		right:0,
 		height: 40 * alpha,
 		alignItems: 'center',
 		justifyContent: "center",
 		borderTopRightRadius: 14 * alpha,
+		borderTopLeftRadius: 14 * alpha,
 	},
 	updateOrderText: {
 		color: 'white',
