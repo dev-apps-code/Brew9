@@ -6,6 +6,7 @@ export default {
 
     state: {
         selectedShop:null,
+        currentOrder:null,
         popUp:false,
     },
     reducers: {
@@ -16,6 +17,10 @@ export default {
         },
         setSelectedShop(state, { payload }) {
             return { ...state, selectedShop: payload}
+        },
+        setCurrentOrder(state, { payload }) {
+            const {order} = payload
+            return { ...state, currentOrder: order}
         },
         setPopUp(state, { payload }) {
 
@@ -57,7 +62,7 @@ export default {
 
             const eventObject = new EventObject(json)
             if (eventObject.success == true) {
-
+                yield put(createAction('setCurrentOrder')(eventObject.result))
                 yield put(createAction('members/saveCurrentUser')(eventObject.result.member))
             }
             typeof callback === 'function' && callback(eventObject)

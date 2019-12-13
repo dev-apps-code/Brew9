@@ -28,6 +28,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 	selectedTab: config.selectedTab,
 	popUp: shops.popUp,
 	lastOrder: shops.lastOrder,
+	currentOrder: shops.currentOrder
 }))
 export default class PickUp extends React.Component {
 
@@ -171,19 +172,7 @@ export default class PickUp extends React.Component {
 		}
 	}
 
-	calculate_point_exp(orders) {
 
-		var exp = 0
-		var point = 0
-
-		const order = orders.first
-
-		point += parseFloat(order.awarded_point)
-		exp += parseFloat(order.awarded_exp)
-		
-
-		this.setState({ total_point: point, total_exp: exp })
-	}
 
 	renderQueueView(current_order) {
 		const queues = current_order.map((item, key) => {
@@ -689,6 +678,14 @@ export default class PickUp extends React.Component {
 
 	renderPointExpModal() {
 
+		const {currentOrder} = this.props
+
+		if (currentOrder == null){
+			return undefined
+		}
+
+		const total_points= parseFloat(currentOrder.awarded_point)
+		const total_exp= parseFloat(currentOrder.awarded_exp)
 		return <Modal
 			animationType="slide"
 			transparent={true}
@@ -702,11 +699,11 @@ export default class PickUp extends React.Component {
 						<View style={{ marginBottom: 10 }}>
 							<View style={styles.popUpInput1}>
 								<Text>Point</Text>
-								<Text style={styles.pointExpModalPointText}>+{this.state.total_point}</Text>
+								<Text style={styles.pointExpModalPointText}>+{total_points}</Text>
 							</View>
 							<View style={styles.popUpInput2}>
 								<Text>Experience</Text>
-								<Text style={styles.pointExpModalExpText}>+{this.state.total_exp}</Text>
+								<Text style={styles.pointExpModalExpText}>+{total_exp}</Text>
 							</View>
 						</View>
 						<TouchableOpacity

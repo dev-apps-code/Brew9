@@ -259,6 +259,8 @@ export default class Home extends React.Component {
 				this.toogleCart(true, true)
 			}.bind(this), 50);
 		}
+
+		console.log(`${this.props.clearCart}`)
 	}
 
 	computeDistance() {
@@ -503,8 +505,8 @@ export default class Home extends React.Component {
 	onCheckoutPressed = () => {
 		const { member_distance } = this.state
 		const { navigate } = this.props.navigation
-		const { navigation, dispatch } = this.props
-		const { currentMember, shop, cart, promotions } = this.props
+		const { navigation, dispatch,currentMember, shop, cart, promotions  } = this.props
+		
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
@@ -513,9 +515,10 @@ export default class Home extends React.Component {
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
-				const { clearCart } = this.props
+				
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
+					const { clearCart} = this.props			
 					
 					if (clearCart == true) {
 

@@ -535,7 +535,7 @@ export default class Checkout extends React.Component {
 						this.setState({
 							loading: false,
 						})
-					}.bind(this), 2000);
+					}.bind(this), 500);
 					dispatch(createAction("shops/setPopUp")({
 						popUp:true
 					}))	
@@ -546,7 +546,7 @@ export default class Checkout extends React.Component {
 						this.setState({
 							loading: false,
 						})
-					}.bind(this), 2000);
+					}.bind(this), 500);
 				} else {
 					this.setState({
 						loading: false,
@@ -616,8 +616,9 @@ export default class Checkout extends React.Component {
 
 	clearCart = () => {
 		const { navigation, dispatch } = this.props
-		const { routeName, key } = navigation.getParam('returnToRoute')
 		dispatch(createAction("orders/resetCart")({}));
+		const { routeName, key } = navigation.getParam('returnToRoute')
+		console.log('clearcart')
 		navigation.navigate({
 			routeName, key,
 		})

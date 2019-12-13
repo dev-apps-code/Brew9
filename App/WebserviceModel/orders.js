@@ -42,6 +42,7 @@ import {
             }
         },
         resetCart(state, { payload }) {            
+            console.log("reset cart")
             return {
                 ...state,cart_order_id: null,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,clearCart:true
             }
