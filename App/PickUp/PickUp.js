@@ -177,8 +177,7 @@ export default class PickUp extends React.Component {
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 
 			const order_items = item.order_items.map((item, key) => {
-
-				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
+				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
 
 				return <View
 					style={styles.drinksView}
@@ -192,7 +191,7 @@ export default class PickUp extends React.Component {
 							flexDirection: "row"
 						}}>
 						<View
-							style={styles.productDetailView}>
+							style={[styles.productDetailView, { marginRight: 5 * alpha }]}>
 							<Text
 								style={styles.productNameText}>{item.product_name}</Text>
 							{(item.variations != null && item.variations != "") ?
@@ -201,14 +200,17 @@ export default class PickUp extends React.Component {
 								<View style={styles.spacer} />
 							}
 						</View>
-						<Text
-							style={styles.productQuantityText}>x{item.quantity}</Text>
+						<View style={{ flex: 0.4, flexDirection: 'row', justifyContent: 'space-between' }}>
 
-						<Text
-							style={styles.productPriceText}>{price_string}</Text>
-						{item.order_items != null && key < item.order_items.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
-							style={styles.dottedLineImage} />)}
+							<Text
+								style={styles.productQuantityText}>x{item.quantity}</Text>
+
+							<Text
+								style={styles.productPriceText}>{price_string}</Text>
+							{item.order_items != null && key < item.order_items.length - 1 && (<Image
+								source={require("./../../assets/images/group-109-copy.png")}
+								style={styles.dottedLineImage} />)}
+						</View>
 					</View>
 				</View>
 			})
@@ -676,12 +678,12 @@ export default class PickUp extends React.Component {
 
 		const { currentOrder } = this.props
 
-		if (currentOrder == null){
+		if (currentOrder == null) {
 			return undefined
 		}
 
-		const total_points= parseFloat(currentOrder.awarded_point)
-		const total_exp= parseFloat(currentOrder.awarded_exp)
+		const total_points = parseFloat(currentOrder.awarded_point)
+		const total_exp = parseFloat(currentOrder.awarded_exp)
 		return <Modal
 			animationType="slide"
 			transparent={true}
@@ -1563,8 +1565,8 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		marginRight: 4 * alpha,
-		width: 25 * alpha,
+		// marginRight: 4 * alpha,
+		// width: 25 * alpha,
 	},
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
@@ -1574,7 +1576,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		width: 45 * alpha,
+		// width: 45 * alpha,
 	},
 	spacer: {
 		marginBottom: 10 * alpha,
