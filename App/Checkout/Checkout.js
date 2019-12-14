@@ -631,8 +631,8 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const { selected_payment, pick_up_status, discount } = this.state
-		const { discount_cart_total, currentMember, selectedShop } = this.props
+		const { selected_payment, pick_up_status, final_price } = this.state
+		const {  currentMember, selectedShop } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		
 		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
