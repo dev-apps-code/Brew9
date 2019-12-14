@@ -27,8 +27,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 	selectedShop: shops.selectedShop,
 	selectedTab: config.selectedTab,
 	popUp: shops.popUp,
-	lastOrder: shops.lastOrder,
-	currentOrder: shops.currentOrder
+	currentOrder: shops.currentOrder,
+	orders:shops.orders
 }))
 export default class PickUp extends React.Component {
 
@@ -71,7 +71,6 @@ export default class PickUp extends React.Component {
 		super(props)
 		this.state = {
 			loading: false,
-			current_order: [],
 			refreshing: false,
 			appState: AppState.currentState,
 			total_exp: 0,
@@ -147,9 +146,7 @@ export default class PickUp extends React.Component {
 			this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
-					this.setState({
-						current_order: eventObject.result
-					})
+					
 				}
 				this.setState({
 					loading: false,
@@ -719,14 +716,14 @@ export default class PickUp extends React.Component {
 
 	render() {
 
-		const { current_order } = this.state
+		const { orders } = this.props
 		return <View
 			style={styles.pickUpMainView}>
 			{this.state.loading ?
 				<View style={[styles.container, styles.horizontal]}>
 					<ActivityIndicator size="large" />
 				</View> :
-				current_order.length > 0 ? this.renderQueueView(current_order) :
+				orders.length > 0 ? this.renderQueueView(orders) :
 					this.renderEmpty()}
 			{this.renderPointExpModal()}
 		</View>
