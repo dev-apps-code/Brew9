@@ -1064,8 +1064,6 @@ export default class Home extends React.Component {
 		this.setState({
 			modalVisible: false,
 		})
-
-
 	}
 
 	onClosePressed = () => {
