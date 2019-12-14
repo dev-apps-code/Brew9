@@ -34,6 +34,7 @@ import openMap from "react-native-open-maps";
 	promotions: orders.promotions,
 	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
+	discount_cart_total : orders.discount_cart_total
 }))
 export default class Checkout extends React.Component {
 
@@ -67,6 +68,7 @@ export default class Checkout extends React.Component {
 			this.onPayNowPressed.bind(this),
 			500, // no new clicks within 500ms time window
 		);
+		const {discount_cart_total} = props
 		this.state = {
 			delivery_options: 'pickup',
 			vouchers_to_use: [],
@@ -86,6 +88,7 @@ export default class Checkout extends React.Component {
 			selected_hour_index: 0,
 			selected_minute_index: 0,
 			paynow_clicked: false,
+			final_price: discount_cart_total.toFixed(2)
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -102,6 +105,7 @@ export default class Checkout extends React.Component {
 		this.setTimePickerDefault()
 		this.loadValidVouchers()
 		dispatch(createAction("orders/noClearCart")());
+		this.check_promotion_trigger()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -359,7 +363,7 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { selectedShop, currentMember, promotions, promotion_ids } = this.props
+		const { selectedShop, currentMember, promotions, promotion_ids ,dispatch} = this.props
 		const { cart_total } = this.props
 		let newPromo = [...promotions]
 
@@ -404,7 +408,7 @@ export default class Checkout extends React.Component {
 
 						} else if (promo.value_type != null && promo.value_type == "fixed") {
 							var discount_value = promo.value ? promo.value : 0
-							price = cart_total - discount_value
+							final_cart_value = cart_total - discount_value
 						}
 
 						if (search_cart_promo_index < 0) {
@@ -423,17 +427,20 @@ export default class Checkout extends React.Component {
 							}));
 						} else {
 							var item = newPromo[search_cart_promo_index]
-							item.price = price
+							item.price = price							
 						}
 					}
 				}
 			}
 		}
+		dispatch(createAction("orders/updateDiscountCartTotal")({
+			discount_cart_total: final_cart_value
+		}));
 
 	}
 
 	calculateVoucherDiscount(vouchers_to_use) {
-		const { cart_total } = this.props
+		const { discount_cart_total } = this.props
 		var discount = 0
 		for (var index in vouchers_to_use) {
 			var item = vouchers_to_use[index]
@@ -450,7 +457,8 @@ export default class Checkout extends React.Component {
 				}
 			}
 		}
-		this.setState({ discount: discount })
+		const f_price = discount_cart_total-discount
+		this.setState({ discount: discount, final_price:f_price.toFixed(2) })
 	}
 
 	onPaymentButtonPressed = () => {
@@ -624,12 +632,9 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const { selected_payment, pick_up_status, discount } = this.state
-		const { cart_total, currentMember, selectedShop } = this.props
+		const { discount_cart_total, currentMember, selectedShop } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		var final_price = cart_total - discount
-		if (final_price < 0) {
-			final_price = 0
-		}
+		
 		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
 		if (currentMember != undefined) {
 			if (selected_payment == "") {
@@ -1523,14 +1528,9 @@ export default class Checkout extends React.Component {
 	}
 
 	renderCheckoutReceipt() {
-		const { vouchers_to_use, shop, discount } = this.state
-		let { currentMember, selectedShop, cart, promotions, cart_total } = this.props
-		var final_price = cart_total - discount
-		if (final_price < 0) {
-			final_price = 0
-		}
-		final_price = final_price.toFixed(2)
-
+		const { vouchers_to_use, final_price } = this.state
+		let { currentMember, selectedShop, cart, promotions } = this.props
+		
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1640,7 +1640,7 @@ export default class Checkout extends React.Component {
 										flex: 1,
 									}} />
 								<Text
-									style={styles.totalText}>${parseFloat(final_price).toFixed(2)}</Text>
+									style={styles.totalText}>${final_price}</Text>
 							</View>
 
 						</View>
@@ -1670,14 +1670,8 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let { isPaymentToggle, discount, isPickupToogle } = this.state
+		let { isPaymentToggle, discount, isPickupToogle,final_price } = this.state
 		let { cart_total } = this.props
-
-		var final_price = cart_total - discount
-		if (final_price < 0) {
-			final_price = 0
-		}
-		final_price = final_price.toFixed(2)
 
 		return <View
 			style={styles.checkoutViewPadding}>

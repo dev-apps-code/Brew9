@@ -20,7 +20,8 @@ import {
         toggle_update_count:0,
         promotions:[],
         promotion_ids:[],
-        clearCart:false
+        clearCart:false,
+        currentPromoText:''
     },
 
     reducers: {
@@ -39,6 +40,14 @@ import {
             }    
             return {
                 ...state,promotions,promotion_ids
+            }
+        },
+        updatePromotionText(state, { payload }) {
+
+            const {promotionText} = payload
+            
+            return {
+                ...state,currentPromoText:promotionText
             }
         },
         resetCart(state, { payload }) {            
@@ -69,8 +78,7 @@ import {
                     quantity = quantity + parseInt(item.quantity)
                 }
             }
-
-            console.log(`total ${total} vs ${quantity}`)
+            
             return {
                 ...state,cart,toggle_update_count:state.toggle_update_count+1,cart_total_quantity:quantity,cart_total:total,promotion_trigger_count
             }
