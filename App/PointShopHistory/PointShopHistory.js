@@ -126,7 +126,7 @@ export default class PointShopHistory extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 					: <View
 							style={styles.blankView}>
-						<Text style={styles.noLabelText}>You have not make any redemption yet</Text>
+						<Text style={styles.noLabelText}>You have not make any redemption</Text>
 				</View> 
 				}
 				</View> 

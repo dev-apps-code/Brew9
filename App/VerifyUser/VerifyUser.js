@@ -87,7 +87,7 @@ export default class VerifyUser extends React.Component {
 	onSendPressed = () => {
 		Keyboard.dismiss()
 		if (this.state.is_counting) {
-			this.refs.toast.show("Please wait for 2 minutes before trying to resend.", TOAST_DURATION)
+			this.refs.toast.show("Please wait for 2 minutes before trying to resend", TOAST_DURATION)
 			return
 		}
 		this.loadLogin()

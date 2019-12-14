@@ -217,7 +217,6 @@ export default class Profile extends React.Component {
 				const { params } = state
 
 				if (params != undefined && params.updated == true) {
-					console.log("update")
 					this.loadProfile()
 				}
 
