@@ -88,13 +88,12 @@ export default class Notification extends React.Component {
 
   componentDidMount() {
 
-    const { members } = this.props;
+    
     AppState.addEventListener('change', this._handleAppStateChange);
-    if (members != null) {
-      this.props.navigation.addListener('didFocus', this.loadNotifications)
-
-      this.loadNotifications();
-    }
+    
+    this.props.navigation.addListener('didFocus', this.loadNotifications)
+    this.loadNotifications();
+    
 
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
@@ -154,7 +153,11 @@ export default class Notification extends React.Component {
         last_note = result
       }
       const obj = new NotificationsRequestObject(last_note);
-      obj.setUrlId(members.id);
+
+      if (members != null){
+        obj.setUrlId(members.id);
+      }
+      
       dispatch(
         createAction("members/loadNotifications")({
           object: obj,
