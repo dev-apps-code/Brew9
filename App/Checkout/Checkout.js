@@ -250,7 +250,7 @@ export default class Checkout extends React.Component {
 
 		const { navigation } = this.props
 		const { routeName, key } = navigation.getParam('returnToRoute')
-		
+
 		navigation.navigate({ routeName, key, })
 	}
 
@@ -537,8 +537,8 @@ export default class Checkout extends React.Component {
 						})
 					}.bind(this), 500);
 					dispatch(createAction("shops/setPopUp")({
-						popUp:true
-					}))	
+						popUp: true
+					}))
 				}
 				else if (selected_payment == 'counter') {
 					setTimeout(function () {
@@ -579,7 +579,7 @@ export default class Checkout extends React.Component {
 					}
 				}
 			}
-			
+
 		}
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
@@ -1156,7 +1156,7 @@ export default class Checkout extends React.Component {
 							</View>
 							<Text
 								style={styles.productVoucherText}>{this.state.selected_payment == '' ? "Please select" : this.state.selected_payment == "credits" ?
-									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? "Pay at counter " : "Credit Card")}</Text>
+									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? "Pay In Store " : "Credit Card")}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage} />

@@ -205,7 +205,10 @@ const PushInbox = createStackNavigator(
     },
     PromotionDetail: {
       screen: PromotionDetail
-    }
+    },
+    MemberVoucher: {
+      screen: MemberVoucher
+    },
   },
   {
     initialRouteName: "Notification",
