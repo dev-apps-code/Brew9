@@ -80,7 +80,6 @@ export default class PickUp extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('load current order')
 		this.loadCurrentOrder()
 		const { currentMember } = this.props
 		const { navigation } = this.props
@@ -311,7 +310,7 @@ export default class PickUp extends React.Component {
 								<Text
 									style={styles.queueheaderText}>Order Number</Text>
 								<Text
-									style={styles.queuenumberText}>{item.paid == false ? "N/A" : item.queue_no}</Text>
+									style={styles.queuenumberText}>{item.paid == false ? "-" : item.queue_no}</Text>
 							</View>
 							<View style={styles.queueHeaderBlock}>
 								<Text
@@ -562,7 +561,6 @@ export default class PickUp extends React.Component {
 	onEditOrder = (order_items, current_order) => {
 		const { navigate } = this.props.navigation
 		const { dispatch } = this.props
-		console.log("Edit", current_order)
 		dispatch(createAction("orders/editCart")({
 			order_items: order_items,
 			order: current_order

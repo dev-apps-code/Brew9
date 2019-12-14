@@ -88,7 +88,6 @@ export default class MissionCenter extends React.Component {
         const callback = eventObject => {
             if (eventObject.success) {
 
-                console.log("Mission", eventObject)
                 var mission_categories = eventObject.result
                 var missions = []
                 for(var index in mission_categories) {
@@ -118,7 +117,6 @@ export default class MissionCenter extends React.Component {
         this.setState({ loading_list: true })
         const callback = eventObject => {
              if (eventObject.success) {
-                console.log("Statement", eventObject.result)
                 this.setState({
                     mission_statements: eventObject.result,
                 }, function(){

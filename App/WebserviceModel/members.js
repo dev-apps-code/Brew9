@@ -138,7 +138,6 @@ export default {
     },
     updateNotifications(state, { payload }) {
       let unread = 0
-      console.log("here")
       let notifications = payload.result
       if (notifications != null && notifications.length > 0) {
         if (payload.last_read != null) {
@@ -158,17 +157,15 @@ export default {
         }
 
         let saved_notifications = payload.current_notifications
-        var new_notification_list = _.unionBy(saved_notifications, notifications, 'id');
+        var new_notification_list = _.unionBy(notifications, saved_notifications, 'id');
         var sorted = _.orderBy(new_notification_list, 'created_at','desc')
         let count = new_notification_list.filter(item => { return item.read == false })
 
-        console.log("Sorted", sorted)
         return { ...state, notifications: sorted, unreadNotificationCount: count.length }
       }
-      console.log("No new Notification")
-      //  else {
-      //   return { ...state, notifications : [], unreadNotificationCount:unread}
-      // }
+       else {
+        return { ...state, notifications : [], unreadNotificationCount:unread}
+      }
 
     },
     destroyCurrentUser(state, { payload }) {
@@ -246,7 +243,6 @@ export default {
         let current_notifications = JSON.parse(current_notification)
         const eventObject = new EventObject(json)
         const result = eventObject.result
-        console.log("update notif")
         yield put(createAction('updateNotifications')({ result, last_read, current_notifications }))
 
         if (eventObject.success == true) { }

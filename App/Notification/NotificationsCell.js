@@ -20,7 +20,6 @@ export default class NotificationsCell extends React.Component {
 	}
 
 	onNotificationsCellPress = (item, type) => {
-		console.log('item, type', item, type)
 		if (type == "promo") {
 			const { navigate } = this.props.navigation
 

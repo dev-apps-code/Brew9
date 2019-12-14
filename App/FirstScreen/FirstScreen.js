@@ -94,15 +94,12 @@ export default class FirstScreen extends React.Component {
         if (members != null){
             this.setState({ loading: true })
             const callback = eventObject => {
-                console.log("Status", eventObject.result)
                 this.setState({
                     loading: false,
                 })
                 if (eventObject.result.force_upgrade) {
-                    console.log("Force")
-					Linking.openURL(eventObject.result.url)	
+                    Linking.openURL(eventObject.result.url)	
 				} else if (eventObject.result.maintenance) {
-                    console.log("Maintenance")
                     this.refs.toast.show("App is currently under maintenance", TOAST_DURATION)
                 } else {
                     this.checkLoginStatus()
@@ -115,7 +112,6 @@ export default class FirstScreen extends React.Component {
                 }
                 const obj = new CurrentStatusRequestObject(last_note)
                 obj.setUrlId(members.id)
-                console.log("Loading Current")
                 dispatch(
                     createAction('members/loadCurrentStatus')({
                         object:obj,

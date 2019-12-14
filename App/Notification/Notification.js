@@ -111,9 +111,9 @@ export default class Notification extends React.Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      if (members != null) {
-        // this.loadNotifications();
-      }
+      // if (members != null) {
+      //   // this.loadNotifications();
+      // }
     }
     this.setState({ appState: nextAppState });
   };
@@ -153,11 +153,15 @@ export default class Notification extends React.Component {
         last_note = result
       }
       const obj = new NotificationsRequestObject(last_note);
+<<<<<<< HEAD
+      obj.setUrlId(members != undefined || members != null ? members.id : 0);
+=======
 
       if (members != null){
         obj.setUrlId(members.id);
       }
       
+>>>>>>> 5c7c26b4ff10f3d925bb4b7ad6e5221f43e62167
       dispatch(
         createAction("members/loadNotifications")({
           object: obj,
@@ -165,7 +169,6 @@ export default class Notification extends React.Component {
         })
       );
     })
-
 
   }
 
@@ -176,6 +179,7 @@ export default class Notification extends React.Component {
     })
     this.loadNotifications()
   }
+
   onNotificationsCellPress = (item, type) => {
     const { dispatch } = this.props
     dispatch(createAction('members/markOnPressNotificationAsRead')({ item }))
