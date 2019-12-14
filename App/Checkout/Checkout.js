@@ -1003,7 +1003,7 @@ export default class Checkout extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={this.state.selected_payment == "counter" ? styles.creditCardSelectedText : styles.creditCardText}>Counter</Text>
+										style={this.state.selected_payment == "counter" ? styles.creditCardSelectedText : styles.creditCardText}>Pay In Store</Text>
 									<View
 										style={{
 											flex: 1,
@@ -3088,7 +3088,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		width: 50 * alpha,
+		width: 55 * alpha,
 	},
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",

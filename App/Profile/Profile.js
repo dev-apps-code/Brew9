@@ -130,7 +130,6 @@ export default class Profile extends React.Component {
 			return false;
 		   }
 		}
-		console.log("loadprofile")
 		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
@@ -192,11 +191,11 @@ export default class Profile extends React.Component {
 		const { company_id } = this.props
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Level Info"))
+		analytics.event(new Event('Profile', 'Click', "Membership Info"))
 
 		navigate("WebCommon", {
-			title: 'Membership Info',
-			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
+			title: 'Membership Rewards',
+			web_url: KURL_INFO + '?page=membership_info&id=' + company_id,
 		})
 		// navigate("WebCommon", {
 		// 	title: 'Membership Info',
@@ -472,7 +471,7 @@ export default class Profile extends React.Component {
 			avatar = require("./../../assets/images/user.png")
 			vouchers_count = 0
 			credits = 0
-			membership_name = ""
+			membership_name = "Standard Member"
 			member_exp = 0
 			exp_needed = 300
 			next_level_name = "Level 2"
@@ -761,110 +760,8 @@ export default class Profile extends React.Component {
 
 			<View
 				style={styles.menuView}>
-				<TouchableOpacity
-					onPress={() => this.onProfileButtonPress()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>My Profile</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								height: 58 * alpha,
-							}}>
 
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => this.onMembershipInfoPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>Membership Info</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-							}}>
-
-							<Text
-								style={styles.menuRowDescriptionText}></Text>
-
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity
+<TouchableOpacity
 					onPress={() => this.onOrderButtonPressed()}
 					style={styles.menuRowbuttonButton}>
 					<View
@@ -916,6 +813,114 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 
+
+				<TouchableOpacity
+					onPress={() => this.onMembershipInfoPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>Membership Rewards</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+							}}>
+
+							<Text
+								style={styles.menuRowDescriptionText}></Text>
+
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => this.onProfileButtonPress()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>My Profile</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								height: 58 * alpha,
+							}}>
+
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+				
+				
+
 				<TouchableOpacity
 					onPress={() => this.onAboutButtonPressed()}
 					style={styles.menuRowbuttonButton}>
@@ -941,7 +946,7 @@ export default class Profile extends React.Component {
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.menuRowLabelText}>Brew9 Inspiration</Text>
+									style={styles.menuRowLabelText}>More</Text>
 								<View
 									style={{
 										flex: 1,

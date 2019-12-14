@@ -259,8 +259,6 @@ export default class Home extends React.Component {
 				this.toogleCart(true, true)
 			}.bind(this), 50);
 		}
-
-		console.log(`${this.props.clearCart}`)
 	}
 
 	computeDistance() {
@@ -307,7 +305,6 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
-		console.log('BackHandler', BackHandler)
 		const { currentMember } = this.props
 		Keyboard.dismiss()
 		this.props.navigation.setParams({
@@ -318,18 +315,18 @@ export default class Home extends React.Component {
 			this.loadCurrentStatus()
 		}
 		AppState.addEventListener('change', this._handleAppStateChange);
-		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		// BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 
 	componentWillUnmount() {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
-		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		// BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
+
 	onBackPress() {
 		const { dispatch, navigation } = this.props;
-		console.log("Back pressed", navigation);
 		const activeRoute = navigation.state.routeName == "Home" ? true : false;
 		if (activeRoute) {
 			this.handleBackPress()
@@ -345,19 +342,21 @@ export default class Home extends React.Component {
 		}
 		this.setState({ appState: nextAppState });
 	};
+
 	handleBackPress = () => {
-		this.setState({ visible: true })
+		const { dispatch, navigation } = this.props;
+		const activeRoute = navigation.state.routeName == "Home" ? true : false;
+		if (activeRoute) {
+			this.setState({ visible: true })
+		}
 	}
 
 	loadCurrentStatus() {
 
-		console.log("load")
 		const { dispatch, currentMember } = this.props
 		if (currentMember != null) {
-			console.log("Not")
 			this.setState({ loading: true })
 			const callback = eventObject => {
-				console.log("Event", eventObject)
 				this.setState({
 					loading: false,
 				})
@@ -369,7 +368,6 @@ export default class Home extends React.Component {
 				}
 				const obj = new CurrentStatusRequestObject(last_note)
 				obj.setUrlId(currentMember.id)
-				console.log("obj", obj)
 				dispatch(
 					createAction('members/loadCurrentStatus')({
 						object: obj,
@@ -377,9 +375,9 @@ export default class Home extends React.Component {
 					})
 				)
 			})
+
 		}
 	}
-
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
@@ -505,8 +503,8 @@ export default class Home extends React.Component {
 	onCheckoutPressed = () => {
 		const { member_distance } = this.state
 		const { navigate } = this.props.navigation
-		const { navigation, dispatch,currentMember, shop, cart, promotions  } = this.props
-		
+		const { navigation, dispatch } = this.props
+		const { currentMember, shop, cart, promotions } = this.props
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
@@ -515,14 +513,18 @@ export default class Home extends React.Component {
 				this.refs.toast.show("You are too far away", TOAST_DURATION)
 				return
 			} else {
-				
+				const { clearCart } = this.props
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
-					const { clearCart} = this.props			
-					
-					if (clearCart == true) {
+					const { state } = payload
+					const { params } = state
+					const { clearCart } = params
 
-						this.loadShops()						
+					console.log(`clearcart ${clearCart}`)
+					if (params != undefined && params.clearCart == true) {
+
+						this.loadShops()
+						dispatch(createAction("orders/resetCart")({}));
 						navigate("PickUp")
 					} else {
 
@@ -1115,14 +1117,12 @@ export default class Home extends React.Component {
 	}
 
 	onClearPress = () => {
-		const { dispatch,cart } = this.props
+		const { dispatch } = this.props
 
 		this.toogleCart(false, false)
 
 
-		if (cart.length > 0){
-			dispatch(createAction("orders/resetCart")());
-		}
+		dispatch(createAction("orders/resetCart")());
 
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
@@ -1934,14 +1934,13 @@ export default class Home extends React.Component {
 						</View>
 					</View>
 				</View>
-				<TouchableHighlight
+				<TouchableOpacity
 					onPress={() => this.onCheckoutPressed()}
 					style={styles.checkoutButton}
-					underlayColor='cyan'
 				>
 					<Text
 						style={styles.checkoutButtonText}>Checkout</Text>
-				</TouchableHighlight>
+				</TouchableOpacity>
 			</View>)
 		}
 		return undefined
@@ -2186,7 +2185,7 @@ const styles = StyleSheet.create({
 		marginBottom: 1 * alpha,
 	},
 	cartView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
