@@ -27,8 +27,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 	selectedShop: shops.selectedShop,
 	selectedTab: config.selectedTab,
 	popUp: shops.popUp,
-	lastOrder: shops.lastOrder,
-	currentOrder: shops.currentOrder
+	currentOrder: shops.currentOrder,
+	orders:shops.orders
 }))
 export default class PickUp extends React.Component {
 
@@ -71,11 +71,11 @@ export default class PickUp extends React.Component {
 		super(props)
 		this.state = {
 			loading: false,
-			current_order: [],
 			refreshing: false,
 			appState: AppState.currentState,
 			total_exp: 0,
 			total_point: 0,
+			showPopUp:false
 		}
 	}
 
@@ -87,6 +87,9 @@ export default class PickUp extends React.Component {
 		this.navigationListener = navigation.addListener('willFocus', payload => {
 			if (currentMember != null) {
 				this.loadCurrentOrder();
+			}
+			if (this.props.popUp != this.state.showPopUp){
+				this.setState({showPopUp: this.props.popUp});
 			}
 		})
 	}
@@ -120,6 +123,11 @@ export default class PickUp extends React.Component {
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			// this.loadCurrentOrder()
 		}
+		if (this.props.selectedTab == 'pickup'){
+			if (this.props.popUp != this.state.showPopUp){
+				this.setState({showPopUp: this.props.popUp});
+			}
+		}
 
 	}
 
@@ -146,9 +154,7 @@ export default class PickUp extends React.Component {
 			this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
-					this.setState({
-						current_order: eventObject.result
-					})
+					
 				}
 				this.setState({
 					loading: false,
@@ -576,6 +582,8 @@ export default class PickUp extends React.Component {
 		dispatch(createAction("shops/setPopUp")({
 			popUp: false
 		}))
+
+		this.setState({showPopUp: false});
 	}
 
 	renderProgressBar(progress) {
@@ -670,16 +678,13 @@ export default class PickUp extends React.Component {
 
 		const { currentOrder } = this.props
 
-		if (currentOrder == null) {
-			return undefined
-		}
-
-		const total_points = parseFloat(currentOrder.awarded_point)
-		const total_exp = parseFloat(currentOrder.awarded_exp)
+		console.log(`showpopui ${this.props.popUp}`)
+		const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
+		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0 
 		return <Modal
 			animationType="slide"
 			transparent={true}
-			visible={this.props.popUp}
+			visible={this.state.showPopUp}
 			onRequestClose={() => this.closePopUp()}>
 			<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
 
@@ -711,14 +716,14 @@ export default class PickUp extends React.Component {
 
 	render() {
 
-		const { current_order } = this.state
+		const { orders } = this.props
 		return <View
 			style={styles.pickUpMainView}>
 			{this.state.loading ?
 				<View style={[styles.container, styles.horizontal]}>
 					<ActivityIndicator size="large" />
 				</View> :
-				current_order.length > 0 ? this.renderQueueView(current_order) :
+				orders.length > 0 ? this.renderQueueView(orders) :
 					this.renderEmpty()}
 			{this.renderPointExpModal()}
 		</View>

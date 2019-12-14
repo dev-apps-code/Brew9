@@ -68,7 +68,7 @@ export default class ScanQr extends React.Component {
             onBackPressed: this.onBackPressed,
         })
 
-        //  this.loadQrCodeScan("tup_96051b92-6134-4dec-bc9e-0de98cca05ea")
+         this.loadQrCodeScan("tup_b959498a-a383-4a47-bd03-51511f655320")
     }
 
     onSuccessfulScan= () => {

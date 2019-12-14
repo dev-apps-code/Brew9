@@ -458,7 +458,9 @@ export default {
           object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) { }
+        if (eventObject.success == true) {
+          yield put(createAction('shops/setOrders')({orders:eventObject.result}))  
+         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },

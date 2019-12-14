@@ -535,10 +535,7 @@ export default class Checkout extends React.Component {
 						this.setState({
 							loading: false,
 						})
-					}.bind(this), 500);
-					dispatch(createAction("shops/setPopUp")({
-						popUp: true
-					}))
+					}.bind(this), 500);				
 				}
 				else if (selected_payment == 'counter') {
 					setTimeout(function () {
