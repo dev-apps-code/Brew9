@@ -664,22 +664,20 @@ export default class Home extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "View Cart"))
 		
-		const {cart} = this.props
-
 		if (isUpdate) {
-			if (cart.length > 0) {
-				this.setState({ isCartToggle: true }, function () {
-					Animated.spring(this.moveAnimation, {
-						toValue: { x: 0, y: this.getCartHeight() },
-					}).start()
-				})
-			}else{
-				this.setState({ isCartToggle: false }, function () {
-					Animated.spring(this.moveAnimation, {
-						toValue: { x: 0, y: windowHeight },
-					}).start()
-				})
-			}
+			// if (cart.length > 0) {
+			// 	this.setState({ isCartToggle: true }, function () {
+			// 		Animated.spring(this.moveAnimation, {
+			// 			toValue: { x: 0, y: this.getCartHeight() },
+			// 		}).start()
+			// 	})
+			// }else{
+			// 	this.setState({ isCartToggle: false }, function () {
+			// 		Animated.spring(this.moveAnimation, {
+			// 			toValue: { x: 0, y: windowHeight },
+			// 		}).start()
+			// 	})
+			// }
 		} else {
 			if (!toggleOn) {
 				this.setState({ isCartToggle: false }, function () {
@@ -1077,12 +1075,15 @@ export default class Home extends React.Component {
 	onClearPress = () => {
 		const { dispatch, cart } = this.props
 
-		this.toogleCart(false, false)
-
 
 		if (cart.length > 0) {
 			dispatch(createAction("orders/resetCart")());
 		}
+		this.setState({ isCartToggle: false }, function () {
+			Animated.spring(this.moveAnimation, {
+				toValue: { x: 0, y: windowHeight },
+			}).start()
+		})
 
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
