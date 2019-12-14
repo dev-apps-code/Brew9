@@ -75,6 +75,7 @@ export default class PickUp extends React.Component {
 			appState: AppState.currentState,
 			total_exp: 0,
 			total_point: 0,
+			showPopUp:false
 		}
 	}
 
@@ -87,6 +88,9 @@ export default class PickUp extends React.Component {
 		this.navigationListener = navigation.addListener('willFocus', payload => {
 			if (currentMember != null) {
 				this.loadCurrentOrder();
+			}
+			if (this.props.popUp != this.state.showPopUp){
+				this.setState({showPopUp: this.props.popUp});
 			}
 		})
 	}
@@ -119,6 +123,11 @@ export default class PickUp extends React.Component {
 
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			// this.loadCurrentOrder()
+		}
+		if (this.props.selectedTab == 'pickup'){
+			if (this.props.popUp != this.state.showPopUp){
+				this.setState({showPopUp: this.props.popUp});
+			}
 		}
 
 	}
@@ -302,7 +311,7 @@ export default class PickUp extends React.Component {
 								<Text
 									style={styles.queueheaderText}>Order Number</Text>
 								<Text
-									style={styles.queuenumberText}>{item.queue_no}</Text>
+									style={styles.queuenumberText}>{item.paid == false ? "N/A" : item.queue_no}</Text>
 							</View>
 							<View style={styles.queueHeaderBlock}>
 								<Text
@@ -368,17 +377,11 @@ export default class PickUp extends React.Component {
 					{
 						item.paid == false && (
 							<TouchableOpacity style={styles.updateOrder} onPress={() => { this.onEditOrder(item.order_items, item) }}>
-								<Text style={styles.updateOrderText}>Edit Order</Text>
+								<Text style={styles.updateOrderText}>Pending Payment</Text>
 							</TouchableOpacity>
 						)
 					}
-					{
-						item.paid == false && (
-							<View style={styles.orderPaidStatus}>
-								<Text style={styles.orderPaidStatusText}>Unpaid</Text>
-							</View>
-						)
-					}
+					
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -581,6 +584,8 @@ export default class PickUp extends React.Component {
 		dispatch(createAction("shops/setPopUp")({
 			popUp: false
 		}))
+
+		this.setState({showPopUp: false});
 	}
 
 	renderProgressBar(progress) {
@@ -675,16 +680,13 @@ export default class PickUp extends React.Component {
 
 		const { currentOrder } = this.props
 
-		if (currentOrder == null) {
-			return undefined
-		}
-
-		const total_points = parseFloat(currentOrder.awarded_point)
-		const total_exp = parseFloat(currentOrder.awarded_exp)
+		console.log(`showpopui ${this.props.popUp}`)
+		const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
+		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0 
 		return <Modal
 			animationType="slide"
 			transparent={true}
-			visible={this.props.popUp}
+			visible={this.state.showPopUp}
 			onRequestClose={() => this.closePopUp()}>
 			<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
 
@@ -732,15 +734,16 @@ export default class PickUp extends React.Component {
 
 const styles = StyleSheet.create({
 	updateOrder: {
-		backgroundColor: PRIMARY_COLOR,
+		backgroundColor: "red",
 		position: 'absolute',
-		width: "50%",
-		top: 0,
-		right: 0,
+		width: "100%",
+		top:0, 
+		right:0,
 		height: 40 * alpha,
 		alignItems: 'center',
 		justifyContent: "center",
 		borderTopRightRadius: 14 * alpha,
+		borderTopLeftRadius: 14 * alpha,
 	},
 	updateOrderText: {
 		color: 'white',

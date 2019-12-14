@@ -535,10 +535,7 @@ export default class Checkout extends React.Component {
 						this.setState({
 							loading: false,
 						})
-					}.bind(this), 500);
-					dispatch(createAction("shops/setPopUp")({
-						popUp: true
-					}))
+					}.bind(this), 500);				
 				}
 				else if (selected_payment == 'counter') {
 					setTimeout(function () {
@@ -3088,7 +3085,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		width: 50 * alpha,
+		width: 55 * alpha,
 	},
 	productVoucherText: {
 		color: "rgb(50, 50, 50)",

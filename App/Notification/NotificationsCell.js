@@ -28,8 +28,12 @@ export default class NotificationsCell extends React.Component {
 				details: item,
 			})
 		}
-		this.props.onNotificationsCellPress(item, type)
+		else if (type == "voucher") {
+			const { navigate } = this.props.navigation
 
+			navigate("MemberVoucher")
+		}
+		this.props.onNotificationsCellPress(item, type)
 	}
 
 	render() {
@@ -79,7 +83,7 @@ export default class NotificationsCell extends React.Component {
 					</View>
 				</View>
 				<View style={styles.arrowView}>
-					{this.props.type == "promo" && (
+					{(this.props.type == "promo" || this.props.type == "voucher") && (
 						<Image
 							source={require("./../../assets/images/next.png")}
 							style={styles.arrowImage} />
@@ -164,6 +168,7 @@ const styles = StyleSheet.create({
 	arrowView: {
 		width: 10 * alpha,
 		marginLeft: 10 * alpha,
+		marginRight: 10 * alpha,
 	},
 	arrowImage: {
 		resizeMode: "contain",

@@ -71,6 +71,9 @@ export default {
             const eventObject = new EventObject(json)
             if (eventObject.success == true) {
                 yield put(createAction('setCurrentOrder')({order:eventObject.result}))
+                if (eventObject.result.paid == true){
+                    yield put(createAction('setPopUp')({popUp:true}))
+                }
                 yield put(createAction('members/saveCurrentUser')(eventObject.result.member))
             }
             typeof callback === 'function' && callback(eventObject)

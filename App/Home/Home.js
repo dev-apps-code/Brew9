@@ -259,8 +259,6 @@ export default class Home extends React.Component {
 				this.toogleCart(true, true)
 			}.bind(this), 50);
 		}
-
-		console.log(`${this.props.clearCart}`)
 	}
 
 	computeDistance() {
@@ -307,7 +305,6 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
-		console.log('BackHandler', BackHandler)
 		const { currentMember } = this.props
 		Keyboard.dismiss()
 		this.props.navigation.setParams({
@@ -318,18 +315,18 @@ export default class Home extends React.Component {
 			this.loadCurrentStatus()
 		}
 		AppState.addEventListener('change', this._handleAppStateChange);
-		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		// BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 
 	componentWillUnmount() {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
-		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		// BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
+
 	onBackPress() {
 		const { dispatch, navigation } = this.props;
-		console.log("Back pressed", navigation);
 		const activeRoute = navigation.state.routeName == "Home" ? true : false;
 		if (activeRoute) {
 			this.handleBackPress()
@@ -345,18 +342,21 @@ export default class Home extends React.Component {
 		}
 		this.setState({ appState: nextAppState });
 	};
+
 	handleBackPress = () => {
-		this.setState({ visible: true })
+		const { dispatch, navigation } = this.props;
+		const activeRoute = navigation.state.routeName == "Home" ? true : false;
+		if (activeRoute) {
+			this.setState({ visible: true })
+		}
 	}
 
 	loadCurrentStatus() {
 
 		const { dispatch, currentMember } = this.props
 		if (currentMember != null) {
-			
 			this.setState({ loading: true })
 			const callback = eventObject => {
-				console.log("Event", eventObject)
 				this.setState({
 					loading: false,
 				})
@@ -368,7 +368,6 @@ export default class Home extends React.Component {
 				}
 				const obj = new CurrentStatusRequestObject(last_note)
 				obj.setUrlId(currentMember.id)
-				
 				dispatch(
 					createAction('members/loadCurrentStatus')({
 						object: obj,
@@ -376,9 +375,9 @@ export default class Home extends React.Component {
 					})
 				)
 			})
+
 		}
 	}
-
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
@@ -1932,14 +1931,13 @@ export default class Home extends React.Component {
 						</View>
 					</View>
 				</View>
-				<TouchableHighlight
+				<TouchableOpacity
 					onPress={() => this.onCheckoutPressed()}
 					style={styles.checkoutButton}
-					underlayColor='cyan'
 				>
 					<Text
 						style={styles.checkoutButtonText}>Checkout</Text>
-				</TouchableHighlight>
+				</TouchableOpacity>
 			</View>)
 		}
 		return undefined
@@ -2184,7 +2182,7 @@ const styles = StyleSheet.create({
 		marginBottom: 1 * alpha,
 	},
 	cartView: {
-		backgroundColor: "transparent",
+		backgroundColor: "white",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
