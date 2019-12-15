@@ -19,7 +19,7 @@ export const KCURRENT_API_VERSION_HEADER = "application/dc.v1";
 
 export const KTIMEOUT = 3 * 1000;
 
-const IS_TEST = true;
+const IS_TEST = false;
 
 export function encodeForFormData(details) {
   let formBody = [];

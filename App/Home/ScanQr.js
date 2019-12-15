@@ -93,7 +93,7 @@ export default class ScanQr extends React.Component {
             else {
                 setTimeout(function () {
                     this.loadScanStatus(qr_code)
-                  }.bind(this), 5000);                     
+                  }.bind(this), 2500);                     
             }   
         }
         const obj = new ScanStatusRequestObject(qr_code)
@@ -114,7 +114,7 @@ export default class ScanQr extends React.Component {
             if (eventObject.success) {                
                 setTimeout(function () {
                     this.loadScanStatus(qr_code)
-                  }.bind(this), 3000);                            
+                  }.bind(this), 2500);                            
             }
             else {
                 this.setState({ loading: false })
