@@ -131,7 +131,11 @@ export default class Checkout extends React.Component {
 		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
 
-		var hour_array = _.range(first_hour, last_hour + 1);
+		if (first_hour == last_hour) {
+			last_hour += 1
+		}
+		
+		var hour_array = _.range(first_hour, last_hour);
 
 		var selected_minute = ""
 
