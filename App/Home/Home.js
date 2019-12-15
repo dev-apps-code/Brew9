@@ -989,6 +989,7 @@ export default class Home extends React.Component {
 		}
 	
 		if (this.props.cart.length == 0){
+			final_promo_text = ''
 			this.setState({ isCartToggle: false }, function () {
 				Animated.spring(this.moveAnimation, {
 					toValue: { x: 0, y: windowHeight },
