@@ -151,6 +151,11 @@ export default class Checkout extends React.Component {
 		if (hour_array.length < 3) {
 			hour_array.length = 3
 		}
+		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
+		var last_hour = closing.hours()
+
+		var hour_array = _.range(first_hour, last_hour+1);
+
 
 		this.setState({
 			selected_hour: first_hour,
