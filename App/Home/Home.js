@@ -255,12 +255,17 @@ export default class Home extends React.Component {
 		if (prevProps.cart != this.props.cart) {
 			this.check_promotion_trigger()
 		}
+		if (prevProps.promotions != this.props.promotions) {
+			this.updateCartHeight()
+		}
 		if (prevProps.toggle_update_count != this.props.toggle_update_count) {
 			setTimeout(function () {
 				this.toogleCart(true, true)
 			}.bind(this), 50);
 		}
 	}
+
+
 
 	computeDistance() {
 		const { location, shop } = this.props
@@ -623,7 +628,7 @@ export default class Home extends React.Component {
 		var height_cap = windowHeight * 0.4
 		var content = height + headerHeight
 
-		const bottomHeight = 45*alpha + 60 *alpha + 35*alpha + 45*alpha
+		const bottomHeight = 45*alpha + 60 *alpha + 35*alpha + 40*alpha
 		var finalheight = windowHeight  - content - bottomHeight
 
 		if (finalheight < height_cap) {
@@ -991,14 +996,7 @@ export default class Home extends React.Component {
 				}).start()
 			})
 		}else{
-			if (this.state.isCartToggle){
-				
-				Animated.spring(this.moveAnimation, {
-					toValue: { x: 0, y: this.getCartHeight() },
-				}).start()
-			
-			}
-			
+		
 		}
 		
 		dispatch(createAction("orders/updatePromotionText")({
@@ -1011,6 +1009,17 @@ export default class Home extends React.Component {
 		dispatch(createAction("orders/updateDiscountCartTotal")({
 			discount_cart_total: final_cart_value
 		}));
+	}
+
+	updateCartHeight(){
+		if (this.state.isCartToggle){
+				
+			Animated.spring(this.moveAnimation, {
+				toValue: { x: 0, y: this.getCartHeight() },
+			}).start()
+		
+		}
+		
 	}
 
 	onAddToCartPressed = (product) => {
