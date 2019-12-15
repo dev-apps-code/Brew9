@@ -171,6 +171,7 @@ export default class Home extends React.Component {
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
+		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
 	}
 
 	onQrScanPressed = () => {
@@ -251,7 +252,7 @@ export default class Home extends React.Component {
 			}
 			this.computeDistance()
 		}
-		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count) {
+		if (prevProps.cart != this.props.cart) {
 			this.check_promotion_trigger()
 		}
 		if (prevProps.toggle_update_count != this.props.toggle_update_count) {
@@ -983,6 +984,23 @@ export default class Home extends React.Component {
 				}
 		}
 	
+		if (this.props.cart.length == 0){
+			this.setState({ isCartToggle: false }, function () {
+				Animated.spring(this.moveAnimation, {
+					toValue: { x: 0, y: windowHeight },
+				}).start()
+			})
+		}else{
+			if (this.state.isCartToggle){
+				
+				Animated.spring(this.moveAnimation, {
+					toValue: { x: 0, y: this.getCartHeight() },
+				}).start()
+			
+			}
+			
+		}
+		
 		dispatch(createAction("orders/updatePromotionText")({
 			promotionText: final_promo_text
 		}));
@@ -1049,11 +1067,7 @@ export default class Home extends React.Component {
 		if (cart.length > 0) {
 			dispatch(createAction("orders/resetCart")());
 		}
-		this.setState({ isCartToggle: false }, function () {
-			Animated.spring(this.moveAnimation, {
-				toValue: { x: 0, y: windowHeight },
-			}).start()
-		})
+		
 
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
@@ -1748,13 +1762,14 @@ export default class Home extends React.Component {
 
 		const {currentPromoText} = this.props
 
+		console.log(`promo ${currentPromoText}`)
 		if (currentPromoText.length > 0){
 			return (<View style={styles.promotionTopBarView}>
 				<View style={styles.promotionBarView}>
 					<Text
 						numberOfLines={2}
 						style={styles.promotionTopBarText}>
-						{this.props.currentPromoText}
+						{currentPromoText}
 					</Text>
 				</View>
 			</View>)
