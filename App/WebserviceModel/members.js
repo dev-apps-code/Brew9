@@ -542,7 +542,7 @@ export default {
 
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          // yield put(createAction('saveCurrentUser')(eventObject.result))
+        
           yield put(createAction('updateUnreadNotification')(count.length))
         }
         typeof callback === 'function' && callback(eventObject)

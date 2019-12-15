@@ -20,7 +20,8 @@ import {
         toggle_update_count:0,
         promotions:[],
         promotion_ids:[],
-        clearCart:false
+        clearCart:false,
+        currentPromoText:''
     },
 
     reducers: {
@@ -41,9 +42,17 @@ import {
                 ...state,promotions,promotion_ids
             }
         },
+        updatePromotionText(state, { payload }) {
+
+            const {promotionText} = payload
+            
+            return {
+                ...state,currentPromoText:promotionText
+            }
+        },
         resetCart(state, { payload }) {            
             return {
-                ...state,cart_order_id: null,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,clearCart:true
+                ...state,cart_order_id: null,cart:[],promotions:[],promotion_ids:[],cart_total_quantity:0,cart_total:0,remaining:0,clearCart:true,
             }
         },
         noClearCart(state, { payload }) {     
@@ -66,7 +75,6 @@ import {
                     quantity = quantity + parseInt(item.quantity)
                 }
             }
-
             return {
                 ...state,cart,toggle_update_count:state.toggle_update_count+1,cart_total_quantity:quantity,cart_total:total,promotion_trigger_count
             }

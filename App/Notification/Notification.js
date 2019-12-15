@@ -153,7 +153,11 @@ export default class Notification extends React.Component {
         last_note = result
       }
       const obj = new NotificationsRequestObject(last_note);
-      obj.setUrlId(members != undefined || members != null ? members.id : 0);
+
+      if (members != null){
+        obj.setUrlId(members.id);
+      }
+      
       dispatch(
         createAction("members/loadNotifications")({
           object: obj,

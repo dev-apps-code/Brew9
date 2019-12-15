@@ -78,7 +78,8 @@ import Moment from 'moment';
 	cart_total: orders.cart_total,
 	toggle_update_count: orders.toggle_update_count,
 	discount_cart_total: orders.discount_cart_total,
-	clearCart: orders.clearCart
+	clearCart: orders.clearCart,
+	currentPromoText:orders.currentPromoText
 }))
 
 export default class Home extends React.Component {
@@ -166,9 +167,10 @@ export default class Home extends React.Component {
 			distance: "-",
 			member_distance: 1000,
 			first_promo_popup: false,
+			popUpVisible:false
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
-
+		this.toogleCart = this.toogleCart.bind(this)
 	}
 
 	onQrScanPressed = () => {
@@ -234,8 +236,6 @@ export default class Home extends React.Component {
 			},
 			newLocation => {
 				dispatch(createAction("members/setLocation")(newLocation));
-
-				// this.props.getMyLocation sets my redu
 			},
 			error => console.log(error)
 		);
@@ -311,9 +311,7 @@ export default class Home extends React.Component {
 			onQrScanPressed: this.onQrScanPressed,
 		})
 		this.loadShops(true)
-		if (currentMember != null) {
-			this.loadCurrentStatus()
-		}
+		
 		AppState.addEventListener('change', this._handleAppStateChange);
 		// BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
@@ -351,33 +349,7 @@ export default class Home extends React.Component {
 		}
 	}
 
-	loadCurrentStatus() {
 
-		const { dispatch, currentMember } = this.props
-		if (currentMember != null) {
-			this.setState({ loading: true })
-			const callback = eventObject => {
-				this.setState({
-					loading: false,
-				})
-			}
-			AsyncStorage.getItem("notification_key", (err, result) => {
-				var last_note = 0
-				if (result != null) {
-					last_note = result
-				}
-				const obj = new CurrentStatusRequestObject(last_note)
-				obj.setUrlId(currentMember.id)
-				dispatch(
-					createAction('members/loadCurrentStatus')({
-						object: obj,
-						callback,
-					})
-				)
-			})
-
-		}
-	}
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
@@ -403,12 +375,12 @@ export default class Home extends React.Component {
 		const callback = eventObject => {
 
 			this.setState({ loading: false })
-			// console.log("Shop", eventObject.result)
+			
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
-					this.check_promotion_trigger()
+					
 					if (loadProducts) {
 						this.loadStoreProducts()
 						this.getLocationAsync()
@@ -641,32 +613,43 @@ export default class Home extends React.Component {
 		}
 	}
 
-	toogleCart = (isUpdate, toggleOn) => {
-		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "View Cart"))
-		const { isCartToggle, product_view_height } = this.state
+	getCartHeight(){
 		const { cart, promotions } = this.props
-
-		var product_checkout_height = product_view_height
+		
 		var headerHeight = 31 * alpha
 		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
-		var checkoutHeight = 51 * alpha
+		
+		var height_cap = windowHeight * 0.4
 		var content = height + headerHeight
-		var finalheight = product_checkout_height - content
-		var height_cap = product_view_height * 0.4
 
-		console.log("content", content)
+		const bottomHeight = 45*alpha + 60 *alpha + 35*alpha + 45*alpha
+		var finalheight = windowHeight  - content - bottomHeight
+
 		if (finalheight < height_cap) {
 			finalheight = height_cap
 		}
 
+		return finalheight
+	}
+
+	toogleCart = (isUpdate, toggleOn) => {
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Home', 'Click', "View Cart"))
+		
 		if (isUpdate) {
-			if (toggleOn) {
-				// this.setState({ isCartToggle: true })
-				// Animated.spring(this.moveAnimation, {
-				// 	toValue: { x: 0, y: cart.length == 0 ? windowHeight : finalheight },
-				// }).start()
-			}
+			// if (cart.length > 0) {
+			// 	this.setState({ isCartToggle: true }, function () {
+			// 		Animated.spring(this.moveAnimation, {
+			// 			toValue: { x: 0, y: this.getCartHeight() },
+			// 		}).start()
+			// 	})
+			// }else{
+			// 	this.setState({ isCartToggle: false }, function () {
+			// 		Animated.spring(this.moveAnimation, {
+			// 			toValue: { x: 0, y: windowHeight },
+			// 		}).start()
+			// 	})
+			// }
 		} else {
 			if (!toggleOn) {
 				this.setState({ isCartToggle: false }, function () {
@@ -677,7 +660,7 @@ export default class Home extends React.Component {
 			} else {
 				this.setState({ isCartToggle: true }, function () {
 					Animated.spring(this.moveAnimation, {
-						toValue: { x: 0, y: finalheight },
+						toValue: { x: 0, y: this.getCartHeight() },
 					}).start()
 				})
 			}
@@ -929,134 +912,83 @@ export default class Home extends React.Component {
 		const { currentMember, dispatch, promotions, cart_total, shop } = this.props
 
 		let newcart = [...this.props.cart]
-		let newpromotion = [...promotions]
+		let finalCart = []
 
 		var promotions_item = []
 		var final_cart_value = cart_total
+		var final_promo_text = ''
 
+		// reset cart promotions
+		for (var index in newcart) {
+			item = newcart[index]
+			if (item.clazz == "product") {
+				finalCart.push(item)
+			}
+		}
 		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
 
 			for (var index in shop.all_promotions) {
 
 				var promotion = shop.all_promotions[index]
 
-				if (currentMember != null && promotion.has_triggered != true) {
+				console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
+				if (currentMember != null){
+					
 
-					if (promotion.trigger_price != null) {
-						var price = 0
-
-						var trigger_price = parseFloat(promotion.trigger_price)
-						var remaining = trigger_price - cart_total
-
-						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
-
-						if (remaining <= 0 && search_cart_promo_index < 0) {
-
-							shop.all_promotions[index].has_triggered = true
-							let cartItem = {
-								clazz: "promotion",
-								id: promotion.id,
-								name: promotion.cart_text,
-								description: "",
-								price: price,
-								type: promotion.reward_type
-							}
-							promotions_item.push(cartItem)
-
-							dispatch(createAction("orders/updatePromotions")({
-								promotions: newpromotion.concat(promotions_item),
-							}));
-
-						}
-					} else if (newcart.length > 0) {
-
-						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
-						var price = 0
-
-						if (promotion.reward_type != null && promotion.reward_type == "Discount") {
-
-							if (promotion.value_type != null && promotion.value_type == "percent") {
-								var discount_value = promotion.value ? promotion.value : 0
-								price = cart_total * discount_value / 100
-
-								if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
-									price = promotion.maximum_discount_allow
-								}
-								final_cart_value = cart_total - price
-
-							} else if (promotion.value_type != null && promotion.value_type == "fixed") {
-								var discount_value = promotion.value ? promotion.value : 0
-								price = cart_total - discount_value
-							}
-
-							if (search_cart_promo_index < 0) {
-
-								let cartItem2 = {
+						if (promotion.trigger_price != null) {
+							var price = 0
+	
+							var trigger_price = parseFloat(promotion.trigger_price)
+							var remaining = trigger_price - cart_total
+	
+							if (remaining <= 0 ) {
+	
+								shop.all_promotions[index].has_triggered = true
+								
+								let cartItem = {
 									clazz: "promotion",
 									id: promotion.id,
 									name: promotion.cart_text,
 									description: "",
 									price: price,
+									type: promotion.reward_type
 								}
-								promotions_item.push(cartItem2)
-								dispatch(createAction("orders/updatePromotions")({
-									promotions: newpromotion.concat(promotions_item),
-								}));
 
-							} else {
-								var item = newpromotion[search_cart_promo_index]
-								item.price = price
-							}
-						}
-						else {
-
-							if (search_cart_promo_index < 0) {
-
-								let cartItem3 = {
-									clazz: "promotion",
-									id: promotion.id,
-									name: promotion.cart_text,
-									description: "",
-									price: price,
+								promotions_item.push(cartItem)
+								
+								if (promotion.reward_type != null && promotion.reward_type == "Discount") {
+	
+									if (promotion.value_type != null && promotion.value_type == "percent") {
+										var discount_value = promotion.value ? promotion.value : 0
+										price = cart_total * discount_value / 100
+		
+										if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
+											price = promotion.maximum_discount_allow
+										}
+										final_cart_value = cart_total - price
+		
+									} else if (promotion.value_type != null && promotion.value_type == "fixed") {
+										var discount_value = promotion.value ? promotion.value : 0
+										final_cart_value = cart_total - discount_value
+									}								
 								}
-								promotions_item.push(cartItem3)
-							}
+							}	else{
+								var display_text = promotion.display_text
+								final_promo_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+								
+								break;
+							}					
 						}
-
-					}
-				} else if (currentMember != null && promotion.has_triggered == true) {
-
-					if (promotion.trigger_price != null) {
-
-						var price = 0
-
-						var trigger_price = parseFloat(promotion.trigger_price)
-						var remaining = trigger_price - cart_total
-
-						const search_cart_promo_index = newpromotion.findIndex(element => element.name == promotion.cart_text)
-
-						if (remaining > 0 && search_cart_promo_index >= 0) {
-							newpromotion.splice(search_cart_promo_index, 1)
-							shop.all_promotions[index].has_triggered = false
-							dispatch(createAction("orders/updatePromotions")({
-								promotions: newpromotion
-							}));
-						}
-					}
+					} 
 				}
-			}
 		}
-		var check_has_product = false
-		for (var index in newcart) {
-			item = newcart[index]
-			if (item.clazz == "product") {
-				check_has_product = true
-			}
-		}
-
-		if (check_has_product == false) {
-			this.onClearPress()
-		}
+	
+		dispatch(createAction("orders/updatePromotionText")({
+			promotionText: final_promo_text
+		}));
+		dispatch(createAction("orders/updatePromotions")({
+			promotions: promotions_item
+		}));
 
 		dispatch(createAction("orders/updateDiscountCartTotal")({
 			discount_cart_total: final_cart_value
@@ -1104,8 +1036,6 @@ export default class Home extends React.Component {
 		this.setState({
 			modalVisible: false,
 		})
-
-
 	}
 
 	onClosePressed = () => {
@@ -1115,12 +1045,15 @@ export default class Home extends React.Component {
 	onClearPress = () => {
 		const { dispatch, cart } = this.props
 
-		this.toogleCart(false, false)
-
 
 		if (cart.length > 0) {
 			dispatch(createAction("orders/resetCart")());
 		}
+		this.setState({ isCartToggle: false }, function () {
+			Animated.spring(this.moveAnimation, {
+				toValue: { x: 0, y: windowHeight },
+			}).start()
+		})
 
 		for (var index in this.state.products) {
 			this.state.products[index].quantity = null
@@ -1578,7 +1511,7 @@ export default class Home extends React.Component {
 				</View>
 
 			</View>
-			{this.renderPromotionTopBar(shop, cart)}
+			{this.renderPromotionTopBar()}
 			{this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>
 				:
 				<View
@@ -1628,8 +1561,8 @@ export default class Home extends React.Component {
 						initialRegion={{
 							latitude: shop ? parseFloat(shop.latitude) : 0.0,
 							longitude: shop ? parseFloat(shop.longitude) : 0.0,
-							latitudeDelta: 0.1,
-							longitudeDelta: 0.1,
+							latitudeDelta: 0.004,
+							longitudeDelta: 0.004,
 						}}
 						onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}
 					>
@@ -1640,7 +1573,7 @@ export default class Home extends React.Component {
 								longitude: shop ? parseFloat(shop.longitude) : 0.0,
 							}
 							}
-							title={shop.name}
+							title="Brew9"
 							description={shop.location}
 						/>
 					</MapView>
@@ -1663,14 +1596,10 @@ export default class Home extends React.Component {
 								style={styles.branchHeaderContact}>Contact </Text>
 							<Text
 								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
-							<View
-								style={{
-									flex: 1,
-								}} />
 							<Text
 								style={styles.businessHeaderHourText}>Business Hour</Text>
 							<Text
-								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
+								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
 
 						</View>
 					</View>
@@ -1715,7 +1644,13 @@ export default class Home extends React.Component {
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
 			<Brew9Modal visible={this.state.visible} cancelable={true} title={"Exit App "} description={"exit the  application?"} okayButtonAction={() => { BackHandler.exitApp() }} cancelButtonAction={() => this.setState({ visible: false })} />
 
-
+			<Brew9Modal visible={this.state.popUpVisible} cancelable={false} title={this.state.title} description={this.state.description} okayButtonAction={() => { 
+                if (this.state.url != null && this.state.url != '' ){
+                    Linking.openURL(this.state.url)
+                }else{
+                    this.setState({ popUpVisible: false })
+                }
+             }}  />
 		</View>
 	}
 
@@ -1770,8 +1705,6 @@ export default class Home extends React.Component {
 	renderFeaturedPromo(shop, cart) {
 		let style = undefined
 
-		const { currentMember } = this.props
-
 		if (shop !== null) {
 			if (shop.can_order == false) {
 				if (cart.length > 0) {
@@ -1811,56 +1744,28 @@ export default class Home extends React.Component {
 		return undefined
 	}
 
-	renderPromotionTopBar(shop, cart) {
+	renderPromotionTopBar() {
 
-		const { currentMember, cart_total } = this.props
+		const {currentPromoText} = this.props
 
-		if (cart.length > 0) {
-			if (shop.all_promotions != null && shop.all_promotions.length > 0) {
-
-				var has_promo = false
-
-				const promos = shop.all_promotions.map((item, key) => {
-
-					if (currentMember != null) {
-						var trigger_price = item.trigger_price ? parseFloat(item.trigger_price) : 0.00
-						var remaining = trigger_price - cart_total
-
-						if (remaining <= 0) {
-							has_promo = false
-							return
-						}
-
-						var display_text = item.display_text
-						var final_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
-
-						if (!has_promo) {
-							has_promo = true
-							return <View style={styles.promotionBarView}
-								key={key}>
-								<Text
-									numberOfLines={2}
-									style={styles.promotionTopBarText}>
-									{final_text}
-								</Text>
-							</View>
-						}
-						return
-					}
-				})
-
-				return <View style={styles.promotionTopBarView}>
-					{promos}
+		if (currentPromoText.length > 0){
+			return (<View style={styles.promotionTopBarView}>
+				<View style={styles.promotionBarView}>
+					<Text
+						numberOfLines={2}
+						style={styles.promotionTopBarText}>
+						{this.props.currentPromoText}
+					</Text>
 				</View>
-
-			}
+			</View>)
 		}
-		return
+		return undefined
+		
 	}
 
 	renderBottomBar(cart, shop) {
 
-		const { cart_total, cart_total_quantity, discount_cart_total } = this.props
+		const { cart_total_quantity, discount_cart_total } = this.props
 		if (cart.length > 0) {
 			return (<View
 				style={styles.cartView}>
@@ -2341,7 +2246,7 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	cartsummaryviewView: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,

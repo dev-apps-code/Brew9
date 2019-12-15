@@ -34,6 +34,7 @@ import openMap from "react-native-open-maps";
 	promotions: orders.promotions,
 	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
+	discount_cart_total : orders.discount_cart_total
 }))
 export default class Checkout extends React.Component {
 
@@ -67,6 +68,7 @@ export default class Checkout extends React.Component {
 			this.onPayNowPressed.bind(this),
 			500, // no new clicks within 500ms time window
 		);
+		const {discount_cart_total} = props
 		this.state = {
 			delivery_options: 'pickup',
 			vouchers_to_use: [],
@@ -86,6 +88,7 @@ export default class Checkout extends React.Component {
 			selected_hour_index: 0,
 			selected_minute_index: 0,
 			paynow_clicked: false,
+			final_price: discount_cart_total.toFixed(2)
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -102,6 +105,7 @@ export default class Checkout extends React.Component {
 		this.setTimePickerDefault()
 		this.loadValidVouchers()
 		dispatch(createAction("orders/noClearCart")());
+		this.check_promotion_trigger()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -120,6 +124,7 @@ export default class Checkout extends React.Component {
 		var time_now = Moment(new Date(), 'h:mm')
 
 		var hour = time_now.hours();
+
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
 
@@ -143,9 +148,17 @@ export default class Checkout extends React.Component {
 
 		selected_minute = minute_array[0]
 
+<<<<<<< HEAD
 		if (hour_array.length < 3) {
 			hour_array.length = 3
 		}
+=======
+		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
+		var last_hour = closing.hours()
+
+		var hour_array = _.range(first_hour, last_hour+1);
+
+>>>>>>> 8a947689fed930c85d49b3865db37aeaf52d1ab2
 
 		this.setState({
 			selected_hour: first_hour,
@@ -157,6 +170,10 @@ export default class Checkout extends React.Component {
 
 	checkAvailableMinute(option) {
 		const { selectedShop } = this.props
+		
+		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+
+		console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
 		var time_now = Moment(new Date(), 'h:mm')
 
@@ -165,7 +182,8 @@ export default class Checkout extends React.Component {
 
 		if (hour == option) {
 			minute_array = _.filter(["00", "15", "30", "45"], function (o) {
-				return parseInt(o) > min;
+				let minOption = parseInt(o)
+				return (minOption > min)				
 			})
 			if (minute_array.length < 3) {
 				minute_array.length = 3
@@ -175,7 +193,14 @@ export default class Checkout extends React.Component {
 				minute_range: minute_array,
 			})
 		} else {
-			minute_array = ["00", "15", "30", "45"]
+			var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+
+			if (option == closing.hours()) {
+				minute_array = _.filter(["00", "15", "30", "45"], function (o) {
+					let minOption = parseInt(o)
+					return (minOption <= closing.minutes())				
+				})
+			}
 			this.setState({
 				minute_range: minute_array,
 				selected_minute: minute_array[0],
@@ -369,7 +394,7 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { selectedShop, currentMember, promotions, promotion_ids } = this.props
+		const { selectedShop, currentMember, promotions, promotion_ids ,dispatch} = this.props
 		const { cart_total } = this.props
 		let newPromo = [...promotions]
 
@@ -414,7 +439,7 @@ export default class Checkout extends React.Component {
 
 						} else if (promo.value_type != null && promo.value_type == "fixed") {
 							var discount_value = promo.value ? promo.value : 0
-							price = cart_total - discount_value
+							final_cart_value = cart_total - discount_value
 						}
 
 						if (search_cart_promo_index < 0) {
@@ -433,17 +458,20 @@ export default class Checkout extends React.Component {
 							}));
 						} else {
 							var item = newPromo[search_cart_promo_index]
-							item.price = price
+							item.price = price							
 						}
 					}
 				}
 			}
 		}
+		dispatch(createAction("orders/updateDiscountCartTotal")({
+			discount_cart_total: final_cart_value
+		}));
 
 	}
 
 	calculateVoucherDiscount(vouchers_to_use) {
-		const { cart_total } = this.props
+		const { discount_cart_total } = this.props
 		var discount = 0
 		for (var index in vouchers_to_use) {
 			var item = vouchers_to_use[index]
@@ -460,7 +488,8 @@ export default class Checkout extends React.Component {
 				}
 			}
 		}
-		this.setState({ discount: discount })
+		const f_price = discount_cart_total-discount
+		this.setState({ discount: discount, final_price:f_price.toFixed(2) })
 	}
 
 	onPaymentButtonPressed = () => {
@@ -531,7 +560,7 @@ export default class Checkout extends React.Component {
 	// }
 
 	loadMakeOrder() {
-		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id } = this.props
+		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id,navigation } = this.props
 		const { navigate } = this.props.navigation
 		const { vouchers_to_use, selected_payment, pick_up_status, pick_up_time } = this.state
 		this.setState({ loading: true })
@@ -559,12 +588,15 @@ export default class Checkout extends React.Component {
 						loading: false,
 					})
 					const order = eventObject.result
+
 					navigate("PaymentsWebview", {
 						name: `Brew9 Order`,
 						order_id: order.receipt_no,
 						session_id: order.session_id,
 						amount: order.total,
 						type: 'order',
+						returnToRoute: navigation.state,
+						clearCart: () => this.clearCart()
 					})
 				}
 			}
@@ -633,13 +665,10 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const { selected_payment, pick_up_status, discount } = this.state
-		const { cart_total, currentMember, selectedShop } = this.props
+		const { selected_payment, pick_up_status, final_price } = this.state
+		const {  currentMember, selectedShop } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		var final_price = cart_total - discount
-		if (final_price < 0) {
-			final_price = 0
-		}
+		
 		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
 		if (currentMember != undefined) {
 			if (selected_payment == "") {
@@ -649,7 +678,7 @@ export default class Checkout extends React.Component {
 
 			if (selected_payment == "credits") {
 				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					this.refs.toast.show("Oops. Insufficient Wallet credit.\nPlease select other payment method.", TOAST_DURATION,
+					this.refs.toast.show("Oops, insufficient credit.\nPlease select other payment option.", TOAST_DURATION,
 						// () => {
 						// 	navigate("MemberWallet")
 						// }
@@ -676,7 +705,7 @@ export default class Checkout extends React.Component {
 						this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
 						return
 					} else if (pickup > closing) {
-						this.refs.toast.show("Shop is closed at this time", TOAST_DURATION)
+						this.refs.toast.show("We are closed at this time.", TOAST_DURATION)
 						return
 					}
 				}
@@ -1533,14 +1562,9 @@ export default class Checkout extends React.Component {
 	}
 
 	renderCheckoutReceipt() {
-		const { vouchers_to_use, shop, discount } = this.state
-		let { currentMember, selectedShop, cart, promotions, cart_total } = this.props
-		var final_price = cart_total - discount
-		if (final_price < 0) {
-			final_price = 0
-		}
-		final_price = final_price.toFixed(2)
-
+		const { vouchers_to_use, final_price } = this.state
+		let { currentMember, selectedShop, cart, promotions } = this.props
+		
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1650,7 +1674,7 @@ export default class Checkout extends React.Component {
 										flex: 1,
 									}} />
 								<Text
-									style={styles.totalText}>${parseFloat(final_price).toFixed(2)}</Text>
+									style={styles.totalText}>${final_price}</Text>
 							</View>
 
 						</View>
@@ -1680,14 +1704,8 @@ export default class Checkout extends React.Component {
 
 	render() {
 
-		let { isPaymentToggle, discount, isPickupToogle } = this.state
+		let { isPaymentToggle, discount, isPickupToogle,final_price } = this.state
 		let { cart_total } = this.props
-
-		var final_price = cart_total - discount
-		if (final_price < 0) {
-			final_price = 0
-		}
-		final_price = final_price.toFixed(2)
 
 		return <View
 			style={styles.checkoutViewPadding}>

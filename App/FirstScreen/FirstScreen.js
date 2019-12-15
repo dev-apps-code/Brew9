@@ -6,13 +6,13 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Image, Text, StyleSheet, AppState } from "react-native"
+import { View, Image, Text, StyleSheet, AppState,Linking } from "react-native"
 import React from "react"
 import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils"
 import CurrentStatusRequestObject from "../Requests/current_status_request_object"
 import { AsyncStorage } from 'react-native'
-
+import Brew9Modal from '../Components/Brew9Modal'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {TOAST_DURATION} from "../Common/common_style";
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
@@ -39,9 +39,11 @@ export default class FirstScreen extends React.Component {
             loading: false,
             isSignedIn: false,
             appState: AppState.currentState,
-            checked: false
+            checked: false,
+            popUpVisible:false
         }
     }
+
 
     componentDidMount() {
         const { dispatch } = this.props
@@ -62,7 +64,7 @@ export default class FirstScreen extends React.Component {
                 this.loadCurrentStatus()
             })
         }
-        // this.checkLoginStatus()
+        this.checkLoginStatus()
     }
 
     checkLoginStatus() {
@@ -98,9 +100,9 @@ export default class FirstScreen extends React.Component {
                     loading: false,
                 })
                 if (eventObject.result.force_upgrade) {
-                    Linking.openURL(eventObject.result.url)	
+                    this.setState({popUpVisible:true,title:eventObject.result.title,description:eventObject.result.description,url:eventObject.result.url})
 				} else if (eventObject.result.maintenance) {
-                    this.refs.toast.show("App is currently under maintenance", TOAST_DURATION)
+                    this.setState({popUpVisible:true,title:eventObject.result.title,description:eventObject.result.description,url:''})
                 } else {
                     this.checkLoginStatus()
                 }
@@ -127,7 +129,13 @@ export default class FirstScreen extends React.Component {
 
     render() {
       
-        return <View><Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/></View>
+        return <View>
+            <Brew9Modal visible={this.state.popUpVisible} cancelable={false} title={this.state.title} description={this.state.description} okayButtonAction={() => { 
+                if (this.state.url != null && this.state.url != '' ){
+                    Linking.openURL(this.state.url)            
+                }
+             }}  />
+            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/></View>
     }
 }
 
