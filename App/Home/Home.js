@@ -621,18 +621,19 @@ export default class Home extends React.Component {
 
 	getCartHeight(){
 		const { cart, promotions } = this.props
-		
+		const {product_view_height} = this.state
 		var headerHeight = 31 * alpha
 		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
 		
 		var height_cap = windowHeight * 0.4
 		var content = height + headerHeight
-		const bottomHeight = 45 * alpha + 60 *alpha + 35*alpha + 40 *alpha
-		var finalheight = windowHeight  - content - bottomHeight
+
+		var finalheight = product_view_height  - content
 
 		if (finalheight < height_cap) {
 			finalheight = height_cap
 		}
+
 
 		return finalheight
 	}
@@ -674,9 +675,12 @@ export default class Home extends React.Component {
 	}
 
 	measureView(event) {
-		this.setState({
-			product_view_height: event.nativeEvent.layout.height
-		})
+		if (this.state.product_view_height == 0){
+			this.setState({
+				product_view_height: event.nativeEvent.layout.height
+			})
+		}
+		
 	}
 
 	renderPopOutCartFlatListCell = ({ item, index }) => {
