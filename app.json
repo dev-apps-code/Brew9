@@ -38,11 +38,11 @@
           "apiKey": "AIzaSyDAJsylYVu_i2yPaOVtqVnVtP9wjlOlxPo"
         }
       },
+      "versionCode":1,
       "googleServicesFile": "./assets/fcm/google-services.json",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },
-    "versionCode":1,
     "slug": "brew9",
     "description": "",
     "scheme": "exp8310c0a3fd094f75bd22dd17cc4ada42",
