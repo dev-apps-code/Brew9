@@ -55,7 +55,7 @@ export default class FirstScreen extends React.Component {
 		AppState.removeEventListener('change', this._handleAppStateChange);
     }
     
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         const { checked } = this.state
         if (checked == false) {
             this.setState({
@@ -64,8 +64,10 @@ export default class FirstScreen extends React.Component {
                 this.loadCurrentStatus()
             })
         }
-        this.checkLoginStatus()
-    }
+        if (prevProps.members != this.props.members){
+            this.checkLoginStatus()
+        }
+	}
 
     checkLoginStatus() {
         const { members,isReady } = this.props
@@ -104,7 +106,7 @@ export default class FirstScreen extends React.Component {
 				} else if (eventObject.result.maintenance) {
                     this.setState({popUpVisible:true,title:eventObject.result.title,description:eventObject.result.description,url:''})
                 } else {
-                    this.checkLoginStatus()
+                    // this.checkLoginStatus()
                 }
             }
             AsyncStorage.getItem("notification_key", (err, result) => {
@@ -122,7 +124,7 @@ export default class FirstScreen extends React.Component {
                 )
               })
         } else {
-            this.checkLoginStatus()
+            // this.checkLoginStatus()
         }
         
     }
