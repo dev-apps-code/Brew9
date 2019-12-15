@@ -628,14 +628,12 @@ export default class Home extends React.Component {
 		var height_cap = windowHeight * 0.4
 		var content = height + headerHeight
 
-		const bottomHeight = 45*alpha + 60 *alpha + 35*alpha + 40*alpha
 		var finalheight = product_view_height  - content
 
 		if (finalheight < height_cap) {
 			finalheight = height_cap
 		}
 
-		console.log(`height ${product_view_height}`)
 
 		return finalheight
 	}
@@ -2280,7 +2278,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
-		bottom: 35 * alpha,
+		bottom: 25 * alpha,
 		flex: 1,
 	},
 	clearAllView: {
@@ -2316,10 +2314,11 @@ const styles = StyleSheet.create({
 	popOutCartFlatList: {
 		backgroundColor: "white",
 		width: "100%",
-		marginBottom: 20 * alpha,
+		marginBottom: 33 * alpha,
 		flex: 1
 	},
 	popOutCartFlatListViewWrapper: {
+		backgroundColor: "white",
 		flex: 1,
 	},
 	popOutView: {
