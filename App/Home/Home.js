@@ -482,10 +482,10 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 			analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > shop.max_order_distance_in_km) {
-				this.refs.toast.show("You are too far away", TOAST_DURATION)
-				return
-			} else {
+			// if (member_distance > shop.max_order_distance_in_km) {
+			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
+			// 	return
+			// } else {
 
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
@@ -503,7 +503,7 @@ export default class Home extends React.Component {
 				navigate("Checkout", {
 					returnToRoute: navigation.state
 				})
-			}
+			// }
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -1803,7 +1803,7 @@ export default class Home extends React.Component {
 								position: "absolute",
 								left: 28 * alpha,
 								right: 13 * alpha,
-								top: 12 * alpha,
+								top: 9 * alpha,
 								height: 45 * alpha,
 								flexDirection: "row",
 								alignItems: "center",
@@ -1851,13 +1851,16 @@ export default class Home extends React.Component {
 						</View>
 					</View>
 				</View>
-				<TouchableOpacity
-					onPress={() => this.onCheckoutPressed()}
-					style={styles.checkoutButton}
-				>
-					<Text
-						style={styles.checkoutButtonText}>Checkout</Text>
-				</TouchableOpacity>
+				<View style={styles.checkoutButtonView}>
+					<TouchableOpacity
+						onPress={() => this.onCheckoutPressed()}
+						style={styles.checkoutButton}
+					>
+						<Text
+							style={styles.checkoutButtonText}>Checkout</Text>
+					</TouchableOpacity>
+				</View>
+				
 			</View>)
 		}
 		return undefined
@@ -2102,7 +2105,7 @@ const styles = StyleSheet.create({
 		marginBottom: 1 * alpha,
 	},
 	cartView: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,
@@ -2141,22 +2144,22 @@ const styles = StyleSheet.create({
 	},
 	shopppingCartView: {
 		backgroundColor: "white",
-		borderRadius: 22.5 * alpha,
-		width: 115 * alpha,
+		borderRadius: 20 * alpha,
+		width: 110 * alpha,
 		// aspectRatio: 1 / 2,
-		height: 45 * alpha,
+		height: 40 * alpha,
 		justifyContent: "center",
 	},
 	shopppingCartButton: {
 		backgroundColor: "transparent",
-		borderRadius: 22.5 * alpha,
+		borderRadius: 20 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 102 * alpha,
-		height: 45 * alpha,
+		width: 110 * alpha,
+		height: 40 * alpha,
 	},
 	group5View: {
 		backgroundColor: "transparent",
@@ -2199,27 +2202,37 @@ const styles = StyleSheet.create({
 	},
 	badgeView: {
 		backgroundColor: "rgb(0, 178, 227)",
-		borderRadius: 15 * alpha,
+		borderRadius: 10 * alpha,
 		borderWidth: 1,
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
-		left: 115 * alpha,
-		top: 0 * alpha,
-		height: 30 * alpha,
+		left: 120 * alpha,
+		top: 5 * alpha,
+		height: 20 * alpha,
 		aspectRatio: 1,
 		flex: 1,
 		justifyContent: "center",
+		alignItems: "center"
 	},
 	numberofitemText: {
 		color: "rgb(255, 251, 251)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
+		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginLeft: 6 * alpha,
-		marginRight: 6 * alpha,
+	},
+	checkoutButtonView: {
+		backgroundColor: "white",
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 0,
+		position: "absolute",
+		right: 0 * alpha,
+		width: 95 * alpha,
+		top: 15 * alpha,
+		height: 46 * alpha,
 	},
 	checkoutButton: {
 		backgroundColor: "rgb(0, 178, 227)",
@@ -2230,7 +2243,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0 * alpha,
 		width: 95 * alpha,
-		top: 15 * alpha,
+		top: 0 * alpha,
 		height: 46 * alpha,
 	},
 	checkoutButtonText: {
