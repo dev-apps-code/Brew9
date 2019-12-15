@@ -123,6 +123,11 @@ export default class Checkout extends React.Component {
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
 
+		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
+		var last_hour = closing.hours()
+
+		var hour_array = _.range(first_hour, last_hour + 1);
+
 		var selected_minute = ""
 
 		if (hour > opening.hours() && min < 45) {
@@ -132,20 +137,15 @@ export default class Checkout extends React.Component {
 		}
 		selected_minute = minute_array[0]
 
-		if (minute_array.length == 2) {
-			minute_array.push("00")
-		}
-
-		if (minute_array.length == 1) {
-			minute_array = ["45", "00", ""]
+		if (minute_array.length < 3) {
+			minute_array.length = 3
 		}
 
 		selected_minute = minute_array[0]
 
-		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
-		var last_hour = closing.hours()
-
-		var hour_array = _.range(first_hour, last_hour);
+		if (hour_array.length < 3) {
+			hour_array.length = 3
+		}
 
 		this.setState({
 			selected_hour: first_hour,
@@ -167,8 +167,8 @@ export default class Checkout extends React.Component {
 			minute_array = _.filter(["00", "15", "30", "45"], function (o) {
 				return parseInt(o) > min;
 			})
-			if (minute_array.length == 2) {
-				minute_array.push("00")
+			if (minute_array.length < 3) {
+				minute_array.length = 3
 			}
 
 			this.setState({
@@ -186,11 +186,21 @@ export default class Checkout extends React.Component {
 
 	onHourValueChange = (option, index) => {
 
-		this.checkAvailableMinute(option)
-		this.setState({
-			selected_hour: option,
-			selected_hour_index: index,
-		})
+		if (option == ""){
+			console.log("Empty")
+			this.setState({
+				selected_hour_index: index - 1,
+			}, function(){
+				this.sphour.scrollToIndex(this.state.selected_hour_index)
+			})
+		} else {
+			this.checkAvailableMinute(option)
+			this.setState({
+				selected_hour: option,
+				selected_hour_index: index,
+			})
+		}
+		
 	}
 
 	onMinuteValueChange = (option, index) => {
