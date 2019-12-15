@@ -167,7 +167,7 @@ export default class Home extends React.Component {
 			distance: "-",
 			member_distance: 1000,
 			first_promo_popup: false,
-			
+			popUpVisible:false
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
@@ -311,9 +311,7 @@ export default class Home extends React.Component {
 			onQrScanPressed: this.onQrScanPressed,
 		})
 		this.loadShops(true)
-		if (currentMember != null) {
-			this.loadCurrentStatus()
-		}
+		
 		AppState.addEventListener('change', this._handleAppStateChange);
 		// BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
@@ -351,33 +349,7 @@ export default class Home extends React.Component {
 		}
 	}
 
-	loadCurrentStatus() {
 
-		const { dispatch, currentMember } = this.props
-		if (currentMember != null) {
-			this.setState({ loading: true })
-			const callback = eventObject => {
-				this.setState({
-					loading: false,
-				})
-			}
-			AsyncStorage.getItem("notification_key", (err, result) => {
-				var last_note = 0
-				if (result != null) {
-					last_note = result
-				}
-				const obj = new CurrentStatusRequestObject(last_note)
-				obj.setUrlId(currentMember.id)
-				dispatch(
-					createAction('members/loadCurrentStatus')({
-						object: obj,
-						callback,
-					})
-				)
-			})
-
-		}
-	}
 	loadStorePushToken(token) {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
@@ -1676,7 +1648,13 @@ export default class Home extends React.Component {
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
 			<Brew9Modal visible={this.state.visible} cancelable={true} title={"Exit App "} description={"exit the  application?"} okayButtonAction={() => { BackHandler.exitApp() }} cancelButtonAction={() => this.setState({ visible: false })} />
 
-
+			<Brew9Modal visible={this.state.popUpVisible} cancelable={false} title={this.state.title} description={this.state.description} okayButtonAction={() => { 
+                if (this.state.url != null && this.state.url != '' ){
+                    Linking.openURL(this.state.url)
+                }else{
+                    this.setState({ popUpVisible: false })
+                }
+             }}  />
 		</View>
 	}
 

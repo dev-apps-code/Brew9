@@ -18,6 +18,7 @@
     ],
     "ios": {
       "supportsTablet": false,
+      "buildNumber":"1",
       "bundleIdentifier": "com.dreamcode.brew9",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan qr code to allow you to pay or redeem for vouchers.",
@@ -41,6 +42,7 @@
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },
+    "versionCode":1,
     "slug": "brew9",
     "description": "",
     "scheme": "exp8310c0a3fd094f75bd22dd17cc4ada42",

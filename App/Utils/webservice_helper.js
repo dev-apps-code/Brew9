@@ -1,5 +1,6 @@
 // import { btoa } from './node_modules/Base64'
 import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER } from './server'
+import {Platform} from 'react-native'
 import Constants from 'expo-constants';
 export class WebserviceHelper {
   // static b64EncodeUnicode(str) {
@@ -25,7 +26,7 @@ export function getMethod(authtoken,object) {
       'Content-Type': 'application/x-www-form-urlencoded',
       'AppVersion': Constants.nativeAppVersion,
       'BuildVersion': Constants.nativeBuildVersion,
-      'Platform': Constants.platform,
+      'Platform': Platform.OS,
       Authorization: getBasicAuthentication(authtoken),
     }
   })
