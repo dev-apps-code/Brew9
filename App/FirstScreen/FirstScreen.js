@@ -124,7 +124,7 @@ export default class FirstScreen extends React.Component {
                 )
               })
         } else {
-            // this.checkLoginStatus()
+            this.checkLoginStatus()
         }
         
     }
