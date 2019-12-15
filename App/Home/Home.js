@@ -175,14 +175,17 @@ export default class Home extends React.Component {
 	}
 
 	onQrScanPressed = () => {
-		const { navigate } = this.props.navigation
+		const { navigation } = this.props
 		const { currentMember } = this.props
 
 		if (currentMember != null) {
-			navigate("ScanQr")
+			navigation.navigate("ScanQr")
 		} else {
 			this.refs.toast.show("You need to login before you can topup", TOAST_DURATION, () => {
-				this.props.navigation.navigate("VerifyUserStack")
+				navigation.navigate("VerifyUser",{
+						returnToRoute: navigation.state,
+						check_promotion_trigger: () => this.check_promotion_trigger()
+				})
 			});
 		}
 	}
@@ -251,6 +254,9 @@ export default class Home extends React.Component {
 				this.loadShops(false)
 			}
 			this.computeDistance()
+		}
+		if (prevProps.currentMember != this.props.currentMember) {
+			this.loadShops(false)
 		}
 		if (prevProps.cart != this.props.cart) {
 			this.check_promotion_trigger()
@@ -386,7 +392,7 @@ export default class Home extends React.Component {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
 				}, function () {
-					
+					this.check_promotion_trigger()
 					if (loadProducts) {
 						this.loadStoreProducts()
 						this.getLocationAsync()
@@ -446,7 +452,7 @@ export default class Home extends React.Component {
 							products: menu_banners.concat(items),
 							data: data
 						}, function () {
-
+							this.check_promotion_trigger()
 						})
 					}.bind(this))
 				}
@@ -515,7 +521,8 @@ export default class Home extends React.Component {
 				this.loadShops()
 			})
 			navigate("VerifyUser", {
-				returnToRoute: navigation.state
+				returnToRoute: navigation.state,
+				check_promotion_trigger: () => this.check_promotion_trigger()
 			})
 		}
 	}
