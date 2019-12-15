@@ -72,6 +72,7 @@ export default class PaymentsWebview extends React.Component {
   }
 
   onBackPressed = () => {
+    
     this.props.navigation.goBack()
   };
 
@@ -132,16 +133,10 @@ export default class PaymentsWebview extends React.Component {
 
         if (params.success == "true"){
           this.refs.toast.show(eventObject.message, 500)
-          this.setState({
-            modal_title:'Brew9',
-            modal_description:decodeURIComponent(params.message),
-            modal_ok_text: null,
-            modal_ok_action: ()=> {
-              this.setState({modal_visible:false})
-              this.props.navigation.pop(2)
-            },
-            modal_visible:true,
-          })
+        
+          const { navigation} = this.props
+          navigation.goBack();
+          navigation.state.params.clearCart()
           this.loadProfile()
         }else{
           this.setState({

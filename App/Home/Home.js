@@ -1561,8 +1561,8 @@ export default class Home extends React.Component {
 						initialRegion={{
 							latitude: shop ? parseFloat(shop.latitude) : 0.0,
 							longitude: shop ? parseFloat(shop.longitude) : 0.0,
-							latitudeDelta: 0.1,
-							longitudeDelta: 0.1,
+							latitudeDelta: 0.004,
+							longitudeDelta: 0.004,
 						}}
 						onMapReady={() => this.marker && this.marker.showCallout && this.marker.showCallout()}
 					>
@@ -1573,7 +1573,7 @@ export default class Home extends React.Component {
 								longitude: shop ? parseFloat(shop.longitude) : 0.0,
 							}
 							}
-							title={shop.name}
+							title="Brew9"
 							description={shop.location}
 						/>
 					</MapView>
@@ -1596,10 +1596,6 @@ export default class Home extends React.Component {
 								style={styles.branchHeaderContact}>Contact </Text>
 							<Text
 								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
-							<View
-								style={{
-									flex: 1,
-								}} />
 							<Text
 								style={styles.businessHeaderHourText}>Business Hour</Text>
 							<Text

@@ -123,7 +123,7 @@ export default class Checkout extends React.Component {
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 		var time_now = Moment(new Date(), 'h:mm')
 
-		var hour = time_now.hours();
+		var hour = 22//time_now.hours();
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
 
@@ -150,6 +150,7 @@ export default class Checkout extends React.Component {
 		var last_hour = closing.hours()
 
 		var hour_array = _.range(first_hour, last_hour);
+
 
 		this.setState({
 			selected_hour: first_hour,
@@ -529,7 +530,7 @@ export default class Checkout extends React.Component {
 	// }
 
 	loadMakeOrder() {
-		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id } = this.props
+		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id,navigation } = this.props
 		const { navigate } = this.props.navigation
 		const { vouchers_to_use, selected_payment, pick_up_status, pick_up_time } = this.state
 		this.setState({ loading: true })
@@ -557,12 +558,15 @@ export default class Checkout extends React.Component {
 						loading: false,
 					})
 					const order = eventObject.result
+
 					navigate("PaymentsWebview", {
 						name: `Brew9 Order`,
 						order_id: order.receipt_no,
 						session_id: order.session_id,
 						amount: order.total,
 						type: 'order',
+						returnToRoute: navigation.state,
+						clearCart: () => this.clearCart()
 					})
 				}
 			}
@@ -644,7 +648,7 @@ export default class Checkout extends React.Component {
 
 			if (selected_payment == "credits") {
 				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					this.refs.toast.show("Oops. Insufficient Wallet credit.\nPlease select other payment method.", TOAST_DURATION,
+					this.refs.toast.show("Oops, insufficient credit.\nPlease select other payment option.", TOAST_DURATION,
 						// () => {
 						// 	navigate("MemberWallet")
 						// }
@@ -671,7 +675,7 @@ export default class Checkout extends React.Component {
 						this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
 						return
 					} else if (pickup > closing) {
-						this.refs.toast.show("Shop is closed at this time", TOAST_DURATION)
+						this.refs.toast.show("We are closed at this time.", TOAST_DURATION)
 						return
 					}
 				}
