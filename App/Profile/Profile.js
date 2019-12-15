@@ -337,7 +337,7 @@ export default class Profile extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', "Level Info"))
 		navigate("WebCommon", {
-			title: 'Membership Info',
+			title: 'Level Info',
 			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
 		})
 	}
