@@ -1599,7 +1599,7 @@ export default class Home extends React.Component {
 							<Text
 								style={styles.businessHeaderHourText}>Business Hour</Text>
 							<Text
-								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mm A') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mm A') : ""}</Text>
+								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
 
 						</View>
 					</View>
@@ -2233,7 +2233,7 @@ const styles = StyleSheet.create({
 		marginRight: 10 * alpha,
 	},
 	cartsummaryviewView: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		position: "absolute",
 		left: 0 * alpha,
 		right: 0 * alpha,

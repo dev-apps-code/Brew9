@@ -123,7 +123,8 @@ export default class Checkout extends React.Component {
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 		var time_now = Moment(new Date(), 'h:mm')
 
-		var hour = 22//time_now.hours();
+		var hour = time_now.hours();
+
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
 
@@ -149,7 +150,7 @@ export default class Checkout extends React.Component {
 		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
 
-		var hour_array = _.range(first_hour, last_hour);
+		var hour_array = _.range(first_hour, last_hour+1);
 
 
 		this.setState({
@@ -162,6 +163,10 @@ export default class Checkout extends React.Component {
 
 	checkAvailableMinute(option) {
 		const { selectedShop } = this.props
+		
+		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+
+		console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
 		var time_now = Moment(new Date(), 'h:mm')
 
@@ -170,7 +175,8 @@ export default class Checkout extends React.Component {
 
 		if (hour == option) {
 			minute_array = _.filter(["00", "15", "30", "45"], function (o) {
-				return parseInt(o) > min;
+				let minOption = parseInt(o)
+				return (minOption > min)				
 			})
 			if (minute_array.length == 2) {
 				minute_array.push("00")
@@ -180,7 +186,14 @@ export default class Checkout extends React.Component {
 				minute_range: minute_array,
 			})
 		} else {
-			minute_array = ["00", "15", "30", "45"]
+			var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+
+			if (option == closing.hours()) {
+				minute_array = _.filter(["00", "15", "30", "45"], function (o) {
+					let minOption = parseInt(o)
+					return (minOption <= closing.minutes())				
+				})
+			}
 			this.setState({
 				minute_range: minute_array,
 				selected_minute: minute_array[0],
