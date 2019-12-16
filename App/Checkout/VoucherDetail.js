@@ -250,7 +250,7 @@ export default class VoucherDetail extends React.Component {
 								style={styles.usableitemcontentText}>- All Hot Drinks</Text> */}
 							{ (item.voucher.how_to_use != null && item.voucher.how_to_use != '') ? 
 							<View> 
-								<Text style={styles.usablescenarioText}>Terms</Text>
+								<Text style={styles.usablescenarioText}>How to use</Text>
 								<Text style={styles.usablescenariocontentText}> 
 									{item.voucher.how_to_use}
 								</Text>
