@@ -34,7 +34,8 @@ import openMap from "react-native-open-maps";
 	promotions: orders.promotions,
 	promotion_ids: orders.promotion_ids,
 	cart_total: orders.cart_total,
-	discount_cart_total : orders.discount_cart_total
+	discount_cart_total : orders.discount_cart_total,
+	location: members.location,
 }))
 export default class Checkout extends React.Component {
 
@@ -472,7 +473,7 @@ export default class Checkout extends React.Component {
 	}
 
 	calculateVoucherDiscount(vouchers_to_use) {
-		const { discount_cart_total } = this.props
+		const { discount_cart_total, cart_total } = this.props
 		var discount = 0
 		for (var index in vouchers_to_use) {
 			var item = vouchers_to_use[index]
@@ -561,7 +562,7 @@ export default class Checkout extends React.Component {
 	// }
 
 	loadMakeOrder() {
-		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id,navigation } = this.props
+		const { cart, dispatch, selectedShop, promotion_ids, cart_order_id,navigation, location } = this.props
 		const { navigate } = this.props.navigation
 		const { vouchers_to_use, selected_payment, pick_up_status, pick_up_time } = this.state
 		this.setState({ loading: true })
@@ -621,10 +622,18 @@ export default class Checkout extends React.Component {
 			}
 
 		}
+		var latitude = null
+		var longitude = null
+
+		if (location != null) {
+			latitude = location.coords.latitude
+			longitude = location.coords.longitude
+		}
+
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
 		console.log("Order_Id", cart_order_id)
-		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time, cart_order_id)
+		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time, cart_order_id, latitude, longitude)
 		obj.setUrlId(selectedShop.id)
 		dispatch(
 			createAction('shops/loadMakeOrder')({
