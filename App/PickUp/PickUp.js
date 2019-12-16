@@ -679,10 +679,13 @@ export default class PickUp extends React.Component {
 		const { currentOrder } = this.props
 
 		console.log(`showpopui ${this.props.popUp}`)
+		// const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
+		// const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
 		const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
 		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
+
 		return <Modal
-			animationType="slide"
+			animationType="fade"
 			transparent={true}
 			visible={this.state.showPopUp}
 			onRequestClose={() => this.closePopUp()}>
@@ -691,13 +694,13 @@ export default class PickUp extends React.Component {
 				<View style={[styles.popUpBackground]}>
 					<View style={[styles.popUpContent]}>
 						<Text style={styles.pointExpModalTitle}>You have receive</Text>
-						<View style={{ marginBottom: 10 }}>
+						<View >
 							<View style={styles.popUpInput1}>
-								<Text>Points</Text>
+								<Text style={styles.popUpTextStyle}>Points</Text>
 								<Text style={styles.pointExpModalPointText}>+{total_points}</Text>
 							</View>
 							<View style={styles.popUpInput2}>
-								<Text>XP Experience</Text>
+								<Text style={styles.popUpTextStyle}>XP Experience</Text>
 								<Text style={styles.pointExpModalExpText}>+{total_exp}</Text>
 							</View>
 						</View>
@@ -770,15 +773,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: 'rgba(0,0,0,0.4)',
 		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	popUpContent: {
 		backgroundColor: 'white',
-		minHeight: windowHeight / 5,
-		// aspectRatio: 1,
-		maxHeight: windowHeight / 2,
-		paddingVertical: 20,
+		height: windowHeight / 4.5,
+		// width: windowHeight / 4,
+		aspectRatio: 1.25 / 1,
+		// maxHeight: windowHeight / 2,
+		paddingVertical: 10 * alpha,
 		marginHorizontal: 30,
-		paddingHorizontal: 20,
+		paddingHorizontal: 10 * alpha,
 		justifyContent: 'space-between',
 		borderRadius: 5 * alpha,
 
@@ -786,7 +791,7 @@ const styles = StyleSheet.create({
 	popUpInput1: {
 		backgroundColor: '#fff5ee',
 		paddingHorizontal: 10 * alpha,
-		paddingVertical: 10 * alpha,
+		paddingVertical: 5 * alpha,
 		borderRadius: 5 * alpha,
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -796,7 +801,7 @@ const styles = StyleSheet.create({
 	popUpInput2: {
 		backgroundColor: '#f5f5f5',
 		paddingHorizontal: 10 * alpha,
-		paddingVertical: 10 * alpha,
+		paddingVertical: 5 * alpha,
 		borderRadius: 5 * alpha,
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -807,7 +812,7 @@ const styles = StyleSheet.create({
 	popUpInput3: {
 		backgroundColor: 'rgb(0, 178, 227)',
 		paddingHorizontal: 10 * alpha,
-		paddingVertical: 10 * alpha,
+		paddingVertical: 5 * alpha,
 		borderRadius: 5 * alpha,
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -1737,16 +1742,22 @@ const styles = StyleSheet.create({
 		paddingBottom: 5,
 		textAlign: 'center',
 		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha
 
 	},
 	pointExpModalPointText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha
+	},
+	popUpTextStyle: {
+		fontSize: 13 * fontAlpha
 	},
 	pointExpModalExpText: {
 		// color: '#deb887',
 		// fontFamily: NON_TITLE_FONT,
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha
 	},
 })
