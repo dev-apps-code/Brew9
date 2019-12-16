@@ -304,7 +304,7 @@ export default class Home extends React.Component {
 				errorMessage: 'Oops, this will not work in an Android emulator. Try it on your device!',
 			});
 		} else {
-			this.getLocationAsync();
+			// this.getLocationAsync();
 		}
 
 		this.setState({ isPromoToggle: false })
