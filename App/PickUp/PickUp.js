@@ -28,7 +28,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 	selectedTab: config.selectedTab,
 	popUp: shops.popUp,
 	currentOrder: shops.currentOrder,
-	orders:shops.orders
+	orders: shops.orders
 }))
 export default class PickUp extends React.Component {
 
@@ -75,7 +75,7 @@ export default class PickUp extends React.Component {
 			appState: AppState.currentState,
 			total_exp: 0,
 			total_point: 0,
-			showPopUp:false
+			showPopUp: false
 		}
 	}
 
@@ -88,8 +88,8 @@ export default class PickUp extends React.Component {
 			if (currentMember != null) {
 				this.loadCurrentOrder();
 			}
-			if (this.props.popUp != this.state.showPopUp){
-				this.setState({showPopUp: this.props.popUp});
+			if (this.props.popUp != this.state.showPopUp) {
+				this.setState({ showPopUp: this.props.popUp });
 			}
 		})
 	}
@@ -123,9 +123,9 @@ export default class PickUp extends React.Component {
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			// this.loadCurrentOrder()
 		}
-		if (this.props.selectedTab == 'pickup'){
-			if (this.props.popUp != this.state.showPopUp){
-				this.setState({showPopUp: this.props.popUp});
+		if (this.props.selectedTab == 'pickup') {
+			if (this.props.popUp != this.state.showPopUp) {
+				this.setState({ showPopUp: this.props.popUp });
 			}
 		}
 
@@ -154,7 +154,7 @@ export default class PickUp extends React.Component {
 			this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
-					
+
 				}
 				this.setState({
 					loading: false,
@@ -296,7 +296,7 @@ export default class PickUp extends React.Component {
 				<View style={[styles.queueView, { marginTop: 15 * alpha }]}>
 
 					<View
-						style={[styles.queueView, { alignItems: 'center' }]}>
+						style={[styles.queueView, { alignItems: 'center', marginTop: item.paid == false ? 40 : 0 * alpha, }]}>
 
 						<View
 							pointerEvents="box-none"
@@ -380,7 +380,7 @@ export default class PickUp extends React.Component {
 							</TouchableOpacity>
 						)
 					}
-					
+
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -583,7 +583,7 @@ export default class PickUp extends React.Component {
 			popUp: false
 		}))
 
-		this.setState({showPopUp: false});
+		this.setState({ showPopUp: false });
 	}
 
 	renderProgressBar(progress) {
@@ -680,7 +680,7 @@ export default class PickUp extends React.Component {
 
 		console.log(`showpopui ${this.props.popUp}`)
 		const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
-		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0 
+		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
 		return <Modal
 			animationType="slide"
 			transparent={true}
@@ -724,7 +724,8 @@ export default class PickUp extends React.Component {
 					<ActivityIndicator size="large" />
 				</View> :
 				orders.length > 0 ? this.renderQueueView(orders) :
-					this.renderEmpty()}
+					this.renderEmpty()
+			}
 			{this.renderPointExpModal()}
 		</View>
 	}
@@ -735,8 +736,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "red",
 		position: 'absolute',
 		width: "100%",
-		top:0, 
-		right:0,
+		top: 0,
+		right: 0,
 		height: 40 * alpha,
 		alignItems: 'center',
 		justifyContent: "center",
@@ -1003,7 +1004,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 40 * alpha,
+		// marginTop: 40 * alpha,
 		// alignItems: "center",
 	},
 
