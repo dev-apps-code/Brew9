@@ -150,28 +150,7 @@ export default class VerifyUser extends React.Component {
 		this.loadActivateAccount()
 	}
 
-	loadShops() {
 
-		const { dispatch, company_id, location } = this.props
-
-		const callback = eventObject => {
-			if (eventObject.success) {
-			}
-		}
-
-		var latitude = location != null ? location.coords.latitude : null
-		var longitude = location != null ? location.coords.longitude : null
-
-		const obj = new NearestShopRequestObject(latitude, longitude)
-		obj.setUrlId(company_id)
-		dispatch(
-			createAction('shops/loadShops')({
-				object: obj,
-				callback,
-			}
-			))
-
-	}
 	loadActivateAccount() {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
@@ -189,7 +168,8 @@ export default class VerifyUser extends React.Component {
 
 					const { navigation } = this.props
 					if (navigation.getParam('returnToRoute') != undefined && navigation.getParam('returnToRoute') != null) {
-						navigation.navigate("Home")
+						navigation.goBack()
+
 					} else {
 						this.props.navigation.navigate('TabGroupOne')
 					}
