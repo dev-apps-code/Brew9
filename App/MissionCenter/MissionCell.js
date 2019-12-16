@@ -42,13 +42,13 @@ export default class MissionCell extends React.Component {
 
 		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
 			status_string = "Check In"
-		} else if(this.props.status == "Completed") {
+		} else if (this.props.status == "Completed") {
 			// console.log(`this.props.status ${this.props.status}`)
 			status_string = "Claim Now"
 		}
 		const point = this.props.point > 1 ? 'points' : 'point'
 		const vouchers = this.props.vouchers.map((item, key) => {
-			return <Text key={key}>{item.voucher.name} x <Text style={styles.highlight}>{item.quantity}</Text>{key < voucher_length - 1 ? "\n" : ""}</Text>
+			return <Text key={key}>{item.voucher.name} <Text style={styles.highlight}>x{item.quantity}</Text>{key < voucher_length - 1 ? "\n" : ""}</Text>
 		})
 
 		progress = this.props.progress != undefined ? this.props.progress : 0
