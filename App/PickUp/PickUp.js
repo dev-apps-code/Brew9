@@ -220,6 +220,52 @@ export default class PickUp extends React.Component {
 				</View>
 			})
 
+			const promotions = item.promotions.map((item,key) => {
+
+				var promotion_discount = ''
+
+				if (item.reward_type == "Discount") {
+
+					if (item.value_type == 'fixed') {
+						promotion_discount = `-$${item.value}`
+					} else if (item.value_type == 'percent') {
+						promotion_discount = `-$${parseFloat(cart_total * (item.value / 100)).toFixed(2)}`
+					}
+
+					return <View
+					style={styles.drinksView}
+					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							justifyContent: "center",
+							backgroundColor: "transparent",
+							flex: 1,
+							flexDirection: "row"
+						}}>
+						<View
+							style={styles.productDetailView}>
+							<Text
+								style={styles.productNameText}>{item.name}</Text>
+
+							<View style={styles.spacer} />
+
+						</View>
+
+						<Text
+							style={styles.productPriceText}>{promotion_discount}</Text>
+						{item.promotions != null && key < item.promotions.length - 1 && (<Image
+							source={require("./../../assets/images/group-109-copy.png")}
+							style={styles.dottedLineImage} />)}
+					</View>
+				</View>
+				}
+
+
+				
+			
+			})
+
 			const voucher_items = item.voucher_items.map((item, key) => {
 
 				var voucher_discount = ''
@@ -443,6 +489,7 @@ export default class PickUp extends React.Component {
 					<View
 						style={styles.drinksViewWrapper}>
 						{order_items}
+						{promotions}
 						{voucher_items}
 					</View>
 					<View style={styles.receiptSectionSeperator}>
@@ -678,7 +725,6 @@ export default class PickUp extends React.Component {
 
 		const { currentOrder } = this.props
 
-		console.log(`showpopui ${this.props.popUp}`)
 		const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
 		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
 		return <Modal
@@ -776,9 +822,9 @@ const styles = StyleSheet.create({
 		minHeight: windowHeight / 5,
 		// aspectRatio: 1,
 		maxHeight: windowHeight / 2,
-		paddingVertical: 20,
-		marginHorizontal: 30,
-		paddingHorizontal: 20,
+		paddingVertical: 20 * alpha,
+		marginHorizontal: 50 * alpha,
+		paddingHorizontal: 20 * alpha,
 		justifyContent: 'space-between',
 		borderRadius: 5 * alpha,
 

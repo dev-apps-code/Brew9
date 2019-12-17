@@ -485,7 +485,7 @@ export default class Checkout extends React.Component {
 					if (voucher.discount_type.toLowerCase() == "fixed") {
 						discount = voucher.discount_price
 					} else if (voucher.discount_type.toLowerCase() == "percent") {
-						discount = cart_total * voucher.discount_price / 100.0
+						discount = discount_cart_total * voucher.discount_price / 100.0
 					}
 				}
 			}
@@ -1075,7 +1075,7 @@ export default class Checkout extends React.Component {
 
 	renderVoucherSection(vouchers) {
 
-		const { cart_total } = this.props
+		const { cart_total, discount_cart_total } = this.props
 		const voucher_items = vouchers.map((item, key) => {
 
 			var discount_value = null
@@ -1084,7 +1084,7 @@ export default class Checkout extends React.Component {
 				if (item.voucher.discount_type == "fixed") {
 					discount_value = item.voucher.discount_price
 				} else if (item.voucher.discount_type == "percent") {
-					discount_value = cart_total * item.voucher.discount_price / 100.0
+					discount_value = discount_cart_total * item.voucher.discount_price / 100.0
 				}
 			}
 

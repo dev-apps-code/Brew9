@@ -121,7 +121,7 @@ export default class ValidVoucher extends React.Component {
 						style={styles.backgroundImage} />
 					{parseInt(days) <= 3 ?
 						<View style={styles.expiringView}>
-							<Text style={styles.expiredText}>expire soon</Text>
+							<Text style={styles.expiredText}>Expire soon</Text>
 
 						</View> : undefined}
 					<View
@@ -181,7 +181,7 @@ export default class ValidVoucher extends React.Component {
 
 const styles = StyleSheet.create({
 	expiredText: {
-		color: '#1e90ff',
+		color: 'rgb(186,125,125)',
 		fontSize: 12 * alpha,
 		textAlign: 'center'
 	},
@@ -222,11 +222,11 @@ const styles = StyleSheet.create({
 		height: 31 * alpha,
 	},
 	expiringView: {
-		// backgroundColor: "red",
+		backgroundColor: "red",
 		position: "absolute",
 		right: 14 * alpha,
 		top: 10 * alpha,
-		backgroundColor: '#00ffff',
+		backgroundColor: 'rgb(245,222,222)',
 		flexDirection: 'row-reverse',
 		borderTopLeftRadius: 5 * alpha,
 		borderBottomLeftRadius: 5 * alpha,

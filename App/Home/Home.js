@@ -385,7 +385,7 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-
+			console.log("Shop", eventObject)
 			this.setState({ loading: false })
 			
 			if (eventObject.success) {
@@ -705,13 +705,13 @@ export default class Home extends React.Component {
 				onChangeQuantity={this.onChangeQuantityPress}
 				price={item.price}
 			/>
-		} else if (item.clazz == "promotion") {
-			return <CartPromoCell
-				navigation={this.props.navigation}
-				name={item.name}
-				price={item.price}
-				type={item.type}
-			/>
+		// } else if (item.clazz == "promotion") {
+		// 	return <CartPromoCell
+		// 		navigation={this.props.navigation}
+		// 		name={item.name}
+		// 		price={item.price}
+		// 		type={item.type}
+		// 	/>
 		}
 	}
 
@@ -1800,7 +1800,7 @@ export default class Home extends React.Component {
 
 	renderBottomBar(cart, shop) {
 
-		const { cart_total_quantity, discount_cart_total } = this.props
+		const { cart_total_quantity, cart_total } = this.props
 		if (cart.length > 0) {
 			return (<View
 				style={styles.cartView}>
@@ -1861,7 +1861,7 @@ export default class Home extends React.Component {
 									flex: 1,
 								}} /> */}
 							<Text
-								style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
+								style={styles.totalpriceText}>${parseFloat(cart_total).toFixed(2)}</Text>
 
 						</View>
 						<View
