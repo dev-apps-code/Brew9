@@ -139,6 +139,7 @@ export default class PointHistory extends React.Component {
 			id={item.id}
 			description={item.description}
 			value={item.value}
+			debit={item.debited}
 			created_at={item.created_at}
 			shop={item.shop}
 			navigation={this.props.navigation}

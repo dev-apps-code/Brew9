@@ -180,6 +180,7 @@ export default class PickUp extends React.Component {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
+			var calculate_cart_total = cart_total 
 
 			const order_items = item.order_items.map((item, key) => {
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -228,8 +229,10 @@ export default class PickUp extends React.Component {
 
 					if (item.value_type == 'fixed') {
 						promotion_discount = `-$${item.value}`
+						calculate_cart_total -= item.value
 					} else if (item.value_type == 'percent') {
-						promotion_discount = `-$${parseFloat(cart_total * (item.value / 100)).toFixed(2)}`
+						promotion_discount = `-$${parseFloat(calculate_cart_total * (item.value / 100)).toFixed(2)}`
+						calculate_cart_total -= parseFloat(calculate_cart_total * (item.value / 100))
 					}
 
 					return <View
@@ -260,10 +263,6 @@ export default class PickUp extends React.Component {
 					</View>
 				</View>
 				}
-
-
-				
-			
 			})
 
 			const voucher_items = item.voucher_items.map((item, key) => {
@@ -273,7 +272,7 @@ export default class PickUp extends React.Component {
 				if (item.voucher.discount_type == "fixed") {
 					voucher_discount = `-$${item.voucher.discount_price}`
 				} else if (item.voucher.discount_type == "percent") {
-					voucher_discount = `-$${parseFloat(cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
+					voucher_discount = `-$${parseFloat(calculate_cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
 
 				}
 				return <View
@@ -439,7 +438,7 @@ export default class PickUp extends React.Component {
 									style={styles.shopBranchText}>{item.shop.name}</Text>
 								<Text
 									numberOfLines={3}
-									style={styles.shopBranchAddressText}>{item.shop.address}</Text>
+									style={styles.shopBranchAddressText}>{item.shop.short_address}</Text>
 							</View>
 							<View
 								style={{

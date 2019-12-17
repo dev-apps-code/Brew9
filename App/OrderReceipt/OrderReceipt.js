@@ -210,7 +210,7 @@ export default class OrderReceipt extends React.Component {
 										style={styles.shopBranchText}>{order.shop.name}</Text>
 									<Text
 										numberOfLines={3}
-										style={styles.shopBranchAddressText}>{order.shop.address}</Text>
+										style={styles.shopBranchAddressText}>{order.shop.short_address}</Text>
 								</View>
 								<View
 									style={{

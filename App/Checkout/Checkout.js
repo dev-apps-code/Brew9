@@ -688,7 +688,7 @@ export default class Checkout extends React.Component {
 
 			if (selected_payment == "credits") {
 				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					this.refs.toast.show("Oops, insufficient credit.\nPlease select other payment option.", TOAST_DURATION,
+					this.refs.toast.show(<View style={{justifyContent: "center"}}><Text style={{color: "white", alignSelf: "center"}}>Oops, insufficient credit.</Text><Text style={{color: "white", alignSelf: "center"}}>Please select other payment option.</Text></View>, TOAST_DURATION + 1000,
 						// () => {
 						// 	navigate("MemberWallet")
 						// }
@@ -1608,7 +1608,7 @@ export default class Checkout extends React.Component {
 										style={styles.shopBranchText}>{selectedShop.name}</Text>
 									<Text
 										numberOfLines={3}
-										style={styles.shopBranchAddressText}>{selectedShop.address}</Text>
+										style={styles.shopBranchAddressText}>{selectedShop.short_address}</Text>
 								</View>
 								<View
 									style={{
@@ -1796,13 +1796,6 @@ const styles = StyleSheet.create({
 	scrollviewScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-	},
-	branchView: {
-		backgroundColor: "white",
-		height: 73 * alpha,
-		width: "100%",
-		flex: 1,
-		marginBottom: 10 * alpha,
 	},
 	branchTwoView: {
 		backgroundColor: "transparent",
@@ -2776,6 +2769,7 @@ const styles = StyleSheet.create({
 	branchView: {
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
+		justifyContent: "center",
 		width: 182 * alpha,
 		height: 60 * alpha,
 	},
