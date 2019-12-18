@@ -14,6 +14,9 @@ import {KURL_INFO} from "../Utils/server";
 import { alpha, fontAlpha} from "../Common/size";
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
+
 @connect(({ members }) => ({
 	members: members.profile,
 	company_id: members.company_id,
@@ -63,7 +66,9 @@ export default class MemberWallet extends React.Component {
 	onFaqPressed = () => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('More', 'Click', 'FAQs'))
+		
 		navigate("WebCommon", {
 			title: 'FAQs',
 			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
@@ -71,6 +76,9 @@ export default class MemberWallet extends React.Component {
     }
     
     onFeedbackPressed = () => {
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('More', 'Click', 'Feedback'))
+		
 		Linking.openURL('mailto:feedback@brew9.co')
 	}
 

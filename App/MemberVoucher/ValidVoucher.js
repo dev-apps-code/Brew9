@@ -13,6 +13,9 @@ import { KURL_INFO } from "../Utils/server";
 import { connect } from "react-redux";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
+
 @connect(({ members }) => ({
 	company_id: members.company_id,
 	members: members
@@ -29,6 +32,9 @@ export default class ValidVoucher extends React.Component {
 
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Voucher', 'Click', this.props.title))
+		
 		navigate("VoucherDetail", { item: this.props.item })
 	}
 

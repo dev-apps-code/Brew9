@@ -12,6 +12,10 @@ import { alpha, fontAlpha } from "../Common/size"
 import { connect } from "react-redux";
 import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
+
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
+
 @connect(({ members }) => ({
 	currentMember: members.profile,
 	members:members,
