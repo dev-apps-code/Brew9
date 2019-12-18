@@ -15,7 +15,7 @@ export default class PromotionDetail extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: "Promotion",
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Promotion</Text>,
       headerTintColor: "black",
       headerLeft: (
         <View style={styles.headerLeftContainer}>

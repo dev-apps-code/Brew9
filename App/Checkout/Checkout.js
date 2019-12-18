@@ -43,7 +43,7 @@ export default class Checkout extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Checkout",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Checkout</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -104,7 +104,12 @@ export default class Checkout extends React.Component {
 
 		const { dispatch } = this.props
 		this.setTimePickerDefault()
-		this.loadValidVouchers()
+		this.setState({
+			valid_vouchers: [],
+		}, function(){
+			this.loadValidVouchers()
+		})
+		
 		dispatch(createAction("orders/noClearCart")());
 		this.check_promotion_trigger()
 	}
@@ -149,14 +154,14 @@ export default class Checkout extends React.Component {
 
 		selected_minute = minute_array[0]
 
-		if (hour_array.length < 3) {
-			hour_array.length = 3
-		}
+		
 		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
 
 		var hour_array = _.range(first_hour, last_hour+1);
-
+		if (hour_array.length < 3) {
+			hour_array.length = 3
+		}
 
 		this.setState({
 			selected_hour: first_hour,
@@ -171,7 +176,7 @@ export default class Checkout extends React.Component {
 		
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 
-		console.log('check available minutes')
+		// console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
 		var time_now = Moment(new Date(), 'h:mm')
 
@@ -214,7 +219,7 @@ export default class Checkout extends React.Component {
 	onHourValueChange = (option, index) => {
 
 		if (option == ""){
-			console.log("Empty")
+			// console.log("Empty")
 			this.setState({
 				selected_hour_index: index - 1,
 			}, function(){
@@ -396,80 +401,102 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { selectedShop, currentMember, promotions, promotion_ids ,dispatch} = this.props
-		const { cart_total } = this.props
-		let newPromo = [...promotions]
+		const { currentMember, dispatch, promotions, cart_total, selectedShop } = this.props
+
+		let shop = selectedShop
+		let newcart = [...this.props.cart]
+		let finalCart = []
 
 		var promotions_item = []
 		var final_cart_value = cart_total
+		var final_promo_text = ''
 
-		if (selectedShop.all_promotions != null && selectedShop.all_promotions.length > 0) {
-
-			for (var index in selectedShop.all_promotions) {
-
-				var promo = selectedShop.all_promotions[index]
-
-				if (currentMember != null) {
-
-					if (promo.trigger_price != null) {
-
-						var trigger_price = parseFloat(promo.trigger_price)
-						var remaining = trigger_price - cart_total
-
-						const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
-
-						console.log("Search", search_cart_promo_index)
-						if (remaining > 0 && search_cart_promo_index >= 0) {
-							promotions.splice(search_cart_promo_index, 1)
-							dispatch(createAction("orders/updatePromotions")({
-								promotions: newPromo
-							}))
-						}
-					}
-					const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
-					var price = 0
-					if (promo.reward_type != null && promo.reward_type == "Discount") {
-						console.log("discount")
-						if (promo.value_type != null && promo.value_type == "percent") {
-							var discount_value = promo.value ? promo.value : 0
-							price = cart_total * discount_value / 100
-							console.log("percent")
-							if (promo.maximum_discount_allow != null && price > promo.maximum_discount_allow) {
-								price = promo.maximum_discount_allow
-							}
-							final_cart_value = cart_total - price
-
-						} else if (promo.value_type != null && promo.value_type == "fixed") {
-							var discount_value = promo.value ? promo.value : 0
-							final_cart_value = cart_total - discount_value
-						}
-
-						if (search_cart_promo_index < 0) {
-
-							let cartItem2 = {
-								clazz: "promotion",
-								id: promo.id,
-								name: promo.cart_text,
-								description: "",
-								price: price,
-							}
-							promotions_item.push(cartItem2)
-
-							dispatch(createAction("orders/updatePromotions")({
-								promotions: newPromo.concat(promotions_item)
-							}));
-						} else {
-							var item = newPromo[search_cart_promo_index]
-							item.price = price							
-						}
-					}
-				}
+		// reset cart promotions
+		for (var index in newcart) {
+			item = newcart[index]
+			if (item.clazz == "product") {
+				finalCart.push(item)
 			}
 		}
+		if (shop.all_promotions != null && shop.all_promotions.length > 0) {
+
+			for (var index in shop.all_promotions) {
+
+				var promotion = shop.all_promotions[index]
+
+				// console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
+				if (currentMember != null){
+					
+					if (promotion.trigger_price != null) {
+						var price = 0
+
+						var trigger_price = parseFloat(promotion.trigger_price)
+						var remaining = trigger_price - cart_total
+
+						if (remaining <= 0 ) {
+
+							shop.all_promotions[index].has_triggered = true
+							
+							if (promotion.reward_type != null && promotion.reward_type == "Discount") {
+
+								if (promotion.value_type != null && promotion.value_type == "percent") {
+									var discount_value = promotion.value ? promotion.value : 0
+									price = cart_total * discount_value / 100
+	
+									if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
+										price = promotion.maximum_discount_allow
+									}
+									final_cart_value = cart_total - price
+	
+								} else if (promotion.value_type != null && promotion.value_type == "fixed") {
+									var discount_value = promotion.value ? promotion.value : 0
+									final_cart_value = cart_total - discount_value
+								}								
+							}
+
+							let cartItem = {
+								clazz: "promotion",
+								id: promotion.id,
+								name: promotion.cart_text,
+								description: "",
+								price: price,
+								type: promotion.reward_type
+							}
+
+							promotions_item.push(cartItem)
+
+						}	else{
+							var display_text = promotion.display_text
+							final_promo_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+							
+							break;
+						}					
+					}
+				} 
+			}
+		}
+	
+		if (this.props.cart.length == 0){
+			final_promo_text = ''
+			this.setState({ isCartToggle: false }, function () {
+				Animated.spring(this.moveAnimation, {
+					toValue: { x: 0, y: windowHeight },
+				}).start()
+			})
+		}else{
+		
+		}
+		
+		dispatch(createAction("orders/updatePromotionText")({
+			promotionText: final_promo_text
+		}));
+		dispatch(createAction("orders/updatePromotions")({
+			promotions: promotions_item
+		}));
+
 		dispatch(createAction("orders/updateDiscountCartTotal")({
 			discount_cart_total: final_cart_value
 		}));
-
 	}
 
 	calculateVoucherDiscount(vouchers_to_use) {
@@ -609,9 +636,7 @@ export default class Checkout extends React.Component {
 					loading: false,
 				})
 				if (Array.isArray(eventObject.result)) {
-					console.log("Array")
 					if (eventObject.result.length > 0) {
-						console.log("Greater")
 						let item = eventObject.result[0]
 						if (item.clazz = "product") {
 							this.removeItemFromCart(eventObject.result, eventObject.message)
@@ -632,7 +657,7 @@ export default class Checkout extends React.Component {
 
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		console.log("Order_Id", cart_order_id)
+		console.log("Order_Id", cart_order_id, voucher_item_ids)
 		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time, cart_order_id, latitude, longitude)
 		obj.setUrlId(selectedShop.id)
 		dispatch(
@@ -2293,7 +2318,7 @@ const styles = StyleSheet.create({
 	paymentButtonText: {
 		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,
-		fontSize: 16 * fontAlpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		marginLeft: 20 * alpha,
@@ -2388,7 +2413,7 @@ const styles = StyleSheet.create({
 	},
 	payNowButtonText: {
 		color: "white",
-		fontFamily: NON_TITLE_FONT,
+		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "left",
@@ -3318,7 +3343,7 @@ const styles = StyleSheet.create({
 	pickupConfirmButtonText: {
 		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
-		fontSize: 17 * alpha,
+		fontSize: 15 * alpha,
 	},
 
 	pickupNowView: {

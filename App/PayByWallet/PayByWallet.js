@@ -26,7 +26,7 @@ export default class PayByWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "QR Code",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>QR Code</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

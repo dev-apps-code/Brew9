@@ -9,6 +9,8 @@ import { View, StyleSheet, Text, Image, TouchableWithoutFeedback } from "react-n
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 export default class NotificationsCell extends React.Component {
 
@@ -22,14 +24,16 @@ export default class NotificationsCell extends React.Component {
 	onNotificationsCellPress = (item, type) => {
 		if (type == "promo") {
 			const { navigate } = this.props.navigation
-
+			const analytics = new Analytics(ANALYTICS_ID)
+			analytics.event(new Event('Inbox', 'Click', `Promotion ${item.title}`))
 			navigate("PromotionDetail", {
 				details: item,
 			})
 		}
 		else if (type == "voucher") {
 			const { navigate } = this.props.navigation
-
+			const analytics = new Analytics(ANALYTICS_ID)
+			analytics.event(new Event('Inbox', 'Click', `Voucher`))
 			navigate("MemberVoucher")
 		}
 		this.props.onNotificationsCellPress(item, type)

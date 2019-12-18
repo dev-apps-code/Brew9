@@ -19,6 +19,8 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, P
 import Moment from 'moment';
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import { LinearGradient } from 'expo-linear-gradient';
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -35,7 +37,7 @@ export default class PickUp extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 
 		return {
-			title: "Your Order",
+			headerTitle: <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT}}>Your Order</Text> ,
 			headerTintColor: "black",
 			headerLeft: null,
 			headerRight: null,
@@ -133,6 +135,9 @@ export default class PickUp extends React.Component {
 
 	onOrderHistoryPressed = () => {
 
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('My Order', 'Click', "Order History"))
+
 		const { navigate } = this.props.navigation
 		navigate("OrderHistory")
 	}
@@ -143,6 +148,8 @@ export default class PickUp extends React.Component {
 
 	onOrderPressed = () => {
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('My Order', 'Click', "Order"))
 
 		navigate("Home")
 	}

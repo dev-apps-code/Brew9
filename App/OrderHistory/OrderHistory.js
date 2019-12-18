@@ -27,7 +27,7 @@ export default class OrderHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Order History",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Order History</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

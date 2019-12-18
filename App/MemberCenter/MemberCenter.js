@@ -24,7 +24,7 @@ export default class MemberCenter extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Member Center",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Member Center</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

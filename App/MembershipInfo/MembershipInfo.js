@@ -25,7 +25,7 @@ export default class MembershipInfo extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Brew9",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Brew9</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

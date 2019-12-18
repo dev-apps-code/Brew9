@@ -24,7 +24,7 @@ export default class DirectionMap extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: "Location",
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Location</Text>,
       headerTintColor: "black",
       headerLeft: (
         <View style={styles.headerLeftContainer}>

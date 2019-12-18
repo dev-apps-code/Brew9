@@ -12,6 +12,8 @@ import { alpha, fontAlpha } from "../Common/size"
 import {KURL_INFO} from "../Utils/server"
 import { connect } from "react-redux";
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
 	company_id: members.company_id,
@@ -29,6 +31,8 @@ export default class ValidVoucher extends React.Component {
 
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+      	analytics.event(new Event('Voucher', 'Click', this.props.item.title))
 		navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
 	}
 
@@ -77,7 +81,7 @@ export default class ValidVoucher extends React.Component {
 							}}>
 							
 							<Text
-								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
+								style={styles.valueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
 							
 						</View>
 					</View>
@@ -249,10 +253,11 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		marginRight: 40 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 	},

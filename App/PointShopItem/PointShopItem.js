@@ -29,7 +29,7 @@ export default class PointShopItem extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: navigation.getParam("item_name", ""),
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>{navigation.getParam("item_name", "")}</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

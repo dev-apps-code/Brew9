@@ -24,7 +24,7 @@ export default class OrderReceipt extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Order",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Order</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

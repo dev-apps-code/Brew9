@@ -9,6 +9,7 @@ export function getSession(authtoken,object) {
 export function updateSession(session_id,object) {
 
    const urlString = `${getPaymentServer()}/api/rest/version/47/merchant/${getMerchantId()}/session/${session_id}`
+   console.log("Payment URL", urlString)
    return fetch(urlString, {
    method: 'PUT',
    headers: {
@@ -17,8 +18,12 @@ export function updateSession(session_id,object) {
    }, body: object.getFormData()
    })
    .then(logResponse('json'))
-   .then(response => _parseJSON(response))
+   .then(response => {
+    _parseJSON(response)
+    console.log(_parseJSON(response))
+   })
    .catch(error => {
+     console.log("Error", error)
      console.error(error);
    });
 

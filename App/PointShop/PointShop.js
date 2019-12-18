@@ -16,6 +16,8 @@ import { connect } from "react-redux";
 import PointsProductsRequestObject from "../Requests/points_products_request_object.js"
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
 import Toast, { DURATION } from 'react-native-easy-toast'
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -27,7 +29,7 @@ export default class PointShop extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Reward Points",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Reward Points</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -71,7 +73,9 @@ export default class PointShop extends React.Component {
 	onPointRulePressed = () => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Redemption Shop', 'Click', 'Point Rules'))
+	  
 		navigate("WebCommon", {
 			title: 'Point Rules',
 			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
@@ -80,7 +84,7 @@ export default class PointShop extends React.Component {
 
 	onItemPressed = (item_id, item_name) => {
 
-		this.refs.toast.show("Insufficient points for redemption", TOAST_DURATION)
+		// this.refs.toast.show("Insufficient points for redemption", TOAST_DURATION)
 		// navigate("PointShopItem", {
 		// 	item_id: item_id,
 		// 	item_name: item_name
@@ -112,19 +116,23 @@ export default class PointShop extends React.Component {
 	onPointHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Redemption Shop', 'Click', 'Point History'))
 		navigate("PointHistory")
 	}
 
 	onTransactionHistoryPressed = () => {
 		const { navigate } = this.props.navigation
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Redemption Shop', 'Click', 'Redemption History'))
 		navigate("PointShopHistory")
 	}
 
 	onRulesPressed = () => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Redemption Shop', 'Click', 'Point Rules'))
 		navigate("WebCommon", {
 			title: 'Point Rules',
 			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
@@ -192,8 +200,9 @@ export default class PointShop extends React.Component {
 
 						<Text
 							style={styles.pointHistoryButtonText}>Points History</Text>
-						<View style={{ borderBottomColor: PRIMARY_COLOR, borderBottomWidth: 5 * alpha, width: 50, borderRadius: 5 }}></View>
+						{/* <View style={{ borderBottomColor: PRIMARY_COLOR, borderBottomWidth: 5 * alpha, width: 50, borderRadius: 5 }}></View> */}
 					</TouchableOpacity>
+					<Text style={styles.verticalLine}>|</Text>
 					<TouchableOpacity
 						onPress={this.onTransactionHistoryPressed}
 						style={styles.pointHistoryButton}
@@ -335,31 +344,37 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1
 	},
 	pointHistoryButtonText: {
-		color: PRIMARY_COLOR,
+		// color: PRIMARY_COLOR,
+		color: "rgb(59, 59, 59)",
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
-		paddingBottom: 6 * alpha,
+		// paddingBottom: 6 * alpha,
 		// marginRight: 10 * alpha,
 	},
+	verticalLine: {
+		alignItems: "center",
+		justifyContent: "center",
+		alignSelf: "center"
+	}, 
 	pointHistoryButton: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		// flexDirection: "row",
 		alignItems: "center",
-		// justifyContent: "center",
+		justifyContent: "center",
 		paddingHorizontal: 15 * alpha,
-		// flex: 1,
-		// width: "50%"
+		flex: 1,
+		width: "50%"
 	},
 	transactionHistoryButton: {
 		backgroundColor: "white",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		// flex: 1,
+		flex: 1,
 		marginLeft: 1 * alpha,
-		// width: "50%"
+		width: "50%"
 	},
 	transactionHistoryButtonText: {
 		color: "rgb(59, 59, 59)",

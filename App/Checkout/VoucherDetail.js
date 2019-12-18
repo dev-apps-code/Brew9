@@ -23,7 +23,7 @@ export default class VoucherDetail extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Voucher Detail",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Voucher Detail</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -74,7 +74,10 @@ export default class VoucherDetail extends React.Component {
 
 	onUsePessed = () => {
 		const addVoucherAction = this.props.navigation.getParam("addVoucherAction", false) 		
-		this.props.navigation.pop(2)		
+		this.props.navigation.pop(2)	
+		const analytics = new Analytics(ANALYTICS_ID)
+      	analytics.event(new Event('Voucher', 'Click', `Use ${this.state.item.voucher.name}`))
+			
 		addVoucherAction(this.state.item)
 	}
 
@@ -129,7 +132,7 @@ export default class VoucherDetail extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
+								style={styles.valueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
 							
 						</View>
 					</View>
@@ -403,10 +406,11 @@ const styles = StyleSheet.create({
 	descriptionText: {
 		color: "rgb(124, 124, 124)",
 		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
+		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		marginRight: 40 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 	},

@@ -28,7 +28,7 @@ export default class MemberVoucher extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Vouchers",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Vouchers</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

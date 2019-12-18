@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {View, StyleSheet, TouchableOpacity, Image} from "react-native"
+import {View, StyleSheet, TouchableOpacity, Image, Text} from "react-native"
 import React from "react"
 import {alpha, fontAlpha} from "../Common/size";
 import { WebView } from 'react-native-webview';
@@ -18,7 +18,7 @@ export default class WebCommon extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: navigation.getParam("title", ""),
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>{navigation.getParam("title", "")}</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

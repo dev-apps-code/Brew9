@@ -32,7 +32,7 @@ export default class ScanQr extends React.Component {
 
         const { params = {} } = navigation.state
         return {
-            title: "Scan QR",
+            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Scan QR</Text>,
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>

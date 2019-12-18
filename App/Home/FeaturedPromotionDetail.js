@@ -15,8 +15,8 @@ export default class FeaturedPromotionDetail extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: "Promotion",
-      headerTintColor: "black",
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Promotion</Text>,
+			headerTintColor: "black",
       headerLeft: (
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity

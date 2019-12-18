@@ -77,7 +77,7 @@ export default class ValidVoucher extends React.Component {
 							}}>
 
 							<Text
-								style={styles.percentvalueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
+								style={styles.valueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
 
 						</View>
 					</View>
@@ -119,11 +119,7 @@ export default class ValidVoucher extends React.Component {
 					<Image
 						source={require("./../../assets/images/group-5-3.png")}
 						style={styles.backgroundImage} />
-					{parseInt(days) <= 3 ?
-						<View style={styles.expiringView}>
-							<Text style={styles.expiredText}>Expire soon</Text>
-
-						</View> : undefined}
+					
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -167,10 +163,16 @@ export default class ValidVoucher extends React.Component {
 							}}>
 							<Text
 								style={styles.dateText}>Expiration: <Text style={styles.highlight}>{this.props.available_date}</Text></Text>
-							<View
+							{/* <View
 								style={{
 									flex: 1,
-								}} />
+								}} /> */}
+								{parseInt(days) <= 3 ?
+									<View style={styles.expiringView}>
+										<Text style={styles.expiredText}>expire soon</Text>
+
+									</View> : 
+								undefined}
 						</View>
 					</View>
 				</View>
@@ -181,8 +183,9 @@ export default class ValidVoucher extends React.Component {
 
 const styles = StyleSheet.create({
 	expiredText: {
-		color: 'rgb(186,125,125)',
-		fontSize: 12 * alpha,
+		fontFamily: TITLE_FONT,
+		color: "white",
+		fontSize: 10 * fontAlpha,
 		textAlign: 'center'
 	},
 	validvoucher: {
@@ -222,16 +225,15 @@ const styles = StyleSheet.create({
 		height: 31 * alpha,
 	},
 	expiringView: {
-		backgroundColor: "red",
-		position: "absolute",
-		right: 14 * alpha,
-		top: 10 * alpha,
-		backgroundColor: 'rgb(245,222,222)',
-		flexDirection: 'row-reverse',
-		borderTopLeftRadius: 5 * alpha,
-		borderBottomLeftRadius: 5 * alpha,
-		paddingVertical: 2 * alpha,
+		backgroundColor: "rgb(255,100,100)",
+		// backgroundColor: 'rgb(245,222,222)',
+		borderRadius: 7 * alpha,
+		// borderTopLeftRadius: 5 * alpha,
+		// borderBottomLeftRadius: 5 * alpha,
 		paddingHorizontal: 5 * alpha,
+		marginLeft: 10 * alpha,
+		height: 14 * alpha,
+		justifyContent: "center",
 		alignItems: 'center'
 	},
 	currencyText: {
@@ -254,19 +256,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "right",
 		backgroundColor: "transparent",
-		marginLeft: 16 * alpha,
-	},
-	percentText: {
-		color: "rgb(0, 178, 227)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 20 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: "transparent",
-		position: "absolute",
-		right: 0,
-		top: 10 * alpha,
 	},
 	percentvalueText: {
 		color: "rgb(0, 178, 227)",
@@ -284,6 +273,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
+		marginRight: 40 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 	},
@@ -302,7 +292,6 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		marginBottom: 1,
 	},
 	termsView: {
 		backgroundColor: "transparent",

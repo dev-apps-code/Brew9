@@ -1060,7 +1060,6 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "bold",
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 2 * alpha,

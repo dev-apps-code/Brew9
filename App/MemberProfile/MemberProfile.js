@@ -37,7 +37,7 @@ export default class MemberProfile extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Personal Info",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Personal Info</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -110,7 +110,7 @@ export default class MemberProfile extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.refs.toast.show("Your profile has been updated successfully", TOAST_DURATION)
+				this.refs.toast.show("Profile updated successfully", TOAST_DURATION)
 				
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
@@ -135,7 +135,7 @@ export default class MemberProfile extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				this.refs.toast.show("Avatar Update Successful", TOAST_DURATION)
+				this.refs.toast.show("Avatar updated successfully", TOAST_DURATION)
 				
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
@@ -262,7 +262,7 @@ export default class MemberProfile extends React.Component {
 			return false
 		}
 		else if (!this.state.dob) {
-			this.refs.toast.show("Please select your Birthday", 500)
+			this.refs.toast.show("Please select your birthday", 500)
 			return false
 		}
 		else if (this.state.email != null && this.state.email.length > 0){
@@ -676,17 +676,17 @@ export default class MemberProfile extends React.Component {
 													index={i}
 													isSelected={this.state.gender === i}
 													onPress={onPress}
-													buttonInnerColor={'#EEEAEA'}
-													buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : '#EEEAEA'}
+													buttonInnerColor={PRIMARY_COLOR}
+													buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : PRIMARY_COLOR}
 													selectedButtonColor={'#00B2E3'}
-													buttonSize={9 * alpha}
-													buttonStyle={{backgroundColor: "rgb(58, 58, 58)", borderWidth: 0, marginRight: 10 * alpha}}
+													buttonSize={5 * alpha}
+													buttonStyle={{backgroundColor: "rgb(200, 200, 200)", borderWidth: 0, marginRight: 5 * alpha, marginTop: 2 * alpha}}
 												/>
 												<RadioButtonLabel
 													obj={obj}
 													index={i}
 													onPress={onPress}
-													labelStyle={{fontSize: 13 * alpha, marginRight: 10 * alpha}}
+													labelStyle={{color: "rgb(135, 135, 135)", fontSize: 13 * fontAlpha, marginRight: 10 * alpha, fontFamily: NON_TITLE_FONT}}
 													labelWrapStyle={{}}
 												/>
 											</RadioButton>
@@ -1076,7 +1076,6 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		fontWeight: "normal",
 		textAlign: "left",
 		width: 200 * alpha,
 		height: 18 * alpha,

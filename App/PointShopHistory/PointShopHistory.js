@@ -27,7 +27,7 @@ export default class PointShopHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Purchase History",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Purchase History</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

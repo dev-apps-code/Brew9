@@ -18,7 +18,7 @@ export default class VIPPurchase extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "VIP Purchase",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>VIP Purchase</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

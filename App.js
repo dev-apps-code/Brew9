@@ -16,7 +16,9 @@ import {
   createAppContainer,
   createSwitchNavigator
 } from "react-navigation";
-
+import {
+	Text,
+} from "react-native";
 import Login from "./App/Login/Login";
 import Checkout from "./App/Checkout/Checkout";
 import CheckoutVoucher from "./App/Checkout/CheckoutVoucher";
@@ -64,7 +66,7 @@ import { create } from "dva-core";
 import { Provider, connect } from "react-redux";
 import { registerModels } from "./App/Model/index";
 import PaymentsWebview from "./App/Checkout/PaymentsWebview"
-import { TABBAR_ACTIVE_TINT, TABBAR_INACTIVE_TINT } from "./App/Common/common_style";
+import { TABBAR_ACTIVE_TINT, TABBAR_INACTIVE_TINT, TITLE_FONT, NON_TITLE_FONT } from "./App/Common/common_style";
 
 Sentry.init({
   dsn: 'https://a6c00af5b64644139799e721b45d61f4@sentry.io/1797623',
@@ -106,7 +108,7 @@ const PushOrder = createStackNavigator(
     Checkout: {
       screen: Checkout,
       navigationOptions: {
-        tabBarVisible: false
+        tabBarVisible: false, 
       }
     },
     FeaturedPromotionDetail: {
@@ -446,7 +448,7 @@ const TabGroupOne = createBottomTabNavigator(
     gesturesEnabled: false,
     animationEnabled: true,
     tabBarOptions: {
-
+      allowFontScaling: false,
       lazy: false,
       showIcon: true,
       activeTintColor: TABBAR_ACTIVE_TINT,

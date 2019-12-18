@@ -23,7 +23,7 @@ export default class PaymentsWebview extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: "Payment",
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Payment</Text>,
       headerTintColor: "black",
       headerLeft: (
         <View style={styles.headerLeftContainer}>
@@ -84,13 +84,14 @@ export default class PaymentsWebview extends React.Component {
   render() {
     const { name , amount, order_id, type,session_id} = this.state
 
+    
     return (
       <View style={styles.mainView}>
         <WebView
           javaScriptEnable={true}
           onNavigationStateChange={this._onNavigationStateChange.bind(this)}
           style={styles.webviewWebView}          
-          source={{ uri:  `${KPAYMENTYURL}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}` }}
+          source={{ uri: `${KPAYMENTYURL}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}` }}
         />    
         <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
       </View>

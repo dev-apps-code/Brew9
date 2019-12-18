@@ -32,7 +32,7 @@ export default class PointProductCell extends React.Component {
     const { navigate } = this.props.navigation;
 
     const analytics = new Analytics(ANALYTICS_ID)
-    analytics.event(new Event('Point Product', 'Click', `${item_name}`))
+    analytics.event(new Event('Redemption Product', 'Click', `${item_name}`))
     this.props.onPressItem(item_id,item_name)
 
     
@@ -68,8 +68,8 @@ export default class PointProductCell extends React.Component {
                 alignItems: "flex-start"
               }}
             >
-              <Text style={styles.valueText}>{item.points}</Text>
-              <Text style={styles.pointsText}>Points</Text>
+              <Text style={styles.valueText}>{item.points} <Text style={styles.pointsText}>Points</Text></Text>
+              
             </View>
           </View>
         </View>
@@ -88,13 +88,13 @@ export default class PointProductCell extends React.Component {
               flex: 1
             }}
           >
-            <View style={styles.headerView}>
+            {/* <View style={styles.headerView}>
               <Text style={styles.sectionheadertitleText}>{sectionHeader}</Text>
               <View
                 style={{
                   flex: 1
                 }}
-              />
+              /> */}
               {/* <TouchableOpacity
                 onPress={() => this.onViewMorePressed(sectionId, sectionHeader)}
                 style={styles.viewmoreButton}
@@ -105,7 +105,7 @@ export default class PointProductCell extends React.Component {
                   style={styles.viewmoreButtonImage}
                 />
               </TouchableOpacity> */}
-            </View>
+            {/* </View> */}
             <View
               style={
                 products.count > 2
@@ -141,14 +141,14 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     flex: 1,
     height: 160 * alpha,
-    top: 40 * alpha,
+    // top: 40 * alpha,
     flexWrap: "wrap"
   },
   itemBlockView2: {
     backgroundColor: "transparent",
     flex: 1,
     height: 320 * alpha,
-    marginTop: 40 * alpha,
+    marginTop: 20 * alpha,
     flexWrap: "wrap"
   },
   sectionheadertitleText: {
@@ -232,6 +232,5 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     textAlign: "left",
     marginLeft: 3 * alpha,
-    marginTop: 2 * alpha
   }
 });

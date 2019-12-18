@@ -24,7 +24,7 @@ export default class MemberWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Brew9 Inspiration",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Brew9 Inspiration</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
