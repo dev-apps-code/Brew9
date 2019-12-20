@@ -32,7 +32,7 @@
       "publishManifestPath": "ios/brew9/Supporting/shell-app-manifest.json"
     },
     "android": {
-      "package": "com.brew9.brew9",
+      "package": "com.brew9.brew9android",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDAJsylYVu_i2yPaOVtqVnVtP9wjlOlxPo"

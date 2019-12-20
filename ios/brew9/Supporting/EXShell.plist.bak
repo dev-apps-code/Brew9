@@ -9,6 +9,6 @@
 	<key>manifestUrl</key>
 	<string>exp://exp.host/@tonyvoon/brew9</string>
 	<key>releaseChannel</key>
-	<string>test</string>
+	<string>default</string>
 </dict>
 </plist>
