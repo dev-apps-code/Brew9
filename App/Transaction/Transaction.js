@@ -21,7 +21,7 @@ export default class Transaction extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Confirm Transaction",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Confirm Transaction</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

@@ -16,6 +16,8 @@ import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DEFAULT_GREY_BACKGROUND, BUT
 import TopUpCard from "./TopUpCard"
 import TopUpProductsRequestObject from "../Requests/top_up_products_request_object";
 import TopUpOrderRequestObject from "../Requests/top_up_order_request_object";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members, shops }) => ({
 	members: members.profile,
@@ -27,7 +29,7 @@ export default class MemberWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Wallet",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Wallet</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -143,7 +145,8 @@ export default class MemberWallet extends React.Component {
 	onTransactionHistoryPressed = () => {
 
 		const { navigate } = this.props.navigation
-
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Redemption Shop', 'Click', 'Wallet History'))
 		navigate("CreditHistory")
 	}
 
@@ -235,7 +238,7 @@ export default class MemberWallet extends React.Component {
 				<View
 					style={styles.topUpView}>
 					<Text
-						style={styles.selectedValueText}>${this.state.selectedTopUpProduct ? this.state.selectedTopUpProduct.price : ''}</Text>
+						style={styles.selectedValueText}>${this.state.selectedTopUpProduct ? parseInt(this.state.selectedTopUpProduct.price) : ''}</Text>
 					<View
 						style={{
 							flex: 1,

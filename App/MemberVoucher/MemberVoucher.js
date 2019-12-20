@@ -18,6 +18,9 @@ import ValidVoucher from "./ValidVoucher"
 import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
+
 @connect(({ members }) => ({
 	members: members.profile,
 	company_id: members.company_id,
@@ -28,7 +31,7 @@ export default class MemberVoucher extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Vouchers",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Vouchers</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -180,6 +183,10 @@ export default class MemberVoucher extends React.Component {
 	onAvailablePressed = () => {
 		const { valid_initial, valid_data, valid_page } = this.state
 
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Voucher', 'Click', 'Available Tab'))
+		
+
 		if (valid_initial) {
 			this.loadValidVoucher(valid_page)
 			this.setState({
@@ -199,6 +206,9 @@ export default class MemberVoucher extends React.Component {
 	onUsedPressed = () => {
 		const { used_initial, used_data, used_page } = this.state
 
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Voucher', 'Click', 'Use Tab'))
+		
 		if (used_initial) {
 			this.loadUsedVoucher(used_page)
 			this.setState({
@@ -217,6 +227,10 @@ export default class MemberVoucher extends React.Component {
 
 	onExpiredPressed = () => {
 		const { expired_initial, expired_data, expired_page } = this.state
+
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Voucher', 'Click', 'Expire Tab'))
+		
 
 		if (expired_initial) {
 			this.loadExpiredVoucher(expired_page)

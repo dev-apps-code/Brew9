@@ -2,7 +2,7 @@ import BaseRequestObject from "./base_request_object";
 
 class MakeOrderRequestObj extends BaseRequestObject{
 
-    constructor(order_items, voucher_item_ids,payment_method, promotion_ids, pickup_status, pickup_time, order_id){
+    constructor(order_items, voucher_item_ids,payment_method, promotion_ids, pickup_status, pickup_time, order_id, latitude, longitude){
         super();
         this.order_items = order_items
         this.voucher_item_ids = voucher_item_ids    
@@ -11,6 +11,8 @@ class MakeOrderRequestObj extends BaseRequestObject{
         this.pickup_status = pickup_status
         this.pickup_time = pickup_time
         this.order_id = order_id
+        this.latitude = latitude
+        this.longitude = longitude
     }
 
    getUrlString() {
@@ -18,7 +20,7 @@ class MakeOrderRequestObj extends BaseRequestObject{
    }
 
    getFormData(){
-    var string =  JSON.stringify({'payment_method':this.payment_method,'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids, 'promotion_ids': this.promotion_ids, 'pickup_status': this.pickup_status, 'pickup_time': this.pickup_time, 'order_id': this.order_id});
+    var string =  JSON.stringify({'payment_method':this.payment_method,'order_items': this.order_items,'voucher_item_ids':this.voucher_item_ids, 'promotion_ids': this.promotion_ids, 'pickup_status': this.pickup_status, 'pickup_time': this.pickup_time, 'order_id': this.order_id, "latitude": this.latitude, "longitude": this.longitude});
 
     return string
    }

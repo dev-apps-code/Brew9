@@ -10,6 +10,8 @@ import { Text, Image, View, TouchableWithoutFeedback, StyleSheet } from "react-n
 import React from "react"
 import {alpha, fontAlpha, windowWidth} from "../Common/size";
 import { TITLE_FONT } from "../Common/common_style";
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 export default class TopUpCard extends React.Component {
 
@@ -25,6 +27,8 @@ export default class TopUpCard extends React.Component {
 	}
 
 	onCardPress = () => {
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Wallet Top Up', 'Click', this.props.price))
 		this.props.onPressItem(this.props.item,this.props.index);
 		this.setState({
 			selected: this.props.selected

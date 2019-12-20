@@ -18,7 +18,7 @@ export default class OrderReview extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Review",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Review</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>

@@ -158,7 +158,7 @@ export default {
 
         let saved_notifications = payload.current_notifications
         var new_notification_list = _.unionBy(notifications, saved_notifications, 'id');
-        var sorted = _.orderBy(new_notification_list, 'created_at','desc')
+        var sorted = _.orderBy(new_notification_list, 'id','desc')
         let count = new_notification_list.filter(item => { return item.read == false })
 
         return { ...state, notifications: sorted, unreadNotificationCount: count.length }
@@ -536,14 +536,15 @@ export default {
           authtoken,
           object,
         )
-        const current_notification = yield call(getCurrentNotification)
-        let current_notifications = JSON.parse(current_notification)
-        let count = current_notifications == null ? [] : current_notifications.filter(item => { return item.read == false })
-
+        // const current_notification = yield call(getCurrentNotification)
+        // let current_notifications = JSON.parse(current_notification)
+        // console.log("Current", current_notifications)
+        // let count = current_notifications == null ? [] : current_notifications.filter(item => { return item.read == false })
+        // console.log("Count", count)
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
         
-          yield put(createAction('updateUnreadNotification')(count.length))
+          yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }

@@ -1,6 +1,8 @@
 import { shops, shop_banner,makeOrder,missions } from '../Services/shops'
 import EventObject from './event_object'
 import {createAction} from  '../Utils/index'
+import _ from 'lodash'
+
 export default {
     namespace: 'shops',
 
@@ -21,7 +23,13 @@ export default {
         },
         setCurrentOrder(state, { payload }) {
             const {order} = payload
+
             let data = [...state.orders]
+
+            _.remove(data, function(currentObject) {
+                return currentObject.id === order.id;
+            });
+
             data.unshift(order)
 
             return { ...state, currentOrder: order,orders:data}

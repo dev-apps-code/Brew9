@@ -19,6 +19,8 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, P
 import Moment from 'moment';
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import { LinearGradient } from 'expo-linear-gradient';
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -28,14 +30,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 	selectedTab: config.selectedTab,
 	popUp: shops.popUp,
 	currentOrder: shops.currentOrder,
-	orders:shops.orders
+	orders: shops.orders
 }))
 export default class PickUp extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
 		return {
-			title: "Your Order",
+			headerTitle: <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT}}>Your Order</Text> ,
 			headerTintColor: "black",
 			headerLeft: null,
 			headerRight: null,
@@ -75,7 +77,7 @@ export default class PickUp extends React.Component {
 			appState: AppState.currentState,
 			total_exp: 0,
 			total_point: 0,
-			showPopUp:false
+			showPopUp: false
 		}
 	}
 
@@ -88,8 +90,8 @@ export default class PickUp extends React.Component {
 			if (currentMember != null) {
 				this.loadCurrentOrder();
 			}
-			if (this.props.popUp != this.state.showPopUp){
-				this.setState({showPopUp: this.props.popUp});
+			if (this.props.popUp != this.state.showPopUp) {
+				this.setState({ showPopUp: this.props.popUp });
 			}
 		})
 	}
@@ -123,15 +125,18 @@ export default class PickUp extends React.Component {
 		if (prevProps.selectedTab != this.props.selectedTab) {
 			// this.loadCurrentOrder()
 		}
-		if (this.props.selectedTab == 'pickup'){
-			if (this.props.popUp != this.state.showPopUp){
-				this.setState({showPopUp: this.props.popUp});
+		if (this.props.selectedTab == 'pickup') {
+			if (this.props.popUp != this.state.showPopUp) {
+				this.setState({ showPopUp: this.props.popUp });
 			}
 		}
 
 	}
 
 	onOrderHistoryPressed = () => {
+
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('My Order', 'Click', "Order History"))
 
 		const { navigate } = this.props.navigation
 		navigate("OrderHistory")
@@ -143,6 +148,8 @@ export default class PickUp extends React.Component {
 
 	onOrderPressed = () => {
 		const { navigate } = this.props.navigation
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('My Order', 'Click', "Order"))
 
 		navigate("Home")
 	}
@@ -154,7 +161,7 @@ export default class PickUp extends React.Component {
 			this.setState({ loading: true })
 			const callback = eventObject => {
 				if (eventObject.success) {
-					
+
 				}
 				this.setState({
 					loading: false,
@@ -180,6 +187,7 @@ export default class PickUp extends React.Component {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
+			var calculate_cart_total = cart_total 
 
 			const order_items = item.order_items.map((item, key) => {
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -220,6 +228,50 @@ export default class PickUp extends React.Component {
 				</View>
 			})
 
+			const promotions = item.promotions.map((item,key) => {
+
+				var promotion_discount = ''
+
+				if (item.reward_type == "Discount") {
+
+					if (item.value_type == 'fixed') {
+						promotion_discount = `-$${item.value}`
+						calculate_cart_total -= item.value
+					} else if (item.value_type == 'percent') {
+						promotion_discount = `-$${parseFloat(calculate_cart_total * (item.value / 100)).toFixed(2)}`
+						calculate_cart_total -= parseFloat(calculate_cart_total * (item.value / 100))
+					}
+
+					return <View
+					style={styles.drinksView}
+					key={key}>
+					<View
+						pointerEvents="box-none"
+						style={{
+							justifyContent: "center",
+							backgroundColor: "transparent",
+							flex: 1,
+							flexDirection: "row"
+						}}>
+						<View
+							style={styles.productDetailView}>
+							<Text
+								style={styles.productNameText}>{item.name}</Text>
+
+							<View style={styles.spacer} />
+
+						</View>
+
+						<Text
+							style={styles.productPriceText}>{promotion_discount}</Text>
+						{item.promotions != null && key < item.promotions.length - 1 && (<Image
+							source={require("./../../assets/images/group-109-copy.png")}
+							style={styles.dottedLineImage} />)}
+					</View>
+				</View>
+				}
+			})
+
 			const voucher_items = item.voucher_items.map((item, key) => {
 
 				var voucher_discount = ''
@@ -227,7 +279,7 @@ export default class PickUp extends React.Component {
 				if (item.voucher.discount_type == "fixed") {
 					voucher_discount = `-$${item.voucher.discount_price}`
 				} else if (item.voucher.discount_type == "percent") {
-					voucher_discount = `-$${parseFloat(cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
+					voucher_discount = `-$${parseFloat(calculate_cart_total * (item.voucher.discount_price / 100)).toFixed(2)}`
 
 				}
 				return <View
@@ -296,7 +348,7 @@ export default class PickUp extends React.Component {
 				<View style={[styles.queueView, { marginTop: 15 * alpha }]}>
 
 					<View
-						style={[styles.queueView, { alignItems: 'center' }]}>
+						style={[styles.queueView, { alignItems: 'center', marginTop: item.paid == false ? 40 : 0 * alpha, }]}>
 
 						<View
 							pointerEvents="box-none"
@@ -380,7 +432,7 @@ export default class PickUp extends React.Component {
 							</TouchableOpacity>
 						)
 					}
-					
+
 				</View>
 				<View
 					style={styles.orderDetailView}>
@@ -393,7 +445,7 @@ export default class PickUp extends React.Component {
 									style={styles.shopBranchText}>{item.shop.name}</Text>
 								<Text
 									numberOfLines={3}
-									style={styles.shopBranchAddressText}>{item.shop.address}</Text>
+									style={styles.shopBranchAddressText}>{item.shop.short_address}</Text>
 							</View>
 							<View
 								style={{
@@ -443,6 +495,7 @@ export default class PickUp extends React.Component {
 					<View
 						style={styles.drinksViewWrapper}>
 						{order_items}
+						{promotions}
 						{voucher_items}
 					</View>
 					<View style={styles.receiptSectionSeperator}>
@@ -583,7 +636,7 @@ export default class PickUp extends React.Component {
 			popUp: false
 		}))
 
-		this.setState({showPopUp: false});
+		this.setState({ showPopUp: false });
 	}
 
 	renderProgressBar(progress) {
@@ -678,9 +731,8 @@ export default class PickUp extends React.Component {
 
 		const { currentOrder } = this.props
 
-		console.log(`showpopui ${this.props.popUp}`)
 		const total_points = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
-		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0 
+		const total_exp = (currentOrder != null) ? parseFloat(currentOrder.awarded_point) : 0
 		return <Modal
 			animationType="slide"
 			transparent={true}
@@ -724,7 +776,8 @@ export default class PickUp extends React.Component {
 					<ActivityIndicator size="large" />
 				</View> :
 				orders.length > 0 ? this.renderQueueView(orders) :
-					this.renderEmpty()}
+					this.renderEmpty()
+			}
 			{this.renderPointExpModal()}
 		</View>
 	}
@@ -735,8 +788,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "red",
 		position: 'absolute',
 		width: "100%",
-		top:0, 
-		right:0,
+		top: 0,
+		right: 0,
 		height: 40 * alpha,
 		alignItems: 'center',
 		justifyContent: "center",
@@ -775,9 +828,9 @@ const styles = StyleSheet.create({
 		minHeight: windowHeight / 5,
 		// aspectRatio: 1,
 		maxHeight: windowHeight / 2,
-		paddingVertical: 20,
-		marginHorizontal: 30,
-		paddingHorizontal: 20,
+		paddingVertical: 20 * alpha,
+		marginHorizontal: 50 * alpha,
+		paddingHorizontal: 20 * alpha,
 		justifyContent: 'space-between',
 		borderRadius: 5 * alpha,
 
@@ -1003,7 +1056,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
-		marginTop: 40 * alpha,
+		// marginTop: 40 * alpha,
 		// alignItems: "center",
 	},
 

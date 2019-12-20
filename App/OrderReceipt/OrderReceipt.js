@@ -24,7 +24,7 @@ export default class OrderReceipt extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Order",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Order</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -210,7 +210,7 @@ export default class OrderReceipt extends React.Component {
 										style={styles.shopBranchText}>{order.shop.name}</Text>
 									<Text
 										numberOfLines={3}
-										style={styles.shopBranchAddressText}>{order.shop.address}</Text>
+										style={styles.shopBranchAddressText}>{order.shop.short_address}</Text>
 								</View>
 								<View
 									style={{

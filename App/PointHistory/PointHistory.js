@@ -25,7 +25,7 @@ export default class PointHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Points",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Points</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -139,6 +139,7 @@ export default class PointHistory extends React.Component {
 			id={item.id}
 			description={item.description}
 			value={item.value}
+			debit={item.debited}
 			created_at={item.created_at}
 			shop={item.shop}
 			navigation={this.props.navigation}

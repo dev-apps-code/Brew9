@@ -16,7 +16,7 @@ export default class WebCommonModal extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: navigation.getParam("title", ""),
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>{navigation.getParam("title", "")}</Text>,
       headerTintColor: "black",
       headerLeft: (
         <View style={styles.headerLeftContainer}>

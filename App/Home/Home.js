@@ -178,6 +178,9 @@ export default class Home extends React.Component {
 		const { navigation } = this.props
 		const { currentMember } = this.props
 
+		const analytics = new Analytics(ANALYTICS_ID)
+			analytics.event(new Event('Home', 'Click', "ScanQr"))
+
 		if (currentMember != null) {
 			navigation.navigate("ScanQr")
 		} else {
@@ -229,7 +232,7 @@ export default class Home extends React.Component {
 
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
-			this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
+			// this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
 			return
 		}
 
@@ -385,7 +388,6 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
 		const callback = eventObject => {
-
 			this.setState({ loading: false })
 			
 			if (eventObject.success) {
@@ -493,17 +495,17 @@ export default class Home extends React.Component {
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
 			analytics.event(new Event('Home', 'Click', "Checkout"))
-			if (member_distance > shop.max_order_distance_in_km) {
-				this.refs.toast.show("You are too far away", TOAST_DURATION)
-				return
-			} else {
+			// if (member_distance > shop.max_order_distance_in_km) {
+			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
+			// 	return
+			// } else {
 
 				this.navigationListener = navigation.addListener('willFocus', payload => {
 					this.removeNavigationListener()
 					const { clearCart } = this.props
 
 					if (clearCart == true) {
-
+						console.log("Clear and go to pickup")
 						this.loadShops()
 						navigate("PickUp")
 					} else {
@@ -514,7 +516,7 @@ export default class Home extends React.Component {
 				navigate("Checkout", {
 					returnToRoute: navigation.state
 				})
-			}
+			// }
 		} else {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -630,7 +632,8 @@ export default class Home extends React.Component {
 		const { cart, promotions } = this.props
 		const {product_view_height} = this.state
 		var headerHeight = 31 * alpha
-		var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
+		// var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
+		var height = (cart.length * 71) * alpha
 		
 		var height_cap = windowHeight * 0.4
 		var content = height + headerHeight
@@ -705,13 +708,13 @@ export default class Home extends React.Component {
 				onChangeQuantity={this.onChangeQuantityPress}
 				price={item.price}
 			/>
-		} else if (item.clazz == "promotion") {
-			return <CartPromoCell
-				navigation={this.props.navigation}
-				name={item.name}
-				price={item.price}
-				type={item.type}
-			/>
+		// } else if (item.clazz == "promotion") {
+		// 	return <CartPromoCell
+		// 		navigation={this.props.navigation}
+		// 		name={item.name}
+		// 		price={item.price}
+		// 		type={item.type}
+		// 	/>
 		}
 	}
 
@@ -950,53 +953,52 @@ export default class Home extends React.Component {
 				// console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
 				if (currentMember != null){
 					
+					if (promotion.trigger_price != null) {
+						var price = 0
 
-						if (promotion.trigger_price != null) {
-							var price = 0
-	
-							var trigger_price = parseFloat(promotion.trigger_price)
-							var remaining = trigger_price - cart_total
-	
-							if (remaining <= 0 ) {
-	
-								shop.all_promotions[index].has_triggered = true
-								
-								let cartItem = {
-									clazz: "promotion",
-									id: promotion.id,
-									name: promotion.cart_text,
-									description: "",
-									price: price,
-									type: promotion.reward_type
-								}
+						var trigger_price = parseFloat(promotion.trigger_price)
+						var remaining = trigger_price - cart_total
 
-								promotions_item.push(cartItem)
-								
-								if (promotion.reward_type != null && promotion.reward_type == "Discount") {
+						if (remaining <= 0 ) {
+
+							shop.all_promotions[index].has_triggered = true
+							
+							let cartItem = {
+								clazz: "promotion",
+								id: promotion.id,
+								name: promotion.cart_text,
+								description: "",
+								price: price,
+								type: promotion.reward_type
+							}
+
+							promotions_item.push(cartItem)
+							
+							if (promotion.reward_type != null && promotion.reward_type == "Discount") {
+
+								if (promotion.value_type != null && promotion.value_type == "percent") {
+									var discount_value = promotion.value ? promotion.value : 0
+									price = cart_total * discount_value / 100
 	
-									if (promotion.value_type != null && promotion.value_type == "percent") {
-										var discount_value = promotion.value ? promotion.value : 0
-										price = cart_total * discount_value / 100
-		
-										if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
-											price = promotion.maximum_discount_allow
-										}
-										final_cart_value = cart_total - price
-		
-									} else if (promotion.value_type != null && promotion.value_type == "fixed") {
-										var discount_value = promotion.value ? promotion.value : 0
-										final_cart_value = cart_total - discount_value
-									}								
-								}
-							}	else{
-								var display_text = promotion.display_text
-								final_promo_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
-								
-								break;
-							}					
-						}
-					} 
-				}
+									if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
+										price = promotion.maximum_discount_allow
+									}
+									final_cart_value = cart_total - price
+	
+								} else if (promotion.value_type != null && promotion.value_type == "fixed") {
+									var discount_value = promotion.value ? promotion.value : 0
+									final_cart_value = cart_total - discount_value
+								}								
+							}
+						}	else{
+							var display_text = promotion.display_text
+							final_promo_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
+							
+							break;
+						}					
+					}
+				} 
+			}
 		}
 	
 		if (this.props.cart.length == 0){
@@ -1631,7 +1633,7 @@ export default class Home extends React.Component {
 							<Text
 								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
 							<Text
-								style={styles.businessHeaderHourText}>Business Hour</Text>
+								style={styles.businessHeaderHourText}>Business Hours</Text>
 							<Text
 								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
 
@@ -1799,7 +1801,7 @@ export default class Home extends React.Component {
 
 	renderBottomBar(cart, shop) {
 
-		const { cart_total_quantity, discount_cart_total } = this.props
+		const { cart_total_quantity, cart_total } = this.props
 		if (cart.length > 0) {
 			return (<View
 				style={styles.cartView}>
@@ -1860,7 +1862,7 @@ export default class Home extends React.Component {
 									flex: 1,
 								}} /> */}
 							<Text
-								style={styles.totalpriceText}>${parseFloat(discount_cart_total).toFixed(2)}</Text>
+								style={styles.totalpriceText}>${parseFloat(cart_total).toFixed(2)}</Text>
 
 						</View>
 						<View
@@ -2164,7 +2166,7 @@ const styles = StyleSheet.create({
 	shopppingCartView: {
 		backgroundColor: "white",
 		borderRadius: 20 * alpha,
-		width: 110 * alpha,
+		width: 90 * alpha,
 		// aspectRatio: 1 / 2,
 		height: 40 * alpha,
 		justifyContent: "center",
@@ -2177,13 +2179,13 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		padding: 0,
 		position: "absolute",
-		width: 110 * alpha,
+		width: 90 * alpha,
 		height: 40 * alpha,
 	},
 	group5View: {
 		backgroundColor: "transparent",
 		height: 26 * alpha,
-		marginLeft: 15 * alpha,
+		marginLeft: 12 * alpha,
 		marginRight: 12 * alpha,
 		flexDirection: "row",
 	},
@@ -2195,14 +2197,12 @@ const styles = StyleSheet.create({
 	},
 	shoppingCartText: {
 		color: "rgb(57, 57, 57)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 16 * alpha,
-		fontStyle: "normal",
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
 		textAlign: "center",
 		marginLeft: 10 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "center",
-		fontWeight: 'bold'
 	},
 	cartImage: {
 		resizeMode: "contain",
@@ -2210,13 +2210,13 @@ const styles = StyleSheet.create({
 		height: 20 * alpha,
 	},
 	totalpriceText: {
-		color: "rgb(57, 57, 57)",
+		color: "rgb(54, 54, 54)",
 		fontFamily: TITLE_FONT,
-		fontSize: 18 * alpha,
+		fontSize: 18 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
 		backgroundColor: "transparent",
-		marginTop: 20 * alpha,
+		marginTop: 24 * alpha,
 		// fontWeight:'bold'
 	},
 	badgeView: {
@@ -2226,7 +2226,7 @@ const styles = StyleSheet.create({
 		borderColor: "white",
 		borderStyle: "solid",
 		position: "absolute",
-		left: 120 * alpha,
+		left: 100 * alpha,
 		top: 5 * alpha,
 		height: 20 * alpha,
 		aspectRatio: 1,
@@ -2266,14 +2266,11 @@ const styles = StyleSheet.create({
 		height: 46 * alpha,
 	},
 	checkoutButtonText: {
-		fontSize: 16 * alpha,
-		fontStyle: "normal",
-		backgroundColor: "transparent",
 		color: "white",
 		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "left",
-		fontWeight: 'bold'
 	},
 	checkoutButtonImage: {
 		resizeMode: "contain",

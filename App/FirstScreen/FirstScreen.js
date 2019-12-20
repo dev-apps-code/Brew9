@@ -6,7 +6,11 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Image, Text, StyleSheet, AppState,Linking } from "react-native"
+import { View, Image, Text, TextInput, StyleSheet, AppState,Linking } from "react-native"
+if (Text.defaultProps == null) Text.defaultProps = {};
+Text.defaultProps.allowFontScaling = false;
+if (TextInput.defaultProps == null) TextInput.defaultProps = {};
+TextInput.defaultProps.allowFontScaling = false;
 import React from "react"
 import {connect} from "react-redux"
 import {createAction, Storage} from "../Utils"

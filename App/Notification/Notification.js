@@ -39,7 +39,7 @@ export default class Notification extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      title: "Notification",
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Notification</Text>,
       headerTintColor: "black",
       headerTitleStyle: {
         textAlign: "center",

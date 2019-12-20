@@ -101,7 +101,7 @@ export default class PointsCell extends React.Component {
 								flex: 1,
 							}}/>
 						<Text
-							style={this.props.shop ? styles.pointsText : styles.pointsText2 }>{parseInt(this.props.value)}</Text>
+							style={this.props.shop ? styles.pointsText : styles.pointsText2 }>{this.props.debit == true ? "-" : "+"}{parseInt(this.props.value)}</Text>
 						{this.props.shop ?
 							<Image
 								source={require("./../../assets/images/next.png")}

@@ -26,7 +26,7 @@ export default class PayByCard extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Payment",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Payment</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -69,6 +69,7 @@ export default class PayByCard extends React.Component {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
 		
+		console.log("Load Session")
 		const callback = eventObject => {
 			this.loadUpdateSessionWithCardDetails()
 		}

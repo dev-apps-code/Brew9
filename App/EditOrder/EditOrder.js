@@ -40,7 +40,7 @@ export default class EditOrder extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			title: "Update Order",
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Update Order</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -88,7 +88,6 @@ export default class EditOrder extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('current_order', this.state.current_order)
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -377,7 +376,6 @@ export default class EditOrder extends React.Component {
 
 						const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
 
-						console.log("Search", search_cart_promo_index)
 						if (remaining > 0 && search_cart_promo_index >= 0) {
 							promotions.splice(search_cart_promo_index, 1)
 							dispatch(createAction("orders/updatePromotions")({
@@ -388,11 +386,9 @@ export default class EditOrder extends React.Component {
 					const search_cart_promo_index = newPromo.findIndex(element => element.name == promo.cart_text)
 					var price = 0
 					if (promo.reward_type != null && promo.reward_type == "Discount") {
-						console.log("discount")
 						if (promo.value_type != null && promo.value_type == "percent") {
 							var discount_value = promo.value ? promo.value : 0
 							price = cart_total * discount_value / 100
-							console.log("percent")
 							if (promo.maximum_discount_allow != null && price > promo.maximum_discount_allow) {
 								price = promo.maximum_discount_allow
 							}
@@ -557,9 +553,7 @@ export default class EditOrder extends React.Component {
 					loading: false,
 				})
 				if (Array.isArray(eventObject.result)) {
-					console.log("Array")
 					if (eventObject.result.length > 0) {
-						console.log("Greater")
 						let item = eventObject.result[0]
 						if (item.clazz = "product") {
 							this.removeItemFromCart(eventObject.result, eventObject.message)
