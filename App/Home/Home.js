@@ -947,7 +947,7 @@ export default class Home extends React.Component {
 
 				var promotion = shop.all_promotions[index]
 
-				console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
+				// console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
 				if (currentMember != null){
 					
 
@@ -1782,7 +1782,6 @@ export default class Home extends React.Component {
 
 		const {currentPromoText} = this.props
 
-		console.log(`promo ${currentPromoText}`)
 		if (currentPromoText.length > 0){
 			return (<View style={styles.promotionTopBarView}>
 				<View style={styles.promotionBarView}>
