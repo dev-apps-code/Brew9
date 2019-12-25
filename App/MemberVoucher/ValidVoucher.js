@@ -34,7 +34,7 @@ export default class ValidVoucher extends React.Component {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Voucher', 'Click', this.props.title))
-		
+
 		navigate("VoucherDetail", { item: this.props.item })
 	}
 
@@ -125,7 +125,7 @@ export default class ValidVoucher extends React.Component {
 					<Image
 						source={require("./../../assets/images/group-5-3.png")}
 						style={styles.backgroundImage} />
-					
+
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -168,16 +168,16 @@ export default class ValidVoucher extends React.Component {
 								alignItems: "flex-end",
 							}}>
 							<Text
-								style={styles.dateText}>Expiration: <Text style={styles.highlight}>{this.props.available_date}</Text></Text>
+								style={styles.dateText}>Validity: <Text style={styles.highlight}>{this.props.available_date}</Text></Text>
 							{/* <View
 								style={{
 									flex: 1,
 								}} /> */}
-								{parseInt(days) <= 3 ?
-									<View style={styles.expiringView}>
-										<Text style={styles.expiredText}>expire soon</Text>
+							{parseInt(days) <= 3 ?
+								<View style={styles.expiringView}>
+									<Text style={styles.expiredText}>expire soon</Text>
 
-									</View> : 
+								</View> :
 								undefined}
 						</View>
 					</View>
