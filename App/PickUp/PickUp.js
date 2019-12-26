@@ -37,7 +37,7 @@ export default class PickUp extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT}}>Your Order</Text> ,
+			headerTitle: <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT }}>Your Order</Text>,
 			headerTintColor: "black",
 			headerLeft: null,
 			headerRight: null,
@@ -187,7 +187,7 @@ export default class PickUp extends React.Component {
 
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
-			var calculate_cart_total = cart_total 
+			var calculate_cart_total = cart_total
 
 			const order_items = item.order_items.map((item, key) => {
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -228,7 +228,7 @@ export default class PickUp extends React.Component {
 				</View>
 			})
 
-			const promotions = item.promotions.map((item,key) => {
+			const promotions = item.promotions.map((item, key) => {
 
 				var promotion_discount = ''
 
@@ -243,32 +243,32 @@ export default class PickUp extends React.Component {
 					}
 
 					return <View
-					style={styles.drinksView}
-					key={key}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							justifyContent: "center",
-							backgroundColor: "transparent",
-							flex: 1,
-							flexDirection: "row"
-						}}>
+						style={styles.drinksView}
+						key={key}>
 						<View
-							style={styles.productDetailView}>
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								backgroundColor: "transparent",
+								flex: 1,
+								flexDirection: "row"
+							}}>
+							<View
+								style={styles.productDetailView}>
+								<Text
+									style={styles.productNameText}>{item.name}</Text>
+
+								<View style={styles.spacer} />
+
+							</View>
+
 							<Text
-								style={styles.productNameText}>{item.name}</Text>
-
-							<View style={styles.spacer} />
-
+								style={styles.productPriceText}>{promotion_discount}</Text>
+							{item.promotions != null && key < item.promotions.length - 1 && (<Image
+								source={require("./../../assets/images/group-109-copy.png")}
+								style={styles.dottedLineImage} />)}
 						</View>
-
-						<Text
-							style={styles.productPriceText}>{promotion_discount}</Text>
-						{item.promotions != null && key < item.promotions.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
-							style={styles.dottedLineImage} />)}
 					</View>
-				</View>
 				}
 			})
 
@@ -345,7 +345,7 @@ export default class PickUp extends React.Component {
 							style={styles.saySomethingButtonText}>Say{"\n"}Something</Text>
 					</TouchableOpacity> */}
 				</View>
-				<View style={[styles.queueView, { marginTop: 15 * alpha }]}>
+				<View style={[styles.queueView, { marginTop: 15 * alpha, }]}>
 
 					<View
 						style={[styles.queueView, { alignItems: 'center', marginTop: item.paid == false ? 40 : 0 * alpha, }]}>
@@ -375,8 +375,17 @@ export default class PickUp extends React.Component {
 								</View>
 							</View>
 						</View>
+						<TouchableOpacity
+							style={styles.refreshView}
+							onPress={this.onRefresh}>
+							<Image
+								source={require("./../../assets/images/refresh.png")}
+								style={styles.refreshImage} />
+
+						</TouchableOpacity>
 						<View
 							style={styles.progressView}>
+
 							<View
 								style={styles.orderedView}>
 								<Image
@@ -1173,11 +1182,32 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flexDirection: "column"
 	},
+	refreshView: {
+		backgroundColor: LIGHT_BLUE,
+		width: 25 * alpha,
+		height: 25 * alpha,
+		justifyContent: 'center',
+		alignItems: "center",
+		position: 'absolute',
+		right: 0 * alpha,
+		bottom: 60 * alpha,
+		borderWidth: 1,
+		borderColor: PRIMARY_COLOR,
+		borderRadius: 5
+		// flex: 0.2
+		// flexDirection: "column".
+	},
 	pickupImage: {
 		tintColor: "rgb(205, 207, 208)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		height: 25 * alpha,
+	},
+	refreshImage: {
+		tintColor: "rgb(35, 31, 32)",
+		resizeMode: "contain",
+		backgroundColor: "transparent",
+		height: 15 * alpha,
 	},
 	pickupSelectedImage: {
 		tintColor: "rgb(35, 31, 32)",
