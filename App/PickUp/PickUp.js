@@ -375,14 +375,7 @@ export default class PickUp extends React.Component {
 								</View>
 							</View>
 						</View>
-						<TouchableOpacity
-							style={styles.refreshView}
-							onPress={this.onRefresh}>
-							<Image
-								source={require("./../../assets/images/refresh.png")}
-								style={styles.refreshImage} />
 
-						</TouchableOpacity>
 						<View
 							style={styles.progressView}>
 
@@ -433,6 +426,14 @@ export default class PickUp extends React.Component {
 							style={styles.progressbarView}>
 							{this.renderProgressBar(progress)}
 						</View>
+						<TouchableOpacity
+							style={styles.refreshView}
+							onPress={this.onRefresh}>
+							<Image
+								source={require("./../../assets/images/refresh.png")}
+								style={styles.refreshImage} />
+
+						</TouchableOpacity>
 					</View>
 					{
 						item.paid == false && (
@@ -616,6 +617,7 @@ export default class PickUp extends React.Component {
 	}
 
 	onRefresh = () => {
+		console.log('onRefresh')
 		this.setState({ refreshing: true })
 		this.loadCurrentOrder()
 	}
