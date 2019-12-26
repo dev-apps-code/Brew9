@@ -22,7 +22,6 @@ import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
-import Brew9Modal from '../Components/Brew9Modal'
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -315,9 +314,7 @@ export default class Checkout extends React.Component {
 					this.tooglePickup()
 				});
 			} else {
-
-				this.setState({ visible: true })
-
+				this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
 			}
 		}
 
@@ -709,7 +706,7 @@ export default class Checkout extends React.Component {
 
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
-		const { selected_payment, pick_up_status, final_price } = this.state
+		const { selected_payment, pick_up_status, final_price, pick_up_time } = this.state
 		const { currentMember, selectedShop } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 
@@ -738,7 +735,7 @@ export default class Checkout extends React.Component {
 				if (selectedShop != null) {
 					var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
 					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
-					var pickup = Moment(pick_up_status, 'h:mm')
+					var pickup = Moment(pick_up_time, 'h:mm')
 					var now = Moment(new Date(), 'HH:mm')
 
 					if (pickup < now) {
@@ -1726,7 +1723,6 @@ export default class Checkout extends React.Component {
 
 				</View>
 			</ScrollView>
-			<Brew9Modal visible={this.state.visible} title={"Time not valid"} description={"Please select valid time "} okayButtonAction={() => this.setState({ visible: false })} />
 		</View>
 	}
 
