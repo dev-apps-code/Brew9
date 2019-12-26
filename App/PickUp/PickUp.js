@@ -184,10 +184,11 @@ export default class PickUp extends React.Component {
 
 	renderQueueView(current_order) {
 		const queues = current_order.map((item, key) => {
-
+			console.log(item)
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 			var calculate_cart_total = cart_total
+			var remarks = item.paid ? "Order must be collected within 30 minutes of collection time \n Otherwise it will be canceled and non-refundable" : "Your order will be processed upon receiving payment."
 
 			const order_items = item.order_items.map((item, key) => {
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -564,56 +565,84 @@ export default class PickUp extends React.Component {
 							<View
 								pointerEvents="box-none"
 								style={{
-									left: 22 * alpha,
-									right: 21 * alpha,
-									top: 11 * alpha,
-									bottom: 11 * alpha,
+									// left: 22 * alpha,
+									// right: 21 * alpha,
+									// top: 11 * alpha,
+									// bottom: 11 * alpha,
+									marginHorizontal: 20 * alpha,
+									marginVertical: 11 * alpha,
 									alignItems: "flex-start",
+									// backgroundColor: 'red'
 								}}>
-
-								{/* <Text
-									style={styles.pleaseCallBranchFText}>Please call branch for refund</Text> */}
 								<View
 									pointerEvents="box-none"
 									style={{
 										alignSelf: "stretch",
-										height: 19 * alpha,
+										// height: 19 * alpha,
+										marginTop: 3 * alpha,
 										marginLeft: 3 * alpha,
 										marginRight: 4 * alpha,
 										flexDirection: "row",
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={styles.orderTime100717Text}>Order time: {item.payment_time}</Text>
-									<View
-										style={{
-											flex: 1,
-										}} />
-									{/* <TouchableOpacity
-										onPress={this.onCopyPressed}
-										style={styles.copyButton}>
-										<Text
-											style={styles.copyButtonText}>Copy</Text>
-									</TouchableOpacity> */}
+										style={[styles.orderTime100717Text, { flex: 0.25 }]}>Order time </Text>
+									<Text style={[styles.orderTime100717Text, { flex: 1 }]}>:{item.payment_time}</Text>
+
 								</View>
-								<Text
-									style={styles.orderNo020028201Text}>Receipt no.: {item.receipt_no}</Text>
+								<View
+									pointerEvents="box-none"
+									style={{
+										alignSelf: "stretch",
+										// height: 19 * alpha,
+										marginTop: 3 * alpha,
+										marginLeft: 3 * alpha,
+										marginRight: 4 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
+									}}>
+									<Text
+										style={[styles.orderNo020028201Text, { flex: 0.25 }]}>Receipt no. </Text>
+									<Text
+										style={[styles.orderNo020028201Text, { flex: 1 }]}>:{item.receipt_no}</Text>
+
+
+								</View>
+								<View
+									pointerEvents="box-none"
+									style={{
+										alignSelf: "stretch",
+										// height: 19 * alpha,
+										marginTop: 3 * alpha,
+										marginLeft: 3 * alpha,
+										marginRight: 4 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
+									}}>
+									<Text
+										style={[styles.remarkNoPackingText, { flex: 0.25 }]}>Remarks </Text>
+									<Text
+										style={[styles.remarkNoPackingText, { flex: 1 }]}>:{remarks}</Text>
+
+								</View>
+
 							</View>
 						</View>
 					</View>
-				</View>
-			</View>
+				</View >
+			</View >
 		})
 
-		return <ScrollView style={{ flex: 1 }}
+		return <ScrollView style={{ flex: 1 }
+		}
 			refreshControl={
-				<RefreshControl
+				< RefreshControl
 					refreshing={this.state.refreshing}
 					onRefresh={this.onRefresh}
 				/>
 			}>
 			{queues}
-		</ScrollView>
+		</ScrollView >
 	}
 
 	onRefresh = () => {
@@ -1507,7 +1536,7 @@ const styles = StyleSheet.create({
 	remarkView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		height: 70 * alpha,
+		// height: 70 * alpha,
 		paddingBottom: 10 * alpha,
 	},
 	bottomFillImage: {
@@ -1537,7 +1566,7 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
+		// textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 2 * alpha,
 	},
@@ -1569,8 +1598,8 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
-		marginLeft: 3 * alpha,
+		// textAlign: "center",
+		// marginLeft: 3 * alpha,
 		marginTop: 1 * alpha,
 	},
 	remarkNoPackingText: {
@@ -1580,8 +1609,9 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "center",
-		marginLeft: 3 * alpha,
+		// textAlign: "center",
+		// marginLeft: 3 * alpha,
+		// marginTop: 5 * alpha,
 	},
 
 
