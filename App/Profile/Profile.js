@@ -120,15 +120,15 @@ export default class Profile extends React.Component {
 	}
 
 	loadProfile() {
-		const {timestamp} =  this.state
+		const { timestamp } = this.state
 
-		
+
 		if (timestamp != undefined) {
-		   const date = new Date()
-		   const diff = date.getTime() - timestamp
-		   if (diff < 10000){
-			return false;
-		   }
+			const date = new Date()
+			const diff = date.getTime() - timestamp
+			if (diff < 10000) {
+				return false;
+			}
 		}
 		const { dispatch, currentMember } = this.props
 		this.setState({ loading: true })
@@ -301,11 +301,16 @@ export default class Profile extends React.Component {
 
 	onMemberButtonPressed = () => {
 		const { currentMember } = this.props
+		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', "Member Profile"))
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 			navigate("MemberProfile")
+		} else {
+			navigate("VerifyUser", {
+				returnToRoute: this.props.navigation.state
+			})
 		}
 	}
 
@@ -760,7 +765,7 @@ export default class Profile extends React.Component {
 			<View
 				style={styles.menuView}>
 
-<TouchableOpacity
+				<TouchableOpacity
 					onPress={() => this.onOrderButtonPressed()}
 					style={styles.menuRowbuttonButton}>
 					<View
@@ -917,8 +922,8 @@ export default class Profile extends React.Component {
 						</View>
 					</View>
 				</TouchableOpacity>
-				
-				
+
+
 
 				<TouchableOpacity
 					onPress={() => this.onAboutButtonPressed()}
