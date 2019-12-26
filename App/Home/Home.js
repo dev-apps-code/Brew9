@@ -3077,7 +3077,7 @@ const styles = StyleSheet.create({
 		height: "100%"
 	},
 	mapImage: {
-		backgroundColor: "blue",
+		backgroundColor: "transparent",
 		height: 200 * alpha,
 		width: "100%",
 	},

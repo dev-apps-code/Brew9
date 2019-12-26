@@ -184,7 +184,6 @@ export default class PickUp extends React.Component {
 
 	renderQueueView(current_order) {
 		const queues = current_order.map((item, key) => {
-			console.log(item)
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 			var calculate_cart_total = cart_total
@@ -646,7 +645,6 @@ export default class PickUp extends React.Component {
 	}
 
 	onRefresh = () => {
-		console.log('onRefresh')
 		this.setState({ refreshing: true })
 		this.loadCurrentOrder()
 	}
