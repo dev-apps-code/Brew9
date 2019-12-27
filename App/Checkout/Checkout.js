@@ -188,7 +188,6 @@ export default class Checkout extends React.Component {
 		const { selectedShop } = this.props
 
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
-		// var closing = Moment('22:00', 'h:mm')
 
 		// console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
@@ -233,7 +232,6 @@ export default class Checkout extends React.Component {
 	onHourValueChange = (option, index) => {
 
 		if (option == "") {
-			// console.log("Empty")
 			this.setState({
 				selected_hour_index: index - 1,
 			}, function () {
@@ -751,7 +749,7 @@ export default class Checkout extends React.Component {
 					var pickup = Moment(pick_up_time, 'h:mm')
 					var now = Moment(new Date(), 'HH:mm')
 
-					if (pickup < now) {
+					if (pickup < now && pick_up_status == "Pick Later") {
 						this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
 						return
 					}
@@ -1118,7 +1116,6 @@ export default class Checkout extends React.Component {
 	}
 
 	renderVoucherSection(vouchers) {
-
 		const { cart_total, discount_cart_total } = this.props
 		const voucher_items = vouchers.map((item, key) => {
 
@@ -1297,7 +1294,6 @@ export default class Checkout extends React.Component {
 	}
 
 	renderOrderItems(items, promotions) {
-
 		let fullList = [...items, ...promotions]
 		let last_item = fullList[fullList.length - 1]
 
