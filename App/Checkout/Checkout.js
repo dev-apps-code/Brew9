@@ -125,28 +125,39 @@ export default class Checkout extends React.Component {
 	setTimePickerDefault() {
 
 		const { selectedShop } = this.props
-
 		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
-		var time_now = Moment(new Date(), 'h:mm')
+		// var opening = Moment('16:00', 'h:mm')
+		// var closing = Moment('22:00', 'h:mm')
 
+		var time_now = Moment(new Date(), 'h:mm')
+		// console.log('opening', opening.hours())
+		// console.log('closing', closing.hours())
 		var hour = time_now.hours();
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
 
 		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
-
+		// console.log('first_hour', first_hour)
+		// console.log('last_hour', last_hour)
 		var hour_array = _.range(first_hour, last_hour + 1);
 
 		var selected_minute = ""
+		if (hour >= opening.hours() && min < 45) {
 
-		if (hour > opening.hours() && min < 45) {
 			minute_array = _.filter(["00", "15", "30", "45"], function (o) {
 				return parseInt(o) > min;
 			})
 		}
-		selected_minute = minute_array[0]
+		if (hour >= closing.hours()) {
+
+			minute_array = _.filter(["00", "15", "30", "45"], function (o) {
+				return parseInt(o) <= closing.minutes();
+			})
+		}
+		if (hour)
+			selected_minute = minute_array[0]
 
 		if (minute_array.length < 3) {
 			minute_array.length = 3
@@ -155,13 +166,15 @@ export default class Checkout extends React.Component {
 		selected_minute = minute_array[0]
 
 
-		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
+		var first_hour = hour >= opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
 
 		var hour_array = _.range(first_hour, last_hour + 1);
 		if (hour_array.length < 3) {
 			hour_array.length = 3
 		}
+		// console.log('hour_array', hour_array)
+		// console.log('minute_array', minute_array)
 
 		this.setState({
 			selected_hour: first_hour,
@@ -175,6 +188,7 @@ export default class Checkout extends React.Component {
 		const { selectedShop } = this.props
 
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+		// var closing = Moment('22:00', 'h:mm')
 
 		// console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
@@ -408,7 +422,6 @@ export default class Checkout extends React.Component {
 	check_promotion_trigger = () => {
 
 		const { currentMember, dispatch, promotions, cart_total, selectedShop } = this.props
-
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
