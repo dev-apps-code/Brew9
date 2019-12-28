@@ -8,25 +8,25 @@
 
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
 import React from "react"
-import { alpha, fontAlpha, windowHeight} from "../Common/size"
-import { createAction,validateEmail } from "../Utils"
+import { alpha, fontAlpha, windowHeight } from "../Common/size"
+import { createAction, validateEmail } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdateAvatarRequestObject from "../Requests/update_avatar_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
 import VerifyPhoneNumberUpdateRequestObject from "../Requests/verify_phone_number_update_request_object"
 import * as SecureStore from "expo-secure-store"
 import Modal from "react-native-modal"
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button'
-import {connect} from "react-redux"
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
+import { connect } from "react-redux"
 import PhoneInput from 'react-native-phone-input'
 import * as ImagePicker from "expo-image-picker"
 import Constants from "expo-constants"
 import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {Image as ExpoImage} from "react-native-expo-image-cache";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY} from "../Common/common_style";
+import { Image as ExpoImage } from "react-native-expo-image-cache";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -37,7 +37,7 @@ export default class MemberProfile extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Personal Info</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Personal Info</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -46,7 +46,7 @@ export default class MemberProfile extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -62,7 +62,7 @@ export default class MemberProfile extends React.Component {
 		this.state = {
 			country_code: "673",
 			country: "bn",
-			members:[],
+			members: [],
 			modalVisible: false,
 			member_phone_number: "",
 			dob: "",
@@ -71,10 +71,10 @@ export default class MemberProfile extends React.Component {
 			image: {
 				uri: null
 			},
-			phone_no:  "",
+			phone_no: "",
 			gender_options: [
-				{label: 'Male', value: 0 },
-				{label: 'Female', value: 1 }
+				{ label: 'Male', value: 0 },
+				{ label: 'Female', value: 1 }
 			],
 			verification_code: "",
 			gender: 2,
@@ -95,23 +95,24 @@ export default class MemberProfile extends React.Component {
 
 	getPermissionAsync = async () => {
 		// if (Constants.platform.ios) {
-			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-			if (status !== 'granted') {
-				return false
-			}
-			return true
+		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+		if (status !== 'granted') {
+			return false
+		}
+		return true
 		// }
 	}
 
-	loadUpdateProfile(formData){
+	loadUpdateProfile(formData) {
 		const { dispatch } = this.props
 
-		
+
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.refs.toast.show("Profile updated successfully", TOAST_DURATION)
-				
+
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
@@ -123,20 +124,20 @@ export default class MemberProfile extends React.Component {
 		obj.setUrlId(this.state.members.id)
 		dispatch(
 			createAction('members/loadUpdateProfile')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
-	
-	loadUpdateAvatar(formData){
+
+	loadUpdateAvatar(formData) {
 		const { dispatch } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
 				this.refs.toast.show("Avatar updated successfully", TOAST_DURATION)
-				
+
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
@@ -148,13 +149,13 @@ export default class MemberProfile extends React.Component {
 		obj.setUrlId(this.state.members.id)
 		dispatch(
 			createAction('members/loadUpdateAvatar')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
 
-	loadUpdatePhoneNumber(formData){
+	loadUpdatePhoneNumber(formData) {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
@@ -163,24 +164,24 @@ export default class MemberProfile extends React.Component {
 			}
 			this.setState({
 				loading: false,
-				has_send_code:true
+				has_send_code: true
 			})
 		}
 		const obj = new UpdatePhoneNumberRequestObject(formData.phone_no, formData.country_code)
 		obj.setUrlId(this.state.members.id)
 		dispatch(
 			createAction('members/loadUpdatePhoneNumber')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
 
-	loadVerifyPhoneNumberUpdate(formData){
+	loadVerifyPhoneNumberUpdate(formData) {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			
+
 			if (eventObject.success) {
 				this.setState({
 					member_phone_number: this.state.phone_no,
@@ -197,7 +198,7 @@ export default class MemberProfile extends React.Component {
 		obj.setUrlId(this.state.members.id)
 		dispatch(
 			createAction('members/loadVerifyPhoneNumberUpdate')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -227,16 +228,15 @@ export default class MemberProfile extends React.Component {
 	_pickImage = async () => {
 
 		var get_permission = await this.getPermissionAsync()
-		
 		if (get_permission) {
 			let result = await ImagePicker.launchImageLibraryAsync({
 				mediaTypes: ImagePicker.MediaTypeOptions.All,
 				allowsEditing: true,
 				aspect: [4, 3],
 			});
-	
+
 			if (!result.cancelled) {
-				
+
 				let data = {
 					uri: result.uri,
 					name: Math.random().toString(36).substr(2, 5) + 'avatar.jpg',
@@ -265,8 +265,8 @@ export default class MemberProfile extends React.Component {
 			this.refs.toast.show("Please select your birthday", 500)
 			return false
 		}
-		else if (this.state.email != null && this.state.email.length > 0){
-			if (!validateEmail(this.state.email)){
+		else if (this.state.email != null && this.state.email.length > 0) {
+			if (!validateEmail(this.state.email)) {
 				this.refs.toast.show("Please enter a valid email", 500)
 				return false
 			}
@@ -287,10 +287,10 @@ export default class MemberProfile extends React.Component {
 
 	onClosePressed = () => {
 		Keyboard.dismiss()
-		this.setState({ modalVisible: false, phone_no:'',has_send_code:false })
+		this.setState({ modalVisible: false, phone_no: '', has_send_code: false })
 	}
 
-	onUpdateCode(iso2){
+	onUpdateCode(iso2) {
 		var country_code = this.phone.getCountryCode()
 		this.setState({
 			country: iso2,
@@ -299,7 +299,7 @@ export default class MemberProfile extends React.Component {
 	}
 
 	onSendCodePressed = () => {
-		const {country_code, phone_no} = this.state 
+		const { country_code, phone_no } = this.state
 
 		if (country_code == '' || country_code == undefined || phone_no == '' || phone_no == undefined) {
 			this.refs.toast.show("Please fill in phone number", TOAST_DURATION)
@@ -320,9 +320,9 @@ export default class MemberProfile extends React.Component {
 
 	onConfirmButtonPressed = () => {
 
-		const {verification_code, has_send_code} = this.state 
+		const { verification_code, has_send_code } = this.state
 
-		if (!has_send_code){
+		if (!has_send_code) {
 			return
 		}
 		if (verification_code == '' || verification_code == undefined) {
@@ -415,7 +415,7 @@ export default class MemberProfile extends React.Component {
 								alignItems: "center",
 								justifyContent: "center",
 							}}>
-							<TouchableOpacity								
+							<TouchableOpacity
 								style={styles.countrycodeButton}>
 								<Text
 									style={styles.countrycodeButtonText}>+673</Text>
@@ -431,18 +431,18 @@ export default class MemberProfile extends React.Component {
 
 							/> */}
 							<View
-								style={styles.lineView}/>
+								style={styles.lineView} />
 						</View>
 						<TextInput
 							keyboardType="number-pad"
 							clearButtonMode="always"
 							autoCorrect={false}
 							placeholder="Phone Number"
-							onChangeText={(phone_no) => this.setState({phone_no})}
-							style={styles.phoneNumberTextInput}/>
+							onChangeText={(phone_no) => this.setState({ phone_no })}
+							style={styles.phoneNumberTextInput} />
 					</View>
 					<View
-						style={styles.lineTwoView}/>
+						style={styles.lineTwoView} />
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -456,9 +456,9 @@ export default class MemberProfile extends React.Component {
 							autoCorrect={false}
 							placeholder="SMS Code"
 							keyboardType="number-pad"
-							onChangeText={(verification_code) => this.setState({verification_code})}
-							style={styles.codeTextInput}/>
-							<View style={{flex: 1}}/>
+							onChangeText={(verification_code) => this.setState({ verification_code })}
+							style={styles.codeTextInput} />
+						<View style={{ flex: 1 }} />
 						<TouchableOpacity
 							onPress={() => this.onSendCodePressed()}
 							style={styles.verificationcodeButton}>
@@ -467,14 +467,14 @@ export default class MemberProfile extends React.Component {
 						</TouchableOpacity>
 					</View>
 					<View
-						style={styles.lineThreeView}/>
+						style={styles.lineThreeView} />
 					<View
 						style={{
 							flex: 1,
-						}}/>
+						}} />
 					<TouchableOpacity
 						onPress={this.onConfirmButtonPressed}
-						style={this.state.has_send_code ? styles.confirmButton: styles.confirmDisabledButton}>
+						style={this.state.has_send_code ? styles.confirmButton : styles.confirmDisabledButton}>
 						<Text
 							style={styles.confirmButtonText}>Confirm</Text>
 					</TouchableOpacity>
@@ -486,330 +486,330 @@ export default class MemberProfile extends React.Component {
 	render() {
 
 		const { members, image, dob, nickname, gender, member_phone_number, email, selected_image } = this.state;
-		const preview = { uri: require("./../../assets/images/user.png")};
+		const preview = { uri: require("./../../assets/images/user.png") };
 		const uri = image.uri
-		
+
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
 			keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
 			style={{ flex: 1 }}
 			enabled><View
-			style={styles.memberProfileView}>
-			<View
-				style={styles.profileView}>
+				style={styles.memberProfileView}>
 				<View
-					style={styles.profilepicView}>
+					style={styles.profileView}>
 					<View
-						pointerEvents="box-none"
+						style={styles.profilepicView}>
+						<View
+							pointerEvents="box-none"
 						>
-						<View style={styles.avatarImageContainer}>						
-						{ image.uri != null ? <ExpoImage style={styles.avatarImage } {...{uri, uri}} />		 : <Image
-							source={require("./../../assets/images/user.png")}
-							style={styles.avatarImage}/>}											
-						</View>												
-						<TouchableOpacity
-							onPress={this._pickImage}
-							style={styles.imagebuttonButton}>
-						</TouchableOpacity>
-						{ image.uri == null && (<Text
-							style={styles.avatarUploadText}>Upload Photo</Text>) }
-					</View>
-					<Text
-						style={styles.nameText}>{members.nickname}</Text>
-				</View>
-			</View>
-			<View
-				style={styles.personalInfoView}>
-				<View
-					style={styles.nicknameView}>
-					<Image
-						source={require("./../../assets/images/line-17.png")}
-						style={styles.seperatorImage}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 0 * alpha,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								width: 315 * alpha,
-								height: 16 * alpha,
-								marginLeft: 22 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.nicknameText}>Nickname</Text>
-							<TextInput
-								autoCorrect={false}
-								placeholder="Nickname"
-								style={styles.usernameTextInput}
-								returnKeyType={'done'}
-								onChangeText={(nickname) => this.setState({nickname})}
-								defaultValue={nickname}
-							/>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.emailView}>
-					<Image
-						source={require("./../../assets/images/line-17.png")}
-						style={styles.seperatorImage}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 0 * alpha,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								width: 315 * alpha,
-								height: 16 * alpha,
-								marginLeft: 22 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.emailText}>Email</Text>
-							<TextInput
-								autoCorrect={false}
-								placeholder="Email (optional)"
-								style={styles.emailTextInput}
-								returnKeyType={'done'}
-								onChangeText={(email) => this.setState({email})}
-								defaultValue={email}
-							/>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.phoneNumberView}>
-					<View
-						style={styles.seperatorView}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							right: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 0 * alpha,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								height: 25 * alpha,
-								marginLeft: 22 * alpha,
-								marginRight: 22 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.phoneNumberText}>Phone Number</Text>
-							<Text
-								style={styles.textInputTextInput}>{member_phone_number}</Text>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<TouchableOpacity
-								onPress={this.onUpdatePressed}
-								style={styles.updateButton}>
-								<Text
-									style={styles.updateButtonText}>update</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.genderView}>
-					<Image
-						source={require("./../../assets/images/line-3-copy.png")}
-						style={styles.seperatorTwoImage}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							right: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 0 * alpha,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								height: 16 * alpha,
-								marginLeft: 22 * alpha,
-								marginRight: 86 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.genderText}>Gender</Text>
-							<View
-								style={styles.selectedradioView}>
-								<RadioForm formHorizontal={true} animation={true} >
-									{this.state.gender_options.map((obj, i) => {
-										var onPress = (value, index) => {
-											this.setState({
-												gender: value,
-												genderIndex: index
-											})
-										}
-										return (
-											<RadioButton labelHorizontal={true} key={i} >
-												{/*  You can set RadioButtonLabel before RadioButtonInput */}
-												<RadioButtonInput
-													obj={obj}
-													index={i}
-													isSelected={this.state.gender === i}
-													onPress={onPress}
-													buttonInnerColor={PRIMARY_COLOR}
-													buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : PRIMARY_COLOR}
-													selectedButtonColor={'#00B2E3'}
-													buttonSize={5 * alpha}
-													buttonStyle={{backgroundColor: "rgb(200, 200, 200)", borderWidth: 0, marginRight: 5 * alpha, marginTop: 2 * alpha}}
-												/>
-												<RadioButtonLabel
-													obj={obj}
-													index={i}
-													onPress={onPress}
-													labelStyle={{color: "rgb(135, 135, 135)", fontSize: 13 * fontAlpha, marginRight: 10 * alpha, fontFamily: NON_TITLE_FONT}}
-													labelWrapStyle={{}}
-												/>
-											</RadioButton>
-										)
-									})}
-								</RadioForm>
-								{/*<RadioForm*/}
-								{/*	formHorizontal={true}*/}
-								{/*	radio_props={radio_props}*/}
-								{/*	initial={members.gender}*/}
-								{/*	style={{backgroundColor: "blue", justifyContent: "center", alignItems: "center"}}*/}
-								{/*	buttonStyle={{backgroundColor: "black", position: "absolute", top: 20}}*/}
-								{/*	borderWidth={0}*/}
-								{/*	buttonSize={13 * alpha}*/}
-								{/*	buttonOuterSize={13 * alpha}*/}
-								{/*	buttonInnerColor={'#EEEAEA'}*/}
-								{/*	selectedButtonColor={'#00B2E3'}*/}
-								{/*	buttonColor={'#EEEAEA'}*/}
-								{/*	labelStyle={{backgroundColor:"red",fontSize: 13 * alpha, marginRight: 10 * alpha, alignSelf: 'center'}}*/}
-								{/*	onPress={(value) => {this.setState({gender:value})}}*/}
-								{/*/>*/}
-								{/*<View*/}
-								{/*	pointerEvents="box-none"*/}
-								{/*	style={{*/}
-								{/*		position: "absolute",*/}
-								{/*		left: 0 * alpha,*/}
-								{/*		right: 0 * alpha,*/}
-								{/*		top: 0 * alpha,*/}
-								{/*		bottom: 0 * alpha,*/}
-								{/*		justifyContent: "center",*/}
-								{/*	}}>*/}
-								{/*	<Image*/}
-								{/*		source={require("./../../assets/images/tick.png")}*/}
-								{/*		style={styles.selectedImage}/>*/}
-								{/*</View>*/}
-								{/*<View*/}
-								{/*	pointerEvents="box-none"*/}
-								{/*	style={{*/}
-								{/*		position: "absolute",*/}
-								{/*		left: 0 * alpha,*/}
-								{/*		top: 0 * alpha,*/}
-								{/*		bottom: 0 * alpha,*/}
-								{/*		justifyContent: "center",*/}
-								{/*	}}>*/}
-								{/*	<View*/}
-								{/*		style={styles.tickView}>*/}
-								{/*		<Image*/}
-								{/*			source={require("./../../assets/images/tick.png")}*/}
-								{/*			style={styles.tickImage}/>*/}
-								{/*	</View>*/}
-								{/*</View>*/}
+							<View style={styles.avatarImageContainer}>
+								{image.uri != null ? <ExpoImage style={styles.avatarImage} {...{ uri, uri }} /> : <Image
+									source={require("./../../assets/images/user.png")}
+									style={styles.avatarImage} />}
 							</View>
-							{/*<Text*/}
-							{/*	style={styles.maleText}>Male</Text>*/}
-							{/*<View*/}
-							{/*	style={{*/}
-							{/*		flex: 1,*/}
-							{/*	}}/>*/}
-							{/*<View*/}
-							{/*	style={styles.radioView}/>*/}
-							{/*<Text*/}
-							{/*	style={styles.femaleText}>Female</Text>*/}
+							<TouchableOpacity
+								onPress={this._pickImage}
+								style={styles.imagebuttonButton}>
+							</TouchableOpacity>
+							{image.uri == null && (<Text
+								style={styles.avatarUploadText}>Upload Photo</Text>)}
 						</View>
+						<Text
+							style={styles.nameText}>{members.nickname}</Text>
 					</View>
 				</View>
 				<View
-					style={styles.birthdayView}>
-					<Text
-						style={styles.birthdayText}>Birthday</Text>
-					<DatePicker
-						date={this.state.dob}
-						mode="date"
-						placeholder="Birthday"
-						format="DD-MM-YYYY"
-						confirmBtnText="Confirm"
-						cancelBtnText="Cancel"
-						showIcon={false}
-						style={styles.birthdayDatePicker}
-						disabled={this.state.member_have_dob}
-						customStyles={{
-							dateText: {
-								fontFamily: NON_TITLE_FONT,
-								fontSize: 13 * fontAlpha,
-								color: "rgb(135, 135, 135)",
-							},
-							dateInput: {
-								height: 18 * alpha,
-								borderWidth: 0,
+					style={styles.personalInfoView}>
+					<View
+						style={styles.nicknameView}>
+						<Image
+							source={require("./../../assets/images/line-17.png")}
+							style={styles.seperatorImage} />
+						<View
+							pointerEvents="box-none"
+							style={{
 								position: "absolute",
-								top: 0,
-								left: 61 * alpha,
-							},
-							disabled: {
-								backgroundColor: "transparent"
-							}
+								left: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 315 * alpha,
+									height: 16 * alpha,
+									marginLeft: 22 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.nicknameText}>Nickname</Text>
+								<TextInput
+									autoCorrect={false}
+									placeholder="Nickname"
+									style={styles.usernameTextInput}
+									returnKeyType={'done'}
+									onChangeText={(nickname) => this.setState({ nickname })}
+									defaultValue={nickname}
+								/>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.emailView}>
+						<Image
+							source={require("./../../assets/images/line-17.png")}
+							style={styles.seperatorImage} />
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 315 * alpha,
+									height: 16 * alpha,
+									marginLeft: 22 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.emailText}>Email</Text>
+								<TextInput
+									autoCorrect={false}
+									placeholder="Email (optional)"
+									style={styles.emailTextInput}
+									returnKeyType={'done'}
+									onChangeText={(email) => this.setState({ email })}
+									defaultValue={email}
+								/>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.phoneNumberView}>
+						<View
+							style={styles.seperatorView} />
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 25 * alpha,
+									marginLeft: 22 * alpha,
+									marginRight: 22 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.phoneNumberText}>Phone Number</Text>
+								<Text
+									style={styles.textInputTextInput}>{member_phone_number}</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<TouchableOpacity
+									onPress={this.onUpdatePressed}
+									style={styles.updateButton}>
+									<Text
+										style={styles.updateButtonText}>update</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.genderView}>
+						<Image
+							source={require("./../../assets/images/line-3-copy.png")}
+							style={styles.seperatorTwoImage} />
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 16 * alpha,
+									marginLeft: 22 * alpha,
+									marginRight: 86 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.genderText}>Gender</Text>
+								<View
+									style={styles.selectedradioView}>
+									<RadioForm formHorizontal={true} animation={true} >
+										{this.state.gender_options.map((obj, i) => {
+											var onPress = (value, index) => {
+												this.setState({
+													gender: value,
+													genderIndex: index
+												})
+											}
+											return (
+												<RadioButton labelHorizontal={true} key={i} >
+													{/*  You can set RadioButtonLabel before RadioButtonInput */}
+													<RadioButtonInput
+														obj={obj}
+														index={i}
+														isSelected={this.state.gender === i}
+														onPress={onPress}
+														buttonInnerColor={PRIMARY_COLOR}
+														buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : PRIMARY_COLOR}
+														selectedButtonColor={'#00B2E3'}
+														buttonSize={5 * alpha}
+														buttonStyle={{ backgroundColor: "rgb(200, 200, 200)", borderWidth: 0, marginRight: 5 * alpha, marginTop: 2 * alpha }}
+													/>
+													<RadioButtonLabel
+														obj={obj}
+														index={i}
+														onPress={onPress}
+														labelStyle={{ color: "rgb(135, 135, 135)", fontSize: 13 * fontAlpha, marginRight: 10 * alpha, fontFamily: NON_TITLE_FONT }}
+														labelWrapStyle={{}}
+													/>
+												</RadioButton>
+											)
+										})}
+									</RadioForm>
+									{/*<RadioForm*/}
+									{/*	formHorizontal={true}*/}
+									{/*	radio_props={radio_props}*/}
+									{/*	initial={members.gender}*/}
+									{/*	style={{backgroundColor: "blue", justifyContent: "center", alignItems: "center"}}*/}
+									{/*	buttonStyle={{backgroundColor: "black", position: "absolute", top: 20}}*/}
+									{/*	borderWidth={0}*/}
+									{/*	buttonSize={13 * alpha}*/}
+									{/*	buttonOuterSize={13 * alpha}*/}
+									{/*	buttonInnerColor={'#EEEAEA'}*/}
+									{/*	selectedButtonColor={'#00B2E3'}*/}
+									{/*	buttonColor={'#EEEAEA'}*/}
+									{/*	labelStyle={{backgroundColor:"red",fontSize: 13 * alpha, marginRight: 10 * alpha, alignSelf: 'center'}}*/}
+									{/*	onPress={(value) => {this.setState({gender:value})}}*/}
+									{/*/>*/}
+									{/*<View*/}
+									{/*	pointerEvents="box-none"*/}
+									{/*	style={{*/}
+									{/*		position: "absolute",*/}
+									{/*		left: 0 * alpha,*/}
+									{/*		right: 0 * alpha,*/}
+									{/*		top: 0 * alpha,*/}
+									{/*		bottom: 0 * alpha,*/}
+									{/*		justifyContent: "center",*/}
+									{/*	}}>*/}
+									{/*	<Image*/}
+									{/*		source={require("./../../assets/images/tick.png")}*/}
+									{/*		style={styles.selectedImage}/>*/}
+									{/*</View>*/}
+									{/*<View*/}
+									{/*	pointerEvents="box-none"*/}
+									{/*	style={{*/}
+									{/*		position: "absolute",*/}
+									{/*		left: 0 * alpha,*/}
+									{/*		top: 0 * alpha,*/}
+									{/*		bottom: 0 * alpha,*/}
+									{/*		justifyContent: "center",*/}
+									{/*	}}>*/}
+									{/*	<View*/}
+									{/*		style={styles.tickView}>*/}
+									{/*		<Image*/}
+									{/*			source={require("./../../assets/images/tick.png")}*/}
+									{/*			style={styles.tickImage}/>*/}
+									{/*	</View>*/}
+									{/*</View>*/}
+								</View>
+								{/*<Text*/}
+								{/*	style={styles.maleText}>Male</Text>*/}
+								{/*<View*/}
+								{/*	style={{*/}
+								{/*		flex: 1,*/}
+								{/*	}}/>*/}
+								{/*<View*/}
+								{/*	style={styles.radioView}/>*/}
+								{/*<Text*/}
+								{/*	style={styles.femaleText}>Female</Text>*/}
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.birthdayView}>
+						<Text
+							style={styles.birthdayText}>Birthday</Text>
+						<DatePicker
+							date={this.state.dob}
+							mode="date"
+							placeholder="Birthday"
+							format="DD-MM-YYYY"
+							confirmBtnText="Confirm"
+							cancelBtnText="Cancel"
+							showIcon={false}
+							style={styles.birthdayDatePicker}
+							disabled={this.state.member_have_dob}
+							customStyles={{
+								dateText: {
+									fontFamily: NON_TITLE_FONT,
+									fontSize: 13 * fontAlpha,
+									color: "rgb(135, 135, 135)",
+								},
+								dateInput: {
+									height: 18 * alpha,
+									borderWidth: 0,
+									position: "absolute",
+									top: 0,
+									left: 61 * alpha,
+								},
+								disabled: {
+									backgroundColor: "transparent"
+								}
 
-						}}
-						onDateChange={(dob) => {this.setState({dob: dob})}}
-					/>
-					{/*<TextInput*/}
-					{/*	autoCorrect={false}*/}
-					{/*	placeholder="1973-11-10"*/}
-					{/*	style={styles.birthdayTextInput}*/}
-					{/*	defaultValue={"1973-11-10"}*/}
-					{/*/>*/}
+							}}
+							onDateChange={(dob) => { this.setState({ dob: dob }) }}
+						/>
+						{/*<TextInput*/}
+						{/*	autoCorrect={false}*/}
+						{/*	placeholder="1973-11-10"*/}
+						{/*	style={styles.birthdayTextInput}*/}
+						{/*	defaultValue={"1973-11-10"}*/}
+						{/*/>*/}
 
+					</View>
 				</View>
-			</View>
-			<TouchableOpacity
-				onPress={() => this.onSavePressed()}
-				style={styles.saveButton}>
-				<Text
-					style={styles.saveButtonText}>SAVE</Text>
-			</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => this.onSavePressed()}
+					style={styles.saveButton}>
+					<Text
+						style={styles.saveButtonText}>SAVE</Text>
+				</TouchableOpacity>
 
-			<Modal isVisible={this.state.modalVisible}
+				<Modal isVisible={this.state.modalVisible}
 					coverScreen={false}
-				   avoidKeyboard={true}>
-				{this.renderModalContent()}
-			</Modal>
-		</View>
-		<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
-		<HudLoading isLoading={this.state.loading}/>
+					avoidKeyboard={true}>
+					{this.renderModalContent()}
+				</Modal>
+			</View>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
+			<HudLoading isLoading={this.state.loading} />
 		</KeyboardAvoidingView>
 
 	}
@@ -862,7 +862,7 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		width: 80 * alpha,
 		position: "absolute",
-		left:0,
+		left: 0,
 		top: 0,
 		height: 80 * alpha,
 	},
