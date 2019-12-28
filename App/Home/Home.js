@@ -351,7 +351,7 @@ export default class Home extends React.Component {
 
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			this.getLocationAsync();
+			// this.getLocationAsync();
 		}
 		this.setState({ appState: nextAppState });
 	};
