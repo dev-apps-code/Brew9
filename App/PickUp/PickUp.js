@@ -660,10 +660,11 @@ export default class PickUp extends React.Component {
 	}
 
 	onDirectionPressed(shop) {
-
-		let latitude = shop ? parseFloat(shop.latitude) : 0.0
-		let longitude = shop ? parseFloat(shop.longitude) : 0.0
-
+		let shops = this.props.selectedShop
+		// let latitude = shop ? parseFloat(shop.latitude) : 0.0
+		// let longitude = shop ? parseFloat(shop.longitude) : 0.0
+		let latitude = shops ? parseFloat(shops.latitude) : 0.0
+		let longitude = shops ? parseFloat(shops.longitude) : 0.0
 		openMap({ latitude: latitude, longitude: longitude });
 	}
 
