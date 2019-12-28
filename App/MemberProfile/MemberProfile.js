@@ -94,13 +94,13 @@ export default class MemberProfile extends React.Component {
 	}
 
 	getPermissionAsync = async () => {
-		if (Constants.platform.ios) {
+		// if (Constants.platform.ios) {
 			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 			if (status !== 'granted') {
 				return false
 			}
 			return true
-		}
+		// }
 	}
 
 	loadUpdateProfile(formData){
