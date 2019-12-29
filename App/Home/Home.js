@@ -230,6 +230,11 @@ export default class Home extends React.Component {
 
 		const { dispatch } = this.props
 
+		const { ask_location_status } = await Permissions.getAsync(Permissions.LOCATION);
+		if (ask_location_status === 'denied') {
+		  	return
+		}
+		
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
 			// this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
