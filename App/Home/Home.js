@@ -230,6 +230,11 @@ export default class Home extends React.Component {
 
 		const { dispatch } = this.props
 
+		const { ask_location_status } = await Permissions.getAsync(Permissions.LOCATION);
+		if (ask_location_status === 'denied') {
+			return
+		}
+
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
 			// this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
@@ -320,7 +325,7 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
-		const { currentMember } = this.props
+
 		Keyboard.dismiss()
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
@@ -369,16 +374,17 @@ export default class Home extends React.Component {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
 
+
+		const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 		if (currentMember != null) {
-			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 			obj.setUrlId(currentMember.id)
-			dispatch(
-				createAction('members/loadStorePushToken')({
-					object: obj,
-					callback,
-				})
-			)
 		}
+		dispatch(
+			createAction('members/loadStorePushToken')({
+				object: obj,
+				callback,
+			})
+		)
 	}
 
 	loadShops(loadProducts) {
@@ -1204,7 +1210,6 @@ export default class Home extends React.Component {
 	}
 
 	renderModalContent = (selected_product, shop) => {
-
 		let select_quantity = this.state.select_quantity
 
 		let filtered = selected_product.selected_variants.filter(function (el) { return el })
@@ -1257,7 +1262,7 @@ export default class Home extends React.Component {
 									source={require("./../../assets/images/star.png")}
 									style={styles.recommendedStarImage} />)}
 								<Text
-									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} {value.price > 0 && (`$${value.price}`)}</Text>
+									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} <Text style={{ color: selected ? 'white' : PRIMARY_COLOR }}>{value.price > 0 && (`$${parseInt(value.price)}`)}</Text></Text>
 							</TouchableOpacity>
 						})
 					}

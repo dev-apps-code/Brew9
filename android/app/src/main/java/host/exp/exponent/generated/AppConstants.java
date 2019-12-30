@@ -162,14 +162,7 @@ public class AppConstants {
         
         
         
-        
-        
-        
-<<<<<<< HEAD
-        
-        
-        
-        
+   
         
         // ADD EMBEDDED RESPONSES HERE
         // START EMBEDDED RESPONSES
