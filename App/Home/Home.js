@@ -232,7 +232,7 @@ export default class Home extends React.Component {
 
 		const { ask_location_status } = await Permissions.getAsync(Permissions.LOCATION);
 		if (ask_location_status === 'denied') {
-		  	return
+			return
 		}
 
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -356,7 +356,7 @@ export default class Home extends React.Component {
 
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			 this.getLocationAsync();
+			this.getLocationAsync();
 		}
 		this.setState({ appState: nextAppState });
 	};
@@ -374,17 +374,17 @@ export default class Home extends React.Component {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
 
-		
-			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
-			if (currentMember != null) {
-				obj.setUrlId(currentMember.id)
-			}
-			dispatch(
-				createAction('members/loadStorePushToken')({
-					object: obj,
-					callback,
-				})
-			)
+
+		const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
+		if (currentMember != null) {
+			obj.setUrlId(currentMember.id)
+		}
+		dispatch(
+			createAction('members/loadStorePushToken')({
+				object: obj,
+				callback,
+			})
+		)
 	}
 
 	loadShops(loadProducts) {
@@ -1210,7 +1210,6 @@ export default class Home extends React.Component {
 	}
 
 	renderModalContent = (selected_product, shop) => {
-
 		let select_quantity = this.state.select_quantity
 
 		let filtered = selected_product.selected_variants.filter(function (el) { return el })
@@ -1263,7 +1262,7 @@ export default class Home extends React.Component {
 									source={require("./../../assets/images/star.png")}
 									style={styles.recommendedStarImage} />)}
 								<Text
-									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} {value.price > 0 && (`$${value.price}`)}</Text>
+									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} <Text style={{ color: selected ? 'white' : PRIMARY_COLOR }}>{value.price > 0 && (`$${parseInt(value.price)}`)}</Text></Text>
 							</TouchableOpacity>
 						})
 					}
