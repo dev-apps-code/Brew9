@@ -226,7 +226,7 @@ export default class MemberProfile extends React.Component {
 	}
 
 	_pickImage = async () => {
-
+		
 		var get_permission = await this.getPermissionAsync()
 		if (get_permission) {
 			let result = await ImagePicker.launchImageLibraryAsync({
@@ -508,7 +508,7 @@ export default class MemberProfile extends React.Component {
 									style={styles.avatarImage} />}
 							</View>
 							<TouchableOpacity
-								onPress={this._pickImage}
+								onPress={  this._pickImage }
 								style={styles.imagebuttonButton}>
 							</TouchableOpacity>
 							{image.uri == null && (<Text

@@ -234,7 +234,7 @@ export default class Home extends React.Component {
 		if (ask_location_status === 'denied') {
 		  	return
 		}
-		
+
 		let { status } = await Permissions.askAsync(Permissions.LOCATION);
 		if (status !== 'granted') {
 			// this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
@@ -325,7 +325,7 @@ export default class Home extends React.Component {
 	}
 
 	async componentDidMount() {
-		const { currentMember } = this.props
+
 		Keyboard.dismiss()
 		this.props.navigation.setParams({
 			onQrScanPressed: this.onQrScanPressed,
@@ -356,7 +356,7 @@ export default class Home extends React.Component {
 
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			// this.getLocationAsync();
+			 this.getLocationAsync();
 		}
 		this.setState({ appState: nextAppState });
 	};
@@ -374,16 +374,17 @@ export default class Home extends React.Component {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
 
-		if (currentMember != null) {
+		
 			const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
-			obj.setUrlId(currentMember.id)
+			if (currentMember != null) {
+				obj.setUrlId(currentMember.id)
+			}
 			dispatch(
 				createAction('members/loadStorePushToken')({
 					object: obj,
 					callback,
 				})
 			)
-		}
 	}
 
 	loadShops(loadProducts) {
