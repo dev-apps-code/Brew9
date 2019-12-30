@@ -130,6 +130,7 @@ export default class Checkout extends React.Component {
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 		var time_now = Moment(new Date(), 'h:mm')
 
+		console.log("Opening" , opening, "Closing", closing)
 		var hour = time_now.hours();
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
@@ -264,8 +265,7 @@ export default class Checkout extends React.Component {
 
 
 	loadValidVouchers() {
-		const { dispatch, currentMember, selectedShop, cart, promotions } = this.props
-
+		const { dispatch, currentMember, selectedShop, cart, promotions, cart_order_id } = this.props
 		if (currentMember != null) {
 			const callback = eventObject => {
 				if (eventObject.success) {
@@ -276,7 +276,7 @@ export default class Checkout extends React.Component {
 			}
 
 			filtered_cart = _.filter(cart, { clazz: 'product' });
-			const obj = new ValidVouchersRequestObject(selectedShop.id, filtered_cart, promotions)
+			const obj = new ValidVouchersRequestObject(selectedShop.id, filtered_cart, promotions, cart_order_id)
 			obj.setUrlId(currentMember.id)
 			dispatch(
 				createAction('vouchers/loadVouchersForCart')({
