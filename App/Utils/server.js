@@ -18,7 +18,7 @@ export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export const KCURRENT_API_VERSION_HEADER = "application/dc.v1";
+export const KCURRENT_API_VERSION_HEADER = "application/dc.v1 gzip";
 
 
 export const KTIMEOUT = 3 * 1000;

@@ -85,20 +85,26 @@ export default class ProductCell extends React.Component {
   };
 
   render() {
-    const ingredients = this.props.productingredient.map((item, key) => {
 
-      var highlight = false
+    var ingredients = null;
+    if (this.props.productingredient !== undefined)
+    {
+      ingredients = this.props.productingredient.map((item, key) => {
 
-      if (item.highlight == true) {
-        hightlight = true
-      }
-
-      return (
-        <View style={item.highlight ? styles.ingredientHighlightView : styles.ingredientView} key={key}>
-          <Text numberOfLines={1} style={item.highlight ? styles.ingredientHighlightText : styles.ingredientText}>{item.name}</Text>
-        </View>
-      );
-    });
+        var highlight = false
+  
+        if (item.highlight == true) {
+          hightlight = true
+        }
+  
+        return (
+          <View style={item.highlight ? styles.ingredientHighlightView : styles.ingredientView} key={key}>
+            <Text numberOfLines={1} style={item.highlight ? styles.ingredientHighlightText : styles.ingredientText}>{item.name}</Text>
+          </View>
+        );
+      });
+    }
+    
 
     var hasPrice = this.props.productprice > 0.00 && this.props.productprice ? true : false
     const uri = this.props.productimage
