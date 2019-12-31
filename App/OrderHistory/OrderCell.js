@@ -9,7 +9,7 @@
 import { Text, Image, TouchableWithoutFeedback, TouchableOpacity, View, StyleSheet } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 
 export default class OrderCell extends React.Component {
 
@@ -18,11 +18,11 @@ export default class OrderCell extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onCellPress = () => {
-	
+
 	}
 
 	onCompletePressed = (order) => {
@@ -33,10 +33,10 @@ export default class OrderCell extends React.Component {
 		})
 	}
 
-	onReviewPressed = () => {
+	onReviewPressed = (order) => {
 		const { navigate } = this.props.navigation
 
-		navigate("OrderReview")
+		navigate("OrderReview", { order: order })
 	}
 
 	onInvoicePressed = () => {
@@ -57,8 +57,8 @@ export default class OrderCell extends React.Component {
 
 			<Image
 				key={key}
-				source={{uri: item.thumb}}
-				style={styles.productimageImage}/>
+				source={{ uri: item.thumb }}
+				style={styles.productimageImage} />
 
 		)
 
@@ -79,7 +79,7 @@ export default class OrderCell extends React.Component {
 						<View
 							style={{
 								flex: 1,
-							}}/>
+							}} />
 						<TouchableOpacity
 							onPress={() => this.onCompletePressed(this.props.item)}
 							style={styles.completeButton}>
@@ -87,7 +87,7 @@ export default class OrderCell extends React.Component {
 								style={styles.completeButtonText}>{this.props.status}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
-								style={styles.completeButtonImage}/>
+								style={styles.completeButtonImage} />
 						</TouchableOpacity>
 					</View>
 					<View
@@ -98,7 +98,7 @@ export default class OrderCell extends React.Component {
 							{
 								this.props.products.length > 5 && (<Image
 									source={require("./../../assets/images/group-21.png")}
-									style={styles.etcimageImage}/>)
+									style={styles.etcimageImage} />)
 							}
 
 						</View>
@@ -134,32 +134,32 @@ export default class OrderCell extends React.Component {
 						<View
 							style={{
 								flex: 1,
-							}}/>
+							}} />
 						<Text
 							style={styles.priceText}>${parseFloat(this.props.total).toFixed(2)}</Text>
 					</View>
 				</View>
-				{/* <View
+				<View
 					style={{
 						flex: 1,
-					}}/>
+					}} />
 				<View
-					style={styles.lineView}/> */}
-				{/*<View*/}
-				{/*	style={styles.optionView}>*/}
-				{/*	<TouchableOpacity*/}
-				{/*		onPress={this.onReviewPressed}*/}
-				{/*		style={styles.reviewButton}>*/}
-				{/*		<Text*/}
-				{/*			style={styles.reviewButtonText}>Review</Text>*/}
-				{/*	</TouchableOpacity>*/}
-				{/*	<TouchableOpacity*/}
-				{/*		onPress={this.onReceiptPressed}*/}
-				{/*		style={styles.receiptButton}>*/}
-				{/*		<Text*/}
-				{/*			style={styles.receiptButtonText}>Receipt</Text>*/}
-				{/*	</TouchableOpacity>*/}
-				{/*</View>*/}
+					style={styles.lineView} />
+				<View
+					style={styles.optionView}>
+					<TouchableOpacity
+						onPress={() => this.onReviewPressed(this.props.item)}
+						style={styles.reviewButton}>
+						<Text
+							style={styles.reviewButtonText}>Review</Text>
+					</TouchableOpacity>
+					{/*	<TouchableOpacity*/}
+					{/*		onPress={this.onReceiptPressed}*/}
+					{/*		style={styles.receiptButton}>*/}
+					{/*		<Text*/}
+					{/*			style={styles.receiptButtonText}>Receipt</Text>*/}
+					{/*	</TouchableOpacity>*/}
+				</View>
 			</View>
 		</TouchableWithoutFeedback>
 	}
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		marginLeft: 20 * alpha,
 	},
@@ -339,11 +339,12 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	reviewButtonText: {
-		color: "rgb(94, 94, 94)",
+		// color: "rgb(94, 94, 94)",
+		color: PRIMARY_COLOR,
 		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	reviewButtonImage: {
@@ -354,7 +355,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		borderRadius: 2 * alpha,
 		borderWidth: 1 * alpha,
-		borderColor: "rgb(231, 230, 230)",
+		// borderColor: "rgb(231, 230, 230)",
+		borderColor: PRIMARY_COLOR,
 		borderStyle: "solid",
 		flexDirection: "row",
 		alignItems: "center",
@@ -386,7 +388,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 })
