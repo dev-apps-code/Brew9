@@ -118,9 +118,12 @@ export default {
       let data = [...notifications]
       let { item } = payload
       let tempData = data.map(notification => {
-        if (notification.id == item.id) {
+        if (notification.id == item.id && item.read == false) {
+
           last_read = item.id
           notification.read = true
+          AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
+
         }
         return notification
       })
@@ -128,7 +131,6 @@ export default {
         return notification.read == false
       })
       AsyncStorage.setItem("notifications", JSON.stringify(data))
-      AsyncStorage.setItem("notification_key", JSON.stringify(last_read))
 
       return { ...state, notifications: tempData, unreadNotificationCount: count.length }
 
@@ -158,13 +160,13 @@ export default {
 
         let saved_notifications = payload.current_notifications
         var new_notification_list = _.unionBy(notifications, saved_notifications, 'id');
-        var sorted = _.orderBy(new_notification_list, 'id','desc')
+        var sorted = _.orderBy(new_notification_list, 'id', 'desc')
         let count = new_notification_list.filter(item => { return item.read == false })
 
         return { ...state, notifications: sorted, unreadNotificationCount: count.length }
       }
-       else {
-        return { ...state, notifications : [], unreadNotificationCount:unread}
+      else {
+        return { ...state, notifications: [], unreadNotificationCount: unread }
       }
 
     },
@@ -459,8 +461,8 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          yield put(createAction('shops/setOrders')({orders:eventObject.result}))  
-         }
+          yield put(createAction('shops/setOrders')({ orders: eventObject.result }))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
@@ -543,7 +545,7 @@ export default {
         // console.log("Count", count)
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-        
+
           yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
         }
         typeof callback === 'function' && callback(eventObject)
