@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking } from "react-native"
+import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking, TextInput } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
@@ -73,6 +73,7 @@ export default class Checkout extends React.Component {
 		this.state = {
 			delivery_options: 'pickup',
 			vouchers_to_use: [],
+			voucher: '',
 			valid_vouchers: [],
 			discount: 0,
 			isPaymentToggle: false,
@@ -89,7 +90,7 @@ export default class Checkout extends React.Component {
 			selected_hour_index: 0,
 			selected_minute_index: 0,
 			paynow_clicked: false,
-			final_price: discount_cart_total.toFixed(2),
+			final_price: discount_cart_total,
 			visible: false
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -843,6 +844,15 @@ export default class Checkout extends React.Component {
 		}
 	}
 
+	onApplyVoucher = () => {
+		console.log('onApplyVoucher')
+	}
+	onChangeVoucher = (text) => {
+		this.setState({
+			voucher: text
+		})
+	}
+
 	renderPaymentMethod() {
 
 		const { currentMember } = this.props
@@ -1204,6 +1214,15 @@ export default class Checkout extends React.Component {
 			<View style={styles.orderitemsView}>
 				{voucher_items}
 			</View>
+			{/* <View style={styles.couponContent}>
+				<TextInput
+					style={styles.voucherInput}
+					onChangeText={text => this.onChangeVoucher(text)}
+					value={this.state.voucher} />
+				<TouchableOpacity style={styles.applyButton} onPress={this.onApplyVoucher}>
+					<Text style={styles.applyText}>Apply</Text>
+				</TouchableOpacity>
+			</View> */}
 		</View>
 	}
 
@@ -1795,6 +1814,42 @@ export default class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	couponContent: {
+		flexDirection: 'row',
+		flex: 1,
+		backgroundColor: 'transparent',
+		marginHorizontal: 20 * alpha
+	},
+	voucherInput: {
+		flex: 1,
+		paddingVertical: 2 * alpha,
+		borderTopLeftRadius: 5 * alpha,
+		borderBottomLeftRadius: 5 * alpha,
+		paddingHorizontal: 5 * alpha,
+		backgroundColor: 'white',
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+	},
+	applyButton: {
+		flex: 0.5,
+		borderTopRightRadius: 5 * alpha,
+		borderBottomRightRadius: 5 * alpha,
+		paddingVertical: 5 * alpha,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: PRIMARY_COLOR
+	},
+	applyText: {
+		// backgroundColor: "transparent",
+		color: "white",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+
+		// marginBottom: 5 * alpha,
+	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
