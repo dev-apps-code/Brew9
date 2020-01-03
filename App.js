@@ -344,25 +344,8 @@ VerifyUserStack.router.getStateForAction = (action, state) => {
 
 const prevGetStateForHome = PushOrder.router.getStateForAction;
 PushOrder.router.getStateForAction = (action, state) => {
-  console.log('action', action)
-  console.log('state', state)
 
   if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Home') {
-    Alert.alert(
-      '',
-      'Are you sure you want to close application?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-        },
-        {
-          text: 'OK',
-          onPress: () => BackHandler.exitApp(),
-        },
-      ],
-      { cancelable: false },
-    );    // BackHandler.exitApp()
     const routes = [
       state.routes[state.index]
     ];

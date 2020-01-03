@@ -111,7 +111,6 @@ export default class Checkout extends React.Component {
 		}, function () {
 			this.loadValidVouchers()
 		})
-		// dispatch(createAction("config/setTab")({ tab: 'home', index: 2 }))
 		dispatch(createAction("orders/noClearCart")());
 		this.check_promotion_trigger()
 	}
