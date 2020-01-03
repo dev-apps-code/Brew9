@@ -11,7 +11,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "enabled": false
     },
     "assetBundlePatterns": [
       "**/*"

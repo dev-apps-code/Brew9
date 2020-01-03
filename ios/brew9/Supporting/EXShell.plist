@@ -10,5 +10,7 @@
 	<string>exp://exp.host/@tonyvoon/brew9</string>
 	<key>releaseChannel</key>
 	<string>test</string>
+	<key>areRemoteUpdatesEnabled</key>
+	<false/>
 </dict>
 </plist>
