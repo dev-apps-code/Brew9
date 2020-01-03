@@ -17,7 +17,8 @@ import {
   createSwitchNavigator
 } from "react-navigation";
 import {
-	Text,
+  BackHandler,
+  Alert
 } from "react-native";
 import Login from "./App/Login/Login";
 import Checkout from "./App/Checkout/Checkout";
@@ -108,7 +109,7 @@ const PushOrder = createStackNavigator(
     Checkout: {
       screen: Checkout,
       navigationOptions: {
-        tabBarVisible: false, 
+        tabBarVisible: false,
       }
     },
     FeaturedPromotionDetail: {
@@ -151,7 +152,7 @@ const PushOrder = createStackNavigator(
     VerifyUser: {
       screen: VerifyUser
     },
-    
+
   },
   {
     initialRouteName: "Home",
@@ -343,8 +344,25 @@ VerifyUserStack.router.getStateForAction = (action, state) => {
 
 const prevGetStateForHome = PushOrder.router.getStateForAction;
 PushOrder.router.getStateForAction = (action, state) => {
+  console.log('action', action)
+  console.log('state', state)
 
   if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Home') {
+    Alert.alert(
+      '',
+      'Are you sure you want to close application?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+        },
+        {
+          text: 'OK',
+          onPress: () => BackHandler.exitApp(),
+        },
+      ],
+      { cancelable: false },
+    );    // BackHandler.exitApp()
     const routes = [
       state.routes[state.index]
     ];
