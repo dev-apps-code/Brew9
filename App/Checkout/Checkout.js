@@ -111,7 +111,7 @@ export default class Checkout extends React.Component {
 		}, function () {
 			this.loadValidVouchers()
 		})
-
+		// dispatch(createAction("config/setTab")({ tab: 'home', index: 2 }))
 		dispatch(createAction("orders/noClearCart")());
 		this.check_promotion_trigger()
 	}
@@ -128,20 +128,16 @@ export default class Checkout extends React.Component {
 		const { selectedShop } = this.props
 		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
-		// var opening = Moment('16:00', 'h:mm')
-		// var closing = Moment('22:00', 'h:mm')
 
 		var time_now = Moment(new Date(), 'h:mm')
-		// console.log('opening', opening.hours())
-		// console.log('closing', closing.hours())
+
 		var hour = time_now.hours();
 		var min = time_now.minutes();
 		var minute_array = ["00", "15", "30", "45"]
 
 		var first_hour = hour > opening.hours() && min > 45 ? hour + 1 : hour > opening.hours() ? hour : opening.hours()
 		var last_hour = closing.hours()
-		// console.log('first_hour', first_hour)
-		// console.log('last_hour', last_hour)
+
 		var hour_array = _.range(first_hour, last_hour + 1);
 
 		var selected_minute = ""
@@ -1203,7 +1199,7 @@ export default class Checkout extends React.Component {
 								<View style={styles.spacer} />
 							</View>
 							<Text
-								style={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? styles.productVoucherText : styles.productVoucherDisableText}>{this.state.valid_vouchers != null ? this.state.valid_vouchers.length : '-'} available</Text>
+								style={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? styles.productVoucherText : styles.productVoucherDisableText}>{this.state.valid_vouchers != null ? this.state.valid_vouchers.length : '-'} usable</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage} />
