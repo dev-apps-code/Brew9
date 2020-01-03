@@ -80,6 +80,7 @@ import Moment from 'moment';
 	discount_cart_total: orders.discount_cart_total,
 	clearCart: orders.clearCart,
 	currentPromoText: orders.currentPromoText
+
 }))
 
 export default class Home extends React.Component {
@@ -87,7 +88,6 @@ export default class Home extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 
 		const { params = {} } = navigation.state
-
 		return {
 
 			headerTintColor: "black",
@@ -333,26 +333,26 @@ export default class Home extends React.Component {
 		this.loadShops(true)
 
 		AppState.addEventListener('change', this._handleAppStateChange);
-		// BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 
 	componentWillUnmount() {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
-		// BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
-	onBackPress() {
-		const { dispatch, navigation } = this.props;
-		const activeRoute = navigation.state.routeName == "Home" ? true : false;
-		if (activeRoute) {
-			this.handleBackPress()
-			return false;
-		}
-		dispatch(NavigationActions.back());
-		return true;
-	}
+	// onBackPress() {
+	// 	const { dispatch, navigation } = this.props;
+	// 	const activeRoute = navigation.state.routeName == "Home" ? true : false;
+	// 	if (activeRoute) {
+	// 		this.handleBackPress()
+	// 		return false;
+	// 	}
+	// 	dispatch(NavigationActions.back());
+	// 	return true;
+	// }
 
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -363,9 +363,15 @@ export default class Home extends React.Component {
 
 	handleBackPress = () => {
 		const { dispatch, navigation } = this.props;
-		const activeRoute = navigation.state.routeName == "Home" ? true : false;
-		if (activeRoute) {
-			this.setState({ visible: true })
+		if (!navigation.isFocused()) {
+			// The screen is not focused, so don't do anything
+			return false;
+		} else {
+			const activeRoute = navigation.state.routeName == "Home" ? true : false;
+			console.log('activeRoute', activeRoute)
+			if (activeRoute) {
+				this.setState({ visible: true })
+			}
 		}
 	}
 
@@ -389,7 +395,7 @@ export default class Home extends React.Component {
 
 	loadShops(loadProducts) {
 
-		// console.log("Status", loadProducts)
+		console.log("Status", loadProducts)
 		const { dispatch, company_id, location } = this.props
 		const { first_promo_popup } = this.state
 		this.setState({ loading: true })
@@ -738,7 +744,6 @@ export default class Home extends React.Component {
 	}
 
 	renderProductlistFlatListCell = ({ item, index }) => {
-
 		if (item) {
 			if (item.clazz == "product") {
 				return <ProductCell
@@ -1424,7 +1429,6 @@ export default class Home extends React.Component {
 		let categoryBottomSpacer = undefined
 		// let should_show = this.shouldShowFeatured(shop)
 		let fullList = [...cart, ...promotions]
-
 		if (shop !== null) {
 			if (shop.can_order == false) {
 				if (shop.featured_promotion !== null) {
