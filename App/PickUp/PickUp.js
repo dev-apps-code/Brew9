@@ -1214,7 +1214,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column"
 	},
 	refreshView: {
-		backgroundColor: LIGHT_BLUE,
+		// backgroundColor: LIGHT_BLUE,
 		width: 25 * alpha,
 		height: 25 * alpha,
 		justifyContent: 'center',
@@ -1222,9 +1222,9 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		right: 0 * alpha,
 		bottom: 60 * alpha,
-		borderWidth: 1,
-		borderColor: PRIMARY_COLOR,
-		borderRadius: 5
+		// borderWidth: 1,
+		// borderColor: PRIMARY_COLOR,
+		// borderRadius: 5
 		// flex: 0.2
 		// flexDirection: "column".
 	},
@@ -1235,7 +1235,7 @@ const styles = StyleSheet.create({
 		height: 25 * alpha,
 	},
 	refreshImage: {
-		tintColor: "rgb(35, 31, 32)",
+		tintColor: "rgb(205, 207, 208)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		height: 15 * alpha,
