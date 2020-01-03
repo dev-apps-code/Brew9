@@ -114,7 +114,7 @@ export default class ValidVoucher extends React.Component {
 					navigation={this.props.navigation}
 					style={styles.validvoucher}>
 					<View
-						style={styles.cellcontentView}>
+						style={this.props.valid == true ? styles.cellcontentView : styles.invalidcellcontentView}>
 						<Image
 							source={require("./../../assets/images/group-5-3.png")}
 							style={styles.backgroundImage}/>
@@ -176,6 +176,13 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: "100%",
 		height: 140 * alpha,
+	},
+	invalidcellcontentView: {
+		opacity: 0.41,
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 8 * alpha,
+		marginBottom: 8 * alpha,
 	},
 	cellcontentView: {
 		backgroundColor: "transparent",

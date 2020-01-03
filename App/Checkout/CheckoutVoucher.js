@@ -264,6 +264,7 @@ export default class CheckoutVoucher extends React.Component {
                 title={item.voucher.name}
                 item={item}
                 description={item.voucher.description}
+                valid={item.is_valid}
                 display_value={item.voucher.display_value}
                 discount_type={item.voucher.discount_type}
                 used_date={item.used_date}

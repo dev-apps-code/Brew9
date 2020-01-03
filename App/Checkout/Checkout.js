@@ -1177,6 +1177,9 @@ export default class Checkout extends React.Component {
 
 		})
 
+		
+		var valid_voucher_counts = _.filter(this.state.valid_vouchers, function(o) { if (o.is_valid == true) return o }).length;
+
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
@@ -1199,7 +1202,7 @@ export default class Checkout extends React.Component {
 								<View style={styles.spacer} />
 							</View>
 							<Text
-								style={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? styles.productVoucherText : styles.productVoucherDisableText}>{this.state.valid_vouchers != null ? this.state.valid_vouchers.length : '-'} usable</Text>
+								style={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? styles.productVoucherText : styles.productVoucherDisableText}>{this.state.valid_vouchers != null ? valid_voucher_counts : '-'} usable</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage} />

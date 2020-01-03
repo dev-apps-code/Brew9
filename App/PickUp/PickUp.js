@@ -1221,7 +1221,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		position: 'absolute',
 		right: 0 * alpha,
-		bottom: 60 * alpha,
+		bottom: 63 * alpha,
 		// borderWidth: 1,
 		// borderColor: PRIMARY_COLOR,
 		// borderRadius: 5
