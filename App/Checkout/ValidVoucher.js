@@ -64,7 +64,7 @@ export default class ValidVoucher extends React.Component {
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
+								style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
 								
 						</View>
 					</View>
@@ -81,7 +81,7 @@ export default class ValidVoucher extends React.Component {
 							}}>
 							
 							<Text
-								style={styles.valueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
+								style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
 							
 						</View>
 					</View>
@@ -98,7 +98,7 @@ export default class ValidVoucher extends React.Component {
 							justifyContent: "center",
 						}}>
 						<Text
-							style={styles.valueText}>{display_value}</Text>
+							style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>{display_value}</Text>
 						<Text
 							style={styles.currencyText}>{members.currency}</Text> 	
 					</View>
@@ -158,7 +158,7 @@ export default class ValidVoucher extends React.Component {
 									alignItems: "flex-end",
 								}}>
 								<Text
-									style={styles.dateText}>Expiration: <Text style={styles.highlight}>{this.props.item.available_date}</Text></Text>
+									style={styles.dateText}>Expiration: <Text style={this.props.valid == true ? styles.highlight : null}>{this.props.item.available_date}</Text></Text>
 								<View
 									style={{
 										flex: 1,
@@ -228,6 +228,16 @@ const styles = StyleSheet.create({
 	},
 	valueText: {
 		color: "rgb(0, 178, 227)",
+		fontFamily: TITLE_FONT,
+		fontSize: 24 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		marginLeft: 16 * alpha,
+	},
+	invalidValueText: {
+		color: "rgb(68, 68, 68)",
 		fontFamily: TITLE_FONT,
 		fontSize: 24 * fontAlpha,
 		fontStyle: "normal",
