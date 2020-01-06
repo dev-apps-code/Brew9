@@ -91,7 +91,8 @@ export default class Checkout extends React.Component {
 			selected_minute_index: 0,
 			paynow_clicked: false,
 			final_price: discount_cart_total,
-			visible: false
+			visible: false,
+			applyCode: false
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -381,6 +382,13 @@ export default class Checkout extends React.Component {
 			vouchers_to_use: new_voucher_list
 		}, function () {
 			this.calculateVoucherDiscount(new_voucher_list)
+		})
+	}
+	onCancelCoupon = () => {
+		console.log('cancel coupon')
+		this.setState({
+			voucher: '',
+			applyCode: false
 		})
 	}
 
@@ -839,7 +847,10 @@ export default class Checkout extends React.Component {
 		}
 	}
 
-	onApplyVoucher = () => {
+	onApplyCouponCode = () => {
+		this.setState({
+			applyCode: true
+		})
 		console.log('onApplyVoucher')
 	}
 	onChangeVoucher = (text) => {
@@ -847,6 +858,7 @@ export default class Checkout extends React.Component {
 			voucher: text
 		})
 	}
+
 
 	renderPaymentMethod() {
 
@@ -1176,11 +1188,35 @@ export default class Checkout extends React.Component {
 
 		})
 
-		
-		var valid_voucher_counts = _.filter(this.state.valid_vouchers, function(o) { if (o.is_valid == true) return o }).length;
+
+		var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (o) { if (o.is_valid == true) return o }).length;
 
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
+				<View style={styles.couponContent}>
+					<Text style={styles.couponText}>Coupon code</Text>
+					{!this.state.applyCode ?
+						<View style={styles.applyCoupon}>
+							<TextInput
+								style={styles.voucherInput}
+								onChangeText={text => this.onChangeVoucher(text)}
+								value={this.state.voucher}
+								maxLength={8} />
+							<TouchableOpacity style={styles.applyButton} onPress={this.onApplyCouponCode}>
+								<Text style={styles.applyText}>Apply</Text>
+							</TouchableOpacity>
+						</View> :
+						<View style={{ flexDirection: 'row' }}>
+							<Text
+								style={[styles.productVoucherText, { marginRight: 5 * alpha }]}>{this.state.voucher} </Text>
+							<TouchableOpacity onPress={() => { this.onCancelCoupon(item) }}>
+								<Image
+									source={require("./../../assets/images/cancel.png")}
+									style={styles.cancelImage} />
+							</TouchableOpacity>
+
+						</View>}
+				</View>
 				<TouchableOpacity
 					onPress={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? () => this.onVoucherButtonPressed() : () => null}
 					style={styles.voucherButton}>
@@ -1212,15 +1248,7 @@ export default class Checkout extends React.Component {
 			<View style={styles.orderitemsView}>
 				{voucher_items}
 			</View>
-			{/* <View style={styles.couponContent}>
-				<TextInput
-					style={styles.voucherInput}
-					onChangeText={text => this.onChangeVoucher(text)}
-					value={this.state.voucher} />
-				<TouchableOpacity style={styles.applyButton} onPress={this.onApplyVoucher}>
-					<Text style={styles.applyText}>Apply</Text>
-				</TouchableOpacity>
-			</View> */}
+
 		</View>
 	}
 
@@ -1792,7 +1820,7 @@ export default class Checkout extends React.Component {
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }}  textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 
 			{/* <TimePicker
 				ref={ref => {
@@ -1813,16 +1841,44 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
 	couponContent: {
+		backgroundColor: "transparent",
+		flex: 1,
+		marginTop: 10 * alpha,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		height: 40 * alpha
+	},
+	applyCoupon: {
 		flexDirection: 'row',
 		flex: 1,
 		backgroundColor: 'transparent',
-		marginHorizontal: 20 * alpha
+		alignItems: 'flex-end'
+
+	},
+	couponText: {
+		// fontFamily: TITLE_FONT,
+		// fontSize: 14 * fontAlpha,
+		// fontStyle: "normal",
+		// textAlign: "center",
+		// alignItems: 'center'
+		backgroundColor: "transparent",
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		flex: 0.35,
+
 	},
 	voucherInput: {
-		flex: 1,
-		paddingVertical: 2 * alpha,
-		borderTopLeftRadius: 5 * alpha,
-		borderBottomLeftRadius: 5 * alpha,
+		flex: 1.5,
+		paddingVertical: 5 * alpha,
+		borderRadius: 5 * alpha,
+		borderWidth: 1,
+		borderColor: 'lightgray',
+		marginHorizontal: 5 * alpha,
+		// borderBottomLeftRadius: 5 * alpha,
 		paddingHorizontal: 5 * alpha,
 		backgroundColor: 'white',
 		fontFamily: TITLE_FONT,
@@ -1831,8 +1887,9 @@ const styles = StyleSheet.create({
 	},
 	applyButton: {
 		flex: 0.5,
-		borderTopRightRadius: 5 * alpha,
-		borderBottomRightRadius: 5 * alpha,
+		borderRadius: 5 * alpha,
+		// borderTopRightRadius: 5 * alpha,
+		// borderBottomRightRadius: 5 * alpha,
 		paddingVertical: 5 * alpha,
 		justifyContent: 'center',
 		alignItems: 'center',
