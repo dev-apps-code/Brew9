@@ -201,6 +201,19 @@ const PushPickup = createStackNavigator(
   }
 );
 
+const PushMission = createStackNavigator(
+  {
+    MissionCenter: {
+      screen: MissionCenter
+    },
+   
+  },
+  {
+    initialRouteName: "MissionCenter",
+  }
+);
+
+
 const PushInbox = createStackNavigator(
   {
     Notification: {
@@ -324,6 +337,16 @@ PushOrder.navigationOptions = ({ navigation }) => {
   };
 };
 
+const prevGetStateForMission = PushMission.router.getStateForAction;
+PushMission.router.getStateForAction = (action, state) => {
+  if (state != undefined) {
+    if (state.index === 0 && action.type === 'Navigation/BACK') {
+      return state;
+    }
+  }
+  return prevGetStateForMission(action, state);
+};
+
 const prevGetStateForVerify = VerifyUserStack.router.getStateForAction;
 VerifyUserStack.router.getStateForAction = (action, state) => {
 
@@ -439,6 +462,9 @@ const TabGroupOne = createBottomTabNavigator(
     PushInbox: {
       screen: PushInbox
     },
+    PushMission:{
+      screen: PushMission
+    },
     PushProfile: {
       screen: PushProfile
     }
@@ -471,6 +497,8 @@ const TabGroupOne = createBottomTabNavigator(
           return PickUp.tabBarItemOptions(navigation, store);
         case "PushInbox":
           return Notification.tabBarItemOptions(navigation, store);
+          case "PushMission":
+            return MissionCenter.tabBarItemOptions(navigation, store);
         case "PushProfile":
           return Profile.tabBarItemOptions(navigation, store);
       }

@@ -19,7 +19,7 @@ import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
 import MissionLoginRequestObject from "../Requests/mission_login_request_object"
 import Toast, {DURATION} from 'react-native-easy-toast'
-import { PRIMARY_COLOR, NON_TITLE_FONT, TITLE_FONT, TOAST_DURATION } from "../Common/common_style"
+import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT_CROWN, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
@@ -34,17 +34,11 @@ export default class MissionCenter extends React.Component {
 
         const { params = {} } = navigation.state
         return {
-            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Mission Center</Text>,
+            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Rewards</Text>,
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>
-                <TouchableOpacity
-                    onPress={params.onBackPressed ? params.onBackPressed : () => null}
-                    style={styles.navigationBarItem}>
-                    <Image
-                        source={require("./../../assets/images/back.png")}
-                        style={styles.navigationBarItemIcon}/>
-                </TouchableOpacity>
+             
             </View>,
             headerRight: null,
             headerStyle: {
@@ -54,13 +48,38 @@ export default class MissionCenter extends React.Component {
         }
     }
 
+    static tabBarItemOptions = (navigation, store) => {
+
+		return {
+			tabBarLabel: "Rewards",
+			tabBarOnPress: ({ navigation, defaultHandler }) => {
+                const analytics = new Analytics(ANALYTICS_ID)
+                analytics.event(new Event('Profile', 'Click', "Mission Center"))
+				store.dispatch(createAction("config/setToggleShopLocation")(false))
+				store.dispatch(createAction("config/setTab")("mission"))
+				defaultHandler()
+			},
+			tabBarIcon: ({ iconTintColor, focused }) => {
+				const image = focused
+					? require('./../../assets/images/crown.png')
+					: require('./../../assets/images/crown.png')
+
+				return <Image
+					source={image}
+					style={{ resizeMode: "contain", width: 28 * alpha, height: 28 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT_CROWN }} />
+			},
+		}
+	}
+
     constructor(props) {
         super(props)
         this.state = {
-            loading: false,
+            loading: true,
             missions: [],
             mission_statements: [],
-            updated: false
+            updated: false,
+            isRefreshing: false,
+            timestamp: undefined,
         }
     }
 
@@ -68,7 +87,13 @@ export default class MissionCenter extends React.Component {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
-        this.loadMissions()
+        this.props.navigation.addListener('didFocus', this.refreshMission.bind(this))
+        this.loadMissions(true)
+    }
+
+    refreshMission(){
+        console.log("refrshing mission")
+        this.loadMissions(false)
     }
 
     onBackPressed = () => {
@@ -82,9 +107,27 @@ export default class MissionCenter extends React.Component {
     }
 
 
-    loadMissions(){
-        const { dispatch, selectedShop, company_id } = this.props
-        this.setState({ loading: true })
+    loadMissions(manualLoading){
+
+        if (!manualLoading){
+            const { timestamp } = this.state
+
+            if (timestamp != undefined) {
+                const date = new Date()
+                const diff = date.getTime() - timestamp
+                if (diff < 10000) {
+                  this.setState({
+                    isRefreshing: false
+                  })
+                  return false;
+                }
+              }
+        }
+        const date = new Date()
+        this.setState({ timestamp: date.getTime() })
+
+        const { dispatch, currentMember, company_id } = this.props
+        
         const callback = eventObject => {
             if (eventObject.success) {
 
@@ -98,7 +141,11 @@ export default class MissionCenter extends React.Component {
                 this.setState({
                     missions: missions,
                 }, function() {
-                    this.loadMissionStatements()
+                    if (currentMember != null){
+                        this.loadMissionStatements()
+                    }else{
+                        this.setState({loading: false, isRefreshing:false})
+                    }                    
                 })     
             }
         }
@@ -114,6 +161,8 @@ export default class MissionCenter extends React.Component {
 
     loadMissionStatements(){
         const { dispatch,currentMember } = this.props
+
+     
         this.setState({ loading_list: true })
         const callback = eventObject => {
              if (eventObject.success) {
@@ -125,10 +174,15 @@ export default class MissionCenter extends React.Component {
             }
             this.setState({
                 loading: false,
+                refreshing: false
             })
         }
         const obj = new GetMissionStatementRequestObject()
-        obj.setUrlId(currentMember.id)
+
+        if (currentMember != null){
+            obj.setUrlId(currentMember.id)
+        }
+        
         dispatch(
             createAction('members/loadMissionStatements')({
                 object:obj,
@@ -138,7 +192,15 @@ export default class MissionCenter extends React.Component {
     }
 
     missionLogin = () => {
-        const { dispatch, currentMember } = this.props
+        const { dispatch, currentMember,navigation } = this.props
+        const { navigate } = this.props.navigation
+        if (currentMember == null){
+            navigate("VerifyUser", {
+				returnToRoute: navigation.state,
+			})
+            return
+        }
+
         this.setState({ loading: true })
         const callback = eventObject => {
             this.refs.toast.show(eventObject.message, TOAST_DURATION)
@@ -161,8 +223,20 @@ export default class MissionCenter extends React.Component {
     }
 
     missionRewardClaim = (statement_id) => {
+
+        const { currentMember,navigation } = this.props
+        const { navigate } = this.props.navigation
         const analytics = new Analytics(ANALYTICS_ID)
         analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
+
+        if (currentMember == null){
+            navigate("VerifyUser", {
+				returnToRoute: navigation.state,
+			})
+            return
+        }
+        
+
         if (statement_id != undefined) {
             const { dispatch } = this.props
         
@@ -233,12 +307,14 @@ export default class MissionCenter extends React.Component {
 
 	renderMissionlistFlatListCell = ({ item }) => {
     
+        const {currentMember} = this.props
         if (item.clazz == "mission") {
             return <MissionCell
                 item={item}
                 title={item.name}
                 point={item.points}
                 status={item.status}
+                login={currentMember != null}
                 progress={item.progress}
                 mission_type={item.mission_type}
                 statement_id={item.statement_id}
@@ -256,6 +332,16 @@ export default class MissionCenter extends React.Component {
 		
     }
     
+    onRefresh() {
+    
+        this.setState({
+            isRefreshing: true,
+        })
+
+        this.loadMissions(true)
+    }
+
+
     render() {
 
         return <View
@@ -267,12 +353,14 @@ export default class MissionCenter extends React.Component {
 					style={styles.missionlistFlatListViewWrapper}>
 					<FlatList
 						renderItem={this.renderMissionlistFlatListCell}
-						data={this.state.missions}
-						style={styles.missionlistFlatList}
+                        data={this.state.missions}
+                        refreshing={this.state.isRefreshing}
+                        style={styles.missionlistFlatList}
+                        onRefresh={this.onRefresh.bind(this)}
                         keyExtractor={(item, index) => index.toString()}/>
 				</View>
                 }
-                <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+                <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}} />
         </View>
     }
 }

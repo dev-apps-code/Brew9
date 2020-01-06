@@ -1,10 +1,10 @@
-// export const KSERVERURL = "https://app.brew9.co/api"
-// export const KURL_INFO = "https://app.brew9.co/info"
-// export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
+export const KSERVERURL = "https://app.brew9.co/api"
+export const KURL_INFO = "https://app.brew9.co/info"
+export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
-export const KSERVERURL = "http://test.brew9.co/api"
-export const KURL_INFO = "http://test.brew9.co/info"
-export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
+// export const KSERVERURL = "http://test.brew9.co/api"
+// export const KURL_INFO = "http://test.brew9.co/info"
+// export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
 
 // export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO ='http://localhost:3000/info'
@@ -18,7 +18,9 @@ export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export const KCURRENT_API_VERSION_HEADER = "application/dc.v1 gzip";
+export const KCURRENT_API_VERSION_HEADER = "application/dc.v2 gzip";
+export const APPBUILDVERSIONIOS = "2";
+export const APPBUILDVERSIONANDROID = "2";
 
 
 export const KTIMEOUT = 3 * 1000;

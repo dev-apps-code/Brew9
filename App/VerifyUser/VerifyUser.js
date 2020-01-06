@@ -358,7 +358,7 @@ export default class VerifyUser extends React.Component {
 				</Hyperlink>
 			</View>
 			<HudLoading isLoading={this.state.loading} />
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
 		</View>
 	}
 }

@@ -93,7 +93,7 @@ export default class PaymentsWebview extends React.Component {
           style={styles.webviewWebView}          
           source={{ uri: `${KPAYMENTYURL}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}` }}
         />    
-        <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+        <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
       </View>
     );
   }

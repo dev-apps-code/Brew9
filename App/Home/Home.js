@@ -1686,7 +1686,7 @@ export default class Home extends React.Component {
 			</Modal> : null}
 
 			{this.renderGallery()}
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
 			<Brew9Modal visible={this.state.visible} cancelable={true} title={"Exit App "} description={"exit the  application?"} okayButtonAction={() => { BackHandler.exitApp() }} cancelButtonAction={() => this.setState({ visible: false })} />
 
 			<Brew9Modal visible={this.state.popUpVisible} cancelable={false} title={this.state.title} description={this.state.description} okayButtonAction={() => {

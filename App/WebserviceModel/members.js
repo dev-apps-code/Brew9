@@ -87,11 +87,11 @@ export default {
         ...state,
         profile: null,
         isReady: false,
-        userAuthToken: "$2a$11$hN.Nhb9r8wqXVuI7zAjjmu2/q7.ZIZGDBkeM0VMr8fdjhHdimm",
+        userAuthToken: "",
       }
     },
     loadCurrentUser(state, { payload }) {
-      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "$2a$11$hN.Nhb9r8wqXVuI7zAjjmu2/q7.ZIZGDBkeM0VMr8fdjhHdimm" }
+      return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     markAllNotificationAsRead(state, { payload }) {
 

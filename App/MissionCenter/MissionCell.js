@@ -40,12 +40,24 @@ export default class MissionCell extends React.Component {
 		var status_string = this.props.status
 		var voucher_length = this.props.vouchers.length
 
-		if (this.props.status == "Pending" && this.props.mission_type == "Login") {
-			status_string = "Check In"
-		} else if (this.props.status == "Completed") {
-			// console.log(`this.props.status ${this.props.status}`)
-			status_string = "Claim Now"
+
+		if (this.props.login == false){
+			if (this.props.mission_type == "Login"){
+				status_string = "Claim Now"
+			}else{
+				status_string = "Pending"
+			}
+			
+		}else{
+			if (this.props.status == "Pending" && this.props.mission_type == "Login") {
+				status_string = "Check In"
+			} else if (this.props.status == "Completed" || this.props.login == false) {
+				// console.log(`this.props.status ${this.props.status}`)
+				status_string = "Claim Now"
+			}
 		}
+	
+
 		const point = this.props.point > 1 ? 'points' : 'point'
 		const vouchers = this.props.vouchers.map((item, key) => {
 			return <Text key={key}>{item.voucher.name} <Text style={styles.highlight}>x{item.quantity}</Text>{key < voucher_length - 1 ? "\n" : ""}</Text>
@@ -96,9 +108,9 @@ export default class MissionCell extends React.Component {
 					}}>
 					<TouchableOpacity
 						onPress={() => this.onStatusPressed(this.props.statement_id)}
-					>
+					>						
 						<View
-							style={this.props.status != "Pending" ? styles.statusCompleteView : styles.statusView}>
+							style={this.props.status == "Pending" || status_string == "Pending" ?  styles.statusView : styles.statusCompleteView}>
 							<Text
 								style={styles.completeText}>{status_string}</Text>
 						</View>
@@ -155,8 +167,8 @@ const styles = StyleSheet.create({
 	},
 	statusView: {
 		backgroundColor: "rgb(89, 89, 89)",
-		borderRadius: 9.5 * alpha,
-		width: 70 * alpha,
+		borderRadius: 11 * alpha,
+		minWidth: 70 * alpha,
 		height: 19 * alpha,
 		marginRight: 20 * alpha,
 		justifyContent: "center",
@@ -165,8 +177,8 @@ const styles = StyleSheet.create({
 	statusCompleteView: {
 		backgroundColor: "rgb(0, 178, 227)",
 		borderRadius: 11 * alpha,
-		width: 80 * alpha,
-		height: 22 * alpha,
+		minWidth: 70 * alpha,
+		height: 19 * alpha,
 		marginRight: 20 * alpha,
 		justifyContent: "center",
 		alignItems: "center",
@@ -178,7 +190,7 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "center",
 	},
 	highlight: {
 		color: PRIMARY_COLOR,

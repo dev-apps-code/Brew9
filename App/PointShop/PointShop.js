@@ -221,7 +221,7 @@ export default class PointShop extends React.Component {
 						keyExtractor={(item, index) => index.toString()} />
 				}
 			</View>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
 		</View>
 	}
 }

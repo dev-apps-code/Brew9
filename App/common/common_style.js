@@ -11,6 +11,7 @@ export const DEFAULT_GREY_BACKGROUND = "rgb(228, 228, 228)"
 export const RED = "rgb(239, 81, 81)"
 export const DISABLED_COLOR = "rgb(191, 191, 191)"
 export const TABBAR_INACTIVE_TINT = "rgb(85, 85, 85)"
+export const TABBAR_INACTIVE_TINT_CROWN = "rgb(135, 135, 135)"
 export const TABBAR_ACTIVE_TINT = "black"
 export const BUTTONBOTTOMPADDING = Platform.OS === "ios" ? 40 * alpha : 0
 export const TOAST_DURATION = 3000

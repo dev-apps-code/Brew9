@@ -729,7 +729,7 @@ export default class Profile extends React.Component {
 						style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 				</View>
 			</View>
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				onPress={() => this.onMissionCenterPressed()}
 				style={styles.missioncenterbuttonButton}>
 				<Image
@@ -759,7 +759,7 @@ export default class Profile extends React.Component {
 						source={require("./../../assets/images/next.png")}
 						style={styles.missionArrow} />
 				</View>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
 
 
 			<View

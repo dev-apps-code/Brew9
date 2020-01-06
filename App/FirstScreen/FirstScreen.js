@@ -18,7 +18,7 @@ import CurrentStatusRequestObject from "../Requests/current_status_request_objec
 import { AsyncStorage } from 'react-native'
 import Brew9Modal from '../Components/Brew9Modal'
 import Toast, {DURATION} from 'react-native-easy-toast'
-import {TOAST_DURATION} from "../Common/common_style";
+import {TOAST_DURATION,TITLE_FONT} from "../Common/common_style";
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 
 @connect(({ members }) => ({
@@ -120,6 +120,8 @@ export default class FirstScreen extends React.Component {
                 }
                 const obj = new CurrentStatusRequestObject(last_note)
                 obj.setUrlId(members.id)
+
+                console.log("loadCurrentStatus")
                 dispatch(
                     createAction('members/loadCurrentStatus')({
                         object:obj,
@@ -141,7 +143,7 @@ export default class FirstScreen extends React.Component {
                     Linking.openURL(this.state.url)            
                 }
              }}  />
-            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/></View>
+            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/></View>
     }
 }
 

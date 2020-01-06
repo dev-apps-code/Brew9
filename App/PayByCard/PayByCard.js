@@ -202,7 +202,7 @@ export default class PayByCard extends React.Component {
 							style={styles.payNowButtonText}>Pay Now</Text>
 					</TouchableOpacity>
 				</View>
-				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
 			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}

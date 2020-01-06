@@ -1,5 +1,5 @@
 // import { btoa } from './node_modules/Base64'
-import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER } from './server'
+import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER,APPBUILDVERSIONIOS,APPBUILDVERSIONANDROID } from './server'
 import {Platform} from 'react-native'
 import Constants from 'expo-constants';
 export class WebserviceHelper {
@@ -19,13 +19,14 @@ export function getBasicAuthentication(authToken) {
 export function getMethod(authtoken,object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
   
+  const buildVersion = Platform.OS === 'android' ? APPBUILDVERSIONANDROID : APPBUILDVERSIONIOS
   return fetch(urlString, {
     method: 'GET',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
       'AppVersion': Constants.nativeAppVersion,
-      'BuildVersion': Constants.nativeBuildVersion,
+      'BuildVersion': buildVersion,
       'Platform': Platform.OS,
       Authorization: getBasicAuthentication(authtoken),
     }

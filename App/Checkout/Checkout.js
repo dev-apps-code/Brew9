@@ -1792,7 +1792,7 @@ export default class Checkout extends React.Component {
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }}  textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}} />
 
 			{/* <TimePicker
 				ref={ref => {

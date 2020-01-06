@@ -172,7 +172,7 @@ export default class ScanQr extends React.Component {
             {scanned && (
                 <Button title={'Tap to Scan Again'} onPress={() => this.setState({ scanned: false })} />
             )}
-            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
             <HudLoading isLoading={this.state.loading}/>
             </View>
         )

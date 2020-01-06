@@ -179,7 +179,7 @@ export default class PointShopItem extends React.Component {
 					<Text
 						style={styles.purchaseButtonText}>Purchase</Text>
 				</TouchableOpacity>
-				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}}/>
+				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
 			<HudLoading isLoading={this.state.loading}/>
 			</View>
 	}
