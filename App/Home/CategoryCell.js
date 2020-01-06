@@ -24,11 +24,11 @@ export default class CategoryCell extends React.Component {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   onCategoryCellPress = () => {
     const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Category', 'Click', this.props.categoryname))
+    analytics.event(new Event('Category', 'Click', this.props.categoryname))
     this.props.onSelectCategory(this.props.scrollIndex, this.props.index);
   };
 
@@ -37,6 +37,7 @@ export default class CategoryCell extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={this.onCategoryCellPress}>
+
         <View
           navigation={this.props.navigation}
           style={
@@ -45,29 +46,35 @@ export default class CategoryCell extends React.Component {
               : styles.categorycell
           }
         >
+
           {this.props.selected ? <View style={styles.selectbarView} /> : null}
-          <View style={{ flex: 1, padding: 7 * alpha }}>
-            {/* <Text style={styles.textWrapper}> */}
-            {categoryImage && (
-              <Image
-                style={styles.categoryIconImage}
-                source={{ uri: categoryImage }}
-              />
-            )}
-            <Text
-              style={
-                this.props.selected && categoryImage
-                  ? styles.labelImageText_selected
-                  : !this.props.selected && categoryImage
-                  ? styles.labelImageText
-                  : this.props.selected
-                  ? styles.labelText_selected
-                  : styles.labelText
-              }
-            >
-              {categoryname}
-            </Text>
-            {/* </Text> */}
+          <View style={{ flex: 1, paddingLeft: 7 * alpha, paddingTop: 5 * alpha }}>
+            <View style={styles.promoBox}>
+              <Text style={styles.promoBoxText}>New</Text>
+            </View>
+            <View style={{ paddingBottom: 7 * alpha }}>
+              {/* <Text style={styles.textWrapper}> */}
+              {categoryImage && (
+                <Image
+                  style={styles.categoryIconImage}
+                  source={{ uri: categoryImage }}
+                />
+              )}
+              <Text
+                style={
+                  this.props.selected && categoryImage
+                    ? styles.labelImageText_selected
+                    : !this.props.selected && categoryImage
+                      ? styles.labelImageText
+                      : this.props.selected
+                        ? styles.labelText_selected
+                        : styles.labelText
+                }
+              >
+                {categoryname}
+              </Text>
+              {/* </Text> */}
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -76,6 +83,22 @@ export default class CategoryCell extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  promoBox: {
+    backgroundColor: '#e5efe5',
+    borderTopLeftRadius: 5 * alpha,
+    borderBottomLeftRadius: 5 * alpha,
+    paddingHorizontal: 5 * alpha,
+    alignSelf: 'flex-end'
+  },
+  promoBoxText: {
+    color: '#006400',
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    textAlign: 'right',
+
+  },
   categorycell: {
     backgroundColor: "transparent",
     width: "100%",
