@@ -49,9 +49,9 @@ export default class CategoryCell extends React.Component {
 
           {this.props.selected ? <View style={styles.selectbarView} /> : null}
           <View style={{ flex: 1, paddingLeft: 7 * alpha, paddingTop: 5 * alpha }}>
-            <View style={styles.promoBox}>
+            {/* <View style={styles.promoBox}>
               <Text style={styles.promoBoxText}>New</Text>
-            </View>
+            </View> */}
             <View style={{ paddingBottom: 7 * alpha }}>
               {/* <Text style={styles.textWrapper}> */}
               {categoryImage && (

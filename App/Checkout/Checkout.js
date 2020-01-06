@@ -1193,7 +1193,7 @@ export default class Checkout extends React.Component {
 
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
-				<View style={styles.couponContent}>
+				{/* <View style={styles.couponContent}>
 					<Text style={styles.couponText}>Coupon code</Text>
 					{!this.state.applyCode ?
 						<View style={styles.applyCoupon}>
@@ -1216,7 +1216,7 @@ export default class Checkout extends React.Component {
 							</TouchableOpacity>
 
 						</View>}
-				</View>
+				</View> */}
 				<TouchableOpacity
 					onPress={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? () => this.onVoucherButtonPressed() : () => null}
 					style={styles.voucherButton}>

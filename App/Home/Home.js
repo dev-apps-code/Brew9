@@ -257,22 +257,22 @@ export default class Home extends React.Component {
 	};
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.location != this.props.location) {
+		if (prevProps.location !== this.props.location) {
 			if (prevProps.location != null) {
 				this.loadShops(false)
 			}
 			this.computeDistance()
 		}
-		if (prevProps.currentMember != this.props.currentMember) {
+		if (prevProps.currentMember !== this.props.currentMember) {
 			this.loadShops(false)
 		}
-		if (prevProps.cart != this.props.cart) {
+		if (prevProps.cart !== this.props.cart) {
 			this.check_promotion_trigger()
 		}
-		if (prevProps.promotions != this.props.promotions) {
+		if (prevProps.promotions !== this.props.promotions) {
 			this.updateCartHeight()
 		}
-		if (prevProps.toggle_update_count != this.props.toggle_update_count) {
+		if (prevProps.toggle_update_count !== this.props.toggle_update_count) {
 			setTimeout(function () {
 				this.toogleCart(true, true)
 			}.bind(this), 50);
@@ -358,7 +358,10 @@ export default class Home extends React.Component {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			this.getLocationAsync();
 		}
-		this.setState({ appState: nextAppState });
+		this.setState({
+			appState: nextAppState,
+			visible: false
+		});
 	};
 
 	handleBackPress = () => {
@@ -395,12 +398,11 @@ export default class Home extends React.Component {
 
 	loadShops(loadProducts) {
 
-		console.log("Status", loadProducts)
 		const { dispatch, company_id, location } = this.props
 		const { first_promo_popup } = this.state
-		this.setState({ loading: true })
+		// this.setState({ loading: true })
 		const callback = eventObject => {
-			this.setState({ loading: false })
+			// this.setState({ loading: false })
 
 			if (eventObject.success) {
 				this.setState({
@@ -433,7 +435,6 @@ export default class Home extends React.Component {
 	}
 
 	loadStoreProducts() {
-
 		const { dispatch, company_id } = this.props
 		const { menu_banners } = this.state
 
@@ -1686,7 +1687,7 @@ export default class Home extends React.Component {
 			</Modal> : null}
 
 			{this.renderGallery()}
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 			<Brew9Modal visible={this.state.visible} cancelable={true} title={"Exit App "} description={"exit the  application?"} okayButtonAction={() => { BackHandler.exitApp() }} cancelButtonAction={() => this.setState({ visible: false })} />
 
 			<Brew9Modal visible={this.state.popUpVisible} cancelable={false} title={this.state.title} description={this.state.description} okayButtonAction={() => {
