@@ -128,7 +128,6 @@ export default class Checkout extends React.Component {
 		const { selectedShop } = this.props
 		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
-
 		var time_now = Moment(new Date(), 'h:mm')
 
 		var hour = time_now.hours();
@@ -335,9 +334,28 @@ export default class Checkout extends React.Component {
 	}
 
 	onSelectOrderNow() {
-		this.setState({
-			pick_up_status: `Order Now`,
-		})
+		const { selectedShop } = this.props
+		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
+		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+		var time_now = Moment(new Date(), 'h:mm')
+
+		if (opening.hour() <= time_now.hour()) {
+			if (opening.hour() == time_now.hour()) {
+				if (opening.minutes() <= time_now.minutes()) {
+					this.setState({
+						pick_up_status: `Order Now`,
+					})
+				} else {
+					console.log('not available')
+				}
+			} else {
+				this.setState({
+					pick_up_status: `Order Now`,
+				})
+			}
+
+		}
+
 	}
 
 	onBranchButtonPressed = () => {
@@ -751,15 +769,15 @@ export default class Checkout extends React.Component {
 					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
 					var pickup = Moment(pick_up_time, 'h:mm')
 					var now = Moment(new Date(), 'HH:mm')
-
 					if (pickup < now && pick_up_status == "Pick Later") {
 						this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
 						return
 					}
-					else if (pickup < opening) {
-						this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
-						return
-					} else if (pickup > closing) {
+					// else if (pickup < opening) {
+					// 	this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
+					// 	return
+					// } 
+					else if (pickup > closing) {
 						this.refs.toast.show("We are closed at this time.", TOAST_DURATION)
 						return
 					}
@@ -847,17 +865,6 @@ export default class Checkout extends React.Component {
 		}
 	}
 
-	onApplyCouponCode = () => {
-		this.setState({
-			applyCode: true
-		})
-		console.log('onApplyVoucher')
-	}
-	onChangeVoucher = (text) => {
-		this.setState({
-			voucher: text
-		})
-	}
 
 
 	renderPaymentMethod() {
@@ -1193,30 +1200,6 @@ export default class Checkout extends React.Component {
 
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
-				{/* <View style={styles.couponContent}>
-					<Text style={styles.couponText}>Coupon code</Text>
-					{!this.state.applyCode ?
-						<View style={styles.applyCoupon}>
-							<TextInput
-								style={styles.voucherInput}
-								onChangeText={text => this.onChangeVoucher(text)}
-								value={this.state.voucher}
-								maxLength={8} />
-							<TouchableOpacity style={styles.applyButton} onPress={this.onApplyCouponCode}>
-								<Text style={styles.applyText}>Apply</Text>
-							</TouchableOpacity>
-						</View> :
-						<View style={{ flexDirection: 'row' }}>
-							<Text
-								style={[styles.productVoucherText, { marginRight: 5 * alpha }]}>{this.state.voucher} </Text>
-							<TouchableOpacity onPress={() => { this.onCancelCoupon(item) }}>
-								<Image
-									source={require("./../../assets/images/cancel.png")}
-									style={styles.cancelImage} />
-							</TouchableOpacity>
-
-						</View>}
-				</View> */}
 				<TouchableOpacity
 					onPress={this.state.valid_vouchers != null && this.state.valid_vouchers.length > 0 ? () => this.onVoucherButtonPressed() : () => null}
 					style={styles.voucherButton}>
@@ -1840,71 +1823,7 @@ export default class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	couponContent: {
-		backgroundColor: "transparent",
-		flex: 1,
-		marginTop: 10 * alpha,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		height: 40 * alpha
-	},
-	applyCoupon: {
-		flexDirection: 'row',
-		flex: 1,
-		backgroundColor: 'transparent',
-		alignItems: 'flex-end'
 
-	},
-	couponText: {
-		// fontFamily: TITLE_FONT,
-		// fontSize: 14 * fontAlpha,
-		// fontStyle: "normal",
-		// textAlign: "center",
-		// alignItems: 'center'
-		backgroundColor: "transparent",
-		color: "rgb(63, 63, 63)",
-		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		textAlign: "left",
-		flex: 0.35,
-
-	},
-	voucherInput: {
-		flex: 1.5,
-		paddingVertical: 5 * alpha,
-		borderRadius: 5 * alpha,
-		borderWidth: 1,
-		borderColor: 'lightgray',
-		marginHorizontal: 5 * alpha,
-		// borderBottomLeftRadius: 5 * alpha,
-		paddingHorizontal: 5 * alpha,
-		backgroundColor: 'white',
-		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-	},
-	applyButton: {
-		flex: 0.5,
-		borderRadius: 5 * alpha,
-		// borderTopRightRadius: 5 * alpha,
-		// borderBottomRightRadius: 5 * alpha,
-		paddingVertical: 5 * alpha,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: PRIMARY_COLOR
-	},
-	applyText: {
-		// backgroundColor: "transparent",
-		color: "white",
-		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		textAlign: "center",
-
-		// marginBottom: 5 * alpha,
-	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,
