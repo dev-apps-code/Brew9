@@ -62,7 +62,7 @@ export default class NotificationsCell extends React.Component {
 								}} />
 							<Text
 								style={styles.timeText}>{this.props.time}</Text>
-{/* <View
+							{/* <View
 								style={{
 									flex: 1,
 								}} /> */}
@@ -77,11 +77,8 @@ export default class NotificationsCell extends React.Component {
 								alignItems: "flex-start",
 							}}>
 							<Text
-								// numberOfLines={2}
-								textAlign='justify'
+
 								style={styles.messageText}>{this.props.text}</Text>
-							
-							
 						</View>
 					</View>
 				</View>
@@ -93,8 +90,8 @@ export default class NotificationsCell extends React.Component {
 					)}
 				</View>
 				{!this.props.read && (
-								<View
-									style={styles.circleView} />)}
+					<View
+						style={styles.circleView} />)}
 				<Image
 					source={require("./../../assets/images/line-7.png")}
 					style={styles.seperatorImage} />
@@ -151,7 +148,8 @@ const styles = StyleSheet.create({
 		width: 320 * alpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: 'justify',
+		lineHeight: 15 * alpha,
 	},
 	circleView: {
 		backgroundColor: "rgb(247, 66, 75)",
