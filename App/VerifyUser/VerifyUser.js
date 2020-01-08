@@ -104,7 +104,11 @@ export default class VerifyUser extends React.Component {
 	loadLogin() {
 		const { dispatch } = this.props
 		const { phone_no, country_code } = this.state
-
+		
+		if (isNaN(phone_no)) {
+			this.refs.toast.show("Please ensure you have enter valid phone number!", TOAST_DURATION)
+			return
+		}
 		if (phone_no == null || phone_no == '') {
 			this.refs.toast.show("Please ensure you have enter your phone number!", TOAST_DURATION)
 			return
@@ -122,7 +126,6 @@ export default class VerifyUser extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
-
 			if (eventObject.success) {
 
 				this.setState({
@@ -241,6 +244,7 @@ export default class VerifyUser extends React.Component {
 								keyboardType="phone-pad"
 								placeholder="123456789"
 								style={styles.textInputTextInput}
+								maxLength={7}
 								onChangeText={(phone_no) => this.setState({ phone_no })} />
 							<View
 								style={{
@@ -358,7 +362,7 @@ export default class VerifyUser extends React.Component {
 				</Hyperlink>
 			</View>
 			<HudLoading isLoading={this.state.loading} />
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 		</View>
 	}
 }
