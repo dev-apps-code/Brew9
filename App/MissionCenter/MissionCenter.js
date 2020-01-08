@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from "react-native"
+import { Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import MissionRequestObject from '../Requests/mission_request_object'
@@ -18,15 +18,16 @@ import MissionCategoryCell from "./MissionCategoryCell"
 import _ from 'lodash'
 import MissionRewardClaimRequestObject from "../Requests/mission_reward_claim_request_object";
 import MissionLoginRequestObject from "../Requests/mission_login_request_object"
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT_CROWN, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import MissionBadgeIcon from "./MissionBadgeIcon"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
-	company_id: members.company_id,
-	location: members.location,
+    company_id: members.company_id,
+    location: members.location,
 }))
 export default class MissionCenter extends React.Component {
 
@@ -34,11 +35,11 @@ export default class MissionCenter extends React.Component {
 
         const { params = {} } = navigation.state
         return {
-            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Rewards</Text>,
+            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Rewards</Text>,
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>
-             
+
             </View>,
             headerRight: null,
             headerStyle: {
@@ -50,26 +51,28 @@ export default class MissionCenter extends React.Component {
 
     static tabBarItemOptions = (navigation, store) => {
 
-		return {
-			tabBarLabel: "Rewards",
-			tabBarOnPress: ({ navigation, defaultHandler }) => {
+        return {
+            tabBarLabel: "Rewards",
+            tabBarOnPress: ({ navigation, defaultHandler }) => {
                 const analytics = new Analytics(ANALYTICS_ID)
                 analytics.event(new Event('Profile', 'Click', "Mission Center"))
-				store.dispatch(createAction("config/setToggleShopLocation")(false))
-				store.dispatch(createAction("config/setTab")("mission"))
-				defaultHandler()
-			},
-			tabBarIcon: ({ iconTintColor, focused }) => {
-				const image = focused
-					? require('./../../assets/images/crown.png')
-					: require('./../../assets/images/crown.png')
+                store.dispatch(createAction("config/setToggleShopLocation")(false))
+                store.dispatch(createAction("config/setTab")("mission"))
+                defaultHandler()
+            },
+            tabBarIcon: ({ iconTintColor, focused }) => {
+                const image = focused
+                    ? require('./../../assets/images/crown.png')
+                    : require('./../../assets/images/crown.png')
 
-				return <Image
-					source={image}
-					style={{ resizeMode: "contain", width: 28 * alpha, height: 28 * alpha, tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT_CROWN }} />
-			},
-		}
-	}
+                return <View style={styles.tabIconWrapper}>
+
+                    <MissionBadgeIcon image={image} focused={focused} />
+
+                </View>
+            },
+        }
+    }
 
     constructor(props) {
         super(props)
@@ -91,86 +94,87 @@ export default class MissionCenter extends React.Component {
         this.loadMissions(true)
     }
 
-    refreshMission(){
+    refreshMission() {
         console.log("refrshing mission")
         this.loadMissions(false)
     }
 
     onBackPressed = () => {
-        const {navigation,dispatch } = this.props
-		const { routeName, key } = navigation.getParam('returnToRoute')
-		navigation.navigate({ routeName, key, 
-			params: { 
-				updated: this.state.updated, 
-			} 
-		})
+        const { navigation, dispatch } = this.props
+        const { routeName, key } = navigation.getParam('returnToRoute')
+        navigation.navigate({
+            routeName, key,
+            params: {
+                updated: this.state.updated,
+            }
+        })
     }
 
 
-    loadMissions(manualLoading){
+    loadMissions(manualLoading) {
 
-        if (!manualLoading){
+        if (!manualLoading) {
             const { timestamp } = this.state
 
             if (timestamp != undefined) {
                 const date = new Date()
                 const diff = date.getTime() - timestamp
                 if (diff < 10000) {
-                  this.setState({
-                    isRefreshing: false
-                  })
-                  return false;
+                    this.setState({
+                        isRefreshing: false
+                    })
+                    return false;
                 }
-              }
+            }
         }
         const date = new Date()
         this.setState({ timestamp: date.getTime() })
 
         const { dispatch, currentMember, company_id } = this.props
-        
+
         const callback = eventObject => {
             if (eventObject.success) {
 
                 var mission_categories = eventObject.result
                 var missions = []
-                for(var index in mission_categories) {
+                for (var index in mission_categories) {
                     missions = missions.concat(mission_categories[index])
                     missions = missions.concat(mission_categories[index].missions)
                 }
 
                 this.setState({
                     missions: missions,
-                }, function() {
-                    if (currentMember != null){
+                }, function () {
+                    if (currentMember != null) {
                         this.loadMissionStatements()
-                    }else{
-                        this.setState({loading: false, isRefreshing:false})
-                    }                    
-                })     
+                    } else {
+                        this.setState({ loading: false, isRefreshing: false })
+                    }
+                })
             }
         }
         const obj = new MissionRequestObject()
         obj.setUrlId(company_id)
         dispatch(
             createAction('shops/loadMissions')({
-                object:obj,
+                object: obj,
                 callback,
             })
         )
     }
 
-    loadMissionStatements(){
-        const { dispatch,currentMember } = this.props
+    loadMissionStatements() {
+        const { dispatch, currentMember } = this.props
 
-     
+
         this.setState({ loading_list: true })
         const callback = eventObject => {
-             if (eventObject.success) {
+            if (eventObject.success) {
                 this.setState({
                     mission_statements: eventObject.result,
-                }, function(){
+                }, function () {
                     this.update_mission()
-                })        
+                })
             }
             this.setState({
                 loading: false,
@@ -179,25 +183,25 @@ export default class MissionCenter extends React.Component {
         }
         const obj = new GetMissionStatementRequestObject()
 
-        if (currentMember != null){
+        if (currentMember != null) {
             obj.setUrlId(currentMember.id)
         }
-        
+
         dispatch(
             createAction('members/loadMissionStatements')({
-                object:obj,
+                object: obj,
                 callback,
             })
         )
     }
 
     missionLogin = () => {
-        const { dispatch, currentMember,navigation } = this.props
+        const { dispatch, currentMember, navigation } = this.props
         const { navigate } = this.props.navigation
-        if (currentMember == null){
+        if (currentMember == null) {
             navigate("VerifyUser", {
-				returnToRoute: navigation.state,
-			})
+                returnToRoute: navigation.state,
+            })
             return
         }
 
@@ -208,7 +212,7 @@ export default class MissionCenter extends React.Component {
                 loading: false,
                 mission_statements: eventObject.result,
                 updated: true,
-            }, function(){
+            }, function () {
                 this.loadMissionStatements()
             })
         }
@@ -216,7 +220,7 @@ export default class MissionCenter extends React.Component {
         obj.setUrlId(currentMember.id);
         dispatch(
             createAction('members/missionLogin')({
-                object:obj,
+                object: obj,
                 callback,
             })
         )
@@ -224,30 +228,30 @@ export default class MissionCenter extends React.Component {
 
     missionRewardClaim = (statement_id) => {
 
-        const { currentMember,navigation } = this.props
+        const { currentMember, navigation } = this.props
         const { navigate } = this.props.navigation
         const analytics = new Analytics(ANALYTICS_ID)
         analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
 
-        if (currentMember == null){
+        if (currentMember == null) {
             navigate("VerifyUser", {
-				returnToRoute: navigation.state,
-			})
+                returnToRoute: navigation.state,
+            })
             return
         }
-        
+
 
         if (statement_id != undefined) {
             const { dispatch } = this.props
-        
+
             this.setState({ loading: true })
             const callback = eventObject => {
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
                     updated: true,
-                    loading: false ,
+                    loading: false,
                     mission_statements: eventObject.result,
-                }, function(){
+                }, function () {
                     this.loadMissionStatements()
                 })
             }
@@ -255,7 +259,7 @@ export default class MissionCenter extends React.Component {
             obj.setUrlId(statement_id)
             dispatch(
                 createAction('members/missionRewardClaim')({
-                    object:obj,
+                    object: obj,
                     callback,
                 })
             )
@@ -267,11 +271,11 @@ export default class MissionCenter extends React.Component {
         if (mission_statement.clazz == "mission_statement") {
             let missions = [...this.state.missions]
             for (var index in missions) {
-                
+
                 if (mission_statement.mission_id == missions[index].id) {
                     missions[index].statement_id = mission_statement.id
                     missions[index].progress = mission_statement.task_progress
-                    missions[index].status = mission_statement.status   
+                    missions[index].status = mission_statement.status
                 }
 
             }
@@ -289,8 +293,8 @@ export default class MissionCenter extends React.Component {
         statements = this.state.mission_statements
 
         for (var index in missions) {
-            var found_mission = _.find(statements, {mission_id:missions[index].id})
-            
+            var found_mission = _.find(statements, { mission_id: missions[index].id })
+
             if (found_mission != undefined) {
 
                 missions[index].statement_id = found_mission.id
@@ -305,9 +309,9 @@ export default class MissionCenter extends React.Component {
         })
     }
 
-	renderMissionlistFlatListCell = ({ item }) => {
-    
-        const {currentMember} = this.props
+    renderMissionlistFlatListCell = ({ item }) => {
+
+        const { currentMember } = this.props
         if (item.clazz == "mission") {
             return <MissionCell
                 item={item}
@@ -321,19 +325,19 @@ export default class MissionCenter extends React.Component {
                 onStatusPressed={item.mission_type == "Login" ? this.missionLogin : this.missionRewardClaim}
                 mission_task_count={item.mission_task_count}
                 vouchers={item.mission_vouchers}
-                navigation={this.props.navigation}/>
+                navigation={this.props.navigation} />
         } else if (item.clazz == "mission_category") {
             return <MissionCategoryCell
                 item={item}
                 title={item.name}
                 description={item.description}
-                navigation={this.props.navigation}/>
+                navigation={this.props.navigation} />
         }
-		
+
     }
-    
+
     onRefresh() {
-    
+
         this.setState({
             isRefreshing: true,
         })
@@ -346,21 +350,21 @@ export default class MissionCenter extends React.Component {
 
         return <View
             style={styles.missionCenterView}>
-                {this.state.loading ? <View style={[styles.container, styles.horizontal]}>
-					<ActivityIndicator size="large" />
-				</View> :
+            {this.state.loading ? <View style={[styles.container, styles.horizontal]}>
+                <ActivityIndicator size="large" />
+            </View> :
                 <View
-					style={styles.missionlistFlatListViewWrapper}>
-					<FlatList
-						renderItem={this.renderMissionlistFlatListCell}
+                    style={styles.missionlistFlatListViewWrapper}>
+                    <FlatList
+                        renderItem={this.renderMissionlistFlatListCell}
                         data={this.state.missions}
                         refreshing={this.state.isRefreshing}
                         style={styles.missionlistFlatList}
                         onRefresh={this.onRefresh.bind(this)}
-                        keyExtractor={(item, index) => index.toString()}/>
-				</View>
-                }
-                <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}} />
+                        keyExtractor={(item, index) => index.toString()} />
+                </View>
+            }
+            <Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
         </View>
     }
 }
@@ -368,32 +372,32 @@ export default class MissionCenter extends React.Component {
 
 const styles = StyleSheet.create({
     headerLeftContainer: {
-		flexDirection: "row",
-		marginLeft: 8 * alpha,
-		width: 70 * alpha,
-	},
-	navigationBarItem: {
-		width: "100%",
-	},
+        flexDirection: "row",
+        marginLeft: 8 * alpha,
+        width: 70 * alpha,
+    },
+    navigationBarItem: {
+        width: "100%",
+    },
     navigationBarItemTitle: {
         color: "black",
         fontFamily: TITLE_FONT,
         fontSize: 16 * fontAlpha,
     },
     navigationBarItemIcon: {
-		width: 18 * alpha,
-		height: 18 * alpha,
-		tintColor: "black",
+        width: 18 * alpha,
+        height: 18 * alpha,
+        tintColor: "black",
     },
     container: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	horizontal: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		padding: 10 * alpha,
-	},
+        flex: 1,
+        justifyContent: 'center',
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10 * alpha,
+    },
     missionCenterView: {
         backgroundColor: "rgb(243, 243, 243)",
         flex: 1,
