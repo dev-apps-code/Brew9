@@ -1200,7 +1200,6 @@ export default class Checkout extends React.Component {
 
 
 		var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (o) { if (o.is_valid == true) return o }).length;
-
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
@@ -1644,7 +1643,7 @@ export default class Checkout extends React.Component {
 	renderCheckoutReceipt() {
 		const { vouchers_to_use, final_price } = this.state
 		let { currentMember, selectedShop, cart, promotions } = this.props
-		let non_negative_final_price = Math.max(0, final_price)
+		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
 
 		return <View
 			style={styles.orderReceiptView}>
@@ -1786,7 +1785,8 @@ export default class Checkout extends React.Component {
 
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
-		let non_negative_final_price = Math.max(0, final_price)
+		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
+
 		return <View
 			style={styles.checkoutViewPadding}>
 			<ScrollView
