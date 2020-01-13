@@ -117,7 +117,7 @@ export default class Checkout extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-
+		console.log('prevProps.promotion_trigger_count', prevProps.promotion_trigger_count)
 		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count) {
 			this.check_promotion_trigger()
 		}
@@ -444,6 +444,9 @@ export default class Checkout extends React.Component {
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
+		console.log('shop', shop)
+		console.log('newcart', newcart)
+		console.log('cart_total', cart_total)
 
 		var promotions_item = []
 		var final_cart_value = cart_total
@@ -1751,7 +1754,7 @@ export default class Checkout extends React.Component {
 										flex: 1,
 									}} />
 								<Text
-									style={styles.totalText}>${final_price}</Text>
+									style={styles.totalText}>${final_price > 0 ? final_price : 0}</Text>
 							</View>
 
 						</View>
@@ -1763,12 +1766,11 @@ export default class Checkout extends React.Component {
 	}
 
 	renderPayNow(final_price) {
-
 		return <View
 			style={styles.totalPayNowView}>
 
 			<View style={styles.paymentButton}><Text
-				style={styles.paymentButtonText}>${final_price}</Text></View>
+				style={styles.paymentButtonText}>${final_price > 0 ? final_price : 0}</Text></View>
 			<TouchableOpacity
 				onPress={() => this.onPayNowPressed()}
 				style={styles.payNowButton}>
