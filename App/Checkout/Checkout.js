@@ -1644,6 +1644,7 @@ export default class Checkout extends React.Component {
 	renderCheckoutReceipt() {
 		const { vouchers_to_use, final_price } = this.state
 		let { currentMember, selectedShop, cart, promotions } = this.props
+		let non_negative_final_price = Math.max(0, final_price)
 
 		return <View
 			style={styles.orderReceiptView}>
@@ -1754,7 +1755,7 @@ export default class Checkout extends React.Component {
 										flex: 1,
 									}} />
 								<Text
-									style={styles.totalText}>${final_price > 0 ? final_price : 0}</Text>
+									style={styles.totalText}>${non_negative_final_price}</Text>
 							</View>
 
 						</View>
@@ -1770,7 +1771,7 @@ export default class Checkout extends React.Component {
 			style={styles.totalPayNowView}>
 
 			<View style={styles.paymentButton}><Text
-				style={styles.paymentButtonText}>${final_price > 0 ? final_price : 0}</Text></View>
+				style={styles.paymentButtonText}>${final_price}</Text></View>
 			<TouchableOpacity
 				onPress={() => this.onPayNowPressed()}
 				style={styles.payNowButton}>
@@ -1785,7 +1786,7 @@ export default class Checkout extends React.Component {
 
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
-
+		let non_negative_final_price = Math.max(0, final_price)
 		return <View
 			style={styles.checkoutViewPadding}>
 			<ScrollView
@@ -1801,7 +1802,7 @@ export default class Checkout extends React.Component {
 
 			{(isPaymentToggle == true || isPickupToogle == true) && (
 				<View style={styles.checkoutViewOverlay} />)}
-			{this.renderPayNow(final_price)}
+			{this.renderPayNow(non_negative_final_price)}
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
