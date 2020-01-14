@@ -16,18 +16,18 @@ import {
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
-import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKGROUND } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKGROUND, LIGHT_GREY } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import Constants from 'expo-constants';
-import {Image as ExpoImage} from "react-native-expo-image-cache";
+import { Image as ExpoImage } from "react-native-expo-image-cache";
 
 export default class ProductCell extends React.Component {
   constructor(props) {
     super(props);
-  } 
+  }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   onProductCellPress = () => {
 
@@ -35,9 +35,9 @@ export default class ProductCell extends React.Component {
       this.props.onCellPress(this.props.item, this.props.index);
       const analytics = new Analytics(ANALYTICS_ID)
       analytics.event(new Event('Product', 'Click', this.props.item.name))
-      
+
     }
-   
+
   };
 
   onAddPressed = () => {
@@ -87,16 +87,15 @@ export default class ProductCell extends React.Component {
   render() {
 
     var ingredients = null;
-    if (this.props.productingredient !== undefined)
-    {
+    if (this.props.productingredient !== undefined) {
       ingredients = this.props.productingredient.map((item, key) => {
 
         var highlight = false
-  
+
         if (item.highlight == true) {
           hightlight = true
         }
-  
+
         return (
           <View style={item.highlight ? styles.ingredientHighlightView : styles.ingredientView} key={key}>
             <Text numberOfLines={1} style={item.highlight ? styles.ingredientHighlightText : styles.ingredientText}>{item.name}</Text>
@@ -104,64 +103,67 @@ export default class ProductCell extends React.Component {
         );
       });
     }
-    
+
 
     var hasPrice = this.props.productprice > 0.00 && this.props.productprice ? true : false
     const uri = this.props.productimage
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
-        
+
         <View navigation={this.props.navigation} style={styles.productcell}>
+          <View
+            pointerEvents="box-none"
+            style={{
+              width: 74 * alpha,
+              height: 74 * alpha,
+              marginLeft: 3 * alpha,
+              marginTop: 4 * alpha
+            }} >
             <View
               pointerEvents="box-none"
               style={{
-                width: 74 * alpha,
-                height: 74 * alpha,
-                marginLeft: 3 * alpha,
-                marginTop: 4 * alpha
-              }} >
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0 * alpha,
-                  bottom: 0 * alpha,
-                  justifyContent: "center"
-                }}
-              >
-                { this.props.productHidden ? <Image                  
-                  source={{ uri: this.props.productimage }}
-                  style={styles.productblurimageImage}
-                  blurRadius={10}
-                /> :  <ExpoImage
-                {...{uri}}
-                style={styles.productimageImage}
-                
-              />}
-               
-              
-                {this.props.productstatus != null && this.props.productstatus.length > 0 ? 
-                  <View style={styles.soldView}>
-                    <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
-                  </View>
-                : null }
-              </View>
-              
+                position: "absolute",
+                left: 0,
+                top: 0 * alpha,
+                bottom: 0 * alpha,
+                justifyContent: "center"
+              }}
+            >
+              {this.props.productHidden ? <Image
+                source={{ uri: this.props.productimage }}
+                style={styles.productblurimageImage}
+                blurRadius={10}
+              /> : <ExpoImage
+                  {...{ uri }}
+                  style={styles.productimageImage}
+
+                />}
+
+
+              {this.props.productstatus != null && this.props.productstatus.length > 0 ?
+                <View style={styles.soldView}>
+                  <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
+                </View>
+                : null}
             </View>
-            { this.props.productHidden ? <View style={styles.blurView}>
-              <Image
-                  source={require("./../../assets/images/blur.png")}
-                  style={styles.detailBlurImage} />
-              </View> : <View style={styles.detailsView}>
+
+          </View>
+          {this.props.productHidden ? <View style={styles.blurView}>
+            <Image
+              source={require("./../../assets/images/blur.png")}
+              style={styles.detailBlurImage} />
+          </View> : <View style={styles.detailsView}>
               <Text numberOfLines={2} style={styles.titleText}>
                 {this.props.productname}
                 {this.props.recommended && (
                   <Image
                     source={require("./../../assets/images/star_icon.png")}
-                    style={styles.recommendedStarImage}/>
+                    style={styles.recommendedStarImage} />
                 )}
               </Text>
+              {/* <View style={styles.promoBox}>
+                <Text style={styles.promoBoxText}>Discount</Text>
+              </View> */}
               <View
                 pointerEvents="box-none"
                 style={{
@@ -182,18 +184,21 @@ export default class ProductCell extends React.Component {
                   flex: 1
                 }}
               />
-            
-              <Text style={styles.priceText}>
-                {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
-              </Text>
-             
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.priceText}>
+                  {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
+                </Text>
+                {/* <Text style={styles.discountPriceText}>
+                  {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
+                </Text> */}
+              </View>
             </View>
-            }
-            
-            {/* { this.props.productHidden && (<BlurView tint="light" intensity={85} blurRadius={100} style={styles.blurView}></BlurView>)} */}
-            
-            { this.props.productHidden && (<Text
-							style={styles.toBeUnvieiledText}>To Be Unveiled</Text>)}
+          }
+
+          {/* { this.props.productHidden && (<BlurView tint="light" intensity={85} blurRadius={100} style={styles.blurView}></BlurView>)} */}
+
+          {this.props.productHidden && (<Text
+            style={styles.toBeUnvieiledText}>To Be Unveiled</Text>)}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -201,6 +206,21 @@ export default class ProductCell extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  promoBox: {
+    backgroundColor: '#e5efe5',
+    padding: 2 * alpha,
+    marginVertical: 2 * alpha,
+    alignSelf: 'flex-start'
+  },
+  promoBoxText: {
+    color: '#006400',
+    fontFamily: TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    textAlign: 'left',
+
+  },
   blurView: {
     flex: 1,
     width: "100%",
@@ -317,9 +337,21 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: "100%"
   },
+  discountPriceText: {
+    marginLeft: 5 * alpha,
+    backgroundColor: "transparent",
+    color: "rgb(130, 130, 130)",
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    marginTop: 5 * alpha,
+    marginBottom: 30 * alpha,
+    fontStyle: "normal",
+    textAlign: "left",
+    textDecorationLine: 'line-through'
+  },
   priceText: {
     backgroundColor: "transparent",
-    color: "rgb(54, 54, 54)",
+    color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
     fontSize: 18 * fontAlpha,
     marginTop: 5 * alpha,
@@ -451,24 +483,24 @@ const styles = StyleSheet.create({
     marginLeft: 3 * alpha,
     width: 14 * alpha,
     height: 14 * alpha,
-		marginLeft: 6 * alpha,
+    marginLeft: 6 * alpha,
     marginRight: -4 * alpha,
     backgroundColor: "transparent",
   },
   toBeUnvieiledText: {
-		color: "white",
-		fontFamily: TITLE_FONT,
-		fontSize: 11 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		backgroundColor: PRIMARY_COLOR,
+    color: "white",
+    fontFamily: TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    textAlign: "left",
+    backgroundColor: PRIMARY_COLOR,
     position: "absolute",
     paddingTop: 3 * alpha,
     paddingBottom: 3 * alpha,
     paddingRight: 5 * alpha,
     paddingLeft: 5 * alpha,
-		right: 0,
-		top: 0,
-	},
+    right: 0,
+    top: 0,
+  },
 })

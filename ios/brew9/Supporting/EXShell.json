@@ -1,1 +1,1 @@
-{"releaseChannel":"test","manifestUrl":"exp://exp.host/@tonyvoon/brew9","isManifestVerificationBypassed":true,"isShell":true}
+{"isShell":true,"areRemoteUpdatesEnabled":false,"manifestUrl":"exp://exp.host/@tonyvoon/brew9","releaseChannel":"version1.0.1","isManifestVerificationBypassed":true}

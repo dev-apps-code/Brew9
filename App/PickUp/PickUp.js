@@ -585,8 +585,9 @@ export default class PickUp extends React.Component {
 										alignItems: "flex-start",
 									}}>
 									<Text
-										style={[styles.orderTime100717Text, { flex: 0.25 }]}>Order time </Text>
-									<Text style={[styles.orderTime100717Text, { flex: 1 }]}>:{item.payment_time}</Text>
+										style={[styles.orderTime100717Text, { flex: 0.25, }]}>Order time </Text>
+									<Text style={[styles.orderTime100717Text,]}> : </Text>
+									<Text style={[styles.orderTime100717Text, { flex: 1 }]}>{item.payment_time}</Text>
 
 								</View>
 								<View
@@ -602,8 +603,9 @@ export default class PickUp extends React.Component {
 									}}>
 									<Text
 										style={[styles.orderNo020028201Text, { flex: 0.25 }]}>Receipt no. </Text>
+									<Text style={[styles.orderNo020028201Text,]}> : </Text>
 									<Text
-										style={[styles.orderNo020028201Text, { flex: 1 }]}>:{item.receipt_no}</Text>
+										style={[styles.orderNo020028201Text, { flex: 1 }]}>{item.receipt_no}</Text>
 
 
 								</View>
@@ -620,8 +622,9 @@ export default class PickUp extends React.Component {
 									}}>
 									<Text
 										style={[styles.remarkNoPackingText, { flex: 0.25 }]}>Remarks </Text>
+									<Text style={[styles.remarkNoPackingText,]}> : </Text>
 									<Text
-										style={[styles.remarkNoPackingText, { flex: 1 }]}>:{remarks}</Text>
+										style={[styles.remarkNoPackingText, { flex: 1 }]}>{remarks}</Text>
 
 								</View>
 
@@ -1238,7 +1241,7 @@ const styles = StyleSheet.create({
 		tintColor: "rgb(205, 207, 208)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
-		height: 15 * alpha,
+		height: 20 * alpha,
 	},
 	pickupSelectedImage: {
 		tintColor: "rgb(35, 31, 32)",

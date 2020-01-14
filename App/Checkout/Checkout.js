@@ -91,7 +91,8 @@ export default class Checkout extends React.Component {
 			selected_minute_index: 0,
 			paynow_clicked: false,
 			final_price: discount_cart_total,
-			visible: false
+			visible: false,
+			applyCode: false
 		}
 		this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -116,7 +117,7 @@ export default class Checkout extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-
+		console.log('prevProps.promotion_trigger_count', prevProps.promotion_trigger_count)
 		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count) {
 			this.check_promotion_trigger()
 		}
@@ -127,7 +128,6 @@ export default class Checkout extends React.Component {
 		const { selectedShop } = this.props
 		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
-
 		var time_now = Moment(new Date(), 'h:mm')
 
 		var hour = time_now.hours();
@@ -334,9 +334,28 @@ export default class Checkout extends React.Component {
 	}
 
 	onSelectOrderNow() {
-		this.setState({
-			pick_up_status: `Order Now`,
-		})
+		const { selectedShop } = this.props
+		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
+		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
+		var time_now = Moment(new Date(), 'h:mm')
+
+		if (opening.hour() <= time_now.hour()) {
+			if (opening.hour() == time_now.hour()) {
+				if (opening.minutes() <= time_now.minutes()) {
+					this.setState({
+						pick_up_status: `Order Now`,
+					})
+				} else {
+					console.log('not available')
+				}
+			} else {
+				this.setState({
+					pick_up_status: `Order Now`,
+				})
+			}
+
+		}
+
 	}
 
 	onBranchButtonPressed = () => {
@@ -383,6 +402,13 @@ export default class Checkout extends React.Component {
 			this.calculateVoucherDiscount(new_voucher_list)
 		})
 	}
+	onCancelCoupon = () => {
+		console.log('cancel coupon')
+		this.setState({
+			voucher: '',
+			applyCode: false
+		})
+	}
 
 	addVoucherItemsToCart = (voucher_item) => {
 
@@ -418,6 +444,9 @@ export default class Checkout extends React.Component {
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
+		console.log('shop', shop)
+		console.log('newcart', newcart)
+		console.log('cart_total', cart_total)
 
 		var promotions_item = []
 		var final_cart_value = cart_total
@@ -743,15 +772,15 @@ export default class Checkout extends React.Component {
 					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
 					var pickup = Moment(pick_up_time, 'h:mm')
 					var now = Moment(new Date(), 'HH:mm')
-
 					if (pickup < now && pick_up_status == "Pick Later") {
 						this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
 						return
 					}
-					else if (pickup < opening) {
-						this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
-						return
-					} else if (pickup > closing) {
+					// else if (pickup < opening) {
+					// 	this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
+					// 	return
+					// } 
+					else if (pickup > closing) {
 						this.refs.toast.show("We are closed at this time.", TOAST_DURATION)
 						return
 					}
@@ -839,14 +868,7 @@ export default class Checkout extends React.Component {
 		}
 	}
 
-	onApplyVoucher = () => {
-		console.log('onApplyVoucher')
-	}
-	onChangeVoucher = (text) => {
-		this.setState({
-			voucher: text
-		})
-	}
+
 
 	renderPaymentMethod() {
 
@@ -1176,9 +1198,8 @@ export default class Checkout extends React.Component {
 
 		})
 
-		
-		var valid_voucher_counts = _.filter(this.state.valid_vouchers, function(o) { if (o.is_valid == true) return o }).length;
 
+		var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (o) { if (o.is_valid == true) return o }).length;
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
@@ -1212,15 +1233,7 @@ export default class Checkout extends React.Component {
 			<View style={styles.orderitemsView}>
 				{voucher_items}
 			</View>
-			{/* <View style={styles.couponContent}>
-				<TextInput
-					style={styles.voucherInput}
-					onChangeText={text => this.onChangeVoucher(text)}
-					value={this.state.voucher} />
-				<TouchableOpacity style={styles.applyButton} onPress={this.onApplyVoucher}>
-					<Text style={styles.applyText}>Apply</Text>
-				</TouchableOpacity>
-			</View> */}
+
 		</View>
 	}
 
@@ -1630,6 +1643,7 @@ export default class Checkout extends React.Component {
 	renderCheckoutReceipt() {
 		const { vouchers_to_use, final_price } = this.state
 		let { currentMember, selectedShop, cart, promotions } = this.props
+		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
 
 		return <View
 			style={styles.orderReceiptView}>
@@ -1740,7 +1754,7 @@ export default class Checkout extends React.Component {
 										flex: 1,
 									}} />
 								<Text
-									style={styles.totalText}>${final_price}</Text>
+									style={styles.totalText}>${non_negative_final_price}</Text>
 							</View>
 
 						</View>
@@ -1752,7 +1766,6 @@ export default class Checkout extends React.Component {
 	}
 
 	renderPayNow(final_price) {
-
 		return <View
 			style={styles.totalPayNowView}>
 
@@ -1772,6 +1785,7 @@ export default class Checkout extends React.Component {
 
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
+		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
 
 		return <View
 			style={styles.checkoutViewPadding}>
@@ -1788,11 +1802,11 @@ export default class Checkout extends React.Component {
 
 			{(isPaymentToggle == true || isPickupToogle == true) && (
 				<View style={styles.checkoutViewOverlay} />)}
-			{this.renderPayNow(final_price)}
+			{this.renderPayNow(non_negative_final_price)}
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }}  textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 
 			{/* <TimePicker
 				ref={ref => {
@@ -1812,42 +1826,7 @@ export default class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
-	couponContent: {
-		flexDirection: 'row',
-		flex: 1,
-		backgroundColor: 'transparent',
-		marginHorizontal: 20 * alpha
-	},
-	voucherInput: {
-		flex: 1,
-		paddingVertical: 2 * alpha,
-		borderTopLeftRadius: 5 * alpha,
-		borderBottomLeftRadius: 5 * alpha,
-		paddingHorizontal: 5 * alpha,
-		backgroundColor: 'white',
-		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-	},
-	applyButton: {
-		flex: 0.5,
-		borderTopRightRadius: 5 * alpha,
-		borderBottomRightRadius: 5 * alpha,
-		paddingVertical: 5 * alpha,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: PRIMARY_COLOR
-	},
-	applyText: {
-		// backgroundColor: "transparent",
-		color: "white",
-		fontFamily: TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		textAlign: "center",
 
-		// marginBottom: 5 * alpha,
-	},
 	headerLeftContainer: {
 		flexDirection: "row",
 		marginLeft: 8 * alpha,

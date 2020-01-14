@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>areRemoteUpdatesEnabled</key>
+	<false/>
 	<key>isManifestVerificationBypassed</key>
 	<true/>
 	<key>isShell</key>
@@ -9,8 +11,6 @@
 	<key>manifestUrl</key>
 	<string>exp://exp.host/@tonyvoon/brew9</string>
 	<key>releaseChannel</key>
-	<string>test</string>
-	<key>areRemoteUpdatesEnabled</key>
-	<false/>
+	<string>version1.0.1</string>
 </dict>
 </plist>
