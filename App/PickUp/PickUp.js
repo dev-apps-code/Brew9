@@ -603,7 +603,7 @@ export default class PickUp extends React.Component {
 									}}>
 									<Text
 										style={[styles.orderNo020028201Text, { flex: 0.25 }]}>Receipt no. </Text>
-									<Text style={[styles.orderTime100717Text,]}> : </Text>
+									<Text style={[styles.orderNo020028201Text,]}> : </Text>
 									<Text
 										style={[styles.orderNo020028201Text, { flex: 1 }]}>{item.receipt_no}</Text>
 
@@ -622,7 +622,7 @@ export default class PickUp extends React.Component {
 									}}>
 									<Text
 										style={[styles.remarkNoPackingText, { flex: 0.25 }]}>Remarks </Text>
-									<Text style={[styles.orderTime100717Text,]}> : </Text>
+									<Text style={[styles.remarkNoPackingText,]}> : </Text>
 									<Text
 										style={[styles.remarkNoPackingText, { flex: 1 }]}>{remarks}</Text>
 
