@@ -48,10 +48,10 @@ export default class VerifyUser extends React.Component {
 		this.state = {
 			loading: false,
 			phone_no: null,
-			country_code: "673",
-			// country_code: "60",
-			country: "bn",
-			// country: 'MY',
+			// country_code: "673",
+			country_code: "60",
+			// country: "bn",
+			country: 'MY',
 			login_success: false,
 			code: "",
 			code_from_server: "",
@@ -104,7 +104,7 @@ export default class VerifyUser extends React.Component {
 	loadLogin() {
 		const { dispatch } = this.props
 		const { phone_no, country_code } = this.state
-		
+
 		if (isNaN(phone_no)) {
 			this.refs.toast.show("Please ensure you have enter valid phone number!", TOAST_DURATION)
 			return
@@ -127,7 +127,7 @@ export default class VerifyUser extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-
+				console.log(eventObject)
 				this.setState({
 					login_success: true,
 					is_counting: true,
@@ -244,7 +244,7 @@ export default class VerifyUser extends React.Component {
 								keyboardType="phone-pad"
 								placeholder="123456789"
 								style={styles.textInputTextInput}
-								maxLength={7}
+								// maxLength={7}
 								onChangeText={(phone_no) => this.setState({ phone_no })} />
 							<View
 								style={{
