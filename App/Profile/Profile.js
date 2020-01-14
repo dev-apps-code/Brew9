@@ -6,9 +6,9 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState, Modal, TouchableWithoutFeedback, TextInput } from "react-native"
 import React from "react"
-import { alpha, fontAlpha, windowWidth } from "../Common/size";
+import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
 import { KURL_INFO, KURL_MEMBERSHIP_INFO } from "../Utils/server";
 import { createAction } from '../Utils'
@@ -16,7 +16,7 @@ import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import Constants from 'expo-constants';
-import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE } from "../Common/common_style";
+import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE, DEFAULT_GREY_BACKGROUND } from "../Common/common_style";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
@@ -73,6 +73,8 @@ export default class Profile extends React.Component {
 			hasShimmered: false,
 			appState: AppState.currentState,
 			timestamp: undefined,
+			showRedeemVoucher: false
+
 		}
 		this.loadProfile = this.loadProfile.bind(this)
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: 0 })
@@ -366,6 +368,30 @@ export default class Profile extends React.Component {
 			navigate("RedeemPromotion")
 		}
 	}
+	onRedeemVoucherPressed = () => {
+		const { currentMember } = this.props
+		if (currentMember !== null) {
+			this.setState({
+				showRedeemVoucher: true
+			})
+		}
+	}
+	closePopUp = () => {
+		this.setState({
+			showRedeemVoucher: false
+		})
+	}
+	onChangeCoupon = (text) => {
+		this.setState({
+			coupon: text
+		})
+	}
+	onOK = () => {
+		this.setState({
+			showRedeemVoucher: false
+		}, console.log('redeem coupon code'))
+
+	}
 
 	onPointShopPressed = () => {
 		const { currentMember } = this.props
@@ -392,6 +418,25 @@ export default class Profile extends React.Component {
 		navigate("About")
 	}
 
+	onFaqPressed = () => {
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', 'FAQs'))
+		
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+		})
+    }
+    
+    onFeedbackPressed = () => {
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', 'Feedback'))
+		
+		Linking.openURL('mailto:feedback@brew9.co')
+	}
+
 	onProfileButtonPress = () => {
 		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
@@ -407,6 +452,49 @@ export default class Profile extends React.Component {
 			})
 			return
 		}
+	}
+
+	renderRedeemVoucher() {
+
+		return (
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={this.state.showRedeemVoucher}
+				onRequestClose={() => this.closePopUp()}>
+				<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
+
+					<View style={[styles.popUpBackground]}>
+						<View style={[styles.popUpContent]}>
+							<View style={styles.popUpInput1}>
+								<Text style={styles.titleText}>Redeem Your Voucher</Text>
+							</View>
+							<TouchableOpacity onPress={() => this.closePopUp()} style={styles.cancelCouponCode}>
+								<Image
+									source={require("./../../assets/images/x-3.png")}
+									style={styles.cancelImage} />
+							</TouchableOpacity>
+							<View style={styles.popUpInput2}>
+								<TextInput
+									style={styles.couponCode}
+									placeholder={'Enter voucher code'}
+									maxLength={8}
+									onChangeText={text => this.onChangeCoupon(text)}
+
+								/>
+							</View>
+
+							<TouchableOpacity
+								onPress={() => this.closePopUp()}
+								style={styles.popUpInput3}>
+								<Text
+									style={styles.okButtonText}>OK</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</TouchableWithoutFeedback>
+			</Modal>
+		)
 	}
 
 	renderProgressBar(progress) {
@@ -437,7 +525,7 @@ export default class Profile extends React.Component {
 	}
 
 	render() {
-
+		console.log('showRedeemVoucher', this.state.showRedeemVoucher)
 		const { currentMember, members } = this.props
 		const { hasShimmered } = this.state
 
@@ -817,6 +905,58 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 
+				<TouchableOpacity
+					onPress={() => this.onRedeemVoucherPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>Redeem Voucher</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+							}}>
+							<Text
+								style={styles.menuRowDescriptionText}></Text>
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+
 
 				<TouchableOpacity
 					onPress={() => this.onMembershipInfoPressed()}
@@ -923,10 +1063,8 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 
-
-
 				<TouchableOpacity
-					onPress={() => this.onAboutButtonPressed()}
+					onPress={() => this.onFaqPressed()}
 					style={styles.menuRowbuttonButton}>
 					<View
 						style={styles.menuRowView}>
@@ -950,7 +1088,58 @@ export default class Profile extends React.Component {
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.menuRowLabelText}>More</Text>
+									style={styles.menuRowLabelText}>FAQs</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								height: 58 * alpha,
+							}}>
+
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => this.onFeedbackPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>Feedback</Text>
 								<View
 									style={{
 										flex: 1,
@@ -976,11 +1165,98 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 			</View>
+			{this.renderRedeemVoucher()}
 		</ScrollView>
 	}
 }
 
 const styles = StyleSheet.create({
+	cancelCouponCode: {
+		position: 'absolute',
+		width: 15 * alpha,
+		height: 15 * alpha,
+		right: 15 * alpha,
+		top: 15 * alpha
+	},
+	cancelImage: {
+		width: 15 * alpha,
+		height: 15 * alpha,
+		tintColor: LIGHT_GREY
+	},
+	titleText: {
+		color: '#696969',
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+	},
+	popUpInput1: {
+		backgroundColor: '#f5f5f5',
+		flex: 1,
+		borderTopLeftRadius: 5 * alpha,
+		borderTopRightRadius: 5 * alpha,
+		paddingVertical: 10 * alpha,
+		alignItems: 'center',
+		justifyContent: 'center'
+
+	},
+	popUpInput2: {
+		backgroundColor: 'transparent',
+		flex: 1,
+		marginVertical: 20 * alpha,
+		paddingHorizontal: 20 * alpha,
+		// alignItems: 'center',
+		// justifyContent: 'center',
+
+
+	},
+	couponCode: {
+		backgroundColor: '#f5f5f5',
+		paddingHorizontal: 10 * alpha,
+		color: LIGHT_GREY,
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		borderRadius: 5 * alpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		height: 30 * alpha,
+	},
+	popUpInput3: {
+		backgroundColor: PRIMARY_COLOR,
+		marginHorizontal: 20 * alpha,
+		marginBottom: 20 * alpha,
+		paddingHorizontal: 10 * alpha,
+		// paddingVertical: 10 * alpha,
+		borderRadius: 15 * alpha,
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: 30 * alpha,
+		// flex: 1,
+		// marginTop: 5
+	},
+	okButtonText: {
+		color: 'white',
+		fontFamily: TITLE_FONT,
+		fontSize: 16 * fontAlpha,
+		borderRadius: 5 * alpha,
+		fontStyle: "normal",
+		textAlign: "center",
+	},
+	popUpBackground: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.4)',
+		justifyContent: 'center',
+	},
+	popUpContent: {
+		backgroundColor: 'white',
+		height: windowHeight / 5,
+		// aspectRatio: 1,
+		// maxHeight: windowHeight / 2,
+		// paddingVertical: 20 * alpha,
+		marginHorizontal: 50 * alpha,
+		// paddingHorizontal: 20 * alpha,
+		justifyContent: 'space-between',
+		borderRadius: 5 * alpha,
+
+	},
 	profileView: {
 		backgroundColor: "white",
 		flex: 1,
