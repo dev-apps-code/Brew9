@@ -117,7 +117,6 @@ export default class Checkout extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		console.log('prevProps.promotion_trigger_count', prevProps.promotion_trigger_count)
 		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count) {
 			this.check_promotion_trigger()
 		}
@@ -169,8 +168,6 @@ export default class Checkout extends React.Component {
 		if (hour_array.length < 3) {
 			hour_array.length = 3
 		}
-		// console.log('hour_array', hour_array)
-		// console.log('minute_array', minute_array)
 
 		this.setState({
 			selected_hour: first_hour,
@@ -185,7 +182,6 @@ export default class Checkout extends React.Component {
 
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 
-		// console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
 		var time_now = Moment(new Date(), 'h:mm')
 
@@ -402,13 +398,6 @@ export default class Checkout extends React.Component {
 			this.calculateVoucherDiscount(new_voucher_list)
 		})
 	}
-	onCancelCoupon = () => {
-		console.log('cancel coupon')
-		this.setState({
-			voucher: '',
-			applyCode: false
-		})
-	}
 
 	addVoucherItemsToCart = (voucher_item) => {
 
@@ -444,10 +433,6 @@ export default class Checkout extends React.Component {
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
-		console.log('shop', shop)
-		console.log('newcart', newcart)
-		console.log('cart_total', cart_total)
-
 		var promotions_item = []
 		var final_cart_value = cart_total
 		var final_promo_text = ''
@@ -464,31 +449,21 @@ export default class Checkout extends React.Component {
 			for (var index in shop.all_promotions) {
 
 				var promotion = shop.all_promotions[index]
-
-				// console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
 				if (currentMember != null) {
-
 					if (promotion.trigger_price != null) {
 						var price = 0
-
 						var trigger_price = parseFloat(promotion.trigger_price)
 						var remaining = trigger_price - cart_total
-
 						if (remaining <= 0) {
-
 							shop.all_promotions[index].has_triggered = true
-
 							if (promotion.reward_type != null && promotion.reward_type == "Discount") {
-
 								if (promotion.value_type != null && promotion.value_type == "percent") {
 									var discount_value = promotion.value ? promotion.value : 0
 									price = cart_total * discount_value / 100
-
 									if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
 										price = promotion.maximum_discount_allow
 									}
 									final_cart_value = cart_total - price
-
 								} else if (promotion.value_type != null && promotion.value_type == "fixed") {
 									var discount_value = promotion.value ? promotion.value : 0
 									final_cart_value = cart_total - discount_value
@@ -671,7 +646,6 @@ export default class Checkout extends React.Component {
 				}
 			}
 			else {
-				console.log("Error", eventObject.message)
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 				this.setState({
 					loading: false,
@@ -698,7 +672,6 @@ export default class Checkout extends React.Component {
 
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		console.log("Order_Id", cart_order_id, voucher_item_ids)
 		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time, cart_order_id, latitude, longitude)
 		obj.setUrlId(selectedShop.id)
 		dispatch(
@@ -733,7 +706,6 @@ export default class Checkout extends React.Component {
 		const { navigation, dispatch } = this.props
 		dispatch(createAction("orders/resetCart")({}));
 		const { routeName, key } = navigation.getParam('returnToRoute')
-		console.log('clearcart')
 		navigation.navigate({
 			routeName, key,
 		})

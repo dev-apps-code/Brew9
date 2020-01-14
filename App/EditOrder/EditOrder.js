@@ -547,7 +547,6 @@ export default class EditOrder extends React.Component {
 				}
 			}
 			else {
-				console.log("Error", eventObject.message)
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 				this.setState({
 					loading: false,
@@ -1594,7 +1593,6 @@ export default class EditOrder extends React.Component {
 
 	}
 	renderQueueView(current_order) {
-		console.log('current_order', current_order)
 		// const queues = current_order.map((item, key) => {
 		const order_items = current_order.order_items.map((item, key) => {
 			var price_string = item.total_price != undefined && item.total_price > 0 ? `$${item.total_price}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""

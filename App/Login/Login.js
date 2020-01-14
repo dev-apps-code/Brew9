@@ -164,7 +164,6 @@ export default class Login extends React.Component {
 				loading: false,
 			})
 		} catch ({ message }) {
-			// console.log(`Facebook Login Error: ${message}`)
 			// alert(`Facebook Login Error: ${message}`);
 		}
 	}

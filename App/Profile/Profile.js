@@ -389,7 +389,7 @@ export default class Profile extends React.Component {
 	onOK = () => {
 		this.setState({
 			showRedeemVoucher: false
-		}, console.log('redeem coupon code'))
+		})
 
 	}
 
@@ -506,7 +506,6 @@ export default class Profile extends React.Component {
 	}
 
 	render() {
-		console.log('showRedeemVoucher', this.state.showRedeemVoucher)
 		const { currentMember, members } = this.props
 		const { hasShimmered } = this.state
 
