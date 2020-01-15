@@ -1699,8 +1699,8 @@ export default class Home extends React.Component {
 					</View>)
 			}
 
-			if (shop.can_order == false && shop.shop_busy_template_message != null) {
-				const template = shop.shop_busy_template_message.template
+			if (shop.can_order == false && shop.alert_message != null) {
+				const template = shop.alert_message
 
 				return (
 					<View style={style}>

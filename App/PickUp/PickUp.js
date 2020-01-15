@@ -1269,7 +1269,7 @@ const styles = StyleSheet.create({
 		height: 25 * alpha,
 	},
 	refreshImage: {
-		tintColor: "rgb(205, 207, 208)",
+		tintColor: "rgb(220, 220, 220)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		height: 20 * alpha,

@@ -726,10 +726,20 @@ export default class Checkout extends React.Component {
 
 			if (selected_payment == "credits") {
 				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>Oops, insufficient credit.{"\n"}Please select other payment option.</Text></View>, TOAST_DURATION + 1000
-						// 	// () => {
-						// 	// 	navigate("MemberWallet")
-						// 	// }
+					var insufficient = "Oops, insufficient credit.\nPlease select other payment option."
+
+					if (selectedShop.response_message != undefined) {
+						insufficient_response = _.find(selectedShop.response_message, function(obj) {
+							return obj.key === "Popup - Insufficient credit";
+						})
+						if (insufficient_response != undefined) {
+							insufficient = insufficient_response.text
+						}
+					}
+					this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{insufficient}</Text></View>, TOAST_DURATION + 1000,
+						// () => {
+						// 	navigate("MemberWallet")
+						// }
 					)
 
 					return
@@ -846,7 +856,10 @@ export default class Checkout extends React.Component {
 	renderPaymentMethod() {
 
 		const { currentMember } = this.props
+		const { final_price } = this.state
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
+		var no_payment_needed = final_price <= 0 ? true : false
+
 		return <Animated.View
 			style={this.moveAnimation.getLayout()} >
 			<View
@@ -942,10 +955,11 @@ export default class Checkout extends React.Component {
 					</View>
 
 					<View
-						style={styles.creditCardView}>
+						style={no_payment_needed ? styles.disabledcreditCardView : styles.creditCardView}>
 						<TouchableOpacity
 							onPress={() => this.onCreditButtonPressed()}
-							style={styles.creditbuttonButton}>
+							style={styles.creditbuttonButton}
+							disabled={no_payment_needed}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -2548,6 +2562,13 @@ const styles = StyleSheet.create({
 	creditCardView: {
 		backgroundColor: "transparent",
 		// position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 70 * alpha,
+		height: 71 * alpha,
+	},
+	disabledcreditCardView: {
+		backgroundColor: "rgb(230, 230, 230)",
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 70 * alpha,
