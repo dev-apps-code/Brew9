@@ -41,22 +41,21 @@ export default class MissionCell extends React.Component {
 		var voucher_length = this.props.vouchers.length
 
 
-		if (this.props.login == false){
-			if (this.props.mission_type == "Login"){
+		if (this.props.login == false) {
+			if (this.props.mission_type == "Login") {
 				status_string = "Claim Now"
-			}else{
+			} else {
 				status_string = "Pending"
 			}
-			
-		}else{
+
+		} else {
 			if (this.props.status == "Pending" && this.props.mission_type == "Login") {
 				status_string = "Check In"
 			} else if (this.props.status == "Completed" || this.props.login == false) {
-				// console.log(`this.props.status ${this.props.status}`)
 				status_string = "Claim Now"
 			}
 		}
-	
+
 
 		const point = this.props.point > 1 ? 'points' : 'point'
 		const vouchers = this.props.vouchers.map((item, key) => {
@@ -108,9 +107,9 @@ export default class MissionCell extends React.Component {
 					}}>
 					<TouchableOpacity
 						onPress={() => this.onStatusPressed(this.props.statement_id)}
-					>						
+					>
 						<View
-							style={this.props.status == "Pending" || status_string == "Pending" ?  styles.statusView : styles.statusCompleteView}>
+							style={this.props.status == "Pending" || status_string == "Pending" ? styles.statusView : styles.statusCompleteView}>
 							<Text
 								style={styles.completeText}>{status_string}</Text>
 						</View>

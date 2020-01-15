@@ -134,8 +134,6 @@ export default class OrderReview extends React.Component {
 	}
 	getPermissionAsync = async () => {
 		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-		console.log('getPermission', status)
-
 		if (status !== 'granted') {
 			return false
 		}
@@ -164,7 +162,7 @@ export default class OrderReview extends React.Component {
 
 				this.setState({
 					imageReview: image
-				}, console.log(this.state.imageReview))
+				})
 			}
 		} else {
 			this.refs.toast.show("Please enable camera roll permission in settings.", TOAST_DURATION)
@@ -199,7 +197,6 @@ export default class OrderReview extends React.Component {
 			selectedComment,
 			imageReview
 		}
-		console.log('data', data)
 	}
 
 	renderCommentSection = () => {

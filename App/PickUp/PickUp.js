@@ -667,8 +667,6 @@ export default class PickUp extends React.Component {
 		let longitudes = shop.latitude ? shop.longitude : this.props.selectedShop.longitude
 		let latitude = latitudes ? parseFloat(latitudes) : 0.0
 		let longitude = longitudes ? parseFloat(longitudes) : 0.0
-		console.log('latitude', latitude)
-		console.log('longitude', longitude)
 		openMap({ latitude: latitude, longitude: longitude });
 	}
 

@@ -1,6 +1,6 @@
 // import { btoa } from './node_modules/Base64'
-import { KSERVERURL, encodeForFormData,KCURRENT_API_VERSION_HEADER,APPBUILDVERSIONIOS,APPBUILDVERSIONANDROID } from './server'
-import {Platform} from 'react-native'
+import { KSERVERURL, encodeForFormData, KCURRENT_API_VERSION_HEADER, getBuildVersion, getAppVersion } from './server'
+import { Platform } from 'react-native'
 import Constants from 'expo-constants';
 export class WebserviceHelper {
   // static b64EncodeUnicode(str) {
@@ -16,17 +16,16 @@ export function getBasicAuthentication(authToken) {
   return `Basic ${authToken}`
 }
 
-export function getMethod(authtoken,object) {
+export function getMethod(authtoken, object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
-  
-  const buildVersion = Platform.OS === 'android' ? APPBUILDVERSIONANDROID : APPBUILDVERSIONIOS
+
   return fetch(urlString, {
     method: 'GET',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'application/x-www-form-urlencoded',
-      'AppVersion': Constants.nativeAppVersion,
-      'BuildVersion': buildVersion,
+      'AppVersion': getAppVersion(),
+      'BuildVersion': getBuildVersion(),
       'Platform': Platform.OS,
       Authorization: getBasicAuthentication(authtoken),
     }
@@ -39,11 +38,11 @@ export function getMethod(authtoken,object) {
 }
 
 
-export function postMethod(authtoken,object) {
+export function postMethod(authtoken, object) {
 
-    const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  const urlString = `${KSERVERURL}/${object.getUrlString()}`
 
-    return fetch(urlString, {
+  return fetch(urlString, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
@@ -62,30 +61,30 @@ export function postMethod(authtoken,object) {
 }
 
 
-export function postJsonMethod(authtoken,object) {
+export function postJsonMethod(authtoken, object) {
 
   const urlString = `${KSERVERURL}/${object.getUrlString()}`
   return fetch(urlString, {
-  method: 'POST',
-  headers: {
-    Accept: KCURRENT_API_VERSION_HEADER,
-    'Content-Type': 'application/json',
-    'Version': Constants.nativeAppVersion,
-    'BuildVersion': Constants.nativeBuildVersion,
-    'Platform': Constants.platform,
-    Authorization: getBasicAuthentication(authtoken),
-  }, body: object.getFormData()
-})
-  .then(logResponse('json'))
-  .then(response => _parseJSON(response))
-  .catch(error => {
-    console.error(error);
-  });
+    method: 'POST',
+    headers: {
+      Accept: KCURRENT_API_VERSION_HEADER,
+      'Content-Type': 'application/json',
+      'Version': Constants.nativeAppVersion,
+      'BuildVersion': Constants.nativeBuildVersion,
+      'Platform': Constants.platform,
+      Authorization: getBasicAuthentication(authtoken),
+    }, body: object.getFormData()
+  })
+    .then(logResponse('json'))
+    .then(response => _parseJSON(response))
+    .catch(error => {
+      console.error(error);
+    });
 }
 
 export function postMultipartMethod(authtoken, object) {
-    const urlString = `${KSERVERURL}/${object.getUrlString()}`
-    return fetch(urlString, {
+  const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  return fetch(urlString, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
@@ -103,7 +102,7 @@ export function postMultipartMethod(authtoken, object) {
     });
 }
 
-export function deleteMethod(authtoken,object) {
+export function deleteMethod(authtoken, object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
   return fetch(urlString, {
     method: 'DELETE',
@@ -124,15 +123,13 @@ export function deleteMethod(authtoken,object) {
 }
 
 export function logResponse(description) {
-  return function(res) {
-      // console.log("Description")
-      // console.log(description, res)
-      return res
+  return function (res) {
+    return res
   }
 }
 
 export function _parseJSON(response) {
-  
+
   return response.text().then(text => (text ? JSON.parse(text) : {}))
 }
 
