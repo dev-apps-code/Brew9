@@ -1199,8 +1199,8 @@ export default class Profile extends React.Component {
 									flexDirection: "row",
 									alignItems: "center",
 								}}>
-								<Text
-									style={styles.menuRowLabelText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text>
+								{/* <Text
+									style={styles.menuRowLabelText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text> */}
 								<View
 									style={{
 										flex: 1,
