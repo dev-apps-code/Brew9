@@ -1611,33 +1611,33 @@ export default class Home extends React.Component {
 							description={shop.location}
 						/>
 					</MapView>
-					<View
-						style={styles.branchInfoView}>
-						{/* <Text
+					{/* <View
+						style={styles.branchInfoView}> */}
+					{/* <Text
 							style={styles.branchInfoText}>Outlet Info</Text> */}
-						{/* { (shop != null && shop.image != null) && ( */}
+					{/* { (shop != null && shop.image != null) && ( */}
 
-						{/* <Image
+					{/* <Image
 							source={{ uri: shop.image.thumb.url }}
 							style={styles.shopImage} /> */}
-						{/* ) } */}
-						<ScrollView style={{ marginHorizontal: 10 * alpha, marginBottom: 10 * alpha }}>
-							<Text
-								style={styles.branchHeaderAddress}>Address </Text>
-							<Text
-								style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
-							<Text
-								style={styles.branchHeaderContact}>Contact </Text>
-							<Text
-								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
-							<Text
-								style={styles.businessHeaderHourText}>Business Hours</Text>
-							<Text
-								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
+					{/* ) } */}
+					<ScrollView contentContainerStyle={{ paddingHorizontal: 10 * alpha, paddingBottom: 80 * alpha }}>
+						<Text
+							style={styles.branchHeaderAddress}>Address </Text>
+						<Text
+							style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
+						<Text
+							style={styles.branchHeaderContact}>Contact </Text>
+						<Text
+							style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
+						<Text
+							style={styles.businessHeaderHourText}>Business Hours</Text>
+						<Text
+							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
 
-						</ScrollView>
-					</View>
+					</ScrollView>
 				</View>
+				// </View>
 			)}
 
 			<Animated.View
