@@ -10,7 +10,7 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, A
 import React from "react"
 import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
-import { KURL_INFO, KURL_MEMBERSHIP_INFO } from "../Utils/server";
+import { KURL_INFO, KURL_MEMBERSHIP_INFO, getAppVersion, getBuildVersion } from "../Utils/server";
 import { createAction } from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
@@ -255,7 +255,6 @@ export default class Profile extends React.Component {
 
 			navigate("VIPPurchase")
 		}
-
 	}
 
 	onRewardButtonPressed = () => {
@@ -1139,6 +1138,56 @@ export default class Profile extends React.Component {
 								}}>
 								<Text
 									style={styles.menuRowLabelText}>Feedback</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+							}}>
+							<Text
+								style={styles.menuRowDescriptionText}></Text>
+						</View>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => this.onFeedbackPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text>
 								<View
 									style={{
 										flex: 1,

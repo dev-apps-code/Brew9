@@ -430,7 +430,7 @@ export default class PickUp extends React.Component {
 							style={styles.refreshView}
 							onPress={this.onRefresh}>
 							<Image
-								source={require("./../../assets/images/refresh.png")}
+								source={require("./../../assets/images/refresh-sharp.png")}
 								style={styles.refreshImage} />
 
 						</TouchableOpacity>

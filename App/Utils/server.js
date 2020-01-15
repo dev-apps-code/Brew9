@@ -1,3 +1,5 @@
+import Constants from "expo-constants";
+import {Platform} from "react-native"
 // export const KSERVERURL = "https://app.brew9.co/api"
 // export const KURL_INFO = "https://app.brew9.co/info"
 // export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
@@ -19,9 +21,8 @@ export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
 export const KCURRENT_API_VERSION_HEADER = "application/dc.v3 gzip";
-export const APPBUILDVERSIONIOS = "3";
-export const APPBUILDVERSIONANDROID = "3";
-
+export const APPBUILDVERSIONIOS = "4";
+export const APPBUILDVERSIONANDROID = "4";
 
 export const KTIMEOUT = 3 * 1000;
 
@@ -37,6 +38,19 @@ export function encodeForFormData(details) {
   formBody = formBody.join("&");
   return formBody;
 }
+
+export function getBuildVersion(){
+  if (Platform.OS === "android"){
+    return APPBUILDVERSIONANDROID
+  }
+  return APPBUILDVERSIONIOS
+}
+
+export function getAppVersion(){
+  return Constants.manifest.version
+}
+
+
 
 export function getPaymentServer(){
   if (IS_TEST){
