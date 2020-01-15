@@ -1147,19 +1147,7 @@ export default class Profile extends React.Component {
 									style={styles.menuRowArrowImage} />
 
 							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									left: 0 * alpha,
-									right: 0 * alpha,
-									top: 0 * alpha,
-									height: 58 * alpha,
-								}}>
-
-								<View
-									style={styles.menuRowLineView} />
-								</View>
+							
 							</View>
 						<View
 							pointerEvents="box-none"
@@ -1175,56 +1163,7 @@ export default class Profile extends React.Component {
 						</View>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => this.onFeedbackPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								{/* <Text
-									style={styles.menuRowLabelText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text> */}
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-							}}>
-							<Text
-								style={styles.menuRowDescriptionText}></Text>
-						</View>
-					</View>
-				</TouchableOpacity>
+				
 			</View>
 			{this.renderRedeemVoucher()}
 		</ScrollView>
