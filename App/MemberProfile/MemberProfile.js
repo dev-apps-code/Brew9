@@ -1068,9 +1068,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgb(243, 243, 243)",
 		color: "rgb(135, 135, 135)",
 		fontFamily: TITLE_FONT,
-		fontSize: 13 * fontAlpha,
+		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
+		paddingBottom: 5 * alpha
 		// paddingLeft: 22 * alpha,
 	},
 	birthdayText: {
