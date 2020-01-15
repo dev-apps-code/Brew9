@@ -13,10 +13,12 @@ import { connect } from "react-redux";
 import openMap from 'react-native-open-maps';
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
-@connect(({ members }) => ({
+@connect(({ members, shops }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
 	location: members.location,
+	selectedShop: shops.selectedShop,
+
 }))
 export default class OrderReceipt extends React.Component {
 
@@ -24,7 +26,7 @@ export default class OrderReceipt extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Order</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Order</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -72,6 +74,13 @@ export default class OrderReceipt extends React.Component {
 		let longitude = shop ? parseFloat(shop.longitude) : 0.0
 
 		openMap({ latitude: latitude, longitude: longitude });
+	}
+	onLocationButtonPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("DirectionMap", {
+			shop: this.props.selectedShop
+		})
 	}
 
 
@@ -235,7 +244,7 @@ export default class OrderReceipt extends React.Component {
 								<View
 									style={styles.directionView}>
 									<TouchableOpacity
-										onPress={() => this.onDirectionPressed(order.shop)}
+										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-17.png")}

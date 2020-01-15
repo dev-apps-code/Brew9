@@ -192,10 +192,10 @@ export default class PickUp extends React.Component {
 
 			var paid_order_message = "Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable"
 			var unpaid_order_message = "Your order will be processed upon receiving payment."
-			
+
 			if (selectedShop.response_message != undefined) {
 				if (item.paid == true) {
-					paid_response = _.find(selectedShop.response_message, function(obj) {
+					paid_response = _.find(selectedShop.response_message, function (obj) {
 						return obj.key === "Not Collected Order";
 					})
 
@@ -203,7 +203,7 @@ export default class PickUp extends React.Component {
 						paid_order_message = paid_response.text
 					}
 				} else {
-					unpaid_response = _.find(selectedShop.response_message, function(obj) {
+					unpaid_response = _.find(selectedShop.response_message, function (obj) {
 						return obj.key === "Pending Payment (Remarks)";
 					})
 					if (unpaid_response != undefined) {
@@ -505,7 +505,8 @@ export default class PickUp extends React.Component {
 							<View
 								style={styles.directionView}>
 								<TouchableOpacity
-									onPress={() => this.onDirectionPressed(item.shop)}
+									// onPress={() => this.onDirectionPressed(item.shop)}
+									onPress={() => this.onLocationButtonPressed()}
 									style={styles.directionIconButton}>
 									<Image
 										source={require("./../../assets/images/group-3-17.png")}
@@ -692,7 +693,14 @@ export default class PickUp extends React.Component {
 		let longitudes = shop.latitude ? shop.longitude : this.props.selectedShop.longitude
 		let latitude = latitudes ? parseFloat(latitudes) : 0.0
 		let longitude = longitudes ? parseFloat(longitudes) : 0.0
-		openMap({ latitude: latitude, longitude: longitude });
+		openMap({ latitude: latitude, longitude: longitude, zoom: 18, query: shop.name });
+	}
+	onLocationButtonPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("DirectionMap", {
+			shop: this.props.selectedShop
+		})
 	}
 
 	closePopUp = () => {

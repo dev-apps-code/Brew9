@@ -40,7 +40,7 @@ export default class EditOrder extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Update Order</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Update Order</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -1514,7 +1514,7 @@ export default class EditOrder extends React.Component {
 								<View
 									style={styles.directionView}>
 									<TouchableOpacity
-										onPress={() => this.onDirectionPressed(selectedShop)}
+										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-17.png")}
@@ -1679,7 +1679,7 @@ export default class EditOrder extends React.Component {
 			{this.renderPaymentMethod()}
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}} />
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 		</View>
 	}
 }
