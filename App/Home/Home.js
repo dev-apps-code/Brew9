@@ -1369,7 +1369,7 @@ export default class Home extends React.Component {
 												alignItems: "flex-start",
 											}}>
 											<TouchableOpacity
-												onPress={() => { if (select_quantity > 1) this.setState({ select_quantity: select_quantity -= 1 }) }}
+												onPress={() => { if (select_quantity > 1 && enabled == true) this.setState({ select_quantity: select_quantity -= 1 }) }}
 												style={styles.removeButton}>
 												<Image
 													source={require("./../../assets/images/button-4.png")}
@@ -1380,7 +1380,7 @@ export default class Home extends React.Component {
 													flex: 1,
 												}} />
 											<TouchableOpacity
-												onPress={() => { if (select_quantity < order_limit) this.setState({ select_quantity: select_quantity += 1 }) }}
+												onPress={() => { if (select_quantity < order_limit && enabled == true) this.setState({ select_quantity: select_quantity += 1 }) }}
 												style={styles.addButton}>
 												<Image
 													source={require("./../../assets/images/add-18.png")}
