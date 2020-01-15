@@ -147,12 +147,12 @@ export default class OrderCell extends React.Component {
 					style={styles.lineView} />
 				<View
 					style={styles.optionView}>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						onPress={() => this.onReviewPressed(this.props.item)}
 						style={styles.reviewButton}>
 						<Text
 							style={styles.reviewButtonText}>Review</Text>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 					{/*	<TouchableOpacity*/}
 					{/*		onPress={this.onReceiptPressed}*/}
 					{/*		style={styles.receiptButton}>*/}
