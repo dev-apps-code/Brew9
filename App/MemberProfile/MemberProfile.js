@@ -1066,7 +1066,7 @@ const styles = StyleSheet.create({
 	},
 	versionText: {
 		backgroundColor: "rgb(243, 243, 243)",
-		color: "rgb(54, 54, 54)",
+		color: "rgb(135, 135, 135)",
 		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
