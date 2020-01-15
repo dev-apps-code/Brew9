@@ -1633,7 +1633,7 @@ export default class Home extends React.Component {
 						<Text
 							style={styles.businessHeaderHourText}>Business Hours</Text>
 						<Text
-							style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
+							style={styles.businessHourText}>{shop ? shop.opening_closing_text : ""}</Text>
 
 					</ScrollView>
 				</View>

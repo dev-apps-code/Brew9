@@ -32,8 +32,10 @@ export default class ValidVoucher extends React.Component {
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-      	analytics.event(new Event('Voucher', 'Click', this.props.title))
-		navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
+		if (this.props.valid) {
+			analytics.event(new Event('Voucher', 'Click', this.props.title))
+			navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
+		}
 	}
 
 	onTermsPressed = () => {
