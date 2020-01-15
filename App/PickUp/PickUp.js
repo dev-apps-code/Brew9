@@ -21,6 +21,7 @@ import NotificationsRequestObject from "../Requests/notifications_request_object
 import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import _ from 'lodash'
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -183,11 +184,35 @@ export default class PickUp extends React.Component {
 
 
 	renderQueueView(current_order) {
+		const { selectedShop } = this.props
 		const queues = current_order.map((item, key) => {
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 			var calculate_cart_total = cart_total
-			var remarks = item.paid ? "Order must be collected within 30 minutes of collection time \n Otherwise it will be canceled and non-refundable" : "Your order will be processed upon receiving payment."
+
+			var paid_order_message = "Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable"
+			var unpaid_order_message = "Your order will be processed upon receiving payment."
+			
+			if (selectedShop.response_message != undefined) {
+				if (item.paid == true) {
+					paid_response = _.find(selectedShop.response_message, function(obj) {
+						return obj.key === "Not Collected Order";
+					})
+
+					if (paid_response != undefined) {
+						paid_order_message = paid_response.text
+					}
+				} else {
+					unpaid_response = _.find(selectedShop.response_message, function(obj) {
+						return obj.key === "Pending Payment (Remarks)";
+					})
+					if (unpaid_response != undefined) {
+						unpaid_order_message = unpaid_response.text
+					}
+				}
+			}
+
+			var remarks = item.paid ? paid_order_message : unpaid_order_message
 
 			const order_items = item.order_items.map((item, key) => {
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""

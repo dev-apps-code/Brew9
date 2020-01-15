@@ -21,8 +21,8 @@ export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
 export const KCURRENT_API_VERSION_HEADER = "application/dc.v3 gzip";
-export const APPBUILDVERSIONIOS = "4";
-export const APPBUILDVERSIONANDROID = "4";
+export const APPBUILDVERSIONIOS = "5";
+export const APPBUILDVERSIONANDROID = "5";
 
 export const KTIMEOUT = 3 * 1000;
 

@@ -903,7 +903,7 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity
+				{/* <TouchableOpacity
 					onPress={() => this.onRedeemVoucherPressed()}
 					style={styles.menuRowbuttonButton}>
 					<View
@@ -953,7 +953,7 @@ export default class Profile extends React.Component {
 								style={styles.menuRowLineView} />
 						</View>
 					</View>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 
 				<TouchableOpacity
@@ -1147,7 +1147,20 @@ export default class Profile extends React.Component {
 									style={styles.menuRowArrowImage} />
 
 							</View>
-						</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									height: 58 * alpha,
+								}}>
+
+								<View
+									style={styles.menuRowLineView} />
+								</View>
+							</View>
 						<View
 							pointerEvents="box-none"
 							style={{
