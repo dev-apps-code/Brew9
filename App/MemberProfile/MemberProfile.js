@@ -10,6 +10,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, K
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size"
 import { createAction, validateEmail } from "../Utils"
+import { getAppVersion, getBuildVersion } from "../Utils/server";
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdateAvatarRequestObject from "../Requests/update_avatar_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
@@ -797,6 +798,7 @@ export default class MemberProfile extends React.Component {
 						{/*/>*/}
 
 					</View>
+
 				</View>
 				<TouchableOpacity
 					onPress={() => this.onSavePressed()}
@@ -810,9 +812,12 @@ export default class MemberProfile extends React.Component {
 					avoidKeyboard={true}>
 					{this.renderModalContent()}
 				</Modal>
+
 			</View>
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 			<HudLoading isLoading={this.state.loading} />
+			<Text
+				style={styles.versionText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text>
 		</KeyboardAvoidingView>
 
 	}
@@ -1058,6 +1063,16 @@ const styles = StyleSheet.create({
 		height: 53 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
+	},
+	versionText: {
+		backgroundColor: "rgb(243, 243, 243)",
+		color: "rgb(135, 135, 135)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		paddingBottom: 5 * alpha
+		// paddingLeft: 22 * alpha,
 	},
 	birthdayText: {
 		backgroundColor: "transparent",

@@ -741,6 +741,7 @@ export default class Checkout extends React.Component {
 						// 	navigate("MemberWallet")
 						// }
 					)
+
 					return
 				}
 			}
@@ -798,7 +799,7 @@ export default class Checkout extends React.Component {
 		let latitude = shop ? parseFloat(shop.latitude) : 0.0
 		let longitude = shop ? parseFloat(shop.longitude) : 0.0
 
-		openMap({ latitude: latitude, longitude: longitude });
+		openMap({ latitude: latitude, longitude: longitude, zoom: 18 });
 	}
 
 
@@ -1689,7 +1690,8 @@ export default class Checkout extends React.Component {
 								<View
 									style={styles.directionView}>
 									<TouchableOpacity
-										onPress={() => this.onDirectionPressed(selectedShop)}
+										// onPress={() => this.onDirectionPressed(selectedShop)}
+										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-17.png")}
