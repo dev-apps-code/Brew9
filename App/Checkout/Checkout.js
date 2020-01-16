@@ -646,7 +646,7 @@ export default class Checkout extends React.Component {
 				}
 			}
 			else {
-				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{eventObject.message}</Text></View>, TOAST_DURATION)
 				this.setState({
 					loading: false,
 				})
