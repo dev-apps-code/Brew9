@@ -517,6 +517,7 @@ export default class Checkout extends React.Component {
 
 	calculateVoucherDiscount(vouchers_to_use) {
 		const { discount_cart_total, cart_total } = this.props
+		const { selected_payment } = this.state
 		var discount = 0
 		for (var index in vouchers_to_use) {
 			var item = vouchers_to_use[index]
@@ -534,7 +535,11 @@ export default class Checkout extends React.Component {
 			}
 		}
 		const f_price = discount_cart_total - discount
-		this.setState({ discount: discount, final_price: f_price.toFixed(2) })
+		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function(){
+			if (selected_payment == "credit_card" && f_price <= 0) {
+				this.setState({ selected_payment: ''})
+			}
+		})
 	}
 
 	onPaymentButtonPressed = () => {
