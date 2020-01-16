@@ -1071,7 +1071,7 @@ const styles = StyleSheet.create({
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
 		textAlign: "center",
-		paddingBottom: 5 * alpha
+		paddingBottom: 15 * alpha
 		// paddingLeft: 22 * alpha,
 	},
 	birthdayText: {
