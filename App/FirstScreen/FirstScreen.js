@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
 
     },
     popUpInput1: {
-        backgroundColor: '#fff5ee',
+        // backgroundColor: '#fff5ee',
         paddingHorizontal: 10 * alpha,
         paddingVertical: 10 * alpha,
         borderRadius: 5 * alpha,
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
 
     },
     descriptionText: {
-        // color: PRIMARY_COLOR,
+        color: 'rgb(135, 135, 135)',
         fontFamily: TITLE_FONT,
         textAlign: 'center'
     },
