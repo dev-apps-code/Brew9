@@ -125,6 +125,10 @@ export default class ValidVoucher extends React.Component {
 					<Image
 						source={require("./../../assets/images/group-5-3.png")}
 						style={styles.backgroundImage} />
+					<Image
+						source={require("./../../assets/images/voucher_new.png")}
+						style={styles.newImage}
+					/>
 
 					<View
 						pointerEvents="box-none"
@@ -339,5 +343,14 @@ const styles = StyleSheet.create({
 	},
 	highlight: {
 		color: PRIMARY_COLOR
+	},
+	newImage: {
+		backgroundColor: "transparent",
+		resizeMode: "contain",
+		position: "absolute",
+		right: 12 * alpha,
+		width: 75 * alpha,
+		bottom: 0 * alpha,
+		height: 80 * alpha
 	}
 })
