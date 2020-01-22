@@ -8,12 +8,20 @@
 
 import React from "react"
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList, TextInput, ImageBackground } from "react-native"
-import { alpha, fontAlpha, windowWidth, navbarHeight } from "../Common/size";
-import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY } from "../Common/common_style";
+import { alpha, fontAlpha, windowWidth, windowHeight, navbarHeight } from "../Common/size";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, TOAST_DURATION } from "../Common/common_style";
 import * as ImagePicker from "expo-image-picker"
 import * as Permissions from "expo-permissions"
+import MakeOrderReviewObj from "../Requests/make_order_review_request_object"
+import { createAction, Storage } from "../Utils"
+import { connect } from "react-redux";
+import Toast, { DURATION } from 'react-native-easy-toast'
 
 
+
+@connect(({ shops }) => ({
+
+}))
 export default class OrderReview extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
@@ -48,6 +56,7 @@ export default class OrderReview extends React.Component {
 			showComment: false,
 			commentSelected: false,
 			comment: '',
+			rating: null,
 			imageReview: [],
 			rateLevel: [
 				{
@@ -126,6 +135,7 @@ export default class OrderReview extends React.Component {
 		this.setState({
 			rateLevel: tempRateLevel,
 			satisfactionLevel: rate.name,
+			rating: rate.index,
 			showComment: true
 		})
 	}
@@ -187,16 +197,35 @@ export default class OrderReview extends React.Component {
 		})
 	}
 	onSubmitReview = () => {
-		let { comment, rateLevel, commentList, imageReview } = this.state
-		let selectedRate = rateLevel.find(item => { return item.selected == true })
-		let selectedComment = commentList.filter(item => { return item.selected == true })
+		const { dispatch } = this.props
+		let { comment, rating, commentList, imageReview, order } = this.state
 
-		let data = {
-			comment,
-			rate: selectedRate,
-			selectedComment,
-			imageReview
+		let selectedTopic = []
+		commentList.forEach(item => {
+			if (item.selected == true) {
+				selectedTopic.push(item.name)
+			}
+		})
+		let order_id = order.id
+		let remark = comment
+		let topic = selectedTopic.toString()
+		let image = []
+		const callback = eventObject => {
+			if (eventObject.success) {
+				this.refs.toast.show("Successfully add review!", TOAST_DURATION)
+
+			} else {
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+			}
+
 		}
+		const obj = new MakeOrderReviewObj(order_id, rating, remark, topic, image)
+		dispatch(
+			createAction('shops/loadReview')({
+				object: obj,
+				callback,
+			})
+		)
 	}
 
 	renderCommentSection = () => {
@@ -287,15 +316,7 @@ export default class OrderReview extends React.Component {
 				style={styles.reviewScrollView}>
 				<View
 					style={styles.satisfactionLevelView}>
-					{/* <View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 11 * alpha,
-							right: 11 * alpha,
-							top: 19 * alpha,
-							bottom: 19 * alpha,
-						}}> */}
+
 					<View style={styles.headerSatisfactionLevelView}>
 						<Text
 							style={styles.titleText}>{order.shop.name}</Text>
@@ -305,10 +326,7 @@ export default class OrderReview extends React.Component {
 
 					<View
 						style={styles.lineView} />
-					{/* <View
-							style={{
-								flex: 1,
-							}} /> */}
+
 					<View style={styles.bodySatisfactionLevelView}>
 						<Text
 							style={[styles.rateText, { color: showComment ? PRIMARY_COLOR : LIGHT_GREY }]}>{satisfactionLevel ? satisfactionLevel : "My Satisfaction Level"}</Text>
@@ -330,8 +348,7 @@ export default class OrderReview extends React.Component {
 					</View>
 					{showComment && this.renderCommentSection()}
 
-					{/* <Text
-							style={styles.commentText}>“Lorem ipsum dolor sit amet, consectetuer {"\n"}adipiscing elit, Lorem ipsum dolor sit amet, {"\n"}consectetuer adipiscing elit,  ”</Text> */}
+
 				</View>
 
 
@@ -392,6 +409,7 @@ export default class OrderReview extends React.Component {
 				onPress={showComment ? this.onSubmitReview : console.log('undefined')}>
 				<Text style={styles.submitText}>SUBMIT</Text>
 			</TouchableOpacity>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 		</View>
 	}
 }
