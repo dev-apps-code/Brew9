@@ -215,3 +215,4 @@ dependencies {
 
 // This has to be down here for some reason
 apply plugin: 'com.google.gms.google-services'
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
