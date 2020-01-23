@@ -10,6 +10,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, K
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size"
 import { createAction, validateEmail } from "../Utils"
+import { getAppVersion, getBuildVersion } from "../Utils/server";
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdateAvatarRequestObject from "../Requests/update_avatar_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
@@ -27,6 +28,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import { Image as ExpoImage } from "react-native-expo-image-cache";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
+import moment from 'moment';
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -226,7 +228,7 @@ export default class MemberProfile extends React.Component {
 	}
 
 	_pickImage = async () => {
-		
+
 		var get_permission = await this.getPermissionAsync()
 		if (get_permission) {
 			let result = await ImagePicker.launchImageLibraryAsync({
@@ -488,7 +490,8 @@ export default class MemberProfile extends React.Component {
 		const { members, image, dob, nickname, gender, member_phone_number, email, selected_image } = this.state;
 		const preview = { uri: require("./../../assets/images/user.png") };
 		const uri = image.uri
-
+		let maxDate = new Date(moment().subtract(10, 'years').calendar())
+		let maxYear = maxDate.getFullYear()
 		return <KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : null}
 			keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
@@ -508,7 +511,7 @@ export default class MemberProfile extends React.Component {
 									style={styles.avatarImage} />}
 							</View>
 							<TouchableOpacity
-								onPress={  this._pickImage }
+								onPress={this._pickImage}
 								style={styles.imagebuttonButton}>
 							</TouchableOpacity>
 							{image.uri == null && (<Text
@@ -764,6 +767,7 @@ export default class MemberProfile extends React.Component {
 							confirmBtnText="Confirm"
 							cancelBtnText="Cancel"
 							showIcon={false}
+							maxDate={"31-12-" + maxYear}
 							style={styles.birthdayDatePicker}
 							disabled={this.state.member_have_dob}
 							customStyles={{
@@ -794,6 +798,7 @@ export default class MemberProfile extends React.Component {
 						{/*/>*/}
 
 					</View>
+
 				</View>
 				<TouchableOpacity
 					onPress={() => this.onSavePressed()}
@@ -807,9 +812,12 @@ export default class MemberProfile extends React.Component {
 					avoidKeyboard={true}>
 					{this.renderModalContent()}
 				</Modal>
+
 			</View>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 			<HudLoading isLoading={this.state.loading} />
+			<Text
+				style={styles.versionText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text>
 		</KeyboardAvoidingView>
 
 	}
@@ -1055,6 +1063,16 @@ const styles = StyleSheet.create({
 		height: 53 * alpha,
 		flexDirection: "row",
 		alignItems: "center",
+	},
+	versionText: {
+		backgroundColor: "rgb(243, 243, 243)",
+		color: "rgb(135, 135, 135)",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "center",
+		paddingBottom: 15 * alpha
+		// paddingLeft: 22 * alpha,
 	},
 	birthdayText: {
 		backgroundColor: "transparent",
