@@ -10,7 +10,7 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, A
 import React from "react"
 import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
-import { KURL_INFO, KURL_MEMBERSHIP_INFO } from "../Utils/server";
+import { KURL_INFO, KURL_MEMBERSHIP_INFO, getAppVersion, getBuildVersion } from "../Utils/server";
 import { createAction } from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
@@ -255,7 +255,6 @@ export default class Profile extends React.Component {
 
 			navigate("VIPPurchase")
 		}
-
 	}
 
 	onRewardButtonPressed = () => {
@@ -389,7 +388,7 @@ export default class Profile extends React.Component {
 	onOK = () => {
 		this.setState({
 			showRedeemVoucher: false
-		}, console.log('redeem coupon code'))
+		})
 
 	}
 
@@ -416,6 +415,25 @@ export default class Profile extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', "About"))
 		navigate("About")
+	}
+
+	onFaqPressed = () => {
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', 'FAQs'))
+		
+		navigate("WebCommon", {
+			title: 'FAQs',
+			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+		})
+    }
+    
+    onFeedbackPressed = () => {
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', 'Click', 'Feedback'))
+		
+		Linking.openURL('mailto:feedback@brew9.co')
 	}
 
 	onProfileButtonPress = () => {
@@ -506,7 +524,6 @@ export default class Profile extends React.Component {
 	}
 
 	render() {
-		console.log('showRedeemVoucher', this.state.showRedeemVoucher)
 		const { currentMember, members } = this.props
 		const { hasShimmered } = this.state
 
@@ -886,7 +903,7 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity
+				{/* <TouchableOpacity
 					onPress={() => this.onRedeemVoucherPressed()}
 					style={styles.menuRowbuttonButton}>
 					<View
@@ -936,7 +953,7 @@ export default class Profile extends React.Component {
 								style={styles.menuRowLineView} />
 						</View>
 					</View>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 
 
 				<TouchableOpacity
@@ -1044,10 +1061,8 @@ export default class Profile extends React.Component {
 					</View>
 				</TouchableOpacity>
 
-
-
 				<TouchableOpacity
-					onPress={() => this.onAboutButtonPressed()}
+					onPress={() => this.onFaqPressed()}
 					style={styles.menuRowbuttonButton}>
 					<View
 						style={styles.menuRowView}>
@@ -1071,7 +1086,58 @@ export default class Profile extends React.Component {
 									alignItems: "center",
 								}}>
 								<Text
-									style={styles.menuRowLabelText}>More</Text>
+									style={styles.menuRowLabelText}>FAQs</Text>
+								<View
+									style={{
+										flex: 1,
+									}} />
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</View>
+						</View>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								height: 58 * alpha,
+							}}>
+
+							<View
+								style={styles.menuRowLineView} />
+						</View>
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => this.onFeedbackPressed()}
+					style={styles.menuRowbuttonButton}>
+					<View
+						style={styles.menuRowView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 24 * alpha,
+									marginLeft: 20 * alpha,
+									marginRight: 30 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.menuRowLabelText}>Feedback</Text>
 								<View
 									style={{
 										flex: 1,
@@ -1081,7 +1147,8 @@ export default class Profile extends React.Component {
 									style={styles.menuRowArrowImage} />
 
 							</View>
-						</View>
+							
+							</View>
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -1096,6 +1163,7 @@ export default class Profile extends React.Component {
 						</View>
 					</View>
 				</TouchableOpacity>
+				
 			</View>
 			{this.renderRedeemVoucher()}
 		</ScrollView>

@@ -288,7 +288,6 @@ export default class Home extends React.Component {
 			const prevLongInRad = location.coords.longitude
 			const latInRad = shop.latitude
 			const longInRad = shop.longitude
-			// console.log("Shop", latInRad, longInRad, "User", prevLatInRad, prevLongInRad)
 			var pdis = getPreciseDistance(
 				{ latitude: prevLatInRad, longitude: prevLongInRad },
 				{ latitude: latInRad, longitude: longInRad }
@@ -300,7 +299,6 @@ export default class Home extends React.Component {
 
 	setDistanceString(calculated_distance) {
 		var distance_string = ""
-		// console.log(calculated_distance)
 		var parseDistance = calculated_distance
 		if (parseDistance > 1000) {
 			distance_string = `${parseFloat(parseDistance / 1000).toFixed(1)}km`
@@ -308,7 +306,6 @@ export default class Home extends React.Component {
 			distance_string = `${parseDistance}m`
 		}
 		this.setState({ distance: distance_string, member_distance: (parseDistance / 1000) })
-		// this.setState({ distance: distance_string, member_distance: 1 })
 	}
 
 	componentWillMount() {
@@ -371,7 +368,6 @@ export default class Home extends React.Component {
 			return false;
 		} else {
 			const activeRoute = navigation.state.routeName == "Home" ? true : false;
-			console.log('activeRoute', activeRoute)
 			if (activeRoute) {
 				this.setState({ visible: true })
 			}
@@ -451,13 +447,11 @@ export default class Home extends React.Component {
 						page: this.state.page + 1,
 					}, function () {
 						let data = [...this.state.data]
-						// console.log("Data",data)
 						var items = []
 						var index_length = menu_banners.length
 						for (var index in data) {
 							data[index].selected = index == 0 ? true : false
 							data[index].scroll_index = index_length
-							// console.log("Index",data[index])
 							items = items.concat(data[index])
 							index_length = index_length + 1
 							items = items.concat(data[index].products)
@@ -518,7 +512,6 @@ export default class Home extends React.Component {
 				const { clearCart } = this.props
 
 				if (clearCart == true) {
-					console.log("Clear and go to pickup")
 					this.loadShops()
 					navigate("PickUp")
 				} else {
@@ -558,7 +551,6 @@ export default class Home extends React.Component {
 			this.setState({
 				selected_promotion: item.banner_detail_image
 			}, function () {
-				// console.log(item.banner_detail_image)
 				this.setState({
 					isPromoToggle: true
 				})
@@ -584,7 +576,6 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-		// console.log("Scroll Index", selected_index, scroll_index)
 
 		let data = [...this.state.data]
 
@@ -614,7 +605,6 @@ export default class Home extends React.Component {
 				break
 			}
 			else if (data[parseInt(next_index)]) {
-				// console.log("First", first_index, "Previous",data[index].scroll_index)
 				if (second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index)) {
 					data[index].selected = true
 					break
@@ -962,7 +952,6 @@ export default class Home extends React.Component {
 
 				var promotion = shop.all_promotions[index]
 
-				// console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
 				if (currentMember != null) {
 
 					if (promotion.trigger_price != null) {
@@ -1147,7 +1136,6 @@ export default class Home extends React.Component {
 				selected_promotion: item.image.url,
 				first_promo_popup: true
 			}, function () {
-				// console.log(item.banner_detail_image)
 				this.setState({
 					isPromoToggle: true
 				})
@@ -1381,7 +1369,7 @@ export default class Home extends React.Component {
 												alignItems: "flex-start",
 											}}>
 											<TouchableOpacity
-												onPress={() => { if (select_quantity > 1) this.setState({ select_quantity: select_quantity -= 1 }) }}
+												onPress={() => { if (select_quantity > 1 && enabled == true) this.setState({ select_quantity: select_quantity -= 1 }) }}
 												style={styles.removeButton}>
 												<Image
 													source={require("./../../assets/images/button-4.png")}
@@ -1392,7 +1380,7 @@ export default class Home extends React.Component {
 													flex: 1,
 												}} />
 											<TouchableOpacity
-												onPress={() => { if (select_quantity < order_limit) this.setState({ select_quantity: select_quantity += 1 }) }}
+												onPress={() => { if (select_quantity < order_limit && enabled == true) this.setState({ select_quantity: select_quantity += 1 }) }}
 												style={styles.addButton}>
 												<Image
 													source={require("./../../assets/images/add-18.png")}
@@ -1623,33 +1611,33 @@ export default class Home extends React.Component {
 							description={shop.location}
 						/>
 					</MapView>
-					<View
-						style={styles.branchInfoView}>
-						{/* <Text
+					{/* <View
+						style={styles.branchInfoView}> */}
+					{/* <Text
 							style={styles.branchInfoText}>Outlet Info</Text> */}
-						{/* { (shop != null && shop.image != null) && ( */}
+					{/* { (shop != null && shop.image != null) && ( */}
 
-						{/* <Image
+					{/* <Image
 							source={{ uri: shop.image.thumb.url }}
 							style={styles.shopImage} /> */}
-						{/* ) } */}
-						<ScrollView style={{ marginHorizontal: 10 * alpha, }}>
-							<Text
-								style={styles.branchHeaderAddress}>Address </Text>
-							<Text
-								style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
-							<Text
-								style={styles.branchHeaderContact}>Contact </Text>
-							<Text
-								style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
-							<Text
-								style={styles.businessHeaderHourText}>Business Hours</Text>
-							<Text
-								style={styles.businessHourText}>{shop ? Moment(shop.opening_hour.start_time, "HH:mm").format('h:mma') : ""} - {shop ? Moment(shop.opening_hour.end_time, "HH:mm").format('h:mma') : ""}</Text>
+					{/* ) } */}
+					<ScrollView contentContainerStyle={{ paddingHorizontal: 10 * alpha, paddingBottom: 80 * alpha }}>
+						<Text
+							style={styles.branchHeaderAddress}>Address </Text>
+						<Text
+							style={styles.branchAddress}>{shop ? shop.address : ""}</Text>
+						<Text
+							style={styles.branchHeaderContact}>Contact </Text>
+						<Text
+							style={styles.branchContact}>{shop ? shop.phone_no : ""}</Text>
+						<Text
+							style={styles.businessHeaderHourText}>Business Hours</Text>
+						<Text
+							style={styles.businessHourText}>{shop ? shop.opening_closing_text : ""}</Text>
 
-						</ScrollView>
-					</View>
+					</ScrollView>
 				</View>
+				// </View>
 			)}
 
 			<Animated.View
@@ -1711,8 +1699,8 @@ export default class Home extends React.Component {
 					</View>)
 			}
 
-			if (shop.can_order == false && shop.shop_busy_template_message != null) {
-				const template = shop.shop_busy_template_message.template
+			if (shop.can_order == false && shop.alert_message != null) {
+				const template = shop.alert_message
 
 				return (
 					<View style={style}>
@@ -1900,12 +1888,6 @@ export default class Home extends React.Component {
 	renderGallery() {
 
 		const { image_isHorizontal, isPromoToggle, image_isLong, selected_promotion } = this.state
-
-		// console.log(image_isHorizontal, isPromoToggle, image_isLong , selected_promotion)
-		// const images = [{
-		// 	url: selected_promotion,
-		// }]	 
-
 		if (selected_promotion) {
 
 			return <Modal visible={isPromoToggle} style={{ margin: 0, flex: 1, backgroundColor: "rgba(0, 0, 0, 0.8)" }}>

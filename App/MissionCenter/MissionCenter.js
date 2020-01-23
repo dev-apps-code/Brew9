@@ -95,7 +95,6 @@ export default class MissionCenter extends React.Component {
     }
 
     refreshMission() {
-        console.log("refrshing mission")
         this.loadMissions(false)
     }
 

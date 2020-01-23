@@ -21,6 +21,7 @@ import NotificationsRequestObject from "../Requests/notifications_request_object
 import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import _ from 'lodash'
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -183,11 +184,35 @@ export default class PickUp extends React.Component {
 
 
 	renderQueueView(current_order) {
+		const { selectedShop } = this.props
 		const queues = current_order.map((item, key) => {
 			let cart_total = parseFloat(item.total) + parseFloat(item.discount)
 			var progress = item.status == "pending" ? 0.33 : item.status == "processing" ? 0.66 : item.status == "ready" ? 1 : 0
 			var calculate_cart_total = cart_total
-			var remarks = item.paid ? "Order must be collected within 30 minutes of collection time \n Otherwise it will be canceled and non-refundable" : "Your order will be processed upon receiving payment."
+
+			var paid_order_message = "Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable"
+			var unpaid_order_message = "Your order will be processed upon receiving payment."
+
+			if (selectedShop.response_message != undefined) {
+				if (item.paid == true) {
+					paid_response = _.find(selectedShop.response_message, function (obj) {
+						return obj.key === "Not Collected Order";
+					})
+
+					if (paid_response != undefined) {
+						paid_order_message = paid_response.text
+					}
+				} else {
+					unpaid_response = _.find(selectedShop.response_message, function (obj) {
+						return obj.key === "Pending Payment (Remarks)";
+					})
+					if (unpaid_response != undefined) {
+						unpaid_order_message = unpaid_response.text
+					}
+				}
+			}
+
+			var remarks = item.paid ? paid_order_message : unpaid_order_message
 
 			const order_items = item.order_items.map((item, key) => {
 				var price_string = item.total_price != undefined && item.total_price > 0 ? `$${parseFloat(item.total_price).toFixed(2)}` : item.total_price != undefined && item.total_price == 0 ? "Free" : ""
@@ -430,7 +455,7 @@ export default class PickUp extends React.Component {
 							style={styles.refreshView}
 							onPress={this.onRefresh}>
 							<Image
-								source={require("./../../assets/images/refresh.png")}
+								source={require("./../../assets/images/refresh-sharp.png")}
 								style={styles.refreshImage} />
 
 						</TouchableOpacity>
@@ -480,7 +505,8 @@ export default class PickUp extends React.Component {
 							<View
 								style={styles.directionView}>
 								<TouchableOpacity
-									onPress={() => this.onDirectionPressed(item.shop)}
+									// onPress={() => this.onDirectionPressed(item.shop)}
+									onPress={() => this.onLocationButtonPressed()}
 									style={styles.directionIconButton}>
 									<Image
 										source={require("./../../assets/images/group-3-17.png")}
@@ -667,9 +693,14 @@ export default class PickUp extends React.Component {
 		let longitudes = shop.latitude ? shop.longitude : this.props.selectedShop.longitude
 		let latitude = latitudes ? parseFloat(latitudes) : 0.0
 		let longitude = longitudes ? parseFloat(longitudes) : 0.0
-		console.log('latitude', latitude)
-		console.log('longitude', longitude)
-		openMap({ latitude: latitude, longitude: longitude });
+		openMap({ latitude: latitude, longitude: longitude, zoom: 18, query: shop.name });
+	}
+	onLocationButtonPressed = () => {
+		const { navigate } = this.props.navigation
+
+		navigate("DirectionMap", {
+			shop: this.props.selectedShop
+		})
 	}
 
 	closePopUp = () => {
@@ -1238,7 +1269,6 @@ const styles = StyleSheet.create({
 		height: 25 * alpha,
 	},
 	refreshImage: {
-		tintColor: "rgb(205, 207, 208)",
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		height: 20 * alpha,

@@ -9,11 +9,11 @@
 import React from "react"
 import { StyleSheet, Image, TouchableOpacity, Text, View, TextInput } from "react-native"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
-import {connect} from "react-redux";
-import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
-import Toast, {DURATION} from 'react-native-easy-toast'
+import { connect } from "react-redux";
+import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from "../Common/common_style";
+import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading.js"
-import {createAction, Storage} from "../Utils"
+import { createAction, Storage } from "../Utils"
 import PaymentSessionRequestObject from '../Requests/payment_session_request_object.js'
 import UpdatePaymentSessionRequestObject from '../Requests/update_payment_session_request_object'
 
@@ -26,7 +26,7 @@ export default class PayByCard extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Payment</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Payment</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -35,7 +35,7 @@ export default class PayByCard extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -62,42 +62,41 @@ export default class PayByCard extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 		this.loadGetSession()
-		
+
 	}
 
-	loadGetSession(){
+	loadGetSession() {
 		const { dispatch } = this.props
 		this.setState({ loading: true })
-		
-		console.log("Load Session")
+
 		const callback = eventObject => {
 			this.loadUpdateSessionWithCardDetails()
 		}
 		const obj = new PaymentSessionRequestObject()
 		dispatch(
 			createAction('payments/loadGetSession')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
 
-	loadUpdateSessionWithCardDetails(){
+	loadUpdateSessionWithCardDetails() {
 		const { dispatch } = this.props
-		let name = "Voon Sze Ching"		
-		let card_number = "4842810339276319"		
+		let name = "Voon Sze Ching"
+		let card_number = "4842810339276319"
 		let security_code = '906'
 		let month = '11'
 		let year = '23'
 		const callback = eventObject => {
-			this.setState({ loading: false }) 				
+			this.setState({ loading: false })
 		}
 
-		const obj = new UpdatePaymentSessionRequestObject(name,card_number,security_code,month,year)
+		const obj = new UpdatePaymentSessionRequestObject(name, card_number, security_code, month, year)
 
 		dispatch(
 			createAction('payments/loadSetCreditCardSession')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -135,76 +134,76 @@ export default class PayByCard extends React.Component {
 
 	render() {
 
-		let cart_total = this.props.navigation.getParam("cart_total",0.00)
+		let cart_total = this.props.navigation.getParam("cart_total", 0.00)
 		return <View
-				style={styles.payByCardView}>
-				<View
-					style={styles.totalAmountView}>
-					<Text
-						style={styles.headerlabelText}>{this.props.navigation.getParam("transaction_name","Payment")}</Text>
-					<Text
-						style={styles.carttotalText}>${parseFloat(cart_total).toFixed(2)}</Text>
-				</View>
-				<View
-					style={styles.payeeView}>
-					<Text
-						style={styles.payeeText}>Payee</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					<Text
-						style={styles.brew9Text}>Brew9</Text>
-				</View>
-				<View
-					style={styles.paymentMethodView}>
-					<Text
-						style={styles.paymentMethodText}>Card Detail</Text>
-				</View>
-				<View
-					style={styles.addBankToPayView}>
-					<View
-						style={styles.nameView}>
-						<TextInput
-							autoCorrect={false}
-							placeholder="Name On Card"
-							style={styles.nameinputTextInput}
-							onChangeText={(card_name) => this.setState({card_name})}/>
-					</View>
-					<View
-						style={styles.cardnumberView}>
-						<TextInput
-							autoCorrect={false}
-							placeholder="Card Number"
-							keyboardType={"number-pad"}
-							style={styles.cardinputTextInput}
-							onChangeText={(card_number) => this.setState({card_number})}/>
-					</View>
-					<View
-						style={styles.expirydateView}>
-						<TextInput
-							autoCorrect={false}
-							placeholder="Expiration (MM/YY)"
-							keyboardType={"number-pad"}
-							style={styles.dateinputTextInput}
-							onChangeText={(card_expiry) => this.setState({card_expiry})}/>
-						<TextInput
-							autoCorrect={false}
-							placeholder="CSV"
-							keyboardType={"number-pad"}
-							style={styles.csvnputTextInput}
-							onChangeText={(cart_csv) => this.setState({cart_csv})}/>
-					</View>
-					<TouchableOpacity
-						onPress={this.onPayNowPressed}
-						style={styles.payNowButton}>
-						<Text
-							style={styles.payNowButtonText}>Pay Now</Text>
-					</TouchableOpacity>
-				</View>
-				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
-			<HudLoading isLoading={this.state.loading}/>
+			style={styles.payByCardView}>
+			<View
+				style={styles.totalAmountView}>
+				<Text
+					style={styles.headerlabelText}>{this.props.navigation.getParam("transaction_name", "Payment")}</Text>
+				<Text
+					style={styles.carttotalText}>${parseFloat(cart_total).toFixed(2)}</Text>
 			</View>
+			<View
+				style={styles.payeeView}>
+				<Text
+					style={styles.payeeText}>Payee</Text>
+				<View
+					style={{
+						flex: 1,
+					}} />
+				<Text
+					style={styles.brew9Text}>Brew9</Text>
+			</View>
+			<View
+				style={styles.paymentMethodView}>
+				<Text
+					style={styles.paymentMethodText}>Card Detail</Text>
+			</View>
+			<View
+				style={styles.addBankToPayView}>
+				<View
+					style={styles.nameView}>
+					<TextInput
+						autoCorrect={false}
+						placeholder="Name On Card"
+						style={styles.nameinputTextInput}
+						onChangeText={(card_name) => this.setState({ card_name })} />
+				</View>
+				<View
+					style={styles.cardnumberView}>
+					<TextInput
+						autoCorrect={false}
+						placeholder="Card Number"
+						keyboardType={"number-pad"}
+						style={styles.cardinputTextInput}
+						onChangeText={(card_number) => this.setState({ card_number })} />
+				</View>
+				<View
+					style={styles.expirydateView}>
+					<TextInput
+						autoCorrect={false}
+						placeholder="Expiration (MM/YY)"
+						keyboardType={"number-pad"}
+						style={styles.dateinputTextInput}
+						onChangeText={(card_expiry) => this.setState({ card_expiry })} />
+					<TextInput
+						autoCorrect={false}
+						placeholder="CSV"
+						keyboardType={"number-pad"}
+						style={styles.csvnputTextInput}
+						onChangeText={(cart_csv) => this.setState({ cart_csv })} />
+				</View>
+				<TouchableOpacity
+					onPress={this.onPayNowPressed}
+					style={styles.payNowButton}>
+					<Text
+						style={styles.payNowButtonText}>Pay Now</Text>
+				</TouchableOpacity>
+			</View>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<HudLoading isLoading={this.state.loading} />
+		</View>
 	}
 }
 

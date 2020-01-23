@@ -117,7 +117,6 @@ export default class Checkout extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		console.log('prevProps.promotion_trigger_count', prevProps.promotion_trigger_count)
 		if (prevProps.promotion_trigger_count != this.props.promotion_trigger_count) {
 			this.check_promotion_trigger()
 		}
@@ -169,8 +168,6 @@ export default class Checkout extends React.Component {
 		if (hour_array.length < 3) {
 			hour_array.length = 3
 		}
-		// console.log('hour_array', hour_array)
-		// console.log('minute_array', minute_array)
 
 		this.setState({
 			selected_hour: first_hour,
@@ -185,7 +182,6 @@ export default class Checkout extends React.Component {
 
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 
-		// console.log('check available minutes')
 		var minute_array = ["00", "15", "30", "45"]
 		var time_now = Moment(new Date(), 'h:mm')
 
@@ -402,13 +398,6 @@ export default class Checkout extends React.Component {
 			this.calculateVoucherDiscount(new_voucher_list)
 		})
 	}
-	onCancelCoupon = () => {
-		console.log('cancel coupon')
-		this.setState({
-			voucher: '',
-			applyCode: false
-		})
-	}
 
 	addVoucherItemsToCart = (voucher_item) => {
 
@@ -444,10 +433,6 @@ export default class Checkout extends React.Component {
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
-		console.log('shop', shop)
-		console.log('newcart', newcart)
-		console.log('cart_total', cart_total)
-
 		var promotions_item = []
 		var final_cart_value = cart_total
 		var final_promo_text = ''
@@ -464,31 +449,21 @@ export default class Checkout extends React.Component {
 			for (var index in shop.all_promotions) {
 
 				var promotion = shop.all_promotions[index]
-
-				// console.log(`trigger price ${promotion.trigger_price} - ${promotion.has_triggered}`)
 				if (currentMember != null) {
-
 					if (promotion.trigger_price != null) {
 						var price = 0
-
 						var trigger_price = parseFloat(promotion.trigger_price)
 						var remaining = trigger_price - cart_total
-
 						if (remaining <= 0) {
-
 							shop.all_promotions[index].has_triggered = true
-
 							if (promotion.reward_type != null && promotion.reward_type == "Discount") {
-
 								if (promotion.value_type != null && promotion.value_type == "percent") {
 									var discount_value = promotion.value ? promotion.value : 0
 									price = cart_total * discount_value / 100
-
 									if (promotion.maximum_discount_allow != null && price > promotion.maximum_discount_allow) {
 										price = promotion.maximum_discount_allow
 									}
 									final_cart_value = cart_total - price
-
 								} else if (promotion.value_type != null && promotion.value_type == "fixed") {
 									var discount_value = promotion.value ? promotion.value : 0
 									final_cart_value = cart_total - discount_value
@@ -542,6 +517,7 @@ export default class Checkout extends React.Component {
 
 	calculateVoucherDiscount(vouchers_to_use) {
 		const { discount_cart_total, cart_total } = this.props
+		const { selected_payment } = this.state
 		var discount = 0
 		for (var index in vouchers_to_use) {
 			var item = vouchers_to_use[index]
@@ -559,7 +535,11 @@ export default class Checkout extends React.Component {
 			}
 		}
 		const f_price = discount_cart_total - discount
-		this.setState({ discount: discount, final_price: f_price.toFixed(2) })
+		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function(){
+			if (selected_payment == "credit_card" && f_price <= 0) {
+				this.setState({ selected_payment: ''})
+			}
+		})
 	}
 
 	onPaymentButtonPressed = () => {
@@ -671,8 +651,7 @@ export default class Checkout extends React.Component {
 				}
 			}
 			else {
-				console.log("Error", eventObject.message)
-				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{eventObject.message}</Text></View>, TOAST_DURATION)
 				this.setState({
 					loading: false,
 				})
@@ -698,7 +677,6 @@ export default class Checkout extends React.Component {
 
 		filtered_cart = _.filter(cart, { clazz: 'product' });
 		const voucher_item_ids = vouchers_to_use.map(item => item.id)
-		console.log("Order_Id", cart_order_id, voucher_item_ids)
 		const obj = new MakeOrderRequestObj(filtered_cart, voucher_item_ids, this.state.selected_payment, promotion_ids, pick_up_status, pick_up_time, cart_order_id, latitude, longitude)
 		obj.setUrlId(selectedShop.id)
 		dispatch(
@@ -733,7 +711,6 @@ export default class Checkout extends React.Component {
 		const { navigation, dispatch } = this.props
 		dispatch(createAction("orders/resetCart")({}));
 		const { routeName, key } = navigation.getParam('returnToRoute')
-		console.log('clearcart')
 		navigation.navigate({
 			routeName, key,
 		})
@@ -754,11 +731,22 @@ export default class Checkout extends React.Component {
 
 			if (selected_payment == "credits") {
 				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", alignSelf: "center" }}>Oops, insufficient credit.</Text><Text style={{ color: "white", alignSelf: "center" }}>Please select other payment option.</Text></View>, TOAST_DURATION + 1000,
+					var insufficient = "Oops, insufficient credit.\nPlease select other payment option."
+
+					if (selectedShop.response_message != undefined) {
+						insufficient_response = _.find(selectedShop.response_message, function(obj) {
+							return obj.key === "Popup - Insufficient credit";
+						})
+						if (insufficient_response != undefined) {
+							insufficient = insufficient_response.text
+						}
+					}
+					this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{insufficient}</Text></View>, TOAST_DURATION + 1000,
 						// () => {
 						// 	navigate("MemberWallet")
 						// }
 					)
+
 					return
 				}
 			}
@@ -816,7 +804,7 @@ export default class Checkout extends React.Component {
 		let latitude = shop ? parseFloat(shop.latitude) : 0.0
 		let longitude = shop ? parseFloat(shop.longitude) : 0.0
 
-		openMap({ latitude: latitude, longitude: longitude });
+		openMap({ latitude: latitude, longitude: longitude, zoom: 18 });
 	}
 
 
@@ -873,7 +861,10 @@ export default class Checkout extends React.Component {
 	renderPaymentMethod() {
 
 		const { currentMember } = this.props
+		const { final_price } = this.state
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
+		var no_payment_needed = final_price <= 0 ? true : false
+
 		return <Animated.View
 			style={this.moveAnimation.getLayout()} >
 			<View
@@ -969,10 +960,11 @@ export default class Checkout extends React.Component {
 					</View>
 
 					<View
-						style={styles.creditCardView}>
+						style={no_payment_needed ? styles.disabledcreditCardView : styles.creditCardView}>
 						<TouchableOpacity
 							onPress={() => this.onCreditButtonPressed()}
-							style={styles.creditbuttonButton}>
+							style={styles.creditbuttonButton}
+							disabled={no_payment_needed}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -1703,7 +1695,8 @@ export default class Checkout extends React.Component {
 								<View
 									style={styles.directionView}>
 									<TouchableOpacity
-										onPress={() => this.onDirectionPressed(selectedShop)}
+										// onPress={() => this.onDirectionPressed(selectedShop)}
+										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
 											source={require("./../../assets/images/group-3-17.png")}
@@ -2574,6 +2567,13 @@ const styles = StyleSheet.create({
 	creditCardView: {
 		backgroundColor: "transparent",
 		// position: "absolute",
+		left: 0 * alpha,
+		right: 0 * alpha,
+		top: 70 * alpha,
+		height: 71 * alpha,
+	},
+	disabledcreditCardView: {
+		backgroundColor: "rgb(230, 230, 230)",
 		left: 0 * alpha,
 		right: 0 * alpha,
 		top: 70 * alpha,
