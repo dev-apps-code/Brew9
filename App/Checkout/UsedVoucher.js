@@ -10,10 +10,10 @@ import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Te
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
-import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { KURL_INFO } from "../Utils/server";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 @connect(({ members }) => ({
-    company_id: members.company_id,
+	company_id: members.company_id,
 }))
 export default class UsedVoucher extends React.Component {
 
@@ -22,12 +22,12 @@ export default class UsedVoucher extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
-		navigate("VoucherDetail",{item:this.props.item,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
+		navigate("VoucherDetail", { item: this.props.item, addVoucherAction: this.props.navigation.getParam("addVoucherAction", null) })
 	}
 
 	onTermsPressed = () => {
@@ -41,7 +41,7 @@ export default class UsedVoucher extends React.Component {
 	}
 
 	render() {
-	
+
 		return <TouchableWithoutFeedback
 			onPress={this.onVoucherPress}>
 			<View
@@ -51,7 +51,7 @@ export default class UsedVoucher extends React.Component {
 					style={styles.cellcontentView}>
 					<Image
 						source={require("./../../assets/images/group-5-copy-3-2.png")}
-						style={styles.backgroundImage}/>
+						style={styles.backgroundImage} />
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -69,7 +69,7 @@ export default class UsedVoucher extends React.Component {
 						<View
 							style={{
 								flex: 1,
-							}}/>
+							}} />
 						<Text
 							style={styles.dateText}>{this.props.used_date}</Text>
 					</View>
@@ -93,11 +93,11 @@ export default class UsedVoucher extends React.Component {
 							}}>
 							<Image
 								source={require("./../../assets/images/line-16-copy-5.png")}
-								style={styles.lineImage}/>							
+								style={styles.lineImage} />
 						</View>
 						<Image
-							source={require("./../../assets/images/bitmap-8.png")}
-							style={styles.usedImage}/>
+							source={require("./../../assets/images/voucher_used.png")}
+							style={styles.usedImage} />
 					</View>
 				</View>
 			</View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	descriptionText: {
@@ -157,46 +157,46 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent"
-	  },
-	  lineImage: {
+	},
+	lineImage: {
 		resizeMode: "cover",
 		backgroundColor: "transparent",
 		width: null,
 		height: 2 * alpha
-	  },
-	  termsView: {
+	},
+	termsView: {
 		backgroundColor: "transparent",
-			alignSelf: "flex-end",
-			width: 140 * alpha,
-			height: 13 * alpha,
-			marginRight: 1 * alpha,
-			marginTop: 14 * alpha,
-			flexDirection: "row",
-			alignItems: "center",
-	  },
-	  termsButton: {
+		alignSelf: "flex-end",
+		width: 140 * alpha,
+		height: 13 * alpha,
+		marginRight: 1 * alpha,
+		marginTop: 14 * alpha,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	termsButton: {
 		backgroundColor: "transparent",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 0 * alpha,
 		height: 13 * alpha,
-			width: 120 * alpha,
+		width: 120 * alpha,
 		marginRight: 4 * alpha
-	  },
-	  termsButtonText: {
+	},
+	termsButtonText: {
 		color: "rgb(136, 133, 133)",
-			fontFamily: TITLE_FONT,
-			fontSize: 10 * fontAlpha,
-			fontStyle: "normal",
-			width: 120 * alpha,
-			textAlign: "right",
-	  },
-	  termsButtonImage: {
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		width: 120 * alpha,
+		textAlign: "right",
+	},
+	termsButtonImage: {
 		resizeMode: "contain",
 		marginRight: 10 * alpha
-	  },
-	  arrowImage: {
+	},
+	arrowImage: {
 		resizeMode: "contain",
 		backgroundColor: "transparent",
 		flex: 1,
@@ -204,8 +204,8 @@ const styles = StyleSheet.create({
 		height: 8 * alpha,
 		marginLeft: 4 * alpha,
 		marginBottom: 3 * alpha,
-	  },
-	  usedImage: {
+	},
+	usedImage: {
 		backgroundColor: "transparent",
 		resizeMode: "contain",
 		position: "absolute",
@@ -213,5 +213,5 @@ const styles = StyleSheet.create({
 		right: 0,
 		top: 0,
 		height: 88 * alpha
-	  }
+	}
 })

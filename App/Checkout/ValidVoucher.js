@@ -9,15 +9,15 @@
 import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Image, View, Text } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size"
-import {KURL_INFO} from "../Utils/server"
+import { KURL_INFO } from "../Utils/server"
 import { connect } from "react-redux";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
 	company_id: members.company_id,
-	members:members
+	members: members
 }))
 export default class ValidVoucher extends React.Component {
 
@@ -26,14 +26,16 @@ export default class ValidVoucher extends React.Component {
 	}
 
 	componentDidMount() {
-	
+
 	}
 
 	onVoucherPress = () => {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-      	analytics.event(new Event('Voucher', 'Click', this.props.title))
-		navigate("VoucherDetail",{item:this.props.item,valid:true,addVoucherAction:this.props.navigation.getParam("addVoucherAction", null)})
+		if (this.props.valid) {
+			analytics.event(new Event('Voucher', 'Click', this.props.title))
+			navigate("VoucherDetail", { item: this.props.item, valid: true, addVoucherAction: this.props.navigation.getParam("addVoucherAction", null) })
+		}
 	}
 
 	onTermsPressed = () => {
@@ -46,52 +48,52 @@ export default class ValidVoucher extends React.Component {
 		})
 	}
 
-	renderPrice(){
+	renderPrice() {
 
-		const {item,members} = this.props
+		const { item, members } = this.props
 		const display_value = item.voucher.display_value
 		const discount_type = item.voucher.discount_type
 		const discount_price = item.voucher.discount_price
-		if (discount_type != null && discount_type != '' && discount_price != null && discount_price != ''){
-			if (discount_type == 'fixed'){
+		if (discount_type != null && discount_type != '' && discount_price != null && discount_price != '') {
+			if (discount_type == 'fixed') {
 				return (
 					<View
-					style={styles.valueView}>
-								
+						style={styles.valueView}>
+
 						<View
 							pointerEvents="box-none"
 							style={{
 								justifyContent: "center",
 							}}>
 							<Text
-								style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
-								
+								style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2) : discount_price}</Text>
+
 						</View>
 					</View>
 				)
-			}else {
+			} else {
 				return (
 					<View
-					style={styles.valueView}>
-					 			
+						style={styles.valueView}>
+
 						<View
 							pointerEvents="box-none"
 							style={{
 								justifyContent: "center",
 							}}>
-							
+
 							<Text
 								style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
-							
+
 						</View>
 					</View>
 				)
 			}
-		} else if (display_value != null  && display_value !==''){
+		} else if (display_value != null && display_value !== '') {
 			return (
 				<View
-				style={styles.valueView}>
-							
+					style={styles.valueView}>
+
 					<View
 						pointerEvents="box-none"
 						style={{
@@ -100,7 +102,7 @@ export default class ValidVoucher extends React.Component {
 						<Text
 							style={this.props.valid == true ? styles.valueText : styles.invalidValueText}>{display_value}</Text>
 						<Text
-							style={styles.currencyText}>{members.currency}</Text> 	
+							style={styles.currencyText}>{members.currency}</Text>
 					</View>
 				</View>
 			)
@@ -109,65 +111,77 @@ export default class ValidVoucher extends React.Component {
 
 	render() {
 		return <TouchableWithoutFeedback
-				onPress={this.onVoucherPress}>
+			onPress={this.onVoucherPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.validvoucher}>
 				<View
-					navigation={this.props.navigation}
-					style={styles.validvoucher}>
+					style={this.props.valid == true ? styles.cellcontentView : styles.invalidcellcontentView}>
+					<Image
+						source={require("./../../assets/images/group-5-3.png")}
+						style={styles.backgroundImage} />
+					<Image
+						source={require("./../../assets/images/voucher_new.png")}
+						style={styles.newImage}
+					/>
+
 					<View
-						style={this.props.valid == true ? styles.cellcontentView : styles.invalidcellcontentView}>
-						<Image
-							source={require("./../../assets/images/group-5-3.png")}
-							style={styles.backgroundImage}/>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 30 * alpha,
+							right: 30 * alpha,
+							top: 23 * alpha,
+							bottom: 10 * alpha,
+							// backgroundColor: 'yellow'
+						}}>
+
 						<View
 							pointerEvents="box-none"
 							style={{
-								position: "absolute",
-								left: 30 * alpha,
-								right: 30 * alpha,
-								top: 23 * alpha,
-								bottom: 10 * alpha,
+								height: 25 * alpha,
+								flexDirection: "row",
 							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 25 * alpha,
-									flexDirection: "row",
-								}}>
-								<Text
-									style={styles.titleText}>{this.props.title}</Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>
-								{this.renderPrice()}
-							</View>
 							<Text
-								style={styles.descriptionText}>{this.props.description}</Text>
-							<Image
-								source={require("./../../assets/images/line-16-copy-5.png")}
-								style={styles.lineImage}/>
+								style={styles.titleText}>{this.props.title}</Text>
 							<View
 								style={{
 									flex: 1,
-								}}/>
-							<View
-								pointerEvents="box-none"
+								}} />
+							{this.renderPrice()}
+						</View>
+						<Text
+							style={styles.descriptionText}>{this.props.description}</Text>
+						<Image
+							source={require("./../../assets/images/line-16-copy-5.png")}
+							style={styles.lineImage} />
+
+						<View
+							style={{
+								flex: 1,
+							}} />
+
+						<View
+							pointerEvents="box-none"
+							style={{
+								height: 14 * alpha,
+								flexDirection: "row",
+								alignItems: "flex-end",
+							}}>
+							<Text
+								style={styles.dateText}>Expiration: <Text style={this.props.valid == true ? styles.highlight : null}>{this.props.item.available_date}</Text></Text>
+							{/* <View
 								style={{
-									height: 14 * alpha,
-									flexDirection: "row",
-									alignItems: "flex-end",
-								}}>
-								<Text
-									style={styles.dateText}>Expiration: <Text style={this.props.valid == true ? styles.highlight : null}>{this.props.item.available_date}</Text></Text>
-								<View
-									style={{
-										flex: 1,
-									}}/>								
-							</View>
+									flex: 1,
+								}} /> */}
+
 						</View>
 					</View>
+
 				</View>
-			</TouchableWithoutFeedback>
+
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 
@@ -335,5 +349,15 @@ const styles = StyleSheet.create({
 	},
 	highlight: {
 		color: PRIMARY_COLOR
+	},
+	newImage: {
+		backgroundColor: "transparent",
+		resizeMode: "contain",
+		position: "absolute",
+		right: 12 * alpha,
+		width: 75 * alpha,
+		bottom: 0,
+		height: 80 * alpha,
+		marginTop: 8 * alpha
 	}
 })
