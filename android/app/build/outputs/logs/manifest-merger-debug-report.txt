@@ -9,7 +9,7 @@ MERGED from [org.webkit:android-jsc:r245459] /Users/alex/.gradle/caches/transfor
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/1665766f90ccb3a7c13c47507e4bbe20/AndroidManifest.xml:2:1-13:12
 MERGED from [:unimodules-react-native-adapter] /Users/alex/project/brew9-v1.0.2/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/sentry-expo/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
-MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-unimodules/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-barcode-scanner] /Users/alex/project/brew9-v1.0.2/node_modules/expo-barcode-scanner/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-camera] /Users/alex/project/brew9-v1.0.2/node_modules/expo-camera/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-facebook] /Users/alex/project/brew9-v1.0.2/node_modules/expo-facebook/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -989,8 +989,8 @@ MERGED from [:unimodules-react-native-adapter] /Users/alex/project/brew9-v1.0.2/
 MERGED from [:unimodules-react-native-adapter] /Users/alex/project/brew9-v1.0.2/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/sentry-expo/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/sentry-expo/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
-MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-unimodules/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
-MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-unimodules/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-barcode-scanner] /Users/alex/project/brew9-v1.0.2/node_modules/expo-barcode-scanner/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-barcode-scanner] /Users/alex/project/brew9-v1.0.2/node_modules/expo-barcode-scanner/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-camera] /Users/alex/project/brew9-v1.0.2/node_modules/expo-camera/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
