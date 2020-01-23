@@ -7,7 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/../node_modules/expo-app-loader-provider/android/expo-app-loader-provider.iml" filepath="$PROJECT_DIR$/../node_modules/expo-app-loader-provider/android/expo-app-loader-provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/expo-barcode-scanner/android/expo-barcode-scanner.iml" filepath="$PROJECT_DIR$/../node_modules/expo-barcode-scanner/android/expo-barcode-scanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/expo-camera/android/expo-camera.iml" filepath="$PROJECT_DIR$/../node_modules/expo-camera/android/expo-camera.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../node_modules/sentry-expo/node_modules/expo-constants/android/expo-constants.iml" filepath="$PROJECT_DIR$/../node_modules/sentry-expo/node_modules/expo-constants/android/expo-constants.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/expo/node_modules/expo-constants/android/expo-constants.iml" filepath="$PROJECT_DIR$/../node_modules/expo/node_modules/expo-constants/android/expo-constants.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/expo-facebook/android/expo-facebook.iml" filepath="$PROJECT_DIR$/../node_modules/expo-facebook/android/expo-facebook.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/expo-file-system/android/expo-file-system.iml" filepath="$PROJECT_DIR$/../node_modules/expo-file-system/android/expo-file-system.iml" />
       <module fileurl="file://$PROJECT_DIR$/../node_modules/expo-font/android/expo-font.iml" filepath="$PROJECT_DIR$/../node_modules/expo-font/android/expo-font.iml" />

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Thu Jan 23 11:07:43 MYT 2020
+#Thu Jan 23 13:08:55 MYT 2020
 56.path=lib/x86/libyoga.so
 5.base=/Users/alex/project/brew9-v1.0.2/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
 42.base=/Users/alex/project/brew9-v1.0.2/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
