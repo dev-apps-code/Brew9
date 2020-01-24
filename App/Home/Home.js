@@ -731,6 +731,7 @@ export default class Home extends React.Component {
 			scrollIndex={item.scroll_index}
 			onSelectCategory={this.onSelectCategory}
 			selected={item.selected}
+			label={item.label}
 		/>
 	}
 
