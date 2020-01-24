@@ -64,6 +64,7 @@ import CurrentStatusRequestObject from "../Requests/current_status_request_objec
 import { getDistance, getPreciseDistance } from 'geolib';
 import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
+import Banners from './Banners';
 
 @connect(({ members, shops, config, orders }) => ({
 	currentMember: members.profile,
@@ -399,7 +400,7 @@ export default class Home extends React.Component {
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			// this.setState({ loading: false })
-
+			
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
@@ -760,15 +761,17 @@ export default class Home extends React.Component {
 					onCellPress={this.onCellPress}
 				/>
 			} else if (item.clazz == "menu_banner") {
-				return <BannerCell
-					index={index}
-					item={item}
-					navigation={this.props.navigation}
-					bannerImage={item.image}
-					bannerDescription={item.description}
-					detailImage={item.banner_detail_image}
-					onPressItem={this.onBannerPressed}
-				/>
+				return <Banners banner={this.state.menu_banners} onBannerPressed={this.onBannerPressed} />
+
+				// <BannerCell
+				// 	index={index}
+				// 	item={item}
+				// 	navigation={this.props.navigation}
+				// 	bannerImage={item.image}
+				// 	bannerDescription={item.description}
+				// 	detailImage={item.banner_detail_image}
+				// 	onPressItem={this.onBannerPressed}
+				// />
 			} else if (item.clazz == "product_category") {
 				return <CategoryHeaderCell
 					index={index}
@@ -1203,7 +1206,7 @@ export default class Home extends React.Component {
 	dismissProduct() {
 		this.setState({ modalVisible: false })
 	}
-
+	
 	renderModalContent = (selected_product, shop) => {
 		let select_quantity = this.state.select_quantity
 
