@@ -48,10 +48,10 @@ export default class VerifyUser extends React.Component {
 		this.state = {
 			loading: false,
 			phone_no: null,
-			// country_code: "673",
-			country_code: "60",
-			// country: "bn",
-			country: 'MY',
+			country_code: "673",
+			// country_code: "60",
+			country: "bn",
+			// country: 'MY',
 			login_success: false,
 			code: "",
 			code_from_server: "",
@@ -127,7 +127,7 @@ export default class VerifyUser extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log(eventObject)
+				// console.log(eventObject)
 				this.setState({
 					login_success: true,
 					is_counting: true,

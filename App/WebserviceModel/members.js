@@ -158,8 +158,9 @@ export default {
           }
         }
 
-        let saved_notifications = payload.current_notifications
-        var new_notification_list = _.unionBy(notifications, saved_notifications, 'id');
+        // let saved_notifications = payload.current_notifications
+        // console.log('saved_notifications', saved_notifications)
+        var new_notification_list = _.unionBy(notifications, 'id');
         var sorted = _.orderBy(new_notification_list, 'id', 'desc')
         let count = new_notification_list.filter(item => { return item.read == false })
 
