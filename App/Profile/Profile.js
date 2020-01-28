@@ -20,6 +20,8 @@ import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_
 import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import ProfileMenu from "./ProfileMenu";
+import ProfileRowMenu from "./ProfileRowMenu"
 
 @connect(({ members, config }) => ({
 	selectedTab: config.selectedTab,
@@ -422,17 +424,17 @@ export default class Profile extends React.Component {
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', 'FAQs'))
-		
+
 		navigate("WebCommon", {
 			title: 'FAQs',
 			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
 		})
-    }
-    
-    onFeedbackPressed = () => {
+	}
+
+	onFeedbackPressed = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', 'Feedback'))
-		
+
 		Linking.openURL('mailto:feedback@brew9.co')
 	}
 
@@ -582,11 +584,6 @@ export default class Profile extends React.Component {
 					style={styles.membersectionView}>
 					<View
 						style={styles.topbackgroundView}>
-						{/* <View
-								style={styles.fill1View}/>
-							<Image
-								source={require("./../../assets/images/fill-2.png")}
-								style={styles.fill2Image}/> */}
 						<Image
 							source={require("./../../assets/images/profile_top_banner.png")}
 							style={styles.group133Image} />
@@ -691,17 +688,6 @@ export default class Profile extends React.Component {
 											<Text
 												style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
 										</View>
-										{/* <TouchableOpacity onPress={() => this.onLevelInfoPressed()}
-											style={styles.levelInfoButton}>
-											<View
-												style={styles.levelInfoView}>
-												<Image
-													source={require("./../../assets/images/exclaimation.png")}
-													style={styles.howToUseButtonImage} />
-												<Text
-													style={styles.levelInfoText}>Info</Text>
-											</View>
-										</TouchableOpacity> */}
 									</View>
 									<View
 										style={{
@@ -727,70 +713,10 @@ export default class Profile extends React.Component {
 										flexDirection: "row",
 										alignItems: "flex-start",
 									}}>
-									<TouchableOpacity
-										onPress={() => this.onPointButtonPressed()}
-										style={styles.pointButtonView}
-									>
-										<View
-											style={styles.pointView}>
-											<Image
-												source={require("./../../assets/images/point_center.png")}
-												style={styles.pointiconImage} />
-											<Text
-												style={styles.pointvalueText}>{points}</Text>
-											<View style={{
-												flexDirection: "row",
-												marginTop: 5 * alpha
-											}}>
-												<Text style={styles.pointText}>Point</Text>
-												<Image
-													source={require("./../../assets/images/next.png")}
-													style={styles.infoArrow} />
-											</View>
-										</View>
-									</TouchableOpacity>
-									<TouchableOpacity
-										onPress={() => this.onRewardButtonPressed()}
-										style={styles.rewardButtonView}>
-										<View
-											style={styles.rewardView}>
-											<Image
-												source={require("./../../assets/images/voucher_center.png")}
-												style={styles.rewardiconImage} />
-											<Text
-												style={styles.rewardvalueText}>{vouchers_count}</Text>
-											<View style={{
-												flexDirection: "row",
-												marginTop: 5 * alpha
-											}}>
-												<Text style={styles.rewardText}>Voucher</Text>
-												<Image
-													source={require("./../../assets/images/next.png")}
-													style={styles.infoArrow} />
-											</View>
-										</View>
-									</TouchableOpacity>
-									<TouchableOpacity
-										onPress={() => this.onWalletButtonPressed()}
-										style={styles.walletButtonView}>
-										<View
-											style={styles.walletView}>
-											<Image
-												source={require("./../../assets/images/wallet_center.png")}
-												style={styles.walletIconImage} />
-											<Text
-												style={styles.walletcreditText}>${parseFloat(credits).toFixed(2)}</Text>
-											<View style={{
-												flexDirection: "row",
-												marginTop: 5 * alpha
-											}}>
-												<Text style={styles.walletText}>Wallet</Text>
-												<Image
-													source={require("./../../assets/images/next.png")}
-													style={styles.infoArrow} />
-											</View>
-										</View>
-									</TouchableOpacity>
+									<ProfileRowMenu onPress={this.onPointButtonPressed} icon={require("./../../assets/images/point_center.png")} iconStyle={styles.pointiconImage} value={points} title={'Point'} />
+									<ProfileRowMenu onPress={this.onRewardButtonPressed} icon={require("./../../assets/images/voucher_center.png")} iconStyle={styles.rewardiconImage} value={vouchers_count} title={'Voucher'} />
+									<ProfileRowMenu onPress={this.onWalletButtonPressed} icon={require("./../../assets/images/wallet_center.png")} iconStyle={styles.walletIconImage} value={"$" + parseFloat(credits).toFixed(2)} title={'Wallet'} />
+
 								</View>
 							</View>
 						</View>
@@ -850,320 +776,12 @@ export default class Profile extends React.Component {
 
 			<View
 				style={styles.menuView}>
-
-				<TouchableOpacity
-					onPress={() => this.onOrderButtonPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>Order History</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-							}}>
-							<Text
-								style={styles.menuRowDescriptionText}></Text>
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity>
-
-				{/* <TouchableOpacity
-					onPress={() => this.onRedeemVoucherPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>Redeem Voucher</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-							}}>
-							<Text
-								style={styles.menuRowDescriptionText}></Text>
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity> */}
-
-
-				<TouchableOpacity
-					onPress={() => this.onMembershipInfoPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>Membership Rewards</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-							}}>
-
-							<Text
-								style={styles.menuRowDescriptionText}></Text>
-
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					onPress={() => this.onProfileButtonPress()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>My Profile</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								height: 58 * alpha,
-							}}>
-
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					onPress={() => this.onFaqPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>FAQs</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</View>
-						</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								height: 58 * alpha,
-							}}>
-
-							<View
-								style={styles.menuRowLineView} />
-						</View>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					onPress={() => this.onFeedbackPressed()}
-					style={styles.menuRowbuttonButton}>
-					<View
-						style={styles.menuRowView}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									height: 24 * alpha,
-									marginLeft: 20 * alpha,
-									marginRight: 30 * alpha,
-									flexDirection: "row",
-									alignItems: "center",
-								}}>
-								<Text
-									style={styles.menuRowLabelText}>Feedback</Text>
-								<View
-									style={{
-										flex: 1,
-									}} />
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-
-							</View>
-							
-							</View>
-						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0,
-							}}>
-							<Text
-								style={styles.menuRowDescriptionText}></Text>
-						</View>
-					</View>
-				</TouchableOpacity>
-				
+				<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} />
+				{/* <ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} /> */}
+				<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
+				<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
+				<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
+				<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
 			</View>
 			{this.renderRedeemVoucher()}
 		</ScrollView>
@@ -1675,66 +1293,7 @@ const styles = StyleSheet.create({
 
 
 
-	menuRowView: {
-		backgroundColor: "transparent",
-		height: 58 * alpha,
-		marginRight: 1 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	menuRowLabelText: {
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	menuRowDisableLabelText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-	},
-	menuRowDescriptionText: {
-		color: "rgb(188, 188, 188)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		marginRight: 23 * alpha,
-	},
-	arrowTwoView: {
-		backgroundColor: "transparent",
-		width: 7 * alpha,
-		height: 8 * alpha,
-	},
-	menuRowbuttonButton: {
-		backgroundColor: "transparent",
-		flex: 1,
-	},
 
-	menuRowLineView: {
-		backgroundColor: "rgb(245, 245, 245)",
-		position: "absolute",
-		alignSelf: "center",
-		width: 375 * alpha,
-		top: 57 * alpha,
-		height: 1 * alpha,
-		left: 20 * alpha,
-	},
-	menuRowArrowImage: {
-		width: 10 * alpha,
-		tintColor: "rgb(195, 195, 195)",
-		resizeMode: "contain",
-	},
 
 	missionlabelText: {
 		backgroundColor: "transparent",
