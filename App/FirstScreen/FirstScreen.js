@@ -20,6 +20,7 @@ import Brew9Modal from '../Components/Brew9Modal'
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, LIGHT_BLUE } from "../Common/common_style";
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
+import KochavaTracker from 'react-native-kochava-tracker';
 
 @connect(({ members }) => ({
     members: members.profile,
@@ -53,6 +54,15 @@ export default class FirstScreen extends React.Component {
         const { dispatch } = this.props
         dispatch(createAction('members/loadCurrentUserFromCache')({}))
         AppState.addEventListener('change', this._handleAppStateChange);
+        var configMapObject = {}
+        if (__DEV__) {
+            configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
+        } else {
+            configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
+        }
+        configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] = "kobrew9-npv3ph2ns";
+        configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] = "kobrew9-82rqs2pdf";
+        KochavaTracker.configure(configMapObject);
     }
 
     componentWillUnmount() {

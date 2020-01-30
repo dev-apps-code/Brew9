@@ -25,6 +25,8 @@ PODS:
   - EXBarCodeScanner (6.0.0):
     - UMCore
     - UMImageLoaderInterface
+  - EXBlur (7.0.0):
+    - UMCore
   - EXCamera (6.0.0):
     - UMBarCodeScannerInterface
     - UMCore
@@ -32,7 +34,7 @@ PODS:
     - UMFileSystemInterface
     - UMImageLoaderInterface
     - UMPermissionsInterface
-  - EXConstants (6.0.0):
+  - EXConstants (7.0.1):
     - UMConstantsInterface
     - UMCore
   - EXFacebook (6.0.0):
@@ -51,9 +53,9 @@ PODS:
     - UMFileSystemInterface
   - EXKeepAwake (6.0.0):
     - UMCore
-  - EXLinearGradient (6.0.0):
+  - EXLinearGradient (7.0.1):
     - UMCore
-  - EXLocation (6.0.0):
+  - EXLocation (7.0.0):
     - UMCore
     - UMPermissionsInterface
     - UMTaskManagerInterface
@@ -218,8 +220,9 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXAppLoaderProvider (from `../node_modules/expo-app-loader-provider/ios`)
   - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
+  - EXBlur (from `../node_modules/expo-blur/ios`)
   - EXCamera (from `../node_modules/expo-camera/ios`)
-  - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXConstants (from `../node_modules/sentry-expo/node_modules/expo-constants/ios`)
   - EXFacebook (from `../node_modules/expo-facebook/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
@@ -262,7 +265,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Amplitude-iOS
     - Analytics
     - AppAuth
@@ -293,12 +296,15 @@ EXTERNAL SOURCES:
   EXBarCodeScanner:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-barcode-scanner/ios"
+  EXBlur:
+    :path: !ruby/object:Pathname
+    path: "../node_modules/expo-blur/ios"
   EXCamera:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-camera/ios"
   EXConstants:
     :path: !ruby/object:Pathname
-    path: "../node_modules/expo-constants/ios"
+    path: "../node_modules/sentry-expo/node_modules/expo-constants/ios"
   EXFacebook:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-facebook/ios"
@@ -397,15 +403,16 @@ SPEC CHECKSUMS:
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   EXAppLoaderProvider: 7a8185228d8ba9e689a0e2d6d957fe9bdd49c8a0
   EXBarCodeScanner: 3b36378bfc891b6fd3518e244784eb8d3ab00653
+  EXBlur: eb1cf2d78e94894e0406a8df47d1c2ea1136da17
   EXCamera: 54623e310d33bccbb8d8fbc84a0081523d0436be
-  EXConstants: 5d81e84ca71b9a552529889cc798b4a04e9e22b3
+  EXConstants: 857aa7b1c84e2878f8402d712061860bca16a697
   EXFacebook: b71969e92a4d76632ee743d26e88c61b4d9a3e45
   EXFileSystem: 091907902fcec9f9182b656fdead41a82f30986a
   EXFont: c862449210fc86aa11d24a202cb22c71a0d39609
   EXImagePicker: ec641e97b73db0fb1ef58b818cffaf7ff6d3c96c
   EXKeepAwake: e7cb6516675052b12a7d23291e33078b4239653a
-  EXLinearGradient: 40781b77e58f844c8dc4ad310dc9755b4d3792a7
-  EXLocation: 4eb76115832f08b1e78003b335c210e18fa60424
+  EXLinearGradient: b7d4a703ac9802078a8a8e212d205929c18b03e4
+  EXLocation: 452a1d9edceb1b93deb86fd785236606d33742dd
   EXPermissions: 99e52dc3e5f8e55153f1958004f6df2a30a1f2f5
   ExpoKit: 2ea6908bcbf5e705ca6c37370718c07c9677ef15
   EXSecureStore: e929213a8a5e8c55cdd4615e52e283c11cba975e
@@ -442,4 +449,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a17f3d9a9c58fc1a00f3bfbcf7712b9252e21ff9
 
-COCOAPODS: 1.7.4
+COCOAPODS: 1.8.4
