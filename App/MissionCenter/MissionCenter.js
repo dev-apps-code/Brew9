@@ -146,11 +146,10 @@ export default class MissionCenter extends React.Component {
                 }, function () {
                     if (currentMember != null) {
                         this.loadMissionStatements()
-                    } else {
-                        this.setState({ loading: false, isRefreshing: false })
                     }
                 })
             }
+            this.setState({ loading: false, isRefreshing: false })
         }
         const obj = new MissionRequestObject()
         obj.setUrlId(company_id)

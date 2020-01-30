@@ -95,6 +95,7 @@ export default class PointShopItem extends React.Component {
 	loadRedeem() {
 		const { dispatch, selectedShop } = this.props
 		const { data } = this.state
+		const { navigate } = this.props.navigation
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
@@ -104,6 +105,7 @@ export default class PointShopItem extends React.Component {
 
 			if (eventObject.success) {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				navigate("PointShopHistory")
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
