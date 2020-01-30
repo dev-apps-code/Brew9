@@ -147,19 +147,14 @@ export default {
             let item = notifications[index]
             let read = item.id <= payload.last_read ? true : false
             notifications[index].read = read
-            // if (read == false) {
-            //   unread = unread + 1
-            // }
+           
           }
         } else {
           for (var index in notifications) {
             notifications[index].read = false
-            // unread = unread + 1
           }
         }
-
-        let saved_notifications = payload.current_notifications
-        var new_notification_list = _.unionBy(notifications, saved_notifications, 'id');
+        var new_notification_list = _.unionBy(notifications, 'id');
         var sorted = _.orderBy(new_notification_list, 'id', 'desc')
         let count = new_notification_list.filter(item => { return item.read == false })
 
@@ -538,11 +533,7 @@ export default {
           authtoken,
           object,
         )
-        // const current_notification = yield call(getCurrentNotification)
-        // let current_notifications = JSON.parse(current_notification)
-        // console.log("Current", current_notifications)
-        // let count = current_notifications == null ? [] : current_notifications.filter(item => { return item.read == false })
-        // console.log("Count", count)
+       
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
 

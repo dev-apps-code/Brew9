@@ -29,7 +29,7 @@ export default class PointShop extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Reward Points</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Reward Points</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -75,20 +75,24 @@ export default class PointShop extends React.Component {
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Redemption Shop', 'Click', 'Point Rules'))
-	  
+
 		navigate("WebCommon", {
 			title: 'Point Rules',
 			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
 		})
 	}
 
-	onItemPressed = (item_id, item_name) => {
-
-		// this.refs.toast.show("Insufficient points for redemption", TOAST_DURATION)
-		// navigate("PointShopItem", {
-		// 	item_id: item_id,
-		// 	item_name: item_name
-		//   });
+	onItemPressed = (item, item_name) => {
+		const { navigate } = this.props.navigation
+		const { points } = this.props.members
+		if (points < item.points) {
+			this.refs.toast.show("Insufficient points for redemption", TOAST_DURATION)
+		} else {
+			navigate("PointShopItem", {
+				item_id: item.id,
+				item_name: item_name
+			});
+		}
 	}
 
 	loadPointsProducts() {
@@ -140,7 +144,6 @@ export default class PointShop extends React.Component {
 	}
 
 	renderPointproductlistFlatListCell = ({ item, index }) => {
-
 		return <PointProductCell
 			navigation={this.props.navigation}
 			sectionId={item.id}
@@ -221,7 +224,7 @@ export default class PointShop extends React.Component {
 						keyExtractor={(item, index) => index.toString()} />
 				}
 			</View>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 		</View>
 	}
 }
@@ -357,7 +360,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		alignSelf: "center"
-	}, 
+	},
 	pointHistoryButton: {
 		backgroundColor: "transparent",
 		// flexDirection: "row",

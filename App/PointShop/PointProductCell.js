@@ -26,16 +26,16 @@ export default class PointProductCell extends React.Component {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
-  onPointProductCellPress = (item_id, item_name) => {
+  onPointProductCellPress = (item, item_name) => {
     const { navigate } = this.props.navigation;
 
     const analytics = new Analytics(ANALYTICS_ID)
     analytics.event(new Event('Redemption Product', 'Click', `${item_name}`))
-    this.props.onPressItem(item_id,item_name)
+    this.props.onPressItem(item, item_name)
 
-    
+
   };
 
   onViewMorePressed = (plan_id, title) => {
@@ -51,7 +51,7 @@ export default class PointProductCell extends React.Component {
 
     const items = products.map((item, key) => (
       <TouchableWithoutFeedback
-        onPress={() => this.onPointProductCellPress(item.id, item.name)}
+        onPress={() => this.onPointProductCellPress(item, item.name)}
         key={key}
       >
         <View style={styles.itemView}>
@@ -69,7 +69,7 @@ export default class PointProductCell extends React.Component {
               }}
             >
               <Text style={styles.valueText}>{item.points} <Text style={styles.pointsText}>Points</Text></Text>
-              
+
             </View>
           </View>
         </View>
@@ -95,7 +95,7 @@ export default class PointProductCell extends React.Component {
                   flex: 1
                 }}
               /> */}
-              {/* <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={() => this.onViewMorePressed(sectionId, sectionHeader)}
                 style={styles.viewmoreButton}
               >

@@ -8,19 +8,19 @@
 
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native"
 import React from "react"
-import {commonStyles, TOAST_DURATION, windowHeight} from "../Common/common_style"
-import { alpha, fontAlpha,windowWidth } from "../Common/size";
+import { commonStyles, TOAST_DURATION } from "../Common/common_style"
+import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import PointProductsItemRequestObject from "../Requests/point_products_item_request_object"
-import {createAction, toTitleCase} from "../Utils";
-import {connect} from "react-redux";
-import Toast, {DURATION} from 'react-native-easy-toast'
+import { createAction, toTitleCase } from "../Utils";
+import { connect } from "react-redux";
+import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import RedeemRequestObject from "../Requests/redeem_request_object"
 import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
-@connect(({ members,shops }) => ({
+@connect(({ members, shops }) => ({
 	members: members.profile,
-	selectedShop:shops.selectedShop
+	selectedShop: shops.selectedShop
 }))
 
 export default class PointShopItem extends React.Component {
@@ -29,7 +29,7 @@ export default class PointShopItem extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>{navigation.getParam("item_name", "")}</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>{navigation.getParam("item_name", "")}</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -38,7 +38,7 @@ export default class PointShopItem extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -62,17 +62,17 @@ export default class PointShopItem extends React.Component {
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
-		})	
+		})
 	}
 
-	
+
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
 	}
 
-	loadPointsProducts(){
-	const { dispatch } = this.props
+	loadPointsProducts() {
+		const { dispatch } = this.props
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
@@ -86,13 +86,13 @@ export default class PointShopItem extends React.Component {
 		obj.setUrlId(this.props.navigation.getParam("item_id", ""))
 		dispatch(
 			createAction('point_products/loadPointProduct')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
-}
+	}
 
-	loadRedeem(){
+	loadRedeem() {
 		const { dispatch, selectedShop } = this.props
 		const { data } = this.state
 
@@ -100,19 +100,19 @@ export default class PointShopItem extends React.Component {
 		const callback = eventObject => {
 			this.setState({
 				loading: false,
-			}) 
+			})
 
 			if (eventObject.success) {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
-			}else{
+			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
-			}		
+			}
 		}
 		const obj = new RedeemRequestObject(selectedShop.id)
-		obj.setUrlId(data.id) 
+		obj.setUrlId(data.id)
 		dispatch(
 			createAction('point_products/loadRedeem')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -123,31 +123,31 @@ export default class PointShopItem extends React.Component {
 		const { data } = this.state
 
 		return <View
-				style={styles.pointItemView}>
-				<Image
-					source={{uri: data.image}}
-					style={styles.productimageImage}/>
+			style={styles.pointItemView}>
+			<Image
+				source={{ uri: data.image }}
+				style={styles.productimageImage} />
+			<View
+				pointerEvents="box-none"
+				style={{
+					marginLeft: 13 * alpha,
+					marginTop: 5 * alpha
+				}}>
+
 				<View
 					pointerEvents="box-none"
 					style={{
-						marginLeft:13 * alpha,	
-						marginTop: 5 * alpha
-					}}>				
-					
-						<View
-							pointerEvents="box-none"
-							style={{	
-													
-							}}>
-							<Text
-								style={styles.titleText}>{data.name} </Text>
-							<Text
-								style={styles.valueText}>{data.points}
-								<Text
+
+					}}>
+					<Text
+						style={styles.titleText}>{data.name} </Text>
+					<Text
+						style={styles.valueText}>{data.points}
+						<Text
 							style={styles.pointsText}> Points</Text></Text>
-						</View>
-						
-						<View
+				</View>
+
+				<View
 					style={styles.viewThreeView}>
 					<Text
 						style={styles.titleTwoText}>Product Type</Text>
@@ -169,19 +169,19 @@ export default class PointShopItem extends React.Component {
 						style={styles.pointsText}> - {toTitleCase(`${data.can_use_time}`)}</Text>
 				</View>
 
-				</View>
-			
-				<TouchableOpacity
-					disabled={!data.can_purchase}
-					onPress={()=>this.loadRedeem()}
-					style={data.can_purchase ? [styles.purchaseButton,commonStyles.normal] : [styles.purchaseButton,commonStyles.disabled] }
-					>
-					<Text
-						style={styles.purchaseButtonText}>Purchase</Text>
-				</TouchableOpacity>
-				<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
-			<HudLoading isLoading={this.state.loading}/>
 			</View>
+
+			<TouchableOpacity
+				disabled={!data.can_purchase}
+				onPress={() => this.loadRedeem()}
+				style={data.can_purchase ? [styles.purchaseButton, commonStyles.normal] : [styles.purchaseButton, commonStyles.disabled]}
+			>
+				<Text
+					style={styles.purchaseButtonText}>Purchase</Text>
+			</TouchableOpacity>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<HudLoading isLoading={this.state.loading} />
+		</View>
 	}
 }
 
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
 	productimageImage: {
 		backgroundColor: "#f6f4f5",
 		resizeMode: "contain",
-		width: windowWidth ,
+		width: windowWidth,
 		height: 250 * alpha,
 	},
 	viewView: {
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		backgroundColor: "transparent",	
+		backgroundColor: "transparent",
 	},
 	pointsText: {
 		color: "rgb(142, 142, 142)",
@@ -336,16 +336,16 @@ const styles = StyleSheet.create({
 	},
 	purchaseButton: {
 		position: "absolute",
-		bottom: 40 *alpha,
-		left:0,
-		width:windowWidth,
+		bottom: 40 * alpha,
+		left: 0,
+		width: windowWidth,
 		borderWidth: 0.5,
 		borderColor: "rgb(215, 215, 215)",
 		borderStyle: "solid",
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		padding: 0,		
+		padding: 0,
 		height: 51 * alpha,
 	},
 	purchaseButtonText: {
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "right",
 	},
 	purchaseButtonImage: {

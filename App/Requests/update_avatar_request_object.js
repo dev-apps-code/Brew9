@@ -1,28 +1,28 @@
 import BaseRequestObject from "./base_request_object";
 
-class UpdateAvatarRequestObject extends BaseRequestObject{
+class UpdateAvatarRequestObject extends BaseRequestObject {
 
-    constructor(image){
+    constructor(image) {
         super();
         this.image = image
     }
 
-   getUrlString() {
-       return `members/${this.url_id}/update_avatar`
-   }
+    getUrlString() {
+        return `members/${this.url_id}/update_avatar`
+    }
 
-   getFormData(){
-    
+    getFormData() {
+
         const data = new FormData()
-        if (this.image!=null){
+        if (this.image != null) {
             data.append('image', this.image)
         }
         return data
-   }
+    }
 }
 export default UpdateAvatarRequestObject
 
-/* ---- SERVICES ----- 
+/* ---- SERVICES -----
 
 import { getMethod,postMethod,postMultipartMethod } from '../Utils/webservice_helper'
 
@@ -36,9 +36,9 @@ export function updateProfile(authtoken,object) {
 
 
 
-/* ---- MODEL ----- 
+/* ---- MODEL -----
 
-*loadUpdateProfile({ payload }, { call, put, select }) 
+*loadUpdateProfile({ payload }, { call, put, select })
     {
     try{
 
@@ -53,7 +53,7 @@ export function updateProfile(authtoken,object) {
         if (eventObject.success == true) {}
         typeof callback === 'function' && callback(eventObject)
         } catch (err) { }
-    }, 
+    },
 
 
 
@@ -63,9 +63,9 @@ export function updateProfile(authtoken,object) {
 
 
 
-/* **** ---- VIEW FUNCTIONS START HERE ----- **** 
+/* **** ---- VIEW FUNCTIONS START HERE ----- ****
 
-/* ---- Constructor ----- 
+/* ---- Constructor -----
 
 constructor(props) {
     super(props)
@@ -77,7 +77,7 @@ constructor(props) {
 
  -------------- */
 
-/* ---- Method ----- 
+/* ---- Method -----
 
 loadUpdateProfile(){
     const { dispatch } = this.props
@@ -102,7 +102,7 @@ loadUpdateProfile(){
 
  -------------- */
 
-/* ---- JSON API RESPONSE ----- 
+/* ---- JSON API RESPONSE -----
 
 {
     "success": true,

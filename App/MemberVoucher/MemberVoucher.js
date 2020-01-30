@@ -31,7 +31,7 @@ export default class MemberVoucher extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Vouchers</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Vouchers</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -185,7 +185,7 @@ export default class MemberVoucher extends React.Component {
 
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Voucher', 'Click', 'Available Tab'))
-		
+
 
 		if (valid_initial) {
 			this.loadValidVoucher(valid_page)
@@ -208,7 +208,7 @@ export default class MemberVoucher extends React.Component {
 
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Voucher', 'Click', 'Use Tab'))
-		
+
 		if (used_initial) {
 			this.loadUsedVoucher(used_page)
 			this.setState({
@@ -230,7 +230,7 @@ export default class MemberVoucher extends React.Component {
 
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Voucher', 'Click', 'Expire Tab'))
-		
+
 
 		if (expired_initial) {
 			this.loadExpiredVoucher(expired_page)

@@ -27,7 +27,7 @@ export default class ExpiredVoucher extends React.Component {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   onVoucherPress = () => {
     const { navigate } = this.props.navigation;
@@ -99,10 +99,10 @@ export default class ExpiredVoucher extends React.Component {
                 <Image
                   source={require("./../../assets/images/line-16-copy-5.png")}
                   style={styles.lineImage}
-                />               
+                />
               </View>
               <Image
-                source={require("./../../assets/images/bitmap-9.png")}
+                source={require("./../../assets/images/voucher_expired.png")}
                 style={styles.expiredImage}
               />
             </View>
@@ -174,13 +174,13 @@ const styles = StyleSheet.create({
   },
   termsView: {
     backgroundColor: "transparent",
-		alignSelf: "flex-end",
-		width: 140 * alpha,
-		height: 13 * alpha,
-		marginRight: 1 * alpha,
-		marginTop: 14 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
+    alignSelf: "flex-end",
+    width: 140 * alpha,
+    height: 13 * alpha,
+    marginRight: 1 * alpha,
+    marginTop: 14 * alpha,
+    flexDirection: "row",
+    alignItems: "center",
   },
   termsButton: {
     backgroundColor: "transparent",
@@ -189,16 +189,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 0 * alpha,
     height: 13 * alpha,
-		width: 120 * alpha,
+    width: 120 * alpha,
     marginRight: 4 * alpha
   },
   termsButtonText: {
     color: "rgb(136, 133, 133)",
-		fontFamily: TITLE_FONT,
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		width: 120 * alpha,
-		textAlign: "right",
+    fontFamily: TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    fontStyle: "normal",
+    width: 120 * alpha,
+    textAlign: "right",
   },
   termsButtonImage: {
     resizeMode: "contain",
@@ -206,12 +206,12 @@ const styles = StyleSheet.create({
   },
   arrowImage: {
     resizeMode: "contain",
-		backgroundColor: "transparent",
-		flex: 1,
-		alignSelf: "flex-end",
-		height: 8 * alpha,
-		marginLeft: 4 * alpha,
-		marginBottom: 3 * alpha,
+    backgroundColor: "transparent",
+    flex: 1,
+    alignSelf: "flex-end",
+    height: 8 * alpha,
+    marginLeft: 4 * alpha,
+    marginBottom: 3 * alpha,
   },
   expiredImage: {
     backgroundColor: "transparent",

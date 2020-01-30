@@ -25,19 +25,19 @@ export default class BannerCell extends React.Component {
     onBannerCellPress = () => {
         const analytics = new Analytics(ANALYTICS_ID)
         analytics.event(new Event('Banner', 'Click', `${this.props.bannerDescription}`))
-        this.props.onPressItem(this.props.item,this.props.index)
+        this.props.onPressItem(this.props.item, this.props.index)
     }
 
     render() {
-        
+
         return <TouchableWithoutFeedback
             onPress={this.onBannerCellPress}>
             <View
                 navigation={this.props.navigation}
                 style={styles.bannercell}>
                 <Image
-                    source={{uri: this.props.bannerImage}}
-                    style={styles.bannerImage}/>
+                    source={{ uri: this.props.bannerImage }}
+                    style={styles.bannerImage} />
             </View>
         </TouchableWithoutFeedback>
     }
@@ -46,7 +46,7 @@ export default class BannerCell extends React.Component {
 const styles = StyleSheet.create({
     bannercell: {
         backgroundColor: "transparent",
-        width: "100%",
+        width: 150 * 2 * alpha,
         flex: 1,
     },
     bannerImage: {
