@@ -13,8 +13,9 @@ import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils/index'
 import { connect } from "react-redux";
 import CreditStatementRequestObject from "../Requests/credit_statement_request_object"
-import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY} from "../Common/common_style";
+import { KURL_INFO } from "../Utils/server";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY } from "../Common/common_style";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -26,7 +27,7 @@ export default class CreditsHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Wallet History</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Wallet History</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -35,7 +36,7 @@ export default class CreditsHistory extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -71,7 +72,7 @@ export default class CreditsHistory extends React.Component {
 			}
 		}
 		const obj = new CreditStatementRequestObject()
-		obj.setUrlId(members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		obj.setPage(page_no)
 		dispatch(
 			createAction('credit_statements/loadCreditHistory')({
@@ -154,7 +155,7 @@ export default class CreditsHistory extends React.Component {
 
 		var expiry_date = ""
 
-		if (members.point_expiry_date != undefined){
+		if (members.point_expiry_date != undefined) {
 			expiry_date = `Expiry Date: ${members.point_expiry_date}`
 		}
 
@@ -172,24 +173,24 @@ export default class CreditsHistory extends React.Component {
 					<View style={[styles.container, styles.horizontal]}>
 						<ActivityIndicator size="large" />
 					</View> : <View
-					style={styles.pointhistoryFlatListViewWrapper}>
+						style={styles.pointhistoryFlatListViewWrapper}>
 						{(!this.state.loading && this.state.data.length > 0) ?
-						<FlatList
-							renderItem={this.renderHistoryFlatListCell}
-							data={this.state.data}
-							style={styles.historyFlatList}
-							refreshing={this.state.isRefreshing}
-							onRefresh={this.onRefresh.bind(this)}
-							onEndReachedThreshold={0.1}
-							onEndReached={this.loadMore.bind(this)}
-							keyExtractor={(item, index) => index.toString()}
-						/> :<View
-						style={styles.blankView}>
-						<Text
-							style={styles.noLabelText}>No Wallet History</Text>
-					</View>
+							<FlatList
+								renderItem={this.renderHistoryFlatListCell}
+								data={this.state.data}
+								style={styles.historyFlatList}
+								refreshing={this.state.isRefreshing}
+								onRefresh={this.onRefresh.bind(this)}
+								onEndReachedThreshold={0.1}
+								onEndReached={this.loadMore.bind(this)}
+								keyExtractor={(item, index) => index.toString()}
+							/> : <View
+								style={styles.blankView}>
+								<Text
+									style={styles.noLabelText}>No Wallet History</Text>
+							</View>
 						}
-				</View> 
+					</View>
 				}
 			</View>
 		</View>
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		marginLeft: 26 * alpha,
 	},

@@ -21,6 +21,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, LIGHT_BLUE } from "../Common/common_style";
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import KochavaTracker from 'react-native-kochava-tracker';
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
     members: members.profile,
@@ -62,7 +63,7 @@ export default class FirstScreen extends React.Component {
         }
         configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] = "kobrew9-npv3ph2ns";
         configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] = "kobrew9-82rqs2pdf";
-        console.log('configMapObject',configMapObject)
+        console.log('configMapObject', configMapObject)
         KochavaTracker.configure(configMapObject);
     }
 
@@ -130,7 +131,7 @@ export default class FirstScreen extends React.Component {
                     last_note = result
                 }
                 const obj = new CurrentStatusRequestObject(last_note)
-                obj.setUrlId(members.id)
+                obj.setUrlId(getMemberIdForApi(members))
                 dispatch(
                     createAction('members/loadCurrentStatus')({
                         object: obj,

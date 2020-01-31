@@ -27,6 +27,7 @@ import * as SecureStore from "expo-secure-store";
 import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR } from "../Common/common_style";
 import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, config }) => ({
   selectedTab: config.selectedTab,
@@ -39,7 +40,7 @@ export default class Notification extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Notification</Text>,
+      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Notification</Text>,
       headerTintColor: "black",
       headerTitleStyle: {
         textAlign: "center",
@@ -88,12 +89,12 @@ export default class Notification extends React.Component {
 
   componentDidMount() {
 
-    
+
     AppState.addEventListener('change', this._handleAppStateChange);
-    
+
     this.props.navigation.addListener('didFocus', this.loadNotifications)
     this.loadNotifications();
-    
+
 
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
@@ -154,10 +155,10 @@ export default class Notification extends React.Component {
       }
       const obj = new NotificationsRequestObject(last_note);
 
-      if (members != null){
-        obj.setUrlId(members.id);
-      }
-      
+      // if (members != null){
+      obj.setUrlId(getMemberIdForApi(members));
+      // }
+
       dispatch(
         createAction("members/loadNotifications")({
           object: obj,

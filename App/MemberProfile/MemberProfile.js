@@ -29,6 +29,7 @@ import HudLoading from "../Components/HudLoading"
 import { Image as ExpoImage } from "react-native-expo-image-cache";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
 import moment from 'moment';
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -123,7 +124,7 @@ export default class MemberProfile extends React.Component {
 			})
 		}
 		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.gender, formData.email)
-		obj.setUrlId(this.state.members.id)
+		obj.setUrlId(getMemberIdForApi(this.state.members))
 		dispatch(
 			createAction('members/loadUpdateProfile')({
 				object: obj,
@@ -148,7 +149,7 @@ export default class MemberProfile extends React.Component {
 			})
 		}
 		const obj = new UpdateAvatarRequestObject(formData.image)
-		obj.setUrlId(this.state.members.id)
+		obj.setUrlId(getMemberIdForApi(this.state.members))
 		dispatch(
 			createAction('members/loadUpdateAvatar')({
 				object: obj,
@@ -170,7 +171,7 @@ export default class MemberProfile extends React.Component {
 			})
 		}
 		const obj = new UpdatePhoneNumberRequestObject(formData.phone_no, formData.country_code)
-		obj.setUrlId(this.state.members.id)
+		obj.setUrlId(getMemberIdForApi(this.state.members))
 		dispatch(
 			createAction('members/loadUpdatePhoneNumber')({
 				object: obj,
@@ -197,7 +198,7 @@ export default class MemberProfile extends React.Component {
 			})
 		}
 		const obj = new VerifyPhoneNumberUpdateRequestObject(formData.code, formData.phone_no, formData.country_code)
-		obj.setUrlId(this.state.members.id)
+		obj.setUrlId(getMemberIdForApi(this.state.members))
 		dispatch(
 			createAction('members/loadVerifyPhoneNumberUpdate')({
 				object: obj,

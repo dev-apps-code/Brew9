@@ -17,6 +17,7 @@ import ExpiredVoucher from "./ExpiredVoucher"
 import ValidVoucher from "./ValidVoucher"
 import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
@@ -96,7 +97,7 @@ export default class MemberVoucher extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		obj.setPage(page_no)
 		obj.setStatus(2) //Hardcoded
 		dispatch(
@@ -126,7 +127,7 @@ export default class MemberVoucher extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		obj.setPage(page_no)
 		obj.setStatus(1)
 		dispatch(
@@ -156,7 +157,7 @@ export default class MemberVoucher extends React.Component {
 			}
 		}
 		const obj = new VoucherRequestObject()
-		obj.setUrlId(members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		obj.setPage(page_no)
 		obj.setStatus(0)
 		dispatch(
