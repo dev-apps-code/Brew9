@@ -333,5 +333,6 @@
     <orderEntry type="module" module-name="unimodules-permissions-interface" />
     <orderEntry type="module" module-name="unimodules-sensors-interface" />
     <orderEntry type="module" module-name="unimodules-task-manager-interface" />
+    <orderEntry type="module" module-name="react-native-kochava-tracker" />
   </component>
 </module>

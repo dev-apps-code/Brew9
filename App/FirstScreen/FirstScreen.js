@@ -62,6 +62,7 @@ export default class FirstScreen extends React.Component {
         }
         configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] = "kobrew9-npv3ph2ns";
         configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] = "kobrew9-82rqs2pdf";
+        console.log('configMapObject',configMapObject)
         KochavaTracker.configure(configMapObject);
     }
 

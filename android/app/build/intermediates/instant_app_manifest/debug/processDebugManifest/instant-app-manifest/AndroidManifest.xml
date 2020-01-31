@@ -96,6 +96,7 @@
         android:name="android.hardware.bluetooth"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- for android -->
     <!-- <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/> -->
@@ -463,6 +464,26 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <!--
+        KochavaTracker: Optional: Included automatically. If you are using a forwarder for multiple INSTALL_REFERRER Broadcast Receivers
+        you must remove it.
+
+            <receiver
+                tools:node="remove"
+                android:name="com.kochava.base.ReferralReceiver">
+            </receiver>
+
+            View the reference documentation for "ReferralReceiver" for more information.
+        -->
+        <receiver
+            android:name="com.kochava.base.ReferralReceiver"
+            android:exported="true"
+            android:priority="999" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="expo.modules.filesystem.FileSystemFileProvider"
             android:authorities="com.brew9.brew9.FileSystemFileProvider"

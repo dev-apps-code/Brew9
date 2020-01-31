@@ -1,1 +1,1 @@
-../../../../../node_modules/sentry-expo/node_modules/expo-constants/ios/EXConstants/EXConstantsService.h
+../../../../../node_modules/expo-constants/ios/EXConstants/EXConstantsService.h
