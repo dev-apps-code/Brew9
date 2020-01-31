@@ -338,6 +338,7 @@ export default class MemberVoucher extends React.Component {
 				discount_price={item.voucher.discount_price}
 				discount_type={item.voucher.discount_type}
 				used_date={item.used_date}
+				expired_soon={item.expired_soon}
 				company_id={this.props.company_id}
 				available_date={item.available_date}
 			/>
