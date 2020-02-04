@@ -761,7 +761,7 @@ export default class Home extends React.Component {
 					onCellPress={this.onCellPress}
 				/>
 			} else if (item.clazz == "menu_banner") {
-				return <Banners banner={this.state.menu_banners} onBannerPressed={this.onBannerPressed} />
+				return <Banners banner={item.banner_images} onBannerPressed={this.onBannerPressed} />
 
 				// <BannerCell
 				// 	index={index}

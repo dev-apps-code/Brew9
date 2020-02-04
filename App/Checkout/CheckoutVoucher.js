@@ -268,6 +268,7 @@ export default class CheckoutVoucher extends React.Component {
                 display_value={item.voucher.display_value}
                 discount_type={item.voucher.discount_type}
                 used_date={item.used_date}
+                expired_soon={item.expired_soon}
                 addVoucherAction={this.props.navigation.getParam("addVoucherAction", null)}
                 company_id={this.props.company_id}
                 expiry_date={item.expiry_date}
