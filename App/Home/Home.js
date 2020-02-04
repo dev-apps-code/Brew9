@@ -400,7 +400,7 @@ export default class Home extends React.Component {
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			// this.setState({ loading: false })
-			
+
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
@@ -1206,7 +1206,7 @@ export default class Home extends React.Component {
 	dismissProduct() {
 		this.setState({ modalVisible: false })
 	}
-	
+
 	renderModalContent = (selected_product, shop) => {
 		let select_quantity = this.state.select_quantity
 
@@ -2445,11 +2445,13 @@ const styles = StyleSheet.create({
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "justify",
 		backgroundColor: "transparent",
 		marginRight: 28 * alpha,
 		marginTop: 5 * alpha,
-		marginBottom: 5 * alpha
+		marginBottom: 5 * alpha,
+		lineHeight: 17 * alpha,
+
 	},
 	ingredientView: {
 		backgroundColor: "rgb(245, 245, 245)",
