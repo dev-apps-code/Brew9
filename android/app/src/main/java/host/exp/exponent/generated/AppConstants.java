@@ -14,7 +14,7 @@ public class AppConstants {
   public static final String VERSION_NAME = "1.0.0";
   public static String INITIAL_URL = "exp://exp.host/@tonyvoon/brew9";
   public static final String SHELL_APP_SCHEME = "exp8310c0a3fd094f75bd22dd17cc4ada42";
-  public static final String RELEASE_CHANNEL = "version1.0.1";
+  public static final String RELEASE_CHANNEL = "test-v1.016";
   public static boolean SHOW_LOADING_VIEW_IN_SHELL_APP = false;
   public static boolean ARE_REMOTE_UPDATES_ENABLED = false;
   public static final List<Constants.EmbeddedResponse> EMBEDDED_RESPONSES;
@@ -168,10 +168,11 @@ public class AppConstants {
         
         
         
+        
         // ADD EMBEDDED RESPONSES HERE
         // START EMBEDDED RESPONSES
         embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@tonyvoon/brew9", "assets://shell-app-manifest.json", "application/json"));
-        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40tonyvoon%2Fbrew9%2F1.0.1%2F91efa851df40b2fb46516c0736e6744d-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40tonyvoon%2Fbrew9%2F1.0.1%2Fbe1644aa2061157dee88c7fdbb7ae2e9-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
         // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }
