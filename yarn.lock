@@ -6244,6 +6244,11 @@ react-native-image-zoom-viewer@^2.2.26:
   dependencies:
     react-native-image-pan-zoom "^2.1.9"
 
+react-native-kochava-tracker@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-kochava-tracker/-/react-native-kochava-tracker-1.2.0.tgz#a386f8f27c0e23ade137d41caddb368d2e068bcd"
+  integrity sha512-9jKB/f4hzDsSI1iIlYoRa7hFghqWAn9qVKrlQi6OL/LNn9exW6HmykmEuDNE+xOhMjdOaTQijo9oWyHSAToO8g==
+
 react-native-loading-spinner-overlay@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-1.0.1.tgz#07f85a072b6f7d05b8749668cd626df4cc330347"
