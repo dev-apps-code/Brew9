@@ -11,12 +11,18 @@
   <!-- These are required permissions to make the app run -->
   <uses-permission android:name="com.brew9.brew9.permission.C2D_MESSAGE" />
   <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
 
   <!-- ADD PERMISSIONS HERE -->
+  <!--KOCHAVA ANALYTIC-->
+  <uses-permission android:name="android.permission.BLUETOOTH"/>
+  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+
   <!-- BEGIN OPTIONAL PERMISSIONS -->
   <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
   <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />

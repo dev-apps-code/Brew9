@@ -8,23 +8,24 @@
 
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Keyboard, KeyboardAvoidingView, Platform } from "react-native"
 import React from "react"
-import { alpha, fontAlpha, windowHeight} from "../Common/size"
+import { alpha, fontAlpha, windowHeight } from "../Common/size"
 import { createAction } from "../Utils"
 import UpdateProfileRequestObject from "../Requests/update_profile_request_object"
 import UpdatePhoneNumberRequestObject from "../Requests/update_phone_number_request_object"
 import VerifyPhoneNumberUpdateRequestObject from "../Requests/verify_phone_number_update_request_object"
 import * as SecureStore from "expo-secure-store"
 import Modal from "react-native-modal"
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button'
-import {connect} from "react-redux"
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
+import { connect } from "react-redux"
 import PhoneInput from 'react-native-phone-input'
 import * as ImagePicker from "expo-image-picker"
 // import Constants from "expo-constants"
 import * as Permissions from "expo-permissions"
 import DatePicker from 'react-native-datepicker'
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -32,13 +33,13 @@ import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
 export default class Register extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
-	
+
 		const { params = {} } = navigation.state
 		return {
-				header: null,
-				headerLeft: null,
-				headerRight: null,
-			}
+			header: null,
+			headerLeft: null,
+			headerRight: null,
+		}
 	}
 
 	constructor(props) {
@@ -48,10 +49,10 @@ export default class Register extends React.Component {
 			country: "bn",
 			dob: "",
 			nickname: "",
-			phone_no:  "",
+			phone_no: "",
 			gender_options: [
-				{label: 'Male', value: 0 },
-				{label: 'Female', value: 1 }
+				{ label: 'Male', value: 0 },
+				{ label: 'Female', value: 1 }
 			],
 			gender: -1,
 			genderIndex: 0,
@@ -67,21 +68,21 @@ export default class Register extends React.Component {
 
 	getPermissionAsync = async () => {
 		// if (Constants.platform.ios) {
-			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-			if (status !== 'granted') {
-				return false
-			}
-			return true
+		const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+		if (status !== 'granted') {
+			return false
+		}
+		return true
 		// }
 	}
 
-	loadUpdateProfile(formData){
-		const { dispatch } = this.props
+	loadUpdateProfile(formData) {
+		const { dispatch, members } = this.props
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				
+
 			} else {
 				this.refs.toast.show(eventObject.message);
 			}
@@ -90,15 +91,15 @@ export default class Register extends React.Component {
 			})
 		}
 		const obj = new UpdateProfileRequestObject(formData.dob, formData.nickname, formData.image, formData.gender)
-		obj.setUrlId(this.props.members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		dispatch(
 			createAction('members/loadUpdateProfile')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
-	
+
 	checkForm = () => {
 		if (this.state.gender === -1) {
 			this.refs.toast.show("Please select your gender")
@@ -129,7 +130,7 @@ export default class Register extends React.Component {
 		navigate('Home')
 	}
 
-	onUpdateCode(iso2){
+	onUpdateCode(iso2) {
 		var country_code = this.phone.getCountryCode()
 		this.setState({
 			country: iso2,
@@ -186,234 +187,234 @@ export default class Register extends React.Component {
 			style={{ flex: 1 }}
 		><View
 			style={styles.memberProfileView}>
-				
-			<View
-				style={styles.profileView}>
+
 				<View
-					style={styles.profilepicView}>
+					style={styles.profileView}>
 					<View
-						pointerEvents="box-none"
-						style={{
-							width: 80 * alpha,
-							height: 80 * alpha,
-						}}>
+						style={styles.profilepicView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								width: 80 * alpha,
+								height: 80 * alpha,
+							}}>
+							<Image
+								source={require("./../../assets/images/logo.png")}
+								style={styles.avatarImage} />
+							<TouchableOpacity
+								onPress={this._pickImage}
+								style={styles.imagebuttonButton}>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+				<View
+					style={styles.personalInfoView}>
+					<View
+						style={styles.nicknameView}>
 						<Image
-							source={require("./../../assets/images/logo.png")}
-							style={styles.avatarImage}/>
-						<TouchableOpacity
-							onPress={this._pickImage}
-							style={styles.imagebuttonButton}>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</View>
-			<View
-				style={styles.personalInfoView}>
-				<View
-					style={styles.nicknameView}>
-					<Image
-						source={require("./../../assets/images/line-17.png")}
-						style={styles.seperatorImage}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 0 * alpha,
-							justifyContent: "center",
-						}}>
+							source={require("./../../assets/images/line-17.png")}
+							style={styles.seperatorImage} />
 						<View
 							pointerEvents="box-none"
 							style={{
-								width: 315 * alpha,
-								height: 16 * alpha,
-								marginLeft: 22 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.nicknameText}>Nickname</Text>
-							<TextInput
-								autoCorrect={false}
-								placeholder="Nickname"
-								style={styles.usernameTextInput}
-								onChangeText={(nickname) => this.setState({nickname})}
-								defaultValue={nickname}
-							/>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.genderView}>
-					<Image
-						source={require("./../../assets/images/line-3-copy.png")}
-						style={styles.seperatorTwoImage}/>
-					<View
-						pointerEvents="box-none"
-						style={{
-							position: "absolute",
-							left: 0 * alpha,
-							right: 0 * alpha,
-							top: 0 * alpha,
-							bottom: 0 * alpha,
-							justifyContent: "center",
-						}}>
-						<View
-							pointerEvents="box-none"
-							style={{
-								height: 16 * alpha,
-								marginLeft: 22 * alpha,
-								marginRight: 86 * alpha,
-								flexDirection: "row",
-								alignItems: "center",
-							}}>
-							<Text
-								style={styles.genderText}>Gender</Text>
-							<View
-								style={styles.selectedradioView}>
-								<RadioForm formHorizontal={true} animation={true} >
-									{this.state.gender_options.map((obj, i) => {
-										var onPress = (value, index) => {
-											this.setState({
-												gender: value,
-												genderIndex: index
-											})
-										}
-										return (
-											<RadioButton labelHorizontal={true} key={i} >
-												{/*  You can set RadioButtonLabel before RadioButtonInput */}
-												<RadioButtonInput
-													obj={obj}
-													index={i}
-													isSelected={this.state.gender === i}
-													onPress={onPress}
-													buttonInnerColor={'#EEEAEA'}
-													buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : '#EEEAEA'}
-													selectedButtonColor={'#00B2E3'}
-													buttonSize={9 * alpha}
-													buttonStyle={{backgroundColor: "rgb(58, 58, 58)", borderWidth: 0, marginRight: 10 * alpha}}
-												/>
-												<RadioButtonLabel
-													obj={obj}
-													index={i}
-													onPress={onPress}
-													labelStyle={{fontSize: 13 * alpha, marginRight: 10 * alpha}}
-													labelWrapStyle={{}}
-												/>
-											</RadioButton>
-										)
-									})}
-								</RadioForm>
-								{/*<RadioForm*/}
-								{/*	formHorizontal={true}*/}
-								{/*	radio_props={radio_props}*/}
-								{/*	initial={members.gender}*/}
-								{/*	style={{backgroundColor: "blue", justifyContent: "center", alignItems: "center"}}*/}
-								{/*	buttonStyle={{backgroundColor: "black", position: "absolute", top: 20}}*/}
-								{/*	borderWidth={0}*/}
-								{/*	buttonSize={13 * alpha}*/}
-								{/*	buttonOuterSize={13 * alpha}*/}
-								{/*	buttonInnerColor={'#EEEAEA'}*/}
-								{/*	selectedButtonColor={'#00B2E3'}*/}
-								{/*	buttonColor={'#EEEAEA'}*/}
-								{/*	labelStyle={{backgroundColor:"red",fontSize: 13 * alpha, marginRight: 10 * alpha, alignSelf: 'center'}}*/}
-								{/*	onPress={(value) => {this.setState({gender:value})}}*/}
-								{/*/>*/}
-								{/*<View*/}
-								{/*	pointerEvents="box-none"*/}
-								{/*	style={{*/}
-								{/*		position: "absolute",*/}
-								{/*		left: 0 * alpha,*/}
-								{/*		right: 0 * alpha,*/}
-								{/*		top: 0 * alpha,*/}
-								{/*		bottom: 0 * alpha,*/}
-								{/*		justifyContent: "center",*/}
-								{/*	}}>*/}
-								{/*	<Image*/}
-								{/*		source={require("./../../assets/images/tick.png")}*/}
-								{/*		style={styles.selectedImage}/>*/}
-								{/*</View>*/}
-								{/*<View*/}
-								{/*	pointerEvents="box-none"*/}
-								{/*	style={{*/}
-								{/*		position: "absolute",*/}
-								{/*		left: 0 * alpha,*/}
-								{/*		top: 0 * alpha,*/}
-								{/*		bottom: 0 * alpha,*/}
-								{/*		justifyContent: "center",*/}
-								{/*	}}>*/}
-								{/*	<View*/}
-								{/*		style={styles.tickView}>*/}
-								{/*		<Image*/}
-								{/*			source={require("./../../assets/images/tick.png")}*/}
-								{/*			style={styles.tickImage}/>*/}
-								{/*	</View>*/}
-								{/*</View>*/}
-							</View>
-							{/*<Text*/}
-							{/*	style={styles.maleText}>Male</Text>*/}
-							{/*<View*/}
-							{/*	style={{*/}
-							{/*		flex: 1,*/}
-							{/*	}}/>*/}
-							{/*<View*/}
-							{/*	style={styles.radioView}/>*/}
-							{/*<Text*/}
-							{/*	style={styles.femaleText}>Female</Text>*/}
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.birthdayView}>
-					<Text
-						style={styles.birthdayText}>Birthday</Text>
-					<DatePicker
-						date={this.state.dob}
-						mode="date"
-						placeholder="Select BirthDate"
-						format="YYYY-MM-DD"
-						confirmBtnText="Confirm"
-						cancelBtnText="Cancel"
-						showIcon={false}
-						style={styles.birthdayDatePicker}
-						disabled={this.state.dob ? true : false}
-						customStyles={{
-							dateText: {
-								fontFamily: NON_TITLE_FONT,
-								fontSize: 13 * fontAlpha,
-								color: "rgb(135, 135, 135)",
-							},
-							dateInput: {
-								height: 18 * alpha,
-								borderWidth: 0,
 								position: "absolute",
-								top: 0,
-								left: 61 * alpha,
-							},
-							disabled: {
-								backgroundColor: "transparent"
-							}
+								left: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									width: 315 * alpha,
+									height: 16 * alpha,
+									marginLeft: 22 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.nicknameText}>Nickname</Text>
+								<TextInput
+									autoCorrect={false}
+									placeholder="Nickname"
+									style={styles.usernameTextInput}
+									onChangeText={(nickname) => this.setState({ nickname })}
+									defaultValue={nickname}
+								/>
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.genderView}>
+						<Image
+							source={require("./../../assets/images/line-3-copy.png")}
+							style={styles.seperatorTwoImage} />
+						<View
+							pointerEvents="box-none"
+							style={{
+								position: "absolute",
+								left: 0 * alpha,
+								right: 0 * alpha,
+								top: 0 * alpha,
+								bottom: 0 * alpha,
+								justifyContent: "center",
+							}}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									height: 16 * alpha,
+									marginLeft: 22 * alpha,
+									marginRight: 86 * alpha,
+									flexDirection: "row",
+									alignItems: "center",
+								}}>
+								<Text
+									style={styles.genderText}>Gender</Text>
+								<View
+									style={styles.selectedradioView}>
+									<RadioForm formHorizontal={true} animation={true} >
+										{this.state.gender_options.map((obj, i) => {
+											var onPress = (value, index) => {
+												this.setState({
+													gender: value,
+													genderIndex: index
+												})
+											}
+											return (
+												<RadioButton labelHorizontal={true} key={i} >
+													{/*  You can set RadioButtonLabel before RadioButtonInput */}
+													<RadioButtonInput
+														obj={obj}
+														index={i}
+														isSelected={this.state.gender === i}
+														onPress={onPress}
+														buttonInnerColor={'#EEEAEA'}
+														buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : '#EEEAEA'}
+														selectedButtonColor={'#00B2E3'}
+														buttonSize={9 * alpha}
+														buttonStyle={{ backgroundColor: "rgb(58, 58, 58)", borderWidth: 0, marginRight: 10 * alpha }}
+													/>
+													<RadioButtonLabel
+														obj={obj}
+														index={i}
+														onPress={onPress}
+														labelStyle={{ fontSize: 13 * alpha, marginRight: 10 * alpha }}
+														labelWrapStyle={{}}
+													/>
+												</RadioButton>
+											)
+										})}
+									</RadioForm>
+									{/*<RadioForm*/}
+									{/*	formHorizontal={true}*/}
+									{/*	radio_props={radio_props}*/}
+									{/*	initial={members.gender}*/}
+									{/*	style={{backgroundColor: "blue", justifyContent: "center", alignItems: "center"}}*/}
+									{/*	buttonStyle={{backgroundColor: "black", position: "absolute", top: 20}}*/}
+									{/*	borderWidth={0}*/}
+									{/*	buttonSize={13 * alpha}*/}
+									{/*	buttonOuterSize={13 * alpha}*/}
+									{/*	buttonInnerColor={'#EEEAEA'}*/}
+									{/*	selectedButtonColor={'#00B2E3'}*/}
+									{/*	buttonColor={'#EEEAEA'}*/}
+									{/*	labelStyle={{backgroundColor:"red",fontSize: 13 * alpha, marginRight: 10 * alpha, alignSelf: 'center'}}*/}
+									{/*	onPress={(value) => {this.setState({gender:value})}}*/}
+									{/*/>*/}
+									{/*<View*/}
+									{/*	pointerEvents="box-none"*/}
+									{/*	style={{*/}
+									{/*		position: "absolute",*/}
+									{/*		left: 0 * alpha,*/}
+									{/*		right: 0 * alpha,*/}
+									{/*		top: 0 * alpha,*/}
+									{/*		bottom: 0 * alpha,*/}
+									{/*		justifyContent: "center",*/}
+									{/*	}}>*/}
+									{/*	<Image*/}
+									{/*		source={require("./../../assets/images/tick.png")}*/}
+									{/*		style={styles.selectedImage}/>*/}
+									{/*</View>*/}
+									{/*<View*/}
+									{/*	pointerEvents="box-none"*/}
+									{/*	style={{*/}
+									{/*		position: "absolute",*/}
+									{/*		left: 0 * alpha,*/}
+									{/*		top: 0 * alpha,*/}
+									{/*		bottom: 0 * alpha,*/}
+									{/*		justifyContent: "center",*/}
+									{/*	}}>*/}
+									{/*	<View*/}
+									{/*		style={styles.tickView}>*/}
+									{/*		<Image*/}
+									{/*			source={require("./../../assets/images/tick.png")}*/}
+									{/*			style={styles.tickImage}/>*/}
+									{/*	</View>*/}
+									{/*</View>*/}
+								</View>
+								{/*<Text*/}
+								{/*	style={styles.maleText}>Male</Text>*/}
+								{/*<View*/}
+								{/*	style={{*/}
+								{/*		flex: 1,*/}
+								{/*	}}/>*/}
+								{/*<View*/}
+								{/*	style={styles.radioView}/>*/}
+								{/*<Text*/}
+								{/*	style={styles.femaleText}>Female</Text>*/}
+							</View>
+						</View>
+					</View>
+					<View
+						style={styles.birthdayView}>
+						<Text
+							style={styles.birthdayText}>Birthday</Text>
+						<DatePicker
+							date={this.state.dob}
+							mode="date"
+							placeholder="Select BirthDate"
+							format="YYYY-MM-DD"
+							confirmBtnText="Confirm"
+							cancelBtnText="Cancel"
+							showIcon={false}
+							style={styles.birthdayDatePicker}
+							disabled={this.state.dob ? true : false}
+							customStyles={{
+								dateText: {
+									fontFamily: NON_TITLE_FONT,
+									fontSize: 13 * fontAlpha,
+									color: "rgb(135, 135, 135)",
+								},
+								dateInput: {
+									height: 18 * alpha,
+									borderWidth: 0,
+									position: "absolute",
+									top: 0,
+									left: 61 * alpha,
+								},
+								disabled: {
+									backgroundColor: "transparent"
+								}
 
-						}}
-						onDateChange={(dob) => {this.setState({dob: dob})}}
-					/>
-					{/*<TextInput*/}
-					{/*	autoCorrect={false}*/}
-					{/*	placeholder="1973-11-10"*/}
-					{/*	style={styles.birthdayTextInput}*/}
-					{/*	defaultValue={"1973-11-10"}*/}
-					{/*/>*/}
+							}}
+							onDateChange={(dob) => { this.setState({ dob: dob }) }}
+						/>
+						{/*<TextInput*/}
+						{/*	autoCorrect={false}*/}
+						{/*	placeholder="1973-11-10"*/}
+						{/*	style={styles.birthdayTextInput}*/}
+						{/*	defaultValue={"1973-11-10"}*/}
+						{/*/>*/}
 
+					</View>
 				</View>
-			</View>
-			<TouchableOpacity
-				onPress={this.onSavePressed}
-				style={styles.saveButton}>
-				<Text
-					style={styles.saveButtonText}>SAVE</Text>
-			</TouchableOpacity>
-			<TouchableOpacity
+				<TouchableOpacity
+					onPress={this.onSavePressed}
+					style={styles.saveButton}>
+					<Text
+						style={styles.saveButtonText}>SAVE</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
 					onPress={this.onClosePressed}
 					style={styles.closeButton}>
 					<Text style={styles.closeButtonText}>X</Text>
@@ -423,18 +424,18 @@ export default class Register extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
-		</View>
-		<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
-			<HudLoading isLoading={this.state.loading}/>
+			</View>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<HudLoading isLoading={this.state.loading} />
 		</KeyboardAvoidingView>
 
 	}
 }
 
 const styles = StyleSheet.create({
-	
+
 	memberProfileView: {
 		// backgroundColor: "rgb(243, 243, 243)",
 		backgroundColor: "white",
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "center",
 		marginTop: 14 * alpha,
 	},
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	usernameTextInput: {
@@ -542,7 +543,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -602,7 +603,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 	},
@@ -626,7 +627,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 13 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		marginLeft: 22 * alpha,
 	},
@@ -652,7 +653,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	saveButton: {
@@ -681,7 +682,7 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 		borderColor: 'rgba(0, 0, 0, 0.1)',
 	},
-	
+
 	headerView: {
 		backgroundColor: "transparent",
 		position: "absolute",

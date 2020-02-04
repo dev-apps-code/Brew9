@@ -6,9 +6,10 @@ INJECTED from /Users/alex/project/brew9-v1.0.2/android/app/src/main/AndroidManif
 INJECTED from /Users/alex/project/brew9-v1.0.2/android/app/src/main/AndroidManifest.xml:2:1-369:12
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:2:1-100:12
 MERGED from [org.webkit:android-jsc:r245459] /Users/alex/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/fd443d8a8ad886e9991a1a0e364e8ceb/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-58:12
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/1665766f90ccb3a7c13c47507e4bbe20/AndroidManifest.xml:2:1-13:12
 MERGED from [:unimodules-react-native-adapter] /Users/alex/project/brew9-v1.0.2/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
-MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/expo/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-barcode-scanner] /Users/alex/project/brew9-v1.0.2/node_modules/expo-barcode-scanner/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-camera] /Users/alex/project/brew9-v1.0.2/node_modules/expo-camera/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -195,6 +196,8 @@ uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from /Users/alex/project/brew9-v1.0.2/android/app/src/main/AndroidManifest.xml:14:3-77
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:27:5-79
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:27:5-79
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-79
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-79
 MERGED from [com.facebook.android:audience-network-sdk:5.1.1] /Users/alex/.gradle/caches/transforms-1/files-1.1/audience-network-sdk-5.1.1.aar/974310b8375f2222d75411c1089f18f9/AndroidManifest.xml:12:5-79
 MERGED from [com.facebook.android:audience-network-sdk:5.1.1] /Users/alex/.gradle/caches/transforms-1/files-1.1/audience-network-sdk-5.1.1.aar/974310b8375f2222d75411c1089f18f9/AndroidManifest.xml:12:5-79
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/alex/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/8098862f3dedf095bfe2126002456421/AndroidManifest.xml:24:5-79
@@ -225,6 +228,8 @@ uses-permission#android.permission.INTERNET
 ADDED from /Users/alex/project/brew9-v1.0.2/android/app/src/main/AndroidManifest.xml:15:3-65
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:21:5-67
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:21:5-67
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-67
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-67
 MERGED from [:expo-file-system] /Users/alex/project/brew9-v1.0.2/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-67
 MERGED from [:expo-file-system] /Users/alex/project/brew9-v1.0.2/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:5-67
 MERGED from [com.facebook.android:audience-network-sdk:5.1.1] /Users/alex/.gradle/caches/transforms-1/files-1.1/audience-network-sdk-5.1.1.aar/974310b8375f2222d75411c1089f18f9/AndroidManifest.xml:11:5-67
@@ -423,6 +428,8 @@ application
 ADDED from /Users/alex/project/brew9-v1.0.2/android/app/src/main/AndroidManifest.xml:48:3-367:17
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:71:5-98:19
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:71:5-98:19
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:35:5-56:19
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:35:5-56:19
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/1665766f90ccb3a7c13c47507e4bbe20/AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/1665766f90ccb3a7c13c47507e4bbe20/AndroidManifest.xml:11:5-20
 MERGED from [:expo-file-system] /Users/alex/project/brew9-v1.0.2/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:5-28:19
@@ -983,12 +990,14 @@ MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/trans
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /Users/alex/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/fd443d8a8ad886e9991a1a0e364e8ceb/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /Users/alex/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/fd443d8a8ad886e9991a1a0e364e8ceb/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/1665766f90ccb3a7c13c47507e4bbe20/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/1665766f90ccb3a7c13c47507e4bbe20/AndroidManifest.xml:7:5-9:41
 MERGED from [:unimodules-react-native-adapter] /Users/alex/project/brew9-v1.0.2/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:unimodules-react-native-adapter] /Users/alex/project/brew9-v1.0.2/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
-MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/expo/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
-MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/expo/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:expo-constants] /Users/alex/project/brew9-v1.0.2/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-app-loader-provider] /Users/alex/project/brew9-v1.0.2/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-barcode-scanner] /Users/alex/project/brew9-v1.0.2/node_modules/expo-barcode-scanner/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
@@ -1393,6 +1402,18 @@ ADDED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transf
 		ADDED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:92:13-37
 	android:name
 		ADDED from [host.exp.exponent:expoview:34.0.0] /Users/alex/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/12799dfa5b56cfd934240069b201665a/AndroidManifest.xml:90:13-109
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:5-76
+	android:name
+		ADDED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:22-73
+receiver#com.kochava.base.ReferralReceiver
+ADDED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:48:9-55:20
+	android:exported
+		ADDED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:50:13-36
+	android:priority
+		ADDED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:51:13-35
+	android:name
+		ADDED from [:react-native-kochava-tracker] /Users/alex/project/brew9-v1.0.2/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:49:13-61
 uses-permission#android.permission.STORAGE
 ADDED from [:expo-file-system] /Users/alex/project/brew9-v1.0.2/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:15:5-66
 	android:name

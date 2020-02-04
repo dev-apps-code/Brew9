@@ -15,6 +15,8 @@ import { connect } from "react-redux";
 import PointStatementRequestObject from "../Requests/point_statement_request_object"
 import {KURL_INFO} from "../Utils/server";
 import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BACKGROUND} from "../Common/common_style";
+import { getMemberIdForApi } from '../Services/members_helper'
+
 @connect(({ members }) => ({
 	members: members.profile,
 	company_id: members.company_id,
@@ -70,7 +72,7 @@ export default class PointHistory extends React.Component {
 			}
 		}
 		const obj = new PointStatementRequestObject()
-		obj.setUrlId(members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		obj.setPage(page_no)
 		dispatch(
 			createAction('point_statements/loadPointHistory')({
