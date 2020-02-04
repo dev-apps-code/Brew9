@@ -18,6 +18,7 @@ import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_GREY, DEFAULT_GREY_BAC
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -74,7 +75,7 @@ export default class PointShop extends React.Component {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Redemption Shop', 'Click', 'Point Rules'))
+		analytics.event(new Event('Redemption Shop', getMemberIdForApi(this.props.members), 'Point Rules'))
 
 		navigate("WebCommon", {
 			title: 'Point Rules',
@@ -121,14 +122,14 @@ export default class PointShop extends React.Component {
 
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Redemption Shop', 'Click', 'Point History'))
+		analytics.event(new Event('Redemption Shop', getMemberIdForApi(this.props.members), 'Point History'))
 		navigate("PointHistory")
 	}
 
 	onTransactionHistoryPressed = () => {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Redemption Shop', 'Click', 'Redemption History'))
+		analytics.event(new Event('Redemption Shop', getMemberIdForApi(this.props.members), 'Redemption History'))
 		navigate("PointShopHistory")
 	}
 
@@ -136,7 +137,7 @@ export default class PointShop extends React.Component {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Redemption Shop', 'Click', 'Point Rules'))
+		analytics.event(new Event('Redemption Shop', getMemberIdForApi(this.props.members), 'Point Rules'))
 		navigate("WebCommon", {
 			title: 'Point Rules',
 			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,

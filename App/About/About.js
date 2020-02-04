@@ -6,16 +6,17 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {Image, View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking} from "react-native"
+import { Image, View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from "react-native"
 import React from "react"
-import {connect} from "react-redux";
-import {KURL_INFO} from "../Utils/server";
+import { connect } from "react-redux";
+import { KURL_INFO } from "../Utils/server";
 
-import { alpha, fontAlpha} from "../Common/size";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { alpha, fontAlpha } from "../Common/size";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -27,7 +28,7 @@ export default class MemberWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Brew9 Inspiration</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Brew9 Inspiration</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -36,7 +37,7 @@ export default class MemberWallet extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -65,20 +66,21 @@ export default class MemberWallet extends React.Component {
 
 	onFaqPressed = () => {
 		const { navigate } = this.props.navigation
-		const { company_id } = this.props
+		const { company_id, members } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('More', 'Click', 'FAQs'))
-		
+		analytics.event(new Event('More', getMemberIdForApi(members), 'FAQs'))
+
 		navigate("WebCommon", {
 			title: 'FAQs',
 			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
 		})
-    }
-    
-    onFeedbackPressed = () => {
+	}
+
+	onFeedbackPressed = () => {
+		const { members } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('More', 'Click', 'Feedback'))
-		
+		analytics.event(new Event('More', getMemberIdForApi(members), 'Feedback'))
+
 		Linking.openURL('mailto:feedback@brew9.co')
 	}
 
@@ -90,111 +92,111 @@ export default class MemberWallet extends React.Component {
 			style={styles.walletView}>
 			<ScrollView
 				style={styles.viewScrollView}>
-				
+
 				<View
-						style={styles.menuView}>
-					
-						<TouchableOpacity
-							onPress={() => this.onFaqPressed()}
-							style={styles.menuRowbuttonButton}>
+					style={styles.menuView}>
+
+					<TouchableOpacity
+						onPress={() => this.onFaqPressed()}
+						style={styles.menuRowbuttonButton}>
+						<View
+							style={styles.menuRowView}>
 							<View
-								style={styles.menuRowView}>
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-										justifyContent: "center",
+										height: 24 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
 									}}>
+									<Text
+										style={styles.menuRowLabelText}>FAQs</Text>
 									<View
-										pointerEvents="box-none"
 										style={{
-											height: 24 * alpha,
-											marginLeft: 20 * alpha,
-											marginRight: 20 * alpha,
-											flexDirection: "row",
-											alignItems: "center",
-										}}>
-										<Text
-											style={styles.menuRowLabelText}>FAQs</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<Image
-												source={require("./../../assets/images/next.png")}
-												style={styles.menuRowArrowImage}/>
-									</View>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-									}}>
-									
-										<Text
-											style={styles.menuRowDescriptionText}></Text>
-									
-									<View
-										style={styles.menuRowLineView}/>
+											flex: 1,
+										}} />
+									<Image
+										source={require("./../../assets/images/next.png")}
+										style={styles.menuRowArrowImage} />
 								</View>
 							</View>
-						</TouchableOpacity>
-						<TouchableOpacity
-								onPress={() => this.onFeedbackPressed()}
-								style={styles.menuRowbuttonButton}>
 							<View
-								style={styles.menuRowView}>
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+								}}>
+
+								<Text
+									style={styles.menuRowDescriptionText}></Text>
+
+								<View
+									style={styles.menuRowLineView} />
+							</View>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => this.onFeedbackPressed()}
+						style={styles.menuRowbuttonButton}>
+						<View
+							style={styles.menuRowView}>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									bottom: 0,
+									justifyContent: "center",
+								}}>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										bottom: 0,
-										justifyContent: "center",
+										height: 24 * alpha,
+										marginLeft: 20 * alpha,
+										marginRight: 20 * alpha,
+										flexDirection: "row",
+										alignItems: "center",
 									}}>
+									<Text
+										style={styles.menuRowLabelText}>Feedback</Text>
 									<View
-										pointerEvents="box-none"
 										style={{
-											height: 24 * alpha,
-											marginLeft: 20 * alpha,
-											marginRight: 20 * alpha,
-											flexDirection: "row",
-											alignItems: "center",
-										}}>
-										<Text
-											style={styles.menuRowLabelText}>Feedback</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-										<Image
-												source={require("./../../assets/images/next.png")}
-												style={styles.menuRowArrowImage}/>
-									</View>
-								</View>
-								<View
-									pointerEvents="box-none"
-									style={{
-										position: "absolute",
-										left: 0 * alpha,
-										right: 0 * alpha,
-										top: 0 * alpha,
-										height: 58 * alpha,
-									}}>
+											flex: 1,
+										}} />
+									<Image
+										source={require("./../../assets/images/next.png")}
+										style={styles.menuRowArrowImage} />
 								</View>
 							</View>
-						</TouchableOpacity>
-					</View>
+							<View
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 0 * alpha,
+									height: 58 * alpha,
+								}}>
+							</View>
+						</View>
+					</TouchableOpacity>
+				</View>
 			</ScrollView>
 		</View>
 	}
@@ -319,7 +321,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 27 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	topUpButton: {
@@ -341,7 +343,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	optionsView: {
@@ -379,7 +381,7 @@ const styles = StyleSheet.create({
 	transactionhistoryButtonImage: {
 		resizeMode: "contain",
 	},
-	
+
 	seperatorTwoView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,
@@ -392,7 +394,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		marginLeft: 20 * alpha,
 	},
@@ -420,7 +422,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 	},
-	
+
 	seperatorThreeView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 354 * alpha,
@@ -432,7 +434,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 20 * alpha,
@@ -441,7 +443,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		height: 51 * alpha,
 	},
-	
+
 	seperatorFourView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,
@@ -453,7 +455,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 20 * alpha,
@@ -463,7 +465,7 @@ const styles = StyleSheet.create({
 		height: 51 * alpha,
 		marginRight: 1 * alpha,
 	},
-	
+
 	seperatorFiveView: {
 		backgroundColor: "rgb(244, 244, 244)",
 		width: 356 * alpha,
@@ -531,7 +533,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		flex: 1,
 	},
-	
+
 	menuRowLineView: {
 		backgroundColor: "rgb(245, 245, 245)",
 		position: "absolute",
@@ -540,8 +542,8 @@ const styles = StyleSheet.create({
 		top: 57 * alpha,
 		height: 1 * alpha,
 		left: 20 * alpha,
-    },
-    
+	},
+
 	menuRowArrowImage: {
 		width: 10 * alpha,
 		tintColor: "rgb(195, 195, 195)",

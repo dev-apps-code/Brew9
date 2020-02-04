@@ -22,6 +22,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import ProfileMenu from "./ProfileMenu";
 import ProfileRowMenu from "./ProfileRowMenu"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, config }) => ({
 	selectedTab: config.selectedTab,
@@ -195,7 +196,7 @@ export default class Profile extends React.Component {
 		const { company_id } = this.props
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Membership Info"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Membership Info"))
 
 		navigate("WebCommon", {
 			title: 'Membership Rewards',
@@ -213,7 +214,7 @@ export default class Profile extends React.Component {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		const { navigation, dispatch } = this.props
-		analytics.event(new Event('Profile', 'Click', "Mission Center"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Mission Center"))
 		if (currentMember !== null) {
 			this.navigationListener = navigation.addListener('willFocus', payload => {
 				this.removeNavigationListener()
@@ -264,7 +265,7 @@ export default class Profile extends React.Component {
 		const { validVouchers } = this.state
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Member Voucher"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Member Voucher"))
 		if (currentMember !== null) {
 			navigate("MemberVoucher", { validVouchers: validVouchers })
 		} else {
@@ -278,7 +279,7 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Member Point"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Member Point"))
 		if (currentMember !== null) {
 			navigate("PointShop")
 		} else {
@@ -292,7 +293,7 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Member Wallet"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Member Wallet"))
 		if (currentMember !== null) {
 			navigate("MemberWallet")
 		} else {
@@ -306,7 +307,7 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Member Profile"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Member Profile"))
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
 			navigate("MemberProfile")
@@ -321,7 +322,7 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Order History"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Order History"))
 		navigate("OrderHistory")
 	}
 
@@ -329,7 +330,7 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Member Profile"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Member Profile"))
 		if (currentMember !== null) {
 			navigate("MemberProfile")
 		} else {
@@ -343,7 +344,7 @@ export default class Profile extends React.Component {
 		const { navigate } = this.props.navigation
 		const { members, company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Level Info"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Level Info"))
 		navigate("WebCommon", {
 			title: 'Level Info',
 			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
@@ -415,7 +416,7 @@ export default class Profile extends React.Component {
 	onAboutButtonPressed = () => {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "About"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "About"))
 		navigate("About")
 	}
 
@@ -423,7 +424,7 @@ export default class Profile extends React.Component {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', 'FAQs'))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), 'FAQs'))
 
 		navigate("WebCommon", {
 			title: 'FAQs',
@@ -433,7 +434,7 @@ export default class Profile extends React.Component {
 
 	onFeedbackPressed = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', 'Feedback'))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), 'Feedback'))
 
 		Linking.openURL('mailto:feedback@brew9.co')
 	}
@@ -441,7 +442,7 @@ export default class Profile extends React.Component {
 	onProfileButtonPress = () => {
 		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Profile', 'Click', "Member Profile"))
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Member Profile"))
 		if (currentMember !== null) {
 			// this.loadDestroy()
 			const { navigate } = this.props.navigation
