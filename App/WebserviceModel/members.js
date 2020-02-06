@@ -79,6 +79,7 @@ export default {
     location: null,
     notifications: [],
     unreadNotificationCount: 0,
+    unclaimedMission: 0
   },
 
   reducers: {
@@ -138,6 +139,9 @@ export default {
     updateUnreadNotification(state, { payload }) {
       return { ...state, unreadNotificationCount: payload }
     },
+    updateUnclaimedMission(state, { payload }) {
+      return { ...state, unclaimedMission: payload }
+    },
     updateNotifications(state, { payload }) {
       let unread = 0
       let notifications = payload.result
@@ -147,7 +151,7 @@ export default {
             let item = notifications[index]
             let read = item.id <= payload.last_read ? true : false
             notifications[index].read = read
-           
+
           }
         } else {
           for (var index in notifications) {
@@ -533,11 +537,12 @@ export default {
           authtoken,
           object,
         )
-       
+
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
 
           yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
+          yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
