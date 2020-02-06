@@ -96,7 +96,7 @@ export default class PointShopItem extends React.Component {
 		const { dispatch, selectedShop } = this.props
 		const { data } = this.state
 		const { navigate } = this.props.navigation
-
+		const item_type = this.props.navigation.getParam("item_type", "")
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({
@@ -105,7 +105,11 @@ export default class PointShopItem extends React.Component {
 
 			if (eventObject.success) {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
-				navigate("PointShopHistory")
+				if (item_type == "Voucher") {
+					navigate("MemberVoucher")
+				} else {
+					navigate("PointShopHistory")
+				}
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
