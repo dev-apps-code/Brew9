@@ -111,37 +111,34 @@ export default class FirstScreen extends React.Component {
     loadCurrentStatus() {
         const { dispatch, members } = this.props
 
-        if (members != null) {
-            this.setState({ loading: true })
-            const callback = eventObject => {
-                this.setState({
-                    loading: false,
-                })
-                if (eventObject.result.force_upgrade) {
-                    this.setState({ popUpVisible: true, title: eventObject.result.title, description: eventObject.result.description, url: eventObject.result.url })
-                } else if (eventObject.result.maintenance) {
-                    this.setState({ popUpVisible: true, title: eventObject.result.title, description: eventObject.result.description, url: '' })
-                } else {
-                    // this.checkLoginStatus()
-                }
-            }
-            AsyncStorage.getItem("notification_key", (err, result) => {
-                var last_note = 0
-                if (result != null) {
-                    last_note = result
-                }
-                const obj = new CurrentStatusRequestObject(last_note)
-                obj.setUrlId(getMemberIdForApi(members))
-                dispatch(
-                    createAction('members/loadCurrentStatus')({
-                        object: obj,
-                        callback,
-                    })
-                )
+        this.setState({ loading: true })
+        const callback = eventObject => {
+            this.setState({
+                loading: false,
             })
-        } else {
-            this.checkLoginStatus()
+            if (eventObject.result.force_upgrade) {
+                this.setState({ popUpVisible: true, title: eventObject.result.title, description: eventObject.result.description, url: eventObject.result.url })
+            } else if (eventObject.result.maintenance) {
+                this.setState({ popUpVisible: true, title: eventObject.result.title, description: eventObject.result.description, url: '' })
+            } else {
+                this.checkLoginStatus()
+            }
         }
+        AsyncStorage.getItem("notification_key", (err, result) => {
+            var last_note = 0
+            if (result != null) {
+                last_note = result
+            }
+            const obj = new CurrentStatusRequestObject(last_note)
+            obj.setUrlId(getMemberIdForApi(members))
+            dispatch(
+                createAction('members/loadCurrentStatus')({
+                    object: obj,
+                    callback,
+                })
+            )
+        })
+
 
     }
     onPressOk = () => {
