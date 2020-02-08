@@ -507,6 +507,7 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
+          yield put(createAction('updateUnclaimedMission')(eventObject.result.member.unclaimed_mission_count))
           yield put(createAction('saveCurrentUser')(eventObject.result.member))
         }
         typeof callback === 'function' && callback(eventObject)
