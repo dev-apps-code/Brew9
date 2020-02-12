@@ -435,7 +435,7 @@ export default class Profile extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', 'Feedback'))
 
-		Linking.openURL('mailto:feedback@brew9.co?body=' + 'Platform: ' + Platform.OS + ', Version: ' + getAppVersion())
+		Linking.openURL('mailto:feedback@brew9.co?subject=Brew9 app feedback' + '(' + Platform.OS + '-' + getAppVersion() + ')')
 	}
 
 	onProfileButtonPress = () => {
