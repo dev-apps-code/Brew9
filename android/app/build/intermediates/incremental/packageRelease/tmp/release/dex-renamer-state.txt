@@ -1,0 +1,7 @@
+#Wed Feb 12 01:47:19 BNT 2020
+base.0=/Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/transforms/dexMerger/release/0
+path.1=classes2.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=/Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/transforms/dexMerger/release/0

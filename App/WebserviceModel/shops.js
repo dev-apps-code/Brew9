@@ -80,6 +80,7 @@ export default {
                     if (eventObject.result.paid == true) {
                         yield put(createAction('setPopUp')({ popUp: true }))
                     }
+                    yield put(createAction('members/updateUnclaimedMission')(eventObject.result.member.unclaimed_mission_count))
                     yield put(createAction('members/saveCurrentUser')(eventObject.result.member))
                 }
                 typeof callback === 'function' && callback(eventObject)

@@ -91,7 +91,8 @@ export default class PointShop extends React.Component {
 			navigate("PointShopItem", {
 				item_id: item.id,
 				item_name: item_name,
-				item_type: item.product_type
+				item_type: item.product_type,
+				item: item,
 			});
 		}
 	}

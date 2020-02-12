@@ -16,7 +16,7 @@ const MissionBadgeIcon = props => (
     MainElement={
       <Image
         source={props.image}
-        style={{ resizeMode: "contain", width: 28 * alpha, height: 28 * alpha, tintColor: props.focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT_CROWN }} />}
+        style={{ resizeMode: "contain", width: 28 * alpha, height: 28 * alpha, tintColor: props.focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT }} />}
     BadgeElement={
       <Text style={{ color: '#FFFFFF', fontSize: 10 * alpha, fontFamily: TITLE_FONT }}>{props.unclaimedMission}</Text>
     }

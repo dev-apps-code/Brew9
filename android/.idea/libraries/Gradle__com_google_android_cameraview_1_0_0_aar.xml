@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android:cameraview:1.0.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/cameraview-1.0.0.aar/07838239a19affe239f6108a792a44ed/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/cameraview-1.0.0.aar/e3e2c7eceecdaff4214b942021cde3db/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/cameraview-1.0.0.aar/07838239a19affe239f6108a792a44ed/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/cameraview-1.0.0.aar/07838239a19affe239f6108a792a44ed/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/cameraview-1.0.0.aar/e3e2c7eceecdaff4214b942021cde3db/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/cameraview-1.0.0.aar/e3e2c7eceecdaff4214b942021cde3db/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

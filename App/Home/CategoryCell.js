@@ -58,7 +58,7 @@ export default class CategoryCell extends React.Component {
                     source={{ uri: categoryImage }}
                   />
                 )}
-                {label && <View style={styles.promoBox}>
+                {(label != null && label != "") && <View style={styles.promoBox}>
                   <Text style={styles.promoBoxText}>{label}</Text>
                 </View>}
               </View>
@@ -87,7 +87,7 @@ export default class CategoryCell extends React.Component {
 
 const styles = StyleSheet.create({
   promoBox: {
-    backgroundColor: '#e5efe5',
+    backgroundColor: '#fde9f1',
     borderTopLeftRadius: 5 * alpha,
     borderBottomLeftRadius: 5 * alpha,
     paddingHorizontal: 5 * alpha,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end'
   },
   promoBoxText: {
-    color: '#2e8b57',
+    color: '#f05071',
     fontFamily: TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: "normal",

@@ -1,0 +1,262 @@
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:194
+-keep class abi31_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:286
+-keep class abi31_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:191
+-keep class abi32_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:225
+-keep class abi32_0_0.expo.modules.appauth.AppAuthBrowserActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:272
+-keep class abi32_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:188
+-keep class abi33_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:258
+-keep class abi33_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:185
+-keep class abi34_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:244
+-keep class abi34_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:121
+-keep class android.support.v4.app.CoreComponentFactory { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:450
+-keep class android.support.v4.content.FileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:668
+-keep class com.facebook.CampaignTrackingReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:661
+-keep class com.facebook.CurrentAccessTokenExpirationBroadcastReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:556
+-keep class com.facebook.CustomTabActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:555
+-keep class com.facebook.CustomTabMainActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:315
+-keep class com.facebook.FacebookActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:557
+-keep class com.facebook.ads.AudienceNetworkActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:320
+-keep class com.facebook.ads.InterstitialAdActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:570
+-keep class com.facebook.ads.internal.ipc.AdsMessengerService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:567
+-keep class com.facebook.ads.internal.ipc.AdsProcessPriorityService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:561
+-keep class com.facebook.ads.internal.ipc.RemoteANActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:656
+-keep class com.facebook.internal.FacebookInitProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:181
+-keep class com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:607
+-keep class com.google.android.gms.ads.AdActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:510
+-keep class com.google.android.gms.analytics.AnalyticsJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:348
+-keep class com.google.android.gms.analytics.AnalyticsReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:357
+-keep class com.google.android.gms.analytics.AnalyticsService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:587
+-keep class com.google.android.gms.auth.api.signin.RevocationBoundService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:578
+-keep class com.google.android.gms.auth.api.signin.internal.SignInHubActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:633
+-keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:363
+-keep class com.google.android.gms.gcm.GcmReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:521
+-keep class com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:535
+-keep class com.google.android.gms.measurement.AppMeasurementJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:516
+-keep class com.google.android.gms.measurement.AppMeasurementReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:531
+-keep class com.google.android.gms.measurement.AppMeasurementService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:540
+-keep class com.google.firebase.components.ComponentDiscoveryService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:624
+-keep class com.google.firebase.iid.FirebaseInstanceIdReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:616
+-keep class com.google.firebase.messaging.FirebaseMessagingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:638
+-keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:479
+-keep class com.kochava.base.ReferralReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:414
+-keep class com.theartofdev.edmodo.cropper.CropImageActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:488
+-keep class expo.modules.filesystem.FileSystemFileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:497
+-keep class expo.modules.imagepicker.ImagePickerFileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:507
+-keep class expo.modules.location.services.LocationTaskService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:229
+-keep class expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:198
+-keep class host.exp.exponent.ExponentDevActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:326
+-keep class host.exp.exponent.ExponentIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:130
+-keep class host.exp.exponent.LauncherActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:142
+-keep class host.exp.exponent.MainActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:121
+-keep class host.exp.exponent.MainApplication { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:303
+-keep class host.exp.exponent.chrometabs.ChromeTabsManagerActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:305
+-keep class host.exp.exponent.experience.ErrorActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:136
+-keep class host.exp.exponent.experience.ExperienceActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:163
+-keep class host.exp.exponent.experience.HomeActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:310
+-keep class host.exp.exponent.experience.InfoActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:170
+-keep class host.exp.exponent.experience.TvActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:395
+-keep class host.exp.exponent.fcm.ExpoFcmMessagingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:408
+-keep class host.exp.exponent.fcm.FcmRegistrationIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:375
+-keep class host.exp.exponent.gcm.ExponentGcmListenerService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:382
+-keep class host.exp.exponent.gcm.ExponentInstanceIDListenerService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:389
+-keep class host.exp.exponent.gcm.GcmRegistrationIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:447
+-keep class host.exp.exponent.notifications.ScheduledNotificationReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:223
+-keep class host.exp.exponent.oauth.OAuthResultActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:206
+-keep class host.exp.exponent.oauth.OAuthWebViewActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:331
+-keep class host.exp.exponent.referrer.InstallReferrerReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:598
+-keep class io.nlopez.smartlocation.activity.providers.ActivityGooglePlayServicesProvider$ActivityRecognitionService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:604
+-keep class io.nlopez.smartlocation.geocoding.providers.AndroidGeocodingProvider$AndroidGeocodingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:601
+-keep class io.nlopez.smartlocation.geofencing.providers.GeofencingGooglePlayServicesProvider$GeofencingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:592
+-keep class net.openid.appauth.AuthorizationManagementActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:211
+-keep class net.openid.appauth.RedirectUriReceiverActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:459
+-keep class versioned.host.exp.exponent.modules.api.components.webview.RNCWebViewFileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_bottom_navigation_item.xml:27
+-keep class android.support.design.internal.BaselineLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_navigation_item.xml:17
+-keep class android.support.design.internal.NavigationMenuItemView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_navigation_menu.xml:17
+-keep class android.support.design.internal.NavigationMenuView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_text_input_password_icon.xml:18
+-keep class android.support.design.widget.CheckableImageButton { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_bottom_sheet_dialog.xml:26
+-keep class android.support.design.widget.CoordinatorLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/mtrl_layout_snackbar.xml:18
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_layout_snackbar.xml:18
+-keep class android.support.design.widget.Snackbar$SnackbarLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/mtrl_layout_snackbar_include.xml:18
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_layout_snackbar_include.xml:18
+-keep class android.support.design.widget.SnackbarContentLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/res/layout/error_activity_new.xml:2
+-keep class android.support.v4.view.ViewPager { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_material.xml:41
+-keep class android.support.v4.widget.NestedScrollView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_select_dialog_material.xml:23
+-keep class android.support.v7.app.AlertController$RecycleListView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_action_menu_item_layout.xml:17
+-keep class android.support.v7.view.menu.ActionMenuItemView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_expanded_menu_layout.xml:17
+-keep class android.support.v7.view.menu.ExpandedMenuView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_popup_menu_item_layout.xml:17
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_list_menu_item_layout.xml:17
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_cascading_menu_item_layout.xml:20
+-keep class android.support.v7.view.menu.ListMenuItemView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_toolbar.xml:27
+-keep class android.support.v7.widget.ActionBarContainer { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_toolbar.xml:43
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_action_mode_bar.xml:19
+-keep class android.support.v7.widget.ActionBarContextView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_toolbar.xml:17
+-keep class android.support.v7.widget.ActionBarOverlayLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_action_menu_layout.xml:17
+-keep class android.support.v7.widget.ActionMenuView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_activity_chooser_view.xml:19
+-keep class android.support.v7.widget.ActivityChooserView$InnerLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_material.xml:18
+-keep class android.support.v7.widget.AlertDialogLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/facebook-common-5.0.1.aar/590ae30aad9bd306db6d90571de42082/res/layout/com_facebook_smart_device_dialog_fragment.xml:47
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/facebook-common-5.0.1.aar/590ae30aad9bd306db6d90571de42082/res/layout/com_facebook_device_auth_dialog_fragment.xml:45
+-keep class android.support.v7.widget.AppCompatImageView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_button_bar_material.xml:26
+-keep class android.support.v7.widget.ButtonBarLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/facebook-common-5.0.1.aar/590ae30aad9bd306db6d90571de42082/res/layout/com_facebook_smart_device_dialog_fragment.xml:22
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/facebook-common-5.0.1.aar/590ae30aad9bd306db6d90571de42082/res/layout/com_facebook_device_auth_dialog_fragment.xml:22
+-keep class android.support.v7.widget.CardView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_content_include.xml:19
+-keep class android.support.v7.widget.ContentFrameLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_title_material.xml:45
+-keep class android.support.v7.widget.DialogTitle { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_simple_overlay_action_mode.xml:23
+-keep class android.support.v7.widget.FitWindowsFrameLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_simple.xml:17
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_dialog_title_material.xml:22
+-keep class android.support.v7.widget.FitWindowsLinearLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_search_view.xml:75
+-keep class android.support.v7.widget.SearchView$SearchAutoComplete { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout-v26/abc_screen_toolbar.xml:37
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/res/layout/oauth_webview_activity.xml:5
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/res/layout/info_activity.xml:14
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_toolbar.xml:36
+-keep class android.support.v7.widget.Toolbar { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_simple_overlay_action_mode.xml:32
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_screen_simple.xml:25
+-keep class android.support.v7.widget.ViewStubCompat { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_title_material.xml:56
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_material.xml:52
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appcompat-v7-28.0.0.aar/598b443ca2e60b3679c92955af2ea768/res/layout/abc_alert_dialog_button_bar_material.xml:43
+-keep class android.widget.Space { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/customtabs-28.0.0.aar/d73ea891f3eca83de41b65b2a954c1ec/res/layout/browser_actions_context_menu_page.xml:5
+-keep class androidx.browser.browseractions.BrowserActionsFallbackMenuView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/android-maps-utils-0.5.aar/4ab4bab36f4baa2d3eed5883d25ebace/res/layout/amu_text_bubble.xml:7
+-keep class com.google.maps.android.ui.RotationLayout { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/android-image-cropper-2.7.0.aar/abdc1ba0bd6812aa4e325d562dd1f345/res/layout/crop_image_activity.xml:2
+-keep class com.theartofdev.edmodo.cropper.CropImageView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/android-image-cropper-2.7.0.aar/abdc1ba0bd6812aa4e325d562dd1f345/res/layout/crop_image_view.xml:13
+-keep class com.theartofdev.edmodo.cropper.CropOverlayView { <init>(android.content.Context, android.util.AttributeSet); }
+
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/res/layout/error_fragment.xml:57
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/res/layout/error_console_fragment.xml:25
+-keep class host.exp.exponent.views.ExponentImageButton { <init>(android.content.Context, android.util.AttributeSet); }
+
