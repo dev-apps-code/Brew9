@@ -77,18 +77,18 @@ public final class R {
         public static final int material = 0x7f0900c0;
         public static final int monochrome = 0x7f0900c6;
         public static final int none = 0x7f0900cd;
-        public static final int production = 0x7f0900de;
-        public static final int sandbox = 0x7f0900f7;
-        public static final int selectionDetails = 0x7f090110;
-        public static final int slide = 0x7f090116;
-        public static final int strict_sandbox = 0x7f090128;
-        public static final int test = 0x7f090132;
-        public static final int wrap_content = 0x7f09015c;
+        public static final int production = 0x7f0900e3;
+        public static final int sandbox = 0x7f0900fc;
+        public static final int selectionDetails = 0x7f090115;
+        public static final int slide = 0x7f09011b;
+        public static final int strict_sandbox = 0x7f09012d;
+        public static final int test = 0x7f090137;
+        public static final int wrap_content = 0x7f090161;
     }
     public static final class layout {
         private layout() {}
 
-        public static final int wallet_test_layout = 0x7f0c0064;
+        public static final int wallet_test_layout = 0x7f0c0065;
     }
     public static final class string {
         private string() {}

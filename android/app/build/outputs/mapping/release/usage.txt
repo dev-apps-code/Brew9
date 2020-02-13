@@ -1971,7 +1971,27 @@ android.support.v4.app.INotificationSideChannel$Stub:
     20:22:public INotificationSideChannel$Stub()
 android.support.v4.app.INotificationSideChannel$Stub$Proxy:
     106:106:public java.lang.String getInterfaceDescriptor()
-android.support.v4.app.JobIntentService
+android.support.v4.app.JobIntentService:
+    static final java.lang.String TAG
+    static final boolean DEBUG
+    android.support.v4.app.JobIntentService$CompatJobEngine mJobImpl
+    android.support.v4.app.JobIntentService$WorkEnqueuer mCompatWorkEnqueuer
+    android.support.v4.app.JobIntentService$CommandProcessor mCurProcessor
+    426:436:public void onCreate()
+    444:455:public int onStartCommand(android.content.Intent,int,int)
+    465:470:public android.os.IBinder onBind(android.content.Intent)
+    476:483:public void onDestroy()
+    501:502:public static void enqueueWork(android.content.Context,java.lang.Class,int,android.content.Intent)
+    517:525:public static void enqueueWork(android.content.Context,android.content.ComponentName,int,android.content.Intent)
+    529:541:static android.support.v4.app.JobIntentService$WorkEnqueuer getWorkEnqueuer(android.content.Context,android.content.ComponentName,boolean,int)
+    protected abstract void onHandleWork(android.content.Intent)
+    572:573:public void setInterruptIfStopped(boolean)
+    580:580:public boolean isStopped()
+    595:595:public boolean onStopCurrentWork()
+    599:603:boolean doStopCurrentWork()
+    607:615:void ensureProcessorRunningLocked(boolean)
+    618:636:void processorFinished()
+    639:648:android.support.v4.app.JobIntentService$GenericWorkItem dequeueWork()
 android.support.v4.app.JobIntentService$CommandProcessor
 android.support.v4.app.JobIntentService$CompatJobEngine
 android.support.v4.app.JobIntentService$CompatWorkEnqueuer
@@ -2092,7 +2112,6 @@ android.support.v4.app.NotificationCompat:
     5163:5166:public static java.lang.String getCategory(android.app.Notification)
     5177:5185:public static boolean getLocalOnly(android.app.Notification)
     5194:5202:public static java.lang.String getGroup(android.app.Notification)
-    5213:5221:public static boolean isGroupSummary(android.app.Notification)
     5238:5246:public static java.lang.String getSortKey(android.app.Notification)
     5254:5257:public static java.lang.String getChannelId(android.app.Notification)
     5266:5269:public static long getTimeoutAfter(android.app.Notification)
@@ -2129,7 +2148,6 @@ android.support.v4.app.NotificationCompat$BadgeIconType
 android.support.v4.app.NotificationCompat$BigPictureStyle:
     1992:1994:public NotificationCompat$BigPictureStyle(android.support.v4.app.NotificationCompat$Builder)
     2001:2002:public android.support.v4.app.NotificationCompat$BigPictureStyle setBigContentTitle(java.lang.CharSequence)
-    2009:2011:public android.support.v4.app.NotificationCompat$BigPictureStyle setSummaryText(java.lang.CharSequence)
 android.support.v4.app.NotificationCompat$BigTextStyle:
     2079:2081:public NotificationCompat$BigTextStyle(android.support.v4.app.NotificationCompat$Builder)
     2088:2089:public android.support.v4.app.NotificationCompat$BigTextStyle setBigContentTitle(java.lang.CharSequence)
@@ -2145,19 +2163,14 @@ android.support.v4.app.NotificationCompat$Builder:
     946:948:public android.support.v4.app.NotificationCompat$Builder setFullScreenIntent(android.app.PendingIntent,boolean)
     968:970:public android.support.v4.app.NotificationCompat$Builder setTicker(java.lang.CharSequence,android.widget.RemoteViews)
     1041:1049:public android.support.v4.app.NotificationCompat$Builder setSound(android.net.Uri,int)
-    1074:1080:public android.support.v4.app.NotificationCompat$Builder setLights(int,int,int)
     1118:1120:public android.support.v4.app.NotificationCompat$Builder setColorized(boolean)
-    1128:1129:public android.support.v4.app.NotificationCompat$Builder setOnlyAlertOnce(boolean)
     1162:1163:public android.support.v4.app.NotificationCompat$Builder setCategory(java.lang.String)
     1237:1238:public android.support.v4.app.NotificationCompat$Builder addPerson(java.lang.String)
-    1253:1254:public android.support.v4.app.NotificationCompat$Builder setGroup(java.lang.String)
-    1265:1266:public android.support.v4.app.NotificationCompat$Builder setGroupSummary(boolean)
     1282:1283:public android.support.v4.app.NotificationCompat$Builder setSortKey(java.lang.String)
     1294:1301:public android.support.v4.app.NotificationCompat$Builder addExtras(android.os.Bundle)
     1317:1318:public android.support.v4.app.NotificationCompat$Builder setExtras(android.os.Bundle)
     1390:1390:public android.support.v4.app.NotificationCompat$Builder addInvisibleAction(int,java.lang.CharSequence,android.app.PendingIntent)
     1403:1404:public android.support.v4.app.NotificationCompat$Builder addInvisibleAction(android.support.v4.app.NotificationCompat$Action)
-    1445:1446:public android.support.v4.app.NotificationCompat$Builder setVisibility(int)
     1458:1459:public android.support.v4.app.NotificationCompat$Builder setPublicVersion(android.app.Notification)
     1469:1470:public android.support.v4.app.NotificationCompat$Builder setCustomContentView(android.widget.RemoteViews)
     1482:1483:public android.support.v4.app.NotificationCompat$Builder setCustomBigContentView(android.widget.RemoteViews)
@@ -2165,8 +2178,6 @@ android.support.v4.app.NotificationCompat$Builder:
     1514:1515:public android.support.v4.app.NotificationCompat$Builder setTimeoutAfter(long)
     1530:1531:public android.support.v4.app.NotificationCompat$Builder setShortcutId(java.lang.String)
     1544:1545:public android.support.v4.app.NotificationCompat$Builder setBadgeIconType(int)
-    1559:1560:public android.support.v4.app.NotificationCompat$Builder setGroupAlertBehavior(int)
-    1568:1569:public android.support.v4.app.NotificationCompat$Builder extend(android.support.v4.app.NotificationCompat$Extender)
     1577:1577:public android.app.Notification getNotification()
     1601:1601:public android.widget.RemoteViews getContentView()
     1609:1609:public android.widget.RemoteViews getBigContentView()
@@ -2178,7 +2189,6 @@ android.support.v4.app.NotificationCompat$CarExtender
 android.support.v4.app.NotificationCompat$CarExtender$UnreadConversation
 android.support.v4.app.NotificationCompat$CarExtender$UnreadConversation$Builder
 android.support.v4.app.NotificationCompat$DecoratedCustomViewStyle
-android.support.v4.app.NotificationCompat$Extender
 android.support.v4.app.NotificationCompat$GroupAlertBehavior
 android.support.v4.app.NotificationCompat$InboxStyle:
     2848:2855:public NotificationCompat$InboxStyle(android.support.v4.app.NotificationCompat$Builder)
@@ -2253,7 +2263,6 @@ android.support.v4.app.NotificationManagerCompat:
     public static final int IMPORTANCE_HIGH
     public static final int IMPORTANCE_MAX
     184:188:public void cancelAll()
-    196:197:public void notify(int,android.app.Notification)
     251:254:public int getImportance()
 android.support.v4.app.NotificationManagerCompat$CancelTask:
     625:630:NotificationManagerCompat$CancelTask(java.lang.String)
@@ -5361,7 +5370,6 @@ android.support.v7.widget.AppCompatTextViewAutoSizeHelper:
 android.support.v7.widget.ButtonBarLayout:
     private static final int PEEK_BUTTON_DP
 android.support.v7.widget.CardView:
-    113:114:public CardView(android.content.Context)
     226:228:public void setContentPadding(int,int,int,int)
 android.support.v7.widget.CardViewImpl:
     public abstract void updatePadding(android.support.v7.widget.CardViewDelegate)
@@ -7671,6 +7679,27 @@ com.crashlytics.android.core.internal.models.ThreadData$FrameData:
     46:47:public ThreadData$FrameData(long,int)
     50:51:public ThreadData$FrameData(long,java.lang.String,int)
     53:59:public ThreadData$FrameData(long,java.lang.String,java.lang.String,long,int)
+com.geektime.rnonesignalandroid.BuildConfig
+com.geektime.rnonesignalandroid.NotificationNotDisplayingExtender
+com.geektime.rnonesignalandroid.R
+com.geektime.rnonesignalandroid.R$anim
+com.geektime.rnonesignalandroid.R$attr
+com.geektime.rnonesignalandroid.R$bool
+com.geektime.rnonesignalandroid.R$color
+com.geektime.rnonesignalandroid.R$dimen
+com.geektime.rnonesignalandroid.R$drawable
+com.geektime.rnonesignalandroid.R$id
+com.geektime.rnonesignalandroid.R$integer
+com.geektime.rnonesignalandroid.R$layout
+com.geektime.rnonesignalandroid.R$raw
+com.geektime.rnonesignalandroid.R$string
+com.geektime.rnonesignalandroid.R$style
+com.geektime.rnonesignalandroid.R$styleable
+com.geektime.rnonesignalandroid.R$xml
+com.geektime.rnonesignalandroid.RNUtils:
+    27:27:public RNUtils()
+com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage:
+    31:31:public java.util.List createJSModules()
 com.google.ads.AdRequest:
     public static final java.lang.String VERSION
     public static final java.lang.String LOGTAG
@@ -12297,7 +12326,20 @@ com.google.android.gms.gcm.GcmPubSub
 com.google.android.gms.gcm.GcmTaskService
 com.google.android.gms.gcm.GcmTaskService$zzd
 com.google.android.gms.gcm.GcmTaskService$zze
-com.google.android.gms.gcm.GoogleCloudMessaging
+com.google.android.gms.gcm.GoogleCloudMessaging:
+    public static final java.lang.String ERROR_SERVICE_NOT_AVAILABLE
+    public static final java.lang.String ERROR_MAIN_THREAD
+    public static final java.lang.String MESSAGE_TYPE_DELETED
+    public static final java.lang.String MESSAGE_TYPE_MESSAGE
+    public static final java.lang.String MESSAGE_TYPE_SEND_EVENT
+    public static final java.lang.String MESSAGE_TYPE_SEND_ERROR
+    public static final java.lang.String INSTANCE_ID_SCOPE
+    16:19:public void close()
+    20:21:public void send(java.lang.String,java.lang.String,android.os.Bundle)
+    22:55:public void send(java.lang.String,java.lang.String,long,android.os.Bundle)
+    65:68:public synchronized void unregister()
+    119:125:public java.lang.String getMessageType(android.content.Intent)
+    132:135:private final synchronized void zzh()
 com.google.android.gms.gcm.OneoffTask
 com.google.android.gms.gcm.OneoffTask$Builder
 com.google.android.gms.gcm.PendingCallback
@@ -12311,7 +12353,6 @@ com.google.android.gms.gcm.Task
 com.google.android.gms.gcm.Task$Builder
 com.google.android.gms.gcm.TaskParams
 com.google.android.gms.gcm.zze
-com.google.android.gms.gcm.zzf
 com.google.android.gms.gcm.zzg
 com.google.android.gms.gcm.zzh
 com.google.android.gms.gcm.zzi
@@ -12353,8 +12394,6 @@ com.google.android.gms.iid.InstanceID:
     56:71:public final void zzd(java.lang.String,java.lang.String,android.os.Bundle)
     73:73:public java.lang.String getToken(java.lang.String,java.lang.String)
 com.google.android.gms.iid.R
-com.google.android.gms.iid.zzaf:
-    5:7:public static boolean zzk(android.content.Context)
 com.google.android.gms.iid.zzak:
     50:54:public final synchronized void zzh(java.lang.String,java.lang.String,java.lang.String)
 com.google.android.gms.iid.zzo:
@@ -13458,13 +13497,11 @@ com.google.android.gms.internal.location.zzh
 com.google.android.gms.internal.location.zzi
 com.google.android.gms.internal.location.zzq:
     public final com.google.android.gms.location.LocationAvailability getLocationAvailability(com.google.android.gms.common.api.GoogleApiClient)
-    public final com.google.android.gms.common.api.PendingResult requestLocationUpdates(com.google.android.gms.common.api.GoogleApiClient,com.google.android.gms.location.LocationRequest,com.google.android.gms.location.LocationListener)
     public final com.google.android.gms.common.api.PendingResult requestLocationUpdates(com.google.android.gms.common.api.GoogleApiClient,com.google.android.gms.location.LocationRequest,com.google.android.gms.location.LocationCallback,android.os.Looper)
     public final com.google.android.gms.common.api.PendingResult removeLocationUpdates(com.google.android.gms.common.api.GoogleApiClient,com.google.android.gms.location.LocationCallback)
     public final com.google.android.gms.common.api.PendingResult setMockMode(com.google.android.gms.common.api.GoogleApiClient,boolean)
     public final com.google.android.gms.common.api.PendingResult setMockLocation(com.google.android.gms.common.api.GoogleApiClient,android.location.Location)
     public final com.google.android.gms.common.api.PendingResult flushLocations(com.google.android.gms.common.api.GoogleApiClient)
-com.google.android.gms.internal.location.zzr
 com.google.android.gms.internal.location.zzs
 com.google.android.gms.internal.location.zzt
 com.google.android.gms.internal.location.zzu
@@ -13941,7 +13978,6 @@ com.google.android.gms.location.FusedLocationProviderApi:
     public static final java.lang.String KEY_LOCATION_CHANGED
     public static final java.lang.String KEY_MOCK_LOCATION
     public abstract com.google.android.gms.location.LocationAvailability getLocationAvailability(com.google.android.gms.common.api.GoogleApiClient)
-    public abstract com.google.android.gms.common.api.PendingResult requestLocationUpdates(com.google.android.gms.common.api.GoogleApiClient,com.google.android.gms.location.LocationRequest,com.google.android.gms.location.LocationListener)
     public abstract com.google.android.gms.common.api.PendingResult requestLocationUpdates(com.google.android.gms.common.api.GoogleApiClient,com.google.android.gms.location.LocationRequest,com.google.android.gms.location.LocationCallback,android.os.Looper)
     public abstract com.google.android.gms.common.api.PendingResult removeLocationUpdates(com.google.android.gms.common.api.GoogleApiClient,com.google.android.gms.location.LocationCallback)
     public abstract com.google.android.gms.common.api.PendingResult setMockMode(com.google.android.gms.common.api.GoogleApiClient,boolean)
@@ -15240,9 +15276,12 @@ com.google.firebase.FirebaseOptions:
     32:32:static synthetic java.lang.String access$400(com.google.firebase.FirebaseOptions)
     32:32:static synthetic java.lang.String access$500(com.google.firebase.FirebaseOptions)
     32:32:static synthetic java.lang.String access$600(com.google.firebase.FirebaseOptions)
-    32:32:synthetic FirebaseOptions(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.google.firebase.FirebaseOptions$1)
-com.google.firebase.FirebaseOptions$1
-com.google.firebase.FirebaseOptions$Builder
+com.google.firebase.FirebaseOptions$Builder:
+    74:82:public FirebaseOptions$Builder(com.google.firebase.FirebaseOptions)
+    98:99:public com.google.firebase.FirebaseOptions$Builder setDatabaseUrl(java.lang.String)
+    106:107:public com.google.firebase.FirebaseOptions$Builder setGaTrackingId(java.lang.String)
+    118:119:public com.google.firebase.FirebaseOptions$Builder setStorageBucket(java.lang.String)
+    124:125:public com.google.firebase.FirebaseOptions$Builder setProjectId(java.lang.String)
 com.google.firebase.FirebaseTooManyRequestsException
 com.google.firebase.R
 com.google.firebase.R$attr
@@ -16397,6 +16436,522 @@ com.kochava.reactlibrary.R$string
 com.kochava.reactlibrary.R$style
 com.kochava.reactlibrary.R$styleable
 com.kochava.reactlibrary.R$xml
+com.onesignal.ADMMessageHandler$Receiver
+com.onesignal.ActivityLifecycleHandler:
+    45:45:ActivityLifecycleHandler()
+com.onesignal.ActivityLifecycleHandler$FocusHandlerThread:
+    229:229:android.os.Looper getHandlerLooper()
+com.onesignal.AndroidSupportV4Compat:
+    41:41:AndroidSupportV4Compat()
+com.onesignal.AndroidSupportV4Compat$ActivityCompat:
+    66:66:AndroidSupportV4Compat$ActivityCompat()
+com.onesignal.AndroidSupportV4Compat$ActivityCompatApi23:
+    74:74:AndroidSupportV4Compat$ActivityCompatApi23()
+com.onesignal.AndroidSupportV4Compat$ContextCompat:
+    43:43:AndroidSupportV4Compat$ContextCompat()
+com.onesignal.BadgeCountUpdater:
+    47:47:BadgeCountUpdater()
+com.onesignal.BuildConfig
+com.onesignal.BundleCompat:
+    public abstract void putInt(java.lang.String,java.lang.Integer)
+    public abstract void putBoolean(java.lang.String,java.lang.Boolean)
+    public abstract boolean getBoolean(java.lang.String)
+com.onesignal.BundleCompatBundle:
+    141:143:BundleCompatBundle(android.content.Intent)
+    152:153:public void putInt(java.lang.String,java.lang.Integer)
+    162:163:public void putBoolean(java.lang.String,java.lang.Boolean)
+    182:182:public boolean getBoolean(java.lang.String)
+com.onesignal.BundleCompatFactory:
+    206:206:BundleCompatFactory()
+com.onesignal.BundleCompatPersistableBundle:
+    65:67:BundleCompatPersistableBundle(android.os.PersistableBundle)
+    76:77:public void putInt(java.lang.String,java.lang.Integer)
+    86:87:public void putBoolean(java.lang.String,java.lang.Boolean)
+    106:106:public boolean getBoolean(java.lang.String)
+com.onesignal.DraggableRelativeLayout$Params:
+    static final int DRAGGABLE_DIRECTION_UP
+    static final int DRAGGABLE_DIRECTION_DOWN
+com.onesignal.GcmBroadcastReceiver:
+    private static final java.lang.String GCM_RECEIVE_ACTION
+    private static final java.lang.String GCM_TYPE
+    private static final java.lang.String MESSAGE_TYPE_EXTRA_KEY
+com.onesignal.GcmIntentJobService:
+    public static final java.lang.String BUNDLE_EXTRA
+    private static final int JOB_ID
+    11:11:public bridge synthetic boolean isStopped()
+    11:11:public bridge synthetic void setInterruptIfStopped(boolean)
+com.onesignal.GenerateNotification:
+    74:74:GenerateNotification()
+com.onesignal.GooglePlayServicesUpgradePrompt:
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST
+    14:14:GooglePlayServicesUpgradePrompt()
+com.onesignal.InAppMessageView:
+    private static final int IN_APP_BANNER_ANIMATION_DURATION_MS
+    private static final int IN_APP_CENTER_ANIMATION_DURATION_MS
+    private static final int IN_APP_BACKGROUND_ANIMATION_DURATION_MS
+    private static final int ACTIVITY_FINISH_AFTER_DISMISS_DELAY_MS
+    private static final int ACTIVITY_INIT_DELAY
+com.onesignal.JSONUtils:
+    18:18:JSONUtils()
+    159:161:static java.util.Map jsonObjectToMap(org.json.JSONObject)
+    168:175:private static java.util.Map jsonObjectToMapNonNull(org.json.JSONObject)
+    182:184:static java.util.List jsonArrayToList(org.json.JSONArray)
+    189:194:private static java.util.List jsonArrayToListNonNull(org.json.JSONArray)
+    202:206:private static java.lang.Object convertNestedJSONType(java.lang.Object)
+com.onesignal.JobIntentService:
+    static final java.lang.String TAG
+    static final boolean DEBUG
+    624:625:public void setInterruptIfStopped(boolean)
+    632:632:public boolean isStopped()
+com.onesignal.LocationGMS:
+    private static final long TIME_FOREGROUND_SEC
+    private static final long TIME_BACKGROUND_SEC
+    private static final long FOREGROUND_UPDATE_TIME_MS
+    private static final long BACKGROUND_UPDATE_TIME_MS
+com.onesignal.LocationGMS$FusedLocationApiWrapper:
+    367:367:LocationGMS$FusedLocationApiWrapper()
+com.onesignal.NotificationBundleProcessor:
+    private static final java.lang.String PUSH_ADDITIONAL_DATE_KEY
+    private static final java.lang.String IAM_PREVIEW_KEY
+    static final java.lang.String DEFAULT_ACTION
+    56:56:NotificationBundleProcessor()
+com.onesignal.NotificationChannelManager:
+    private static final java.lang.String DEFAULT_CHANNEL_ID
+    private static final java.lang.String RESTORE_CHANNEL_ID
+    53:53:NotificationChannelManager()
+com.onesignal.NotificationExtenderService:
+    static final int EXTENDER_SERVICE_JOB_ID
+    69:95:public NotificationExtenderService()
+    101:111:protected final com.onesignal.OSNotificationDisplayedResult displayNotification(com.onesignal.NotificationExtenderService$OverrideSettings)
+    69:69:public bridge synthetic boolean isStopped()
+    69:69:public bridge synthetic void setInterruptIfStopped(boolean)
+com.onesignal.NotificationExtenderService$OverrideSettings:
+    83:88:void override(com.onesignal.NotificationExtenderService$OverrideSettings)
+com.onesignal.NotificationLimitManager:
+    private static final int MAX_NUMBER_OF_NOTIFICATIONS_INT
+    20:20:NotificationLimitManager()
+com.onesignal.NotificationRestorer:
+    private static final int RESTORE_KICKOFF_REQUEST_CODE
+    private static final int DELAY_BETWEEN_NOTIFICATION_RESTORES_MS
+    static final int DEFAULT_TTL_IF_NOT_IN_PAYLOAD
+    private static final int RESTORE_NOTIFICATIONS_DELAY_MS
+    81:81:NotificationRestorer()
+com.onesignal.NotificationSummaryManager:
+    16:16:NotificationSummaryManager()
+com.onesignal.OSDynamicTriggerController:
+    private static final double REQUIRED_ACCURACY
+    private static final long DEFAULT_LAST_IN_APP_TIME_AGO
+com.onesignal.OSDynamicTriggerTimer:
+    8:8:OSDynamicTriggerTimer()
+com.onesignal.OSEmailSubscriptionChangedInternalObserver:
+    32:33:void changed(com.onesignal.OSEmailSubscriptionState)
+    41:50:static void fireChangesToPublicObserver(com.onesignal.OSEmailSubscriptionState)
+com.onesignal.OSEmailSubscriptionObserver
+com.onesignal.OSEmailSubscriptionState:
+    96:100:void persistAsFrom()
+    103:104:boolean compare(com.onesignal.OSEmailSubscriptionState)
+com.onesignal.OSEmailSubscriptionStateChanges
+com.onesignal.OSInAppMessage:
+    92:127:org.json.JSONObject toJSONObject()
+com.onesignal.OSInAppMessageAction$OSInAppMessageActionUrlType:
+    99:106:public org.json.JSONObject toJSONObject()
+com.onesignal.OSInAppMessageController:
+    public static final java.lang.String IN_APP_MESSAGES_JSON_KEY
+    358:358:com.onesignal.OSInAppMessage getCurrentDisplayedInAppMessage()
+com.onesignal.OSInAppMessageDummyController:
+    41:41:com.onesignal.OSInAppMessage getCurrentDisplayedInAppMessage()
+com.onesignal.OSNotification:
+    73:88:public OSNotification(org.json.JSONObject)
+    113:123:public java.lang.String stringify()
+com.onesignal.OSNotificationDisplayedResult:
+    public int androidNotificationId
+    30:30:public OSNotificationDisplayedResult()
+com.onesignal.OSNotificationOpenResult:
+    49:62:public java.lang.String stringify()
+com.onesignal.OSNotificationPayload:
+    56:97:public OSNotificationPayload(org.json.JSONObject)
+com.onesignal.OSNotificationPayload$ActionButton:
+    109:113:public OSNotificationPayload$ActionButton(org.json.JSONObject)
+com.onesignal.OSObservable:
+    55:62:void removeObserver(java.lang.Object)
+com.onesignal.OSPermissionObserver
+com.onesignal.OSPermissionState:
+    72:72:boolean compare(com.onesignal.OSPermissionState)
+com.onesignal.OSPermissionStateChanges:
+    36:36:public com.onesignal.OSPermissionState getTo()
+    40:40:public com.onesignal.OSPermissionState getFrom()
+com.onesignal.OSReceiveReceiptRepository:
+    private static final java.lang.String APP_ID
+    private static final java.lang.String PLAYER_ID
+com.onesignal.OSSessionManager:
+    private static final java.lang.String DIRECT_TAG
+    158:158:java.lang.String getDirectNotificationId()
+    162:162:org.json.JSONArray getIndirectNotificationIds()
+com.onesignal.OSSubscriptionObserver
+com.onesignal.OSSubscriptionState:
+    133:135:boolean compare(com.onesignal.OSSubscriptionState)
+com.onesignal.OSSubscriptionStateChanges:
+    36:36:public com.onesignal.OSSubscriptionState getTo()
+    40:40:public com.onesignal.OSSubscriptionState getFrom()
+com.onesignal.OSTrigger:
+    118:131:public org.json.JSONObject toJSONObject()
+com.onesignal.OSUtils:
+    static final int UNINITIALIZABLE_STATUS
+    460:468:static java.util.Collection extractStringsFromCollection(java.util.Collection)
+com.onesignal.OSViewUtils:
+    18:18:OSViewUtils()
+com.onesignal.OneSignal:
+    static final long MIN_ON_SESSION_TIME_MILLIS
+    public static final java.lang.String VERSION
+    static com.onesignal.OSEmailSubscriptionState lastEmailSubscriptionState
+    private static com.onesignal.OSObservable emailSubscriptionStateChangesObserver
+    479:485:private static com.onesignal.OSPermissionState getLastPermissionState(android.content.Context)
+    513:519:private static com.onesignal.OSSubscriptionState getLastSubscriptionState(android.content.Context)
+    547:553:private static com.onesignal.OSEmailSubscriptionState getLastEmailSubscriptionState(android.content.Context)
+    558:560:static com.onesignal.OSObservable getEmailSubscriptionStateChangesObserver()
+    620:620:public static com.onesignal.OneSignal$Builder startInit(android.content.Context)
+    631:650:private static void init(com.onesignal.OneSignal$Builder)
+    653:654:public static void init(android.content.Context,java.lang.String,java.lang.String)
+    657:658:public static void init(android.content.Context,java.lang.String,java.lang.String,com.onesignal.OneSignal$NotificationOpenedHandler)
+    1380:1381:public static void setEmail(java.lang.String,com.onesignal.OneSignal$EmailUpdateHandler)
+    1384:1385:public static void setEmail(java.lang.String)
+    1388:1389:public static void setEmail(java.lang.String,java.lang.String)
+    1455:1456:public static void logoutEmail()
+    1554:1558:public static void sendTags(java.lang.String)
+    1648:1652:public static void postNotification(java.lang.String,com.onesignal.OneSignal$PostNotificationResponseHandler)
+    1833:1834:public static void deleteTags(java.util.Collection)
+    1853:1854:public static void deleteTags(java.lang.String)
+    1858:1872:public static void deleteTags(java.lang.String,com.onesignal.OneSignal$ChangeTagsUpdateHandler)
+    2370:2370:public static com.onesignal.OneSignal$OSInFocusDisplayOption currentInFocusDisplayOption()
+    2642:2724:public static void cancelGroupedNotifications(java.lang.String)
+    2727:2728:public static void removeNotificationOpenedHandler()
+    2731:2732:public static void removeInAppMessageClickHandler()
+    2735:2736:public static void removeNotificationReceivedHandler()
+    2755:2764:public static void addPermissionObserver(com.onesignal.OSPermissionObserver)
+    2767:2773:public static void removePermissionObserver(com.onesignal.OSPermissionObserver)
+    2792:2801:public static void addSubscriptionObserver(com.onesignal.OSSubscriptionObserver)
+    2804:2810:public static void removeSubscriptionObserver(com.onesignal.OSSubscriptionObserver)
+    2826:2835:public static void addEmailSubscriptionObserver(com.onesignal.OSEmailSubscriptionObserver)
+    2838:2844:public static void removeEmailSubscriptionObserver(com.onesignal.OSEmailSubscriptionObserver)
+    2891:2896:public static void addTriggersFromJsonString(java.lang.String)
+    2918:2929:public static void removeTriggersForKeysFromJsonArrayString(java.lang.String)
+    3098:3099:public static void sendOutcome(java.lang.String)
+    3114:3115:public static void sendUniqueOutcome(java.lang.String)
+    3130:3131:public static void sendOutcomeWithValue(java.lang.String,float)
+    79:79:static synthetic void access$000(com.onesignal.OneSignal$Builder)
+com.onesignal.OneSignal$24
+com.onesignal.OneSignal$AppEntryAction:
+    104:104:boolean isAppClose()
+com.onesignal.OneSignal$Builder:
+    android.content.Context mContext
+    252:258:private OneSignal$Builder(android.content.Context)
+    261:262:private void setDisplayOptionCarryOver(boolean)
+    278:279:public com.onesignal.OneSignal$Builder setNotificationOpenedHandler(com.onesignal.OneSignal$NotificationOpenedHandler)
+    295:296:public com.onesignal.OneSignal$Builder setNotificationReceivedHandler(com.onesignal.OneSignal$NotificationReceivedHandler)
+    323:324:public com.onesignal.OneSignal$Builder autoPromptLocation(boolean)
+    335:336:public com.onesignal.OneSignal$Builder disableGmsMissingPrompt(boolean)
+    340:342:public com.onesignal.OneSignal$Builder inFocusDisplaying(com.onesignal.OneSignal$OSInFocusDisplayOption)
+    355:356:public com.onesignal.OneSignal$Builder unsubscribeWhenNotificationsAreDisabled(boolean)
+    372:373:public com.onesignal.OneSignal$Builder filterOtherGCMReceivers(boolean)
+    377:378:public void init()
+    236:236:synthetic OneSignal$Builder(android.content.Context,com.onesignal.OneSignal$1)
+com.onesignal.OneSignal$EmailUpdateError:
+    212:212:public com.onesignal.OneSignal$EmailErrorType getType()
+com.onesignal.OneSignal$SendTagsError:
+    193:193:public int getCode()
+    194:194:public java.lang.String getMessage()
+com.onesignal.OneSignalAnimate:
+    12:12:OneSignalAnimate()
+com.onesignal.OneSignalCacheCleaner:
+    10:10:OneSignalCacheCleaner()
+com.onesignal.OneSignalChromeTab:
+    40:40:OneSignalChromeTab()
+com.onesignal.OneSignalChromeTabAndroidFrame:
+    5:5:OneSignalChromeTabAndroidFrame()
+com.onesignal.OneSignalDbContract
+com.onesignal.OneSignalDbContract$CachedUniqueOutcomeNotificationTable
+com.onesignal.OneSignalDbContract$NotificationTable
+com.onesignal.OneSignalDbContract$OutcomeEventsTable
+com.onesignal.OneSignalDbHelper:
+    static final int DATABASE_VERSION
+    private static final java.lang.String DATABASE_NAME
+    private static final java.lang.String INTEGER_PRIMARY_KEY_TYPE
+    private static final java.lang.String TEXT_TYPE
+    private static final java.lang.String INT_TYPE
+    private static final java.lang.String FLOAT_TYPE
+    private static final java.lang.String TIMESTAMP_TYPE
+    private static final java.lang.String COMMA_SEP
+    private static final int DB_OPEN_RETRY_MAX
+    private static final int DB_OPEN_RETRY_BACKOFF
+    protected static final java.lang.String SQL_CREATE_ENTRIES
+    private static final java.lang.String SQL_CREATE_OUTCOME_ENTRIES
+    private static final java.lang.String SQL_CREATE_UNIQUE_OUTCOME_NOTIFICATION_ENTRIES
+    315:316:public void cleanOutcomeDatabase()
+com.onesignal.OneSignalNotificationManager:
+    private static final java.lang.String GROUPLESS_SUMMARY_KEY
+    private static final int GROUPLESS_SUMMARY_ID
+    16:16:public OneSignalNotificationManager()
+com.onesignal.OneSignalPrefs:
+    public static final java.lang.String PREFS_PLAYER_PURCHASES
+    public static final java.lang.String PREFS_TRIGGERS
+    public static final java.lang.String PREFS_OS_LAST_LOCATION_TIME
+    public static final java.lang.String PREFS_GT_SOUND_ENABLED
+    public static final java.lang.String PREFS_OS_LAST_SESSION_TIME
+    public static final java.lang.String PREFS_GT_VIBRATE_ENABLED
+    public static final java.lang.String PREFS_GT_FIREBASE_TRACKING_ENABLED
+    public static final java.lang.String PREFS_OS_CLEAR_GROUP_SUMMARY_CLICK
+    public static final java.lang.String PREFS_OS_RESTORE_TTL_FILTER
+    public static final java.lang.String PREFS_OS_FILTER_OTHER_GCM_RECEIVERS
+    public static final java.lang.String PREFS_GT_APP_ID
+    public static final java.lang.String PREFS_GT_PLAYER_ID
+    public static final java.lang.String PREFS_OS_EMAIL_ID
+    public static final java.lang.String PREFS_GT_UNSENT_ACTIVE_TIME
+    public static final java.lang.String PREFS_OS_UNSENT_ATTRIBUTED_ACTIVE_TIME
+    public static final java.lang.String PREFS_ONESIGNAL_USERSTATE_DEPENDVALYES_
+    public static final java.lang.String PREFS_ONESIGNAL_USERSTATE_SYNCVALYES_
+    public static final java.lang.String PREFS_ONESIGNAL_ACCEPTED_NOTIFICATION_LAST
+    public static final java.lang.String PREFS_ONESIGNAL_SUBSCRIPTION_LAST
+    public static final java.lang.String PREFS_ONESIGNAL_PLAYER_ID_LAST
+    public static final java.lang.String PREFS_ONESIGNAL_PUSH_TOKEN_LAST
+    public static final java.lang.String PREFS_ONESIGNAL_PERMISSION_ACCEPTED_LAST
+    public static final java.lang.String PREFS_ONESIGNAL_EMAIL_ID_LAST
+    public static final java.lang.String PREFS_ONESIGNAL_EMAIL_ADDRESS_LAST
+    public static final java.lang.String PREFS_GT_DO_NOT_SHOW_MISSING_GPS
+    public static final java.lang.String PREFS_ONESIGNAL_SUBSCRIPTION
+    public static final java.lang.String PREFS_ONESIGNAL_SYNCED_SUBSCRIPTION
+    public static final java.lang.String PREFS_GT_REGISTRATION_ID
+    public static final java.lang.String PREFS_ONESIGNAL_USER_PROVIDED_CONSENT
+    public static final java.lang.String PREFS_OS_ETAG_PREFIX
+    public static final java.lang.String PREFS_OS_HTTP_CACHE_PREFIX
+    public static final java.lang.String PREFS_OS_CACHED_IAMS
+    public static final java.lang.String PREFS_OS_DISMISSED_IAMS
+    public static final java.lang.String PREFS_OS_IMPRESSIONED_IAMS
+    public static final java.lang.String PREFS_OS_CLICKED_CLICK_IDS_IAMS
+    public static final java.lang.String PREFS_OS_RECEIVE_RECEIPTS_ENABLED
+    public static final java.lang.String PREFS_OS_LAST_ATTRIBUTED_NOTIFICATION_OPEN
+    public static final java.lang.String PREFS_OS_LAST_NOTIFICATIONS_RECEIVED
+    public static final java.lang.String PREFS_OS_NOTIFICATION_LIMIT
+    public static final java.lang.String PREFS_OS_INDIRECT_ATTRIBUTION_WINDOW
+    public static final java.lang.String PREFS_OS_DIRECT_ENABLED
+    public static final java.lang.String PREFS_OS_INDIRECT_ENABLED
+    public static final java.lang.String PREFS_OS_UNATTRIBUTED_ENABLED
+    public static final java.lang.String PREFS_OS_OUTCOMES_CURRENT_SESSION
+    public static final java.lang.String PREFS_OS_UNATTRIBUTED_UNIQUE_OUTCOME_EVENTS_SENT
+    static final java.lang.String PREFS_PURCHASE_TOKENS
+    static final java.lang.String PREFS_EXISTING_PURCHASES
+    41:41:OneSignalPrefs()
+    207:208:public static void saveObject(java.lang.String,java.lang.String,java.lang.Object)
+    239:239:static java.lang.Object getObject(java.lang.String,java.lang.String,java.lang.Object)
+com.onesignal.OneSignalPrefs$WritePrefHandlerThread:
+    private static final int WRITE_CALL_DELAY_TO_BUFFER_MS
+com.onesignal.OneSignalRemoteParams:
+    private static final java.lang.String OUTCOME_PARAM
+    private static final java.lang.String ENABLED_PARAM
+    private static final java.lang.String DIRECT_PARAM
+    private static final java.lang.String INDIRECT_PARAM
+    private static final java.lang.String NOTIFICATION_ATTRIBUTION_PARAM
+    private static final java.lang.String UNATTRIBUTED_PARAM
+    private static final int INCREASE_BETWEEN_RETRIES
+    private static final int MIN_WAIT_BETWEEN_RETRIES
+    private static final int MAX_WAIT_BETWEEN_RETRIES
+    static final int DEFAULT_INDIRECT_ATTRIBUTION_WINDOW
+    static final int DEFAULT_NOTIFICATION_LIMIT
+    11:11:OneSignalRemoteParams()
+com.onesignal.OneSignalRestClient:
+    static final java.lang.String CACHE_KEY_GET_TAGS
+    static final java.lang.String CACHE_KEY_REMOTE_PARAMS
+    private static final java.lang.String BASE_URL
+    private static final int THREAD_ID
+    private static final int TIMEOUT
+    private static final int GET_TIMEOUT
+    44:44:OneSignalRestClient()
+com.onesignal.OneSignalStateSynchronizer:
+    36:36:OneSignalStateSynchronizer()
+com.onesignal.OneSignalSyncServiceUtils:
+    private static final int SYNC_TASK_ID
+    private static final long SYNC_AFTER_BG_DELAY_MS
+com.onesignal.OutcomeEvent:
+    private static final java.lang.String SESSION
+    private static final java.lang.String NOTIFICATION_IDS
+    private static final java.lang.String OUTCOME_ID
+    private static final java.lang.String TIMESTAMP
+    private static final java.lang.String WEIGHT
+com.onesignal.OutcomeEventsCache:
+    17:17:OutcomeEventsCache()
+com.onesignal.OutcomeEventsController:
+    private static final java.lang.String OS_SAVE_OUTCOMES
+    private static final java.lang.String OS_SEND_SAVED_OUTCOMES
+    private static final java.lang.String OS_SAVE_UNIQUE_OUTCOME_NOTIFICATIONS
+    27:32:public OutcomeEventsController(com.onesignal.OSSessionManager,com.onesignal.OutcomeEventsRepository)
+com.onesignal.OutcomeEventsRepository:
+    private static final java.lang.String APP_ID
+    private static final java.lang.String DEVICE_TYPE
+    private static final java.lang.String DIRECT
+    23:26:OutcomeEventsRepository(com.onesignal.OutcomeEventsService,com.onesignal.OneSignalDbHelper)
+com.onesignal.OutcomesUtils:
+    static final java.lang.String NOTIFICATIONS_IDS
+    static final java.lang.String NOTIFICATION_ID
+    static final java.lang.String TIME
+    14:14:OutcomesUtils()
+com.onesignal.PermissionsActivity:
+    private static final int REQUEST_LOCATION
+com.onesignal.PushRegistratorFCM:
+    private static final java.lang.String FCM_APP_NAME
+com.onesignal.R:
+    10:10:private R()
+com.onesignal.R$anim:
+    13:13:private R$anim()
+com.onesignal.R$attr
+com.onesignal.R$bool
+com.onesignal.R$color
+com.onesignal.R$dimen
+com.onesignal.R$drawable
+com.onesignal.R$id:
+    161:161:private R$id()
+com.onesignal.R$integer
+com.onesignal.R$layout:
+    228:228:private R$layout()
+com.onesignal.R$raw
+com.onesignal.R$string
+com.onesignal.R$style
+com.onesignal.R$styleable
+com.onesignal.RestoreJobService:
+    static final int RESTORE_SERVICE_JOB_ID
+    33:33:public bridge synthetic boolean isStopped()
+    33:33:public bridge synthetic void setInterruptIfStopped(boolean)
+com.onesignal.RootToolsInternalMethods:
+    26:26:RootToolsInternalMethods()
+com.onesignal.TrackAmazonPurchase$OSPurchasingListener:
+    private com.amazon.device.iap.model.RequestId lastRequestId
+    private java.lang.String currentMarket
+    104:124:private java.lang.String marketToCurrencyCode(java.lang.String)
+    129:157:public void onProductDataResponse(com.amazon.device.iap.model.ProductDataResponse)
+    162:177:public void onPurchaseResponse(com.amazon.device.iap.model.PurchaseResponse)
+    181:183:public void onPurchaseUpdatesResponse(com.amazon.device.iap.model.PurchaseUpdatesResponse)
+    187:189:public void onUserDataResponse(com.amazon.device.iap.model.UserDataResponse)
+com.onesignal.TrackFirebaseAnalytics:
+    private static final java.lang.String EVENT_NOTIFICATION_OPENED
+    private static final java.lang.String EVENT_NOTIFICATION_INFLUENCE_OPEN
+    private static final java.lang.String EVENT_NOTIFICATION_RECEIVED
+com.onesignal.TrackGooglePurchase$3:
+    225:227:public void onFailure(int,org.json.JSONObject,java.lang.Throwable)
+com.onesignal.UserState:
+    public static final int DEVICE_TYPE_ANDROID
+    public static final int DEVICE_TYPE_FIREOS
+    public static final int DEVICE_TYPE_EMAIL
+    static final int PUSH_STATUS_SUBSCRIBED
+    static final int PUSH_STATUS_NO_PERMISSION
+    static final int PUSH_STATUS_UNSUBSCRIBE
+    static final int PUSH_STATUS_MISSING_ANDROID_SUPPORT_LIBRARY
+    static final int PUSH_STATUS_MISSING_FIREBASE_FCM_LIBRARY
+    static final int PUSH_STATUS_OUTDATED_ANDROID_SUPPORT_LIBRARY
+    static final int PUSH_STATUS_INVALID_FCM_SENDER_ID
+    static final int PUSH_STATUS_OUTDATED_GOOGLE_PLAY_SERVICES_APP
+    static final int PUSH_STATUS_FIREBASE_FCM_INIT_ERROR
+    static final int PUSH_STATUS_FIREBASE_FCM_ERROR_SERVICE_NOT_AVAILABLE
+    static final int PUSH_STATUS_FIREBASE_FCM_ERROR_IOEXCEPTION
+    static final int PUSH_STATUS_FIREBASE_FCM_ERROR_MISC_EXCEPTION
+    135:139:void set(java.lang.String,java.lang.Object)
+com.onesignal.UserStateEmailSynchronizer:
+    32:32:public boolean getUserSubscribePreference()
+    37:37:public void setPermission(boolean)
+com.onesignal.UserStateSynchronizer:
+    public abstract boolean getUserSubscribePreference()
+    public abstract void setPermission(boolean)
+com.onesignal.UserStateSynchronizer$NetworkHandlerThread:
+    protected static final int NETWORK_HANDLER_USERSTATE
+    static final int MAX_RETRIES
+    static final int NETWORK_CALL_DELAY_TO_BUFFER_MS
+    97:98:void stopScheduledRunnable()
+com.onesignal.WebViewManager:
+    private static final int IN_APP_MESSAGE_INIT_DELAY
+com.onesignal.WebViewManager$OSJavaScriptInterface:
+    static final java.lang.String JS_OBJ_NAME
+    static final java.lang.String GET_PAGE_META_DATA_JS_FUNCTION
+    static final java.lang.String EVENT_TYPE_KEY
+    static final java.lang.String EVENT_TYPE_RENDERING_COMPLETE
+    static final java.lang.String EVENT_TYPE_ACTION_TAKEN
+    static final java.lang.String IAM_DISPLAY_LOCATION_KEY
+    static final java.lang.String IAM_PAGE_META_DATA_KEY
+com.onesignal.shortcutbadger.ShortcutBadger:
+    private static final java.lang.String LOG_TAG
+    private static final int SUPPORTED_CHECK_ATTEMPTS
+    private static volatile java.lang.Boolean sIsBadgeCounterSupported
+    73:79:public static boolean applyCount(android.content.Context,int)
+    111:111:public static boolean removeCount(android.content.Context)
+    120:121:public static void removeCountOrThrow(android.content.Context)
+    131:164:public static boolean isBadgeCounterSupported(android.content.Context)
+    173:185:public static void applyNotification(android.content.Context,android.app.Notification,int)
+    234:236:private ShortcutBadger()
+com.onesignal.shortcutbadger.impl.AdwHomeBadger:
+    public static final java.lang.String INTENT_UPDATE_COUNTER
+    public static final java.lang.String PACKAGENAME
+    public static final java.lang.String CLASSNAME
+    public static final java.lang.String COUNT
+com.onesignal.shortcutbadger.impl.ApexHomeBadger:
+    private static final java.lang.String INTENT_UPDATE_COUNTER
+    private static final java.lang.String PACKAGENAME
+    private static final java.lang.String COUNT
+    private static final java.lang.String CLASS
+com.onesignal.shortcutbadger.impl.AsusHomeBadger:
+    private static final java.lang.String INTENT_ACTION
+    private static final java.lang.String INTENT_EXTRA_BADGE_COUNT
+    private static final java.lang.String INTENT_EXTRA_PACKAGENAME
+    private static final java.lang.String INTENT_EXTRA_ACTIVITY_NAME
+com.onesignal.shortcutbadger.impl.DefaultBadger:
+    private static final java.lang.String INTENT_ACTION
+    private static final java.lang.String INTENT_EXTRA_BADGE_COUNT
+    private static final java.lang.String INTENT_EXTRA_PACKAGENAME
+    private static final java.lang.String INTENT_EXTRA_ACTIVITY_NAME
+com.onesignal.shortcutbadger.impl.EverythingMeHomeBadger:
+    private static final java.lang.String CONTENT_URI
+    private static final java.lang.String COLUMN_PACKAGE_NAME
+    private static final java.lang.String COLUMN_ACTIVITY_NAME
+    private static final java.lang.String COLUMN_COUNT
+com.onesignal.shortcutbadger.impl.LGHomeBadger:
+    private static final java.lang.String INTENT_ACTION
+    private static final java.lang.String INTENT_EXTRA_BADGE_COUNT
+    private static final java.lang.String INTENT_EXTRA_PACKAGENAME
+    private static final java.lang.String INTENT_EXTRA_ACTIVITY_NAME
+com.onesignal.shortcutbadger.impl.NewHtcHomeBadger:
+    public static final java.lang.String INTENT_UPDATE_SHORTCUT
+    public static final java.lang.String INTENT_SET_NOTIFICATION
+    public static final java.lang.String PACKAGENAME
+    public static final java.lang.String COUNT
+    public static final java.lang.String EXTRA_COMPONENT
+    public static final java.lang.String EXTRA_COUNT
+com.onesignal.shortcutbadger.impl.NovaHomeBadger:
+    private static final java.lang.String CONTENT_URI
+    private static final java.lang.String COUNT
+    private static final java.lang.String TAG
+com.onesignal.shortcutbadger.impl.OPPOHomeBader:
+    private static final java.lang.String PROVIDER_CONTENT_URI
+    private static final java.lang.String INTENT_ACTION
+    private static final java.lang.String INTENT_EXTRA_PACKAGENAME
+    private static final java.lang.String INTENT_EXTRA_BADGE_COUNT
+    private static final java.lang.String INTENT_EXTRA_BADGE_UPGRADENUMBER
+    private static final java.lang.String INTENT_EXTRA_BADGEUPGRADE_COUNT
+com.onesignal.shortcutbadger.impl.SamsungHomeBadger:
+    private static final java.lang.String CONTENT_URI
+com.onesignal.shortcutbadger.impl.SonyHomeBadger:
+    private static final java.lang.String INTENT_ACTION
+    private static final java.lang.String INTENT_EXTRA_PACKAGE_NAME
+    private static final java.lang.String INTENT_EXTRA_ACTIVITY_NAME
+    private static final java.lang.String INTENT_EXTRA_MESSAGE
+    private static final java.lang.String INTENT_EXTRA_SHOW_MESSAGE
+    private static final java.lang.String PROVIDER_CONTENT_URI
+    private static final java.lang.String PROVIDER_COLUMNS_BADGE_COUNT
+    private static final java.lang.String PROVIDER_COLUMNS_PACKAGE_NAME
+    private static final java.lang.String PROVIDER_COLUMNS_ACTIVITY_NAME
+    private static final java.lang.String SONY_HOME_PROVIDER_NAME
+com.onesignal.shortcutbadger.impl.XiaomiHomeBadger:
+    public static final java.lang.String INTENT_ACTION
+    public static final java.lang.String EXTRA_UPDATE_APP_COMPONENT_NAME
+    public static final java.lang.String EXTRA_UPDATE_APP_MSG_TEXT
+com.onesignal.shortcutbadger.util.BroadcastHelper:
+    13:13:public BroadcastHelper()
+com.onesignal.shortcutbadger.util.CloseHelper:
+    12:12:public CloseHelper()
 com.raizlabs.android.dbflow.BuildConfig
 com.raizlabs.android.dbflow.R
 com.raizlabs.android.dbflow.SQLiteCompatibilityUtils:
@@ -17460,7 +18015,7 @@ host.exp.exponent.LoadingView:
     45:58:public LoadingView(android.content.Context,android.util.AttributeSet)
     45:63:public LoadingView(android.content.Context,android.util.AttributeSet,int)
 host.exp.exponent.MainApplication:
-    48:48:public static okhttp3.OkHttpClient$Builder okHttpClientBuilder(okhttp3.OkHttpClient$Builder)
+    50:50:public static okhttp3.OkHttpClient$Builder okHttpClientBuilder(okhttp3.OkHttpClient$Builder)
 host.exp.exponent.Manifest
 host.exp.exponent.Manifest$permission
 host.exp.exponent.R

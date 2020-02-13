@@ -143,10 +143,14 @@ PODS:
   - GTMSessionFetcher/Core (1.2.2)
   - JKBigInteger2 (0.0.5)
   - lottie-ios (2.5.3)
+  - OneSignal (2.12.6)
   - React (0.59.8):
     - React/Core (= 0.59.8)
   - react-native-kochava-tracker (1.2.0):
     - React
+  - react-native-onesignal (3.6.4):
+    - OneSignal (= 2.12.6)
+    - React (< 1.0.0, >= 0.13.0)
   - React/ART (0.59.8):
     - React/Core
   - React/Core (0.59.8):
@@ -239,7 +243,9 @@ DEPENDENCIES:
   - EXWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - OneSignal (< 3.0, >= 2.9.3)
   - react-native-kochava-tracker (from `../node_modules/react-native-kochava-tracker`)
+  - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - React/ART (from `../node_modules/react-native`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
@@ -268,7 +274,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Amplitude-iOS
     - Analytics
     - AppAuth
@@ -289,6 +295,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - JKBigInteger2
     - lottie-ios
+    - OneSignal
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -352,6 +359,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-kochava-tracker:
     :path: "../node_modules/react-native-kochava-tracker"
+  react-native-onesignal:
+    :path: "../node_modules/react-native-onesignal"
   UMBarCodeScannerInterface:
     :path: !ruby/object:Pathname
     path: "../node_modules/unimodules-barcode-scanner-interface/ios"
@@ -437,8 +446,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   JKBigInteger2: e91672035c42328c48b7dd015b66812ddf40ca9b
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
+  OneSignal: a6df91542d1cf133b9dd19d89f2b533d8f2d3163
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-kochava-tracker: e60cf0bb0fc228fa59be6b4c7935342f07969b6f
+  react-native-onesignal: 5ee6834ff54b56fc8ea33877803e8fa92633c87b
   UMBarCodeScannerInterface: ea7d9374318227d7d86c8fc53fa03cb06e3e0f99
   UMCameraInterface: be7baefbdf7d3ac010f3681da83ccd0021663eca
   UMConstantsInterface: 4d8135cd90f5bfbaa55211040a1cd7e8296d1b6c
@@ -453,6 +464,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 3962594bfee05f30eab5694814cfd8e92dd670a6
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 89db02ecfe5b5f72cdf0e9d6796d8e6fbcb18df7
+PODFILE CHECKSUM: 24e28777860f9d32bcd5be9a99e80ee151f3be0c
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.7.5

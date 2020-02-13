@@ -6,6 +6,7 @@ INJECTED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/
 INJECTED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:2:1-375:12
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/AndroidManifest.xml:2:1-100:12
 MERGED from [org.webkit:android-jsc:r245459] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/c10c8d191112237f6473805381a82719/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-onesignal] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-onesignal/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
 MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-58:12
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/c40f8cd226b4abad394aef519498b996/AndroidManifest.xml:2:1-13:12
 MERGED from [:unimodules-react-native-adapter] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/@unimodules/react-native-adapter/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
@@ -36,6 +37,7 @@ MERGED from [:unimodules-core] /Users/minghuifoo/Documents/Projects/Mobile/brew9
 MERGED from [:unimodules-image-loader-interface] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/unimodules-image-loader-interface/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
 MERGED from [:unimodules-sensors-interface] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/unimodules-sensors-interface/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.gms:play-services-ads:15.0.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-ads-15.0.1.aar/3288ba0a2e446089328f4e8c5ebe8a8a/AndroidManifest.xml:17:1-25:12
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:2:1-106:12
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:17:1-47:12
 MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-tagmanager-v4-impl-16.0.8.aar/38374957a049cf7ff9bfa37dca04eb03/AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-analytics-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-impl-16.0.8.aar/e2528040d351c843d39718c7739aca02/AndroidManifest.xml:17:1-31:12
@@ -137,12 +139,12 @@ MERGED from [com.android.support:cursoradapter:28.0.0] /Users/minghuifoo/.gradle
 MERGED from [com.google.android.exoplayer:extension-okhttp:2.9.2] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/extension-okhttp-2.9.2.aar/9e33a429be0e0acfbcb0663406f350b5/AndroidManifest.xml:17:1-24:12
 MERGED from [com.github.bumptech.glide:gifdecoder:4.9.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/gifdecoder-4.9.0.aar/33142ba61fc3635a690d84e4ea507535/AndroidManifest.xml:2:1-11:12
 MERGED from [com.android.support:interpolator:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/a921e87cdf224916aafd02a6e9e3ba43/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:cardview-v7:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/3fbe4f6269d088aec4d1cbbe030c39d2/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/788c8af025f363d704844a8731f1c625/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:documentfile:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/9c2a275bf09147bd21c558af6b96c115/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:localbroadcastmanager:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/localbroadcastmanager-28.0.0.aar/8aeef15daafdbaedf9b2d4d1d36a3ffe/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:print:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/cc6d946bb8bac9850d7eaaf218bc6dc4/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/bf9d225b22f3d9c7116de6afda5b42f7/AndroidManifest.xml:17:1-22:12
-MERGED from [com.android.support:cardview-v7:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/3fbe4f6269d088aec4d1cbbe030c39d2/AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/exoplayer-core-2.9.2.aar/4a6dcca5a88d07f258c2e6c174248cdc/AndroidManifest.xml:17:1-26:12
 MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/2745fe8787f75b95243b17b3523a06b8/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.1.aar/d1153697f6d5de68c33f3060563cda55/AndroidManifest.xml:17:1-22:12
@@ -176,16 +178,20 @@ INJECTED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:4:3-61
 permission#com.brew9.brew9android.permission.C2D_MESSAGE
 ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:7:3-9:42
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:7:5-9:47
 	android:protectionLevel
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:9:5-40
 	android:name
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:8:5-65
 uses-permission#com.brew9.brew9android.permission.C2D_MESSAGE
 ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:12:3-83
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:11:5-79
 	android:name
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:12:20-80
 uses-permission#com.google.android.c2dm.permission.RECEIVE
 ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:13:3-80
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:17:5-82
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:17:5-82
 MERGED from [com.google.android.gms:play-services-gcm:16.1.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.1.0.aar/c7e4ad0355fcd3bd00c630c320e4a73c/AndroidManifest.xml:23:5-82
 MERGED from [com.google.android.gms:play-services-gcm:16.1.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-gcm-16.1.0.aar/c7e4ad0355fcd3bd00c630c320e4a73c/AndroidManifest.xml:23:5-82
 MERGED from [com.google.android.gms:play-services-iid:16.0.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-iid-16.0.1.aar/67287330c5c37c177c400098511c4e04/AndroidManifest.xml:23:5-82
@@ -206,6 +212,8 @@ MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/AndroidManifest.xml:27:5-79
 MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:15:5-79
 MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:15:5-79
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:24:5-79
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-analytics-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-impl-16.0.8.aar/e2528040d351c843d39718c7739aca02/AndroidManifest.xml:24:5-79
@@ -240,6 +248,8 @@ MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects
 MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:12:5-67
 MERGED from [:expo-file-system] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-file-system/android/build/intermediates/library_manifest/release/AndroidManifest.xml:12:5-67
 MERGED from [:expo-file-system] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-file-system/android/build/intermediates/library_manifest/release/AndroidManifest.xml:12:5-67
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:16:5-67
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:16:5-67
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:23:5-67
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:23:5-67
 MERGED from [com.google.android.gms:play-services-analytics-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-impl-16.0.8.aar/e2528040d351c843d39718c7739aca02/AndroidManifest.xml:23:5-67
@@ -288,6 +298,8 @@ uses-permission#android.permission.WAKE_LOCK
 ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:18:3-66
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/AndroidManifest.xml:24:5-68
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/AndroidManifest.xml:24:5-68
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:18:5-68
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:18:5-68
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:27:5-68
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:27:5-68
 MERGED from [com.google.android.gms:play-services-analytics-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-impl-16.0.8.aar/e2528040d351c843d39718c7739aca02/AndroidManifest.xml:27:5-68
@@ -336,6 +348,8 @@ MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:30:20-69
 uses-permission#android.permission.VIBRATE
 ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:31:3-64
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:23:5-66
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:23:5-66
 	android:name
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:31:20-61
 uses-permission#com.android.launcher.permission.INSTALL_SHORTCUT
@@ -454,6 +468,8 @@ MERGED from [:expo-image-picker] /Users/minghuifoo/Documents/Projects/Mobile/bre
 MERGED from [:expo-image-picker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-23:19
 MERGED from [:expo-location] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-location/android/build/intermediates/library_manifest/release/AndroidManifest.xml:15:5-19:19
 MERGED from [:expo-location] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-location/android/build/intermediates/library_manifest/release/AndroidManifest.xml:15:5-19:19
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:48:5-104:19
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:48:5-104:19
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:29:5-45:19
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:29:5-45:19
 MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-tagmanager-v4-impl-16.0.8.aar/38374957a049cf7ff9bfa37dca04eb03/AndroidManifest.xml:22:5-20
@@ -621,7 +637,7 @@ ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src
 activity#host.exp.exponent.MainActivity
 ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:76:5-96:16
 	android:launchMode
-		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:78:7-38
+		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:78:7-37
 	android:windowSoftInputMode
 		ADDED from /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/src/main/AndroidManifest.xml:81:7-49
 	android:configChanges
@@ -1010,6 +1026,8 @@ MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches
 MERGED from [host.exp.exponent:expoview:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/expoview-34.0.0.aar/2b5f2289a0ab00e9ac48762e03fc64a7/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/c10c8d191112237f6473805381a82719/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/c10c8d191112237f6473805381a82719/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-onesignal] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-onesignal/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
+MERGED from [:react-native-onesignal] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-onesignal/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-kochava-tracker] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/react-native-kochava-tracker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:34.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/c40f8cd226b4abad394aef519498b996/AndroidManifest.xml:7:5-9:41
@@ -1070,6 +1088,8 @@ MERGED from [:unimodules-sensors-interface] /Users/minghuifoo/Documents/Projects
 MERGED from [:unimodules-sensors-interface] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/unimodules-sensors-interface/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.gms:play-services-ads:15.0.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-ads-15.0.1.aar/3288ba0a2e446089328f4e8c5ebe8a8a/AndroidManifest.xml:21:5-23:62
 MERGED from [com.google.android.gms:play-services-ads:15.0.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-ads-15.0.1.aar/3288ba0a2e446089328f4e8c5ebe8a8a/AndroidManifest.xml:21:5-23:62
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:4:5-44
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:4:5-44
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-tagmanager-v4-impl:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-tagmanager-v4-impl-16.0.8.aar/38374957a049cf7ff9bfa37dca04eb03/AndroidManifest.xml:20:5-44
@@ -1272,6 +1292,8 @@ MERGED from [com.github.bumptech.glide:gifdecoder:4.9.0] /Users/minghuifoo/.grad
 MERGED from [com.github.bumptech.glide:gifdecoder:4.9.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/gifdecoder-4.9.0.aar/33142ba61fc3635a690d84e4ea507535/AndroidManifest.xml:5:5-7:41
 MERGED from [com.android.support:interpolator:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/a921e87cdf224916aafd02a6e9e3ba43/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:interpolator:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/interpolator-28.0.0.aar/a921e87cdf224916aafd02a6e9e3ba43/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/3fbe4f6269d088aec4d1cbbe030c39d2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/3fbe4f6269d088aec4d1cbbe030c39d2/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/788c8af025f363d704844a8731f1c625/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:runtime:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/788c8af025f363d704844a8731f1c625/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:documentfile:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/documentfile-28.0.0.aar/9c2a275bf09147bd21c558af6b96c115/AndroidManifest.xml:20:5-44
@@ -1282,8 +1304,6 @@ MERGED from [com.android.support:print:28.0.0] /Users/minghuifoo/.gradle/caches/
 MERGED from [com.android.support:print:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/print-28.0.0.aar/cc6d946bb8bac9850d7eaaf218bc6dc4/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/bf9d225b22f3d9c7116de6afda5b42f7/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:viewmodel:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.1.aar/bf9d225b22f3d9c7116de6afda5b42f7/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:cardview-v7:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/3fbe4f6269d088aec4d1cbbe030c39d2/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:cardview-v7:28.0.0] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/cardview-v7-28.0.0.aar/3fbe4f6269d088aec4d1cbbe030c39d2/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/exoplayer-core-2.9.2.aar/4a6dcca5a88d07f258c2e6c174248cdc/AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/exoplayer-core-2.9.2.aar/4a6dcca5a88d07f258c2e6c174248cdc/AndroidManifest.xml:20:5-22:41
 MERGED from [android.arch.lifecycle:livedata:1.1.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/livedata-1.1.1.aar/2745fe8787f75b95243b17b3523a06b8/AndroidManifest.xml:20:5-44
@@ -1470,6 +1490,194 @@ ADDED from [:expo-location] /Users/minghuifoo/Documents/Projects/Mobile/brew9-ap
 		ADDED from [:expo-location] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-location/android/build/intermediates/library_manifest/release/AndroidManifest.xml:18:13-37
 	android:name
 		ADDED from [:expo-location] /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/node_modules/expo-location/android/build/intermediates/library_manifest/release/AndroidManifest.xml:17:13-78
+permission#${applicationId}.permission.C2D_MESSAGE
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:7:5-9:47
+uses-permission#${applicationId}.permission.C2D_MESSAGE
+MERGED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:11:5-79
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:29:5-81
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:29:22-78
+uses-permission#com.sec.android.provider.badge.permission.READ
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:31:5-86
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:19:5-86
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:19:5-86
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:31:22-83
+uses-permission#com.sec.android.provider.badge.permission.WRITE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:32:5-87
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:20:5-87
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:20:5-87
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:32:22-84
+uses-permission#com.htc.launcher.permission.READ_SETTINGS
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:33:5-81
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:23:5-81
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:23:5-81
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:33:22-78
+uses-permission#com.htc.launcher.permission.UPDATE_SHORTCUT
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:34:5-83
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:24:5-83
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:24:5-83
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:34:22-80
+uses-permission#com.sonyericsson.home.permission.BROADCAST_BADGE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:35:5-88
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:27:5-88
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:27:5-88
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:35:22-85
+uses-permission#com.sonymobile.home.permission.PROVIDER_INSERT_BADGE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:36:5-92
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:36:22-89
+uses-permission#com.anddoes.launcher.permission.UPDATE_COUNT
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:37:5-84
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:30:5-84
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:30:5-84
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:37:22-81
+uses-permission#com.majeur.launcher.permission.UPDATE_BADGE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:38:5-83
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:33:5-83
+MERGED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:33:5-83
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:38:22-80
+uses-permission#com.huawei.android.launcher.permission.CHANGE_BADGE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:39:5-91
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:39:22-88
+uses-permission#com.huawei.android.launcher.permission.READ_SETTINGS
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:40:5-92
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:40:22-89
+uses-permission#com.huawei.android.launcher.permission.WRITE_SETTINGS
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:41:5-93
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:41:22-90
+uses-permission#android.permission.READ_APP_BADGE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:42:5-73
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:42:22-70
+uses-permission#com.oppo.launcher.permission.READ_SETTINGS
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:43:5-82
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:43:22-79
+uses-permission#com.oppo.launcher.permission.WRITE_SETTINGS
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:44:5-83
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:44:22-80
+uses-permission#me.everything.badger.permission.BADGE_COUNT_READ
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:45:5-88
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:45:22-85
+uses-permission#me.everything.badger.permission.BADGE_COUNT_WRITE
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:46:5-89
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:46:22-86
+meta-data#onesignal_app_id
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:49:9-51:51
+	android:value
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:51:13-48
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:50:13-44
+meta-data#onesignal_google_project_number
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:53:9-55:70
+	android:value
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:55:13-67
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:54:13-59
+receiver#com.onesignal.GcmBroadcastReceiver
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:57:9-67:20
+	android:permission
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:59:13-73
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:58:13-62
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:${applicationId}
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:62:13-66:29
+	android:priority
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:62:28-50
+intent-filter#action:name:com.google.android.c2dm.intent.RECEIVE+category:name:com.brew9.brew9android
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:62:13-66:29
+	android:priority
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:62:28-50
+category#${applicationId}
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:65:17-61
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:65:27-58
+receiver#com.onesignal.NotificationOpenedReceiver
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:68:9-77
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:68:19-74
+service#com.onesignal.GcmIntentService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:70:9-66
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:70:18-63
+service#com.onesignal.GcmIntentJobService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:71:9-73:72
+	android:permission
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:73:13-69
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:72:13-61
+service#com.onesignal.RestoreJobService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:74:9-76:72
+	android:permission
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:76:13-69
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:75:13-59
+service#com.onesignal.RestoreKickoffJobService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:77:9-79:72
+	android:permission
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:79:13-69
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:78:13-66
+service#com.onesignal.SyncService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:80:9-82:43
+	android:stopWithTask
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:82:13-40
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:81:13-53
+service#com.onesignal.SyncJobService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:83:9-85:72
+	android:permission
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:85:13-69
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:84:13-56
+activity#com.onesignal.PermissionsActivity
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:87:9-89:75
+	android:theme
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:89:13-72
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:88:13-61
+service#com.onesignal.NotificationRestoreService
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:91:9-76
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:91:18-73
+receiver#com.onesignal.BootUpReceiver
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:93:9-98:20
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:93:19-62
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.QUICKBOOT_POWERON
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:94:13-97:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:95:17-79
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:95:25-76
+action#android.intent.action.QUICKBOOT_POWERON
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:96:17-82
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:96:25-79
+receiver#com.onesignal.UpgradeReceiver
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:99:9-103:20
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:99:19-63
+intent-filter#action:name:android.intent.action.MY_PACKAGE_REPLACED
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:100:13-102:29
+action#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:101:17-84
+	android:name
+		ADDED from [com.onesignal:OneSignal:3.12.6] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/OneSignal-3.12.6.aar/8c665284ed32583b7fa5d11e0b76da2c/AndroidManifest.xml:101:25-81
 service#com.google.android.gms.analytics.AnalyticsJobService
 ADDED from [com.google.android.gms:play-services-analytics:16.0.8] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-analytics-16.0.8.aar/67944518d9664862ca8f43fe163a961c/AndroidManifest.xml:40:9-44:72
 	android:enabled
@@ -1614,34 +1822,6 @@ ADDED from [com.google.android.gms:play-services-auth:16.0.1] /Users/minghuifoo/
 		ADDED from [com.google.android.gms:play-services-auth:16.0.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-auth-16.0.1.aar/179e1fc8a6f91e88ed451a1ead4c2f6e/AndroidManifest.xml:36:13-107
 	android:name
 		ADDED from [com.google.android.gms:play-services-auth:16.0.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/play-services-auth-16.0.1.aar/179e1fc8a6f91e88ed451a1ead4c2f6e/AndroidManifest.xml:34:13-89
-uses-permission#com.sec.android.provider.badge.permission.READ
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:19:5-86
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:19:22-83
-uses-permission#com.sec.android.provider.badge.permission.WRITE
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:20:5-87
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:20:22-84
-uses-permission#com.htc.launcher.permission.READ_SETTINGS
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:23:5-81
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:23:22-78
-uses-permission#com.htc.launcher.permission.UPDATE_SHORTCUT
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:24:5-83
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:24:22-80
-uses-permission#com.sonyericsson.home.permission.BROADCAST_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:27:5-88
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:27:22-85
-uses-permission#com.anddoes.launcher.permission.UPDATE_COUNT
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:30:5-84
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:30:22-81
-uses-permission#com.majeur.launcher.permission.UPDATE_BADGE
-ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:33:5-83
-	android:name
-		ADDED from [me.leolin:ShortcutBadger:1.1.4] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.4.aar/e913d41f6246fd4c476246c183db6279/AndroidManifest.xml:33:22-80
 activity#net.openid.appauth.AuthorizationManagementActivity
 ADDED from [net.openid:appauth:0.7.1] /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/appauth-0.7.1.aar/114d17d160e5626b6c295c9691c1eae9/AndroidManifest.xml:27:9-31:75
 	android:launchMode

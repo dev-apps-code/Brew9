@@ -1,144 +1,168 @@
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:194
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:204
 -keep class abi31_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:286
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:296
 -keep class abi31_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:191
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:201
 -keep class abi32_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:225
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:235
 -keep class abi32_0_0.expo.modules.appauth.AppAuthBrowserActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:272
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:282
 -keep class abi32_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:188
--keep class abi33_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:258
--keep class abi33_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:185
--keep class abi34_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:244
--keep class abi34_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:121
--keep class android.support.v4.app.CoreComponentFactory { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:450
--keep class android.support.v4.content.FileProvider { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:668
--keep class com.facebook.CampaignTrackingReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:661
--keep class com.facebook.CurrentAccessTokenExpirationBroadcastReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:556
--keep class com.facebook.CustomTabActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:555
--keep class com.facebook.CustomTabMainActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:315
--keep class com.facebook.FacebookActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:557
--keep class com.facebook.ads.AudienceNetworkActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:320
--keep class com.facebook.ads.InterstitialAdActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:570
--keep class com.facebook.ads.internal.ipc.AdsMessengerService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:567
--keep class com.facebook.ads.internal.ipc.AdsProcessPriorityService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:561
--keep class com.facebook.ads.internal.ipc.RemoteANActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:656
--keep class com.facebook.internal.FacebookInitProvider { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:181
--keep class com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:607
--keep class com.google.android.gms.ads.AdActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:510
--keep class com.google.android.gms.analytics.AnalyticsJobService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:348
--keep class com.google.android.gms.analytics.AnalyticsReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:357
--keep class com.google.android.gms.analytics.AnalyticsService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:587
--keep class com.google.android.gms.auth.api.signin.RevocationBoundService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:578
--keep class com.google.android.gms.auth.api.signin.internal.SignInHubActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:633
--keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:363
--keep class com.google.android.gms.gcm.GcmReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:521
--keep class com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:535
--keep class com.google.android.gms.measurement.AppMeasurementJobService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:516
--keep class com.google.android.gms.measurement.AppMeasurementReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:531
--keep class com.google.android.gms.measurement.AppMeasurementService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:540
--keep class com.google.firebase.components.ComponentDiscoveryService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:624
--keep class com.google.firebase.iid.FirebaseInstanceIdReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:616
--keep class com.google.firebase.messaging.FirebaseMessagingService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:638
--keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:479
--keep class com.kochava.base.ReferralReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:414
--keep class com.theartofdev.edmodo.cropper.CropImageActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:488
--keep class expo.modules.filesystem.FileSystemFileProvider { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:497
--keep class expo.modules.imagepicker.ImagePickerFileProvider { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:507
--keep class expo.modules.location.services.LocationTaskService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:229
--keep class expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
 # Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:198
--keep class host.exp.exponent.ExponentDevActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:326
--keep class host.exp.exponent.ExponentIntentService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:130
--keep class host.exp.exponent.LauncherActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:142
--keep class host.exp.exponent.MainActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:121
--keep class host.exp.exponent.MainApplication { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:303
--keep class host.exp.exponent.chrometabs.ChromeTabsManagerActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:305
--keep class host.exp.exponent.experience.ErrorActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:136
--keep class host.exp.exponent.experience.ExperienceActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:163
--keep class host.exp.exponent.experience.HomeActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:310
--keep class host.exp.exponent.experience.InfoActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:170
--keep class host.exp.exponent.experience.TvActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:395
--keep class host.exp.exponent.fcm.ExpoFcmMessagingService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:408
--keep class host.exp.exponent.fcm.FcmRegistrationIntentService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:375
--keep class host.exp.exponent.gcm.ExponentGcmListenerService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:382
--keep class host.exp.exponent.gcm.ExponentInstanceIDListenerService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:389
--keep class host.exp.exponent.gcm.GcmRegistrationIntentService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:447
--keep class host.exp.exponent.notifications.ScheduledNotificationReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:223
--keep class host.exp.exponent.oauth.OAuthResultActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:206
--keep class host.exp.exponent.oauth.OAuthWebViewActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:331
--keep class host.exp.exponent.referrer.InstallReferrerReceiver { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:598
--keep class io.nlopez.smartlocation.activity.providers.ActivityGooglePlayServicesProvider$ActivityRecognitionService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:604
--keep class io.nlopez.smartlocation.geocoding.providers.AndroidGeocodingProvider$AndroidGeocodingService { <init>(); }
+-keep class abi33_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:268
+-keep class abi33_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:195
+-keep class abi34_0_0.com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:254
+-keep class abi34_0_0.expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:131
+-keep class android.support.v4.app.CoreComponentFactory { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:460
+-keep class android.support.v4.content.FileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:734
+-keep class com.facebook.CampaignTrackingReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:727
+-keep class com.facebook.CurrentAccessTokenExpirationBroadcastReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:622
+-keep class com.facebook.CustomTabActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:621
+-keep class com.facebook.CustomTabMainActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:325
+-keep class com.facebook.FacebookActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:623
+-keep class com.facebook.ads.AudienceNetworkActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:330
+-keep class com.facebook.ads.InterstitialAdActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:636
+-keep class com.facebook.ads.internal.ipc.AdsMessengerService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:633
+-keep class com.facebook.ads.internal.ipc.AdsProcessPriorityService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:627
+-keep class com.facebook.ads.internal.ipc.RemoteANActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:722
+-keep class com.facebook.internal.FacebookInitProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:191
+-keep class com.facebook.react.devsupport.DevSettingsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:673
+-keep class com.google.android.gms.ads.AdActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:576
+-keep class com.google.android.gms.analytics.AnalyticsJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:358
+-keep class com.google.android.gms.analytics.AnalyticsReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:367
+-keep class com.google.android.gms.analytics.AnalyticsService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:653
+-keep class com.google.android.gms.auth.api.signin.RevocationBoundService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:644
+-keep class com.google.android.gms.auth.api.signin.internal.SignInHubActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:699
+-keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:373
+-keep class com.google.android.gms.gcm.GcmReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:587
+-keep class com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver { <init>(); }
 # Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:601
+-keep class com.google.android.gms.measurement.AppMeasurementJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:582
+-keep class com.google.android.gms.measurement.AppMeasurementReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:597
+-keep class com.google.android.gms.measurement.AppMeasurementService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:606
+-keep class com.google.firebase.components.ComponentDiscoveryService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:690
+-keep class com.google.firebase.iid.FirebaseInstanceIdReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:682
+-keep class com.google.firebase.messaging.FirebaseMessagingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:704
+-keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:489
+-keep class com.kochava.base.ReferralReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:564
+-keep class com.onesignal.BootUpReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:528
+-keep class com.onesignal.GcmBroadcastReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:542
+-keep class com.onesignal.GcmIntentJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:541
+-keep class com.onesignal.GcmIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:539
+-keep class com.onesignal.NotificationOpenedReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:562
+-keep class com.onesignal.NotificationRestoreService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:558
+-keep class com.onesignal.PermissionsActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:545
+-keep class com.onesignal.RestoreJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:548
+-keep class com.onesignal.RestoreKickoffJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:554
+-keep class com.onesignal.SyncJobService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:551
+-keep class com.onesignal.SyncService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:570
+-keep class com.onesignal.UpgradeReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:424
+-keep class com.theartofdev.edmodo.cropper.CropImageActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:498
+-keep class expo.modules.filesystem.FileSystemFileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:507
+-keep class expo.modules.imagepicker.ImagePickerFileProvider { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:517
+-keep class expo.modules.location.services.LocationTaskService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:239
+-keep class expo.modules.payments.stripe.RedirectUriReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:208
+-keep class host.exp.exponent.ExponentDevActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:336
+-keep class host.exp.exponent.ExponentIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:140
+-keep class host.exp.exponent.LauncherActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:152
+-keep class host.exp.exponent.MainActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:131
+-keep class host.exp.exponent.MainApplication { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:313
+-keep class host.exp.exponent.chrometabs.ChromeTabsManagerActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:315
+-keep class host.exp.exponent.experience.ErrorActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:146
+-keep class host.exp.exponent.experience.ExperienceActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:173
+-keep class host.exp.exponent.experience.HomeActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:320
+-keep class host.exp.exponent.experience.InfoActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:180
+-keep class host.exp.exponent.experience.TvActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:405
+-keep class host.exp.exponent.fcm.ExpoFcmMessagingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:418
+-keep class host.exp.exponent.fcm.FcmRegistrationIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:385
+-keep class host.exp.exponent.gcm.ExponentGcmListenerService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:392
+-keep class host.exp.exponent.gcm.ExponentInstanceIDListenerService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:399
+-keep class host.exp.exponent.gcm.GcmRegistrationIntentService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:457
+-keep class host.exp.exponent.notifications.ScheduledNotificationReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:233
+-keep class host.exp.exponent.oauth.OAuthResultActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:216
+-keep class host.exp.exponent.oauth.OAuthWebViewActivity { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:341
+-keep class host.exp.exponent.referrer.InstallReferrerReceiver { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:664
+-keep class io.nlopez.smartlocation.activity.providers.ActivityGooglePlayServicesProvider$ActivityRecognitionService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:670
+-keep class io.nlopez.smartlocation.geocoding.providers.AndroidGeocodingProvider$AndroidGeocodingService { <init>(); }
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:667
 -keep class io.nlopez.smartlocation.geofencing.providers.GeofencingGooglePlayServicesProvider$GeofencingService { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:592
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:658
 -keep class net.openid.appauth.AuthorizationManagementActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:211
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:221
 -keep class net.openid.appauth.RedirectUriReceiverActivity { <init>(); }
-# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:459
+# Referenced at /Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_manifests/release/AndroidManifest.xml:469
 -keep class versioned.host.exp.exponent.modules.api.components.webview.RNCWebViewFileProvider { <init>(); }
 # Referenced at /Users/minghuifoo/.gradle/caches/transforms-1/files-1.1/design-28.0.0.aar/e32a9359f5b0a3733e90bdf51d501a4f/res/layout/design_bottom_navigation_item.xml:27
 -keep class android.support.design.internal.BaselineLayout { <init>(android.content.Context, android.util.AttributeSet); }

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed Feb 12 01:47:20 BNT 2020
+#Thu Feb 13 01:19:56 BNT 2020
 20.base=/Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_assets/release/mergeReleaseAssets/out
 143.base=/Users/minghuifoo/Documents/Projects/Mobile/brew9-app/android/app/build/intermediates/merged_assets/release/mergeReleaseAssets/out
 237.path=asset_a91d5460f58a573731a8563d2add87bc.png
