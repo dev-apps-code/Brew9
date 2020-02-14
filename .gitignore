@@ -7,3 +7,6 @@ android/app/build
 android/app/build/*
 android/app/release
 android/app/release/*
+
+ios/build
+ios/build/*
