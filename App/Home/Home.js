@@ -1334,7 +1334,7 @@ export default class Home extends React.Component {
 					{variants}
 				</ScrollView>
 				{
-					(selected_product.price > 0.00 && selected_product.price) ?
+					(selected_product.calculated_price > 0.00 && selected_product.calculated_price) ?
 						<View
 							style={styles.bottomView}>
 							<View
