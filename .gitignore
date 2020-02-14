@@ -1,4 +1,12 @@
-/node_modules/*
+node_modules/*
 .expo/packager-info.json
 .expo/settings.json
 node_modules
+
+android/app/build
+android/app/build/*
+android/app/release
+android/app/release/*
+
+ios/build
+ios/build/*

@@ -88,6 +88,7 @@ export default class PaymentsWebview extends React.Component {
     return (
       <View style={styles.mainView}>
         <WebView
+          useWebKit={true} 
           javaScriptEnable={true}
           onNavigationStateChange={this._onNavigationStateChange.bind(this)}
           style={styles.webviewWebView}          
