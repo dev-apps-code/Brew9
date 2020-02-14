@@ -5,6 +5,7 @@ class EventObject {
         this.code = jsonData.code
         this.message = jsonData.message
         this.total = jsonData.total
+        this.member = jsonData.member
       }
   }
   

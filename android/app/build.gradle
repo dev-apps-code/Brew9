@@ -1,13 +1,16 @@
 buildscript {
   repositories {
     google()
+    maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal 
     maven { url 'https://maven.fabric.io/public' }
   }
 
   dependencies {
     classpath 'io.fabric.tools:gradle:1.26.1'
+    classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'
   }
 }
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'devicefarm'
@@ -29,11 +32,11 @@ android {
   }
 
   defaultConfig {
-    applicationId 'com.brew9.brew9'
+    applicationId 'com.brew9.brew9android'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 1
-    versionName '1.0.0'
+    versionCode 6
+    versionName '1.0.17'
     ndk {
       // We use different `abiFilters` for distributing
       // to be able to bundle old, incompatible SDKs.
@@ -111,6 +114,15 @@ apply from: 'expo.gradle'
 apply from: "../../node_modules/react-native-unimodules/gradle.groovy"
 
 dependencies {
+    implementation project(':react-native-onesignal')
+  implementation project(':react-native-kochava-tracker')
+  //Required: Google Play Services Ads Identifier (If publishing to Google Play)
+  implementation 'com.google.android.gms:play-services-ads-identifier:15.0.1'
+  //Required: Install Referrer (If publishing to Google Play)
+  implementation 'com.android.installreferrer:installreferrer:1.0'
+  //Optional: Instant App Status Collection
+  implementation 'com.google.android.instantapps:instantapps:1.1.0'
+
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation 'com.android.support:multidex:1.0.1'

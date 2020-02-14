@@ -95,7 +95,8 @@ export default class PointShopItem extends React.Component {
 	loadRedeem() {
 		const { dispatch, selectedShop } = this.props
 		const { data } = this.state
-
+		const { navigate } = this.props.navigation
+		const item_type = this.props.navigation.getParam("item_type", "")
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			this.setState({
@@ -104,6 +105,11 @@ export default class PointShopItem extends React.Component {
 
 			if (eventObject.success) {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				if (item_type == "Voucher") {
+					navigate("MemberVoucher")
+				} else {
+					navigate("PointShopHistory")
+				}
 			} else {
 				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
@@ -121,11 +127,13 @@ export default class PointShopItem extends React.Component {
 	render() {
 
 		const { data } = this.state
-
+		const item = this.props.navigation.getParam("item", "")
+		
+		console.log("item", item)
 		return <View
 			style={styles.pointItemView}>
 			<Image
-				source={{ uri: data.image }}
+				source={{ uri: item.image || null}}
 				style={styles.productimageImage} />
 			<View
 				pointerEvents="box-none"

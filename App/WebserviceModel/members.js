@@ -79,6 +79,7 @@ export default {
     location: null,
     notifications: [],
     unreadNotificationCount: 0,
+    unclaimedMission: 0
   },
 
   reducers: {
@@ -138,6 +139,9 @@ export default {
     updateUnreadNotification(state, { payload }) {
       return { ...state, unreadNotificationCount: payload }
     },
+    updateUnclaimedMission(state, { payload }) {
+      return { ...state, unclaimedMission: payload }
+    },
     updateNotifications(state, { payload }) {
       let unread = 0
       let notifications = payload.result
@@ -147,7 +151,7 @@ export default {
             let item = notifications[index]
             let read = item.id <= payload.last_read ? true : false
             notifications[index].read = read
-           
+
           }
         } else {
           for (var index in notifications) {
@@ -242,7 +246,9 @@ export default {
         const result = eventObject.result
         yield put(createAction('updateNotifications')({ result, last_read, current_notifications }))
 
-        if (eventObject.success == true) { }
+        if (eventObject.success == true) { 
+          yield put(createAction('updateUnclaimedMission')(eventObject.member.unclaimed_mission_count))
+        }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
@@ -255,8 +261,10 @@ export default {
           authtoken,
           object,
         )
+        console.log("Loading Profile")
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
+          yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
           yield put(createAction('saveCurrentUser')(eventObject.result))
         }
         typeof callback === 'function' && callback(eventObject)
@@ -456,6 +464,7 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
+          yield put(createAction('updateUnclaimedMission')(eventObject.member.unclaimed_mission_count))
           yield put(createAction('shops/setOrders')({ orders: eventObject.result }))
         }
         typeof callback === 'function' && callback(eventObject)
@@ -488,8 +497,10 @@ export default {
           object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) { }
-        typeof callback === 'function' && callback(eventObject)
+        if (eventObject.success == true) { 
+          yield put(createAction('updateUnclaimedMission')(eventObject.member.unclaimed_mission_count))
+        }
+          typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
     *missionRewardClaim({ payload }, { call, put, select }) {
@@ -503,6 +514,7 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
+          yield put(createAction('updateUnclaimedMission')(eventObject.result.member.unclaimed_mission_count))
           yield put(createAction('saveCurrentUser')(eventObject.result.member))
         }
         typeof callback === 'function' && callback(eventObject)
@@ -533,11 +545,12 @@ export default {
           authtoken,
           object,
         )
-       
+
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
 
           yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
+          yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }

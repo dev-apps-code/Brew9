@@ -14,11 +14,11 @@ public class AppConstants {
   public static final String VERSION_NAME = "1.0.0";
   public static String INITIAL_URL = "exp://exp.host/@tonyvoon/brew9";
   public static final String SHELL_APP_SCHEME = "exp8310c0a3fd094f75bd22dd17cc4ada42";
-  public static final String RELEASE_CHANNEL = "test-v1.015";
+  public static final String RELEASE_CHANNEL = "default";
   public static boolean SHOW_LOADING_VIEW_IN_SHELL_APP = false;
   public static boolean ARE_REMOTE_UPDATES_ENABLED = false;
   public static final List<Constants.EmbeddedResponse> EMBEDDED_RESPONSES;
-  public static boolean FCM_ENABLED = false;
+  public static boolean FCM_ENABLED = true;
 
   static {
     List<Constants.EmbeddedResponse> embeddedResponses = new ArrayList<>();
@@ -178,10 +178,43 @@ public class AppConstants {
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // ADD EMBEDDED RESPONSES HERE
         // START EMBEDDED RESPONSES
         embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@tonyvoon/brew9", "assets://shell-app-manifest.json", "application/json"));
-        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40tonyvoon%2Fbrew9%2F1.0.15%2Ffe88b1f164e006d831789bb56d25d7bd-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40tonyvoon%2Fbrew9%2F1.0.17%2F2cfae5e17da4dc52725a41a33066b54d-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
         // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }

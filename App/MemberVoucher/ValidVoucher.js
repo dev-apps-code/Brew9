@@ -111,10 +111,6 @@ export default class ValidVoucher extends React.Component {
 
 	render() {
 		let { item } = this.props
-		let lastDate = item.expiry_date.split("-")
-		var date = lastDate[2].toString() + '-' + lastDate[1].toString() + '-' + lastDate[0].toString()
-		var msDiff = new Date(date).getTime() - new Date().getTime();    //Future date - current date
-		var days = Math.floor(msDiff / (1000 * 60 * 60 * 24));
 		return <TouchableWithoutFeedback
 			onPress={this.onVoucherPress}>
 			<View
@@ -125,10 +121,10 @@ export default class ValidVoucher extends React.Component {
 					<Image
 						source={require("./../../assets/images/group-5-3.png")}
 						style={styles.backgroundImage} />
-					<Image
+					{/* <Image
 						source={require("./../../assets/images/voucher_new.png")}
 						style={styles.newImage}
-					/>
+					/> */}
 
 					<View
 						pointerEvents="box-none"
@@ -136,7 +132,7 @@ export default class ValidVoucher extends React.Component {
 							position: "absolute",
 							left: 30 * alpha,
 							right: 30 * alpha,
-							top: parseInt(days) <= 3 ? 33 * alpha : 23 * alpha,
+							top: this.props.expired_soon == true ? 33 * alpha : 23 * alpha,
 							bottom: 10 * alpha,
 						}}>
 
@@ -177,7 +173,7 @@ export default class ValidVoucher extends React.Component {
 								style={{
 									flex: 1,
 								}} /> */}
-							{parseInt(days) <= 3 ?
+							{this.props.expired_soon == true ?
 								<View style={styles.expiringView}>
 									<Text style={styles.expiredText}>expire soon</Text>
 

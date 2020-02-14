@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from "react-native"
+import { Image, View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, AppState } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import MissionRequestObject from '../Requests/mission_request_object'
@@ -62,8 +62,8 @@ export default class MissionCenter extends React.Component {
             },
             tabBarIcon: ({ iconTintColor, focused }) => {
                 const image = focused
-                    ? require('./../../assets/images/crown.png')
-                    : require('./../../assets/images/crown.png')
+                    ? require('./../../assets/images/reward_selected_tab.png')
+                    : require('./../../assets/images/reward_tab.png')
 
                 return <View style={styles.tabIconWrapper}>
 
@@ -83,15 +83,31 @@ export default class MissionCenter extends React.Component {
             updated: false,
             isRefreshing: false,
             timestamp: undefined,
+            appState: AppState.currentState,
         }
     }
 
+    componentWillUnmount() {
+		AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+    
+    _handleAppStateChange = nextAppState => {
+		const { currentMember } = this.props
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			if (currentMember != null) {
+				this.loadMissionStatements()
+			}
+		}
+		this.setState({ appState: nextAppState });
+    };
+    
     componentDidMount() {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
         this.props.navigation.addListener('didFocus', this.refreshMission.bind(this))
         this.loadMissions(true)
+        AppState.addEventListener('change', this._handleAppStateChange);
     }
 
     refreshMission() {
@@ -146,11 +162,10 @@ export default class MissionCenter extends React.Component {
                 }, function () {
                     if (currentMember != null) {
                         this.loadMissionStatements()
-                    } else {
-                        this.setState({ loading: false, isRefreshing: false })
                     }
                 })
             }
+            this.setState({ loading: false, isRefreshing: false })
         }
         const obj = new MissionRequestObject()
         obj.setUrlId(company_id)

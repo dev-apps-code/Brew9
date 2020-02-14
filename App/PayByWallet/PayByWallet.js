@@ -6,14 +6,15 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import {StyleSheet, Image, Text, View, TouchableOpacity, ScrollView, ActivityIndicator} from "react-native"
+import { StyleSheet, Image, Text, View, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native"
 import React from "react"
-import {alpha, fontAlpha} from "../Common/size";
-import {connect} from "react-redux";
+import { alpha, fontAlpha } from "../Common/size";
+import { connect } from "react-redux";
 import QrCodeRequestObject from "../Requests/qr_code_request_object";
-import {createAction} from "../Utils";
+import { createAction } from "../Utils";
 import QRCode from 'react-native-qrcode-svg';
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -26,7 +27,7 @@ export default class PayByWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>QR Code</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>QR Code</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -35,7 +36,7 @@ export default class PayByWallet extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -56,7 +57,7 @@ export default class PayByWallet extends React.Component {
 
 	componentDidMount() {
 		this.loadQrCode()
-		this.timer = setInterval(()=> this.loadQrCode(), 30000)
+		this.timer = setInterval(() => this.loadQrCode(), 30000)
 		this.props.navigation.setParams({
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
@@ -71,7 +72,7 @@ export default class PayByWallet extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	loadQrCode(){
+	loadQrCode() {
 		const { dispatch, members } = this.props
 		this.setState({ loading_list: true })
 		const callback = eventObject => {
@@ -83,10 +84,10 @@ export default class PayByWallet extends React.Component {
 			}
 		}
 		const obj = new QrCodeRequestObject()
-		obj.setUrlId(members.id)
+		obj.setUrlId(getMemberIdForApi(members))
 		dispatch(
 			createAction('members/loadQrCode')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
@@ -112,7 +113,7 @@ export default class PayByWallet extends React.Component {
 							style={styles.group9View}>
 							<Image
 								source={require("./../../assets/images/group-3-14.png")}
-								style={styles.group3Image}/>
+								style={styles.group3Image} />
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -120,18 +121,18 @@ export default class PayByWallet extends React.Component {
 								}}>
 								<Image
 									source={require("./../../assets/images/group-6-11.png")}
-									style={styles.group6Image}/>
+									style={styles.group6Image} />
 								<Image
 									source={require("./../../assets/images/fill-7-6.png")}
-									style={styles.fill7Image}/>
+									style={styles.fill7Image} />
 							</View>
 						</View>
 						<Image
 							source={require("./../../assets/images/group-13-10.png")}
-							style={styles.group13Image}/>
+							style={styles.group13Image} />
 						<Image
 							source={require("./../../assets/images/group-14-12.png")}
-							style={styles.group14Image}/>
+							style={styles.group14Image} />
 						<View
 							style={styles.group6View}>
 							<View
@@ -146,37 +147,37 @@ export default class PayByWallet extends React.Component {
 								}}>
 								<Image
 									source={require("./../../assets/images/group-3-24.png")}
-									style={styles.group3TwoImage}/>
+									style={styles.group3TwoImage} />
 							</View>
 							<Image
 								source={require("./../../assets/images/fill-4-3.png")}
-								style={styles.fill4Image}/>
+								style={styles.fill4Image} />
 						</View>
 						<Image
 							source={require("./../../assets/images/group-12-12.png")}
-							style={styles.group12Image}/>
+							style={styles.group12Image} />
 					</View>
 				</View>
 				<View
 					style={styles.walletBalanceView}>
 					<Image
-						source={members.image ? {uri: members.image} : require("./../../assets/images/user.png")}
-						style={styles.profilePicImage}/>
+						source={members.image ? { uri: members.image } : require("./../../assets/images/user.png")}
+						style={styles.profilePicImage} />
 					<Text
 						style={styles.nicknameText}>{
-							members.name ? members.name : 
-							members.nickname ? members.nickname :
-							members.phone_no ? members.phone_no : 
-							members.facebook_id 
+							members.name ? members.name :
+								members.nickname ? members.nickname :
+									members.phone_no ? members.phone_no :
+										members.facebook_id
 						}</Text>
 					<View
 						style={styles.payByWalletView}>
 						{members.wallet_enabled && (<TouchableOpacity
-								onPress={this.onSelectWalletPressed}
-								style={styles.selectwalletButton}>
-								<Text
-									style={styles.selectwalletButtonText}></Text>
-							</TouchableOpacity>
+							onPress={this.onSelectWalletPressed}
+							style={styles.selectwalletButton}>
+							<Text
+								style={styles.selectwalletButtonText}></Text>
+						</TouchableOpacity>
 						)}
 						<View
 							pointerEvents="box-none"
@@ -196,7 +197,7 @@ export default class PayByWallet extends React.Component {
 									alignItems: "center",
 								}}>
 								<View
-									style={styles.selectView}/>
+									style={styles.selectView} />
 								<Text
 									style={members.wallet_enabled ? styles.payByBrew9WalletText : styles.payByBrew9WalletTextDisabled}>Pay by Brew9 wallet</Text>
 								<Text
@@ -207,24 +208,24 @@ export default class PayByWallet extends React.Component {
 					<View
 						style={{
 							flex: 1,
-						}}/>
+						}} />
 					<Image
 						source={require("./../../assets/images/line-12-2.png")}
-						style={styles.lineImage}/>
+						style={styles.lineImage} />
 				</View>
 				<View
 					style={styles.qrCodeViewView}>
 					<Text
 						style={styles.scanQrcodeToEarnText}>Scan QRCode to earn point (Payment not supported)</Text>
-						{ this.state.qr_code ? <QRCode
-							value={this.state.qr_code}
-							size={161 * alpha}
-							bgColor='black'
-							fgColor='white'/>
-						:	<View style={[styles.container, styles.horizontal]}>
-								<ActivityIndicator size="large" />
-							</View>
-						}
+					{this.state.qr_code ? <QRCode
+						value={this.state.qr_code}
+						size={161 * alpha}
+						bgColor='black'
+						fgColor='white' />
+						: <View style={[styles.container, styles.horizontal]}>
+							<ActivityIndicator size="large" />
+						</View>
+					}
 					<Text
 						style={styles.autoText}>Auto refresh every 30 seconds</Text>
 				</View>
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 15 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "center",
 		backgroundColor: "transparent",
 		marginTop: 10 * alpha,
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 	},
 	selectView: {
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 10 * alpha,
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginLeft: 10 * alpha,
@@ -484,7 +485,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 11 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 44 * alpha,

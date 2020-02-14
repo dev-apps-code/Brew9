@@ -6244,6 +6244,11 @@ react-native-image-zoom-viewer@^2.2.26:
   dependencies:
     react-native-image-pan-zoom "^2.1.9"
 
+react-native-kochava-tracker@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-kochava-tracker/-/react-native-kochava-tracker-1.2.0.tgz#a386f8f27c0e23ade137d41caddb368d2e068bcd"
+  integrity sha512-9jKB/f4hzDsSI1iIlYoRa7hFghqWAn9qVKrlQi6OL/LNn9exW6HmykmEuDNE+xOhMjdOaTQijo9oWyHSAToO8g==
+
 react-native-loading-spinner-overlay@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-1.0.1.tgz#07f85a072b6f7d05b8749668cd626df4cc330347"
@@ -6378,6 +6383,13 @@ react-native-svg@^9.5.1:
   version "9.11.1"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.11.1.tgz#b1ccf48de413ff8c4f476f202aaa3893f4c8b59a"
   integrity sha512-BmNCM81SSzhj1+N5rYiy7sxrkmybgiT8Cu8yVRB7zVoWze/i1lbCWJah+Gk0OHHwR35ZA31oVKf5jtO4G1n94Q==
+
+react-native-swiper@^1.5.14:
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.14.tgz#1c6f949ca377186300f972bb0f30d24062c899aa"
+  integrity sha512-Kn0fxKooN7Shwu1qJYHB+Y8ssXXnvrIwReHXU5jCdyYNfz2QbBv0Cv3sa2Mqzr+XgzORCFFIokc8uCCUITDrVA==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-switch-selector@^1.1.14:
   version "1.1.14"

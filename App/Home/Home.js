@@ -52,7 +52,7 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps';
 import openMap from 'react-native-open-maps';
-import { Notifications } from 'expo';
+// import { Notifications } from 'expo';
 import CategoryHeaderCell from "./CategoryHeaderCell"
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR, RED, LIGHT_BLUE_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
@@ -65,6 +65,7 @@ import { getDistance, getPreciseDistance } from 'geolib';
 import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
 import Banners from './Banners';
+import OneSignal from 'react-native-onesignal';
 
 @connect(({ members, shops, config, orders }) => ({
 	currentMember: members.profile,
@@ -173,6 +174,11 @@ export default class Home extends React.Component {
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
 		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
+		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", {kOSSettingsKeyAutoPrompt : true});// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+
+		OneSignal.addEventListener('received', this.onReceived);
+		OneSignal.addEventListener('opened', this.onOpened);
+		OneSignal.addEventListener('ids', this.onIds.bind(this));
 	}
 
 	onQrScanPressed = () => {
@@ -196,36 +202,36 @@ export default class Home extends React.Component {
 
 
 
-	registerForPushNotificationsAsync = async () => {
-		const { status: existingStatus } = await Permissions.getAsync(
-			Permissions.NOTIFICATIONS
-		);
-		let finalStatus = existingStatus;
+	// registerForPushNotificationsAsync = async () => {
+	// 	const { status: existingStatus } = await Permissions.getAsync(
+	// 		Permissions.NOTIFICATIONS
+	// 	);
+	// 	let finalStatus = existingStatus;
 
-		// only ask if permissions have not already been determined, because
-		// iOS won't necessarily prompt the user a second time.
-		if (existingStatus !== 'granted') {
-			// Android remote notification permissions are granted during the app
-			// install, so this will only ask on iOS
-			const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-			finalStatus = status;
-		}
+	// 	// only ask if permissions have not already been determined, because
+	// 	// iOS won't necessarily prompt the user a second time.
+	// 	if (existingStatus !== 'granted') {
+	// 		// Android remote notification permissions are granted during the app
+	// 		// install, so this will only ask on iOS
+	// 		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+	// 		finalStatus = status;
+	// 	}
 
-		// Stop here if the user did not grant permissions
-		if (finalStatus !== 'granted') {
-			return;
-		}
+	// 	// Stop here if the user did not grant permissions
+	// 	if (finalStatus !== 'granted') {
+	// 		return;
+	// 	}
 
-		// Get the token that uniquely identifies this device
-		let token = await Notifications.getExpoPushTokenAsync();
+	// 	// Get the token that uniquely identifies this device
+	// 	let token = await Notifications.getExpoPushTokenAsync();
 
-		// POST the token to your backend server from where you can retrieve it to send push notifications.
-		this.loadStorePushToken(token)
-	}
+	// 	// POST the token to your backend server from where you can retrieve it to send push notifications.
+	// 	this.loadStorePushToken(token)
+	// }
 
-	getNotificationAsync = async () => {
-		await this.registerForPushNotificationsAsync()
-	}
+	// getNotificationAsync = async () => {
+	// 	await this.registerForPushNotificationsAsync()
+	// }
 
 	getLocationAsync = async () => {
 
@@ -310,7 +316,7 @@ export default class Home extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getNotificationAsync()
+		// this.getNotificationAsync()
 		if (Platform.OS === 'android') {
 			this.setState({
 				errorMessage: 'Oops, this will not work in an Android emulator. Try it on your device!',
@@ -339,6 +345,25 @@ export default class Home extends React.Component {
 		this.removeNavigationListener()
 		AppState.removeEventListener('change', this._handleAppStateChange);
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		OneSignal.removeEventListener('received', this.onReceived);
+		OneSignal.removeEventListener('opened', this.onOpened);
+		OneSignal.removeEventListener('ids', this.onIds)
+	}
+
+	onReceived(notification) {
+		// console.log("Notification received: ", notification);
+	}
+	
+	onOpened(openResult) {
+		// console.log('Message: ', openResult.notification.payload.body);
+		// console.log('Data: ', openResult.notification.payload.additionalData);
+		// console.log('isActive: ', openResult.notification.isAppInFocus);
+		// console.log('openResult: ', openResult);
+	}
+	
+	onIds(device) {
+		// console.log('Device info: ', device);
+		this.loadStorePushToken(device.userId)
 	}
 
 	// onBackPress() {
@@ -376,11 +401,11 @@ export default class Home extends React.Component {
 	}
 
 
-	loadStorePushToken(token) {
+	loadStorePushToken = (token) => {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
 
-
+		console.log("Storing Token", token)
 		const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 		if (currentMember != null) {
 			obj.setUrlId(currentMember.id)
@@ -400,7 +425,7 @@ export default class Home extends React.Component {
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			// this.setState({ loading: false })
-			
+
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
@@ -761,7 +786,7 @@ export default class Home extends React.Component {
 					onCellPress={this.onCellPress}
 				/>
 			} else if (item.clazz == "menu_banner") {
-				return <Banners banner={this.state.menu_banners} onBannerPressed={this.onBannerPressed} />
+				return <Banners banner={item.banner_images} onBannerPressed={this.onBannerPressed} />
 
 				// <BannerCell
 				// 	index={index}
@@ -1206,7 +1231,7 @@ export default class Home extends React.Component {
 	dismissProduct() {
 		this.setState({ modalVisible: false })
 	}
-	
+
 	renderModalContent = (selected_product, shop) => {
 		let select_quantity = this.state.select_quantity
 
@@ -2445,11 +2470,13 @@ const styles = StyleSheet.create({
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-		textAlign: "left",
+		textAlign: "justify",
 		backgroundColor: "transparent",
 		marginRight: 28 * alpha,
 		marginTop: 5 * alpha,
-		marginBottom: 5 * alpha
+		marginBottom: 5 * alpha,
+		lineHeight: 17 * alpha,
+
 	},
 	ingredientView: {
 		backgroundColor: "rgb(245, 245, 245)",

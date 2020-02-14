@@ -27,6 +27,7 @@ export default class Cell extends React.Component {
   onCellPress = () => {};
 
   render() {
+    console.log("Render", this.props.product_image)
     return (
       <TouchableWithoutFeedback onPress={this.onPointItemCellPress}>
         <View navigation={this.props.navigation} style={styles.pointitemcell}>
@@ -40,12 +41,8 @@ export default class Cell extends React.Component {
               justifyContent: "center"
             }}
           >
-            <Image
-              url={{
-                uri: this.props.product_image ? this.props.product_image : ""
-              }}
-              style={styles.imageImage}
-            />
+            <Image source={{ uri: this.props.product_image || null }} style={styles.imageImage} />
+            
           </View>
           <View
             pointerEvents="box-none"
@@ -119,10 +116,10 @@ const styles = StyleSheet.create({
     height: 120 * alpha
   },
   imageImage: {
-    backgroundColor: "rgb(246, 246, 246)",
+    // backgroundColor: "rgb(246, 246, 246)",
     resizeMode: "contain",
     width: 90 * alpha,
-    height: 89 * alpha,
+    height: 90 * alpha,
     marginLeft: 15 * alpha
   },
   nameText: {
