@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState, Modal, TouchableWithoutFeedback, TextInput } from "react-native"
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState, Modal, TouchableWithoutFeedback, TextInput, Platform } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
@@ -434,7 +434,7 @@ export default class Profile extends React.Component {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', 'Click', 'Feedback'))
 
-		Linking.openURL('mailto:feedback@brew9.co')
+		Linking.openURL('mailto:feedback@brew9.co?subject=Brew9 app feedback' + '(' + Platform.OS + '-' + getAppVersion() + ')')
 	}
 
 	onProfileButtonPress = () => {
