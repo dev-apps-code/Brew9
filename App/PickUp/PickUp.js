@@ -22,6 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import _ from 'lodash'
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -135,9 +136,9 @@ export default class PickUp extends React.Component {
 	}
 
 	onOrderHistoryPressed = () => {
-
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('My Order', 'Click', "Order History"))
+		analytics.event(new Event('My Order', getMemberIdForApi(currentMember), "Order History"))
 
 		const { navigate } = this.props.navigation
 		navigate("OrderHistory")
@@ -149,8 +150,9 @@ export default class PickUp extends React.Component {
 
 	onOrderPressed = () => {
 		const { navigate } = this.props.navigation
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('My Order', 'Click', "Order"))
+		analytics.event(new Event('My Order', getMemberIdForApi(currentMember), "Order"))
 
 		navigate("Home")
 	}

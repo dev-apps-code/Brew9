@@ -11,7 +11,13 @@ import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
+import { connect } from 'react-redux'
 
+@connect(({ members }) => ({
+	currentMember: members.profile,
+	members: members,
+}))
 export default class NotificationsCell extends React.Component {
 
 	constructor(props) {
@@ -25,7 +31,7 @@ export default class NotificationsCell extends React.Component {
 		if (type == "promo") {
 			const { navigate } = this.props.navigation
 			const analytics = new Analytics(ANALYTICS_ID)
-			analytics.event(new Event('Inbox', 'Click', `Promotion ${item.title}`))
+			analytics.event(new Event('Inbox', getMemberIdForApi(currentMember), `Promotion ${item.title}`))
 			navigate("PromotionDetail", {
 				details: item,
 			})
@@ -33,7 +39,7 @@ export default class NotificationsCell extends React.Component {
 		else if (type == "voucher") {
 			const { navigate } = this.props.navigation
 			const analytics = new Analytics(ANALYTICS_ID)
-			analytics.event(new Event('Inbox', 'Click', `Voucher`))
+			analytics.event(new Event('Inbox', getMemberIdForApi(currentMember), `Voucher`))
 			navigate("MemberVoucher")
 		}
 		this.props.onNotificationsCellPress(item, type)

@@ -8,11 +8,17 @@
 
 import { Text, Image, View, TouchableWithoutFeedback, StyleSheet } from "react-native"
 import React from "react"
-import {alpha, fontAlpha, windowWidth} from "../Common/size";
+import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import { TITLE_FONT } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
+import { connect } from 'react-redux'
 
+@connect(({ members }) => ({
+	currentMember: members.profile,
+	members: members,
+}))
 export default class TopUpCard extends React.Component {
 
 	constructor(props) {
@@ -28,8 +34,8 @@ export default class TopUpCard extends React.Component {
 
 	onCardPress = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Wallet Top Up', 'Click', this.props.price))
-		this.props.onPressItem(this.props.item,this.props.index);
+		analytics.event(new Event('Wallet Top Up', getMemberIdForApi(this.props.members), this.props.price))
+		this.props.onPressItem(this.props.item, this.props.index);
 		this.setState({
 			selected: this.props.selected
 		})
@@ -38,14 +44,14 @@ export default class TopUpCard extends React.Component {
 	render() {
 
 		return <TouchableWithoutFeedback
-				onPress={this.onCardPress}>
-				<View
-					navigation={this.props.navigation}
-					style={styles.cardcell}>
-					<Image
-						source={{uri: this.props.image}}
-						style={styles.cardImage}/>
-					{/* <View
+			onPress={this.onCardPress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.cardcell}>
+				<Image
+					source={{ uri: this.props.image }}
+					style={styles.cardImage} />
+				{/* <View
 						style={styles.infoView}>
 						<View
 							pointerEvents="box-none"
@@ -91,8 +97,8 @@ export default class TopUpCard extends React.Component {
 							</View>
 						</View>
 					</View> */}
-				</View>
-			</TouchableWithoutFeedback>
+			</View>
+		</TouchableWithoutFeedback>
 	}
 }
 

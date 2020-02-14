@@ -10,15 +10,16 @@ import { Image, ScrollView, Text, TouchableOpacity, View, StyleSheet } from "rea
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size"
 import { connect } from "react-redux";
-import {KURL_INFO} from "../Utils/server";
-import {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} from "../Common/common_style";
+import { KURL_INFO } from "../Utils/server";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	currentMember: members.profile,
-	members:members,
+	members: members,
 	company_id: members.company_id,
 }))
 export default class VoucherDetail extends React.Component {
@@ -27,7 +28,7 @@ export default class VoucherDetail extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Voucher Detail</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Voucher Detail</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -36,7 +37,7 @@ export default class VoucherDetail extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -50,8 +51,8 @@ export default class VoucherDetail extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			item: this.props.navigation.getParam("item",null),
-			valid : this.props.navigation.getParam("valid", false) 
+			item: this.props.navigation.getParam("item", null),
+			valid: this.props.navigation.getParam("valid", false)
 		}
 	}
 
@@ -60,11 +61,11 @@ export default class VoucherDetail extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
-    }
-    
-    onBackPressed = () => {
+	}
+
+	onBackPressed = () => {
 		this.props.navigation.goBack()
-    }
+	}
 
 	onTermsPressed = () => {
 		const { navigate } = this.props.navigation
@@ -77,59 +78,59 @@ export default class VoucherDetail extends React.Component {
 	}
 
 	onUsePessed = () => {
-		const addVoucherAction = this.props.navigation.getParam("addVoucherAction", false) 		
-		this.props.navigation.pop(2)	
+		const addVoucherAction = this.props.navigation.getParam("addVoucherAction", false)
+		this.props.navigation.pop(2)
 		const analytics = new Analytics(ANALYTICS_ID)
-      	analytics.event(new Event('Voucher', 'Click', `Use ${this.state.item.voucher.name}`))
-			
+		analytics.event(new Event('Voucher', getMemberIdForApi(this.props.currentMember), `Use ${this.state.item.voucher.name}`))
+
 		addVoucherAction(this.state.item)
 	}
 
-	renderPrice(){
+	renderPrice() {
 
 		const { members } = this.props
-		const {item} = this.state
+		const { item } = this.state
 		const display_value = item.voucher.display_value
 		const discount_type = item.voucher.discount_type
 		const discount_price = item.voucher.discount_price
-		if (display_value != null  && display_value !=='' && discount_type == 'fixed'){
+		if (display_value != null && display_value !== '' && discount_type == 'fixed') {
 
 			return (
 				<View
-				style={styles.valueView}>
-							
+					style={styles.valueView}>
+
 					<View
 						pointerEvents="box-none"
 						style={{
 							justifyContent: "center",
 						}}>
 						<Text
-							style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
+							style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2) : discount_price}</Text>
 					</View>
 				</View>
 			)
-		}else if (discount_type != null && discount_type != '' && discount_price != null && discount_price != ''){
-			if (discount_type == 'fixed'){
+		} else if (discount_type != null && discount_type != '' && discount_price != null && discount_price != '') {
+			if (discount_type == 'fixed') {
 				return (
 					<View
-					style={styles.valueView}>
-								
+						style={styles.valueView}>
+
 						<View
 							pointerEvents="box-none"
 							style={{
 								justifyContent: "center",
 							}}>
 							<Text
-								style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2): discount_price}</Text>
+								style={styles.valueText}>${discount_price != null ? parseFloat(discount_price).toFixed(2) : discount_price}</Text>
 						</View>
 					</View>
 				)
-			}else {
+			} else {
 
 				return (
 					<View
-					style={styles.valueView}>
-					 			
+						style={styles.valueView}>
+
 						<View
 							pointerEvents="box-none"
 							style={{
@@ -137,7 +138,7 @@ export default class VoucherDetail extends React.Component {
 							}}>
 							<Text
 								style={styles.valueText}>{discount_price != null ? parseInt(discount_price) : discount_price}%</Text>
-							
+
 						</View>
 					</View>
 				)
@@ -148,77 +149,77 @@ export default class VoucherDetail extends React.Component {
 	render() {
 
 		const { members } = this.props
-		const {item} = this.state
+		const { item } = this.state
 		return <View
-				style={styles.voucherDetailView}>
-				<ScrollView
-					style={styles.scrollviewScrollView}>
+			style={styles.voucherDetailView}>
+			<ScrollView
+				style={styles.scrollviewScrollView}>
+				<View
+					style={styles.voucherView}>
 					<View
-						style={styles.voucherView}>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0 * alpha,
+							right: 0 * alpha,
+							top: 0 * alpha,
+							bottom: 0 * alpha,
+							justifyContent: "center",
+						}}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 0 * alpha,
-								bottom: 0 * alpha,
-								justifyContent: "center",
-							}}>
+							style={styles.cellcontentView}>
+							<Image
+								source={require("./../../assets/images/group-5-3.png")}
+								style={styles.backgroundImage} />
 							<View
-								style={styles.cellcontentView}>
-								<Image
-									source={require("./../../assets/images/group-5-3.png")}
-									style={styles.backgroundImage}/>
+								pointerEvents="box-none"
+								style={{
+									position: "absolute",
+									left: 30 * alpha,
+									right: 31 * alpha,
+									top: 23 * alpha,
+									bottom: 11 * alpha,
+								}}>
 								<View
 									pointerEvents="box-none"
 									style={{
-										position: "absolute",
-										left: 30 * alpha,
-										right: 31 * alpha,
-										top: 23 * alpha,
-										bottom: 11 * alpha,
+										height: 25 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-start",
 									}}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											height: 25 * alpha,
-											flexDirection: "row",
-											alignItems: "flex-start",
-										}}>
-										<Text
-											style={styles.titleText}>{item.voucher.name}</Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-											{this.renderPrice()}
-									</View>
 									<Text
-										style={styles.descriptionText}>{item.voucher.description}</Text>
-									<Image
-										source={require("./../../assets/images/line-16-copy-5.png")}
-										style={styles.lineImage}/>
-									
+										style={styles.titleText}>{item.voucher.name}</Text>
 									<View
-										pointerEvents="box-none"
 										style={{
-											height: 14 * alpha,
-											flexDirection: "row",
-											alignItems: "flex-end",
-											marginTop: 10 * alpha
-										}}>
-										<Text
-											style={styles.dateText}>Expiration: <Text style={styles.highlight}>{item.available_date}</Text></Text>
-										<View
-											style={{
-												flex: 1,
-											}}/>
-									</View>
+											flex: 1,
+										}} />
+									{this.renderPrice()}
+								</View>
+								<Text
+									style={styles.descriptionText}>{item.voucher.description}</Text>
+								<Image
+									source={require("./../../assets/images/line-16-copy-5.png")}
+									style={styles.lineImage} />
+
+								<View
+									pointerEvents="box-none"
+									style={{
+										height: 14 * alpha,
+										flexDirection: "row",
+										alignItems: "flex-end",
+										marginTop: 10 * alpha
+									}}>
+									<Text
+										style={styles.dateText}>Expiration: <Text style={styles.highlight}>{item.available_date}</Text></Text>
+									<View
+										style={{
+											flex: 1,
+										}} />
 								</View>
 							</View>
 						</View>
-						{/* <View
+					</View>
+					{/* <View
 							style={styles.rm10Copy2View}>
 							<Text
 								style={styles.textText}>%</Text>
@@ -236,55 +237,55 @@ export default class VoucherDetail extends React.Component {
 									style={styles.textTwoText}>10</Text>
 							</View>
 						</View> */}
-					</View>
+				</View>
+				<View
+					style={styles.detailsView}>
 					<View
-						style={styles.detailsView}>
-						<View
-							style={styles.conditionsView}>
-							<Text
-								style={styles.titleTwoText}>Terms and Conditions</Text>
-							{/* <Text
+						style={styles.conditionsView}>
+						<Text
+							style={styles.titleTwoText}>Terms and Conditions</Text>
+						{/* <Text
 								style={styles.usableshopText}>Shop</Text>
 							<Text
 								style={styles.usableshopcontentText}>- Usable on all Brew9 Shop in Brunei</Text> */}
-							<Text
-								style={styles.usabletimeText}>Applicable Time Period</Text>
-							<Text
-								style={styles.usabletimecontentText}>- {item.voucher.when_use}</Text>
-							{/* <Text
+						<Text
+							style={styles.usabletimeText}>Applicable Time Period</Text>
+						<Text
+							style={styles.usabletimecontentText}>- {item.voucher.when_use}</Text>
+						{/* <Text
 								style={styles.usableitemText}>Applicable Items</Text>
 							<Text
 								style={styles.usableitemcontentText}>- All Hot Drinks</Text> */}
-							{ (item.voucher.how_to_use != null && item.voucher.how_to_use != '') ? 
-							<View> 
+						{(item.voucher.how_to_use != null && item.voucher.how_to_use != '') ?
+							<View>
 								<Text style={styles.usablescenarioText}>How to use</Text>
-								<Text style={styles.usablescenariocontentText}> 
+								<Text style={styles.usablescenariocontentText}>
 									{item.voucher.how_to_use}
 								</Text>
-								</View>
-							: undefined}	
-							{ (item.voucher.terms != null && item.voucher.terms != '') ?
-								<View> 
-									<Text style={styles.usablescenarioText}>
-										Terms and Conditions
+							</View>
+							: undefined}
+						{(item.voucher.terms != null && item.voucher.terms != '') ?
+							<View>
+								<Text style={styles.usablescenarioText}>
+									Terms and Conditions
 									</Text>
-									<Text style={styles.usablescenariocontentText}>
-										{item.voucher.terms}
-									</Text>
-								</View>
-							: undefined}								
-						</View>
+								<Text style={styles.usablescenariocontentText}>
+									{item.voucher.terms}
+								</Text>
+							</View>
+							: undefined}
 					</View>
-				</ScrollView>
-				{ this.state.valid ? 
-					<TouchableOpacity
+				</View>
+			</ScrollView>
+			{this.state.valid ?
+				<TouchableOpacity
 					onPress={this.onUsePessed}
 					style={styles.useButton}>
 					<Text
 						style={styles.useButtonText}>Apply Voucher</Text>
 				</TouchableOpacity>
-				 : undefined }			
-			</View>
+				: undefined}
+		</View>
 	}
 }
 
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		backgroundColor: "transparent",
 		marginTop: 1 * alpha,

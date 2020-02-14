@@ -185,7 +185,7 @@ export default class MemberVoucher extends React.Component {
 		const { valid_initial, valid_data, valid_page } = this.state
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Voucher', 'Click', 'Available Tab'))
+		analytics.event(new Event('Voucher', getMemberIdForApi(this.props.members), 'Available Tab'))
 
 
 		if (valid_initial) {
@@ -208,7 +208,7 @@ export default class MemberVoucher extends React.Component {
 		const { used_initial, used_data, used_page } = this.state
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Voucher', 'Click', 'Use Tab'))
+		analytics.event(new Event('Voucher', getMemberIdForApi(this.props.members), 'Use Tab'))
 
 		if (used_initial) {
 			this.loadUsedVoucher(used_page)
@@ -230,7 +230,7 @@ export default class MemberVoucher extends React.Component {
 		const { expired_initial, expired_data, expired_page } = this.state
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Voucher', 'Click', 'Expire Tab'))
+		analytics.event(new Event('Voucher', getMemberIdForApi(this.props.members), 'Expire Tab'))
 
 
 		if (expired_initial) {
