@@ -1585,8 +1585,15 @@ export default class Home extends React.Component {
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
-								initialNumToRender={6}
-								onScrollToIndexFailed={(info) => { /* handle error here /*/ }}
+								initialNumToRender={this.state.products.length / 5}
+								onScrollToIndexFailed={(error) => {
+									this.flatListRef.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
+									setTimeout(() => {
+										if (this.state.products.length !== 0 && this.flatListRef !== null) {
+											this.flatListRef.scrollToIndex({ index: error.index, animated: true });
+										}
+									}, 5);
+								}}
 								ref={(ref) => { this.flatListRef = ref }}
 								style={styles.productlistFlatList}
 								refreshing={this.state.isRefreshing}
