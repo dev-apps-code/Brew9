@@ -1,10 +1,10 @@
 {
-  "devToolsPort": 19003,
+  "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19002,
-  "packagerPid": 81529,
+  "packagerPort": 19001,
+  "packagerPid": 2213,
   "expoServerNgrokUrl": "https://z2-h53.tonyvoon.brew9-app.exp.direct",
   "packagerNgrokUrl": "https://packager.z2-h53.tonyvoon.brew9-app.exp.direct",
-  "ngrokPid": 81547,
+  "ngrokPid": 2243,
   "webpackServerPort": null
 }

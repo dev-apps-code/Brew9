@@ -4,13 +4,13 @@ import {Platform} from "react-native"
 // export const KURL_INFO = "https://app.brew9.co/info"
 // export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
-export const KSERVERURL = "http://test.brew9.co/api"
-export const KURL_INFO = "http://test.brew9.co/info"
-export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
+// export const KSERVERURL = "http://test.brew9.co/api"
+// export const KURL_INFO = "http://test.brew9.co/info"
+// export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
 
-// export const KSERVERURL ='http://localhost:3000/api'
-// export const KURL_INFO ='http://localhost:3000/info'
-// export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
+export const KSERVERURL ='http://localhost:3000/api'
+export const KURL_INFO ='http://localhost:3000/info'
+export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
 
 // export const KPAYMENTYURL ='http://payment.brew9.com'
 // export const KSERVERURL ='https://18624bd1.ngrok.io/api'
@@ -21,8 +21,8 @@ export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
 export const KCURRENT_API_VERSION_HEADER = "application/dc.v4 gzip";
-export const APPBUILDVERSIONIOS = "8";
-export const APPBUILDVERSIONANDROID = "8";
+export const APPBUILDVERSIONIOS = "10";
+export const APPBUILDVERSIONANDROID = "10";
 
 export const KTIMEOUT = 3 * 1000;
 
