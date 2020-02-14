@@ -60,6 +60,7 @@ export default class WebCommonModal extends React.Component {
     return (
       <View style={styles.mainView}>
         <WebView
+          useWebKit={true}
           style={styles.webviewWebView}
           source={{ uri: this.props.navigation.getParam("web_url", "") }}
         />

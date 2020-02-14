@@ -127,11 +127,13 @@ export default class PointShopItem extends React.Component {
 	render() {
 
 		const { data } = this.state
-
+		const item = this.props.navigation.getParam("item", "")
+		
+		console.log("item", item)
 		return <View
 			style={styles.pointItemView}>
 			<Image
-				source={{ uri: data.image }}
+				source={{ uri: item.image || null}}
 				style={styles.productimageImage} />
 			<View
 				pointerEvents="box-none"

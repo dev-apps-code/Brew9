@@ -11,7 +11,7 @@
         "client_id": "android:host.exp.exponent",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.brew9.brew9",
+          "package_name": "com.brew9.brew9android",
           "certificate_hash": ""
         }
       },
