@@ -1196,7 +1196,7 @@ export default class Checkout extends React.Component {
 					</TouchableOpacity>
 
 					<Image
-						source={require("./../../assets/images/group-109-copy.png")}
+						source={require("./../../assets/images/dotted-line.png")}
 						style={styles.dottedLineImage} />
 				</View>
 			</View>
@@ -1371,7 +1371,7 @@ export default class Checkout extends React.Component {
 						</TouchableOpacity>
 					)}
 					{item.id != last_item.id && (<Image
-						source={require("./../../assets/images/group-109-copy.png")}
+						source={require("./../../assets/images/dotted-line.png")}
 						style={styles.dottedLineImage} />)}
 
 				</View>
@@ -1695,7 +1695,7 @@ export default class Checkout extends React.Component {
 										onPress={() => this.onCallPressed(selectedShop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-23.png")}
+											source={require("./../../assets/images/call-Icon.png")}
 											style={styles.callIconButtonImage} />
 									</TouchableOpacity>
 									<View
@@ -1712,7 +1712,7 @@ export default class Checkout extends React.Component {
 										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-17.png")}
+											source={require("./../../assets/images/direction-Icon.png")}
 											style={styles.directionIconButtonImage} />
 									</TouchableOpacity>
 									<View
