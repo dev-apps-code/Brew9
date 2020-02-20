@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Image, Text, TextInput, StyleSheet, AppState, Linking, Modal, TouchableWithoutFeedback, TouchableOpacity } from "react-native"
+import { View, Image, Text, TextInput, StyleSheet, AppState, Linking, Modal, TouchableWithoutFeedback, TouchableOpacity, Platform } from "react-native"
 if (Text.defaultProps == null) Text.defaultProps = {};
 Text.defaultProps.allowFontScaling = false;
 if (TextInput.defaultProps == null) TextInput.defaultProps = {};
@@ -22,6 +22,10 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, P
 import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import KochavaTracker from 'react-native-kochava-tracker';
 import { getMemberIdForApi } from '../Services/members_helper'
+import { getAppVersion, getBuildVersion } from "../Utils/server";
+
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import { ANALYTICS_ID } from "../Common/config"
 
 @connect(({ members }) => ({
     members: members.profile,
@@ -52,7 +56,11 @@ export default class FirstScreen extends React.Component {
 
 
     componentDidMount() {
+        let platform = Platform.OS
         const { dispatch } = this.props
+        const analytics = new Analytics(ANALYTICS_ID)
+        analytics.event(new Event('FirstScreen', 'Launch', platform, getAppVersion()))
+
         dispatch(createAction('members/loadCurrentUserFromCache')({}))
         AppState.addEventListener('change', this._handleAppStateChange);
         var configMapObject = {}
