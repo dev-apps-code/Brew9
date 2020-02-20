@@ -1231,6 +1231,14 @@ export default class Home extends React.Component {
 	dismissProduct() {
 		this.setState({ modalVisible: false })
 	}
+	getVariantPrice = (price) => {
+		let sen = (price + "").split(".");
+		if (sen[1] == 0) {
+			return parseInt(price)
+		} else {
+			return parseFloat(price).toFixed(2)
+		}
+	}
 
 	renderModalContent = (selected_product, shop) => {
 		let select_quantity = this.state.select_quantity
@@ -1274,9 +1282,8 @@ export default class Home extends React.Component {
 					style={styles.optionchoiceView}>
 					{
 						item.variant_values.map((value, value_key) => {
-
 							var selected = selected_variants.includes(value)
-
+							var price = this.getVariantPrice(value.price)
 							return <TouchableOpacity
 								key={value_key}
 								onPress={() => this.onVariantPressed(selected_product, selected_variants, key, value, required_variant)}
@@ -1285,7 +1292,7 @@ export default class Home extends React.Component {
 									source={require("./../../assets/images/star.png")}
 									style={styles.recommendedStarImage} />)}
 								<Text
-									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} <Text style={{ color: selected ? 'white' : PRIMARY_COLOR }}>{value.price > 0 && (`$${parseInt(value.price)}`)}</Text></Text>
+									style={selected ? styles.selectedButtonText : styles.unselectedButtonText}>{value.value} <Text style={{ color: selected ? 'white' : PRIMARY_COLOR }}>{value.price > 0 && (`$${price}`)}</Text></Text>
 							</TouchableOpacity>
 						})
 					}
@@ -1352,7 +1359,7 @@ export default class Home extends React.Component {
 					{variants}
 				</ScrollView>
 				{
-					(selected_product.price > 0.00 && selected_product.price) ?
+					(selected_product.calculated_price > 0.00 && selected_product.calculated_price) ?
 						<View
 							style={styles.bottomView}>
 							<View
@@ -1362,7 +1369,7 @@ export default class Home extends React.Component {
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 32 * alpha,
+										// height: 32 * alpha,
 										flexDirection: "row",
 										// alignItems: "center",
 									}}>
@@ -1603,8 +1610,15 @@ export default class Home extends React.Component {
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
-								initialNumToRender={6}
-								onScrollToIndexFailed={(info) => { /* handle error here /*/ }}
+								initialNumToRender={this.state.products.length / 5}
+								onScrollToIndexFailed={(error) => {
+									this.flatListRef.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
+									setTimeout(() => {
+										if (this.state.products.length !== 0 && this.flatListRef !== null) {
+											this.flatListRef.scrollToIndex({ index: error.index, animated: true });
+										}
+									}, 5);
+								}}
 								ref={(ref) => { this.flatListRef = ref }}
 								style={styles.productlistFlatList}
 								refreshing={this.state.isRefreshing}
@@ -2433,7 +2447,7 @@ const styles = StyleSheet.create({
 	contentScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginTop: 5 * alpha,
+		marginVertical: 5 * alpha,
 		maxHeight: 250 * alpha,
 	},
 	productView: {
@@ -2743,7 +2757,9 @@ const styles = StyleSheet.create({
 	},
 	bottomView: {
 		backgroundColor: "transparent",
-		height: 113 * alpha,
+		// backgroundColor: "red",
+		// height: 113 * alpha,
+		// marginTop: 5 * alpha,
 		justifyContent: "flex-end",
 	},
 	lineView: {
@@ -2754,7 +2770,7 @@ const styles = StyleSheet.create({
 	},
 	summaryView: {
 		backgroundColor: "transparent",
-		height: 37 * alpha,
+		// height: 37 * alpha,
 		marginLeft: 20 * alpha,
 		marginRight: 20 * alpha,
 		marginBottom: 12 * alpha,
@@ -2832,6 +2848,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		alignSelf: "flex-start",
 		marginLeft: 1 * alpha,
+		marginTop: 1 * alpha,
 	},
 	normal: {
 		backgroundColor: "rgb(0, 178, 227)",
