@@ -22,6 +22,7 @@ import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -275,6 +276,10 @@ export default class Checkout extends React.Component {
 					this.setState({
 						valid_vouchers: eventObject.result
 					})
+					var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (o) { if (o.is_valid == true) return o }).length;
+					const analytics = new Analytics(ANALYTICS_ID)
+					analytics.event(new Event('Valid Voucher', getMemberIdForApi(currentMember), valid_voucher_counts))
+
 				}
 			}
 
@@ -535,9 +540,9 @@ export default class Checkout extends React.Component {
 			}
 		}
 		const f_price = discount_cart_total - discount
-		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function(){
+		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function () {
 			if (selected_payment == "credit_card" && f_price <= 0) {
-				this.setState({ selected_payment: ''})
+				this.setState({ selected_payment: '' })
 			}
 		})
 	}
@@ -698,7 +703,7 @@ export default class Checkout extends React.Component {
 		const { currentMember, selectedShop } = this.props
 		var credit_card_message = "System is in process of upgrading. Please select other payment options for now."
 		if (selectedShop.response_message != undefined) {
-			credit_card_response = _.find(selectedShop.response_message, function(obj) {
+			credit_card_response = _.find(selectedShop.response_message, function (obj) {
 				return obj.key === "Credit Card Disabled";
 			})
 			if (credit_card_message != undefined) {
@@ -746,7 +751,7 @@ export default class Checkout extends React.Component {
 					var insufficient = "Oops, insufficient credit.\nPlease select other payment option."
 
 					if (selectedShop.response_message != undefined) {
-						insufficient_response = _.find(selectedShop.response_message, function(obj) {
+						insufficient_response = _.find(selectedShop.response_message, function (obj) {
 							return obj.key === "Popup - Insufficient credit";
 						})
 						if (insufficient_response != undefined) {
