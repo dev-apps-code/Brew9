@@ -30,6 +30,7 @@ import { Image as ExpoImage } from "react-native-expo-image-cache";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
 import moment from 'moment';
 import { getMemberIdForApi } from '../Services/members_helper'
+import Brew9Modal from '../Components/Brew9Modal'
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -85,6 +86,7 @@ export default class MemberProfile extends React.Component {
 			selected_image: null,
 			has_send_code: false,
 			member_have_dob: false,
+			birthdayAlert: false
 		}
 	}
 
@@ -113,6 +115,7 @@ export default class MemberProfile extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
+			console.log('eventobject', eventObject)
 			if (eventObject.success) {
 				this.refs.toast.show("Profile updated successfully", TOAST_DURATION)
 
@@ -367,6 +370,10 @@ export default class MemberProfile extends React.Component {
 			}
 			this.loadUpdateProfile(profileFormData)
 		}
+	}
+	onChangeBirthdate = (dob) => {
+		this.setState({ dob: dob, birthdayAlert: true })
+
 	}
 
 	renderModalContent = () => (
@@ -789,7 +796,7 @@ export default class MemberProfile extends React.Component {
 								}
 
 							}}
-							onDateChange={(dob) => { this.setState({ dob: dob }) }}
+							onDateChange={(dob) => { this.onChangeBirthdate(dob) }}
 						/>
 						{/*<TextInput*/}
 						{/*	autoCorrect={false}*/}
@@ -813,6 +820,12 @@ export default class MemberProfile extends React.Component {
 					avoidKeyboard={true}>
 					{this.renderModalContent()}
 				</Modal>
+				<Brew9Modal visible={this.state.birthdayAlert}
+					cancelable={true}
+					title={"Birthday alert "}
+					description={"Once you enter your birthday date, you can not update it again. Please make sure your birthday is correct!"}
+					okayButtonAction={() => { this.setState({ birthdayAlert: false }) }}
+					cancelButtonAction={() => this.setState({ birthdayAlert: false, dob: "" })} />
 
 			</View>
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
