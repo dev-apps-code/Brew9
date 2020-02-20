@@ -104,7 +104,7 @@ export default class ProductCell extends React.Component {
       });
     }
 
-
+    var hasDiscount = this.props.productDiscountPrice > 0.00 && this.props.productDiscountPrice ? true : false
     var hasPrice = this.props.productprice > 0.00 && this.props.productprice ? true : false
     const uri = this.props.productimage
     return (
@@ -161,9 +161,9 @@ export default class ProductCell extends React.Component {
                     style={styles.recommendedStarImage} />
                 )}
               </Text>
-              {/* <View style={styles.promoBox}>
-                <Text style={styles.promoBoxText}>Discount</Text>
-              </View> */}
+              {this.props.productDiscountTitle && <View style={styles.promoBox}>
+                <Text style={styles.promoBoxText}>{this.props.productDiscountTitle}</Text>
+              </View>}
               <View
                 pointerEvents="box-none"
                 style={{
@@ -184,13 +184,20 @@ export default class ProductCell extends React.Component {
                   flex: 1
                 }}
               />
-              {hasPrice&&<View style={{ flexDirection: 'row' }}>
+              {hasPrice && !hasDiscount && <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.priceText}>
                   {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
                 </Text>
-                {/* <Text style={styles.discountPriceText}>
+
+              </View>}
+              {hasDiscount && hasPrice && <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.priceText}>
+                  {hasPrice ? `$${parseFloat(this.props.productDiscountPrice).toFixed(2)}` : ""}
+                </Text>
+
+                <Text style={styles.discountPriceText}>
                   {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
-                </Text> */}
+                </Text>
               </View>}
             </View>
           }
@@ -207,15 +214,17 @@ export default class ProductCell extends React.Component {
 
 const styles = StyleSheet.create({
   promoBox: {
-    backgroundColor: '#e5efe5',
-    padding: 2 * alpha,
+    backgroundColor: '#fde9f1',
+    paddingVertical: 2 * alpha,
     marginVertical: 2 * alpha,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    borderRadius: 5 * alpha
   },
   promoBoxText: {
-    color: '#006400',
+    color: '#f05071',
+    paddingHorizontal: 4 * alpha,
     fontFamily: TITLE_FONT,
-    fontSize: 10 * fontAlpha,
+    fontSize: 11 * fontAlpha,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: 'left',
