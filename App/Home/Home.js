@@ -174,7 +174,7 @@ export default class Home extends React.Component {
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
 		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
-		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", {kOSSettingsKeyAutoPrompt : true});// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", { kOSSettingsKeyAutoPrompt: true });// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
 
 		OneSignal.addEventListener('received', this.onReceived);
 		OneSignal.addEventListener('opened', this.onOpened);
@@ -353,14 +353,14 @@ export default class Home extends React.Component {
 	onReceived(notification) {
 		// console.log("Notification received: ", notification);
 	}
-	
+
 	onOpened(openResult) {
 		// console.log('Message: ', openResult.notification.payload.body);
 		// console.log('Data: ', openResult.notification.payload.additionalData);
 		// console.log('isActive: ', openResult.notification.isAppInFocus);
 		// console.log('openResult: ', openResult);
 	}
-	
+
 	onIds(device) {
 		// console.log('Device info: ', device);
 		this.loadStorePushToken(device.userId)
@@ -771,6 +771,8 @@ export default class Home extends React.Component {
 					item={item}
 					productname={item.name}
 					productprice={item.price}
+					productDiscountTitle={item.discount_title}
+					productDiscountPrice={item.discount_value}
 					productimage={item.middle}
 					productquantity={item.quantity}
 					productsummary={item.summary}
