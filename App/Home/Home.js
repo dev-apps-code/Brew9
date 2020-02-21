@@ -66,6 +66,7 @@ import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
+import ImageCell from './ImageCell';
 
 @connect(({ members, shops, config, orders }) => ({
 	currentMember: members.profile,
@@ -169,12 +170,12 @@ export default class Home extends React.Component {
 			distance: "-",
 			member_distance: 1000,
 			first_promo_popup: false,
-			popUpVisible: false
+			popUpVisible: false,
 		}
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
 		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
-		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", {kOSSettingsKeyAutoPrompt : true});// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", { kOSSettingsKeyAutoPrompt: true });// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
 
 		OneSignal.addEventListener('received', this.onReceived);
 		OneSignal.addEventListener('opened', this.onOpened);
@@ -353,14 +354,14 @@ export default class Home extends React.Component {
 	onReceived(notification) {
 		// console.log("Notification received: ", notification);
 	}
-	
+
 	onOpened(openResult) {
 		// console.log('Message: ', openResult.notification.payload.body);
 		// console.log('Data: ', openResult.notification.payload.additionalData);
 		// console.log('isActive: ', openResult.notification.isAppInFocus);
 		// console.log('openResult: ', openResult);
 	}
-	
+
 	onIds(device) {
 		// console.log('Device info: ', device);
 		this.loadStorePushToken(device.userId)
@@ -425,7 +426,6 @@ export default class Home extends React.Component {
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			// this.setState({ loading: false })
-
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
@@ -1319,12 +1319,9 @@ export default class Home extends React.Component {
 				</TouchableOpacity>
 
 			</View>
-			<View
-				style={styles.imageblockView}>
-				<Image
-					source={{ uri: selected_product.image.url }}
-					style={styles.productimageImage} />
-			</View>
+
+			<ImageCell image={selected_product.image} />
+
 			<View
 				pointerEvents="box-none">
 				<ScrollView
