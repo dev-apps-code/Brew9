@@ -66,6 +66,7 @@ import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
+import { getMemberIdForApi } from '../Services/members_helper'
 import ImageCell from './ImageCell';
 
 @connect(({ members, shops, config, orders }) => ({
@@ -187,7 +188,7 @@ export default class Home extends React.Component {
 		const { currentMember } = this.props
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "ScanQr"))
+		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "ScanQr"))
 
 		if (currentMember != null) {
 			navigation.navigate("ScanQr")
@@ -527,7 +528,7 @@ export default class Home extends React.Component {
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
-			analytics.event(new Event('Home', 'Click', "Checkout"))
+			analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Checkout"))
 			// if (member_distance > shop.max_order_distance_in_km) {
 			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
 			// 	return
@@ -572,7 +573,7 @@ export default class Home extends React.Component {
 	onBannerPressed = (item, index) => {
 		// const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "Featured Promo"))
+		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Featured Promo"))
 		if (item.banner_detail_image != undefined && item.banner_detail_image != "") {
 			this.setState({
 				selected_promotion: item.banner_detail_image
@@ -587,7 +588,7 @@ export default class Home extends React.Component {
 
 	_toggleDelivery = (value) => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "Delivery"))
+		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Delivery"))
 		if (value == 1) {
 
 			this.refs.toast.show("Delivery not available yet", TOAST_DURATION, () => {
@@ -649,7 +650,7 @@ export default class Home extends React.Component {
 
 		const { isToggleShopLocation, dispatch } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "Location"))
+		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Location"))
 		if (isToggleShopLocation) {
 			dispatch(createAction("config/setToggleShopLocation")(false))
 		} else {
@@ -679,7 +680,7 @@ export default class Home extends React.Component {
 
 	toogleCart = (isUpdate, toggleOn) => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', 'Click', "View Cart"))
+		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "View Cart"))
 
 		if (isUpdate) {
 			// if (cart.length > 0) {

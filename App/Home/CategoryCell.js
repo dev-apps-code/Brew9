@@ -18,7 +18,13 @@ import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
+import { connect } from 'react-redux'
 
+@connect(({ members }) => ({
+  currentMember: members.profile,
+  members: members,
+}))
 export default class CategoryCell extends React.Component {
   constructor(props) {
     super(props);
@@ -28,7 +34,7 @@ export default class CategoryCell extends React.Component {
 
   onCategoryCellPress = () => {
     const analytics = new Analytics(ANALYTICS_ID)
-    analytics.event(new Event('Category', 'Click', this.props.categoryname))
+    analytics.event(new Event('Category', getMemberIdForApi(this.props.currentMember), this.props.categoryname))
     this.props.onSelectCategory(this.props.scrollIndex, this.props.index);
   };
 

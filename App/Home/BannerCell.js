@@ -11,7 +11,13 @@ import { TouchableWithoutFeedback, Image, View, StyleSheet } from "react-native"
 import { alpha, fontAlpha } from "../Common/size";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
+import { connect } from 'react-redux'
 
+@connect(({ members }) => ({
+    currentMember: members.profile,
+    members: members,
+}))
 export default class BannerCell extends React.Component {
 
     constructor(props) {
@@ -24,7 +30,7 @@ export default class BannerCell extends React.Component {
 
     onBannerCellPress = () => {
         const analytics = new Analytics(ANALYTICS_ID)
-        analytics.event(new Event('Banner', 'Click', `${this.props.bannerDescription}`))
+        analytics.event(new Event('Banner', getMemberIdForApi(this.props.currentMember), `${this.props.bannerDescription}`))
         this.props.onPressItem(this.props.item, this.props.index)
     }
 

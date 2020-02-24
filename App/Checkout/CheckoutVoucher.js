@@ -19,6 +19,7 @@ import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops }) => ({
     currentMember: members.profile,
@@ -31,7 +32,7 @@ export default class CheckoutVoucher extends React.Component {
 
         const { params = {} } = navigation.state
         return {
-            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Vouchers</Text>,
+            headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Vouchers</Text>,
             headerTintColor: "black",
             headerLeft: <View
                 style={styles.headerLeftContainer}>
@@ -199,9 +200,9 @@ export default class CheckoutVoucher extends React.Component {
 
     onHowToUsePressed = () => {
         const { navigate } = this.props.navigation
-        const { company_id } = this.props
+        const { company_id, currentMember } = this.props
         const analytics = new Analytics(ANALYTICS_ID)
-        analytics.event(new Event('Voucher', 'Click', 'How to use'))
+        analytics.event(new Event('Voucher', getMemberIdForApi(currentMember), 'How to use'))
 
         navigate("WebCommon", {
             title: 'How To Use',
