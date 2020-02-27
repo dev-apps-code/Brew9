@@ -170,7 +170,8 @@ export default class Home extends React.Component {
 			distance: "-",
 			member_distance: 1000,
 			first_promo_popup: false,
-			popUpVisible: false
+			popUpVisible: false,
+			scroll_Index: null
 		}
 		this.renderBottom = false
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
@@ -602,20 +603,17 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-
 		let data = [...this.state.data]
-
-		this.setState({ data, selected_category: selected_index })
+		this.setState({ data, selected_category: selected_index, scroll_Index: scroll_index })
 		if (scroll_index < this.state.products.length) {
 			this.flatListRef.scrollToIndex({ animated: true, index: scroll_index })
 		}
 	}
 
 	reachProductIndex = (viewableItems, changed) => {
-
+		console.log('this.state.scroll_Index', this.state.scroll_Index)
 		let viewable = viewableItems.viewableItems
 		let data = [...this.state.data]
-
 		var first_index = viewable[0].index
 		var last_index = viewable[viewable.length - 1].index
 
@@ -632,8 +630,15 @@ export default class Home extends React.Component {
 			}
 			else if (data[parseInt(next_index)]) {
 				if (second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index)) {
-					data[index].selected = true
-					break
+					if (this.state.scroll_Index != null) {
+						if (this.state.scroll_Index == data[index].scroll_index) {
+							data[index].selected = true
+							break
+						}
+					} else {
+						data[index].selected = true
+						break
+					}
 				}
 			} else {
 				data[data.length - 1].selected = true
@@ -1622,6 +1627,7 @@ export default class Home extends React.Component {
 								refreshing={this.state.isRefreshing}
 								onRefresh={this.onRefresh.bind(this)}
 								onViewableItemsChanged={this.reachProductIndex}
+								onScrollBeginDrag={() => { this.setState({ scroll_Index: null }) }}
 								keyExtractor={(item, index) => index.toString()} />
 						}
 					</View>
