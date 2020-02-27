@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 10 * alpha,
   },
-  productimageImage: {
+  productimageImage: { 
     backgroundColor: "transparent",
     resizeMode: "cover",
     width: 74 * alpha,
