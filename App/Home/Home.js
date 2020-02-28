@@ -178,7 +178,7 @@ export default class Home extends React.Component {
 		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
 		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", { kOSSettingsKeyAutoPrompt: true });// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
 
-		OneSignal.addEventListener('received', this.onReceived.bind(this));
+		OneSignal.addEventListener('received', this.onReceived);
 		OneSignal.addEventListener('opened', this.onOpened.bind(this));
 		OneSignal.addEventListener('ids', this.onIds.bind(this));
 	}
@@ -186,7 +186,6 @@ export default class Home extends React.Component {
 	onQrScanPressed = () => {
 		const { navigation } = this.props
 		const { currentMember } = this.props
-
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "ScanQr"))
 
@@ -354,19 +353,12 @@ export default class Home extends React.Component {
 
 	onReceived(notification) {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Push Notification', getMemberIdForApi(this.props.currentMember), "Received"))
-
-		// console.log("Notification received: ", notification);
+		analytics.event(new Event('Push Notification', "Received", notification.payload.body))
 	}
 
 	onOpened(openResult) {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Push Notification', getMemberIdForApi(this.props.currentMember), "Open"))
-
-		// console.log('Message: ', openResult.notification.payload.body);
-		// console.log('Data: ', openResult.notification.payload.additionalData);
-		// console.log('isActive: ', openResult.notification.isAppInFocus);
-		// console.log('openResult: ', openResult);
+		analytics.event(new Event('Push Notification', "Open", openResult.notification.payload.body))
 	}
 
 	onIds(device) {
@@ -1614,7 +1606,7 @@ export default class Home extends React.Component {
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
-								initialNumToRender={this.state.products.length / 5}
+								initialNumToRender={5}
 								onScrollToIndexFailed={(error) => {
 									this.flatListRef.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
 									setTimeout(() => {
