@@ -23,6 +23,7 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT_CROWN, TABBAR_ACTIVE_T
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import MissionBadgeIcon from "./MissionBadgeIcon"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -50,12 +51,14 @@ export default class MissionCenter extends React.Component {
     }
 
     static tabBarItemOptions = (navigation, store) => {
+        const state = store.getState()
+        members = state.members.profile
 
         return {
             tabBarLabel: "Rewards",
             tabBarOnPress: ({ navigation, defaultHandler }) => {
                 const analytics = new Analytics(ANALYTICS_ID)
-                analytics.event(new Event('Profile', 'Click', "Mission Center"))
+                analytics.event(new Event('Profile', getMemberIdForApi(members), "Mission Center"))
                 store.dispatch(createAction("config/setToggleShopLocation")(false))
                 store.dispatch(createAction("config/setTab")("mission"))
                 defaultHandler()
@@ -245,7 +248,7 @@ export default class MissionCenter extends React.Component {
         const { currentMember, navigation } = this.props
         const { navigate } = this.props.navigation
         const analytics = new Analytics(ANALYTICS_ID)
-        analytics.event(new Event('Mission Center', 'Click', "Claim Reward"))
+        analytics.event(new Event('Mission Center', getMemberIdForApi(currentMember), "Claim Reward"))
 
         if (currentMember == null) {
             navigate("VerifyUser", {

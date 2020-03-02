@@ -22,6 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import _ from 'lodash'
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -135,9 +136,9 @@ export default class PickUp extends React.Component {
 	}
 
 	onOrderHistoryPressed = () => {
-
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('My Order', 'Click', "Order History"))
+		analytics.event(new Event('My Order', getMemberIdForApi(currentMember), "Order History"))
 
 		const { navigate } = this.props.navigation
 		navigate("OrderHistory")
@@ -149,8 +150,9 @@ export default class PickUp extends React.Component {
 
 	onOrderPressed = () => {
 		const { navigate } = this.props.navigation
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('My Order', 'Click', "Order"))
+		analytics.event(new Event('My Order', getMemberIdForApi(currentMember), "Order"))
 
 		navigate("Home")
 	}
@@ -246,7 +248,7 @@ export default class PickUp extends React.Component {
 							<Text
 								style={styles.productPriceText}>{price_string}</Text>
 							{item.order_items != null && key < item.order_items.length - 1 && (<Image
-								source={require("./../../assets/images/group-109-copy.png")}
+								source={require("./../../assets/images/dotted-line.png")}
 								style={styles.dottedLineImage} />)}
 						</View>
 					</View>
@@ -290,7 +292,7 @@ export default class PickUp extends React.Component {
 							<Text
 								style={styles.productPriceText}>{promotion_discount}</Text>
 							{item.promotions != null && key < item.promotions.length - 1 && (<Image
-								source={require("./../../assets/images/group-109-copy.png")}
+								source={require("./../../assets/images/dotted-line.png")}
 								style={styles.dottedLineImage} />)}
 						</View>
 					</View>
@@ -330,7 +332,7 @@ export default class PickUp extends React.Component {
 						<Text
 							style={styles.productPriceText}>{voucher_discount}</Text>
 						{item.voucher_items != null && key < item.voucher_items.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
+							source={require("./../../assets/images/dotted-line.png")}
 							style={styles.dottedLineImage} />)}
 					</View>
 				</View>
@@ -407,7 +409,7 @@ export default class PickUp extends React.Component {
 							<View
 								style={styles.orderedView}>
 								<Image
-									source={require("./../../assets/images/group-9-copy-13.png")}
+									source={require("./../../assets/images/ordered-icon.png")}
 									style={item.status === "pending" ? styles.orderedSelectedImage : styles.orderedImage} />
 								<View
 									style={{
@@ -417,12 +419,12 @@ export default class PickUp extends React.Component {
 									style={item.status === "pending" ? styles.orderedSelectedText : styles.orderedText}>Ordered</Text>
 							</View>
 							<Image
-								source={require("./../../assets/images/group-11-copy-5.png")}
+								source={require("./../../assets/images/divider.png")}
 								style={styles.dividerImage} />
 							<View
 								style={styles.processingView}>
 								<Image
-									source={require("./../../assets/images/group-13-11.png")}
+									source={require("./../../assets/images/preparing.png")}
 									style={item.status === "processing" ? styles.processingSelectedImage : styles.processingImage} />
 								<View
 									style={{
@@ -432,12 +434,12 @@ export default class PickUp extends React.Component {
 									style={item.status === "processing" ? styles.processingSelectedText : styles.processingText}>Preparing</Text>
 							</View>
 							<Image
-								source={require("./../../assets/images/group-11-copy-5.png")}
+								source={require("./../../assets/images/divider.png")}
 								style={styles.dividerImage} />
 							<View
 								style={styles.pickUpView}>
 								<Image
-									source={require("./../../assets/images/group-7-copy-8.png")}
+									source={require("./../../assets/images/ordered-ready.png")}
 									style={item.status === "ready" ? styles.pickupSelectedImage : styles.pickupImage} />
 								<View
 									style={{
@@ -492,7 +494,7 @@ export default class PickUp extends React.Component {
 									onPress={() => this.onCallPressed(item.shop.phone_no)}
 									style={styles.callIconButton}>
 									<Image
-										source={require("./../../assets/images/group-3-23.png")}
+										source={require("./../../assets/images/call-Icon.png")}
 										style={styles.callIconButtonImage} />
 								</TouchableOpacity>
 								<View
@@ -509,7 +511,7 @@ export default class PickUp extends React.Component {
 									onPress={() => this.onLocationButtonPressed()}
 									style={styles.directionIconButton}>
 									<Image
-										source={require("./../../assets/images/group-3-17.png")}
+										source={require("./../../assets/images/direction-Icon.png")}
 										style={styles.directionIconButtonImage} />
 								</TouchableOpacity>
 								<View

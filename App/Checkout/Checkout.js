@@ -22,6 +22,7 @@ import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -125,7 +126,7 @@ export default class Checkout extends React.Component {
 	setTimePickerDefault() {
 
 		const { selectedShop } = this.props
-		var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm')
+		var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
 		var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm')
 		var time_now = Moment(new Date(), 'h:mm')
 
@@ -382,8 +383,9 @@ export default class Checkout extends React.Component {
 
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
+		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Checkout', 'Click', "Select Voucher"))
+		analytics.event(new Event('Checkout', getMemberIdForApi(currentMember), "Select Voucher"))
 		navigate("CheckoutVoucher", { valid_vouchers: this.state.valid_vouchers, cart: this.props.cart, addVoucherAction: this.addVoucherItemsToCart })
 	}
 
@@ -535,16 +537,16 @@ export default class Checkout extends React.Component {
 			}
 		}
 		const f_price = discount_cart_total - discount
-		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function(){
+		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function () {
 			if (selected_payment == "credit_card" && f_price <= 0) {
-				this.setState({ selected_payment: ''})
+				this.setState({ selected_payment: '' })
 			}
 		})
 	}
 
 	onPaymentButtonPressed = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Checkout', 'Click', "Select Payment"))
+		analytics.event(new Event('Checkout', getMemberIdForApi(this.props.currentMember), "Select Payment"))
 		this.tooglePayment()
 	}
 
@@ -698,7 +700,7 @@ export default class Checkout extends React.Component {
 		const { currentMember, selectedShop } = this.props
 		var credit_card_message = "System is in process of upgrading. Please select other payment options for now."
 		if (selectedShop.response_message != undefined) {
-			credit_card_response = _.find(selectedShop.response_message, function(obj) {
+			credit_card_response = _.find(selectedShop.response_message, function (obj) {
 				return obj.key === "Credit Card Disabled";
 			})
 			if (credit_card_message != undefined) {
@@ -734,7 +736,7 @@ export default class Checkout extends React.Component {
 		const { currentMember, selectedShop } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 
-		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
+		analytics.event(new Event('Checkout', getMemberIdForApi(currentMember), "Pay Now"))
 		if (currentMember != undefined) {
 			if (selected_payment == "") {
 				this.tooglePayment()
@@ -746,7 +748,7 @@ export default class Checkout extends React.Component {
 					var insufficient = "Oops, insufficient credit.\nPlease select other payment option."
 
 					if (selectedShop.response_message != undefined) {
-						insufficient_response = _.find(selectedShop.response_message, function(obj) {
+						insufficient_response = _.find(selectedShop.response_message, function (obj) {
 							return obj.key === "Popup - Insufficient credit";
 						})
 						if (insufficient_response != undefined) {
@@ -867,6 +869,20 @@ export default class Checkout extends React.Component {
 			})
 		}
 	}
+
+	pickUpNow = () => {
+		let { selectedShop } = this.props
+		var time_now = Moment(new Date(), 'h:mm')
+		var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
+		var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
+		if (time_now >= opening && time_now <= closing) {
+			return true
+		} else {
+			return false
+		}
+
+	}
+
 
 
 
@@ -1196,7 +1212,7 @@ export default class Checkout extends React.Component {
 					</TouchableOpacity>
 
 					<Image
-						source={require("./../../assets/images/group-109-copy.png")}
+						source={require("./../../assets/images/dotted-line.png")}
 						style={styles.dottedLineImage} />
 				</View>
 			</View>
@@ -1371,7 +1387,7 @@ export default class Checkout extends React.Component {
 						</TouchableOpacity>
 					)}
 					{item.id != last_item.id && (<Image
-						source={require("./../../assets/images/group-109-copy.png")}
+						source={require("./../../assets/images/dotted-line.png")}
 						style={styles.dottedLineImage} />)}
 
 				</View>
@@ -1388,6 +1404,7 @@ export default class Checkout extends React.Component {
 	renderPickupTimeScroll() {
 		let { vouchers_to_use, discount, minute_range, hour_range } = this.state
 		let { currentMember, selectedShop, cart_total_quantity, cart_total, cart } = this.props
+		let order_now = this.pickUpNow()
 
 		return <Animated.View style={this.movePickAnimation.getLayout()}>
 			<View
@@ -1418,7 +1435,8 @@ export default class Checkout extends React.Component {
 						style={styles.pickupNowView}>
 						<TouchableOpacity
 							onPress={() => this.onSelectOrderNow()}
-							style={styles.pickupNowbuttonButton}>
+							style={styles.pickupNowbuttonButton}
+							disabled={!order_now}>
 							<View
 								pointerEvents="box-none"
 								style={{
@@ -1695,7 +1713,7 @@ export default class Checkout extends React.Component {
 										onPress={() => this.onCallPressed(selectedShop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-23.png")}
+											source={require("./../../assets/images/call-Icon.png")}
 											style={styles.callIconButtonImage} />
 									</TouchableOpacity>
 									<View
@@ -1712,7 +1730,7 @@ export default class Checkout extends React.Component {
 										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-17.png")}
+											source={require("./../../assets/images/direction-Icon.png")}
 											style={styles.directionIconButtonImage} />
 									</TouchableOpacity>
 									<View

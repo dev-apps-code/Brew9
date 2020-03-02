@@ -21,7 +21,13 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import Constants from 'expo-constants';
 import { Image as ExpoImage } from "react-native-expo-image-cache";
+import { getMemberIdForApi } from '../Services/members_helper'
+import { connect } from 'react-redux'
 
+@connect(({ members }) => ({
+  currentMember: members.profile,
+  members: members,
+}))
 export default class ProductCell extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +40,7 @@ export default class ProductCell extends React.Component {
     if (this.props.productHidden != undefined && !this.props.productHidden) {
       this.props.onCellPress(this.props.item, this.props.index);
       const analytics = new Analytics(ANALYTICS_ID)
-      analytics.event(new Event('Product', 'Click', this.props.item.name))
+      analytics.event(new Event('Product', getMemberIdForApi(this.props.currentMember), this.props.item.name))
 
     }
 

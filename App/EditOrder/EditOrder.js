@@ -22,6 +22,7 @@ import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -308,7 +309,7 @@ export default class EditOrder extends React.Component {
 	onVoucherButtonPressed = () => {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Checkout', 'Click', "Select Voucher"))
+		analytics.event(new Event('Checkout', getMemberIdForApi(this.props.currentMember), "Select Voucher"))
 		navigate("CheckoutVoucher", { valid_vouchers: this.state.valid_vouchers, cart: this.props.cart, addVoucherAction: this.addVoucherItemsToCart })
 	}
 
@@ -450,7 +451,7 @@ export default class EditOrder extends React.Component {
 
 	onPaymentButtonPressed = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Checkout', 'Click', "Select Payment"))
+		analytics.event(new Event('Checkout', getMemberIdForApi(this.props.currentMember), "Select Payment"))
 		this.tooglePayment()
 	}
 
@@ -615,7 +616,7 @@ export default class EditOrder extends React.Component {
 		if (final_price < 0) {
 			final_price = 0
 		}
-		analytics.event(new Event('Checkout', 'Click', "Pay Now"))
+		analytics.event(new Event('Checkout', getMemberIdForApi(this.props.currentMember), "Pay Now"))
 		if (currentMember != undefined) {
 			if (selected_payment == "") {
 				this.tooglePayment()
@@ -1060,7 +1061,7 @@ export default class EditOrder extends React.Component {
 					</TouchableOpacity>
 
 					<Image
-						source={require("./../../assets/images/group-109-copy.png")}
+						source={require("./../../assets/images/dotted-line.png")}
 						style={styles.dottedLineImage} />
 				</View>
 			</View>
@@ -1501,7 +1502,7 @@ export default class EditOrder extends React.Component {
 										onPress={() => this.onCallPressed(selectedShop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-23.png")}
+											source={require("./../../assets/images/call-Icon.png")}
 											style={styles.callIconButtonImage} />
 									</TouchableOpacity>
 									<View
@@ -1517,7 +1518,7 @@ export default class EditOrder extends React.Component {
 										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-17.png")}
+											source={require("./../../assets/images/direction-Icon.png")}
 											style={styles.directionIconButtonImage} />
 									</TouchableOpacity>
 									<View
@@ -1626,7 +1627,7 @@ export default class EditOrder extends React.Component {
 					<Text
 						style={styles.productPriceText}>{price_string}</Text>
 					{item.order_items != null && key < item.order_items.length - 1 && (<Image
-						source={require("./../../assets/images/group-109-copy.png")}
+						source={require("./../../assets/images/dotted-line.png")}
 						style={styles.dottedLineImage} />)}
 				</View>
 			</View>
