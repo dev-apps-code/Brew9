@@ -66,7 +66,6 @@ import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
-import { getMemberIdForApi } from '../Services/members_helper'
 import ImageCell from './ImageCell';
 
 @connect(({ members, shops, config, orders }) => ({
@@ -172,7 +171,9 @@ export default class Home extends React.Component {
 			member_distance: 1000,
 			first_promo_popup: false,
 			popUpVisible: false,
+			scroll_Index: null
 		}
+		this.renderBottom = false
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
 		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
@@ -188,7 +189,7 @@ export default class Home extends React.Component {
 		const { currentMember } = this.props
 
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "ScanQr"))
+		analytics.event(new Event('Home', 'Click', "ScanQr"))
 
 		if (currentMember != null) {
 			navigation.navigate("ScanQr")
@@ -406,8 +407,6 @@ export default class Home extends React.Component {
 	loadStorePushToken = (token) => {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
-
-		console.log("Storing Token", token)
 		const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 		if (currentMember != null) {
 			obj.setUrlId(currentMember.id)
@@ -427,6 +426,7 @@ export default class Home extends React.Component {
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			// this.setState({ loading: false })
+
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners
@@ -528,7 +528,7 @@ export default class Home extends React.Component {
 
 		if (currentMember != undefined) {
 			const analytics = new Analytics(ANALYTICS_ID)
-			analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Checkout"))
+			analytics.event(new Event('Home', 'Click', "Checkout"))
 			// if (member_distance > shop.max_order_distance_in_km) {
 			// 	this.refs.toast.show("You are too far away", TOAST_DURATION)
 			// 	return
@@ -573,7 +573,7 @@ export default class Home extends React.Component {
 	onBannerPressed = (item, index) => {
 		// const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Featured Promo"))
+		analytics.event(new Event('Home', 'Click', "Featured Promo"))
 		if (item.banner_detail_image != undefined && item.banner_detail_image != "") {
 			this.setState({
 				selected_promotion: item.banner_detail_image
@@ -588,7 +588,7 @@ export default class Home extends React.Component {
 
 	_toggleDelivery = (value) => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Delivery"))
+		analytics.event(new Event('Home', 'Click', "Delivery"))
 		if (value == 1) {
 
 			this.refs.toast.show("Delivery not available yet", TOAST_DURATION, () => {
@@ -603,20 +603,17 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-
 		let data = [...this.state.data]
-
-		this.setState({ data, selected_category: selected_index })
+		this.setState({ data, selected_category: selected_index, scroll_Index: scroll_index })
 		if (scroll_index < this.state.products.length) {
 			this.flatListRef.scrollToIndex({ animated: true, index: scroll_index })
 		}
 	}
 
 	reachProductIndex = (viewableItems, changed) => {
-
+		console.log('this.state.scroll_Index', this.state.scroll_Index)
 		let viewable = viewableItems.viewableItems
 		let data = [...this.state.data]
-
 		var first_index = viewable[0].index
 		var last_index = viewable[viewable.length - 1].index
 
@@ -633,8 +630,15 @@ export default class Home extends React.Component {
 			}
 			else if (data[parseInt(next_index)]) {
 				if (second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index)) {
-					data[index].selected = true
-					break
+					if (this.state.scroll_Index != null) {
+						if (this.state.scroll_Index == data[index].scroll_index) {
+							data[index].selected = true
+							break
+						}
+					} else {
+						data[index].selected = true
+						break
+					}
 				}
 			} else {
 				data[data.length - 1].selected = true
@@ -650,7 +654,7 @@ export default class Home extends React.Component {
 
 		const { isToggleShopLocation, dispatch } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "Location"))
+		analytics.event(new Event('Home', 'Click', "Location"))
 		if (isToggleShopLocation) {
 			dispatch(createAction("config/setToggleShopLocation")(false))
 		} else {
@@ -680,7 +684,7 @@ export default class Home extends React.Component {
 
 	toogleCart = (isUpdate, toggleOn) => {
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Home', getMemberIdForApi(this.props.currentMember), "View Cart"))
+		analytics.event(new Event('Home', 'Click', "View Cart"))
 
 		if (isUpdate) {
 			// if (cart.length > 0) {
@@ -1131,6 +1135,7 @@ export default class Home extends React.Component {
 
 	}
 
+
 	calculateImageDimension(selected_promotion) {
 
 		const { image_check } = this.state
@@ -1322,7 +1327,6 @@ export default class Home extends React.Component {
 				</TouchableOpacity>
 
 			</View>
-
 			<ImageCell image={selected_product.image} />
 
 			<View
@@ -1452,6 +1456,7 @@ export default class Home extends React.Component {
 		let { delivery, distance } = this.state
 		let { isToggleShopLocation, cart, promotions, shop } = this.props
 		let categoryBottomSpacer = undefined
+		let renderBottom = this.renderBottom
 		// let should_show = this.shouldShowFeatured(shop)
 		let fullList = [...cart, ...promotions]
 		if (shop !== null) {
@@ -1603,14 +1608,14 @@ export default class Home extends React.Component {
 							flex: 1,
 						}} />
 					<View
-						style={styles.productlistFlatListViewWrapper}>
+						style={!renderBottom ? styles.productlistFlatListViewWrapper : styles.productlistFlatListViewWrapperwithALert}>
 						{this.state.loading ?
 							undefined
 							:
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
-								initialNumToRender={5}
+								initialNumToRender={6}
 								onScrollToIndexFailed={(error) => {
 									this.flatListRef.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
 									setTimeout(() => {
@@ -1624,6 +1629,7 @@ export default class Home extends React.Component {
 								refreshing={this.state.isRefreshing}
 								onRefresh={this.onRefresh.bind(this)}
 								onViewableItemsChanged={this.reachProductIndex}
+								onScrollBeginDrag={() => { this.setState({ scroll_Index: null }) }}
 								keyExtractor={(item, index) => index.toString()} />
 						}
 					</View>
@@ -1732,10 +1738,10 @@ export default class Home extends React.Component {
 	}
 
 	renderAlertBar(cart, shop) {
-
 		const style = (cart.length > 0) ? styles.alertViewCart : styles.alertView
 		if (shop !== null) {
 			if (shop.is_opened === false) {
+				this.renderBottom = true
 				return (
 					<View style={style}>
 						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
@@ -1744,7 +1750,7 @@ export default class Home extends React.Component {
 
 			if (shop.can_order == false && shop.alert_message != null) {
 				const template = shop.alert_message
-
+				this.renderBottom = true
 				return (
 					<View style={style}>
 						<Text style={styles.alertViewText}>{template}</Text>
@@ -2160,6 +2166,10 @@ const styles = StyleSheet.create({
 		width: 290 * alpha,
 		marginBottom: 1 * alpha,
 	},
+	productlistFlatListViewWrapperwithALert: {
+		width: 290 * alpha,
+		marginBottom: 25 * alpha,
+	},
 	cartView: {
 		backgroundColor: "transparent",
 		position: "absolute",
@@ -2447,7 +2457,7 @@ const styles = StyleSheet.create({
 	contentScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginVertical: 5 * alpha,
+		marginTop: 5 * alpha,
 		maxHeight: 250 * alpha,
 	},
 	productView: {
@@ -2757,9 +2767,7 @@ const styles = StyleSheet.create({
 	},
 	bottomView: {
 		backgroundColor: "transparent",
-		// backgroundColor: "red",
 		// height: 113 * alpha,
-		// marginTop: 5 * alpha,
 		justifyContent: "flex-end",
 	},
 	lineView: {
