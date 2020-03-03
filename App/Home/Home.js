@@ -772,6 +772,8 @@ export default class Home extends React.Component {
 					item={item}
 					productname={item.name}
 					productprice={item.price}
+					productDiscountTitle={item.discount_title}
+					productDiscountPrice={item.discounted_price}
 					productimage={item.middle}
 					productquantity={item.quantity}
 					productsummary={item.summary}
@@ -1608,7 +1610,7 @@ export default class Home extends React.Component {
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
-								initialNumToRender={this.state.products.length / 5}
+								initialNumToRender={5}
 								onScrollToIndexFailed={(error) => {
 									this.flatListRef.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
 									setTimeout(() => {
