@@ -364,7 +364,6 @@ export default class Home extends React.Component {
 	}
 
 	onIds(device) {
-		// console.log('Device info: ', device);
 		this.loadStorePushToken(device.userId)
 	}
 
@@ -407,7 +406,6 @@ export default class Home extends React.Component {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
 
-		console.log("Storing Token", token)
 		const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 		if (currentMember != null) {
 			obj.setUrlId(currentMember.id)
