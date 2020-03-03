@@ -31,7 +31,7 @@ export default class NotificationsCell extends React.Component {
 		if (type == "promo") {
 			const { navigate } = this.props.navigation
 			const analytics = new Analytics(ANALYTICS_ID)
-			analytics.event(new Event('Inbox', getMemberIdForApi(currentMember), `Promotion ${item.title}`))
+			analytics.event(new Event('Inbox', getMemberIdForApi(this.props.currentMember), `Promotion ${item.title}`))
 			navigate("PromotionDetail", {
 				details: item,
 			})
@@ -39,7 +39,7 @@ export default class NotificationsCell extends React.Component {
 		else if (type == "voucher") {
 			const { navigate } = this.props.navigation
 			const analytics = new Analytics(ANALYTICS_ID)
-			analytics.event(new Event('Inbox', getMemberIdForApi(currentMember), `Voucher`))
+			analytics.event(new Event('Inbox', getMemberIdForApi(this.props.currentMember), `Voucher`))
 			navigate("MemberVoucher")
 		}
 		this.props.onNotificationsCellPress(item, type)
