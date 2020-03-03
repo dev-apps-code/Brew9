@@ -166,12 +166,12 @@ export default class ProductCell extends React.Component {
                   flex: 1
                 }}
               />
-              {hasPrice && <View style={{ flexDirection: 'row' }}>
+              {/* {hasPrice && <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.priceText}>
                   {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
                 </Text>
 
-              </View>}
+              </View>} */}
               {hasDiscount && hasPrice && <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.priceText}>
                   {hasPrice ? `$${parseFloat(this.props.productDiscountPrice).toFixed(2)}` : ""}
