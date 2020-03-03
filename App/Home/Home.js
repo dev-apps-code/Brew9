@@ -1182,6 +1182,7 @@ export default class Home extends React.Component {
 		if (index) {
 			let product = this.state.products[index]
 			if (product) {
+				if (product.discount != null) product.price = product.discounted_price
 				if (product.quantity == null) product.quantity = 1
 				if (product.calculated_price == null) product.calculated_price = product.price
 				if (product.selected_quantity == null) product.selected_quantity = 1
