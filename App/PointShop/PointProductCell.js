@@ -20,7 +20,15 @@ import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
+import { connect } from 'react-redux'
 
+@connect(({ members }) => ({
+  company_id: members.company_id,
+  members: members,
+  currentMember: members.profile,
+
+}))
 export default class PointProductCell extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +40,7 @@ export default class PointProductCell extends React.Component {
     const { navigate } = this.props.navigation;
 
     const analytics = new Analytics(ANALYTICS_ID)
-    analytics.event(new Event('Redemption Product', 'Click', `${item_name}`))
+    analytics.event(new Event('Redemption Product', getMemberIdForApi(this.props.currentMember), `${item_name}`))
     this.props.onPressItem(item, item_name)
 
 

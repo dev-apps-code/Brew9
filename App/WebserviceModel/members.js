@@ -245,9 +245,10 @@ export default {
         const eventObject = new EventObject(json)
         const result = eventObject.result
         yield put(createAction('updateNotifications')({ result, last_read, current_notifications }))
-
-        if (eventObject.success == true) { 
-          yield put(createAction('updateUnclaimedMission')(eventObject.member.unclaimed_mission_count))
+        if (eventObject.success == true) {
+          if (eventObject.member) {
+            yield put(createAction('updateUnclaimedMission')(eventObject.member.unclaimed_mission_count))
+          }
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
@@ -497,10 +498,10 @@ export default {
           object,
         )
         const eventObject = new EventObject(json)
-        if (eventObject.success == true) { 
+        if (eventObject.success == true) {
           yield put(createAction('updateUnclaimedMission')(eventObject.member.unclaimed_mission_count))
         }
-          typeof callback === 'function' && callback(eventObject)
+        typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
     *missionRewardClaim({ payload }, { call, put, select }) {

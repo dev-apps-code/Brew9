@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members }) => ({
 	company_id: members.company_id,
@@ -33,7 +34,7 @@ export default class ValidVoucher extends React.Component {
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
 		if (this.props.valid) {
-			analytics.event(new Event('Voucher', 'Click', this.props.title))
+			analytics.event(new Event('Voucher', getMemberIdForApi(this.props.currentMember), this.props.title))
 			navigate("VoucherDetail", { item: this.props.item, valid: true, addVoucherAction: this.props.navigation.getParam("addVoucherAction", null) })
 		}
 	}

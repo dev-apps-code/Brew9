@@ -19,6 +19,7 @@ export default class Banners extends React.PureComponent {
                         {
                             banner.map((item, index) => (
                                 <BannerCell
+                                    key={index}
                                     index={index}
                                     item={item}
                                     navigation={this.props.navigation}

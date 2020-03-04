@@ -134,8 +134,6 @@ export default class PaymentsWebview extends React.Component {
         }
 
         if (params.success == "true"){
-          this.refs.toast.show(eventObject.message, 500)
-        
           const { navigation} = this.props
           navigation.goBack();
           navigation.state.params.clearCart()

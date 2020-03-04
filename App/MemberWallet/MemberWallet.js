@@ -18,6 +18,7 @@ import TopUpProductsRequestObject from "../Requests/top_up_products_request_obje
 import TopUpOrderRequestObject from "../Requests/top_up_order_request_object";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops }) => ({
 	members: members.profile,
@@ -29,7 +30,7 @@ export default class MemberWallet extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Wallet</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Wallet</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -146,7 +147,7 @@ export default class MemberWallet extends React.Component {
 
 		const { navigate } = this.props.navigation
 		const analytics = new Analytics(ANALYTICS_ID)
-		analytics.event(new Event('Redemption Shop', 'Click', 'Wallet History'))
+		analytics.event(new Event('Redemption Shop', getMemberIdForApi(this.props.members), 'Wallet History'))
 		navigate("CreditHistory")
 	}
 
