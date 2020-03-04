@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { KURL_INFO, KURL_MEMBERSHIP_INFO, getAppVersion, getBuildVersion } from "../Utils/server";
 import { createAction } from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
+import VerifyCouponCodeObj from '../Requests/verify_coupon _code_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import Constants from 'expo-constants';
@@ -372,9 +373,14 @@ export default class Profile extends React.Component {
 	}
 	onRedeemVoucherPressed = () => {
 		const { currentMember } = this.props
+		const { navigate } = this.props.navigation
 		if (currentMember !== null) {
 			this.setState({
 				showRedeemVoucher: true
+			})
+		} else {
+			navigate("VerifyUser", {
+				returnToRoute: this.props.navigation.state
 			})
 		}
 	}
@@ -392,6 +398,30 @@ export default class Profile extends React.Component {
 		this.setState({
 			showRedeemVoucher: false
 		})
+
+	}
+	onRedeemCouponCode = () => {
+		let { coupon } = this.state
+		let { dispatch } = this.props
+
+		if (coupon) {
+			const callback = eventObject => {
+				if (eventObject.success) {
+					// this.refs.toast.show("Successfully add review!", TOAST_DURATION)
+
+				} else {
+					// this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				}
+
+			}
+			const obj = new VerifyCouponCodeObj(coupon)
+			dispatch(
+				createAction('vouchers/loadVerifyCouponCode')({
+					object: obj,
+					callback,
+				})
+			)
+		}
 
 	}
 
@@ -457,7 +487,6 @@ export default class Profile extends React.Component {
 	}
 
 	renderRedeemVoucher() {
-
 		return (
 			<Modal
 				animationType="fade"
@@ -487,7 +516,7 @@ export default class Profile extends React.Component {
 							</View>
 
 							<TouchableOpacity
-								onPress={() => this.closePopUp()}
+								onPress={() => this.onRedeemCouponCode()}
 								style={styles.popUpInput3}>
 								<Text
 									style={styles.okButtonText}>OK</Text>
@@ -778,7 +807,7 @@ export default class Profile extends React.Component {
 			<View
 				style={styles.menuView}>
 				<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} />
-				{/* <ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} /> */}
+				<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
 				<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
 				<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
 				<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
