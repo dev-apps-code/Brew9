@@ -85,7 +85,6 @@ export default class ProductCell extends React.Component {
   };
 
   render() {
-
     var ingredients = null;
     if (this.props.productingredient !== undefined) {
       ingredients = this.props.productingredient.map((item, key) => {
@@ -124,8 +123,6 @@ export default class ProductCell extends React.Component {
                 style={styles.productimageImage}
 
               />}
-
-
             {this.props.productstatus != null && this.props.productstatus.length > 0 ?
               <View style={styles.soldView}>
                 <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
@@ -161,25 +158,25 @@ export default class ProductCell extends React.Component {
               <Text numberOfLines={hasPrice ? 2 : 3} style={styles.descriptionText}>
                 {this.props.productsummary}
               </Text>
-              <View
-                style={{
-                  flex: 1
-                }}
-              />
-              {/* {hasPrice && <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.priceText}>
-                  {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
-                </Text>
 
-              </View>} */}
-              {hasDiscount && hasPrice && <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.priceText}>
-                  {hasPrice ? `$${parseFloat(this.props.productDiscountPrice).toFixed(2)}` : ""}
-                </Text>
 
-                <Text style={styles.discountPriceText}>
-                  {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
-                </Text>
+              {hasPrice && <View style={{ flexDirection: 'row' }}>
+                {hasDiscount ?
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.priceText}>
+                      {hasPrice ? `$${parseFloat(this.props.productDiscountPrice).toFixed(2)}` : ""}
+                    </Text>
+
+                    <Text style={styles.discountPriceText}>
+                      {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
+                    </Text>
+                  </View> :
+
+                  <Text style={styles.priceText}>
+                    {`$${parseFloat(this.props.productprice).toFixed(2)}`}
+                  </Text>
+
+                }
               </View>}
             </View>
           }
@@ -234,7 +231,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 10 * alpha,
   },
-  productimageImage: { 
+  productimageImage: {
     backgroundColor: "transparent",
     resizeMode: "cover",
     width: 74 * alpha,
@@ -299,6 +296,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10 * alpha,
     marginRight: 10 * alpha,
+    justifyContent: 'flex-start'
   },
   titleText: {
     color: "rgb(54, 54, 54)",
