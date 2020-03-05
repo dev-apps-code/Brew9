@@ -66,6 +66,7 @@ import { AsyncStorage } from 'react-native'
 import Moment from 'moment';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
+import ImageCell from './ImageCell';
 
 @connect(({ members, shops, config, orders }) => ({
 	currentMember: members.profile,
@@ -169,12 +170,14 @@ export default class Home extends React.Component {
 			distance: "-",
 			member_distance: 1000,
 			first_promo_popup: false,
-			popUpVisible: false
+			popUpVisible: false,
+			scroll_Index: null
 		}
+		this.renderBottom = false
 		this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight })
 		this.toogleCart = this.toogleCart.bind(this)
 		this.check_promotion_trigger = this.check_promotion_trigger.bind(this)
-		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", {kOSSettingsKeyAutoPrompt : true});// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", { kOSSettingsKeyAutoPrompt: true });// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
 
 		OneSignal.addEventListener('received', this.onReceived);
 		OneSignal.addEventListener('opened', this.onOpened);
@@ -353,16 +356,15 @@ export default class Home extends React.Component {
 	onReceived(notification) {
 		// console.log("Notification received: ", notification);
 	}
-	
+
 	onOpened(openResult) {
 		// console.log('Message: ', openResult.notification.payload.body);
 		// console.log('Data: ', openResult.notification.payload.additionalData);
 		// console.log('isActive: ', openResult.notification.isAppInFocus);
 		// console.log('openResult: ', openResult);
 	}
-	
+
 	onIds(device) {
-		// console.log('Device info: ', device);
 		this.loadStorePushToken(device.userId)
 	}
 
@@ -404,8 +406,6 @@ export default class Home extends React.Component {
 	loadStorePushToken = (token) => {
 		const { dispatch, currentMember } = this.props
 		const callback = eventObject => { }
-
-		console.log("Storing Token", token)
 		const obj = new PushRequestObject(Constants.installationId, Constants.deviceName, token, Platform.OS)
 		if (currentMember != null) {
 			obj.setUrlId(currentMember.id)
@@ -602,20 +602,17 @@ export default class Home extends React.Component {
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
-
 		let data = [...this.state.data]
-
-		this.setState({ data, selected_category: selected_index })
+		this.setState({ data, selected_category: selected_index, scroll_Index: scroll_index })
 		if (scroll_index < this.state.products.length) {
 			this.flatListRef.scrollToIndex({ animated: true, index: scroll_index })
 		}
 	}
 
 	reachProductIndex = (viewableItems, changed) => {
-
+		console.log('this.state.scroll_Index', this.state.scroll_Index)
 		let viewable = viewableItems.viewableItems
 		let data = [...this.state.data]
-
 		var first_index = viewable[0].index
 		var last_index = viewable[viewable.length - 1].index
 
@@ -632,8 +629,15 @@ export default class Home extends React.Component {
 			}
 			else if (data[parseInt(next_index)]) {
 				if (second_index >= data[index].scroll_index && second_index < (data[parseInt(next_index)].scroll_index)) {
-					data[index].selected = true
-					break
+					if (this.state.scroll_Index != null) {
+						if (this.state.scroll_Index == data[index].scroll_index) {
+							data[index].selected = true
+							break
+						}
+					} else {
+						data[index].selected = true
+						break
+					}
 				}
 			} else {
 				data[data.length - 1].selected = true
@@ -771,6 +775,8 @@ export default class Home extends React.Component {
 					item={item}
 					productname={item.name}
 					productprice={item.price}
+					productDiscountTitle={item.discount_title}
+					productDiscountPrice={item.discounted_price}
 					productimage={item.middle}
 					productquantity={item.quantity}
 					productsummary={item.summary}
@@ -1128,6 +1134,7 @@ export default class Home extends React.Component {
 
 	}
 
+
 	calculateImageDimension(selected_promotion) {
 
 		const { image_check } = this.state
@@ -1179,8 +1186,9 @@ export default class Home extends React.Component {
 		if (index) {
 			let product = this.state.products[index]
 			if (product) {
+				product.discount == null ? product.current_price = product.price : product.current_price = product.discounted_price
 				if (product.quantity == null) product.quantity = 1
-				if (product.calculated_price == null) product.calculated_price = product.price
+				if (product.calculated_price == null) product.calculated_price = product.current_price
 				if (product.selected_quantity == null) product.selected_quantity = 1
 				if (product.total_quantity == null) product.total_quantity = 0
 				if (product.variants) {
@@ -1319,12 +1327,8 @@ export default class Home extends React.Component {
 				</TouchableOpacity>
 
 			</View>
-			<View
-				style={styles.imageblockView}>
-				<Image
-					source={{ uri: selected_product.image.url }}
-					style={styles.productimageImage} />
-			</View>
+			<ImageCell image={selected_product.image} />
+
 			<View
 				pointerEvents="box-none">
 				<ScrollView
@@ -1452,6 +1456,7 @@ export default class Home extends React.Component {
 		let { delivery, distance } = this.state
 		let { isToggleShopLocation, cart, promotions, shop } = this.props
 		let categoryBottomSpacer = undefined
+		let renderBottom = this.renderBottom
 		// let should_show = this.shouldShowFeatured(shop)
 		let fullList = [...cart, ...promotions]
 		if (shop !== null) {
@@ -1603,14 +1608,14 @@ export default class Home extends React.Component {
 							flex: 1,
 						}} />
 					<View
-						style={styles.productlistFlatListViewWrapper}>
+						style={!renderBottom ? styles.productlistFlatListViewWrapper : styles.productlistFlatListViewWrapperwithALert}>
 						{this.state.loading ?
 							undefined
 							:
 							<FlatList
 								renderItem={this.renderProductlistFlatListCell}
 								data={this.state.products}
-								initialNumToRender={this.state.products.length / 5}
+								initialNumToRender={6}
 								onScrollToIndexFailed={(error) => {
 									this.flatListRef.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
 									setTimeout(() => {
@@ -1624,6 +1629,7 @@ export default class Home extends React.Component {
 								refreshing={this.state.isRefreshing}
 								onRefresh={this.onRefresh.bind(this)}
 								onViewableItemsChanged={this.reachProductIndex}
+								onScrollBeginDrag={() => { this.setState({ scroll_Index: null }) }}
 								keyExtractor={(item, index) => index.toString()} />
 						}
 					</View>
@@ -1732,10 +1738,10 @@ export default class Home extends React.Component {
 	}
 
 	renderAlertBar(cart, shop) {
-
 		const style = (cart.length > 0) ? styles.alertViewCart : styles.alertView
 		if (shop !== null) {
 			if (shop.is_opened === false) {
+				this.renderBottom = true
 				return (
 					<View style={style}>
 						<Text style={styles.alertViewText}>{shop.alert_message}</Text>
@@ -1744,7 +1750,7 @@ export default class Home extends React.Component {
 
 			if (shop.can_order == false && shop.alert_message != null) {
 				const template = shop.alert_message
-
+				this.renderBottom = true
 				return (
 					<View style={style}>
 						<Text style={styles.alertViewText}>{template}</Text>
@@ -2160,6 +2166,10 @@ const styles = StyleSheet.create({
 		width: 290 * alpha,
 		marginBottom: 1 * alpha,
 	},
+	productlistFlatListViewWrapperwithALert: {
+		width: 290 * alpha,
+		marginBottom: 25 * alpha,
+	},
 	cartView: {
 		backgroundColor: "transparent",
 		position: "absolute",
@@ -2447,7 +2457,7 @@ const styles = StyleSheet.create({
 	contentScrollView: {
 		backgroundColor: "transparent",
 		flex: 1,
-		marginVertical: 5 * alpha,
+		marginTop: 5 * alpha,
 		maxHeight: 250 * alpha,
 	},
 	productView: {
@@ -2757,9 +2767,7 @@ const styles = StyleSheet.create({
 	},
 	bottomView: {
 		backgroundColor: "transparent",
-		// backgroundColor: "red",
 		// height: 113 * alpha,
-		// marginTop: 5 * alpha,
 		justifyContent: "flex-end",
 	},
 	lineView: {

@@ -120,7 +120,7 @@ export default class OrderReceipt extends React.Component {
 						<Text
 							style={styles.productPriceText}>{price_string}</Text>
 						{key < items.length - 1 && (<Image
-							source={require("./../../assets/images/group-109-copy.png")}
+							source={require("./../../assets/images/dotted-line.png")}
 							style={styles.dottedLineImage} />)}
 					</View>
 
@@ -231,7 +231,7 @@ export default class OrderReceipt extends React.Component {
 										onPress={() => this.onCallPressed(order.shop.phone_no)}
 										style={styles.callIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-23.png")}
+											source={require("./../../assets/images/call-Icon.png")}
 											style={styles.callIconButtonImage} />
 									</TouchableOpacity>
 									<View
@@ -247,7 +247,7 @@ export default class OrderReceipt extends React.Component {
 										onPress={() => this.onLocationButtonPressed()}
 										style={styles.directionIconButton}>
 										<Image
-											source={require("./../../assets/images/group-3-17.png")}
+											source={require("./../../assets/images/direction-Icon.png")}
 											style={styles.directionIconButtonImage} />
 									</TouchableOpacity>
 									<View
