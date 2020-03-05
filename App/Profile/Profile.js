@@ -513,14 +513,16 @@ export default class Profile extends React.Component {
 									onChangeText={text => this.onChangeCoupon(text)}
 
 								/>
-							</View>
 
+							</View>
 							<TouchableOpacity
 								onPress={() => this.onRedeemCouponCode()}
-								style={styles.popUpInput3}>
+								style={styles.ok_button}>
 								<Text
 									style={styles.okButtonText}>OK</Text>
 							</TouchableOpacity>
+
+
 						</View>
 					</View>
 				</TouchableWithoutFeedback>
@@ -838,7 +840,7 @@ const styles = StyleSheet.create({
 	},
 	popUpInput1: {
 		backgroundColor: '#f5f5f5',
-		flex: 1,
+		flex: 0.5,
 		borderTopLeftRadius: 5 * alpha,
 		borderTopRightRadius: 5 * alpha,
 		paddingVertical: 10 * alpha,
@@ -851,34 +853,32 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginVertical: 20 * alpha,
 		paddingHorizontal: 20 * alpha,
-		// alignItems: 'center',
-		// justifyContent: 'center',
+		alignItems: 'center',
+		justifyContent: 'center',
 
 
 	},
 	couponCode: {
 		backgroundColor: '#f5f5f5',
-		paddingHorizontal: 10 * alpha,
+		padding: 10 * alpha,
 		color: LIGHT_GREY,
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		borderRadius: 5 * alpha,
 		fontStyle: "normal",
-		textAlign: "left",
-		height: 30 * alpha,
+		textAlign: "center",
+		// height: 40 * alpha,
+		width: 200 * alpha,
+		flex: 1
 	},
-	popUpInput3: {
+	ok_button: {
 		backgroundColor: PRIMARY_COLOR,
-		marginHorizontal: 20 * alpha,
-		marginBottom: 20 * alpha,
-		paddingHorizontal: 10 * alpha,
-		// paddingVertical: 10 * alpha,
-		borderRadius: 15 * alpha,
+		flex: 0.5,
+		borderBottomLeftRadius: 5 * alpha,
+		borderBottomRightRadius: 5 * alpha,
+		paddingVertical: 10 * alpha,
 		alignItems: 'center',
-		justifyContent: 'center',
-		height: 30 * alpha,
-		// flex: 1,
-		// marginTop: 5
+		justifyContent: 'center'
 	},
 	okButtonText: {
 		color: 'white',
@@ -895,7 +895,7 @@ const styles = StyleSheet.create({
 	},
 	popUpContent: {
 		backgroundColor: 'white',
-		height: windowHeight / 5,
+		minHeight: windowHeight / 5,
 		// aspectRatio: 1,
 		// maxHeight: windowHeight / 2,
 		// paddingVertical: 20 * alpha,
