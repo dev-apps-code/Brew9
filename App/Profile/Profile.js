@@ -419,6 +419,10 @@ export default class Profile extends React.Component {
 					callback,
 				})
 			)
+		} else {
+			this.setState({ loading: false, })
+			this.refs.toast.show('Please fill in coupon code', TOAST_DURATION)
+
 		}
 
 	}
@@ -817,7 +821,7 @@ export default class Profile extends React.Component {
 
 			</ScrollView>
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
-			{this.state.loading ? <HudLoading isLoading={this.state.loading} /> : undefined}
+			{/* {this.state.loading ? <HudLoading isLoading={this.state.loading} /> : undefined} */}
 
 
 		</View>
