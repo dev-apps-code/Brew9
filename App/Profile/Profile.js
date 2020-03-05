@@ -17,13 +17,15 @@ import VerifyCouponCodeObj from '../Requests/verify_coupon _code_request_object'
 import LogoutRequestObject from "../Requests/logout_request_object"
 import NotificationsRequestObject from "../Requests/notifications_request_object";
 import Constants from 'expo-constants';
-import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE, DEFAULT_GREY_BACKGROUND } from "../Common/common_style";
+import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, DISABLED_COLOR, LIGHT_BLUE, DEFAULT_GREY_BACKGROUND, TOAST_DURATION } from "../Common/common_style";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import ProfileMenu from "./ProfileMenu";
 import ProfileRowMenu from "./ProfileRowMenu"
 import { getMemberIdForApi } from '../Services/members_helper'
+import Toast, { DURATION } from 'react-native-easy-toast'
+import HudLoading from "../Components/HudLoading"
 
 @connect(({ members, config }) => ({
 	selectedTab: config.selectedTab,
@@ -77,7 +79,8 @@ export default class Profile extends React.Component {
 			hasShimmered: false,
 			appState: AppState.currentState,
 			timestamp: undefined,
-			showRedeemVoucher: false
+			showRedeemVoucher: false,
+			loading: false
 
 		}
 		this.loadProfile = this.loadProfile.bind(this)
@@ -367,7 +370,6 @@ export default class Profile extends React.Component {
 		const { currentMember } = this.props
 		if (currentMember !== null) {
 			const { navigate } = this.props.navigation
-
 			navigate("RedeemPromotion")
 		}
 	}
@@ -403,20 +405,16 @@ export default class Profile extends React.Component {
 	onRedeemCouponCode = () => {
 		let { coupon } = this.state
 		let { dispatch } = this.props
+		this.setState({ loading: true, showRedeemVoucher: false })
 
 		if (coupon) {
 			const callback = eventObject => {
-				if (eventObject.success) {
-					// this.refs.toast.show("Successfully add review!", TOAST_DURATION)
-
-				} else {
-					// this.refs.toast.show(eventObject.message, TOAST_DURATION)
-				}
-
+				this.setState({ loading: false })
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			const obj = new VerifyCouponCodeObj(coupon)
 			dispatch(
-				createAction('vouchers/loadVerifyCouponCode')({
+				createAction('members/loadVerifyCouponCode')({
 					object: obj,
 					callback,
 				})
@@ -605,175 +603,175 @@ export default class Profile extends React.Component {
 			isLogin = false
 		}
 
-		return <ScrollView
-			style={styles.profileView}>
-			<View
-				pointerEvents="box-none"
-				style={{
-					height: 530 * alpha,
-				}}>
+		return <View style={styles.profileView}>
+			<ScrollView>
 				<View
-					style={styles.membersectionView}>
+					pointerEvents="box-none"
+					style={{
+						height: 530 * alpha,
+					}}>
 					<View
-						style={styles.topbackgroundView}>
-						<Image
-							source={require("./../../assets/images/profile_top_banner.png")}
-							style={styles.group133Image} />
-					</View>
-					<View
-						style={styles.memberDetailView}>
+						style={styles.membersectionView}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0 * alpha,
-								right: 0 * alpha,
-								top: 10 * alpha,
-								height: 200 * alpha,
-							}}>
-							<View
-								style={styles.detailsView}>
-								<View
-									style={styles.rectangleTwoView} />
-								<View
-									style={styles.rectangleView} />
-							</View>
+							style={styles.topbackgroundView}>
+							<Image
+								source={require("./../../assets/images/profile_top_banner.png")}
+								style={styles.group133Image} />
+						</View>
+						<View
+							style={styles.memberDetailView}>
 							<View
 								pointerEvents="box-none"
 								style={{
 									position: "absolute",
-									left: 15 * alpha,
-									right: 15 * alpha,
-									top: 0 * alpha,
-									height: 187 * alpha,
+									left: 0 * alpha,
+									right: 0 * alpha,
+									top: 10 * alpha,
+									height: 200 * alpha,
 								}}>
+								<View
+									style={styles.detailsView}>
+									<View
+										style={styles.rectangleTwoView} />
+									<View
+										style={styles.rectangleView} />
+								</View>
 								<View
 									pointerEvents="box-none"
 									style={{
-										height: 79 * alpha,
-										flexDirection: "row",
-										alignItems: "flex-start",
+										position: "absolute",
+										left: 15 * alpha,
+										right: 15 * alpha,
+										top: 0 * alpha,
+										height: 187 * alpha,
 									}}>
 									<View
-										style={styles.membershipinfoView}>
+										pointerEvents="box-none"
+										style={{
+											height: 79 * alpha,
+											flexDirection: "row",
+											alignItems: "flex-start",
+										}}>
 										<View
-											pointerEvents="box-none"
-											style={{
-												width: 250 * alpha,
-												height: 23 * alpha,
-												marginLeft: 2 * alpha,
-												flexDirection: "row",
-												alignItems: "center",
-											}}>
-											<Text
-												style={styles.membershiplabelText}>{membership_name}</Text>
-											{membership_name != "" && (<View
-												style={styles.membershiplevelButton}>
-												<Text
-													style={styles.membershiplevelText}>{level_name}</Text>
-											</View>)}
-											<TouchableOpacity onPress={() => this.onLevelInfoPressed()}
-												style={styles.levelInfoView}>
-												<Image
-													source={require("./../../assets/images/exclaimation.png")}
-													style={styles.howToUseButtonImage} />
-											</TouchableOpacity>
-
-										</View>
-										<View
-											style={[styles.expbarView]}>
+											style={styles.membershipinfoView}>
 											<View
 												pointerEvents="box-none"
 												style={{
-													position: "absolute",
-													left: 0,
-													right: 0,
-													top: 0,
-													height: 24 * alpha,
+													width: 250 * alpha,
+													height: 23 * alpha,
+													marginLeft: 2 * alpha,
+													flexDirection: "row",
+													alignItems: "center",
 												}}>
+												<Text
+													style={styles.membershiplabelText}>{membership_name}</Text>
+												{membership_name != "" && (<View
+													style={styles.membershiplevelButton}>
+													<Text
+														style={styles.membershiplevelText}>{level_name}</Text>
+												</View>)}
+												<TouchableOpacity onPress={() => this.onLevelInfoPressed()}
+													style={styles.levelInfoView}>
+													<Image
+														source={require("./../../assets/images/exclaimation.png")}
+														style={styles.howToUseButtonImage} />
+												</TouchableOpacity>
+
+											</View>
+											<View
+												style={[styles.expbarView]}>
 												<View
 													pointerEvents="box-none"
 													style={{
 														position: "absolute",
-														left: 0 * alpha,
-														right: 0 * alpha,
+														left: 0,
+														right: 0,
 														top: 0,
-														height: 15 * alpha,
-														flexDirection: "row",
-														alignItems: "flex-start",
+														height: 24 * alpha,
 													}}>
-													<Text
-														style={styles.initiallevelText}>{level_name}</Text>
 													<View
+														pointerEvents="box-none"
 														style={{
-															flex: 1,
-														}} />
-													<Text
-														style={styles.nextlevelText}>{next_level_name}</Text>
-												</View>
-												<View
-													style={styles.progressbarView}>
-													{this.renderProgressBar(membership_progress ? membership_progress : 0)}
-												</View>
+															position: "absolute",
+															left: 0 * alpha,
+															right: 0 * alpha,
+															top: 0,
+															height: 15 * alpha,
+															flexDirection: "row",
+															alignItems: "flex-start",
+														}}>
+														<Text
+															style={styles.initiallevelText}>{level_name}</Text>
+														<View
+															style={{
+																flex: 1,
+															}} />
+														<Text
+															style={styles.nextlevelText}>{next_level_name}</Text>
+													</View>
+													<View
+														style={styles.progressbarView}>
+														{this.renderProgressBar(membership_progress ? membership_progress : 0)}
+													</View>
 
+												</View>
+												<Text
+													style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
 											</View>
-											<Text
-												style={styles.levelexpText}>{member_exp} / {exp_needed} XP</Text>
 										</View>
+										<View
+											style={{
+												flex: 1,
+											}} />
+										<View style={{ elevation: 2 * alpha }}>
+											<TouchableOpacity onPress={() => this.onMemberButtonPressed()}>
+												<Image
+													source={avatar}
+													style={styles.profileImage} />
+											</TouchableOpacity>
+										</View>
+
 									</View>
 									<View
+										style={styles.dividerView} />
+									<View
+										pointerEvents="box-none"
 										style={{
-											flex: 1,
-										}} />
-									<View style={{ elevation: 2 * alpha }}>
-										<TouchableOpacity onPress={() => this.onMemberButtonPressed()}>
-											<Image
-												source={avatar}
-												style={styles.profileImage} />
-										</TouchableOpacity>
+											height: 83 * alpha,
+											marginTop: 15 * alpha,
+											justifyContent: "space-between",
+											flexDirection: "row",
+											alignItems: "flex-start",
+										}}>
+										<ProfileRowMenu onPress={this.onPointButtonPressed} icon={require("./../../assets/images/point_center.png")} iconStyle={styles.pointiconImage} value={points} title={'Point'} />
+										<ProfileRowMenu onPress={this.onRewardButtonPressed} icon={require("./../../assets/images/voucher_center.png")} iconStyle={styles.rewardiconImage} value={vouchers_count} title={'Voucher'} />
+										<ProfileRowMenu onPress={this.onWalletButtonPressed} icon={require("./../../assets/images/wallet_center.png")} iconStyle={styles.walletIconImage} value={"$" + parseFloat(credits).toFixed(2)} title={'Wallet'} />
+
 									</View>
-
-								</View>
-								<View
-									style={styles.dividerView} />
-								<View
-									pointerEvents="box-none"
-									style={{
-										height: 83 * alpha,
-										marginTop: 15 * alpha,
-										justifyContent: "space-between",
-										flexDirection: "row",
-										alignItems: "flex-start",
-									}}>
-									<ProfileRowMenu onPress={this.onPointButtonPressed} icon={require("./../../assets/images/point_center.png")} iconStyle={styles.pointiconImage} value={points} title={'Point'} />
-									<ProfileRowMenu onPress={this.onRewardButtonPressed} icon={require("./../../assets/images/voucher_center.png")} iconStyle={styles.rewardiconImage} value={vouchers_count} title={'Voucher'} />
-									<ProfileRowMenu onPress={this.onWalletButtonPressed} icon={require("./../../assets/images/wallet_center.png")} iconStyle={styles.walletIconImage} value={"$" + parseFloat(credits).toFixed(2)} title={'Wallet'} />
-
 								</View>
 							</View>
 						</View>
 					</View>
-				</View>
-				<View
-					pointerEvents="box-none"
-					style={{
-						position: "absolute",
-						left: 20 * alpha,
-						width: 290 * alpha,
-						top: 80 * alpha,
-						height: 250 * alpha,
-						alignItems: "flex-start",
-					}}>
 					<View
-						style={styles.notificationView}>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 20 * alpha,
+							width: 290 * alpha,
+							top: 80 * alpha,
+							height: 250 * alpha,
+							alignItems: "flex-start",
+						}}>
+						<View
+							style={styles.notificationView}>
+						</View>
+						<Text
+							style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
+						<Text
+							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 					</View>
-					<Text
-						style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
-					<Text
-						style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
 				</View>
-			</View>
-			{/* <TouchableOpacity
+				{/* <TouchableOpacity
 				onPress={() => this.onMissionCenterPressed()}
 				style={styles.missioncenterbuttonButton}>
 				<Image
@@ -806,17 +804,23 @@ export default class Profile extends React.Component {
 			</TouchableOpacity> */}
 
 
-			<View
-				style={styles.menuView}>
-				<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} />
-				<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
-				<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
-				<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
-				<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
-				<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
-			</View>
-			{this.renderRedeemVoucher()}
-		</ScrollView>
+				<View
+					style={styles.menuView}>
+					<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} />
+					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
+					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
+					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
+					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
+					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
+				</View>
+				{this.renderRedeemVoucher()}
+
+			</ScrollView>
+			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			{this.state.loading ? <HudLoading isLoading={this.state.loading} /> : undefined}
+
+
+		</View>
 	}
 }
 

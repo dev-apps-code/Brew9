@@ -1,16 +1,16 @@
 import Constants from "expo-constants";
-import {Platform} from "react-native"
+import { Platform } from "react-native"
 // export const KSERVERURL = "https://app.brew9.co/api"
 // export const KURL_INFO = "https://app.brew9.co/info"
 // export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
-// export const KSERVERURL = "http://test.brew9.co/api"
-// export const KURL_INFO = "http://test.brew9.co/info"
-// export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
+export const KSERVERURL = "http://test.brew9.co/api"
+export const KURL_INFO = "http://test.brew9.co/info"
+export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
 
-export const KSERVERURL = "https://dev.brew9.co/api"
-export const KURL_INFO = "https://dev.brew9.co/info"
-export const KPAYMENTYURL = "https://dev.brew9.co/payments/baiduri"
+// export const KSERVERURL = "https://dev.brew9.co/api"
+// export const KURL_INFO = "https://dev.brew9.co/info"
+// export const KPAYMENTYURL = "https://dev.brew9.co/payments/baiduri"
 
 // export const KSERVERURL ='http://localhost:3000/api'
 // export const KURL_INFO ='http://localhost:3000/info'
@@ -43,31 +43,31 @@ export function encodeForFormData(details) {
   return formBody;
 }
 
-export function getBuildVersion(){
-  if (Platform.OS === "android"){
+export function getBuildVersion() {
+  if (Platform.OS === "android") {
     return APPBUILDVERSIONANDROID
   }
   return APPBUILDVERSIONIOS
 }
 
-export function getAppVersion(){
+export function getAppVersion() {
   return Constants.manifest.version
 }
 
 
 
-export function getPaymentServer(){
-  if (IS_TEST){
+export function getPaymentServer() {
+  if (IS_TEST) {
     return 'https://baiduri-bpgs.mtf.gateway.mastercard.com'
-  }else{
+  } else {
     return 'https://baiduri-bpgs.gateway.mastercard.com'
   }
 }
 
-export function getMerchantId(){
-    return '950029645'
+export function getMerchantId() {
+  return '950029645'
 }
 
-export function getBaiduriAuthorizationToken(){
+export function getBaiduriAuthorizationToken() {
   return 'Basic TUVSQ0hBTlQuOTUwMDI5NjQ1Ojc0NTlkZWNiZWFiOWEwMzUxYzU4ZDk3YjFkZjg4NDdm'
 }

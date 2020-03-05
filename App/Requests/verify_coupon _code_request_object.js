@@ -10,7 +10,7 @@ class VerifyCouponCodeObj extends BaseRequestObject {
     }
 
     getUrlString() {
-        return `coupon_codes/verify_code/`
+        return `coupon_codes/redeem_code`
     }
 
     getFormData() {
