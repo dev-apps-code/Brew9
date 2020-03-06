@@ -610,7 +610,6 @@ export default class Home extends React.Component {
 	}
 
 	reachProductIndex = (viewableItems, changed) => {
-		console.log('this.state.scroll_Index', this.state.scroll_Index)
 		let viewable = viewableItems.viewableItems
 		let data = [...this.state.data]
 		var first_index = viewable[0].index

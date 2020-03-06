@@ -6,8 +6,7 @@ class EventObject {
         this.message = jsonData.message
         this.total = jsonData.total
         this.member = jsonData.member
-      }
-  }
-  
-  export default EventObject
-  
+    }
+}
+
+export default EventObject

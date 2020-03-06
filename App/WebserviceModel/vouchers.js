@@ -1,4 +1,4 @@
-import { validVouchers, getValidVoucher,getUsedVoucher, getExpiredVoucher } from '../Services/vouchers'
+import { validVouchers, getValidVoucher, getUsedVoucher, getExpiredVoucher, } from '../Services/vouchers'
 import EventObject from './event_object'
 
 export default {
@@ -15,39 +15,37 @@ export default {
         }
     },
     effects: {
-        *loadVouchersForCart({ payload }, { call, put, select }) 
-        {
-        try{
-    
-            const { object, callback } = payload
-            const authtoken = yield select(state => state.members.userAuthToken)
-            const json = yield call(
-                validVouchers,
-                authtoken,
-                object,
-            )
-            const eventObject = new EventObject(json)
+        *loadVouchersForCart({ payload }, { call, put, select }) {
+            try {
 
-            if (eventObject.success == true) {}
-            typeof callback === 'function' && callback(eventObject)
+                const { object, callback } = payload
+                const authtoken = yield select(state => state.members.userAuthToken)
+                const json = yield call(
+                    validVouchers,
+                    authtoken,
+                    object,
+                )
+                const eventObject = new EventObject(json)
+
+                if (eventObject.success == true) { }
+                typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
-        }, 
-        *loadValidVouchers({ payload }, { call, put, select }) 
-        {
-        try{
-    
-            const { object, callback } = payload
-            const authtoken = yield select(state => state.members.userAuthToken)
-            const json = yield call(
-                getValidVoucher,
-                authtoken,
-                object,
-            )
-            const eventObject = new EventObject(json)
-            if (eventObject.success == true) {}
-            typeof callback === 'function' && callback(eventObject)
+        },
+        *loadValidVouchers({ payload }, { call, put, select }) {
+            try {
+
+                const { object, callback } = payload
+                const authtoken = yield select(state => state.members.userAuthToken)
+                const json = yield call(
+                    getValidVoucher,
+                    authtoken,
+                    object,
+                )
+                const eventObject = new EventObject(json)
+                if (eventObject.success == true) { }
+                typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
-        }, 
+        },
         *loadUsedVoucher({ payload }, { call, put, select }) {
             try {
 
@@ -84,5 +82,6 @@ export default {
                 typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
+
     },
 }

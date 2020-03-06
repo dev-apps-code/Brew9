@@ -19,7 +19,8 @@ import {
   missionLogin,
   scanStatus,
   updateAvatar,
-  currentStatus
+  currentStatus,
+  verifyCouponCode
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -552,6 +553,26 @@ export default {
 
           yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
           yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
+        }
+        typeof callback === 'function' && callback(eventObject)
+      } catch (err) { }
+    },
+    *loadVerifyCouponCode({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload
+
+        const authtoken = yield select(state => state.members.userAuthToken)
+
+        const json = yield call(
+          verifyCouponCode,
+          authtoken,
+          object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          if (eventObject.member) {
+            yield put(createAction('saveCurrentUser')(eventObject.member))
+          }
         }
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
