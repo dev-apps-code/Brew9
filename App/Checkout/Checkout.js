@@ -276,6 +276,10 @@ export default class Checkout extends React.Component {
 					this.setState({
 						valid_vouchers: eventObject.result
 					})
+					var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (o) { if (o.is_valid == true) return o }).length;
+					const analytics = new Analytics(ANALYTICS_ID)
+					analytics.event(new Event('Valid Voucher', getMemberIdForApi(currentMember), valid_voucher_counts))
+
 				}
 			}
 
@@ -697,10 +701,21 @@ export default class Checkout extends React.Component {
 	}
 
 	onCreditButtonPressed = () => {
-		this.setState({
-			selected_payment: "credit_card"
-		})
-		this.tooglePayment()
+		const { currentMember, selectedShop } = this.props
+		var credit_card_message = "System is in process of upgrading. Please select other payment options for now."
+		if (selectedShop.response_message != undefined) {
+			credit_card_response = _.find(selectedShop.response_message, function (obj) {
+				return obj.key === "Credit Card Disabled";
+			})
+			if (credit_card_message != undefined) {
+				credit_card_message = credit_card_response.text
+			}
+		}
+		this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{credit_card_message}</Text></View>, TOAST_DURATION + 1000)
+		// this.setState({
+		// 	selected_payment: "credit_card"
+		// })
+		// this.tooglePayment()
 
 	}
 	onCounterButtonPressed = () => {
