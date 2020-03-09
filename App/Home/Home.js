@@ -180,14 +180,13 @@ export default class Home extends React.Component {
 		OneSignal.init("1e028dc3-e7ee-45a1-a537-a04d698ada1d", { kOSSettingsKeyAutoPrompt: true });// set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
 
 		OneSignal.addEventListener('received', this.onReceived);
-		OneSignal.addEventListener('opened', this.onOpened);
+		OneSignal.addEventListener('opened', this.onOpened.bind(this));
 		OneSignal.addEventListener('ids', this.onIds.bind(this));
 	}
 
 	onQrScanPressed = () => {
 		const { navigation } = this.props
 		const { currentMember } = this.props
-
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "ScanQr"))
 
@@ -354,14 +353,13 @@ export default class Home extends React.Component {
 	}
 
 	onReceived(notification) {
-		// console.log("Notification received: ", notification);
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Push Notification', "Received", notification.payload.body))
 	}
 
 	onOpened(openResult) {
-		// console.log('Message: ', openResult.notification.payload.body);
-		// console.log('Data: ', openResult.notification.payload.additionalData);
-		// console.log('isActive: ', openResult.notification.isAppInFocus);
-		// console.log('openResult: ', openResult);
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Push Notification', "Open", openResult.notification.payload.body))
 	}
 
 	onIds(device) {
