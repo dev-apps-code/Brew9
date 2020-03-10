@@ -85,9 +85,21 @@ export default class ProductCell extends React.Component {
   };
 
   render() {
+    let { productingredient,
+      productDiscountPrice,
+      productprice,
+      productimage,
+      navigation,
+      productHidden,
+      productstatus,
+      productname,
+      recommended,
+      productsummary,
+    } = this.props
+
     var ingredients = null;
-    if (this.props.productingredient !== undefined) {
-      ingredients = this.props.productingredient.map((item, key) => {
+    if (productingredient !== undefined) {
+      ingredients = productingredient.map((item, key) => {
 
         var highlight = false
 
@@ -103,19 +115,19 @@ export default class ProductCell extends React.Component {
       });
     }
 
-    var hasDiscount = this.props.productDiscountPrice > 0.00 && this.props.productDiscountPrice ? true : false
-    var hasPrice = this.props.productprice > 0.00 && this.props.productprice ? true : false
-    const uri = this.props.productimage
+    var hasDiscount = productDiscountPrice > 0.00 && productDiscountPrice ? true : false
+    var hasPrice = productprice > 0.00 && productprice ? true : false
+    const uri = productimage
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
 
-        <View navigation={this.props.navigation} style={styles.productcell}>
+        <View navigation={navigation} style={styles.productcell}>
           <View
             style={{ justifyContent: 'center', alignItems: 'center' }}
           >
 
-            {this.props.productHidden ? <Image
-              source={{ uri: this.props.productimage }}
+            {productHidden ? <Image
+              source={{ uri: productimage }}
               style={styles.productblurimageImage}
               blurRadius={10}
             /> : <ExpoImage
@@ -123,57 +135,60 @@ export default class ProductCell extends React.Component {
                 style={styles.productimageImage}
 
               />}
-            {this.props.productstatus != null && this.props.productstatus.length > 0 ?
+            {productstatus != null && productstatus.length > 0 ?
               <View style={styles.soldView}>
-                <Text style={styles.soldtextText}>{this.props.productstatus}</Text>
+                <Text style={styles.soldtextText}>{productstatus}</Text>
               </View>
               : null}
 
           </View>
-          {this.props.productHidden ? <View style={styles.blurView}>
+          {productHidden ? <View style={styles.blurView}>
             <Image
               source={require("./../../assets/images/blur.png")}
               style={styles.detailBlurImage} />
-          </View> : <View style={styles.detailsView}>
-              <Text numberOfLines={2} style={styles.titleText}>
-                {this.props.productname}
-                {this.props.recommended && (
-                  <Image
-                    source={require("./../../assets/images/star_icon.png")}
-                    style={styles.recommendedStarImage} />
-                )}
-              </Text>
-              <View
-                pointerEvents="box-none"
-                style={{
-                  marginTop: 2 * alpha,
-                  marginBottom: 2 * alpha,
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                }}
-              >
-                {ingredients}
-              </View>
+          </View> :
+            <View style={styles.detailsView}>
+              <View>
+                <Text numberOfLines={2} style={styles.titleText}>
+                  {productname}
+                  {recommended && (
+                    <Image
+                      source={require("./../../assets/images/star_icon.png")}
+                      style={styles.recommendedStarImage} />
+                  )}
+                </Text>
+                <View
+                  pointerEvents="box-none"
+                  style={{
+                    marginTop: 2 * alpha,
+                    marginBottom: 2 * alpha,
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {ingredients}
+                </View>
 
-              <Text numberOfLines={hasPrice ? 2 : 3} style={styles.descriptionText}>
-                {this.props.productsummary}
-              </Text>
+                <Text numberOfLines={hasPrice ? 2 : 3} style={styles.descriptionText}>
+                  {productsummary}
+                </Text>
+              </View>
 
 
               {hasPrice && <View style={{ flexDirection: 'row' }}>
                 {hasDiscount ?
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                     <Text style={styles.priceText}>
-                      {hasPrice ? `$${parseFloat(this.props.productDiscountPrice).toFixed(2)}` : ""}
+                      {hasPrice ? `$${parseFloat(productDiscountPrice).toFixed(2)}` : ""}
                     </Text>
 
                     <Text style={styles.discountPriceText}>
-                      {hasPrice ? `$${parseFloat(this.props.productprice).toFixed(2)}` : ""}
+                      {hasPrice ? `$${parseFloat(productprice).toFixed(2)}` : ""}
                     </Text>
                   </View> :
 
                   <Text style={styles.priceText}>
-                    {`$${parseFloat(this.props.productprice).toFixed(2)}`}
+                    {`$${parseFloat(productprice).toFixed(2)}`}
                   </Text>
 
                 }
@@ -183,7 +198,7 @@ export default class ProductCell extends React.Component {
 
           {/* { this.props.productHidden && (<BlurView tint="light" intensity={85} blurRadius={100} style={styles.blurView}></BlurView>)} */}
 
-          {this.props.productHidden && (<Text
+          {productHidden && (<Text
             style={styles.toBeUnvieiledText}>To Be Unveiled</Text>)}
         </View>
       </TouchableWithoutFeedback>
@@ -296,7 +311,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10 * alpha,
     marginRight: 10 * alpha,
-    justifyContent: 'flex-start'
+    justifyContent: 'space-between'
   },
   titleText: {
     color: "rgb(54, 54, 54)",
@@ -322,18 +337,19 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     color: "rgb(130, 130, 130)",
     fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     marginTop: 5 * alpha,
-    marginBottom: 30 * alpha,
+    // marginBottom: 30 * alpha,
     fontStyle: "normal",
     textAlign: "left",
+    paddingBottom: 1 * alpha,
     textDecorationLine: 'line-through'
   },
   priceText: {
     backgroundColor: "transparent",
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
-    fontSize: 18 * fontAlpha,
+    fontSize: 20 * fontAlpha,
     marginTop: 5 * alpha,
     // marginBottom: 30 * alpha,
     fontStyle: "normal",
