@@ -2155,7 +2155,7 @@ const styles = StyleSheet.create({
 		height: 30 * alpha
 	},
 	productlistFlatList: {
-		backgroundColor: "white",
+		backgroundColor: "transparent",
 		width: "100%",
 		height: "100%",
 	},
