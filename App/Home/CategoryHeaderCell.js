@@ -7,77 +7,78 @@
 //
 
 import {
-  TouchableWithoutFeedback,
-  StyleSheet,
-  Text,
-  View,
-  Image
+	TouchableWithoutFeedback,
+	StyleSheet,
+	Text,
+	View,
+	Image
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR } from "../Common/common_style";
 
 export default class CategoryHeaderCell extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+	constructor(props) {
+		super(props);
+	}
 
-  componentDidMount() {}
+	componentDidMount() { }
 
-  onCategoryCellPress = () => {
-    
-  };
+	onCategoryCellPress = () => {
 
-  render() {
-    const { categoryImage, categoryname } = this.props;
+	};
 
-    return <TouchableWithoutFeedback
-				onPress={this.onCellThreePress}>
+	render() {
+		const { categoryImage, categoryname } = this.props;
+
+		return <TouchableWithoutFeedback
+			onPress={this.onCellThreePress}>
+			<View
+				navigation={this.props.navigation}
+				style={styles.categoryheadercell}>
 				<View
-					navigation={this.props.navigation}
-					style={styles.categoryheadercell}>
+					style={styles.textblockView}>
 					<View
-						style={styles.textblockView}>
-              <View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								right: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<View
-								style={styles.lineView}/>
-						</View>
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
 						<View
-							pointerEvents="box-none"
-							style={{
-								position: "absolute",
-								left: 0,
-								top: 0,
-								bottom: 0,
-								justifyContent: "center",
-							}}>
-							<Text
-								style={styles.headerText}>{this.props.categoryName}</Text>
-						</View>
-						
+							style={styles.lineView} />
 					</View>
-					{this.props.categoryDescription !== null && (
+					<View
+						pointerEvents="box-none"
+						style={{
+							position: "absolute",
+							left: 0,
+							top: 0,
+							bottom: 0,
+							justifyContent: "center",
+						}}>
 						<Text
+							style={styles.headerText}>{this.props.categoryName}</Text>
+					</View>
+
+				</View>
+				{this.props.categoryDescription !== null && (
+					<Text
 						numberOfLines={3}
 						style={styles.descriptionText}>{this.props.categoryDescription}</Text>
-					)}
-				</View>
-			</TouchableWithoutFeedback>
-  }
+				)}
+			</View>
+		</TouchableWithoutFeedback>
+	}
 }
 
 const styles = StyleSheet.create({
-  categoryheadercell: {
-		backgroundColor: "transparent",
+	categoryheadercell: {
+		marginTop: 5 * alpha,
+		backgroundColor: "white",
 		width: "100%",
 		flex: 1,
 	},
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		marginLeft: 10 * alpha,
 		paddingRight: 10 * alpha,
-		backgroundColor: "white",
+		backgroundColor: "#f5fffa",
 	},
 	lineView: {
 		marginLeft: 10 * alpha,
@@ -109,8 +110,8 @@ const styles = StyleSheet.create({
 		fontSize: 12 * fontAlpha,
 		fontStyle: "normal",
 		fontWeight: "normal",
-    	textAlign: "left",
-    // width: 190 * alpha,
+		textAlign: "left",
+		// width: 190 * alpha,
 		alignSelf: "flex-start",
 		marginLeft: 10 * alpha,
 		marginRight: 10 * alpha,
