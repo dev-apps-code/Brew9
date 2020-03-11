@@ -14,7 +14,7 @@ class VerifyCouponCodeObj extends BaseRequestObject {
     }
 
     getFormData() {
-        var string = JSON.stringify({ 'code': this.code });
+        var string = "code=" + this.code;
 
         return string
     }
