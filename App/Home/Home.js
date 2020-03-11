@@ -234,35 +234,54 @@ export default class Home extends React.Component {
 	// getNotificationAsync = async () => {
 	// 	await this.registerForPushNotificationsAsync()
 	// }
+	getLocation = async () => {
+		const { dispatch } = this.props
+		try {
+			const response = await Permissions.getAsync(Permissions.LOCATION);
+			if (response.status !== 'granted') {
+				if (response.status === 'denied') {
+					if (Platform.OS == 'android') {
+						AsyncStorage.setItem("location permission", response.status)
+					}
+				} else {
+					const { status } = await Permissions.askAsync(Permissions.LOCATION);
+				}
+			} else {
+				Location.watchPositionAsync(
+					{
+						distanceInterval: 100,
+						timeInterval: 10000
+					},
+					newLocation => {
+						dispatch(createAction("members/setLocation")(newLocation));
+					},
+					error => console.log(error)
+				);
+
+				let location = await Location.getCurrentPositionAsync({});
+				dispatch(createAction("members/setLocation")(location));
+
+			}
+		} catch (error) {
+			alert(error.message);
+		}
+
+	}
+
 
 	getLocationAsync = async () => {
-
 		const { dispatch } = this.props
+		try {
+			const value = await AsyncStorage.getItem("location permission");
+			if (value != 'denied') {
+				this.getLocation()
+			} else {
+				return
+			}
 
-		const { ask_location_status } = await Permissions.getAsync(Permissions.LOCATION);
-		if (ask_location_status === 'denied') {
-			return
+		} catch (error) {
+			// Error retrieving data
 		}
-
-		let { status } = await Permissions.askAsync(Permissions.LOCATION);
-		if (status !== 'granted') {
-			// this.refs.toast.show('Permission to access location was denied', TOAST_DURATION)
-			return
-		}
-
-		Location.watchPositionAsync(
-			{
-				distanceInterval: 100,
-				timeInterval: 10000
-			},
-			newLocation => {
-				dispatch(createAction("members/setLocation")(newLocation));
-			},
-			error => console.log(error)
-		);
-
-		let location = await Location.getCurrentPositionAsync({});
-		dispatch(createAction("members/setLocation")(location));
 	};
 
 	componentDidUpdate(prevProps, prevState) {
@@ -337,7 +356,6 @@ export default class Home extends React.Component {
 			onQrScanPressed: this.onQrScanPressed,
 		})
 		this.loadShops(true)
-
 		AppState.addEventListener('change', this._handleAppStateChange);
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
