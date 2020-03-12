@@ -15,7 +15,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import React from "react";
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, LIGHT_BLUE, LIGHT_BLUE_BACKGROUND, LIGHT_GREY } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
@@ -160,18 +160,16 @@ export default class ProductCell extends React.Component {
                         style={styles.recommendedStarImage} />
                     )}
                   </Text>
-                  {productTagLabel && <View style={[styles.promoBox, { backgroundColor: productTagColor }]}>
-                    <Text style={[styles.promoBoxText, { color: productTagText }]} >{productTagLabel}</Text>
-                  </View>}
                   <View
-                    pointerEvents="box-none"
                     style={{
-                      marginTop: 2 * alpha,
-                      marginBottom: 2 * alpha,
                       flexDirection: "row",
                       flexWrap: "wrap",
                     }}
                   >
+                    {productTagLabel && <View style={[styles.promoBox, { backgroundColor: productTagColor }]}>
+                      <Text style={[styles.promoBoxText, { color: productTagText }]} >{productTagLabel}</Text>
+                    </View>}
+
                     {ingredients}
                   </View>
 
@@ -207,7 +205,6 @@ export default class ProductCell extends React.Component {
             {productHidden && (<Text
               style={styles.toBeUnvieiledText}>To Be Unveiled</Text>)}
           </View>
-          <View style={{ flex: 1, height: 1, backgroundColor: "rgb(229, 227, 227)", marginLeft: 15 * alpha }} ></View>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -219,6 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fde9f1',
     paddingVertical: 4 * alpha,
     marginVertical: 4 * alpha,
+    marginRight: 2.5 * alpha,
     alignSelf: 'flex-start',
     // borderRadius: 5 * alpha
   },
@@ -293,12 +291,9 @@ const styles = StyleSheet.create({
   // },
   soldView: {
     backgroundColor: "transparent",
-    // position: "absolute",
     width: 74 * alpha,
-    // top: 75 * alpha,
-    // left: 5 * alpha,
-    flex: 1,
-    justifyContent: "center",
+
+    // justifyContent: 'flex-end',
     alignItems: "center"
   },
   soldtextText: {
@@ -444,14 +439,19 @@ const styles = StyleSheet.create({
   ingredientView: {
     backgroundColor: "rgb(245, 245, 245)",
     justifyContent: "center",
-    marginRight: 5 * alpha,
-    marginBottom: 3 * alpha,
+    paddingVertical: 2 * alpha,
+    marginVertical: 4 * alpha,
+    marginRight: 4 * alpha,
+
   },
   ingredientHighlightView: {
     backgroundColor: LIGHT_BLUE_BACKGROUND,
     justifyContent: "center",
-    marginRight: 5 * alpha,
-    marginBottom: 3 * alpha,
+    paddingVertical: 2 * alpha,
+    marginVertical: 4 * alpha,
+    marginRight: 4 * alpha,
+
+
   },
   ingredientText: {
     backgroundColor: "transparent",
@@ -461,10 +461,11 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
-    marginRight: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginTop: 4 * alpha,
-    marginBottom: 4 * alpha
+    paddingHorizontal: 4 * alpha,
+    // marginRight: 
+    // marginLeft: 4 * alpha,
+    // marginTop: 4 * alpha,
+    // marginBottom: 4 * alpha
   },
   ingredientHighlightText: {
     backgroundColor: "transparent",
@@ -474,10 +475,12 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "left",
-    marginRight: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginTop: 4 * alpha,
-    marginBottom: 4 * alpha
+    paddingHorizontal: 4 * alpha,
+
+    // marginRight: 4 * alpha,
+    // marginLeft: 4 * alpha,
+    // marginTop: 4 * alpha,
+    // marginBottom: 4 * alpha
   },
   recommendedStarImage: {
     resizeMode: "contain",

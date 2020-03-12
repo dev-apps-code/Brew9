@@ -77,7 +77,6 @@ export default class CategoryHeaderCell extends React.Component {
 
 const styles = StyleSheet.create({
 	categoryheadercell: {
-		marginTop: 5 * alpha,
 		backgroundColor: "white",
 		width: "100%",
 		flex: 1,
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
 		textAlign: "left",
 		marginLeft: 10 * alpha,
 		paddingRight: 10 * alpha,
-		backgroundColor: "#f5fffa",
+		backgroundColor: "white",
 	},
 	lineView: {
 		marginLeft: 10 * alpha,
