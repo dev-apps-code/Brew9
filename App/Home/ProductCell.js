@@ -166,7 +166,7 @@ export default class ProductCell extends React.Component {
                       flexWrap: "wrap",
                     }}
                   >
-                    {productTagLabel && <View style={[styles.promoBox, { backgroundColor: productTagColor }]}>
+                    {hasDiscount && <View style={[styles.promoBox, { backgroundColor: productTagColor }]}>
                       <Text style={[styles.promoBoxText, { color: productTagText }]} >{productTagLabel}</Text>
                     </View>}
 
