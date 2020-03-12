@@ -45,5 +45,6 @@ const styles = StyleSheet.create({
         width: 150 * 2 * alpha,
         height: 150 * alpha,
         flex: 1,
+        backgroundColor: 'white'
     }
 })

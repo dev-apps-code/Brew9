@@ -799,6 +799,9 @@ export default class Home extends React.Component {
 					productenable={item.enabled}
 					productstatus={item.status}
 					productHidden={item.hidden}
+					productTagLabel={item.discount_tag_label}
+					productTagColor={item.discount_tag_color}
+					productTagText={item.discount_tag_text_color}
 					recommended={item.recommended}
 					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
@@ -1201,7 +1204,7 @@ export default class Home extends React.Component {
 		if (index) {
 			let product = this.state.products[index]
 			if (product) {
-				product.discount == null ? product.current_price = product.price : product.current_price = product.discounted_price
+				product.discounted_price > 0 ? product.current_price = product.discounted_price : product.current_price = product.price
 				if (product.quantity == null) product.quantity = 1
 				if (product.calculated_price == null) product.calculated_price = product.current_price
 				if (product.selected_quantity == null) product.selected_quantity = 1
