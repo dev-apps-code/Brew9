@@ -95,8 +95,10 @@ export default class ProductCell extends React.Component {
       productname,
       recommended,
       productsummary,
+      productTagLabel,
+      productTagColor,
+      productTagText,
     } = this.props
-
     var ingredients = null;
     if (productingredient !== undefined) {
       ingredients = productingredient.map((item, key) => {
@@ -158,6 +160,9 @@ export default class ProductCell extends React.Component {
                         style={styles.recommendedStarImage} />
                     )}
                   </Text>
+                  {productTagLabel && <View style={[styles.promoBox, { backgroundColor: productTagColor }]}>
+                    <Text style={[styles.promoBoxText, { color: productTagText }]} >{productTagLabel}</Text>
+                  </View>}
                   <View
                     pointerEvents="box-none"
                     style={{
@@ -212,10 +217,10 @@ export default class ProductCell extends React.Component {
 const styles = StyleSheet.create({
   promoBox: {
     backgroundColor: '#fde9f1',
-    paddingVertical: 2 * alpha,
-    marginVertical: 2 * alpha,
+    paddingVertical: 4 * alpha,
+    marginVertical: 4 * alpha,
     alignSelf: 'flex-start',
-    borderRadius: 5 * alpha
+    // borderRadius: 5 * alpha
   },
   promoBoxText: {
     color: '#f05071',
