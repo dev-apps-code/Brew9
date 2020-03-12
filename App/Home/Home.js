@@ -799,6 +799,9 @@ export default class Home extends React.Component {
 					productenable={item.enabled}
 					productstatus={item.status}
 					productHidden={item.hidden}
+					productTagLabel={item.discount_tag_label}
+					productTagColor={item.discount_tag_color}
+					productTagText={item.discount_tag_text_color}
 					recommended={item.recommended}
 					daily_limit={item.product_settings[0].daily_limit}
 					productingredient={item.ingredients}
