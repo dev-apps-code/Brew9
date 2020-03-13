@@ -1188,7 +1188,8 @@ export default class Checkout extends React.Component {
 						justifyContent: "center",
 						backgroundColor: "transparent",
 						flex: 1,
-						flexDirection: "row"
+						flexDirection: "row",
+						justifyContent: 'space-between'
 					}}>
 					<View
 						style={styles.productDetailView}>
@@ -1205,9 +1206,11 @@ export default class Checkout extends React.Component {
 
 					</View>
 					{item.voucher.free_quantity ? <Text
-						style={styles.productQuantityText}>x{item.voucher.free_quantity}</Text> : undefined}
+						style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined}
 					{discount_value ? <Text
-						style={styles.productPriceText}>{`-$${parseFloat(discount_value).toFixed(2)}`}</Text> : undefined}
+						style={styles.voucherPriceText}>{`-$${parseFloat(discount_value).toFixed(2)}`}</Text> : undefined}
+
+
 					<TouchableOpacity onPress={() => this.onCancelVoucher(item)} style={styles.cancelVoucherButton}>
 						<Image
 							source={require("./../../assets/images/cancel.png")}
@@ -3214,7 +3217,27 @@ const styles = StyleSheet.create({
 		marginRight: 4 * alpha,
 		width: 25 * alpha,
 	},
+	voucherQuantityText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		width: 55 * alpha,
+	},
 	productPriceText: {
+		color: "rgb(50, 50, 50)",
+		fontFamily: TITLE_FONT,
+		fontSize: 13 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 55 * alpha,
+	},
+	voucherPriceText: {
 		color: "rgb(50, 50, 50)",
 		fontFamily: TITLE_FONT,
 		fontSize: 13 * fontAlpha,
