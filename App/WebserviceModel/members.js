@@ -177,6 +177,9 @@ export default {
     setLocation(state, { payload }) {
       return { ...state, location: payload }
     },
+    setDeliveryOption(state, { payload }) {
+      return { ...state, delivery: payload }
+    },
     saveCurrentUser(state, { payload }) {
       saveCurrentUserToStorage(payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }

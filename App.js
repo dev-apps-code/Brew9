@@ -22,6 +22,7 @@ import {
 } from "react-native";
 import Login from "./App/Login/Login";
 import Checkout from "./App/Checkout/Checkout";
+import ShippingAddress from "./App/ShippingAddress/ShippingAddress";
 import CheckoutVoucher from "./App/Checkout/CheckoutVoucher";
 import VoucherDetail from "./App/Checkout/VoucherDetail";
 import Profile from "./App/Profile/Profile";
@@ -105,6 +106,9 @@ const PushOrder = createStackNavigator(
     },
     PaymentsWebview: {
       screen: PaymentsWebview
+    },
+    ShippingAddress: {
+      screen: ShippingAddress,
     },
     Checkout: {
       screen: Checkout,
@@ -206,7 +210,7 @@ const PushMission = createStackNavigator(
     MissionCenter: {
       screen: MissionCenter
     },
-   
+
   },
   {
     initialRouteName: "MissionCenter",
@@ -462,7 +466,7 @@ const TabGroupOne = createBottomTabNavigator(
     PushInbox: {
       screen: PushInbox
     },
-    PushMission:{
+    PushMission: {
       screen: PushMission
     },
     PushProfile: {
@@ -497,8 +501,8 @@ const TabGroupOne = createBottomTabNavigator(
           return PickUp.tabBarItemOptions(navigation, store);
         case "PushInbox":
           return Notification.tabBarItemOptions(navigation, store);
-          case "PushMission":
-            return MissionCenter.tabBarItemOptions(navigation, store);
+        case "PushMission":
+          return MissionCenter.tabBarItemOptions(navigation, store);
         case "PushProfile":
           return Profile.tabBarItemOptions(navigation, store);
       }

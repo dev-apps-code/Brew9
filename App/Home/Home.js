@@ -156,7 +156,7 @@ export default class Home extends React.Component {
 			modalVisible: false,
 			selected_index: null,
 			select_quantity: 1,
-			delivery: 1,
+			delivery: 0,
 			modalGalleryVisible: true,
 			selected_promotion: "",
 			isPromoToggle: false,
@@ -536,7 +536,7 @@ export default class Home extends React.Component {
 	}
 
 	onCheckoutPressed = () => {
-		const { member_distance } = this.state
+		const { member_distance, delivery } = this.state
 		const { navigate } = this.props.navigation
 		const { navigation, dispatch, currentMember, shop, cart, promotions } = this.props
 
@@ -602,19 +602,12 @@ export default class Home extends React.Component {
 	}
 
 	_toggleDelivery = (value) => {
+		const { dispatch } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "Delivery"))
-		if (value == 1) {
+		let delivery = value == 1 ? 'delivery' : 'pickup'
+		dispatch(createAction("members/setDeliveryOption")(delivery));
 
-			this.refs.toast.show("Delivery not available yet", TOAST_DURATION, () => {
-				this.setState({
-					delivery: 0
-				})
-			})
-		}
-		this.setState({
-			delivery: 0
-		})
 	}
 
 	onSelectCategory = (scroll_index, selected_index) => {
@@ -1531,27 +1524,27 @@ export default class Home extends React.Component {
 						style={{
 							flex: 1,
 						}} />
-					{/* <View style={styles.pickUpDeliveryView}>
-							<SwitchSelector
-								options={[
-									{ label: "Pick Up", value: 0 },
-									{ label: "Delivery", value: 1 }]}
-								initial={0}
-								value={delivery}
-								textColor={"#4E4D4D"}
-								selectedColor={"#FFFFFF"}
-								buttonColor={"#2A2929"}
-								borderColor={"#979797"}
-								backgroundColor={"rgb(240,240,240)"}
-								style={styles.pickUpDeliveryViewTemp}
-								textStyle={styles.optionText}
-								fontSize={10 * alpha}
-								height={32 * alpha}
-								onPress={(value) => this}
-							/>
-							<TouchableOpacity style={styles.pickUpDeliveryViewTemp} onPress={() => this._toggleDelivery(1)}></TouchableOpacity>
-							
-						</View> */}
+					<View style={styles.pickUpDeliveryView}>
+						<SwitchSelector
+							options={[
+								{ label: "Pick Up", value: 0 },
+								{ label: "Delivery", value: 1 }]}
+							initial={this.state.delivery}
+							value={delivery}
+							textColor={"#4E4D4D"}
+							selectedColor={"#FFFFFF"}
+							buttonColor={"#2A2929"}
+							borderColor={"#979797"}
+							backgroundColor={"rgb(240,240,240)"}
+							style={styles.pickUpDeliveryViewTemp}
+							textStyle={styles.optionText}
+							fontSize={10 * alpha}
+							height={32 * alpha}
+							onPress={(value) => this._toggleDelivery(value)}
+						/>
+						{/* <TouchableOpacity style={styles.pickUpDeliveryViewTemp} onPress={() => this._toggleDelivery(1)}></TouchableOpacity> */}
+
+					</View>
 				</View>
 				<View
 					pointerEvents="box-none"

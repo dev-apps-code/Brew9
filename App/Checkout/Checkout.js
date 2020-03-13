@@ -37,12 +37,14 @@ import { getMemberIdForApi } from '../Services/members_helper'
 	cart_total: orders.cart_total,
 	discount_cart_total: orders.discount_cart_total,
 	location: members.location,
+	delivery: members.delivery
 }))
 export default class Checkout extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 
 		const { params = {} } = navigation.state
+		console.log('params', params)
 		return {
 			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Checkout</Text>,
 			headerTintColor: "black",
@@ -1813,7 +1815,7 @@ export default class Checkout extends React.Component {
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
-
+		console.log('delivery', this.props.delivery)
 		return <View
 			style={styles.checkoutViewPadding}>
 			<ScrollView
