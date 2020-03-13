@@ -1206,10 +1206,10 @@ export default class Checkout extends React.Component {
 						<View style={styles.spacer} />
 
 					</View>
-					<Text
-						style={styles.productQuantityText}></Text>
-					<Text
-						style={styles.productPriceText}>{discount_value ? `-$${parseFloat(discount_value).toFixed(2)}` : ""}</Text>
+					{item.voucher.free_quantity ? <Text
+						style={styles.productQuantityText}>x{item.voucher.free_quantity}</Text> : undefined}
+					{discount_value ? <Text
+						style={styles.productPriceText}>{`-$${parseFloat(discount_value).toFixed(2)}`}</Text> : undefined}
 					<TouchableOpacity onPress={() => this.onCancelVoucher(item)} style={styles.cancelVoucherButton}>
 						<Image
 							source={require("./../../assets/images/cancel.png")}
