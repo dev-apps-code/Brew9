@@ -394,6 +394,10 @@ export default class Checkout extends React.Component {
 		analytics.event(new Event('Checkout', getMemberIdForApi(currentMember), "Select Voucher"))
 		navigate("CheckoutVoucher", { valid_vouchers: this.state.valid_vouchers, cart: this.props.cart, addVoucherAction: this.addVoucherItemsToCart })
 	}
+	onEditAddress = () => {
+		const { navigate } = this.props.navigation
+		navigate("EditShippingAddress")
+	}
 
 	onCancelVoucher = (item) => {
 		let new_voucher_list = [...this.state.vouchers_to_use]
@@ -1311,6 +1315,8 @@ export default class Checkout extends React.Component {
 
 	renderPickupTime() {
 		const { pick_up_status } = this.state
+		let { delivery } = this.props
+		let pick_up = delivery ? 'Delivery time' : 'Pick Up Time'
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
@@ -1325,14 +1331,15 @@ export default class Checkout extends React.Component {
 								justifyContent: "center",
 								backgroundColor: "transparent",
 								flex: 1,
-								flexDirection: "row"
+								flexDirection: "row",
+
 							}}>
 							<View
 								style={styles.productDetailView}>
 								<View style={{ flexDirection: "row", alignItems: "center" }}>
 									<View style={pick_up_status != null ? styles.greenCircle : styles.redCircle} />
 									<Text
-										style={styles.productNameText}>Pick Up Time</Text>
+										style={styles.productNameText}>{pick_up}</Text>
 
 								</View>
 							</View>
@@ -1667,10 +1674,60 @@ export default class Checkout extends React.Component {
 
 		</Animated.View>
 	}
+	renderDeliveryAddress = () => {
+		return (
+			<View style={styles.deliveryAddressView}>
+				<TouchableOpacity
+					onPress={() => this.onEditAddress()}
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								alignItems: 'center',
+								backgroundColor: "transparent",
+								flex: 1,
+								flexDirection: "row",
+								paddingBottom: 15 * alpha,
+								borderBottomColor: '#dcdcdc',
+								borderBottomWidth: 0.5,
+
+							}}>
+							<View
+								style={[styles.deliveryAddressDetail, { flex: 1 }]}>
+								<Text
+									style={styles.productNameText}>Delivery Address</Text>
+								<Text style={styles.addressText}>2-3 Jalan Merbah 1, bandar Puchong Jaya</Text>
+							</View>
+							<Text style={[styles.editAddressText]}>Edit Address</Text>
+							<Image
+								source={require("./../../assets/images/next.png")}
+								style={styles.menuRowArrowImage} />
+						</View>
+					</View>
+				</TouchableOpacity>
+				<View style={{ paddingVertical: 15 * alpha }}>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 * alpha, paddingBottom: 10 * alpha }}>
+						<Text style={styles.productNameText}>Subtotal</Text>
+						<Text style={styles.productVoucherText}>$</Text>
+					</View>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 * alpha, }}>
+						<View>
+							<Text style={styles.productNameText}>Delivery fees</Text>
+							<Text style={styles.deliveryNoted}>*Get Free delivery with minimum purchase RM50</Text>
+						</View>
+						<Text style={styles.productVoucherText}>$60</Text>
+
+					</View>
+				</View>
+			</View>)
+	}
 
 	renderCheckoutReceipt() {
 		const { vouchers_to_use, final_price } = this.state
-		let { currentMember, selectedShop, cart, promotions } = this.props
+		let { currentMember, selectedShop, cart, promotions, delivery } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
 
 		return <View
@@ -1698,7 +1755,7 @@ export default class Checkout extends React.Component {
 						}}>
 
 						<View style={styles.locationWrapperView}>
-							<View
+							{!delivery && <View
 								style={styles.locationView}>
 								<View
 									style={styles.branchView}>
@@ -1745,7 +1802,7 @@ export default class Checkout extends React.Component {
 									<Text
 										style={styles.directionText}>Direction</Text>
 								</View>
-							</View>
+							</View>}
 						</View>
 						<View style={styles.receiptSectionSeperator}>
 							<Image
@@ -1766,6 +1823,14 @@ export default class Checkout extends React.Component {
 						{this.renderVoucherSection(vouchers_to_use)}
 						{this.renderPaymentSection()}
 						{this.renderPickupTime()}
+						<View style={styles.receiptSectionSeperator}>
+							<Image
+								source={require("./../../assets/images/curve_in_background.png")}
+								style={styles.curve_in} />
+							<View
+								style={styles.sectionSeperatorView} />
+						</View>
+						{delivery ? this.renderDeliveryAddress() : undefined}
 						<View style={styles.receiptSectionSeperator}>
 							<Image
 								source={require("./../../assets/images/curve_in_background.png")}
@@ -1855,6 +1920,51 @@ export default class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	deliveryNoted: {
+		backgroundColor: "transparent",
+		color: "#ff4500",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		marginBottom: 5 * alpha,
+	},
+	deliveryAddressDetail: {
+		backgroundColor: "transparent",
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "right",
+		marginBottom: 5 * alpha,
+	},
+	addressText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		// marginBottom: 10 * alpha,
+	},
+	editAddressText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		flex: 1
+		// marginBottom: 10 * alpha,
+	},
+	deliveryAddressView: {
+		paddingHorizontal: 24 * alpha,
+		backgroundColor: "rgb(245,245,245)"
+	},
 
 	headerLeftContainer: {
 		flexDirection: "row",

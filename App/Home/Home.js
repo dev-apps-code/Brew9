@@ -605,7 +605,7 @@ export default class Home extends React.Component {
 		const { dispatch } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Home', 'Click', "Delivery"))
-		let delivery = value == 1 ? 'delivery' : 'pickup'
+		let delivery = value == 1 ? true : false
 		dispatch(createAction("members/setDeliveryOption")(delivery));
 
 	}
