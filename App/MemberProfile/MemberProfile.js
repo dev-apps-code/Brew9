@@ -115,7 +115,6 @@ export default class MemberProfile extends React.Component {
 
 		this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log('eventobject', eventObject)
 			if (eventObject.success) {
 				this.refs.toast.show("Profile updated successfully", TOAST_DURATION)
 
