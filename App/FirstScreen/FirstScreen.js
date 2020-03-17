@@ -23,7 +23,7 @@ import { alpha, fontAlpha, windowHeight, windowWidth } from "../Common/size"
 import KochavaTracker from 'react-native-kochava-tracker';
 import { getMemberIdForApi } from '../Services/members_helper'
 import { getAppVersion, getBuildVersion } from "../Utils/server";
-
+import Brew9PopUp from "../Components/Brew9PopUp"
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 
@@ -157,30 +157,13 @@ export default class FirstScreen extends React.Component {
     }
     renderForceUpdate = () => {
         let { popUpVisible, title, description } = this.state
-        return <Modal
-            animationType="fade"
-            transparent={true}
-            visible={popUpVisible}
-        >
-            <TouchableWithoutFeedback >
-                <View style={[styles.popUpBackground]}>
-                    <View style={[styles.popUpContent]}>
-                        <Text style={styles.titleText}>{title}</Text>
-                        <View style={{ marginBottom: 10 }}>
-                            <View style={styles.popUpInput1}>
-                                <Text style={styles.descriptionText}>{description}</Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity
-                            onPress={this.onPressOk}
-                            style={styles.popUpInput3}>
-                            <Text
-                                style={styles.orderButtonText}>OK</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
-        </Modal>
+        return <Brew9PopUp
+            popUpVisible={popUpVisible}
+            title={title}
+            description={description}
+            onPressOk={this.onPressOk}
+            onBackgroundPress={() => console.log('close')}
+        />
 
     }
 
