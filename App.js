@@ -23,6 +23,8 @@ import {
 import Login from "./App/Login/Login";
 import Checkout from "./App/Checkout/Checkout";
 import ShippingAddress from "./App/ShippingAddress/ShippingAddress";
+import EditShippingAddress from "./App/ShippingAddress/EditShippingAddress"
+import AddShippingAddress from "./App/ShippingAddress/AddShippingAddress"
 import CheckoutVoucher from "./App/Checkout/CheckoutVoucher";
 import VoucherDetail from "./App/Checkout/VoucherDetail";
 import Profile from "./App/Profile/Profile";
@@ -124,6 +126,12 @@ const PushOrder = createStackNavigator(
     },
     CheckoutVoucher: {
       screen: CheckoutVoucher
+    },
+    EditShippingAddress: {
+      screen: EditShippingAddress
+    },
+    AddShippingAddress: {
+      screen: AddShippingAddress
     },
     VoucherDetail: {
       screen: VoucherDetail
