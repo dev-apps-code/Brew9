@@ -1202,6 +1202,11 @@ export default class Checkout extends React.Component {
 									style={styles.voucherButtonText}>Voucher</Text>
 							</View>
 						</View>
+						{item.voucher.description && <View style={styles.voucherDetailView}>
+							<Text style={styles.productVariantText}>
+								{item.voucher.description}
+							</Text>
+						</View>}
 						<View style={styles.spacer} />
 
 					</View>
