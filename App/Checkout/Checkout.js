@@ -3225,7 +3225,7 @@ const styles = StyleSheet.create({
 		fontWeight: "normal",
 		textAlign: "left",
 		backgroundColor: "transparent",
-		width: 55 * alpha,
+		width: 50 * alpha,
 	},
 	productPriceText: {
 		color: "rgb(50, 50, 50)",
