@@ -1179,7 +1179,6 @@ export default class Checkout extends React.Component {
 				}
 			}
 
-			console.log("Desc", item.voucher.description)
 			return <View
 				style={styles.drinksView}
 				key={key}>
