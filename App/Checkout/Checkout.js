@@ -1202,7 +1202,7 @@ export default class Checkout extends React.Component {
 									style={styles.voucherButtonText}>Voucher</Text>
 							</View>
 						</View>
-						{item.voucher.description && <View style={styles.voucherDetailView}>
+						{item.voucher.description.length > 0 && <View style={styles.voucherDetailView}>
 							<Text style={styles.productVariantText}>
 								{item.voucher.description}
 							</Text>
@@ -1210,8 +1210,8 @@ export default class Checkout extends React.Component {
 						<View style={styles.spacer} />
 
 					</View>
-					{item.voucher.free_quantity ? <Text
-						style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined}
+					{/* {item.voucher.free_quantity ? <Text
+						style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
 					{discount_value ? <Text
 						style={styles.voucherPriceText}>{`-$${parseFloat(discount_value).toFixed(2)}`}</Text> : undefined}
 
