@@ -163,13 +163,19 @@ export default class AddShippingAddress extends React.Component {
             <View>
                 <View style={styles.formDetail}>
                     <Text style={styles.title}>{title}</Text>
-                    <TextInput
+                    {title != "address" ? <TextInput
                         keyboardType="default"
                         clearButtonMode="always"
                         autoCorrect={false}
                         placeholder={placeholder}
                         onChangeText={(text) => onChangeText(text)}
-                        style={styles.textInput} />
+                        style={styles.textInput} /> :
+                        <View>
+                            <Text style={styles.textInput}>{placeholder}</Text>
+                            <Image
+                                source={require("./../../assets/images/next.png")}
+                                style={styles.navigationBarItemIcon} />
+                        </View>}
                 </View>
                 <Image
                     source={require("./../../assets/images/line-17.png")}

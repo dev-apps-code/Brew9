@@ -1754,7 +1754,6 @@ export default class Checkout extends React.Component {
 		const { vouchers_to_use, final_price } = this.state
 		let { currentMember, selectedShop, cart, promotions, delivery } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
-		console.log('currentMember', currentMember.defaultAddress)
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1911,7 +1910,6 @@ export default class Checkout extends React.Component {
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
-		console.log('delivery', this.props.delivery)
 		return <View
 			style={styles.checkoutViewPadding}>
 			<ScrollView

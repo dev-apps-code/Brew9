@@ -63,7 +63,7 @@ export default class EditShippingAddress extends React.Component {
                 { label: 'Male', value: 0 },
                 { label: 'Female', value: 1 }
             ],
-            contactNo:this.address.contactNo ? this.address.contactNo : "",
+            contactNo: this.address.contactNo ? this.address.contactNo : "",
             address: this.address.address ? this.address.address : "",
             unitNo: this.address.unitNo ? this.address.unitNo : "",
             gender: this.address.gender ? this.address.gender : "",
@@ -88,6 +88,12 @@ export default class EditShippingAddress extends React.Component {
         this.setState({ tag })
 
     }
+    onSelectAddress = () => {
+        const { navigate } = this.props.navigation
+        navigate("ShippingArea", {
+            returnToRoute: this.props.navigation.state
+        })
+    }
 
 
     componentDidMount() {
@@ -106,13 +112,19 @@ export default class EditShippingAddress extends React.Component {
             <View>
                 <View style={styles.formDetail}>
                     <Text style={styles.title}>{title}</Text>
-                    <TextInput
+                    {title != "Address" ? <TextInput
                         keyboardType="default"
                         clearButtonMode="always"
                         autoCorrect={false}
                         placeholder={placeholder}
                         onChangeText={(text) => onChangeText(text)}
-                        style={styles.textInput} />
+                        style={styles.textInput} /> :
+                        <TouchableOpacity style={{ flexDirection: 'row', flex: 1, marginRight: 10 * alpha, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.onSelectAddress()}>
+                            <Text style={[styles.textInput]}>{placeholder}</Text>
+                            <Image
+                                source={require("./../../assets/images/next.png")}
+                                style={styles.navigationBarItemIcon} />
+                        </TouchableOpacity>}
                 </View>
                 <Image
                     source={require("./../../assets/images/line-17.png")}

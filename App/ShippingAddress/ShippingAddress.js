@@ -96,7 +96,7 @@ export default class ShippingAddress extends React.Component {
     }
     onAddAddress = () => {
         const { navigation } = this.props
-        navigation.navigate("MapShippingAddress")
+        navigation.navigate("AddShippingAddress")
     }
     onEditAddress = (item) => {
         const { navigation } = this.props

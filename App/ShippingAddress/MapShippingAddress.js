@@ -12,12 +12,13 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    Platform
+    Platform,
+    TextInput
 } from "react-native";
 import React from "react";
 import { alpha, fontAlpha } from "../Common/size";
 import openMap from "react-native-open-maps";
-import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import MapView, {
     Marker,
     PROVIDER_GOOGLE
@@ -68,9 +69,11 @@ export default class MapShippingAddress extends React.Component {
 
 
     componentDidMount() {
+        this.props.navigation.setParams({
+            onBackPressed: this.onBackPressed,
+        })
         navigator.geolocation.getCurrentPosition(
             position => {
-                console.log(position)
                 this.setState({
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
@@ -83,9 +86,36 @@ export default class MapShippingAddress extends React.Component {
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
     }
+    onBackPressed = () => {
+
+        this.props.navigation.goBack()
+    }
+    onChangeName = (address) => {
+        this.setState({ address })
+    }
+    onChangeName = (address) => {
+        this.setState({ address })
+    }
+    onChangeName = (address) => {
+        this.setState({ address })
+    }
+    renderForm = (title, placeholder, onChangeText) => {
+
+        return (
+            <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+                <Text style={styles.title}>{title}</Text>
+                <TextInput
+                    keyboardType="default"
+                    clearButtonMode="always"
+                    autoCorrect={false}
+                    placeholder={placeholder}
+                    onChangeText={(text) => onChangeText(text)}
+                    style={styles.textInput} />
+            </View>
+        )
+    }
 
     renderMap = () => {
-        console.log("renderMap");
         return (
             <MapView
                 showsUserLocation={true}
@@ -101,73 +131,24 @@ export default class MapShippingAddress extends React.Component {
             </MapView>
         );
     };
-    GooglePlacesInput = () => {
-        return (
-            <GooglePlacesAutocomplete
-                placeholder='Search'
-                minLength={2} // minimum length of text to search
-                autoFocus={false}
-                returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-                keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
-                listViewDisplayed='auto'    // true/false/undefined
-                fetchDetails={true}
-                renderDescription={row => row.description} // custom description render
-                onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                    console.log(data, details);
-                }}
-
-                getDefaultValue={() => ''}
-
-                query={{
-                    // available options: https://developers.google.com/places/web-service/autocomplete
-                    key: 'AIzaSyD0Gq1MLRFylAy8TV9rzH9UgZ3koEWDf8k',
-                    language: 'en', // language of the results
-                    types: '(cities)' // default: 'geocode'
-                }}
-
-                styles={{
-                    textInputContainer: {
-                        width: '100%'
-                    },
-                    description: {
-                        fontWeight: 'bold'
-                    },
-                    predefinedPlacesDescription: {
-                        color: '#1faadb'
-                    }
-                }}
-
-                currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-                currentLocationLabel="Current location"
-                nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-                GoogleReverseGeocodingQuery={{
-                    // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-                }}
-                GooglePlacesSearchQuery={{
-                    // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-                    rankby: 'distance',
-                    type: 'cafe'
-                }}
-
-                GooglePlacesDetailsQuery={{
-                    // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
-                    fields: 'formatted_address',
-                }}
-
-                filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-                predefinedPlaces={[homePlace, workPlace]}
-
-                debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-                renderLeftButton={() => <Image source={require("./../../assets/images/back.png")} />}
-                renderRightButton={() => <Text>Custom text after the input</Text>}
-            />
-        );
-    }
     render() {
         return (
             <View style={styles.container}>
+                <Text style={styles.headerTitle}>Area</Text>
                 {this.state.loading ? null : this.renderMap()}
-                {this.GooglePlacesInput()}
+                <View style={styles.formView}>
+                    {this.renderForm("Name", "e.g. Gym/School", this.onChangeName)}
+                    {this.renderForm("Address", "e.g. Gym/School", this.onChangeName)}
+                    {this.renderForm("Address Detail's", "e.g. Gym/School", this.onChangeName)}
+                    <TouchableOpacity
+                        onPress={() => this.onSavePressed()}
+                        style={styles.saveButton}>
+                        <Text
+                            style={styles.saveButtonText}>SAVE</Text>
+                    </TouchableOpacity>
+                </View>
+
+
             </View>
         );
     }
@@ -193,12 +174,71 @@ const styles = StyleSheet.create({
         tintColor: "black"
     },
     container: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: "flex-end",
-        alignItems: "center"
+        flex: 1,
+        backgroundColor: 'transparent'
     },
     map: {
-        ...StyleSheet.absoluteFillObject
+        height: 300 * alpha,
+        width: "100%",
+
     },
+    title: {
+        backgroundColor: "transparent",
+        color: "rgb(54, 54, 54)",
+        fontFamily: TITLE_FONT,
+        fontSize: 13 * fontAlpha,
+        fontStyle: "normal",
+        width: 110 * alpha,
+        textAlign: "left",
+    },
+    textInput: {
+        backgroundColor: "transparent",
+        padding: 0,
+        color: "black",
+        fontFamily: NON_TITLE_FONT,
+        fontSize: 14 * fontAlpha,
+        fontStyle: "normal",
+        fontWeight: "normal",
+        textAlign: "left",
+        // width: 193 * alpha,
+        // height: 30 * alpha,
+        flex: 1,
+    },
+    formView: {
+        paddingHorizontal: 20 * alpha,
+        marginTop: 20 * alpha
+    },
+    saveButton: {
+        borderRadius: 4 * alpha,
+        justifyContent: "center",
+        alignSelf: "center",
+        backgroundColor: PRIMARY_COLOR,
+        // position: "absolute",
+        // left: 0 * alpha,
+        // right: 0 * alpha,
+        marginHorizontal: 20 * alpha,
+        // bottom: BUTTONBOTTOMPADDING,
+        height: 47 * alpha,
+        flexDirection: "row",
+        alignItems: "center",
+        flex: 1
+    },
+    saveButtonText: {
+        color: "white",
+        fontFamily: TITLE_FONT,
+        fontSize: 14 * fontAlpha,
+        fontStyle: "normal",
+        textAlign: "left",
+    },
+    headerTitle: {
+        backgroundColor: "transparent",
+        color: "rgb(54, 54, 54)",
+        fontFamily: TITLE_FONT,
+        fontSize: 16 * fontAlpha,
+        fontStyle: "normal",
+        textAlign: "left",
+        paddingVertical: 15 * alpha,
+        paddingHorizontal: 15 * alpha,
+    }
 
 });
