@@ -9,7 +9,12 @@ class ShopAreaRequestObject extends BaseRequestObject {
     }
 
     getUrlString() {
-        return `shops/${this.shop_id}/get_areas`
+        return `shops/${this.url_id}/get_areas`
+    }
+    getFormData() {
+        var string = "";
+
+        return string
     }
 }
 export default ShopAreaRequestObject

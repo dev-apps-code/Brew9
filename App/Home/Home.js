@@ -441,7 +441,6 @@ export default class Home extends React.Component {
 		// this.setState({ loading: true })
 		const callback = eventObject => {
 			// this.setState({ loading: false })
-
 			if (eventObject.success) {
 				this.setState({
 					menu_banners: eventObject.result.menu_banners

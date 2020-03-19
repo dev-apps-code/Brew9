@@ -59,10 +59,7 @@ export default {
                     authtoken,
                     object,
                 )
-                console.log('json loadShopArea', json)
-
                 const eventObject = new EventObject(json)
-                console.log('eventObject loadShopArea', eventObject)
                 if (eventObject.success == true) { }
                 typeof callback === 'function' && callback(eventObject)
             } catch (err) { console.log('error loadShopArea', err) }

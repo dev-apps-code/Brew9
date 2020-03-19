@@ -129,7 +129,6 @@ export default class PointShopItem extends React.Component {
 		const { data } = this.state
 		const item = this.props.navigation.getParam("item", "")
 		
-		console.log("item", item)
 		return <View
 			style={styles.pointItemView}>
 			<Image

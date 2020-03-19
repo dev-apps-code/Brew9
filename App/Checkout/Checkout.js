@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import { createAction, Storage } from "../Utils"
+import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object'
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
@@ -108,12 +109,14 @@ export default class Checkout extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 
-		const { dispatch } = this.props
+		const { dispatch, delivery } = this.props
 		this.setTimePickerDefault()
 		this.setState({
 			valid_vouchers: [],
+			deliveryFee: ''
 		}, function () {
 			this.loadValidVouchers()
+			{ delivery && this.loadDeliveryFee(this.state.final_price) }
 		})
 		dispatch(createAction("orders/noClearCart")());
 		this.check_promotion_trigger()
@@ -266,6 +269,32 @@ export default class Checkout extends React.Component {
 		} else {
 			this.spminute.scrollToIndex(index - 1)
 		}
+
+	}
+	loadDeliveryFee = (total) => {
+		const { dispatch, selectedShop, currentMember } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				let deliveryFee = parseFloat(eventObject.result.delivery_fee).toFixed(2)
+				let final_price = total - deliveryFee
+
+				this.setState({
+					deliveryFee: deliveryFee,
+					final_price: final_price
+				})
+
+			}
+		}
+
+		const obj = new DeliveryFeeRequestObject(total)
+		console.log('obj', obj)
+		obj.setUrlId(selectedShop.id)
+		dispatch(
+			createAction('shops/loadDeliveryFee')({
+				object: obj,
+				callback,
+			})
+		)
 
 	}
 
@@ -448,7 +477,7 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { currentMember, dispatch, promotions, cart_total, selectedShop } = this.props
+		const { currentMember, dispatch, promotions, cart_total, selectedShop, delivery } = this.props
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
@@ -535,7 +564,7 @@ export default class Checkout extends React.Component {
 	}
 
 	calculateVoucherDiscount(vouchers_to_use) {
-		const { discount_cart_total, cart_total } = this.props
+		const { discount_cart_total, cart_total, delivery } = this.props
 		const { selected_payment } = this.state
 		var discount = 0
 		for (var index in vouchers_to_use) {
@@ -554,6 +583,7 @@ export default class Checkout extends React.Component {
 			}
 		}
 		const f_price = discount_cart_total - discount
+		{ delivery && this.loadDeliveryFee(f_price.toFixed(2)) }
 		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function () {
 			if (selected_payment == "credit_card" && f_price <= 0) {
 				this.setState({ selected_payment: '' })
@@ -1687,6 +1717,7 @@ export default class Checkout extends React.Component {
 		</Animated.View>
 	}
 	renderDeliveryAddress = (address) => {
+		let { deliveryFee } = this.state
 		return (
 			<View style={styles.deliveryAddressView}>
 				<TouchableOpacity
@@ -1743,7 +1774,7 @@ export default class Checkout extends React.Component {
 							<Text style={styles.productNameText}>Delivery fees</Text>
 							<Text style={styles.deliveryNoted}>*Get Free delivery with minimum purchase RM50</Text>
 						</View>
-						<Text style={styles.productVoucherText}>$60</Text>
+						<Text style={styles.productVoucherText}>{`-$${parseFloat(deliveryFee).toFixed(2)}`}</Text>
 
 					</View>
 				</View>

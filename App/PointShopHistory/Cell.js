@@ -27,7 +27,6 @@ export default class Cell extends React.Component {
   onCellPress = () => {};
 
   render() {
-    console.log("Render", this.props.product_image)
     return (
       <TouchableWithoutFeedback onPress={this.onPointItemCellPress}>
         <View navigation={this.props.navigation} style={styles.pointitemcell}>
