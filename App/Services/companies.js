@@ -1,9 +1,13 @@
-import { getMethod,postMethod,postMultipartMethod } from '../Utils/webservice_helper'
+import { getMethod, postMethod, postMultipartMethod } from '../Utils/webservice_helper'
 
-export function topUpProducts(authtoken,object) {
-    return getMethod(authtoken,object)
+export function topUpProducts(authtoken, object) {
+    return getMethod(authtoken, object)
 }
 
-export function pointsProducts(authtoken,object) {
-    return getMethod(authtoken,object)
+export function pointsProducts(authtoken, object) {
+    return getMethod(authtoken, object)
+}
+
+export function shopArea(authtoken, object) {
+    return getMethod(authtoken, object)
 }

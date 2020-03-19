@@ -1,11 +1,11 @@
 import EventObject from './event_object'
-import { topUpProducts, pointsProducts } from '../Services/companies.js'
+import { topUpProducts, pointsProducts, shopArea } from '../Services/companies.js'
 
 export default {
     namespace: 'companies',
 
     state: {
-        
+
     },
 
     reducers: {
@@ -13,12 +13,11 @@ export default {
             return {
                 ...state,
             }
-        },        
+        },
     },
     effects: {
-        *loadTopUpProducts({ payload }, { call, put, select })
-        {
-            try{
+        *loadTopUpProducts({ payload }, { call, put, select }) {
+            try {
 
                 const { object, callback } = payload
                 const authtoken = yield select(state => state.members.userAuthToken)
@@ -29,13 +28,12 @@ export default {
                     object,
                 )
                 const eventObject = new EventObject(json)
-                if (eventObject.success == true) {}
+                if (eventObject.success == true) { }
                 typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
-        *loadPointsProducts({ payload }, { call, put, select })
-        {
-            try{
+        *loadPointsProducts({ payload }, { call, put, select }) {
+            try {
 
                 const { object, callback } = payload
                 const authtoken = yield select(state => state.members.userAuthToken)
@@ -46,9 +44,28 @@ export default {
                     object,
                 )
                 const eventObject = new EventObject(json)
-                if (eventObject.success == true) {}
+                if (eventObject.success == true) { }
                 typeof callback === 'function' && callback(eventObject)
             } catch (err) { }
         },
+        *loadShopArea({ payload }, { call, put, select }) {
+            try {
+
+                const { object, callback } = payload
+                const authtoken = yield select(state => state.members.userAuthToken)
+
+                const json = yield call(
+                    shopArea,
+                    authtoken,
+                    object,
+                )
+                console.log('json loadShopArea', json)
+
+                const eventObject = new EventObject(json)
+                console.log('eventObject loadShopArea', eventObject)
+                if (eventObject.success == true) { }
+                typeof callback === 'function' && callback(eventObject)
+            } catch (err) { console.log('error loadShopArea', err) }
+        }
     },
 }
