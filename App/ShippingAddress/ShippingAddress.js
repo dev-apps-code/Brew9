@@ -61,13 +61,9 @@ export default class ShippingAddress extends React.Component {
 
     }
     onBackPressed = () => {
-
-        const { navigation } = this.props
-
-        const { routeName, key } = navigation.getParam('returnToRoute')
-
-        navigation.navigate({ routeName, key, })
+        this.props.navigation.goBack()
     }
+
     loadShippingAddress = () => {
         let { dispatch, currentMember } = this.props
         const callback = eventObject => {
@@ -83,7 +79,6 @@ export default class ShippingAddress extends React.Component {
 
         }
         const obj = new ShippingAddressRequestObject()
-        console.log('obj', obj)
         obj.setUrlId(currentMember.id)
         dispatch(
             createAction('members/loadShippingAddress')({
@@ -120,8 +115,10 @@ export default class ShippingAddress extends React.Component {
                     <View
                         style={selected} />
                     <View style={{ flex: 1, marginLeft: 15 * alpha }}>
-                        <Text style={styles.addressText}>{item.name}</Text>
-                        <Text style={styles.addressText}>{item.address}</Text>
+                        <Text style={styles.addressText}>{item.unit_no}</Text>
+                        <Text style={styles.addressText}>{item.street1}</Text>
+                        <Text style={styles.addressText}>{item.street2}</Text>
+                        <Text style={styles.addressText}>{item.city}, {item.postal_code},{item.state} {item.country}</Text>
                     </View>
                     <View style={{ flex: 0.25 }} />
 
@@ -135,20 +132,22 @@ export default class ShippingAddress extends React.Component {
 
     render() {
         const { location, shippingAddress } = this.props
+        let { loading } = this.state
         return <View
             style={styles.Container}>
             <ScrollView
                 style={styles.scrollviewScrollView}>
                 <Text style={styles.headingStyle}>Delivery Address</Text>
-                <FlatList
-                    data={this.state.shippingAddress}
-                    renderItem={({ item }) => (
-                        this.renderShippingAddress(item)
-                    )}
-                    keyExtractor={item => item.id}
-                />
+                {loading ? <HudLoading isLoading={this.state.loading} />
+                    : <FlatList
+                        data={this.state.shippingAddress}
+                        renderItem={({ item }) => (
+                            this.renderShippingAddress(item)
+                        )}
+                        keyExtractor={item => item.id}
+                    />}
             </ScrollView>
-            <TouchableOpacity onPress={this.onEditAddress}>
+            <TouchableOpacity onPress={this.onAddAddress}>
                 <View style={styles.addButtonView}>
                     <Image
                         source={require("./../../assets/images/add.png")}

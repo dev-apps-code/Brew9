@@ -20,7 +20,9 @@ import {
   scanStatus,
   updateAvatar,
   currentStatus,
-  verifyCouponCode
+  verifyCouponCode,
+  getShippingAddress,
+  saveShippingAddress
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -580,6 +582,50 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
+    *loadShippingAddress({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+
+        const json = yield call(
+          getShippingAddress,
+          authtoken,
+          object,
+        )
+        console.log('json loadShippingAddress', json)
+
+        const eventObject = new EventObject(json)
+        console.log('eventObject loadShippingAddress', eventObject)
+        if (eventObject.success == true) {
+          // yield put(createAction('saveCurrentShippingAddress')(eventObject.member))
+
+        }
+        typeof callback === 'function' && callback(eventObject)
+
+      } catch (err) { console.log('loadShippingAddress', err) }
+    },
+    *saveShippingAddress({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+
+        const json = yield call(
+          saveShippingAddress,
+          authtoken,
+          object,
+        )
+        console.log('json saveShippingAddress', json)
+
+        const eventObject = new EventObject(json)
+        console.log('eventObject saveShippingAddress', eventObject)
+        if (eventObject.success == true) {
+          // yield put(createAction('saveCurrentShippingAddress')(eventObject.member))
+
+        }
+        typeof callback === 'function' && callback(eventObject)
+
+      } catch (err) { console.log('addShippingAddress', err) }
+    }
   },
 
 }

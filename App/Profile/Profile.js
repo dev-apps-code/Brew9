@@ -828,7 +828,7 @@ export default class Profile extends React.Component {
 					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
 					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
 					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
-					<ProfileMenu onPress={this.onAddressPress} text={'My Address'} />
+					{/* <ProfileMenu onPress={this.onAddressPress} text={'My Address'} /> */}
 					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
 					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
 				</View>

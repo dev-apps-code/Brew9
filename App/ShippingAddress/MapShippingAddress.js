@@ -16,12 +16,13 @@ import {
     TextInput
 } from "react-native";
 import React from "react";
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import openMap from "react-native-open-maps";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import MapView, {
     Marker,
 } from "react-native-maps";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default class MapShippingAddress extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -58,7 +59,7 @@ export default class MapShippingAddress extends React.Component {
             latitude: parseFloat(this.props.navigation.state.params.area.latitude),
             longitude: parseFloat(this.props.navigation.state.params.area.longitude),
             error: null,
-            area: this.props.navigation.state.params.area
+            deliveryArea: this.props.navigation.state.params.area.area
         };
     }
 
@@ -83,27 +84,19 @@ export default class MapShippingAddress extends React.Component {
 
         this.props.navigation.goBack()
     }
-    onChangeName = (address) => {
-        this.setState({ address })
-    }
-    onChangeName = (address) => {
-        this.setState({ address })
-    }
-    onChangeName = (address) => {
-        this.setState({ address })
-    }
-    renderForm = (title, placeholder, onChangeText) => {
 
+    renderForm = (title, placeholder, text, onChangeText, description) => {
+        console.log('description', description)
         return (
             <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
                 <Text style={styles.title}>{title}</Text>
-                <TextInput
+                {text ? <Text style={styles.textInput}>{description}</Text> : <TextInput
                     keyboardType="default"
                     clearButtonMode="always"
                     autoCorrect={false}
                     placeholder={placeholder}
-                    onChangeText={(text) => onChangeText(text)}
-                    style={styles.textInput} />
+                    onChangeText={onChangeText}
+                    style={styles.textInput} />}
             </View>
         )
     }
@@ -125,23 +118,68 @@ export default class MapShippingAddress extends React.Component {
             </MapView>
         );
     };
+    onChangeUnitNo = (unitNo) => {
+        this.setState({
+            unitNo
+        })
+    }
+    onChangeStreet1 = (Street1) => {
+        this.setState({
+            Street1
+        })
+    }
+    onChangeStreet2 = (Street2) => {
+        this.setState({
+            Street2
+        })
+    }
+    onChangeCity = (city) => {
+        this.setState({
+            city
+        })
+    }
+    onChangePoscode = (poscode) => {
+        this.setState({
+            poscode
+        })
+    }
+    onChangeCountry = (country) => {
+        this.setState({
+            country
+        })
+    }
+    onChangeState = (state) => {
+        this.setState({
+            state
+        })
+    }
+
+    onSavePressed = () => {
+        console.log(this.state)
+    }
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.headerTitle}>Area</Text>
+                <Text style={styles.headerTitle}>{this.state.deliveryArea}</Text>
                 {this.renderMap()}
-                <View style={styles.formView}>
-                    {this.renderForm("Name", "e.g. Gym/School", this.onChangeName)}
-                    {this.renderForm("Address", "e.g. Gym/School", this.onChangeName)}
-                    {this.renderForm("Address Detail's", "e.g. Gym/School", this.onChangeName)}
-                    <TouchableOpacity
-                        onPress={() => this.onSavePressed()}
-                        style={styles.saveButton}>
-                        <Text
-                            style={styles.saveButtonText}>SAVE</Text>
-                    </TouchableOpacity>
-                </View>
+                <ScrollView style={{ height: windowHeight / 4 }}>
+                    <View style={styles.formView}>
+                        {this.renderForm("Unit no", "e.g. Gym/School", false, (text) => this.onChangeUnitNo(text))}
+                        {this.renderForm("Street1", "e.g. Gym/School", false, (text) => this.onChangeStreet1(text))}
+                        {this.renderForm("Street2", "e.g. Gym/School", false, (text) => this.onChangeStreet2(text))}
+                        {this.renderForm("State", "Exp:Block B", false, (text) => this.onChangeState(text))}
+                        {this.renderForm("Poscode", "Exp:Block B", false, (text) => this.onChangePoscode(text))}
+                        {this.renderForm("City", "Exp:Block B", false, (text) => this.onChangeCity(text))}
+                        {this.renderForm("Country", "Exp:Block B", false, (text) => this.onChangeCountry(text))}
 
+                        <TouchableOpacity
+                            onPress={() => this.onSavePressed()}
+                            style={styles.saveButton}>
+                            <Text
+                                style={styles.saveButtonText}>SAVE</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
 
             </View>
         );

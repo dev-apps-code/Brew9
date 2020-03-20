@@ -6,7 +6,7 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, TextInput } from "react-native"
+import { View, Text, StyleSheet, ScrollView, FlatList, Image, TouchableOpacity, TextInput } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
@@ -58,17 +58,22 @@ export default class AddShippingAddress extends React.Component {
         super(props)
         this.state = {
             name: '',
-            gender_options: [
-                { label: 'Male', value: 0 },
-                { label: 'Female', value: 1 }
-            ],
-            contactNo: "",
-            address: "",
-            unitNo: "",
+            first_name: "",
+            last_name: "",
+            contact_number: "",
+            unit_no: "",
+            street1: "",
+            street2: "",
+            city: "",
+            state: "",
+            postal_code: "",
+            country: "",
+            land_mark: "",
+            latitude: "",
+            longitude: "",
+            delivery_area: "",
             gender: "",
             genderIndex: 0,
-            tag: "",
-            defaultAddress: 1
 
 
 
@@ -111,10 +116,7 @@ export default class AddShippingAddress extends React.Component {
         dispatch(createAction("members/setShippingAddress")(formData));
     }
     checkForm = () => {
-        if (this.state.gender == null) {
-            this.refs.toast.show("Please select your gender", 500)
-            return false
-        } else if (!this.state.name) {
+        if (!this.state.first_name) {
             this.refs.toast.show("Please select a name", 500)
             return false
         }
@@ -147,35 +149,40 @@ export default class AddShippingAddress extends React.Component {
     componentDidMount() {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
-            onItemPressed: this.onItemPressed,
         })
     }
 
     onBackPressed = () => {
-
         this.props.navigation.goBack()
     }
     onChangeDefaultAddress = (value) => {
-        this.setState({ defaultAddress: value })
+        this.setState({ default: value })
     }
-    renderFormDetail = (title, placeholder, onChangeText) => {
+    onSelectAddress = () => {
+        const { navigate } = this.props.navigation
+        navigate("ShippingArea", {
+            returnToRoute: this.props.navigation.state
+        })
+    }
+    renderFormDetail = (title, placeholder, onChangeText, edit) => {
         return (
             <View>
                 <View style={styles.formDetail}>
                     <Text style={styles.title}>{title}</Text>
-                    {title != "address" ? <TextInput
+                    {title != "Address" ? <TextInput
                         keyboardType="default"
                         clearButtonMode="always"
                         autoCorrect={false}
                         placeholder={placeholder}
                         onChangeText={(text) => onChangeText(text)}
-                        style={styles.textInput} /> :
-                        <View>
-                            <Text style={styles.textInput}>{placeholder}</Text>
+                        style={styles.textInput}
+                        editable={edit} /> :
+                        <TouchableOpacity style={{ flexDirection: 'row', flex: 1, marginRight: 10 * alpha, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.onSelectAddress()}>
+                            <Text style={[styles.textInput]}>{placeholder}</Text>
                             <Image
                                 source={require("./../../assets/images/next.png")}
                                 style={styles.navigationBarItemIcon} />
-                        </View>}
+                        </TouchableOpacity>}
                 </View>
                 <Image
                     source={require("./../../assets/images/line-17.png")}
@@ -238,34 +245,42 @@ export default class AddShippingAddress extends React.Component {
 
         return <View
             style={styles.container}>
-            <View style={styles.addAddressForm}>
-                {this.renderFormDetail("Name", "Fill up receiver's name", this.onChangeName)}
-                {this.renderRadioButtonForm()}
-                {this.renderFormDetail("Contac No.", "Fill up receiver's contact", this.onChangeContactNo)}
-                {this.renderFormDetail("Address", "Fill up receiver's contact", this.onChangeAddress)}
-                {this.renderFormDetail("Unit No.", "Exp:Block B", this.onChangeUnitNo)}
-                {this.renderFormDetail("Tag", "", this.onChangeTag)}
-                <View style={[styles.defaultAddressView]}>
-                    <Text style={styles.title}>Default address</Text>
-                    <SwitchSelector
-                        options={[
-                            { label: "", value: 0 },
-                            { label: "", value: 1 }]}
-                        initial={this.state.delivery}
-                        value={0}
-                        textColor={"#4E4D4D"}
-                        selectedColor={"#FFFFFF"}
-                        buttonColor={"#2A2929"}
-                        borderColor={"#979797"}
-                        backgroundColor={"rgb(240,240,240)"}
-                        style={styles.defaultAddressOption}
-                        textStyle={styles.optionText}
-                        fontSize={10 * alpha}
-                        height={25 * alpha}
-                        onPress={(value) => this.onChangeDefaultAddress(value)}
-                    />
+            <ScrollView>
+                <View style={styles.addAddressForm}>
+                    {this.renderFormDetail("First Name", "Fill up receiver's first name", (text) => this.onChangeFirstName(text), true)}
+                    {/* {this.renderRadioButtonForm()} */}
+                    {this.renderFormDetail("Contac No.", "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
+                    {this.renderFormDetail("Address", "Fill up receiver's contact", (text) => this.onChangeAddress(text), true)}
+                    {this.renderFormDetail("Unit No.", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Street1", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Street2", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("City", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("State", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Poscode", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Country", "Exp:Block B", (text) => console.log(text), false)}
+                    {/* {this.renderFormDetail("Tag", "", this.onChangeTag)} */}
+                    <View style={[styles.defaultAddressView]}>
+                        <Text style={styles.title}>Default address</Text>
+                        <SwitchSelector
+                            options={[
+                                { label: "", value: true },
+                                { label: "", value: false }]}
+                            initial={this.state.delivery}
+                            value={0}
+                            textColor={"#4E4D4D"}
+                            selectedColor={"#FFFFFF"}
+                            buttonColor={"#2A2929"}
+                            borderColor={"#979797"}
+                            backgroundColor={"rgb(240,240,240)"}
+                            style={styles.defaultAddressOption}
+                            textStyle={styles.optionText}
+                            fontSize={10 * alpha}
+                            height={25 * alpha}
+                            onPress={(value) => this.onChangeDefaultAddress(value)}
+                        />
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
             <TouchableOpacity
                 onPress={() => this.onSavePressed()}
                 style={styles.saveButton}>
@@ -274,6 +289,7 @@ export default class AddShippingAddress extends React.Component {
             </TouchableOpacity>
 
         </View>
+
     }
 }
 
