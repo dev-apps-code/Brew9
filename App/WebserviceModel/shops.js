@@ -1,4 +1,4 @@
-import { shops, shop_banner, makeOrder, missions, review } from '../Services/shops'
+import { shops, shop_banner, makeOrder, missions, review, deliveryFee } from '../Services/shops'
 import EventObject from './event_object'
 import { createAction } from '../Utils/index'
 import _ from 'lodash'
@@ -131,6 +131,21 @@ export default {
                 typeof callback === 'function' && callback(eventObject)
             } catch (err) { console.log('err', err) }
         },
+        *loadDeliveryFee({ payload }, { call, put, select }) {
+            try {
+
+                const { object, callback } = payload
+                const authtoken = yield select(state => state.members.userAuthToken)
+                const json = yield call(
+                    deliveryFee,
+                    authtoken,
+                    object,
+                )
+                const eventObject = new EventObject(json)
+                if (eventObject.success == true) { }
+                typeof callback === 'function' && callback(eventObject)
+            } catch (err) { console.log('err', err) }
+        }
     }
 
 }

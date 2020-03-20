@@ -263,7 +263,17 @@
 			<key>orderHint</key>
 			<integer>39</integer>
 		</dict>
+		<key>OneSignal.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>57</integer>
+		</dict>
 		<key>OneSignal.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>58</integer>
+		</dict>
+		<key>Pods-OneSignalNotificationServiceExtension.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>58</integer>
@@ -286,6 +296,11 @@
 			<false/>
 			<key>orderHint</key>
 			<integer>42</integer>
+		</dict>
+		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>61</integer>
 		</dict>
 		<key>UMBarCodeScannerInterface.xcscheme</key>
 		<dict>
@@ -392,12 +407,22 @@
 			<key>orderHint</key>
 			<integer>40</integer>
 		</dict>
+		<key>react-native-fast-image.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>59</integer>
+		</dict>
 		<key>react-native-kochava-tracker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>43</integer>
+		</dict>
+		<key>react-native-onesignal.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>60</integer>
 		</dict>
 		<key>react-native-onesignal.xcscheme_^#shared#^_</key>
 		<dict>

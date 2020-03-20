@@ -1,12 +1,12 @@
 import Constants from "expo-constants";
 import { Platform } from "react-native"
-export const KSERVERURL = "https://app.brew9.co/api"
-export const KURL_INFO = "https://app.brew9.co/info"
-export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
+// export const KSERVERURL = "https://app.brew9.co/api"
+// export const KURL_INFO = "https://app.brew9.co/info"
+// export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
-// export const KSERVERURL = "http://test.brew9.co/api"
-// export const KURL_INFO = "http://test.brew9.co/info"
-// export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
+export const KSERVERURL = "http://test.brew9.co/api"
+export const KURL_INFO = "http://test.brew9.co/info"
+export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
 
 // export const KSERVERURL = "https://dev.brew9.co/api"
 // export const KURL_INFO = "https://dev.brew9.co/info"
@@ -24,9 +24,9 @@ export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
 export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
 export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
 export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export const KCURRENT_API_VERSION_HEADER = "application/dc.v4 gzip";
-export const APPBUILDVERSIONIOS = "12";
-export const APPBUILDVERSIONANDROID = "12";
+export const KCURRENT_API_VERSION_HEADER = "application/dc.v5 gzip";
+export const APPBUILDVERSIONIOS = "11";
+export const APPBUILDVERSIONANDROID = "11";
 
 export const KTIMEOUT = 3 * 1000;
 

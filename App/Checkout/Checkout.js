@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import { createAction, Storage } from "../Utils"
+import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object'
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
 import _ from 'lodash'
@@ -23,6 +24,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
 import { getMemberIdForApi } from '../Services/members_helper'
+import Brew9Modal from '../Components/Brew9Modal'
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -37,6 +39,7 @@ import { getMemberIdForApi } from '../Services/members_helper'
 	cart_total: orders.cart_total,
 	discount_cart_total: orders.discount_cart_total,
 	location: members.location,
+	delivery: members.delivery
 }))
 export default class Checkout extends React.Component {
 
@@ -106,12 +109,14 @@ export default class Checkout extends React.Component {
 			onItemPressed: this.onItemPressed,
 		})
 
-		const { dispatch } = this.props
+		const { dispatch, delivery } = this.props
 		this.setTimePickerDefault()
 		this.setState({
 			valid_vouchers: [],
+			deliveryFee: ''
 		}, function () {
 			this.loadValidVouchers()
+			{ delivery && this.loadDeliveryFee(this.state.final_price) }
 		})
 		dispatch(createAction("orders/noClearCart")());
 		this.check_promotion_trigger()
@@ -266,6 +271,32 @@ export default class Checkout extends React.Component {
 		}
 
 	}
+	loadDeliveryFee = (total) => {
+		const { dispatch, selectedShop, currentMember } = this.props
+		const callback = eventObject => {
+			if (eventObject.success) {
+				let deliveryFee = parseFloat(eventObject.result.delivery_fee).toFixed(2)
+				let final_price = total - deliveryFee
+
+				this.setState({
+					deliveryFee: deliveryFee,
+					final_price: final_price
+				})
+
+			}
+		}
+
+		const obj = new DeliveryFeeRequestObject(total)
+		console.log('obj', obj)
+		obj.setUrlId(selectedShop.id)
+		dispatch(
+			createAction('shops/loadDeliveryFee')({
+				object: obj,
+				callback,
+			})
+		)
+
+	}
 
 
 	loadValidVouchers() {
@@ -302,6 +333,7 @@ export default class Checkout extends React.Component {
 
 		navigation.navigate({ routeName, key, })
 	}
+
 
 
 	onConfirmTimePicker() {
@@ -392,6 +424,16 @@ export default class Checkout extends React.Component {
 		analytics.event(new Event('Checkout', getMemberIdForApi(currentMember), "Select Voucher"))
 		navigate("CheckoutVoucher", { valid_vouchers: this.state.valid_vouchers, cart: this.props.cart, addVoucherAction: this.addVoucherItemsToCart })
 	}
+	onEditAddress = () => {
+		const { navigation } = this.props
+		navigation.navigate("EditShippingAddress")
+	}
+	addShippingAddress = () => {
+		const { navigation } = this.props
+		navigation.navigate("ShippingAddress", {
+			returnToRoute: navigation.state,
+		})
+	}
 
 	onCancelVoucher = (item) => {
 		let new_voucher_list = [...this.state.vouchers_to_use]
@@ -435,7 +477,7 @@ export default class Checkout extends React.Component {
 
 	check_promotion_trigger = () => {
 
-		const { currentMember, dispatch, promotions, cart_total, selectedShop } = this.props
+		const { currentMember, dispatch, promotions, cart_total, selectedShop, delivery } = this.props
 		let shop = selectedShop
 		let newcart = [...this.props.cart]
 		let finalCart = []
@@ -522,7 +564,7 @@ export default class Checkout extends React.Component {
 	}
 
 	calculateVoucherDiscount(vouchers_to_use) {
-		const { discount_cart_total, cart_total } = this.props
+		const { discount_cart_total, cart_total, delivery } = this.props
 		const { selected_payment } = this.state
 		var discount = 0
 		for (var index in vouchers_to_use) {
@@ -541,6 +583,7 @@ export default class Checkout extends React.Component {
 			}
 		}
 		const f_price = discount_cart_total - discount
+		{ delivery && this.loadDeliveryFee(f_price.toFixed(2)) }
 		this.setState({ discount: discount, final_price: f_price.toFixed(2) }, function () {
 			if (selected_payment == "credit_card" && f_price <= 0) {
 				this.setState({ selected_payment: '' })
@@ -737,65 +780,70 @@ export default class Checkout extends React.Component {
 	onPayNowPressed = () => {
 		const { navigate } = this.props.navigation
 		const { selected_payment, pick_up_status, final_price, pick_up_time } = this.state
-		const { currentMember, selectedShop } = this.props
+		const { currentMember, selectedShop, delivery } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 
 		analytics.event(new Event('Checkout', getMemberIdForApi(currentMember), "Pay Now"))
 		if (currentMember != undefined) {
-			if (selected_payment == "") {
-				this.tooglePayment()
-				return
-			}
-
-			if (selected_payment == "credits") {
-				if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
-					var insufficient = "Oops, insufficient credit.\nPlease select other payment option."
-
-					if (selectedShop.response_message != undefined) {
-						insufficient_response = _.find(selectedShop.response_message, function (obj) {
-							return obj.key === "Popup - Insufficient credit";
-						})
-						if (insufficient_response != undefined) {
-							insufficient = insufficient_response.text
-						}
-					}
-					this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{insufficient}</Text></View>, TOAST_DURATION + 1000,
-						// () => {
-						// 	navigate("MemberWallet")
-						// }
-					)
-
+			if (delivery && !currentMember.defaultAddress) {
+				this.setState({ visible: true })
+			} else {
+				if (selected_payment == "") {
+					this.tooglePayment()
 					return
 				}
-			}
 
-			if (pick_up_status == null) {
-				this.tooglePickup()
-				return
-			} else {
-				if (selectedShop != null) {
-					var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
-					var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
-					var pickup = Moment(pick_up_time, 'h:mm')
-					var now = Moment(new Date(), 'HH:mm')
-					if (pickup < now && pick_up_status == "Pick Later") {
-						this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
-						return
-					}
-					// else if (pickup < opening) {
-					// 	this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
-					// 	return
-					// } 
-					else if (pickup > closing) {
-						this.refs.toast.show("We are closed at this time.", TOAST_DURATION)
+				if (selected_payment == "credits") {
+					if (parseFloat(final_price) > parseFloat(currentMember.credits).toFixed(2)) {
+						var insufficient = "Oops, insufficient credit.\nPlease select other payment option."
+
+						if (selectedShop.response_message != undefined) {
+							insufficient_response = _.find(selectedShop.response_message, function (obj) {
+								return obj.key === "Popup - Insufficient credit";
+							})
+							if (insufficient_response != undefined) {
+								insufficient = insufficient_response.text
+							}
+						}
+						this.refs.toast.show(<View style={{ justifyContent: "center" }}><Text style={{ color: "white", textAlign: "center" }}>{insufficient}</Text></View>, TOAST_DURATION + 1000,
+							// () => {
+							// 	navigate("MemberWallet")
+							// }
+						)
+
 						return
 					}
 				}
+
+				if (pick_up_status == null) {
+					this.tooglePickup()
+					return
+				} else {
+					if (selectedShop != null) {
+						var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm')
+						var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm')
+						var pickup = Moment(pick_up_time, 'h:mm')
+						var now = Moment(new Date(), 'HH:mm')
+						if (pickup < now && pick_up_status == "Pick Later") {
+							this.refs.toast.show("Pick up time is not available", TOAST_DURATION)
+							return
+						}
+						// else if (pickup < opening) {
+						// 	this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
+						// 	return
+						// } 
+						else if (pickup > closing) {
+							this.refs.toast.show("We are closed at this time.", TOAST_DURATION)
+							return
+						}
+					}
+				}
+
+
+				this.loadMakeOrder()
+				return
 			}
 
-
-			this.loadMakeOrder()
-			return
 
 		} else {
 			navigate("VerifyUser", {
@@ -1317,6 +1365,8 @@ export default class Checkout extends React.Component {
 
 	renderPickupTime() {
 		const { pick_up_status } = this.state
+		let { delivery } = this.props
+		let pick_up = delivery ? 'Delivery time' : 'Pick Up Time'
 		return <View style={styles.drinksViewWrapper}>
 			<View style={styles.orderitemsView}>
 				<TouchableOpacity
@@ -1331,14 +1381,15 @@ export default class Checkout extends React.Component {
 								justifyContent: "center",
 								backgroundColor: "transparent",
 								flex: 1,
-								flexDirection: "row"
+								flexDirection: "row",
+
 							}}>
 							<View
 								style={styles.productDetailView}>
 								<View style={{ flexDirection: "row", alignItems: "center" }}>
 									<View style={pick_up_status != null ? styles.greenCircle : styles.redCircle} />
 									<Text
-										style={styles.productNameText}>Pick Up Time</Text>
+										style={styles.productNameText}>{pick_up}</Text>
 
 								</View>
 							</View>
@@ -1673,12 +1724,75 @@ export default class Checkout extends React.Component {
 
 		</Animated.View>
 	}
+	renderDeliveryAddress = (address) => {
+		let { deliveryFee } = this.state
+		return (
+			<View style={styles.deliveryAddressView}>
+				<TouchableOpacity
+
+					style={styles.voucherButton}>
+					<View
+						style={styles.drinksView}>
+						<View
+							pointerEvents="box-none"
+							style={{
+								justifyContent: "center",
+								alignItems: 'center',
+								backgroundColor: "transparent",
+								flex: 1,
+								flexDirection: "row",
+								paddingBottom: 15 * alpha,
+								borderBottomColor: '#dcdcdc',
+								borderBottomWidth: 0.5,
+
+							}}>
+							<View
+								style={[styles.deliveryAddressDetail, { flex: 1 }]}>
+								<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+									<Text
+										style={[styles.productNameText]}>Delivery Address</Text>
+									{!address && <TouchableOpacity onPress={() => this.addShippingAddress()} style={{ flexDirection: 'row', flex: 1 }}>
+										<Text style={[styles.editAddressText]}>Please add address</Text>
+										<Image
+											source={require("./../../assets/images/next.png")}
+											style={styles.menuRowArrowImage} />
+									</TouchableOpacity>}
+								</View>
+
+								{address && <Text style={styles.addressText}>2-3 Jalan Merbah 1, bandar Puchong Jaya</Text>}
+
+							</View>
+							{address ? <TouchableOpacity onPress={() => this.onEditAddress()} style={{ flexDirection: 'row' }}>
+								<Text style={[styles.editAddressText,]}>Edit Address</Text>
+								<Image
+									source={require("./../../assets/images/next.png")}
+									style={styles.menuRowArrowImage} />
+							</TouchableOpacity> : undefined}
+
+						</View>
+					</View>
+				</TouchableOpacity>
+				<View style={{ paddingVertical: 15 * alpha }}>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 * alpha, paddingBottom: 10 * alpha }}>
+						<Text style={styles.productNameText}>Subtotal</Text>
+						<Text style={styles.productVoucherText}>$</Text>
+					</View>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 * alpha, }}>
+						<View>
+							<Text style={styles.productNameText}>Delivery fees</Text>
+							<Text style={styles.deliveryNoted}>*Get Free delivery with minimum purchase RM50</Text>
+						</View>
+						<Text style={styles.productVoucherText}>{`-$${parseFloat(deliveryFee).toFixed(2)}`}</Text>
+
+					</View>
+				</View>
+			</View>)
+	}
 
 	renderCheckoutReceipt() {
 		const { vouchers_to_use, final_price } = this.state
-		let { currentMember, selectedShop, cart, promotions } = this.props
+		let { currentMember, selectedShop, cart, promotions, delivery } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
-
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1704,7 +1818,7 @@ export default class Checkout extends React.Component {
 						}}>
 
 						<View style={styles.locationWrapperView}>
-							<View
+							{!delivery && <View
 								style={styles.locationView}>
 								<View
 									style={styles.branchView}>
@@ -1751,7 +1865,7 @@ export default class Checkout extends React.Component {
 									<Text
 										style={styles.directionText}>Direction</Text>
 								</View>
-							</View>
+							</View>}
 						</View>
 						<View style={styles.receiptSectionSeperator}>
 							<Image
@@ -1772,6 +1886,20 @@ export default class Checkout extends React.Component {
 						{this.renderVoucherSection(vouchers_to_use)}
 						{this.renderPaymentSection()}
 						{this.renderPickupTime()}
+						<View style={styles.receiptSectionSeperator}>
+							<Image
+								source={require("./../../assets/images/curve_in_background.png")}
+								style={styles.curve_in} />
+							<View
+								style={styles.sectionSeperatorView} />
+						</View>
+						{delivery ?
+							currentMember.defaultAddress != undefined ?
+								this.renderDeliveryAddress(true)
+								:
+								this.renderDeliveryAddress(false)
+							:
+							undefined}
 						<View style={styles.receiptSectionSeperator}>
 							<Image
 								source={require("./../../assets/images/curve_in_background.png")}
@@ -1821,7 +1949,6 @@ export default class Checkout extends React.Component {
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
-
 		return <View
 			style={styles.checkoutViewPadding}>
 			<ScrollView
@@ -1842,6 +1969,7 @@ export default class Checkout extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={() => { this.setState({ visible: false }) }} cancelButtonAction={() => this.setState({ visible: false })} />
 
 			{/* <TimePicker
 				ref={ref => {
@@ -1861,6 +1989,51 @@ export default class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
+	deliveryNoted: {
+		backgroundColor: "transparent",
+		color: "#ff4500",
+		fontFamily: TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "left",
+		marginBottom: 5 * alpha,
+	},
+	deliveryAddressDetail: {
+		backgroundColor: "transparent",
+		color: "rgb(63, 63, 63)",
+		fontFamily: TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		textAlign: "right",
+		marginBottom: 5 * alpha,
+	},
+	addressText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 12 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "left",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		// marginBottom: 10 * alpha,
+	},
+	editAddressText: {
+		color: "rgb(164, 164, 164)",
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 14 * fontAlpha,
+		fontStyle: "normal",
+		fontWeight: "normal",
+		textAlign: "right",
+		backgroundColor: "transparent",
+		width: 191 * alpha,
+		flex: 1
+		// marginBottom: 10 * alpha,
+	},
+	deliveryAddressView: {
+		paddingHorizontal: 24 * alpha,
+		backgroundColor: "rgb(245,245,245)"
+	},
 
 	headerLeftContainer: {
 		flexDirection: "row",

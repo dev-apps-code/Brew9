@@ -19,3 +19,7 @@ export function missions(authtoken, object) {
 export function review(authtoken, object) {
    return postMethod(authtoken, object)
 }
+
+export function deliveryFee(authtoken, object) {
+   return getMethod(authtoken, object)
+}
