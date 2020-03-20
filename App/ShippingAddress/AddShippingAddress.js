@@ -11,10 +11,8 @@ import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
-import VoucherRequestObject from "../Requests/voucher_request_object";
-import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
-import UsedVoucher from "../Checkout/UsedVoucher"
-import ValidVoucher from "../Checkout/ValidVoucher"
+import SaveShippingAddressObjectRequest from "../Requests/save_shipping_address_request_object";
+
 import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
@@ -74,6 +72,7 @@ export default class AddShippingAddress extends React.Component {
             delivery_area: "",
             gender: "",
             genderIndex: 0,
+            default: true
 
 
 
@@ -89,31 +88,36 @@ export default class AddShippingAddress extends React.Component {
     onChangeAddress = (address) => {
         this.setState({ address })
     }
-    onChangeUnitNo = (unitNo) => {
-        this.setState({ unitNo })
-    }
+
     onChangeTag = (tag) => {
         this.setState({ tag })
     }
     onSavePressed = () => {
-        let formcheck = this.checkForm()
+        // let formcheck = this.checkForm()
+        console.log('this.state', this.state)
 
-        if (formcheck) {
-            const profileFormData = {
-                name: this.state.name,
-                address: this.state.address,
-                unitNo: this.state.unitNo,
-                gender: this.state.gender,
-                tag: this.state.tag,
-                defaultAddress: this.state.defaultAddress,
-                contactNo: this.state.contactNo
-            }
-            this.loadUpdateProfile(profileFormData)
-        }
+        this.loadUpdateProfile(this.state)
+
     }
     loadUpdateProfile(formData) {
-        const { dispatch } = this.props
-        dispatch(createAction("members/setShippingAddress")(formData));
+        const { dispatch, currentMember } = this.props
+        const callback = eventObject => {
+            console.log('loadUpdateProfile', eventObject)
+            if (eventObject.success) {
+
+
+            }
+        }
+
+        const obj = new SaveShippingAddressObjectRequest(formData)
+        console.log('obj', obj)
+        obj.setUrlId(currentMember.id)
+        dispatch(
+            createAction('members/saveShippingAddress')({
+                object: obj,
+                callback,
+            })
+        )
     }
     checkForm = () => {
         if (!this.state.first_name) {
@@ -152,6 +156,22 @@ export default class AddShippingAddress extends React.Component {
         })
     }
 
+    returnData(info) {
+        console.log("addshippingaddres: ", info)
+        this.setState({
+            unit_no: info.unitNo,
+            street1: info.Street1,
+            street2: info.Street2,
+            city: info.city,
+            state: info.state,
+            postal_code: info.poscode,
+            country: info.country,
+            latitude: info.latitude,
+            longitude: info.longitude,
+            delivery_area: info.deliveryArea
+        })
+    }
+
     onBackPressed = () => {
         this.props.navigation.goBack()
     }
@@ -161,7 +181,8 @@ export default class AddShippingAddress extends React.Component {
     onSelectAddress = () => {
         const { navigate } = this.props.navigation
         navigate("ShippingArea", {
-            returnToRoute: this.props.navigation.state
+            returnToRoute: this.props.navigation.state,
+            returnData: this.returnData.bind(this)
         })
     }
     renderFormDetail = (title, placeholder, onChangeText, edit) => {
@@ -169,14 +190,14 @@ export default class AddShippingAddress extends React.Component {
             <View>
                 <View style={styles.formDetail}>
                     <Text style={styles.title}>{title}</Text>
-                    {title != "Address" ? <TextInput
+                    {title != "Address" ? edit ? <TextInput
                         keyboardType="default"
                         clearButtonMode="always"
                         autoCorrect={false}
                         placeholder={placeholder}
                         onChangeText={(text) => onChangeText(text)}
                         style={styles.textInput}
-                        editable={edit} /> :
+                        editable={edit} /> : <Text>{placeholder}</Text> :
                         <TouchableOpacity style={{ flexDirection: 'row', flex: 1, marginRight: 10 * alpha, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.onSelectAddress()}>
                             <Text style={[styles.textInput]}>{placeholder}</Text>
                             <Image
@@ -247,17 +268,17 @@ export default class AddShippingAddress extends React.Component {
             style={styles.container}>
             <ScrollView>
                 <View style={styles.addAddressForm}>
-                    {this.renderFormDetail("First Name", "Fill up receiver's first name", (text) => this.onChangeFirstName(text), true)}
+                    {this.renderFormDetail("First Name", "Fill up receiver's first name", (text) => this.onChangeName(text), true)}
                     {/* {this.renderRadioButtonForm()} */}
                     {this.renderFormDetail("Contac No.", "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
                     {this.renderFormDetail("Address", "Fill up receiver's contact", (text) => this.onChangeAddress(text), true)}
-                    {this.renderFormDetail("Unit No.", "Exp:Block B", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Street1", "Exp:Block B", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Street2", "Exp:Block B", (text) => console.log(text), false)}
-                    {this.renderFormDetail("City", "Exp:Block B", (text) => console.log(text), false)}
-                    {this.renderFormDetail("State", "Exp:Block B", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Poscode", "Exp:Block B", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Country", "Exp:Block B", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Unit No.", this.state.unit_no, (text) => console.log(text), false)}
+                    {this.renderFormDetail("Street1", this.state.street1, (text) => console.log(text), false)}
+                    {this.renderFormDetail("Street2", this.state.street2, (text) => console.log(text), false)}
+                    {this.renderFormDetail("City", this.state.city, (text) => console.log(text), false)}
+                    {this.renderFormDetail("State", this.state.state, (text) => console.log(text), false)}
+                    {this.renderFormDetail("Poscode", this.state.postal_code, (text) => console.log(text), false)}
+                    {this.renderFormDetail("Country", this.state.country, (text) => console.log(text), false)}
                     {/* {this.renderFormDetail("Tag", "", this.onChangeTag)} */}
                     <View style={[styles.defaultAddressView]}>
                         <Text style={styles.title}>Default address</Text>

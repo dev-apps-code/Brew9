@@ -156,6 +156,9 @@ export default class MapShippingAddress extends React.Component {
 
     onSavePressed = () => {
         console.log(this.state)
+        const { navigation } = this.props
+        navigation.state.params.returnData(this.state);
+        navigation.navigate("AddShippingAddress")
     }
     render() {
         return (
