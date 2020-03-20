@@ -1,9 +1,1 @@
-{
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://ta-34f.martisya.brew9-app-v1.exp.direct",
-  "packagerNgrokUrl": "https://packager.ta-34f.martisya.brew9-app-v1.exp.direct",
-  "ngrokPid": 4600,
-  "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 4584
-}
+{}
