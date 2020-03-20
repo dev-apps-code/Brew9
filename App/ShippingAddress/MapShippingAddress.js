@@ -21,12 +21,7 @@ import openMap from "react-native-open-maps";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import MapView, {
     Marker,
-    PROVIDER_GOOGLE
 } from "react-native-maps";
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
-const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } } };
-const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } } };
 
 export default class MapShippingAddress extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -60,10 +55,9 @@ export default class MapShippingAddress extends React.Component {
         super(props);
         this.handlePress = this.handlePress.bind(this);
         this.state = {
-            latitude: this.props.navigation.state.params.area.latitude,
-            longitude: this.props.navigation.state.params.area.latitude,
+            latitude: parseFloat(this.props.navigation.state.params.area.latitude),
+            longitude: parseFloat(this.props.navigation.state.params.area.longitude),
             error: null,
-            loading: true,
             area: this.props.navigation.state.params.area
         };
     }
@@ -83,19 +77,7 @@ export default class MapShippingAddress extends React.Component {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                this.setState({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    error: null,
-                    loading: false
-                });
-                console.log("finished");
-            },
-            error => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
+
     }
     onBackPressed = () => {
 
@@ -132,7 +114,6 @@ export default class MapShippingAddress extends React.Component {
             <MapView
                 style={styles.container}
                 initialRegion={{
-                    //put the passed props (coordinates) of the areas here at the lat and long
                     latitude: latitude,
                     longitude: longitude,
                     latitudeDelta: 0.0922,
@@ -148,7 +129,7 @@ export default class MapShippingAddress extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.headerTitle}>Area</Text>
-                {this.state.loading ? null : this.renderMap()}
+                {this.renderMap()}
                 <View style={styles.formView}>
                     {this.renderForm("Name", "e.g. Gym/School", this.onChangeName)}
                     {this.renderForm("Address", "e.g. Gym/School", this.onChangeName)}
