@@ -275,9 +275,8 @@ export default class Checkout extends React.Component {
 		const { dispatch, selectedShop, currentMember } = this.props
 		const callback = eventObject => {
 			if (eventObject.success) {
-				let deliveryFee = parseFloat(eventObject.result.delivery_fee).toFixed(2)
-				let final_price = total + deliveryFee
-
+				let deliveryFee = parseFloat(eventObject.result.delivery_fee)
+				let final_price = parseFloat(total) + deliveryFee
 
 				this.setState({
 					deliveryFee: deliveryFee,
@@ -1783,7 +1782,7 @@ export default class Checkout extends React.Component {
 							<Text style={styles.productNameText}>Delivery fees</Text>
 							<Text style={styles.deliveryNoted}>*Get Free delivery with minimum purchase RM50</Text>
 						</View>
-						<Text style={styles.productVoucherText}>{`-$${parseFloat(deliveryFee).toFixed(2)}`}</Text>
+						<Text style={styles.productVoucherText}>{`$${parseFloat(deliveryFee).toFixed(2)}`}</Text>
 
 					</View>
 				</View>
@@ -1901,13 +1900,13 @@ export default class Checkout extends React.Component {
 								this.renderDeliveryAddress(false)
 							:
 							undefined}
-						<View style={styles.receiptSectionSeperator}>
+						{delivery && <View style={styles.receiptSectionSeperator}>
 							<Image
 								source={require("./../../assets/images/curve_in_background.png")}
 								style={styles.curve_in} />
 							<View
 								style={styles.sectionSeperatorView} />
-						</View>
+						</View>}
 						<View style={styles.totalViewWrapper}>
 							<View
 								style={styles.totalView}>
