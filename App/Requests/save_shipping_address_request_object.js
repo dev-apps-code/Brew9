@@ -10,31 +10,34 @@ class SaveShippingAddressObjectRequest extends BaseRequestObject {
     }
 
     getUrlString() {
-        return `members/${this.url_id}/update_profile`
+        return `members/${this.url_id}/save_member_addresses`
     }
 
     getFormData() {
         console.log(this.data)
         const data = new FormData()
+
+        data.append('member_id', this.url_id)
+
         if (this.data.name != null) {
-            data.append('name', this.data.name)
+            data.append('fullname', this.data.name)
         }
 
         if (this.contact_number != null) {
             data.append('contact_number', this.contact_number)
         }
         if (this.data.street1 != null) {
-            data.append('street1', this.data.street1)
+            data.append('address', this.data.street1)
         }
-        if (this.data.street2 != null) {
-            data.append('street2', this.data.street2)
-        }
+        // if (this.data.street2 != null) {
+        //     data.append('street2', this.data.street2)
+        // }
         if (this.data.city != null) {
             data.append('city', this.data.city)
         }
-        if (this.data.unit_no != null) {
-            data.append('unit_no', this.data.unit_no)
-        }
+        // if (this.data.unit_no != null) {
+        //     data.append('unit_no', this.data.unit_no)
+        // }
         if (this.data.state != null) {
             data.append('state', this.data.state)
         }
