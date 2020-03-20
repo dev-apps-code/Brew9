@@ -58,13 +58,24 @@ export default class MapShippingAddress extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this.handlePress = this.handlePress.bind(this);
         this.state = {
-            latitude: 0,
-            longitude: 0,
+            latitude: this.props.navigation.state.params.area.latitude,
+            longitude: this.props.navigation.state.params.area.latitude,
             error: null,
-            loading: true
+            loading: true,
+            area: this.props.navigation.state.params.area
         };
+    }
+
+    handlePress(e) {
+        console.log(e.nativeEvent.coordinate)
+        this.setState({
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude
+        });
+
+        //get the user identified coordinates here
     }
 
 
@@ -116,16 +127,18 @@ export default class MapShippingAddress extends React.Component {
     }
 
     renderMap = () => {
+        let { latitude, longitude } = this.state
         return (
             <MapView
-                showsUserLocation={true}
-                style={styles.map}
-                region={{
-                    latitude: this.state.latitude,
-                    longitude: this.state.longitude,
-                    latitudeDelta: 0.009,
-                    longitudeDelta: 0.009
+                style={styles.container}
+                initialRegion={{
+                    //put the passed props (coordinates) of the areas here at the lat and long
+                    latitude: latitude,
+                    longitude: longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421
                 }}
+                onPress={this.handlePress}
             >
                 <Marker coordinate={this.state} />
             </MapView>

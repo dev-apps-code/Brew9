@@ -13,17 +13,12 @@ import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import { createAction, Storage } from "../Utils"
-import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
-import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
+import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
 import _ from 'lodash'
 import { TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
 import Moment from 'moment';
-import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
-import openMap from "react-native-open-maps";
-import { getMemberIdForApi } from '../Services/members_helper'
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
 
 @connect(({ members, shops, orders }) => ({
     currentMember: members.profile,
@@ -60,18 +55,7 @@ export default class ShippingAddress extends React.Component {
         super(props)
         this.state = {
             delivery_options: 'pickup',
-            shippingAddress: [
-                {
-                    name: 'CO3 Social Office',
-                    address: "2-3 Jalan Merbah1, bandar Puchong Jaya",
-                    default: true
-                },
-                {
-                    name: 'CO3 Social Office',
-                    address: "2-3 Jalan Merbah1, bandar Puchong Jaya",
-                    default: false
-                }
-            ]
+            shippingAddress: []
 
         }
 
@@ -84,11 +68,36 @@ export default class ShippingAddress extends React.Component {
 
         navigation.navigate({ routeName, key, })
     }
+    loadShippingAddress = () => {
+        let { dispatch, currentMember } = this.props
+        const callback = eventObject => {
+            console.log('eventObject', eventObject)
+
+            if (eventObject.success) {
+                this.setState({
+                    loading: false,
+                    shippingAddress: eventObject.result
+
+                })
+            }
+
+        }
+        const obj = new ShippingAddressRequestObject()
+        console.log('obj', obj)
+        obj.setUrlId(currentMember.id)
+        dispatch(
+            createAction('members/loadShippingAddress')({
+                object: obj,
+                callback,
+            })
+        )
+    }
 
     componentDidMount() {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
+        this.loadShippingAddress()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -139,7 +148,7 @@ export default class ShippingAddress extends React.Component {
                     keyExtractor={item => item.id}
                 />
             </ScrollView>
-            <TouchableOpacity onPress={this.onAddAddress}>
+            <TouchableOpacity onPress={this.onEditAddress}>
                 <View style={styles.addButtonView}>
                     <Image
                         source={require("./../../assets/images/add.png")}

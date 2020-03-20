@@ -68,44 +68,23 @@ export default class ShippingArea extends React.Component {
             genderIndex: 0,
             tag: "",
             defaultAddress: 1,
-            data: [{
-                name: 'kulim'
-            },
-            {
-                name: 'kulim'
-            },
-            {
-                name: 'kulim'
-            },
-            {
-                name: 'kulim'
-            }, {
-                name: 'kulim'
-            }, {
-                name: 'kulim'
-            }]
-
-
-
+            area: []
 
         }
     }
     loadArea = () => {
         let { dispatch, selectedShop } = this.props
-        console.log('selectedShop', selectedShop)
         const callback = eventObject => {
-            console.log('eventObject', eventObject)
 
             if (eventObject.success) {
                 this.setState({
                     loading: false,
-                    data: eventObject.result,
+                    area: eventObject.result.delivery_areas,
                 })
             }
 
         }
-        const obj = new ShopAreaRequestObject(selectedShop.id)
-        console.log('obj', obj)
+        const obj = new ShopAreaRequestObject()
         obj.setUrlId(members.company_id)
         dispatch(
             createAction('companies/loadShopArea')({
@@ -117,7 +96,16 @@ export default class ShippingArea extends React.Component {
 
 
 
-
+    onBackPressed = () => {
+        this.props.navigation.goBack()
+    }
+    onSelectArea = (item) => {
+        const { navigation } = this.props
+        navigation.navigate("MapShippingAddress", { area: item })
+    }
+    onChangeDefaultAddress = (value) => {
+        this.setState({ defaultAddress: value })
+    }
 
     componentDidMount() {
         this.props.navigation.setParams({
@@ -126,29 +114,13 @@ export default class ShippingArea extends React.Component {
         this.loadArea()
     }
 
-    onBackPressed = () => {
-        this.props.navigation.goBack()
-    }
-    onSelectArea = () => {
-        const { navigation } = this.props
-        navigation.navigate("MapShippingAddress")
-    }
-    onChangeDefaultAddress = (value) => {
-        this.setState({ defaultAddress: value })
-    }
     renderPlaces = (item) => {
-        console.log('item', item)
         return (
-            <TouchableOpacity style={styles.placesButton} onPress={this.onSelectArea}>
-                <Text>{item.name}</Text>
+            <TouchableOpacity style={styles.placesButton} onPress={() => this.onSelectArea(item)}>
+                <Text>{item.area}</Text>
             </TouchableOpacity>
         )
     }
-
-
-
-
-
 
     render() {
 
@@ -160,16 +132,12 @@ export default class ShippingArea extends React.Component {
                 <View style={styles.placesWrapperView}>
                     <FlatList
                         renderItem={({ item }) => this.renderPlaces(item)}
-                        data={this.state.data}
-                        // style={styles.placesWrapperView}
+                        data={this.state.area}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={3}
                         key={'THREE COLUMN'} />
                 </View>
             </View>
-
-
-
         </View>
     }
 }

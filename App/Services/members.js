@@ -86,3 +86,11 @@ export function currentStatus(authtoken, object) {
 export function verifyCouponCode(authtoken, object) {
    return getMethod(authtoken, object)
 }
+
+export function getShippingAddress(authtoken, object) {
+   return getMethod(authtoken, object)
+}
+
+export function saveShippingAddress(authtoken, object) {
+   return postMethod(authtoken, object)
+}

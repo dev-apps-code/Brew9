@@ -113,7 +113,7 @@ export default class Checkout extends React.Component {
 		this.setTimePickerDefault()
 		this.setState({
 			valid_vouchers: [],
-			deliveryFee: ''
+			deliveryFee: 0
 		}, function () {
 			this.loadValidVouchers()
 			{ delivery && this.loadDeliveryFee(this.state.final_price) }
@@ -276,7 +276,8 @@ export default class Checkout extends React.Component {
 		const callback = eventObject => {
 			if (eventObject.success) {
 				let deliveryFee = parseFloat(eventObject.result.delivery_fee).toFixed(2)
-				let final_price = total - deliveryFee
+				let final_price = total + deliveryFee
+
 
 				this.setState({
 					deliveryFee: deliveryFee,
