@@ -100,16 +100,17 @@ export default class AddShippingAddress extends React.Component {
 
     }
     loadUpdateProfile(formData) {
-        const { dispatch, currentMember } = this.props
+        const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
             console.log('loadUpdateProfile', eventObject)
             if (eventObject.success) {
+                navigation.navigate('ShippingAddress')
 
 
             }
         }
 
-        const obj = new SaveShippingAddressObjectRequest(formData)
+        const obj = new SaveShippingAddressObjectRequest(formData, currentMember.id)
         console.log('obj', obj)
         obj.setUrlId(currentMember.id)
         dispatch(
