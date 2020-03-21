@@ -26,6 +26,7 @@ import { getAppVersion, getBuildVersion } from "../Utils/server";
 import Brew9PopUp from "../Components/Brew9PopUp"
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
 
 @connect(({ members }) => ({
     members: members.profile,
@@ -93,13 +94,21 @@ export default class FirstScreen extends React.Component {
     }
 
     checkLoginStatus() {
-        const { members, isReady } = this.props
+        const { members, isReady, dispatch } = this.props
         if (isReady) {
             if (typeof members === 'undefined' || members === null) {
                 this.props.navigation.navigate("VerifyUserStack")
             }
             else {
                 this.props.navigation.navigate("TabGroupOne")
+                const obj = new ShippingAddressRequestObject()
+                obj.setUrlId(members.id)
+                dispatch(
+                    createAction('members/loadShippingAddress')({
+                        object: obj,
+                        // callback,
+                    })
+                )
             }
         }
 

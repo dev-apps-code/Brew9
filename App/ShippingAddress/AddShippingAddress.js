@@ -12,7 +12,9 @@ import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import SaveShippingAddressObjectRequest from "../Requests/save_shipping_address_request_object";
-import UpdateShippingAddressObjectRequest from "../Requests/update_shipping_address_request_object"
+import UpdateShippingAddressObjectRequest from "../Requests/update_shipping_address_request_object";
+import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
+
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING, windowHeight } from "../Common/common_style";
@@ -104,13 +106,12 @@ export default class AddShippingAddress extends React.Component {
     }
     onSavePressed = () => {
         let formcheck = this.checkForm()
-        let primary = this.state.default == 1 ? true : false
         if (formcheck) {
             const shippingAddress = {
                 member_id: this.props.currentMember.id,
                 fullname: this.state.fullname,
                 address: this.state.address,
-                contact_number: this.state.contactNo,
+                contact_number: this.state.contact_number,
                 city: this.state.city,
                 state: this.state.state,
                 postal_code: this.state.postal_code,
@@ -119,7 +120,7 @@ export default class AddShippingAddress extends React.Component {
                 latitude: this.state.latitude,
                 longitude: this.state.longitude,
                 delivery_area: this.state.delivery_area,
-                primary: primary
+                primary: this.state.primary
             }
             this.loadUpdateProfile(shippingAddress)
         }
@@ -131,14 +132,24 @@ export default class AddShippingAddress extends React.Component {
         const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
             if (eventObject.success) {
-                navigation.navigate('ShippingAddress')
-
+                const callback = eventObject => {
+                    if (eventObject.success) {
+                        navigation.navigate('ShippingAddress')
+                    }
+                }
+                const obj = new ShippingAddressRequestObject()
+                obj.setUrlId(currentMember.id)
+                dispatch(
+                    createAction('members/loadShippingAddress')({
+                        object: obj,
+                        callback,
+                    })
+                )
 
             }
         }
         if (this.address == null) {
             const obj = new SaveShippingAddressObjectRequest(formData, currentMember.id)
-            console.log('obj', obj)
             obj.setUrlId(currentMember.id)
             dispatch(
                 createAction('members/saveShippingAddress')({
@@ -209,7 +220,8 @@ export default class AddShippingAddress extends React.Component {
         this.props.navigation.goBack()
     }
     onChangeDefaultAddress = (value) => {
-        this.setState({ primary: value })
+        let primary = value == 1 ? true : false
+        this.setState({ primary: primary })
     }
     onSelectAddress = () => {
         const { navigate } = this.props.navigation
@@ -271,7 +283,7 @@ export default class AddShippingAddress extends React.Component {
                             options={[
                                 { label: "", value: 0 },
                                 { label: "", value: 1 }]}
-                            initial={this.state.delivery}
+                            initial={this.state.primary}
                             value={0}
                             textColor={"#4E4D4D"}
                             selectedColor={"#FFFFFF"}

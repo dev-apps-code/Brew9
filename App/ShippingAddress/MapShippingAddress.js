@@ -279,7 +279,8 @@ const styles = StyleSheet.create({
     },
     formView: {
         paddingHorizontal: 20 * alpha,
-        marginTop: 20 * alpha
+        marginTop: 20 * alpha,
+        flex: 1
     },
     saveButton: {
         borderRadius: 4 * alpha,

@@ -39,7 +39,9 @@ import Brew9Modal from '../Components/Brew9Modal'
 	cart_total: orders.cart_total,
 	discount_cart_total: orders.discount_cart_total,
 	location: members.location,
-	delivery: members.delivery
+	delivery: members.delivery,
+	shippingAddress: members.shippingAddress
+
 }))
 export default class Checkout extends React.Component {
 
@@ -424,10 +426,10 @@ export default class Checkout extends React.Component {
 		analytics.event(new Event('Checkout', getMemberIdForApi(currentMember), "Select Voucher"))
 		navigate("CheckoutVoucher", { valid_vouchers: this.state.valid_vouchers, cart: this.props.cart, addVoucherAction: this.addVoucherItemsToCart })
 	}
-	onEditAddress = () => {
-		const { navigation } = this.props
-		navigation.navigate("EditShippingAddress")
-	}
+	// onEditAddress = (item) => {
+	// 	const { navigation } = this.props
+	// 	navigation.navigate("AddShippingAddress", { params: null })
+	// }
 	addShippingAddress = () => {
 		const { navigation } = this.props
 		navigation.navigate("ShippingAddress", {
@@ -1726,6 +1728,7 @@ export default class Checkout extends React.Component {
 	}
 	renderDeliveryAddress = (address) => {
 		let { deliveryFee } = this.state
+
 		return (
 			<View style={styles.deliveryAddressView}>
 				<TouchableOpacity
@@ -1759,10 +1762,12 @@ export default class Checkout extends React.Component {
 									</TouchableOpacity>}
 								</View>
 
-								{address && <Text style={styles.addressText}>2-3 Jalan Merbah 1, bandar Puchong Jaya</Text>}
+								{address && <View>
+									<Text style={styles.addressText}>{address.address + "\n" + address.city + ' , ' + address.postal_code + ', ' + address.state + ', ' + address.country}</Text>
+								</View>}
 
 							</View>
-							{address ? <TouchableOpacity onPress={() => this.onEditAddress()} style={{ flexDirection: 'row' }}>
+							{address ? <TouchableOpacity onPress={() => this.addShippingAddress()} style={{ flexDirection: 'row' }}>
 								<Text style={[styles.editAddressText,]}>Edit Address</Text>
 								<Image
 									source={require("./../../assets/images/next.png")}
@@ -1791,8 +1796,10 @@ export default class Checkout extends React.Component {
 
 	renderCheckoutReceipt() {
 		const { vouchers_to_use, final_price } = this.state
-		let { currentMember, selectedShop, cart, promotions, delivery } = this.props
+		let { currentMember, selectedShop, cart, promotions, delivery, shippingAddress } = this.props
+		let array = Array.isArray(shippingAddress)
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
+		let defaultAddress = array ? shippingAddress.find(item => { return item.primary == true }) : undefined
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1894,8 +1901,8 @@ export default class Checkout extends React.Component {
 								style={styles.sectionSeperatorView} />
 						</View>
 						{delivery ?
-							currentMember.defaultAddress != undefined ?
-								this.renderDeliveryAddress(true)
+							defaultAddress != undefined ?
+								this.renderDeliveryAddress(defaultAddress)
 								:
 								this.renderDeliveryAddress(false)
 							:

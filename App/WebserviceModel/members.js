@@ -188,7 +188,22 @@ export default {
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
     saveCurrentShippingAddress(state, { payload }) {
+
+
       return { ...state, shippingAddress: payload, }
+    },
+    savePrimaryShippingAddress(state, { payload }) {
+      let shippingAddress = state.shippingAddress
+      let currentShippingAddress = shippingAddress.map(item => {
+        if (item.id == payload.id) {
+          item.primary = true
+        } else {
+          item.primary = false
+        }
+        return item
+      })
+
+      return { ...state, shippingAddress: currentShippingAddress }
     }
   },
   effects: {

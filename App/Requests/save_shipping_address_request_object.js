@@ -19,7 +19,7 @@ class SaveShippingAddressObjectRequest extends BaseRequestObject {
             this.latitude = data.latitude,
             this.longitude = data.longitude,
             this.delivery_area = data.delivery_area,
-            this.primary = data.default
+            this.primary = data.primary
     }
 
     getUrlString() {

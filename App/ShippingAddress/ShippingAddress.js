@@ -105,25 +105,34 @@ export default class ShippingAddress extends React.Component {
         navigation.navigate("AddShippingAddress", { params: item })
 
     }
+    updateDefaultAddress = (item) => {
+        const { navigation, dispatch } = this.props
+        dispatch(createAction("members/savePrimaryShippingAddress")(item))
+        navigation.navigate("Checkout")
+    }
     renderShippingAddress = (item) => {
         let selected = item.primary ? styles.selectTwoView : styles.selectView
         return (
-            <View style={styles.content}>
-                <View style={styles.shippingAddressDetail}>
-                    <View
-                        style={selected} />
-                    <View style={{ flex: 1, marginLeft: 15 * alpha }}>
-                        <Text style={styles.addressText}>{item.fullname}</Text>
-                        <Text style={styles.addressText}>{item.address}</Text>
-                        <Text style={styles.addressText}>{item.city}, {item.postal_code},{item.state}, {item.country}</Text>
-                    </View>
-                    <View style={{ flex: 0.25 }} />
+            <TouchableOpacity onPress={() => this.updateDefaultAddress(item)}>
+                <View style={styles.content}>
 
+                    <View style={styles.shippingAddressDetail}>
+                        <View
+                            style={selected} />
+                        <View style={{ flex: 1, marginLeft: 15 * alpha }}>
+                            <Text style={styles.addressText}>{item.fullname}</Text>
+                            <Text style={styles.addressText}>{item.address}</Text>
+                            <Text style={styles.addressText}>{item.city}, {item.postal_code},{item.state}, {item.country}</Text>
+                        </View>
+                        <View style={{ flex: 0.25 }} />
+
+                    </View>
+                    <TouchableOpacity onPress={() => this.onEditAddress(item)} style={styles.editButton}>
+                        <Text style={styles.editTextButton}>Edit address</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => this.onEditAddress(item)} style={styles.editButton}>
-                    <Text style={styles.editTextButton}>Edit address</Text>
-                </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
+
         )
     }
 
