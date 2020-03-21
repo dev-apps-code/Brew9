@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-kochava-tracker/ios/KochavaSDK/libKochavaTrackeriOS/libKochavaCoreiOS/KochavaCore.h
