@@ -186,6 +186,9 @@ export default {
       saveCurrentUserToStorage(payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
+    saveCurrentShippingAddress(state, { payload }) {
+      return { ...state, shippingAddress: payload, }
+    }
   },
   effects: {
     *loadStorePushToken({ payload }, { call, put, select }) {
@@ -592,12 +595,9 @@ export default {
           authtoken,
           object,
         )
-        console.log('json loadShippingAddress', json)
-
         const eventObject = new EventObject(json)
-        console.log('eventObject loadShippingAddress', eventObject)
         if (eventObject.success == true) {
-          // yield put(createAction('saveCurrentShippingAddress')(eventObject.member))
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
 
         }
         typeof callback === 'function' && callback(eventObject)
@@ -614,12 +614,9 @@ export default {
           authtoken,
           object,
         )
-        console.log('json saveShippingAddress', json)
-
         const eventObject = new EventObject(json)
-        console.log('eventObject saveShippingAddress', eventObject)
         if (eventObject.success == true) {
-          // yield put(createAction('saveCurrentShippingAddress')(eventObject.member))
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
 
         }
         typeof callback === 'function' && callback(eventObject)

@@ -23,7 +23,7 @@ import { ANALYTICS_ID } from "../Common/config"
 @connect(({ members, shops, orders }) => ({
     currentMember: members.profile,
     members: members,
-    shppingAddress: members.shippingAddress
+    shippingAddress: members.shippingAddress
 }))
 export default class ShippingAddress extends React.Component {
 
@@ -66,14 +66,12 @@ export default class ShippingAddress extends React.Component {
 
     loadShippingAddress = () => {
         let { dispatch, currentMember } = this.props
+        this.setState({ loading: true })
         const callback = eventObject => {
-            console.log('eventObject', eventObject)
 
             if (eventObject.success) {
                 this.setState({
                     loading: false,
-                    shippingAddress: eventObject.result
-
                 })
             }
 
@@ -108,17 +106,16 @@ export default class ShippingAddress extends React.Component {
 
     }
     renderShippingAddress = (item) => {
-        let selected = item.default ? styles.selectTwoView : styles.selectView
+        let selected = item.primary ? styles.selectTwoView : styles.selectView
         return (
             <View style={styles.content}>
                 <View style={styles.shippingAddressDetail}>
                     <View
                         style={selected} />
                     <View style={{ flex: 1, marginLeft: 15 * alpha }}>
-                        <Text style={styles.addressText}>{item.unit_no}</Text>
-                        <Text style={styles.addressText}>{item.street1}</Text>
-                        <Text style={styles.addressText}>{item.street2}</Text>
-                        <Text style={styles.addressText}>{item.city}, {item.postal_code},{item.state} {item.country}</Text>
+                        <Text style={styles.addressText}>{item.fullname}</Text>
+                        <Text style={styles.addressText}>{item.address}</Text>
+                        <Text style={styles.addressText}>{item.city}, {item.postal_code},{item.state}, {item.country}</Text>
                     </View>
                     <View style={{ flex: 0.25 }} />
 
@@ -138,14 +135,13 @@ export default class ShippingAddress extends React.Component {
             <ScrollView
                 style={styles.scrollviewScrollView}>
                 <Text style={styles.headingStyle}>Delivery Address</Text>
-                {loading ? <HudLoading isLoading={this.state.loading} />
-                    : <FlatList
-                        data={this.state.shippingAddress}
-                        renderItem={({ item }) => (
-                            this.renderShippingAddress(item)
-                        )}
-                        keyExtractor={item => item.id}
-                    />}
+                <FlatList
+                    data={shippingAddress}
+                    renderItem={({ item }) => (
+                        this.renderShippingAddress(item)
+                    )}
+                    keyExtractor={item => item.id}
+                />
             </ScrollView>
             <TouchableOpacity onPress={this.onAddAddress}>
                 <View style={styles.addButtonView}>
@@ -156,7 +152,8 @@ export default class ShippingAddress extends React.Component {
 
                 </View>
             </TouchableOpacity>
-
+            <HudLoading isLoading={loading} />
+            <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
         </View>
     }
 }
@@ -224,6 +221,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5 * alpha
     },
     content: {
+        backgroundColor: 'white',
         marginBottom: 10 * alpha,
         paddingTop: 20 * alpha,
         paddingHorizontal: 10 * alpha,
@@ -242,7 +240,7 @@ const styles = StyleSheet.create({
     addressText: {
         color: "rgb(130, 130, 130)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         paddingBottom: 5 * alpha
         // marginTop: 10 * alpha
     },

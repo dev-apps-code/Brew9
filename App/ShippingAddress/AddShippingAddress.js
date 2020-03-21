@@ -12,9 +12,9 @@ import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import SaveShippingAddressObjectRequest from "../Requests/save_shipping_address_request_object";
-
+import Toast, { DURATION } from 'react-native-easy-toast'
 import { KURL_INFO } from "../Utils/server";
-import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING, windowHeight } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import { getMemberIdForApi } from '../Services/members_helper'
@@ -55,54 +55,60 @@ export default class AddShippingAddress extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: '',
-            first_name: "",
-            last_name: "",
-            contact_number: "",
-            unit_no: "",
-            street1: "",
-            street2: "",
-            city: "",
-            state: "",
-            postal_code: "",
-            country: "",
-            land_mark: "",
-            latitude: "",
-            longitude: "",
-            delivery_area: "",
-            gender: "",
-            genderIndex: 0,
-            default: true
-
-
-
-
+            fullname: '',
+            address: '',
+            contact_number: '',
+            city: '',
+            state: '',
+            postal_code: '',
+            country: '',
+            land_mark: '',
+            latitude: '',
+            longitude: '',
+            delivery_area: '',
+            primary: true
         }
     }
-    onChangeName = (name) => {
-        this.setState({ name })
+    onChangeName = (fullname) => {
+        this.setState({ fullname })
     }
-    onChangeContactNo = (contactNo) => {
-        this.setState({ contactNo })
+    onChangeContactNo = (contact_number) => {
+        this.setState({ contact_number })
     }
     onChangeAddress = (address) => {
         this.setState({ address })
     }
 
-    onChangeTag = (tag) => {
-        this.setState({ tag })
+    onChangeTag = (land_mark) => {
+        this.setState({ land_mark })
     }
     onSavePressed = () => {
-        // let formcheck = this.checkForm()
-        console.log('this.state', this.state)
+        let formcheck = this.checkForm()
+        if (formcheck) {
+            const shippingAddress = {
+                member_id: this.props.currentMember.id,
+                fullname: this.state.fullname,
+                address: this.state.address,
+                contact_number: this.state.contactNo,
+                city: this.state.city,
+                state: this.state.state,
+                postal_code: this.state.postal_code,
+                country: this.state.country,
+                land_mark: this.state.land_mark,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude,
+                delivery_area: this.state.delivery_area,
+                primary: this.state.default
+            }
+            this.loadUpdateProfile(shippingAddress)
+        }
 
-        this.loadUpdateProfile(this.state)
+
 
     }
     loadUpdateProfile(formData) {
         const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
-            console.log('loadUpdateProfile', eventObject)
             if (eventObject.success) {
                 navigation.navigate('ShippingAddress')
 
@@ -121,31 +127,25 @@ export default class AddShippingAddress extends React.Component {
         )
     }
     checkForm = () => {
-        if (!this.state.first_name) {
-            this.refs.toast.show("Please select a name", 500)
+        let { fullname, address, contact_number, city, state, postal_code, country, land_mark, latitude, longitude, delivery_area } = this.state
+        if (!fullname) {
+            this.refs.toast.show("Please select a fullname", 500)
             return false
         }
-        else if (!this.state.address) {
+        else if (!address) {
             this.refs.toast.show("Please select your address", 500)
             return false
         }
-        else if (!this.state.contactNo) {
-            this.refs.toast.show("Please select your address", 500)
+        else if (!contact_number) {
+            this.refs.toast.show("Please select your contact number", 500)
             return false
 
         }
-        else if (!this.state.tag) {
-            this.refs.toast.show("Please select your tag", 500)
-            return false
+        // else if (!this.state.tag) {
+        //     this.refs.toast.show("Please select your tag", 500)
+        //     return false
 
-        }
-        else if (!this.state.unitNo) {
-            this.refs.toast.show("Please select your unit no.", 500)
-            return false
-
-        }
-
-
+        // }
         return true
 
     }
@@ -158,18 +158,16 @@ export default class AddShippingAddress extends React.Component {
     }
 
     returnData(info) {
-        console.log("addshippingaddres: ", info)
+        console.log(info)
         this.setState({
-            unit_no: info.unitNo,
-            street1: info.Street1,
-            street2: info.Street2,
+            address: info.address,
             city: info.city,
             state: info.state,
-            postal_code: info.poscode,
+            postal_code: info.postal_code,
             country: info.country,
             latitude: info.latitude,
             longitude: info.longitude,
-            delivery_area: info.deliveryArea
+            delivery_area: info.delivery_area
         })
     }
 
@@ -177,7 +175,7 @@ export default class AddShippingAddress extends React.Component {
         this.props.navigation.goBack()
     }
     onChangeDefaultAddress = (value) => {
-        this.setState({ default: value })
+        this.setState({ primary: value })
     }
     onSelectAddress = () => {
         const { navigate } = this.props.navigation
@@ -264,23 +262,21 @@ export default class AddShippingAddress extends React.Component {
 
 
     render() {
-
+        let current_address = this.state.address ? this.state.address : "Select shipping Address"
         return <View
             style={styles.container}>
+
             <ScrollView>
                 <View style={styles.addAddressForm}>
                     {this.renderFormDetail("First Name", "Fill up receiver's first name", (text) => this.onChangeName(text), true)}
                     {/* {this.renderRadioButtonForm()} */}
                     {this.renderFormDetail("Contac No.", "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
-                    {this.renderFormDetail("Address", "Fill up receiver's contact", (text) => this.onChangeAddress(text), true)}
-                    {this.renderFormDetail("Unit No.", this.state.unit_no, (text) => console.log(text), false)}
-                    {this.renderFormDetail("Street1", this.state.street1, (text) => console.log(text), false)}
-                    {this.renderFormDetail("Street2", this.state.street2, (text) => console.log(text), false)}
+                    {this.renderFormDetail("Address", current_address, (text) => this.onChangeAddress(text), true)}
                     {this.renderFormDetail("City", this.state.city, (text) => console.log(text), false)}
                     {this.renderFormDetail("State", this.state.state, (text) => console.log(text), false)}
                     {this.renderFormDetail("Poscode", this.state.postal_code, (text) => console.log(text), false)}
                     {this.renderFormDetail("Country", this.state.country, (text) => console.log(text), false)}
-                    {/* {this.renderFormDetail("Tag", "", this.onChangeTag)} */}
+                    {this.renderFormDetail("Tag", "", (text) => this.onChangeTag(text))}
                     <View style={[styles.defaultAddressView]}>
                         <Text style={styles.title}>Default address</Text>
                         <SwitchSelector
@@ -309,6 +305,8 @@ export default class AddShippingAddress extends React.Component {
                 <Text
                     style={styles.saveButtonText}>SAVE</Text>
             </TouchableOpacity>
+            <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+
 
         </View>
 

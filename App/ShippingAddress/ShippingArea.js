@@ -19,7 +19,7 @@ import React from "react";
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
 import { createAction } from "../Utils";
 import { connect } from "react-redux";
-
+import HudLoading from "../Components/HudLoading"
 import ShopAreaRequestObject from "../Requests/shop_area_request_object";
 
 import { KURL_INFO } from "../Utils/server";
@@ -88,23 +88,13 @@ export default class ShippingArea extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      gender_options: [
-        { label: "Male", value: 0 },
-        { label: "Female", value: 1 }
-      ],
-      contactNo: "",
-      address: "",
-      unitNo: "",
-      gender: "",
-      genderIndex: 0,
-      tag: "",
-      defaultAddress: 1,
-      area: []
+      area: [],
+      loading: false
     };
   }
   loadArea = () => {
     let { dispatch, selectedShop } = this.props;
+    this.setState({ loading: true })
     const callback = eventObject => {
       if (eventObject.success) {
         this.setState({
@@ -124,7 +114,6 @@ export default class ShippingArea extends React.Component {
   };
 
   returnData(info) {
-    console.log('shippingarea: ', info)
     this.props.navigation.state.params.returnData(info);
     // this.props.navigation.goBack();
   }
@@ -135,13 +124,11 @@ export default class ShippingArea extends React.Component {
   onSelectArea = item => {
     const { navigation } = this.props;
     navigation.navigate("MapShippingAddress", {
-         area: item,
-         returnData: this.returnData.bind(this)
-        });
+      area: item,
+      returnData: this.returnData.bind(this)
+    });
   };
-  onChangeDefaultAddress = value => {
-    this.setState({ defaultAddress: value });
-  };
+
 
   componentDidMount() {
     this.props.navigation.setParams({
@@ -177,6 +164,7 @@ export default class ShippingArea extends React.Component {
             />
           </View>
         </View>
+        <HudLoading isLoading={this.state.loading} />
       </View>
     );
   }
