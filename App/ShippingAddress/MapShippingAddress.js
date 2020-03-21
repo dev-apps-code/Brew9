@@ -23,6 +23,7 @@ import MapView, {
     Marker,
 } from "react-native-maps";
 import { ScrollView } from "react-native-gesture-handler";
+import Toast, { DURATION } from 'react-native-easy-toast'
 
 export default class MapShippingAddress extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -59,7 +60,7 @@ export default class MapShippingAddress extends React.Component {
             latitude: parseFloat(this.props.navigation.state.params.area.latitude),
             longitude: parseFloat(this.props.navigation.state.params.area.longitude),
             error: null,
-            deliveryArea: this.props.navigation.state.params.area.area
+            delivery_area: this.props.navigation.state.params.area.area
         };
     }
 
@@ -86,7 +87,6 @@ export default class MapShippingAddress extends React.Component {
     }
 
     renderForm = (title, placeholder, text, onChangeText, description) => {
-        console.log('description', description)
         return (
             <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
                 <Text style={styles.title}>{title}</Text>
@@ -118,19 +118,11 @@ export default class MapShippingAddress extends React.Component {
             </MapView>
         );
     };
-    onChangeUnitNo = (unitNo) => {
+
+
+    onChangeAddress = (address) => {
         this.setState({
-            unitNo
-        })
-    }
-    onChangeStreet1 = (Street1) => {
-        this.setState({
-            Street1
-        })
-    }
-    onChangeStreet2 = (Street2) => {
-        this.setState({
-            Street2
+            address
         })
     }
     onChangeCity = (city) => {
@@ -138,9 +130,9 @@ export default class MapShippingAddress extends React.Component {
             city
         })
     }
-    onChangePoscode = (poscode) => {
+    onChangePoscode = (postal_code) => {
         this.setState({
-            poscode
+            postal_code
         })
     }
     onChangeCountry = (country) => {
@@ -154,11 +146,57 @@ export default class MapShippingAddress extends React.Component {
         })
     }
 
+    checkForm = () => {
+        let { address, city, state, postal_code, country } = this.state
+        if (!city) {
+            this.refs.toast.show("Please select a city", 500)
+            return false
+        }
+        else if (!state) {
+            this.refs.toast.show("Please select your state", 500)
+            return false
+        }
+        else if (!postal_code) {
+            this.refs.toast.show("Please select your postal code", 500)
+            return false
+
+        }
+        else if (!country) {
+            this.refs.toast.show("Please select your country", 500)
+            return false
+
+        }
+
+        else if (!address) {
+            this.refs.toast.show("Please fill in your address", 500)
+            return false
+
+        }
+        return true
+
+    }
+
     onSavePressed = () => {
-        console.log(this.state)
         const { navigation } = this.props
-        navigation.state.params.returnData(this.state);
-        navigation.navigate("AddShippingAddress")
+        let { address, city, state, postal_code, country, latitude, longitude, delivery_area } = this.state
+        let formcheck = this.checkForm()
+        if (formcheck) {
+            const shippingAddress = {
+                address: address,
+                city: city,
+                state: state,
+                postal_code: postal_code,
+                country: country,
+                latitude: latitude,
+                longitude: longitude,
+                delivery_area: delivery_area,
+            }
+            navigation.state.params.returnData(shippingAddress);
+            navigation.navigate("AddShippingAddress")
+        }
+
+
+
     }
     render() {
         return (
@@ -167,9 +205,8 @@ export default class MapShippingAddress extends React.Component {
                 {this.renderMap()}
                 <ScrollView style={{ height: windowHeight / 4 }}>
                     <View style={styles.formView}>
-                        {this.renderForm("Unit no", "e.g. Gym/School", false, (text) => this.onChangeUnitNo(text))}
-                        {this.renderForm("Street1", "e.g. Gym/School", false, (text) => this.onChangeStreet1(text))}
-                        {this.renderForm("Street2", "e.g. Gym/School", false, (text) => this.onChangeStreet2(text))}
+
+                        {this.renderForm("address", "e.g. Gym/School", false, (text) => this.onChangeAddress(text))}
                         {this.renderForm("State", "Exp:Block B", false, (text) => this.onChangeState(text))}
                         {this.renderForm("Poscode", "Exp:Block B", false, (text) => this.onChangePoscode(text))}
                         {this.renderForm("City", "Exp:Block B", false, (text) => this.onChangeCity(text))}
@@ -183,6 +220,7 @@ export default class MapShippingAddress extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
+                <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 
             </View>
         );

@@ -12,6 +12,7 @@ import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import SaveShippingAddressObjectRequest from "../Requests/save_shipping_address_request_object";
+import UpdateShippingAddressObjectRequest from "../Requests/update_shipping_address_request_object"
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING, windowHeight } from "../Common/common_style";
@@ -54,20 +55,39 @@ export default class AddShippingAddress extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            fullname: '',
-            address: '',
-            contact_number: '',
-            city: '',
-            state: '',
-            postal_code: '',
-            country: '',
-            land_mark: '',
-            latitude: '',
-            longitude: '',
-            delivery_area: '',
-            primary: true
+        this.address = this.props.navigation.state.params.params
+        if (this.address != null) {
+            this.state = {
+                fullname: this.address.fullname ? this.address.fullname : '',
+                address: this.address.address ? this.address.address : '',
+                contact_number: this.address.contact_number ? this.address.contact_number : '',
+                city: this.address.city ? this.address.city : '',
+                state: this.address.state ? this.address.state : '',
+                postal_code: this.address.postal_code ? this.address.postal_code : '',
+                country: this.address.country ? this.address.country : '',
+                land_mark: this.address.land_mark ? this.address.land_mark : '',
+                latitude: this.address.latitude ? this.address.latitude : '',
+                longitude: this.address.longitude ? this.address.longitude : '',
+                delivery_area: this.address.delivery_area ? this.address.delivery_area : '',
+                primary: this.address.primary == true ? 1 : 0
+            }
+        } else {
+            this.state = {
+                fullname: '',
+                address: '',
+                contact_number: '',
+                city: '',
+                state: '',
+                postal_code: '',
+                country: '',
+                land_mark: '',
+                latitude: '',
+                longitude: '',
+                delivery_area: '',
+                primary: true
+            }
         }
+
     }
     onChangeName = (fullname) => {
         this.setState({ fullname })
@@ -84,6 +104,7 @@ export default class AddShippingAddress extends React.Component {
     }
     onSavePressed = () => {
         let formcheck = this.checkForm()
+        let primary = this.state.default == 1 ? true : false
         if (formcheck) {
             const shippingAddress = {
                 member_id: this.props.currentMember.id,
@@ -98,7 +119,7 @@ export default class AddShippingAddress extends React.Component {
                 latitude: this.state.latitude,
                 longitude: this.state.longitude,
                 delivery_area: this.state.delivery_area,
-                primary: this.state.default
+                primary: primary
             }
             this.loadUpdateProfile(shippingAddress)
         }
@@ -115,16 +136,29 @@ export default class AddShippingAddress extends React.Component {
 
             }
         }
+        if (this.address == null) {
+            const obj = new SaveShippingAddressObjectRequest(formData, currentMember.id)
+            console.log('obj', obj)
+            obj.setUrlId(currentMember.id)
+            dispatch(
+                createAction('members/saveShippingAddress')({
+                    object: obj,
+                    callback,
+                })
+            )
+        } else {
+            const obj = new UpdateShippingAddressObjectRequest(formData, currentMember.id)
+            console.log('UpdateShippingAddressObjectRequest obj', obj)
+            obj.setUrlId(this.address.id)
+            dispatch(
+                createAction('members/updateShippingAddress')({
+                    object: obj,
+                    callback,
+                })
+            )
+        }
 
-        const obj = new SaveShippingAddressObjectRequest(formData, currentMember.id)
-        console.log('obj', obj)
-        obj.setUrlId(currentMember.id)
-        dispatch(
-            createAction('members/saveShippingAddress')({
-                object: obj,
-                callback,
-            })
-        )
+
     }
     checkForm = () => {
         let { fullname, address, contact_number, city, state, postal_code, country, land_mark, latitude, longitude, delivery_area } = this.state
@@ -184,21 +218,22 @@ export default class AddShippingAddress extends React.Component {
             returnData: this.returnData.bind(this)
         })
     }
-    renderFormDetail = (title, placeholder, onChangeText, edit) => {
+    renderFormDetail = (title, value, placeholder, onChangeText, edit) => {
         return (
             <View>
                 <View style={styles.formDetail}>
                     <Text style={styles.title}>{title}</Text>
                     {title != "Address" ? edit ? <TextInput
+                        defaultValue={value}
                         keyboardType="default"
                         clearButtonMode="always"
                         autoCorrect={false}
                         placeholder={placeholder}
                         onChangeText={(text) => onChangeText(text)}
                         style={styles.textInput}
-                        editable={edit} /> : <Text>{placeholder}</Text> :
+                        editable={edit} /> : <Text>{value}</Text> :
                         <TouchableOpacity style={{ flexDirection: 'row', flex: 1, marginRight: 10 * alpha, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.onSelectAddress()}>
-                            <Text style={[styles.textInput]}>{placeholder}</Text>
+                            <Text style={[styles.textInput]}>{value}</Text>
                             <Image
                                 source={require("./../../assets/images/next.png")}
                                 style={styles.navigationBarItemIcon} />
@@ -211,78 +246,31 @@ export default class AddShippingAddress extends React.Component {
         )
     }
 
-    renderRadioButtonForm = () => {
-        return (
-            <View>
-                <View style={styles.formDetail}>
-                    <Text
-                        style={styles.title}>Gender</Text>
-                    <View
-                        style={styles.selectedradioView}>
-                        <RadioForm formHorizontal={true} animation={true} >
-                            {this.state.gender_options.map((obj, i) => {
-                                var onPress = (value, index) => {
-                                    this.setState({
-                                        gender: value,
-                                        genderIndex: index
-                                    })
-                                }
-                                return (
-                                    <RadioButton labelHorizontal={true} key={i} >
-                                        {/*  You can set RadioButtonLabel before RadioButtonInput */}
-                                        <RadioButtonInput
-                                            obj={obj}
-                                            index={i}
-                                            isSelected={this.state.gender === i}
-                                            onPress={onPress}
-                                            buttonInnerColor={PRIMARY_COLOR}
-                                            buttonOuterColor={this.state.genderIndex === i ? '#00B2E3' : PRIMARY_COLOR}
-                                            selectedButtonColor={'#00B2E3'}
-                                            buttonSize={5 * alpha}
-                                            buttonStyle={{ backgroundColor: "rgb(200, 200, 200)", borderWidth: 0, marginRight: 5 * alpha, marginTop: 2 * alpha }}
-                                        />
-                                        <RadioButtonLabel
-                                            obj={obj}
-                                            index={i}
-                                            onPress={onPress}
-                                            labelStyle={{ color: "rgb(135, 135, 135)", fontSize: 13 * fontAlpha, marginRight: 10 * alpha, fontFamily: NON_TITLE_FONT }}
-                                            labelWrapStyle={{}}
-                                        />
-                                    </RadioButton>
-                                )
-                            })}
-                        </RadioForm>
-                    </View>
-                </View>
-                <Image
-                    source={require("./../../assets/images/line-17.png")}
-                    style={styles.seperatorImage} />
-            </View>)
-    }
+
 
 
     render() {
         let current_address = this.state.address ? this.state.address : "Select shipping Address"
+        let { fullname, address, contact_number, city, state, postal_code, country, land_mark, latitude, longitude, delivery_area } = this.state
         return <View
             style={styles.container}>
 
             <ScrollView>
                 <View style={styles.addAddressForm}>
-                    {this.renderFormDetail("First Name", "Fill up receiver's first name", (text) => this.onChangeName(text), true)}
-                    {/* {this.renderRadioButtonForm()} */}
-                    {this.renderFormDetail("Contac No.", "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
-                    {this.renderFormDetail("Address", current_address, (text) => this.onChangeAddress(text), true)}
-                    {this.renderFormDetail("City", this.state.city, (text) => console.log(text), false)}
-                    {this.renderFormDetail("State", this.state.state, (text) => console.log(text), false)}
-                    {this.renderFormDetail("Poscode", this.state.postal_code, (text) => console.log(text), false)}
-                    {this.renderFormDetail("Country", this.state.country, (text) => console.log(text), false)}
-                    {this.renderFormDetail("Tag", "", (text) => this.onChangeTag(text))}
+                    {this.renderFormDetail("First Name", fullname, "Fill up receiver's first name", (text) => this.onChangeName(text), true)}
+                    {this.renderFormDetail("Contac No.", contact_number, "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
+                    {this.renderFormDetail("Address", current_address, "", (text) => this.onChangeAddress(text), true)}
+                    {this.renderFormDetail("City", city, "", (text) => console.log(text), false)}
+                    {this.renderFormDetail("State", state, "", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Poscode", postal_code, "", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Country", country, "", (text) => console.log(text), false)}
+                    {this.renderFormDetail("Tag", land_mark, "", (text) => this.onChangeTag(text), true)}
                     <View style={[styles.defaultAddressView]}>
                         <Text style={styles.title}>Default address</Text>
                         <SwitchSelector
                             options={[
-                                { label: "", value: true },
-                                { label: "", value: false }]}
+                                { label: "", value: 0 },
+                                { label: "", value: 1 }]}
                             initial={this.state.delivery}
                             value={0}
                             textColor={"#4E4D4D"}
