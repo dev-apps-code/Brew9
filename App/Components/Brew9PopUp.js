@@ -6,7 +6,7 @@ import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 class Brew9PopUp extends Component {
 
     render() {
-        let { popUpVisible, title, inputPlaceholder, input, description, onPressOk, onChangeText, onBackgroundPress } = this.props
+        let { popUpVisible, title, inputPlaceholder, input, description, onPressOk, onPressCancel, OkText, cancelText, onChangeText, onBackgroundPress } = this.props
         return (
             <Modal
                 animationType="fade"
@@ -33,12 +33,20 @@ class Brew9PopUp extends Component {
 
                                 </View>}
                             </View>
-                            <TouchableOpacity
-                                onPress={onPressOk}
-                                style={styles.popUpInput3}>
-                                <Text
-                                    style={styles.orderButtonText}>OK</Text>
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'row' }}>
+                                {cancelText && <TouchableOpacity
+                                    onPress={onPressCancel}
+                                    style={styles.cancelButtonView}>
+                                    <Text
+                                        style={styles.cancelButtonText}>{cancelText}</Text>
+                                </TouchableOpacity>}
+                                <TouchableOpacity
+                                    onPress={onPressOk}
+                                    style={styles.popUpInput3}>
+                                    <Text
+                                        style={styles.okButtonText}>{OkText}</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
@@ -94,10 +102,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10 * alpha,
         paddingVertical: 10 * alpha,
         borderRadius: 5 * alpha,
+        marginHorizontal: 5 * alpha,
         alignItems: 'center',
         justifyContent: 'center',
-        // flex: 1,
+        flex: 1,
         marginTop: 5
+    },
+    cancelButtonView: {
+        paddingHorizontal: 10 * alpha,
+        paddingVertical: 10 * alpha,
+        borderRadius: 5 * alpha,
+        marginHorizontal: 5 * alpha,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginTop: 5,
+        backgroundColor: 'white', borderColor: 'rgb(0, 178, 227)', borderWidth: 1
     },
     titleText: {
         paddingBottom: 5,
@@ -110,7 +130,7 @@ const styles = StyleSheet.create({
         fontFamily: TITLE_FONT,
         textAlign: 'center'
     },
-    orderButtonText: {
+    okButtonText: {
         color: "rgb(254, 254, 254)",
         fontFamily: NON_TITLE_FONT,
         fontSize: 14 * fontAlpha,
@@ -118,5 +138,14 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         textAlign: "left",
     },
+    cancelButtonText: {
+        color: "rgb(254, 254, 254)",
+        fontFamily: NON_TITLE_FONT,
+        fontSize: 14 * fontAlpha,
+        fontStyle: "normal",
+        fontWeight: "normal",
+        textAlign: "left",
+        color: 'rgb(0, 178, 227)'
+    }
 })
 export default Brew9PopUp
