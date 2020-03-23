@@ -86,7 +86,7 @@ export default class AddShippingAddress extends React.Component {
                 latitude: '',
                 longitude: '',
                 delivery_area: '',
-                primary: true
+                primary: 1
             }
         }
 
@@ -106,6 +106,7 @@ export default class AddShippingAddress extends React.Component {
     }
     onSavePressed = () => {
         let formcheck = this.checkForm()
+        let primary = this.state.primary == 1 ? true : false
         if (formcheck) {
             const shippingAddress = {
                 member_id: this.props.currentMember.id,
@@ -120,7 +121,7 @@ export default class AddShippingAddress extends React.Component {
                 latitude: this.state.latitude,
                 longitude: this.state.longitude,
                 delivery_area: this.state.delivery_area,
-                primary: this.state.primary
+                primary: primary
             }
             this.loadUpdateProfile(shippingAddress)
         }
@@ -159,7 +160,6 @@ export default class AddShippingAddress extends React.Component {
             )
         } else {
             const obj = new UpdateShippingAddressObjectRequest(formData, currentMember.id)
-            console.log('UpdateShippingAddressObjectRequest obj', obj)
             obj.setUrlId(this.address.id)
             dispatch(
                 createAction('members/updateShippingAddress')({
@@ -220,8 +220,7 @@ export default class AddShippingAddress extends React.Component {
         this.props.navigation.goBack()
     }
     onChangeDefaultAddress = (value) => {
-        let primary = value == 1 ? true : false
-        this.setState({ primary: primary })
+        this.setState({ primary: value })
     }
     onSelectAddress = () => {
         const { navigate } = this.props.navigation
