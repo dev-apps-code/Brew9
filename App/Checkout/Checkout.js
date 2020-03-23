@@ -19,7 +19,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
@@ -44,6 +44,7 @@ import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
+import DeliveryTimeSelector from '../Components/DeliveryTimeSelector';
 
 @connect(({ members, shops, orders }) => ({
   currentMember: members.profile,
@@ -121,6 +122,7 @@ export default class Checkout extends React.Component {
       hour_range: [],
       minute_range: [],
       isPickupToogle: false,
+      isDeliveryTimeSelectorToggle: false,
       pickup_view_height: 150 * alpha,
       selected_hour_index: 0,
       selected_minute_index: 0,
@@ -1063,6 +1065,21 @@ export default class Checkout extends React.Component {
     }
   };
 
+  toggleDeliveryTimeSelector = () => {
+    const { isDeliveryTimeSelectorToggle } = this.state;
+
+    const y = () => (isDeliveryTimeSelectorToggle ? windowWidth : 52 * alpha);
+
+    this.setState(
+      { isDeliveryTimeSelectorToggle: !isDeliveryTimeSelectorToggle },
+      function() {
+        Animated.spring(this.movePickAnimation, {
+          toValue: { x: 0, y: y() }
+        }).start();
+      }
+    );
+  };
+
   tooglePayment = () => {
     const { isPaymentToggle, payment_view_height } = this.state;
 
@@ -1605,8 +1622,9 @@ export default class Checkout extends React.Component {
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
-            // onPress={() => this.showDateTimePicker()}
-            onPress={() => this.tooglePickup()}
+            onPress={() =>
+              delivery ? this.toggleDeliveryTimeSelector() : this.tooglePickup()
+            }
             style={styles.voucherButton}
           >
             <View style={styles.drinksView}>
@@ -2119,6 +2137,15 @@ export default class Checkout extends React.Component {
     );
   };
 
+  renderDeliveryTimeSelector = () => (
+    <DeliveryTimeSelector
+      styles={styles}
+      state={this.state}
+      animation={this.movePickAnimation}
+      toggleDelivery={this.toggleDeliveryTimeSelector}
+    />
+  );
+
   renderCheckoutReceipt() {
     const { vouchers_to_use, final_price } = this.state;
     let {
@@ -2317,6 +2344,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderPaymentMethod()}
         {this.renderPickupTimeScroll()}
+        {this.renderDeliveryTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
         <Toast
           ref="toast"
