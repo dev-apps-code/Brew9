@@ -5,73 +5,76 @@
 //  Created by [Author].
 //  Copyright © 2018 brew9. All rights reserved.
 //
-import * as Font from "expo-font";
-import { DangerZone, AppLoading } from "expo";
-import React from "react";
+import * as Font from 'expo-font';
+import { DangerZone, AppLoading } from 'expo';
+import React from 'react';
 import * as Sentry from 'sentry-expo';
-import { createBottomTabNavigator, NavigationActions } from "react-navigation";
-import Constants from 'expo-constants'
+import { createBottomTabNavigator, NavigationActions } from 'react-navigation';
+import Constants from 'expo-constants';
 import {
   createStackNavigator,
   createAppContainer,
   createSwitchNavigator
-} from "react-navigation";
-import {
-  BackHandler,
-  Alert
-} from "react-native";
-import Login from "./App/Login/Login";
-import Checkout from "./App/Checkout/Checkout";
-import ShippingAddress from "./App/ShippingAddress/ShippingAddress";
-import AddShippingAddress from "./App/ShippingAddress/AddShippingAddress"
-import ShippingArea from "./App/ShippingAddress/ShippingArea"
-import MapShippingAddress from "./App/ShippingAddress/MapShippingAddress"
-import CheckoutVoucher from "./App/Checkout/CheckoutVoucher";
-import VoucherDetail from "./App/Checkout/VoucherDetail";
-import Profile from "./App/Profile/Profile";
-import MemberWallet from "./App/MemberWallet/MemberWallet";
-import MemberVoucher from "./App/MemberVoucher/MemberVoucher";
-import MembershipInfo from "./App/MembershipInfo/MembershipInfo";
-import PickUp from "./App/PickUp/PickUp";
-import MemberProfile from "./App/MemberProfile/MemberProfile";
-import Home from "./App/Home/Home";
-import VIPPurchase from "./App/VIPPurchase/VIPPurchase";
-import PointHistory from "./App/PointHistory/PointHistory";
-import Transaction from "./App/Transaction/Transaction";
-import OrderHistory from "./App/OrderHistory/OrderHistory";
-import PointShop from "./App/PointShop/PointShop";
-import PointShopFullList from "./App/PointShop/PointShopFullList";
-import PointShopItem from "./App/PointShopItem/PointShopItem";
-import PointShopHistory from "./App/PointShopHistory/PointShopHistory";
-import PayByWallet from "./App/PayByWallet/PayByWallet";
-import MemberCenter from "./App/MemberCenter/MemberCenter";
-import WebCommon from "./App/WebCommon/WebCommon";
-import WebCommonModal from "./App/WebCommonModal/WebCommonModal";
-import OrderReceipt from "./App/OrderReceipt/OrderReceipt";
-import OrderReview from "./App/OrderReview/OrderReview";
-import OrderInvoice from "./App/OrderInvoice/OrderInvoice";
-import RedeemPromotion from "./App/RedeemPromotion/RedeemPromotion";
-import Notification from "./App/Notification/Notification";
-import PromotionDetail from "./App/Notification/PromotionDetail";
-import MissionCenter from "./App/MissionCenter/MissionCenter";
-import Confirmation from "./App/Confirmation/Confirmation";
-import FirstScreen from "./App/FirstScreen/FirstScreen";
-import BannerView from "./App/Home/BannerView";
-import VerifyUser from "./App/VerifyUser/VerifyUser";
-import Register from "./App/Register/Register";
-import DirectionMap from "./App/DirectionMap/DirectionMap";
-import FeaturedPromotionDetail from "./App/Home/FeaturedPromotionDetail";
-import ScanQr from "./App/Home/ScanQr";
-import PayByCard from "./App/PayByCard/PayByCard"
-import CreditHistory from "./App/CreditHistory/CreditHistory"
-import About from "./App/About/About"
-import EditOrder from "./App/EditOrder/EditOrder"
+} from 'react-navigation';
+import { BackHandler, Alert } from 'react-native';
+import Login from './App/Login/Login';
+import Checkout from './App/Checkout/Checkout';
+import ShippingAddress from './App/ShippingAddress/ShippingAddress';
+import AddShippingAddress from './App/ShippingAddress/AddShippingAddress';
+import ShippingArea from './App/ShippingAddress/ShippingArea';
+import MapShippingAddress from './App/ShippingAddress/MapShippingAddress';
+import CheckoutVoucher from './App/Checkout/CheckoutVoucher';
+import VoucherDetail from './App/Checkout/VoucherDetail';
+import Profile from './App/Profile/Profile';
+import MemberWallet from './App/MemberWallet/MemberWallet';
+import MemberVoucher from './App/MemberVoucher/MemberVoucher';
+import MembershipInfo from './App/MembershipInfo/MembershipInfo';
+import PickUp from './App/PickUp/PickUp';
+import MemberProfile from './App/MemberProfile/MemberProfile';
+import Home from './App/Home/Home';
+import VIPPurchase from './App/VIPPurchase/VIPPurchase';
+import PointHistory from './App/PointHistory/PointHistory';
+import Transaction from './App/Transaction/Transaction';
+import OrderHistory from './App/OrderHistory/OrderHistory';
+import PointShop from './App/PointShop/PointShop';
+import PointShopFullList from './App/PointShop/PointShopFullList';
+import PointShopItem from './App/PointShopItem/PointShopItem';
+import PointShopHistory from './App/PointShopHistory/PointShopHistory';
+import PayByWallet from './App/PayByWallet/PayByWallet';
+import MemberCenter from './App/MemberCenter/MemberCenter';
+import WebCommon from './App/WebCommon/WebCommon';
+import WebCommonModal from './App/WebCommonModal/WebCommonModal';
+import OrderReceipt from './App/OrderReceipt/OrderReceipt';
+import OrderReview from './App/OrderReview/OrderReview';
+import OrderInvoice from './App/OrderInvoice/OrderInvoice';
+import RedeemPromotion from './App/RedeemPromotion/RedeemPromotion';
+import Notification from './App/Notification/Notification';
+import PromotionDetail from './App/Notification/PromotionDetail';
+import MissionCenter from './App/MissionCenter/MissionCenter';
+import Confirmation from './App/Confirmation/Confirmation';
+import FirstScreen from './App/FirstScreen/FirstScreen';
+import BannerView from './App/Home/BannerView';
+import VerifyUser from './App/VerifyUser/VerifyUser';
+import Register from './App/Register/Register';
+import DirectionMap from './App/DirectionMap/DirectionMap';
+import FeaturedPromotionDetail from './App/Home/FeaturedPromotionDetail';
+import ScanQr from './App/Home/ScanQr';
+import PayByCard from './App/PayByCard/PayByCard';
+import CreditHistory from './App/CreditHistory/CreditHistory';
+import About from './App/About/About';
+import EditOrder from './App/EditOrder/EditOrder';
 
-import { create } from "dva-core";
-import { Provider, connect } from "react-redux";
-import { registerModels } from "./App/Model/index";
-import PaymentsWebview from "./App/Checkout/PaymentsWebview"
-import { TABBAR_ACTIVE_TINT, TABBAR_INACTIVE_TINT, TITLE_FONT, NON_TITLE_FONT } from "./App/Common/common_style";
+import { create } from 'dva-core';
+import { Provider, connect } from 'react-redux';
+import { registerModels } from './App/Model/index';
+import PaymentsWebview from './App/Checkout/PaymentsWebview';
+import {
+  TABBAR_ACTIVE_TINT,
+  TABBAR_INACTIVE_TINT,
+  TITLE_FONT,
+  NON_TITLE_FONT
+} from './App/Common/common_style';
+import { Asset } from 'react-native-unimodules';
 
 Sentry.init({
   dsn: 'https://a6c00af5b64644139799e721b45d61f4@sentry.io/1797623',
@@ -95,28 +98,26 @@ const VerifyUserStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: "VerifyUser",
-    header: "none",
-
+    initialRouteName: 'VerifyUser',
+    header: 'none'
   }
 );
-
 
 const PushOrder = createStackNavigator(
   {
     Home: {
-      screen: Home,
+      screen: Home
     },
     PaymentsWebview: {
       screen: PaymentsWebview
     },
     ShippingAddress: {
-      screen: ShippingAddress,
+      screen: ShippingAddress
     },
     Checkout: {
       screen: Checkout,
       navigationOptions: {
-        tabBarVisible: false,
+        tabBarVisible: false
       }
     },
     FeaturedPromotionDetail: {
@@ -161,22 +162,19 @@ const PushOrder = createStackNavigator(
     },
     Register: {
       screen: Register,
-      header: "none"
+      header: 'none'
     },
     ScanQr: {
       screen: ScanQr
     },
     VerifyUser: {
       screen: VerifyUser
-    },
-
+    }
   },
   {
-    initialRouteName: "Home",
-
+    initialRouteName: 'Home'
   }
 );
-
 
 // export const VerifyStack = createStackNavigator(
 //   {
@@ -211,10 +209,10 @@ const PushPickup = createStackNavigator(
     }
   },
   {
-    initialRouteName: "PickUp",
+    initialRouteName: 'PickUp',
     navigationOptions: {
-      gesturesEnabled: false,
-    },
+      gesturesEnabled: false
+    }
   }
 );
 
@@ -222,14 +220,12 @@ const PushMission = createStackNavigator(
   {
     MissionCenter: {
       screen: MissionCenter
-    },
-
+    }
   },
   {
-    initialRouteName: "MissionCenter",
+    initialRouteName: 'MissionCenter'
   }
 );
-
 
 const PushInbox = createStackNavigator(
   {
@@ -241,17 +237,17 @@ const PushInbox = createStackNavigator(
     },
     MemberVoucher: {
       screen: MemberVoucher
-    },
+    }
   },
   {
-    initialRouteName: "Notification",
+    initialRouteName: 'Notification'
   }
 );
 
 const PushProfile = createStackNavigator(
   {
     Profile: {
-      screen: Profile,
+      screen: Profile
     },
     PaymentsWebview: {
       screen: PaymentsWebview
@@ -263,7 +259,7 @@ const PushProfile = createStackNavigator(
       screen: Transaction
     },
     MembershipInfo: {
-      screen: MembershipInfo,
+      screen: MembershipInfo
     },
     MemberVoucher: {
       screen: MemberVoucher
@@ -324,10 +320,10 @@ const PushProfile = createStackNavigator(
     },
     About: {
       screen: About
-    },
+    }
   },
   {
-    initialRouteName: "Profile",
+    initialRouteName: 'Profile'
   }
 );
 
@@ -345,12 +341,12 @@ PushProfile.router.getStateForAction = (action, state) => {
 PushOrder.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
-    if (navigation.state.routes[i].routeName != "Home") {
+    if (navigation.state.routes[i].routeName != 'Home') {
       tabBarVisible = false;
     }
   }
   return {
-    tabBarVisible,
+    tabBarVisible
   };
 };
 
@@ -366,43 +362,44 @@ PushMission.router.getStateForAction = (action, state) => {
 
 const prevGetStateForVerify = VerifyUserStack.router.getStateForAction;
 VerifyUserStack.router.getStateForAction = (action, state) => {
-
-  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'VerifyUser') {
-    const routes = [
-      state.routes[state.index]
-    ];
+  if (
+    action.type === 'Navigation/BACK' &&
+    state &&
+    state.routes[state.index].routeName === 'VerifyUser'
+  ) {
+    const routes = [state.routes[state.index]];
     return {
       ...state,
       routes,
-      index: routes.length - 1,
+      index: routes.length - 1
     };
   }
 
   return prevGetStateForVerify(action, state);
-}
-
+};
 
 const prevGetStateForHome = PushOrder.router.getStateForAction;
 PushOrder.router.getStateForAction = (action, state) => {
-
-  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Home') {
-    const routes = [
-      state.routes[state.index]
-    ];
+  if (
+    action.type === 'Navigation/BACK' &&
+    state &&
+    state.routes[state.index].routeName === 'Home'
+  ) {
+    const routes = [state.routes[state.index]];
     return {
       ...state,
       routes,
-      index: routes.length - 1,
+      index: routes.length - 1
     };
   }
 
   return prevGetStateForHome(action, state);
-}
+};
 
 PushPickup.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
-    if (navigation.state.routes[i].routeName != "PickUp") {
+    if (navigation.state.routes[i].routeName != 'PickUp') {
       tabBarVisible = false;
     }
   }
@@ -411,21 +408,23 @@ PushPickup.navigationOptions = ({ navigation }) => {
   };
 };
 
-
 const prevGetStateForPickUp = PushPickup.router.getStateForAction;
 PushPickup.router.getStateForAction = (action, state) => {
-
-  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'PickUp') {
+  if (
+    action.type === 'Navigation/BACK' &&
+    state &&
+    state.routes[state.index].routeName === 'PickUp'
+  ) {
     return state;
   }
 
   return prevGetStateForPickUp(action, state);
-}
+};
 
 PushInbox.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
-    if (navigation.state.routes[i].routeName != "Notification") {
+    if (navigation.state.routes[i].routeName != 'Notification') {
       tabBarVisible = false;
     }
   }
@@ -436,20 +435,23 @@ PushInbox.navigationOptions = ({ navigation }) => {
 
 const prevGetStateForPushInbox = PushInbox.router.getStateForAction;
 PushInbox.router.getStateForAction = (action, state) => {
-
-  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Notification') {
+  if (
+    action.type === 'Navigation/BACK' &&
+    state &&
+    state.routes[state.index].routeName === 'Notification'
+  ) {
     return state;
   }
 
   return prevGetStateForPushInbox(action, state);
-}
+};
 
 PushProfile.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
 
   let routeName = navigation.state.routes[navigation.state.index].routeName;
 
-  if (routeName != "Profile") {
+  if (routeName != 'Profile') {
     tabBarVisible = false;
   }
 
@@ -460,13 +462,16 @@ PushProfile.navigationOptions = ({ navigation }) => {
 
 const prevGetStateForPushProfile = PushProfile.router.getStateForAction;
 PushProfile.router.getStateForAction = (action, state) => {
-
-  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'Profile') {
+  if (
+    action.type === 'Navigation/BACK' &&
+    state &&
+    state.routes[state.index].routeName === 'Profile'
+  ) {
     return state;
   }
 
   return prevGetStateForPushProfile(action, state);
-}
+};
 
 const TabGroupOne = createBottomTabNavigator(
   {
@@ -487,7 +492,7 @@ const TabGroupOne = createBottomTabNavigator(
     }
   },
   {
-    tabBarPosition: "bottom",
+    tabBarPosition: 'bottom',
     swipeEnabled: false,
     gesturesEnabled: false,
     animationEnabled: true,
@@ -498,25 +503,25 @@ const TabGroupOne = createBottomTabNavigator(
       activeTintColor: TABBAR_ACTIVE_TINT,
       inactiveTintColor: TABBAR_INACTIVE_TINT,
       indicatorStyle: {
-        backgroundColor: "transparent"
+        backgroundColor: 'transparent'
       },
       style: {
-        backgroundColor: "rgb(224, 224, 224)"
+        backgroundColor: 'rgb(224, 224, 224)'
       }
     },
     defaultNavigationOptions: ({ navigation }) => {
       const { routeName } = navigation.state;
 
       switch (routeName) {
-        case "PushOrder":
+        case 'PushOrder':
           return Home.tabBarItemOptions(navigation, store);
-        case "PushPickup":
+        case 'PushPickup':
           return PickUp.tabBarItemOptions(navigation, store);
-        case "PushInbox":
+        case 'PushInbox':
           return Notification.tabBarItemOptions(navigation, store);
-        case "PushMission":
+        case 'PushMission':
           return MissionCenter.tabBarItemOptions(navigation, store);
-        case "PushProfile":
+        case 'PushProfile':
           return Profile.tabBarItemOptions(navigation, store);
       }
     }
@@ -533,7 +538,7 @@ const AuthenticationStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Login"
+    initialRouteName: 'Login'
   }
 );
 
@@ -542,36 +547,34 @@ const RootNavigator = createStackNavigator(
     FirstScreen: {
       screen: FirstScreen,
       navigationOptions: {
-        gesturesEnabled: false,
-      },
+        gesturesEnabled: false
+      }
     },
     TabGroupOne: {
       screen: TabGroupOne,
       navigationOptions: {
-        gesturesEnabled: false,
-      },
+        gesturesEnabled: false
+      }
     },
     // VerifyStack: {
     //   screen: VerifyStack
     // },
     VerifyUserStack: {
-      screen: VerifyUserStack,
-
+      screen: VerifyUserStack
     }
   },
   {
-    initialRouteName: "FirstScreen",
-    headerMode: "none",
+    initialRouteName: 'FirstScreen',
+    headerMode: 'none',
     animationEnabled: false,
     transitionConfig: () => ({
       transitionSpec: {
-        duration: 0,  // Set the animation duration time as 0 !!
-      },
+        duration: 0 // Set the animation duration time as 0 !!
+      }
     }),
     navigationOptions: {
-
-      gesturesEnabled: false,
-    },
+      gesturesEnabled: false
+    }
   }
 );
 
@@ -584,6 +587,16 @@ const store = app._store;
 
 const AppContainer = createAppContainer(RootNavigator);
 
+function cacheImages(images) {
+  return images.map((image) => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -593,13 +606,20 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    this.initProjectImages();
     this.initProjectFonts();
   }
 
+  async initProjectImages() {
+    await cacheImages([require('./assets/images/x-3.png')]);
+  }
+
   async initProjectFonts() {
+    // await Asset.fromModule(require('./assets/images/x-3.png')).downloadAsync();
+
     await Font.loadAsync({
-      "ClanPro-Book": require("./assets/fonts/ClanPro-Book.ttf"),
-      "ClanPro-News": require("./assets/fonts/ClanPro-News.ttf"),
+      'ClanPro-Book': require('./assets/fonts/ClanPro-Book.ttf'),
+      'ClanPro-News': require('./assets/fonts/ClanPro-News.ttf')
     });
     this.setState({
       fontsReady: true
