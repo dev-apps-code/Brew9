@@ -1,4 +1,4 @@
-import { getMethod, postMethod, postMultipartMethod, deleteMethod } from '../Utils/webservice_helper'
+import { getMethod, postMethod, postMultipartMethod, deleteMethod, putMethod } from '../Utils/webservice_helper'
 
 export function storePushToken(authtoken, object) {
    return postMethod(authtoken, object)
@@ -85,4 +85,16 @@ export function currentStatus(authtoken, object) {
 }
 export function verifyCouponCode(authtoken, object) {
    return getMethod(authtoken, object)
+}
+
+export function getShippingAddress(authtoken, object) {
+   return getMethod(authtoken, object)
+}
+
+export function saveShippingAddress(authtoken, object) {
+   return postMethod(authtoken, object)
+}
+
+export function updateShippingAddress(authtoken, object) {
+   return putMethod(authtoken, object)
 }

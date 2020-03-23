@@ -26,7 +26,6 @@ import ProfileRowMenu from "./ProfileRowMenu"
 import { getMemberIdForApi } from '../Services/members_helper'
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
-import Brew9PopUp from "../Components/Brew9PopUp"
 
 @connect(({ members, config }) => ({
 	selectedTab: config.selectedTab,
@@ -374,17 +373,29 @@ export default class Profile extends React.Component {
 			navigate("RedeemPromotion")
 		}
 	}
-	onRedeemVoucherPressed = () => {
-		const { currentMember } = this.props
-		const { navigate } = this.props.navigation
-		if (currentMember !== null) {
-			this.setState({
-				showRedeemVoucher: true
-			})
+	onRedeemCouponCode = () => {
+		let { coupon, validVouchers } = this.state
+		let { dispatch, navigation } = this.props
+		this.setState({ loading: true, showRedeemVoucher: false })
+		if (coupon) {
+			const callback = eventObject => {
+				this.setState({ loading: false })
+				if (eventObject.success == true) {
+					navigation.navigate("MemberVoucher", { validVouchers: validVouchers })
+				} else {
+					this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				}
+			}
+			const obj = new VerifyCouponCodeObj(coupon)
+			dispatch(
+				createAction('members/loadVerifyCouponCode')({
+					object: obj,
+					callback,
+				})
+			)
 		} else {
-			navigate("VerifyUser", {
-				returnToRoute: this.props.navigation.state
-			})
+			this.setState({ loading: false, })
+			this.refs.toast.show('Please fill in coupon code', TOAST_DURATION)
 		}
 	}
 	closePopUp = () => {
@@ -404,18 +415,14 @@ export default class Profile extends React.Component {
 
 	}
 	onRedeemCouponCode = () => {
-		let { coupon, validVouchers } = this.state
-		let { dispatch, navigation } = this.props
+		let { coupon } = this.state
+		let { dispatch } = this.props
 		this.setState({ loading: true, showRedeemVoucher: false })
 
 		if (coupon) {
 			const callback = eventObject => {
 				this.setState({ loading: false })
-				if (eventObject.success == true) {
-					navigation.navigate("MemberVoucher", { validVouchers: validVouchers })
-				} else {
-					this.refs.toast.show(eventObject.message, TOAST_DURATION)
-				}
+				this.refs.toast.show(eventObject.message, TOAST_DURATION)
 			}
 			const obj = new VerifyCouponCodeObj(coupon)
 			dispatch(
@@ -476,6 +483,20 @@ export default class Profile extends React.Component {
 		Linking.openURL('mailto:feedback@brew9.co?subject=Brew9 app feedback' + '(' + Platform.OS + '-' + getAppVersion() + ')')
 	}
 
+	onAddressPress = () => {
+		const { navigation, currentMember } = this.props
+		if (currentMember !== null) {
+			navigation.navigate("ShippingAddress", {
+				returnToRoute: navigation.state,
+			})
+		} else {
+			navigation.navigate("VerifyUser", {
+				returnToRoute: navigation.state
+			})
+			return
+		}
+	}
+
 	onProfileButtonPress = () => {
 		const { currentMember } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
@@ -495,15 +516,45 @@ export default class Profile extends React.Component {
 
 	renderRedeemVoucher() {
 		return (
-			<Brew9PopUp
-				popUpVisible={this.state.showRedeemVoucher}
-				title={'Redeem Your Voucher'}
-				input={true}
-				inputPlaceholder={'Enter voucher code'}
-				onPressOk={this.onRedeemCouponCode}
-				onBackgroundPress={this.closePopUp}
-				onChangeText={text => this.onChangeCoupon(text)} />
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={this.state.showRedeemVoucher}
+				onRequestClose={() => this.closePopUp()}>
+				<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
 
+					<View style={[styles.popUpBackground]}>
+						<View style={[styles.popUpContent]}>
+							<View style={styles.popUpInput1}>
+								<Text style={styles.titleText}>Redeem Your Voucher</Text>
+							</View>
+							<TouchableOpacity onPress={() => this.closePopUp()} style={styles.cancelCouponCode}>
+								<Image
+									source={require("./../../assets/images/x-3.png")}
+									style={styles.cancelImage} />
+							</TouchableOpacity>
+							<View style={styles.popUpInput2}>
+								<TextInput
+									style={styles.couponCode}
+									placeholder={'Enter voucher code'}
+									maxLength={8}
+									onChangeText={text => this.onChangeCoupon(text)}
+
+								/>
+
+							</View>
+							<TouchableOpacity
+								onPress={() => this.onRedeemCouponCode()}
+								style={styles.ok_button}>
+								<Text
+									style={styles.okButtonText}>OK</Text>
+							</TouchableOpacity>
+
+
+						</View>
+					</View>
+				</TouchableWithoutFeedback>
+			</Modal>
 		)
 	}
 
@@ -789,6 +840,7 @@ export default class Profile extends React.Component {
 					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
 					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
 					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
+					{/* <ProfileMenu onPress={this.onAddressPress} text={'My Address'} /> */}
 					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
 					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
 				</View>

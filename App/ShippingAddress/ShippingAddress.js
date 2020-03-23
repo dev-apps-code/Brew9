@@ -13,22 +13,17 @@ import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import { createAction, Storage } from "../Utils"
-import MakeOrderRequestObj from '../Requests/make_order_request_obj.js'
-import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js'
+import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
 import _ from 'lodash'
 import { TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
 import Moment from 'moment';
-import ScrollPicker from 'rn-scrollable-picker';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
-import openMap from "react-native-open-maps";
-import { getMemberIdForApi } from '../Services/members_helper'
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
 
 @connect(({ members, shops, orders }) => ({
     currentMember: members.profile,
     members: members,
-    shppingAddress: members.shippingAddress
+    shippingAddress: members.shippingAddress
 }))
 export default class ShippingAddress extends React.Component {
 
@@ -60,35 +55,42 @@ export default class ShippingAddress extends React.Component {
         super(props)
         this.state = {
             delivery_options: 'pickup',
-            shippingAddress: [
-                {
-                    name: 'CO3 Social Office',
-                    address: "2-3 Jalan Merbah1, bandar Puchong Jaya",
-                    default: true
-                },
-                {
-                    name: 'CO3 Social Office',
-                    address: "2-3 Jalan Merbah1, bandar Puchong Jaya",
-                    default: false
-                }
-            ]
+            shippingAddress: []
 
         }
 
     }
     onBackPressed = () => {
+        this.props.navigation.goBack()
+    }
 
-        const { navigation } = this.props
+    loadShippingAddress = () => {
+        let { dispatch, currentMember } = this.props
+        this.setState({ loading: true })
+        const callback = eventObject => {
 
-        const { routeName, key } = navigation.getParam('returnToRoute')
+            if (eventObject.success) {
+                this.setState({
+                    loading: false,
+                })
+            }
 
-        navigation.navigate({ routeName, key, })
+        }
+        const obj = new ShippingAddressRequestObject()
+        obj.setUrlId(currentMember.id)
+        dispatch(
+            createAction('members/loadShippingAddress')({
+                object: obj,
+                callback,
+            })
+        )
     }
 
     componentDidMount() {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
+        this.loadShippingAddress()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -96,43 +98,54 @@ export default class ShippingAddress extends React.Component {
     }
     onAddAddress = () => {
         const { navigation } = this.props
-        navigation.navigate("AddShippingAddress")
+        navigation.navigate("AddShippingAddress", { params: null })
     }
     onEditAddress = (item) => {
         const { navigation } = this.props
-        navigation.navigate("EditShippingAddress", { params: item })
+        navigation.navigate("AddShippingAddress", { params: item })
 
     }
+    updateDefaultAddress = (item) => {
+        const { navigation, dispatch } = this.props
+        dispatch(createAction("members/savePrimaryShippingAddress")(item))
+        navigation.navigate("Checkout")
+    }
     renderShippingAddress = (item) => {
-        let selected = item.default ? styles.selectTwoView : styles.selectView
+        let selected = item.primary ? styles.selectTwoView : styles.selectView
         return (
-            <View style={styles.content}>
-                <View style={styles.shippingAddressDetail}>
-                    <View
-                        style={selected} />
-                    <View style={{ flex: 1, marginLeft: 15 * alpha }}>
-                        <Text style={styles.addressText}>{item.name}</Text>
-                        <Text style={styles.addressText}>{item.address}</Text>
-                    </View>
-                    <View style={{ flex: 0.25 }} />
+            <TouchableOpacity onPress={() => this.updateDefaultAddress(item)}>
+                <View style={styles.content}>
 
+                    <View style={styles.shippingAddressDetail}>
+                        <View
+                            style={selected} />
+                        <View style={{ flex: 1, marginLeft: 15 * alpha }}>
+                            <Text style={styles.addressText}>{item.fullname}</Text>
+                            <Text style={styles.addressText}>{item.address}</Text>
+                            <Text style={styles.addressText}>{item.city}, {item.postal_code},{item.state}, {item.country}</Text>
+                        </View>
+                        <View style={{ flex: 0.25 }} />
+
+                    </View>
+                    <TouchableOpacity onPress={() => this.onEditAddress(item)} style={styles.editButton}>
+                        <Text style={styles.editTextButton}>Edit address</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => this.onEditAddress(item)} style={styles.editButton}>
-                    <Text style={styles.editTextButton}>Edit address</Text>
-                </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
+
         )
     }
 
     render() {
         const { location, shippingAddress } = this.props
+        let { loading } = this.state
         return <View
             style={styles.Container}>
             <ScrollView
                 style={styles.scrollviewScrollView}>
                 <Text style={styles.headingStyle}>Delivery Address</Text>
                 <FlatList
-                    data={this.state.shippingAddress}
+                    data={shippingAddress}
                     renderItem={({ item }) => (
                         this.renderShippingAddress(item)
                     )}
@@ -148,7 +161,8 @@ export default class ShippingAddress extends React.Component {
 
                 </View>
             </TouchableOpacity>
-
+            <HudLoading isLoading={loading} />
+            <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
         </View>
     }
 }
@@ -216,6 +230,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5 * alpha
     },
     content: {
+        backgroundColor: 'white',
         marginBottom: 10 * alpha,
         paddingTop: 20 * alpha,
         paddingHorizontal: 10 * alpha,
@@ -234,7 +249,7 @@ const styles = StyleSheet.create({
     addressText: {
         color: "rgb(130, 130, 130)",
         fontFamily: NON_TITLE_FONT,
-        fontSize: 16 * fontAlpha,
+        fontSize: 14 * fontAlpha,
         paddingBottom: 5 * alpha
         // marginTop: 10 * alpha
     },

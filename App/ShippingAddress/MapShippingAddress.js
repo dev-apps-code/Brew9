@@ -16,17 +16,14 @@ import {
     TextInput
 } from "react-native";
 import React from "react";
-import { alpha, fontAlpha } from "../Common/size";
+import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import openMap from "react-native-open-maps";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING } from "../Common/common_style";
 import MapView, {
     Marker,
-    PROVIDER_GOOGLE
 } from "react-native-maps";
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
-const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } } };
-const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } } };
+import { ScrollView } from "react-native-gesture-handler";
+import Toast, { DURATION } from 'react-native-easy-toast'
 
 export default class MapShippingAddress extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -58,13 +55,23 @@ export default class MapShippingAddress extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this.handlePress = this.handlePress.bind(this);
         this.state = {
-            latitude: 0,
-            longitude: 0,
+            latitude: parseFloat(this.props.navigation.state.params.area.latitude),
+            longitude: parseFloat(this.props.navigation.state.params.area.longitude),
             error: null,
-            loading: true
+            delivery_area: this.props.navigation.state.params.area.area
         };
+    }
+
+    handlePress(e) {
+        console.log(e.nativeEvent.coordinate)
+        this.setState({
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude
+        });
+
+        //get the user identified coordinates here
     }
 
 
@@ -72,82 +79,148 @@ export default class MapShippingAddress extends React.Component {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
         })
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                this.setState({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    error: null,
-                    loading: false
-                });
-                console.log("finished");
-            },
-            error => Alert.alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
+
     }
     onBackPressed = () => {
 
         this.props.navigation.goBack()
     }
-    onChangeName = (address) => {
-        this.setState({ address })
-    }
-    onChangeName = (address) => {
-        this.setState({ address })
-    }
-    onChangeName = (address) => {
-        this.setState({ address })
-    }
-    renderForm = (title, placeholder, onChangeText) => {
 
+    renderForm = (title, placeholder, text, onChangeText, description) => {
         return (
             <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
                 <Text style={styles.title}>{title}</Text>
-                <TextInput
+                {text ? <Text style={styles.textInput}>{description}</Text> : <TextInput
                     keyboardType="default"
                     clearButtonMode="always"
                     autoCorrect={false}
                     placeholder={placeholder}
-                    onChangeText={(text) => onChangeText(text)}
-                    style={styles.textInput} />
+                    onChangeText={onChangeText}
+                    style={styles.textInput} />}
             </View>
         )
     }
 
     renderMap = () => {
+        let { latitude, longitude } = this.state
         return (
             <MapView
-                showsUserLocation={true}
-                style={styles.map}
-                region={{
-                    latitude: this.state.latitude,
-                    longitude: this.state.longitude,
-                    latitudeDelta: 0.009,
-                    longitudeDelta: 0.009
+                style={styles.container}
+                initialRegion={{
+                    latitude: latitude,
+                    longitude: longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421
                 }}
+                onPress={this.handlePress}
             >
                 <Marker coordinate={this.state} />
             </MapView>
         );
     };
+
+
+    onChangeAddress = (address) => {
+        this.setState({
+            address
+        })
+    }
+    onChangeCity = (city) => {
+        this.setState({
+            city
+        })
+    }
+    onChangePoscode = (postal_code) => {
+        this.setState({
+            postal_code
+        })
+    }
+    onChangeCountry = (country) => {
+        this.setState({
+            country
+        })
+    }
+    onChangeState = (state) => {
+        this.setState({
+            state
+        })
+    }
+
+    checkForm = () => {
+        let { address, city, state, postal_code, country } = this.state
+        if (!city) {
+            this.refs.toast.show("Please select a city", 500)
+            return false
+        }
+        else if (!state) {
+            this.refs.toast.show("Please select your state", 500)
+            return false
+        }
+        else if (!postal_code) {
+            this.refs.toast.show("Please select your postal code", 500)
+            return false
+
+        }
+        else if (!country) {
+            this.refs.toast.show("Please select your country", 500)
+            return false
+
+        }
+
+        else if (!address) {
+            this.refs.toast.show("Please fill in your address", 500)
+            return false
+
+        }
+        return true
+
+    }
+
+    onSavePressed = () => {
+        const { navigation } = this.props
+        let { address, city, state, postal_code, country, latitude, longitude, delivery_area } = this.state
+        let formcheck = this.checkForm()
+        if (formcheck) {
+            const shippingAddress = {
+                address: address,
+                city: city,
+                state: state,
+                postal_code: postal_code,
+                country: country,
+                latitude: latitude,
+                longitude: longitude,
+                delivery_area: delivery_area,
+            }
+            navigation.state.params.returnData(shippingAddress);
+            navigation.navigate("AddShippingAddress")
+        }
+
+
+
+    }
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.headerTitle}>Area</Text>
-                {this.state.loading ? null : this.renderMap()}
-                <View style={styles.formView}>
-                    {this.renderForm("Name", "e.g. Gym/School", this.onChangeName)}
-                    {this.renderForm("Address", "e.g. Gym/School", this.onChangeName)}
-                    {this.renderForm("Address Detail's", "e.g. Gym/School", this.onChangeName)}
-                    <TouchableOpacity
-                        onPress={() => this.onSavePressed()}
-                        style={styles.saveButton}>
-                        <Text
-                            style={styles.saveButtonText}>SAVE</Text>
-                    </TouchableOpacity>
-                </View>
+                <Text style={styles.headerTitle}>{this.state.deliveryArea}</Text>
+                {this.renderMap()}
+                <ScrollView style={{ height: windowHeight / 4 }}>
+                    <View style={styles.formView}>
 
+                        {this.renderForm("address", "e.g. Gym/School", false, (text) => this.onChangeAddress(text))}
+                        {this.renderForm("State", "Exp:Block B", false, (text) => this.onChangeState(text))}
+                        {this.renderForm("Poscode", "Exp:Block B", false, (text) => this.onChangePoscode(text))}
+                        {this.renderForm("City", "Exp:Block B", false, (text) => this.onChangeCity(text))}
+                        {this.renderForm("Country", "Exp:Block B", false, (text) => this.onChangeCountry(text))}
+
+                        <TouchableOpacity
+                            onPress={() => this.onSavePressed()}
+                            style={styles.saveButton}>
+                            <Text
+                                style={styles.saveButtonText}>SAVE</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+                <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 
             </View>
         );
@@ -206,7 +279,8 @@ const styles = StyleSheet.create({
     },
     formView: {
         paddingHorizontal: 20 * alpha,
-        marginTop: 20 * alpha
+        marginTop: 20 * alpha,
+        flex: 1
     },
     saveButton: {
         borderRadius: 4 * alpha,

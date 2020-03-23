@@ -20,7 +20,10 @@ import {
   scanStatus,
   updateAvatar,
   currentStatus,
-  verifyCouponCode
+  verifyCouponCode,
+  getShippingAddress,
+  saveShippingAddress,
+  updateShippingAddress
 } from '../Services/members'
 import EventObject from './event_object'
 import { AsyncStorage } from 'react-native'
@@ -184,6 +187,24 @@ export default {
       saveCurrentUserToStorage(payload)
       return { ...state, profile: payload, isReady: true, userAuthToken: payload ? payload.auth_token : "" }
     },
+    saveCurrentShippingAddress(state, { payload }) {
+
+
+      return { ...state, shippingAddress: payload, }
+    },
+    savePrimaryShippingAddress(state, { payload }) {
+      let shippingAddress = state.shippingAddress
+      let currentShippingAddress = shippingAddress.map(item => {
+        if (item.id == payload.id) {
+          item.primary = true
+        } else {
+          item.primary = false
+        }
+        return item
+      })
+
+      return { ...state, shippingAddress: currentShippingAddress }
+    }
   },
   effects: {
     *loadStorePushToken({ payload }, { call, put, select }) {
@@ -580,6 +601,64 @@ export default {
         typeof callback === 'function' && callback(eventObject)
       } catch (err) { }
     },
+    *loadShippingAddress({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+
+        const json = yield call(
+          getShippingAddress,
+          authtoken,
+          object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+
+        }
+        typeof callback === 'function' && callback(eventObject)
+
+      } catch (err) { console.log('loadShippingAddress', err) }
+    },
+    *saveShippingAddress({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+
+        const json = yield call(
+          saveShippingAddress,
+          authtoken,
+          object,
+        )
+        const eventObject = new EventObject(json)
+        if (eventObject.success == true) {
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+
+        }
+        typeof callback === 'function' && callback(eventObject)
+
+      } catch (err) { console.log('addShippingAddress', err) }
+    },
+    *updateShippingAddress({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload
+        const authtoken = yield select(state => state.members.userAuthToken)
+
+        const json = yield call(
+          updateShippingAddress,
+          authtoken,
+          object,
+        )
+        const eventObject = new EventObject(json)
+        console.log(' updateShippingAddresseventObject', eventObject)
+        if (eventObject.success == true) {
+          // yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+
+        }
+        typeof callback === 'function' && callback(eventObject)
+
+      } catch (err) { console.log('updateShippingAddresseventObject', err) }
+    }
   },
 
 }

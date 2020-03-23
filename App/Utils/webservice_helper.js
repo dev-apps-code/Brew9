@@ -88,6 +88,25 @@ export function postMultipartMethod(authtoken, object) {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
+      'Content-Type': 'application/json',
+      'Version': Constants.nativeAppVersion,
+      'BuildVersion': Constants.nativeBuildVersion,
+      'Platform': Constants.platform,
+      Authorization: getBasicAuthentication(authtoken),
+    }, body: object.getFormData()
+  })
+    .then(logResponse('json'))
+    .then(response => _parseJSON(response))
+    .catch(error => {
+      console.error(error);
+    });
+}
+export function putMethod(authtoken, object) {
+  const urlString = `${KSERVERURL}/${object.getUrlString()}`
+  return fetch(urlString, {
+    method: 'PUT',
+    headers: {
+      Accept: KCURRENT_API_VERSION_HEADER,
       'Content-Type': 'multipart/form-data',
       'Version': Constants.nativeAppVersion,
       'BuildVersion': Constants.nativeBuildVersion,
