@@ -432,6 +432,7 @@ export default class Checkout extends React.Component {
 	// }
 	addShippingAddress = () => {
 		const { navigation } = this.props
+		this.setState({ visible: false })
 		navigation.navigate("ShippingAddress", {
 			returnToRoute: navigation.state,
 		})
@@ -1717,6 +1718,7 @@ export default class Checkout extends React.Component {
 	}
 	renderDeliveryAddress = (address) => {
 		let { deliveryFee } = this.state
+		let text = address ? "Edit Address" : "Please add address"
 
 		return (
 			<View style={styles.deliveryAddressView}>
@@ -1725,45 +1727,27 @@ export default class Checkout extends React.Component {
 					style={styles.voucherButton}>
 					<View
 						style={styles.drinksView}>
+
 						<View
-							pointerEvents="box-none"
-							style={{
-								justifyContent: "center",
-								alignItems: 'center',
-								backgroundColor: "transparent",
-								flex: 1,
-								flexDirection: "row",
-								paddingBottom: 15 * alpha,
-								borderBottomColor: '#dcdcdc',
-								borderBottomWidth: 0.5,
-
-							}}>
-							<View
-								style={[styles.deliveryAddressDetail, { flex: 1 }]}>
-								<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-									<Text
-										style={[styles.productNameText]}>Delivery Address</Text>
-									{!address && <TouchableOpacity onPress={() => this.addShippingAddress()} style={{ flexDirection: 'row', flex: 1 }}>
-										<Text style={[styles.editAddressText]}>Please add address</Text>
-										<Image
-											source={require("./../../assets/images/next.png")}
-											style={styles.menuRowArrowImage} />
-									</TouchableOpacity>}
-								</View>
-
-								{address && <View>
-									<Text style={styles.addressText}>{address.address + "\n" + address.city + ' , ' + address.postal_code + ', ' + address.state + ', ' + address.country}</Text>
-								</View>}
-
+							style={[styles.deliveryAddressDetail, { flex: 1 }]}>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+								<Text
+									style={[styles.productNameText]}>Delivery Address</Text>
+								<TouchableOpacity onPress={() => this.addShippingAddress()} style={{ flexDirection: 'row', flex: 1 }}>
+									<Text style={[styles.editAddressText]}>{text}</Text>
+									<Image
+										source={require("./../../assets/images/next.png")}
+										style={styles.menuRowArrowImage} />
+								</TouchableOpacity>
 							</View>
-							{address ? <TouchableOpacity onPress={() => this.addShippingAddress()} style={{ flexDirection: 'row' }}>
-								<Text style={[styles.editAddressText,]}>Edit Address</Text>
-								<Image
-									source={require("./../../assets/images/next.png")}
-									style={styles.menuRowArrowImage} />
-							</TouchableOpacity> : undefined}
+
+							{address && <View>
+								<Text style={styles.addressText}>{address.address + "\n" + address.city + ' , ' + address.postal_code + ', ' + address.state + ', ' + address.country}</Text>
+							</View>}
 
 						</View>
+						
+
 					</View>
 				</TouchableOpacity>
 				<View style={{ paddingVertical: 15 * alpha }}>
@@ -1965,7 +1949,7 @@ export default class Checkout extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
-			<Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={() => { this.setState({ visible: false }) }} cancelButtonAction={() => this.setState({ visible: false })} />
+			<Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} />
 
 			{/* <TimePicker
 				ref={ref => {
@@ -2015,7 +1999,7 @@ const styles = StyleSheet.create({
 		// marginBottom: 10 * alpha,
 	},
 	editAddressText: {
-		color: "rgb(164, 164, 164)",
+		color: "rgb(50, 50, 50)",
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 14 * fontAlpha,
 		fontStyle: "normal",
@@ -2028,7 +2012,7 @@ const styles = StyleSheet.create({
 	},
 	deliveryAddressView: {
 		paddingHorizontal: 24 * alpha,
-		backgroundColor: "rgb(245,245,245)"
+		backgroundColor: "rgb(245,245,245)",
 	},
 
 	headerLeftContainer: {
