@@ -932,8 +932,9 @@ export default class Checkout extends React.Component {
 
 	renderPaymentMethod() {
 
-		const { currentMember } = this.props
+		const { currentMember, delivery } = this.props
 		const { final_price } = this.state
+		let cashPayment = delivery? 'Cash On Delivery' : 'Pay In Store'
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 		var no_payment_needed = final_price <= 0 ? true : false
 
@@ -1181,7 +1182,7 @@ export default class Checkout extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={this.state.selected_payment == "counter" ? styles.creditCardSelectedText : styles.creditCardText}>Pay In Store</Text>
+										style={this.state.selected_payment == "counter" ? styles.creditCardSelectedText : styles.creditCardText}>{cashPayment}</Text>
 									<View
 										style={{
 											flex: 1,
@@ -1311,7 +1312,7 @@ export default class Checkout extends React.Component {
 
 	renderPaymentSection() {
 
-		const { currentMember } = this.props
+		const { currentMember, delivery } = this.props
 		const { selected_payment } = this.state
 
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
@@ -1344,7 +1345,7 @@ export default class Checkout extends React.Component {
 							</View>
 							<Text
 								style={styles.productVoucherText}>{this.state.selected_payment == '' ? "Please select" : this.state.selected_payment == "credits" ?
-									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? "Pay In Store " : "Credit Card")}</Text>
+									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? (delivery ? "Cash On Delivery" : "Pay In Store") : "Credit Card")}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage} />
