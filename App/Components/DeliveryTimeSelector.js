@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
 import { alpha, windowWidth } from '../Common/size';
@@ -18,6 +18,15 @@ const DelieryTimeSelector = ({
   props
 }) => {
   let { minute_range, hour_range } = state;
+  const [isToday, setIsToday] = useState(false);
+  let today= new Date();
+  let tomorrow = new Date();
+
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  console.log('today ', today);
+  console.log('tomorrow ', tomorrow);
+
   return (
     <Animated.View style={animation.getLayout()}>
       <View style={styles.popOutPickupView}>
@@ -142,15 +151,16 @@ const DelieryTimeSelector = ({
           />
         </View>
         <View style={styles.timepickerBottomBar} />
-      </View>
-      <View style={{backgroundColor: 'red'}}>
-        <Text>Hello</Text>
-        <TouchableOpacity
-          onPress={() => this.onConfirmTimePicker()}
-          style={styles.pickupConfirmButton}
-        >
-          <Text style={styles.pickupConfirmButtonText}>Confirm</Text>
-        </TouchableOpacity>
+
+        <View style={{ paddingVertical: 20, height: 10 * alpha }}>
+          {/* <Text>Hello</Text> */}
+          <TouchableOpacity
+            onPress={() => this.onConfirmTimePicker()}
+            style={{ justifyContent: 'center' }}
+          >
+            <Text style={styles.pickupConfirmButtonText}>Confirm</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Animated.View>
   );

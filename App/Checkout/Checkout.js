@@ -15,7 +15,6 @@ import {
   Text,
   ScrollView,
   Linking,
-  TextInput,
   SafeAreaView
 } from 'react-native';
 import React from 'react';
@@ -131,8 +130,10 @@ export default class Checkout extends React.Component {
       visible: false,
       applyCode: false
     };
-    this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
-    this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+    const xy = { x: 0, y: windowHeight };
+    this.movePickAnimation = new Animated.ValueXY(xy);
+    this.deliveryTimeSelectorAnimation = new Animated.ValueXY(xy);
+    this.moveAnimation = new Animated.ValueXY(xy);
   }
 
   componentDidMount() {
@@ -1073,7 +1074,7 @@ export default class Checkout extends React.Component {
     this.setState(
       { isDeliveryTimeSelectorToggle: !isDeliveryTimeSelectorToggle },
       function() {
-        Animated.spring(this.movePickAnimation, {
+        Animated.spring(this.deliveryTimeSelectorAnimation, {
           toValue: { x: 0, y: y() }
         }).start();
       }
@@ -2141,7 +2142,7 @@ export default class Checkout extends React.Component {
     <DeliveryTimeSelector
       styles={styles}
       state={this.state}
-      animation={this.movePickAnimation}
+      animation={this.deliveryTimeSelectorAnimation}
       toggleDelivery={this.toggleDeliveryTimeSelector}
     />
   );
@@ -2328,7 +2329,7 @@ export default class Checkout extends React.Component {
       2
     );
     return (
-      <View style={styles.checkoutViewPadding}>
+      <SafeAreaView style={styles.checkoutViewPadding}>
         <ScrollView
           style={styles.scrollviewScrollView}
           onLayout={(event) => this.measureView(event)}
@@ -2374,7 +2375,7 @@ export default class Checkout extends React.Component {
 				selectedMinute={this.state.selected_minute}
 				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
 			/> */}
-      </View>
+      </SafeAreaView>
     );
   }
 }
