@@ -26,6 +26,7 @@ import ProfileRowMenu from "./ProfileRowMenu"
 import { getMemberIdForApi } from '../Services/members_helper'
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
+import Brew9PopUp from "../Components/Brew9PopUp"
 
 @connect(({ members, config }) => ({
 	selectedTab: config.selectedTab,
@@ -414,29 +415,14 @@ export default class Profile extends React.Component {
 		})
 
 	}
-	onRedeemCouponCode = () => {
-		let { coupon } = this.state
-		let { dispatch } = this.props
-		this.setState({ loading: true, showRedeemVoucher: false })
-
-		if (coupon) {
-			const callback = eventObject => {
-				this.setState({ loading: false })
-				this.refs.toast.show(eventObject.message, TOAST_DURATION)
-			}
-			const obj = new VerifyCouponCodeObj(coupon)
-			dispatch(
-				createAction('members/loadVerifyCouponCode')({
-					object: obj,
-					callback,
-				})
-			)
-		} else {
-			this.setState({ loading: false, })
-			this.refs.toast.show('Please fill in coupon code', TOAST_DURATION)
-
+	onRedeemVoucherPressed = () => {
+		const { currentMember } = this.props
+		const { navigate } = this.props.navigation
+		if (currentMember !== null) {
+			this.setState({
+				showRedeemVoucher: true
+			})
 		}
-
 	}
 
 	onPointShopPressed = () => {
@@ -516,45 +502,15 @@ export default class Profile extends React.Component {
 
 	renderRedeemVoucher() {
 		return (
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={this.state.showRedeemVoucher}
-				onRequestClose={() => this.closePopUp()}>
-				<TouchableWithoutFeedback onPress={() => this.closePopUp()}>
-
-					<View style={[styles.popUpBackground]}>
-						<View style={[styles.popUpContent]}>
-							<View style={styles.popUpInput1}>
-								<Text style={styles.titleText}>Redeem Your Voucher</Text>
-							</View>
-							<TouchableOpacity onPress={() => this.closePopUp()} style={styles.cancelCouponCode}>
-								<Image
-									source={require("./../../assets/images/x-3.png")}
-									style={styles.cancelImage} />
-							</TouchableOpacity>
-							<View style={styles.popUpInput2}>
-								<TextInput
-									style={styles.couponCode}
-									placeholder={'Enter voucher code'}
-									maxLength={8}
-									onChangeText={text => this.onChangeCoupon(text)}
-
-								/>
-
-							</View>
-							<TouchableOpacity
-								onPress={() => this.onRedeemCouponCode()}
-								style={styles.ok_button}>
-								<Text
-									style={styles.okButtonText}>OK</Text>
-							</TouchableOpacity>
-
-
-						</View>
-					</View>
-				</TouchableWithoutFeedback>
-			</Modal>
+			<Brew9PopUp
+				popUpVisible={this.state.showRedeemVoucher}
+				title={'Redeem Your Voucher'}
+				input={true}
+				inputPlaceholder={'Enter voucher code'}
+				OkText={'Ok'}
+				onPressOk={this.onRedeemCouponCode}
+				onBackgroundPress={this.closePopUp}
+				onChangeText={text => this.onChangeCoupon(text)} />
 		)
 	}
 
