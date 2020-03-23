@@ -15,7 +15,8 @@ import {
   Text,
   ScrollView,
   Linking,
-  TextInput
+  TextInput,
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
@@ -2297,7 +2298,8 @@ export default class Checkout extends React.Component {
       2
     );
     return (
-      <View style={styles.checkoutViewPadding}>
+      <SafeAreaView style={styles.checkoutViewPadding}>
+        {/* <View style={styles.checkoutViewPadding}> */}
         <ScrollView
           style={styles.scrollviewScrollView}
           onLayout={(event) => this.measureView(event)}
@@ -2340,7 +2342,8 @@ export default class Checkout extends React.Component {
 				selectedMinute={this.state.selected_minute}
 				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
 			/> */}
-      </View>
+        {/* </View> */}
+      </SafeAreaView>
     );
   }
 }
