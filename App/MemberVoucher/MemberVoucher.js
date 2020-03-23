@@ -21,6 +21,7 @@ import { getMemberIdForApi } from '../Services/members_helper'
 
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import AnimationLoading from "../Components/AnimationLoading"
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -465,9 +466,7 @@ export default class MemberVoucher extends React.Component {
 							style={styles.howToUseButtonText}>How to use</Text>
 					</TouchableOpacity>
 					{this.state.loading ?
-						<View style={[styles.container, styles.horizontal]}>
-							<ActivityIndicator size="large" />
-						</View> :
+						<AnimationLoading /> :
 						this.state.current_data.length == 0 && !this.state.loading ?
 							<View
 								style={styles.novoucherviewView}>

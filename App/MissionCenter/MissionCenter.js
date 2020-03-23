@@ -24,6 +24,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import MissionBadgeIcon from "./MissionBadgeIcon"
 import { getMemberIdForApi } from '../Services/members_helper'
+import AnimationLoading from "../Components/AnimationLoading"
 
 @connect(({ members }) => ({
     currentMember: members.profile,
@@ -91,19 +92,19 @@ export default class MissionCenter extends React.Component {
     }
 
     componentWillUnmount() {
-		AppState.removeEventListener('change', this._handleAppStateChange);
+        AppState.removeEventListener('change', this._handleAppStateChange);
     }
-    
+
     _handleAppStateChange = nextAppState => {
-		const { currentMember } = this.props
-		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			if (currentMember != null) {
-				this.loadMissionStatements()
-			}
-		}
-		this.setState({ appState: nextAppState });
+        const { currentMember } = this.props
+        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+            if (currentMember != null) {
+                this.loadMissionStatements()
+            }
+        }
+        this.setState({ appState: nextAppState });
     };
-    
+
     componentDidMount() {
         this.props.navigation.setParams({
             onBackPressed: this.onBackPressed,
@@ -261,12 +262,12 @@ export default class MissionCenter extends React.Component {
         if (statement_id != undefined) {
             const { dispatch } = this.props
 
-            this.setState({ loading: true })
+            this.setState({ isRefreshing: true })
             const callback = eventObject => {
                 this.refs.toast.show(eventObject.message, TOAST_DURATION)
                 this.setState({
                     updated: true,
-                    loading: false,
+                    isRefreshing: false,
                     mission_statements: eventObject.result,
                 }, function () {
                     this.loadMissionStatements()
@@ -367,9 +368,8 @@ export default class MissionCenter extends React.Component {
 
         return <View
             style={styles.missionCenterView}>
-            {this.state.loading ? <View style={[styles.container, styles.horizontal]}>
-                <ActivityIndicator size="large" />
-            </View> :
+            {this.state.loading ? <AnimationLoading />
+                :
                 <View
                     style={styles.missionlistFlatListViewWrapper}>
                     <FlatList
@@ -380,6 +380,8 @@ export default class MissionCenter extends React.Component {
                         onRefresh={this.onRefresh.bind(this)}
                         keyExtractor={(item, index) => index.toString()} />
                 </View>
+            }
+            {this.state.isRefreshing && <HudLoading isLoading={this.state.isRefreshing} />
             }
             <Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
         </View>
