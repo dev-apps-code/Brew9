@@ -10,6 +10,8 @@ android/app/release/*
 
 ios/build
 ios/build/*
+ios/Pods
+ios/Pods/*
 
 # OSX
 .DS_Store
