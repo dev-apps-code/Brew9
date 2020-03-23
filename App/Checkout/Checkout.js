@@ -44,6 +44,7 @@ import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9Modal from '../Components/Brew9Modal';
+import DeliveryTimeSelector from '../Components/DeliveryTimeSelector';
 
 @connect(({ members, shops, orders }) => ({
   currentMember: members.profile,
@@ -121,6 +122,7 @@ export default class Checkout extends React.Component {
       hour_range: [],
       minute_range: [],
       isPickupToogle: false,
+      isDeliveryToggled: false,
       pickup_view_height: 150 * alpha,
       selected_hour_index: 0,
       selected_minute_index: 0,
@@ -130,6 +132,10 @@ export default class Checkout extends React.Component {
       applyCode: false
     };
     this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+    this.deliveryTimeSelectorAnimation = new Animated.ValueXY({
+      x: 0,
+      y: windowHeight
+    });
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
   }
 
@@ -1063,6 +1069,18 @@ export default class Checkout extends React.Component {
     }
   };
 
+  toggleDelivery = () => {
+    const { isDeliveryToggled } = this.state;
+
+    const y = () => (isDeliveryToggled ? windowHeight : 52 * alpha);
+
+    this.setState({ isDeliveryToggled: !isDeliveryToggled }, function() {
+      Animated.spring(this.deliveryTimeSelectorAnimation, {
+        toValue: { x: 0, y: y() }
+      }).start();
+    });
+  };
+
   tooglePayment = () => {
     const { isPaymentToggle, payment_view_height } = this.state;
 
@@ -1603,7 +1621,9 @@ export default class Checkout extends React.Component {
         <View style={styles.orderitemsView}>
           <TouchableOpacity
             // onPress={() => this.showDateTimePicker()}
-            onPress={() => this.tooglePickup()}
+            onPress={() =>
+              delivery ? this.toggleDelivery() : this.tooglePickup()
+            }
             style={styles.voucherButton}
           >
             <View style={styles.drinksView}>
@@ -2273,6 +2293,16 @@ export default class Checkout extends React.Component {
     );
   }
 
+  renderDeliveryTimeSelector = () => (
+    <DeliveryTimeSelector
+      styles={styles}
+      state={this.state}
+      animation={this.deliveryTimeSelectorAnimation}
+      toggleDelivery={this.toggleDelivery}
+      props={this.props}
+    />
+  );
+
   renderPayNow(final_price) {
     return (
       <View style={styles.totalPayNowView}>
@@ -2315,6 +2345,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderPaymentMethod()}
         {this.renderPickupTimeScroll()}
+        {this.renderDeliveryTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
         <Toast
           ref="toast"
