@@ -1,10 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/leakcanary-android-no-op-1.4-beta1.aar/602861af030a8e8027fc71f4aecb5690/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/leakcanary-android-no-op-1.4-beta1.aar/602861af030a8e8027fc71f4aecb5690/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/leakcanary-android-no-op-1.4-beta1.aar/2d2c4ffad033079b4656353909c72658/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/leakcanary-android-no-op-1.4-beta1.aar/2d2c4ffad033079b4656353909c72658/res" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-android-no-op/1.4-beta1/56751ae7118786b6ae060b1f9c8a249e65870582/leakcanary-android-no-op-1.4-beta1-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-android-no-op/1.4-beta1/f272943d045bc940ee246e707c5e59cefee2e73e/leakcanary-android-no-op-1.4-beta1-sources.jar!/" />
     </SOURCES>

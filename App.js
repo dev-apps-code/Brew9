@@ -72,7 +72,9 @@ import { Provider, connect } from "react-redux";
 import { registerModels } from "./App/Model/index";
 import PaymentsWebview from "./App/Checkout/PaymentsWebview"
 import { TABBAR_ACTIVE_TINT, TABBAR_INACTIVE_TINT, TITLE_FONT, NON_TITLE_FONT } from "./App/Common/common_style";
-
+import RNUxcam from 'react-native-ux-cam';
+RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
+RNUxcam.startWithKey('qlswr42nsngf21b'); // Add this line after 
 Sentry.init({
   dsn: 'https://a6c00af5b64644139799e721b45d61f4@sentry.io/1797623',
   enableInExpoDevelopment: true,
@@ -593,6 +595,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    console.log('RNUxcam', RNUxcam)
     this.initProjectFonts();
   }
 

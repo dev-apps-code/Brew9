@@ -59,6 +59,8 @@ target 'brew9' do
 
   pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
 
+  pod 'RNUxcam', :path => '../node_modules/react-native-ux-cam'
+
   post_install do |installer|
     installer.pods_project.main_group.tab_width = '2';
     installer.pods_project.main_group.indent_width = '2';

@@ -65,6 +65,7 @@
     "react-native-swiper": "^1.5.14",
     "react-native-switch-selector": "^1.1.14",
     "react-native-unimodules": "^0.5.2",
+    "react-native-ux-cam": "^5.1.15",
     "react-native-webview": "^5.12.1",
     "react-navigation": "3.11.1",
     "react-redux": "^5.0.2",
