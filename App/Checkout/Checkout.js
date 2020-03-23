@@ -24,7 +24,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
 import { getMemberIdForApi } from '../Services/members_helper'
-import Brew9Modal from '../Components/Brew9Modal'
+import Brew9PopUp from "../Components/Brew9PopUp"
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -1747,7 +1747,7 @@ export default class Checkout extends React.Component {
 							</View>}
 
 						</View>
-						
+
 
 					</View>
 				</TouchableOpacity>
@@ -1950,8 +1950,17 @@ export default class Checkout extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
-			<Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} />
-
+			{/* <Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} /> */}
+			<Brew9PopUp
+				popUpVisible={this.state.visible}
+				title={""}
+				description={"Please add delivery address"}
+				OkText={'Add address'}
+				cancelText={'Cancel'}
+				onPressOk={this.addShippingAddress}
+				onPressCancel={() => this.setState({ visible: false })}
+				onBackgroundPress={this.closePopUp}
+				onChangeText={text => this.onChangeCoupon(text)} />
 			{/* <TimePicker
 				ref={ref => {
 					this.TimePicker = ref;
