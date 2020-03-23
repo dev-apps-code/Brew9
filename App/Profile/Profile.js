@@ -373,17 +373,29 @@ export default class Profile extends React.Component {
 			navigate("RedeemPromotion")
 		}
 	}
-	onRedeemVoucherPressed = () => {
-		const { currentMember } = this.props
-		const { navigate } = this.props.navigation
-		if (currentMember !== null) {
-			this.setState({
-				showRedeemVoucher: true
-			})
+	onRedeemCouponCode = () => {
+		let { coupon, validVouchers } = this.state
+		let { dispatch, navigation } = this.props
+		this.setState({ loading: true, showRedeemVoucher: false })
+		if (coupon) {
+			const callback = eventObject => {
+				this.setState({ loading: false })
+				if (eventObject.success == true) {
+					navigation.navigate("MemberVoucher", { validVouchers: validVouchers })
+				} else {
+					this.refs.toast.show(eventObject.message, TOAST_DURATION)
+				}
+			}
+			const obj = new VerifyCouponCodeObj(coupon)
+			dispatch(
+				createAction('members/loadVerifyCouponCode')({
+					object: obj,
+					callback,
+				})
+			)
 		} else {
-			navigate("VerifyUser", {
-				returnToRoute: this.props.navigation.state
-			})
+			this.setState({ loading: false, })
+			this.refs.toast.show('Please fill in coupon code', TOAST_DURATION)
 		}
 	}
 	closePopUp = () => {
