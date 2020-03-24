@@ -574,7 +574,10 @@ export default {
 
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-
+          let members = Array.isArray(eventObject.result)
+          if (!members) {
+            yield put(createAction('saveCurrentUser')(eventObject.result))
+          }
           yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
           yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
         }
@@ -650,9 +653,8 @@ export default {
           object,
         )
         const eventObject = new EventObject(json)
-        console.log(' updateShippingAddresseventObject', eventObject)
         if (eventObject.success == true) {
-          // yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
 
         }
         typeof callback === 'function' && callback(eventObject)

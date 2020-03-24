@@ -332,7 +332,6 @@ export default class Checkout extends React.Component {
     };
 
     const obj = new DeliveryFeeRequestObject(total);
-    console.log('obj', obj);
     obj.setUrlId(selectedShop.id);
     dispatch(
       createAction('shops/loadDeliveryFee')({
@@ -434,8 +433,7 @@ export default class Checkout extends React.Component {
   }
 
   onSelectOrderTomorrow = () => {
-    this.setOrderSchedule('tomorrow');
-    
+    this.setOrderSchedule('tomorrow'); 
   }
 
   onSelectOrderNow() {
@@ -2066,7 +2064,6 @@ export default class Checkout extends React.Component {
   renderDeliveryAddress = (address) => {
     let { deliveryFee } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
-
     return (
       <View style={styles.deliveryAddressView}>
         <TouchableOpacity style={styles.voucherButton}>
@@ -2287,8 +2284,8 @@ export default class Checkout extends React.Component {
                 <View style={styles.sectionSeperatorView} />
               </View>
               {delivery
-                ? defaultAddress != undefined
-                  ? this.renderDeliveryAddress(defaultAddress)
+                ? currentMember.defaultAddress != undefined
+                  ? this.renderDeliveryAddress(currentMember.defaultAddress)
                   : this.renderDeliveryAddress(false)
                 : undefined}
               {delivery && (
@@ -2368,7 +2365,6 @@ export default class Checkout extends React.Component {
           style={{ bottom: windowHeight / 2 - 40 }}
           textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
         />
-        {/* <Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} /> */}
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}

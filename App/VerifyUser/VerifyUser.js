@@ -48,10 +48,8 @@ export default class VerifyUser extends React.Component {
 		this.state = {
 			loading: false,
 			phone_no: null,
-			// country_code: "673",
-			country_code: "60",
-			// country: "bn",
-			country: 'MY',
+			country_code: "673",
+			country: "bn",
 			login_success: false,
 			code: "",
 			code_from_server: "",
