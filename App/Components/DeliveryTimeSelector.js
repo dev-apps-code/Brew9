@@ -5,17 +5,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
   StyleSheet
 } from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
 import { alpha, windowWidth } from '../Common/size';
-import {
-  NON_TITLE_FONT,
-  LIGHT_GREY,
-  DEFAULT_GREY_BACKGROUND,
-  LIGHT_BLUE,
-  PRIMARY_COLOR
-} from '../Common/common_style';
+import { DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR } from '../Common/common_style';
 import { month } from '../Utils/date';
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
@@ -29,17 +24,13 @@ const DelieryTimeSelector = ({
 }) => {
   let { minute_range, hour_range } = state;
   const [isToday, setIsToday] = useState(true);
+  const [selected, setSelected] = useState(0);
   let today = new Date();
   let tomorrow = new Date();
 
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  console.log('today ', today);
-  console.log('tomorrow ', tomorrow);
-
   return (
     <Animated.View style={animation.getLayout()}>
-      <View style={styles.popOutPickupView}>
+      <View style={[styles.popOutPickupView, { height: 350 * alpha }]}>
         <View style={styles.paymentMethodTwoView}>
           <TouchableOpacity
             onPress={() => toggleDelivery()}
@@ -56,20 +47,27 @@ const DelieryTimeSelector = ({
             flexDirection: 'row'
           }}
         >
-          <DayCard
-            cardStyle={componentStyle.todayCard}
-            isActive={isToday}
-            dayText="Today"
-            dateText={`${month(today.getMonth())} ${today.getDate()}`}
-            press={() => setIsToday(true)}
-          />
-          <DayCard
-            cardStyle={componentStyle.tomorrowCard}
-            isActive={!isToday}
-            dayText="Tomorrow"
-            dateText={`${month(tomorrow.getMonth())} ${tomorrow.getDate()}`}
-            press={() => setIsToday(false)}
-          />
+          <ScrollView horizontal={true}>
+            <CustomCard
+              cardStyle={componentStyle.todayCard}
+              isActive={selected == 0}
+              text="Now"
+              press={() => setSelected(0)}
+            />
+            <CustomCard
+              cardStyle={componentStyle.tomorrowCard}
+              isActive={selected == 1}
+              text="Later"
+              press={() => setSelected(1)}
+            />
+
+            <CustomCard
+              cardStyle={componentStyle.tomorrowCard}
+              isActive={selected == 2}
+              text="Tomorrow"
+              press={() => setSelected(2)}
+            />
+          </ScrollView>
         </View>
         <View style={styles.menuRowLine2View} />
         <View style={[styles.popOutTimePickerView, { height: 150 * alpha }]}>
@@ -165,10 +163,10 @@ const DelieryTimeSelector = ({
   );
 };
 
-const DayCard = ({
+const CustomCard = ({
   cardStyle,
   textStyle,
-  dayText,
+  text,
   dateText,
   isActive,
   press
@@ -192,17 +190,7 @@ const DayCard = ({
           }
         ]}
       >
-        {dayText}
-      </Text>
-      <Text
-        style={[
-          componentStyle.cardTextStyle,
-          {
-            color: isActive ? '#fff' : '#333'
-          }
-        ]}
-      >
-        {dateText}
+        {text}
       </Text>
     </TouchableOpacity>
   );
@@ -211,7 +199,7 @@ const DayCard = ({
 const componentStyle = StyleSheet.create({
   card: {
     borderRadius: 10,
-    height: 80 * alpha,
+    height: 60 * alpha,
     justifyContent: 'center',
     margin: 20,
     width: windowWidth / 2 - 40
