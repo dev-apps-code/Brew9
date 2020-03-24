@@ -133,20 +133,7 @@ export default class AddShippingAddress extends React.Component {
         const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
             if (eventObject.success) {
-                const callback = eventObject => {
-                    if (eventObject.success) {
-                        navigation.navigate('ShippingAddress')
-                    }
-                }
-                const obj = new ShippingAddressRequestObject()
-                obj.setUrlId(currentMember.id)
-                dispatch(
-                    createAction('members/loadShippingAddress')({
-                        object: obj,
-                        callback,
-                    })
-                )
-
+                navigation.navigate('ShippingAddress')
             }
         }
         if (this.address == null) {
