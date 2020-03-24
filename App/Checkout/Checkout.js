@@ -289,7 +289,6 @@ export default class Checkout extends React.Component {
 		}
 
 		const obj = new DeliveryFeeRequestObject(total)
-		console.log('obj', obj)
 		obj.setUrlId(selectedShop.id)
 		dispatch(
 			createAction('shops/loadDeliveryFee')({
@@ -934,7 +933,7 @@ export default class Checkout extends React.Component {
 
 		const { currentMember, delivery } = this.props
 		const { final_price } = this.state
-		let cashPayment = delivery? 'Cash On Delivery' : 'Pay In Store'
+		let cashPayment = delivery ? 'Cash On Delivery' : 'Pay In Store'
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 		var no_payment_needed = final_price <= 0 ? true : false
 
@@ -1773,7 +1772,6 @@ export default class Checkout extends React.Component {
 		let { currentMember, selectedShop, cart, promotions, delivery, shippingAddress } = this.props
 		let array = Array.isArray(shippingAddress)
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
-		let defaultAddress = array ? shippingAddress.find(item => { return item.primary == true }) : undefined
 		return <View
 			style={styles.orderReceiptView}>
 			<ScrollView
@@ -1875,8 +1873,8 @@ export default class Checkout extends React.Component {
 								style={styles.sectionSeperatorView} />
 						</View>
 						{delivery ?
-							defaultAddress != undefined ?
-								this.renderDeliveryAddress(defaultAddress)
+							currentMember.defaultAddress != undefined ?
+								this.renderDeliveryAddress(currentMember.defaultAddress)
 								:
 								this.renderDeliveryAddress(false)
 							:
@@ -1926,7 +1924,6 @@ export default class Checkout extends React.Component {
 	}
 
 	render() {
-
 		let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state
 		let { cart_total } = this.props
 		let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(2)
@@ -1950,7 +1947,6 @@ export default class Checkout extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
-			{/* <Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} /> */}
 			<Brew9PopUp
 				popUpVisible={this.state.visible}
 				title={""}

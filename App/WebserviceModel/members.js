@@ -574,7 +574,7 @@ export default {
 
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-
+          yield put(createAction('saveCurrentUser')(eventObject.result))
           yield put(createAction('updateUnreadNotification')(eventObject.result.unread_notification))
           yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
         }
