@@ -6458,6 +6458,11 @@ react-native-unimodules@^0.5.2:
     unimodules-sensors-interface "~3.0.0"
     unimodules-task-manager-interface "~3.0.0"
 
+react-native-ux-cam@^5.1.15:
+  version "5.1.15"
+  resolved "https://registry.yarnpkg.com/react-native-ux-cam/-/react-native-ux-cam-5.1.15.tgz#4a900a8d46be7510c2a62c573c67ee54a221b5df"
+  integrity sha512-88w+V8DUeF/IHYk+XcZ6pIPWek8h/BCajhm6ANCOu54fnu2OgRbi+xYAfUUKnVLHyk4a4Y6DeUAuc4EGE4bMRQ==
+
 react-native-view-shot@2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-2.6.0.tgz#3b23675826f67658366352c4b97b59a6aded2f43"

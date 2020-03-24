@@ -214,6 +214,9 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNUxcam (5.1.15):
+    - React
+    - UXCam (~> 3.1.13)
   - RNFastImage (8.1.5):
     - React
     - SDWebImage (~> 5.0)
@@ -239,6 +242,7 @@ PODS:
     - UMFontInterface
   - UMSensorsInterface (3.0.0)
   - UMTaskManagerInterface (3.0.0)
+  - UXCam (3.1.14)
   - yoga (0.59.8.React)
 
 DEPENDENCIES:
@@ -278,6 +282,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNUxcam (from `../node_modules/react-native-ux-cam`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -317,6 +322,7 @@ SPEC REPOS:
     - libwebp
     - lottie-ios
     - OneSignal
+    - UXCam
     - SDWebImage
     - SDWebImageWebPCoder
 
@@ -384,6 +390,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-kochava-tracker"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
+  RNUxcam:
+    :path: "../node_modules/react-native-ux-cam"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
   UMBarCodeScannerInterface:
@@ -476,6 +484,7 @@ SPEC CHECKSUMS:
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-kochava-tracker: e60cf0bb0fc228fa59be6b4c7935342f07969b6f
   react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
+  RNUxcam: b9c9894811487add76986d8d018d75ca8bef5839
   RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
   SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
   SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
@@ -491,8 +500,9 @@ SPEC CHECKSUMS:
   UMReactNativeAdapter: 131ea2b944ade8035f0b54c6570c405f6000548d
   UMSensorsInterface: 0ed023ce9b96f2ca6fada7bda05b7760da60b293
   UMTaskManagerInterface: 8664abd37a00715727e60df9ecd65e42ba47b548
+  UXCam: 073f563d1486a9b021578e2c9f7c58d7bff79b0d
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 92a555cc7b21b36557a7d3f27ca9c63b724c52e5
+PODFILE CHECKSUM: ff3f5a31d470e368cdc40b168ca39267bc3bf407
 
 COCOAPODS: 1.8.4

@@ -59,6 +59,7 @@ target 'brew9' do
 
   pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
 
+  pod 'RNUxcam', :path => '../node_modules/react-native-ux-cam'
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
 
   post_install do |installer|

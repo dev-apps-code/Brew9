@@ -114,6 +114,7 @@ apply from: 'expo.gradle'
 apply from: "../../node_modules/react-native-unimodules/gradle.groovy"
 
 dependencies {
+    implementation project(':react-native-ux-cam')
     implementation project(':react-native-fast-image')
     implementation project(':react-native-onesignal')
   implementation project(':react-native-kochava-tracker')
