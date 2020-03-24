@@ -169,6 +169,7 @@ export default class FirstScreen extends React.Component {
             popUpVisible={popUpVisible}
             title={title}
             description={description}
+            OkText={'Update'}
             onPressOk={this.onPressOk}
             onBackgroundPress={() => console.log('close')}
         />

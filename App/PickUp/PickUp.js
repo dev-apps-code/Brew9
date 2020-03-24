@@ -23,6 +23,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import _ from 'lodash'
 import { getMemberIdForApi } from '../Services/members_helper'
+import AnimationLoading from '../Components/AnimationLoading'
 
 @connect(({ members, shops, config }) => ({
 	currentMember: members.profile,
@@ -848,9 +849,7 @@ export default class PickUp extends React.Component {
 		return <View
 			style={styles.pickUpMainView}>
 			{this.state.loading ?
-				<View style={[styles.container, styles.horizontal]}>
-					<ActivityIndicator size="large" />
-				</View> :
+				<AnimationLoading /> :
 				orders.length > 0 ? this.renderQueueView(orders) :
 					this.renderEmpty()
 			}

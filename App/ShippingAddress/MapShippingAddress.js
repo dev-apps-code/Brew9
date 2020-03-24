@@ -201,16 +201,16 @@ export default class MapShippingAddress extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.headerTitle}>{this.state.deliveryArea}</Text>
+                <Text style={styles.headerTitle}>{this.state.delivery_area}</Text>
                 {this.renderMap()}
                 <ScrollView style={{ height: windowHeight / 4 }}>
                     <View style={styles.formView}>
 
-                        {this.renderForm("address", "e.g. Gym/School", false, (text) => this.onChangeAddress(text))}
-                        {this.renderForm("State", "Exp:Block B", false, (text) => this.onChangeState(text))}
-                        {this.renderForm("Poscode", "Exp:Block B", false, (text) => this.onChangePoscode(text))}
-                        {this.renderForm("City", "Exp:Block B", false, (text) => this.onChangeCity(text))}
-                        {this.renderForm("Country", "Exp:Block B", false, (text) => this.onChangeCountry(text))}
+                        {this.renderForm("Address", "No.1, Spg1, Kg A", false, (text) => this.onChangeAddress(text))}
+                        {this.renderForm("State", "Brunei Muara", false, (text) => this.onChangeState(text))}
+                        {this.renderForm("Poscode", "XX1111", false, (text) => this.onChangePoscode(text))}
+                        {this.renderForm("City", "BSB", false, (text) => this.onChangeCity(text))}
+                        {this.renderForm("Country", "Brunei", false, (text) => this.onChangeCountry(text))}
 
                         <TouchableOpacity
                             onPress={() => this.onSavePressed()}
@@ -302,7 +302,8 @@ const styles = StyleSheet.create({
         fontFamily: TITLE_FONT,
         fontSize: 14 * fontAlpha,
         fontStyle: "normal",
-        textAlign: "left",
+        textAlign: "center",
+        flex: 1
     },
     headerTitle: {
         backgroundColor: "transparent",

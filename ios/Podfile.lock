@@ -142,6 +142,15 @@ PODS:
   - "GoogleToolboxForMac/NSString+URLArguments (2.2.1)"
   - GTMSessionFetcher/Core (1.2.2)
   - JKBigInteger2 (0.0.5)
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
   - lottie-ios (2.5.3)
   - OneSignal (2.12.6)
   - React (0.59.8):
@@ -208,6 +217,16 @@ PODS:
   - RNUxcam (5.1.15):
     - React
     - UXCam (~> 3.1.13)
+  - RNFastImage (8.1.5):
+    - React
+    - SDWebImage (~> 5.0)
+    - SDWebImageWebPCoder (~> 0.4.1)
+  - SDWebImage (5.6.0):
+    - SDWebImage/Core (= 5.6.0)
+  - SDWebImage/Core (5.6.0)
+  - SDWebImageWebPCoder (0.4.1):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.5)
   - UMBarCodeScannerInterface (3.0.0)
   - UMCameraInterface (3.0.0)
   - UMConstantsInterface (3.0.0)
@@ -264,6 +283,7 @@ DEPENDENCIES:
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - RNUxcam (from `../node_modules/react-native-ux-cam`)
+  - RNFastImage (from `../node_modules/react-native-fast-image`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
   - UMConstantsInterface (from `../node_modules/unimodules-constants-interface/ios`)
@@ -299,9 +319,12 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GTMSessionFetcher
     - JKBigInteger2
+    - libwebp
     - lottie-ios
     - OneSignal
     - UXCam
+    - SDWebImage
+    - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -369,6 +392,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-onesignal"
   RNUxcam:
     :path: "../node_modules/react-native-ux-cam"
+  RNFastImage:
+    :path: "../node_modules/react-native-fast-image"
   UMBarCodeScannerInterface:
     :path: !ruby/object:Pathname
     path: "../node_modules/unimodules-barcode-scanner-interface/ios"
@@ -453,12 +478,16 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   JKBigInteger2: e91672035c42328c48b7dd015b66812ddf40ca9b
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   OneSignal: a6df91542d1cf133b9dd19d89f2b533d8f2d3163
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-kochava-tracker: e60cf0bb0fc228fa59be6b4c7935342f07969b6f
   react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
   RNUxcam: b9c9894811487add76986d8d018d75ca8bef5839
+  RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
+  SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
+  SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
   UMBarCodeScannerInterface: 84ea2d6b58ff0dc27ef9b68bab71286be18ee020
   UMCameraInterface: 26b26005d1756a0d5f4f04f1e168e39ea9154535
   UMConstantsInterface: 038bacb19de12b6fd328c589122c8dc977cccf61

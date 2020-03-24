@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient;
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
 import com.uxcam.RNUxcamPackage;
+import com.dylanvann.fastimage.FastImageViewPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.kochava.reactlibrary.RNKochavaTrackerPackage;
 
@@ -33,6 +34,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
         // Needed for `react-native link`
         // new MainReactPackage(),
             new RNUxcamPackage(),
+            new FastImageViewPackage(),
             new ReactNativeOneSignalPackage(),
             new RNKochavaTrackerPackage()
     );

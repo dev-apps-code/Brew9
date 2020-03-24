@@ -11,7 +11,7 @@ import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
-import HudLoading from "../Components/HudLoading"
+import AnimationLoading from "../Components/AnimationLoading"
 import { createAction, Storage } from "../Utils"
 import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
 import _ from 'lodash'
@@ -55,7 +55,8 @@ export default class ShippingAddress extends React.Component {
         super(props)
         this.state = {
             delivery_options: 'pickup',
-            shippingAddress: []
+            shippingAddress: [],
+            isRefreshing: false
 
         }
 
@@ -105,6 +106,12 @@ export default class ShippingAddress extends React.Component {
         navigation.navigate("AddShippingAddress", { params: item })
 
     }
+    onRefresh() {
+        this.setState({
+            isRefreshing: true,
+        })
+        this.loadShippingAddress(true)
+    }
     updateDefaultAddress = (item) => {
         const { navigation, dispatch } = this.props
         dispatch(createAction("members/savePrimaryShippingAddress")(item))
@@ -139,31 +146,39 @@ export default class ShippingAddress extends React.Component {
     render() {
         const { location, shippingAddress } = this.props
         let { loading } = this.state
-        return <View
-            style={styles.Container}>
-            <ScrollView
-                style={styles.scrollviewScrollView}>
-                <Text style={styles.headingStyle}>Delivery Address</Text>
-                <FlatList
-                    data={shippingAddress}
-                    renderItem={({ item }) => (
-                        this.renderShippingAddress(item)
-                    )}
-                    keyExtractor={item => item.id}
-                />
-            </ScrollView>
-            <TouchableOpacity onPress={this.onAddAddress}>
-                <View style={styles.addButtonView}>
-                    <Image
-                        source={require("./../../assets/images/add.png")}
-                        style={styles.addButtonImage} />
-                    <Text style={styles.addAddressText}>Add Address</Text>
+        if (loading) {
+            return <AnimationLoading />
 
-                </View>
-            </TouchableOpacity>
-            <HudLoading isLoading={loading} />
-            <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
-        </View>
+        } else {
+            return <View
+                style={styles.Container}>
+                <ScrollView
+                    style={styles.scrollviewScrollView}>
+                    <Text style={styles.headingStyle}>Delivery Address</Text>
+                    <FlatList
+                        data={shippingAddress}
+                        renderItem={({ item }) => (
+                            this.renderShippingAddress(item)
+                        )}
+                        refreshing={this.state.isRefreshing}
+                        onRefresh={this.onRefresh.bind(this)}
+                        keyExtractor={item => item.id}
+                    />
+                </ScrollView>
+                <TouchableOpacity onPress={this.onAddAddress}>
+                    <View style={styles.addButtonView}>
+                        <Image
+                            source={require("./../../assets/images/add.png")}
+                            style={styles.addButtonImage} />
+                        <Text style={styles.addAddressText}>Add Address</Text>
+
+                    </View>
+                </TouchableOpacity>
+
+                <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+            </View>
+        }
+
     }
 }
 

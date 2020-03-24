@@ -24,7 +24,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import openMap from "react-native-open-maps";
 import { getMemberIdForApi } from '../Services/members_helper'
-import Brew9Modal from '../Components/Brew9Modal'
+import Brew9PopUp from "../Components/Brew9PopUp"
 
 @connect(({ members, shops, orders }) => ({
 	currentMember: members.profile,
@@ -932,8 +932,9 @@ export default class Checkout extends React.Component {
 
 	renderPaymentMethod() {
 
-		const { currentMember } = this.props
+		const { currentMember, delivery } = this.props
 		const { final_price } = this.state
+		let cashPayment = delivery? 'Cash On Delivery' : 'Pay In Store'
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
 		var no_payment_needed = final_price <= 0 ? true : false
 
@@ -1181,7 +1182,7 @@ export default class Checkout extends React.Component {
 										alignItems: "center",
 									}}>
 									<Text
-										style={this.state.selected_payment == "counter" ? styles.creditCardSelectedText : styles.creditCardText}>Pay In Store</Text>
+										style={this.state.selected_payment == "counter" ? styles.creditCardSelectedText : styles.creditCardText}>{cashPayment}</Text>
 									<View
 										style={{
 											flex: 1,
@@ -1311,7 +1312,7 @@ export default class Checkout extends React.Component {
 
 	renderPaymentSection() {
 
-		const { currentMember } = this.props
+		const { currentMember, delivery } = this.props
 		const { selected_payment } = this.state
 
 		const credits = currentMember != undefined ? parseFloat(currentMember.credits).toFixed(2) : 0
@@ -1344,7 +1345,7 @@ export default class Checkout extends React.Component {
 							</View>
 							<Text
 								style={styles.productVoucherText}>{this.state.selected_payment == '' ? "Please select" : this.state.selected_payment == "credits" ?
-									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? "Pay In Store " : "Credit Card")}</Text>
+									`Wallet ${this.props.members.currency}${credits}` : (this.state.selected_payment == "counter" ? (delivery ? "Cash On Delivery" : "Pay In Store") : "Credit Card")}</Text>
 							<Image
 								source={require("./../../assets/images/next.png")}
 								style={styles.menuRowArrowImage} />
@@ -1746,7 +1747,7 @@ export default class Checkout extends React.Component {
 							</View>}
 
 						</View>
-						
+
 
 					</View>
 				</TouchableOpacity>
@@ -1949,8 +1950,17 @@ export default class Checkout extends React.Component {
 			{this.renderPickupTimeScroll()}
 			<HudLoading isLoading={this.state.loading} />
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
-			<Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} />
-
+			{/* <Brew9Modal visible={this.state.visible} cancelable={true} title={""} description={"Please add delivery address"} confirm_text={'Add address'} okayButtonAction={this.addShippingAddress} cancelButtonAction={() => this.setState({ visible: false })} /> */}
+			<Brew9PopUp
+				popUpVisible={this.state.visible}
+				title={""}
+				description={"Please add delivery address"}
+				OkText={'Add address'}
+				cancelText={'Cancel'}
+				onPressOk={this.addShippingAddress}
+				onPressCancel={() => this.setState({ visible: false })}
+				onBackgroundPress={this.closePopUp}
+				onChangeText={text => this.onChangeCoupon(text)} />
 			{/* <TimePicker
 				ref={ref => {
 					this.TimePicker = ref;
