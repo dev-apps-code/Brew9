@@ -67,7 +67,7 @@ import Moment from 'moment';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
-
+import AnimationLoading from '../Components/AnimationLoading'
 @connect(({ members, shops, config, orders }) => ({
 	currentMember: members.profile,
 	company_id: members.company_id,
@@ -1597,7 +1597,8 @@ export default class Home extends React.Component {
 
 			</View>
 			{this.renderPromotionTopBar()}
-			{this.state.loading ? <View style={[styles.loadingIndicator]}><ActivityIndicator size="large" /></View>
+			{this.state.loading ? <AnimationLoading />
+
 				:
 				<View
 					style={styles.productsectionView}

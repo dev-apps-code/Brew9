@@ -28,6 +28,7 @@ import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, P
 import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
 import { getMemberIdForApi } from '../Services/members_helper'
+import AnimationLoading from "../Components/AnimationLoading"
 
 @connect(({ members, config }) => ({
   selectedTab: config.selectedTab,
@@ -236,9 +237,7 @@ export default class Notification extends React.Component {
           </View>
           <View style={styles.pointhistoryFlatListViewWrapper}>
             {this.state.loading ? (
-              <View style={[styles.container, styles.horizontal]}>
-                <ActivityIndicator size="large" />
-              </View>
+              <AnimationLoading />
             ) : !this.state.loading && notifications.length > 0 ? (
               <FlatList
                 renderItem={this.renderPointhistoryFlatListCell}
