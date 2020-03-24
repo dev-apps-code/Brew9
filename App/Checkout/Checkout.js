@@ -2040,6 +2040,8 @@ export default class Checkout extends React.Component {
   renderDeliveryAddress = (address) => {
     let { deliveryFee } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
+    let subtotal = null;
+
     return (
       <View style={styles.deliveryAddressView}>
         <TouchableOpacity style={styles.voucherButton}>
@@ -2082,23 +2084,25 @@ export default class Checkout extends React.Component {
             </View>
           </View>
         </TouchableOpacity>
-        <View style={{ paddingVertical: 15 * alpha }}>
+        <View>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingHorizontal: 10 * alpha,
+              // paddingHorizontal: 10 * alpha,
               paddingBottom: 10 * alpha
             }}
           >
             <Text style={styles.productNameText}>Subtotal</Text>
-            <Text style={styles.productVoucherText}>$</Text>
+            <Text style={styles.productVoucherText}>
+              {subtotal || '$ 0.00'}
+            </Text>
           </View>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingHorizontal: 10 * alpha
+              // paddingHorizontal: 10 * alpha
             }}
           >
             <View>
@@ -2130,6 +2134,11 @@ export default class Checkout extends React.Component {
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
       2
     );
+    let defaultAddress = array
+      ? shippingAddress.find((item) => {
+          return item.primary == true;
+        })
+      : undefined;
     return (
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
