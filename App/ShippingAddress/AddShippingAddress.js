@@ -6,15 +6,14 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { View, Text, StyleSheet, ScrollView, FlatList, Image, TouchableOpacity, TextInput } from "react-native"
+import { View, Text, StyleSheet, ScrollView, FlatList, Image, TouchableOpacity, TextInput, AsyncStorage } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { createAction } from '../Utils'
 import { connect } from "react-redux";
 import SaveShippingAddressObjectRequest from "../Requests/save_shipping_address_request_object";
 import UpdateShippingAddressObjectRequest from "../Requests/update_shipping_address_request_object";
-import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
-
+import CurrentStatusRequestObject from "../Requests/current_status_request_object"
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { KURL_INFO } from "../Utils/server";
 import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles, TOAST_DURATION, LIGHT_GREY, BUTTONBOTTOMPADDING, windowHeight } from "../Common/common_style";
@@ -126,14 +125,33 @@ export default class AddShippingAddress extends React.Component {
             this.loadUpdateProfile(shippingAddress)
         }
 
-
-
     }
     loadUpdateProfile(formData) {
         const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
             if (eventObject.success) {
-                navigation.navigate('ShippingAddress')
+                const callback = eventObject => {
+                    if (eventObject.success) {
+                        navigation.navigate('ShippingAddress')
+                    }
+                }
+                AsyncStorage.getItem("notification_key", (err, result) => {
+                    var last_note = 0
+                    if (result != null) {
+                        last_note = result
+                    }
+                    const obj = new CurrentStatusRequestObject(last_note)
+                    obj.setUrlId(getMemberIdForApi(currentMember))
+                    dispatch(
+                        createAction('members/loadCurrentStatus')({
+                            object: obj,
+                            callback,
+                        })
+                    )
+                })
+            } else {
+                this.refs.toast.show("Something Happen", 500)
+
             }
         }
         if (this.address == null) {

@@ -1719,7 +1719,6 @@ export default class Checkout extends React.Component {
 	renderDeliveryAddress = (address) => {
 		let { deliveryFee } = this.state
 		let text = address ? "Edit Address" : "Please add address"
-
 		return (
 			<View style={styles.deliveryAddressView}>
 				<TouchableOpacity
