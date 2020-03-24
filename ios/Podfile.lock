@@ -214,13 +214,13 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - RNUxcam (5.1.15):
-    - React
-    - UXCam (~> 3.1.13)
   - RNFastImage (8.1.5):
     - React
     - SDWebImage (~> 5.0)
     - SDWebImageWebPCoder (~> 0.4.1)
+  - RNUxcam (5.1.15):
+    - React
+    - UXCam (~> 3.1.13)
   - SDWebImage (5.6.0):
     - SDWebImage/Core (= 5.6.0)
   - SDWebImage/Core (5.6.0)
@@ -282,8 +282,8 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
-  - RNUxcam (from `../node_modules/react-native-ux-cam`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
+  - RNUxcam (from `../node_modules/react-native-ux-cam`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
   - UMConstantsInterface (from `../node_modules/unimodules-constants-interface/ios`)
@@ -322,9 +322,9 @@ SPEC REPOS:
     - libwebp
     - lottie-ios
     - OneSignal
-    - UXCam
     - SDWebImage
     - SDWebImageWebPCoder
+    - UXCam
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -390,10 +390,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-kochava-tracker"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
-  RNUxcam:
-    :path: "../node_modules/react-native-ux-cam"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
+  RNUxcam:
+    :path: "../node_modules/react-native-ux-cam"
   UMBarCodeScannerInterface:
     :path: !ruby/object:Pathname
     path: "../node_modules/unimodules-barcode-scanner-interface/ios"
@@ -484,8 +484,8 @@ SPEC CHECKSUMS:
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-kochava-tracker: e60cf0bb0fc228fa59be6b4c7935342f07969b6f
   react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
-  RNUxcam: b9c9894811487add76986d8d018d75ca8bef5839
   RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
+  RNUxcam: b9c9894811487add76986d8d018d75ca8bef5839
   SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
   SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
   UMBarCodeScannerInterface: 84ea2d6b58ff0dc27ef9b68bab71286be18ee020
@@ -503,6 +503,6 @@ SPEC CHECKSUMS:
   UXCam: 073f563d1486a9b021578e2c9f7c58d7bff79b0d
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: ff3f5a31d470e368cdc40b168ca39267bc3bf407
+PODFILE CHECKSUM: 0b5b76a3b97595ab142cfe6325d3705e370905f9
 
 COCOAPODS: 1.8.4

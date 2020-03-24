@@ -101,14 +101,6 @@ export default class FirstScreen extends React.Component {
             }
             else {
                 this.props.navigation.navigate("TabGroupOne")
-                const obj = new ShippingAddressRequestObject()
-                obj.setUrlId(members.id)
-                dispatch(
-                    createAction('members/loadShippingAddress')({
-                        object: obj,
-                        // callback,
-                    })
-                )
             }
         }
 
@@ -129,6 +121,7 @@ export default class FirstScreen extends React.Component {
 
         this.setState({ loading: true })
         const callback = eventObject => {
+            console.log('loadCurrentStatus', eventObject)
             this.setState({
                 loading: false,
             })

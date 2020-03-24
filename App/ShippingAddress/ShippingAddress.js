@@ -6,19 +6,22 @@
 //  Copyright © 2018 brew9. All rights reserved.
 //
 
-import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking, TextInput, FlatList } from "react-native"
+import { Animated, StyleSheet, View, TouchableOpacity, Image, Text, ScrollView, Linking, TextInput, FlatList, AsyncStorage } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
 import AnimationLoading from "../Components/AnimationLoading"
 import { createAction, Storage } from "../Utils"
+import UpdateShippingAddressObjectRequest from "../Requests/update_shipping_address_request_object";
+import CurrentStatusRequestObject from "../Requests/current_status_request_object"
 import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object'
 import _ from 'lodash'
 import { TITLE_FONT, NON_TITLE_FONT, BUTTONBOTTOMPADDING, DEFAULT_GREY_BACKGROUND, PRIMARY_COLOR, TOAST_DURATION, LIGHT_GREY } from "../Common/common_style";
 import Moment from 'moment';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
+import { getMemberIdForApi } from '../Services/members_helper'
 
 @connect(({ members, shops, orders }) => ({
     currentMember: members.profile,
@@ -69,11 +72,13 @@ export default class ShippingAddress extends React.Component {
         let { dispatch, currentMember } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-
+            this.setState({
+                loading: false,
+            })
             if (eventObject.success) {
-                this.setState({
-                    loading: false,
-                })
+
+            } else {
+                this.refs.toast.show(eventObject.message, 500)
             }
 
         }
@@ -112,15 +117,69 @@ export default class ShippingAddress extends React.Component {
         })
         this.loadShippingAddress(true)
     }
-    updateDefaultAddress = (item) => {
-        const { navigation, dispatch } = this.props
-        dispatch(createAction("members/savePrimaryShippingAddress")(item))
-        navigation.navigate("Checkout")
+    onItemPress = (item) => {
+        const shippingAddress = {
+            member_id: this.props.currentMember.id,
+            fullname: item.fullname,
+            address: item.address,
+            contact_number: item.contact_number,
+            city: item.city,
+            state: item.state,
+            postal_code: item.postal_code,
+            country: item.country,
+            land_mark: item.land_mark,
+            latitude: item.latitude,
+            longitude: item.longitude,
+            delivery_area: item.delivery_area,
+            primary: !item.primary
+        }
+        this.updateDefaultAddress(shippingAddress, item.id)
+    }
+
+
+    updateDefaultAddress = (formData, address_id) => {
+        const { navigation, dispatch, currentMember } = this.props
+        const callback = eventObject => {
+
+            if (eventObject.success) {
+
+                const callback = eventObject => {
+                    if (eventObject.success) {
+                        navigation.navigate("Checkout")
+                    }
+                }
+                AsyncStorage.getItem("notification_key", (err, result) => {
+                    var last_note = 0
+                    if (result != null) {
+                        last_note = result
+                    }
+                    const obj = new CurrentStatusRequestObject(last_note)
+                    obj.setUrlId(getMemberIdForApi(currentMember))
+                    dispatch(
+                        createAction('members/loadCurrentStatus')({
+                            object: obj,
+                            callback,
+                        })
+                    )
+                })
+            } else {
+                this.refs.toast.show("Something Happen", 500)
+
+            }
+        }
+        const obj = new UpdateShippingAddressObjectRequest(formData, currentMember.id)
+        obj.setUrlId(address_id)
+        dispatch(
+            createAction('members/updateShippingAddress')({
+                object: obj,
+                callback,
+            })
+        )
     }
     renderShippingAddress = (item) => {
         let selected = item.primary ? styles.selectTwoView : styles.selectView
         return (
-            <TouchableOpacity onPress={() => this.updateDefaultAddress(item)}>
+            <TouchableOpacity onPress={() => this.onItemPress(item)}>
                 <View style={styles.content}>
 
                     <View style={styles.shippingAddressDetail}>
@@ -175,7 +234,7 @@ export default class ShippingAddress extends React.Component {
                     </View>
                 </TouchableOpacity>
 
-                <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+                <Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
             </View>
         }
 
