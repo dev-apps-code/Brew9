@@ -427,10 +427,15 @@ export default class Checkout extends React.Component {
     }
   }
 
+  setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
+
   onSelectPickLater() {
-    this.setState({
-      pick_up_status: `Pick Later`
-    });
+    this.setState({ pick_up_status: `Pick Later` });
+  }
+
+  onSelectOrderTomorrow = () => {
+    this.setOrderSchedule('tomorrow');
+    
   }
 
   onSelectOrderNow() {
@@ -1069,7 +1074,7 @@ export default class Checkout extends React.Component {
   toggleDeliveryTimeSelector = () => {
     const { isDeliveryTimeSelectorToggle } = this.state;
 
-    const y = () => (isDeliveryTimeSelectorToggle ? windowWidth : 52 * alpha);
+    const y = () => (isDeliveryTimeSelectorToggle ? windowHeight : 52 * alpha);
 
     this.setState(
       { isDeliveryTimeSelectorToggle: !isDeliveryTimeSelectorToggle },
@@ -2144,8 +2149,19 @@ export default class Checkout extends React.Component {
       state={this.state}
       animation={this.deliveryTimeSelectorAnimation}
       toggleDelivery={this.toggleDeliveryTimeSelector}
+      onSelectOrderNow={() => this.onSelectOrderNow()}
+      onSelectOrderLater={() => this.onSelectPickLater()}
+      onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
+      onConfirmDeliveryTimeSchedule={() => this.onConfirmDeliveryTimeSchedule()}
+      onHourValueChange={() => this.onHourValueChange()}
+      onMinuteValueChange={() => this.onMinuteValueChange()}
     />
   );
+
+  onConfirmDeliveryTimeSchedule = () => {
+    // WIP add confirmation here
+    console.log('order time schedule ', this.state.order_schedule);
+  };
 
   renderCheckoutReceipt() {
     const { vouchers_to_use, final_price } = this.state;
