@@ -2197,13 +2197,8 @@ export default class Checkout extends React.Component {
     );
     let defaultAddress = array
       ? shippingAddress.find((item) => {
-<<<<<<< HEAD
           return item.primary == true;
         })
-=======
-        return item.primary == true;
-      })
->>>>>>> delivery
       : undefined;
     return (
       <View style={styles.orderReceiptView}>
