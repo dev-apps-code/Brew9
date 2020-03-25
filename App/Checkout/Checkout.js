@@ -15,10 +15,10 @@ import {
   Text,
   ScrollView,
   Linking,
-  TextInput
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
@@ -43,6 +43,7 @@ import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
+import DeliveryTimeSelector from '../Components/DeliveryTimeSelector';
 import newLinking from 'expo/build/Linking/Linking';
 
 @connect(({ members, shops, orders }) => ({
@@ -122,6 +123,7 @@ export default class Checkout extends React.Component {
       hour_range: [],
       minute_range: [],
       isPickupToogle: false,
+      isDeliveryTimeSelectorToggle: false,
       pickup_view_height: 150 * alpha,
       selected_hour_index: 0,
       selected_minute_index: 0,
@@ -131,8 +133,10 @@ export default class Checkout extends React.Component {
       visible: false,
       applyCode: false
     };
-    this.movePickAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
-    this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+    const xy = { x: 0, y: windowHeight };
+    this.movePickAnimation = new Animated.ValueXY(xy);
+    this.deliveryTimeSelectorAnimation = new Animated.ValueXY(xy);
+    this.moveAnimation = new Animated.ValueXY(xy);
   }
 
   componentDidMount() {
@@ -425,10 +429,14 @@ export default class Checkout extends React.Component {
     }
   }
 
+  setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
+
   onSelectPickLater() {
-    this.setState({
-      pick_up_status: `Pick Later`
-    });
+    this.setState({ pick_up_status: `Pick Later` });
+  }
+
+  onSelectOrderTomorrow = () => {
+    this.setOrderSchedule('tomorrow'); 
   }
 
   onSelectOrderNow() {
@@ -1074,6 +1082,21 @@ export default class Checkout extends React.Component {
     }
   };
 
+  toggleDeliveryTimeSelector = () => {
+    const { isDeliveryTimeSelectorToggle } = this.state;
+
+    const y = () => (isDeliveryTimeSelectorToggle ? windowHeight : 52 * alpha);
+
+    this.setState(
+      { isDeliveryTimeSelectorToggle: !isDeliveryTimeSelectorToggle },
+      function() {
+        Animated.spring(this.deliveryTimeSelectorAnimation, {
+          toValue: { x: 0, y: y() }
+        }).start();
+      }
+    );
+  };
+
   tooglePayment = () => {
     const { isPaymentToggle, payment_view_height } = this.state;
 
@@ -1616,8 +1639,9 @@ export default class Checkout extends React.Component {
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
-            // onPress={() => this.showDateTimePicker()}
-            onPress={() => this.tooglePickup()}
+            onPress={() =>
+              delivery ? this.toggleDeliveryTimeSelector() : this.tooglePickup()
+            }
             style={styles.voucherButton}
           >
             <View style={styles.drinksView}>
@@ -2137,6 +2161,26 @@ export default class Checkout extends React.Component {
     );
   };
 
+  renderDeliveryTimeSelector = () => (
+    <DeliveryTimeSelector
+      styles={styles}
+      state={this.state}
+      animation={this.deliveryTimeSelectorAnimation}
+      toggleDelivery={this.toggleDeliveryTimeSelector}
+      onSelectOrderNow={() => this.onSelectOrderNow()}
+      onSelectOrderLater={() => this.onSelectPickLater()}
+      onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
+      onConfirmDeliveryTimeSchedule={() => this.onConfirmDeliveryTimeSchedule()}
+      onHourValueChange={() => this.onHourValueChange()}
+      onMinuteValueChange={() => this.onMinuteValueChange()}
+    />
+  );
+
+  onConfirmDeliveryTimeSchedule = () => {
+    // WIP add confirmation here
+    console.log('order time schedule ', this.state.order_schedule);
+  };
+
   renderCheckoutReceipt() {
     const { vouchers_to_use, final_price, selected_address } = this.state;
     let {
@@ -2153,8 +2197,8 @@ export default class Checkout extends React.Component {
     );
     let defaultAddress = array
       ? shippingAddress.find((item) => {
-        return item.primary == true;
-      })
+          return item.primary == true;
+        })
       : undefined;
     return (
       <View style={styles.orderReceiptView}>
@@ -2319,7 +2363,7 @@ export default class Checkout extends React.Component {
       2
     );
     return (
-      <View style={styles.checkoutViewPadding}>
+      <SafeAreaView style={styles.checkoutViewPadding}>
         <ScrollView
           style={styles.scrollviewScrollView}
           onLayout={(event) => this.measureView(event)}
@@ -2335,6 +2379,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderPaymentMethod()}
         {this.renderPickupTimeScroll()}
+        {this.renderDeliveryTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
         <Toast
           ref="toast"
@@ -2363,7 +2408,7 @@ export default class Checkout extends React.Component {
 				selectedMinute={this.state.selected_minute}
 				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
 			/> */}
-      </View>
+      </SafeAreaView>
     );
   }
 }
