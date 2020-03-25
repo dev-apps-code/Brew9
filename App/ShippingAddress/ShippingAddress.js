@@ -271,7 +271,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: 'black',
-        paddingVertical: 10 * alpha
+        paddingVertical: 10 * alpha,
+        borderRadius: 4 * alpha,
+        height: 47 * alpha,
 
     },
     addAddressText: {
