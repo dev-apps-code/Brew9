@@ -412,7 +412,6 @@ export default class Checkout extends React.Component {
 
   onConfirmTimePicker() {
     const { selected_hour, selected_minute, pick_up_status, selected_date } = this.state;
-    console.log('selected_date', selected_date, selected_hour, selected_minute)
     var now = new Moment().format('HH:mm');
     var selectorTime = `${selected_hour}:${selected_minute}`;
     if (pick_up_status == 'Order Now') {
@@ -440,7 +439,7 @@ export default class Checkout extends React.Component {
     } else if (pick_up_status == 'Pick Tomorrow') {
       this.setState(
         {
-          pick_up_time: `${selected_date}  ${selected_hour}:${selected_minute}`
+          pick_up_time: `${selected_date} ${selected_hour}:${selected_minute}`
         },
         function () {
           this.toggleDeliveryTimeSelector();
@@ -461,7 +460,7 @@ export default class Checkout extends React.Component {
   }
 
   onSelectOrderTomorrow = () => {
-    var currentDate = Moment(new Date()).format('YYYY-MM-DD')
+    var currentDate = new Date()
     // let tomorrow = Moment(currentDate).add(1, 'days');
     let tomorrow = Moment(currentDate).add(1, 'days').format('YYYY-MM-DD')
     this.setState({
