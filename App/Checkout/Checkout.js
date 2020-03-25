@@ -43,6 +43,7 @@ import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
+import newLinking from 'expo/build/Linking/Linking';
 
 @connect(({ members, shops, orders }) => ({
   currentMember: members.profile,
@@ -103,7 +104,7 @@ export default class Checkout extends React.Component {
       this.onPayNowPressed.bind(this),
       500 // no new clicks within 500ms time window
     );
-    const { discount_cart_total } = props;
+    const { discount_cart_total, currentMember } = props;
     this.state = {
       delivery_options: 'pickup',
       vouchers_to_use: [],
@@ -117,6 +118,7 @@ export default class Checkout extends React.Component {
       pick_up_status: null,
       selected_hour: '00',
       selected_minute: '00',
+      selected_address: currentMember.defaultAddress,
       hour_range: [],
       minute_range: [],
       isPickupToogle: false,
@@ -786,14 +788,16 @@ export default class Checkout extends React.Component {
       promotion_ids,
       cart_order_id,
       navigation,
-      location
+      location, 
+      delivery
     } = this.props;
     const { navigate } = this.props.navigation;
     const {
       vouchers_to_use,
       selected_payment,
       pick_up_status,
-      pick_up_time
+      pick_up_time,
+      selected_address
     } = this.state;
     this.setState({ loading: true });
     const callback = (eventObject) => {
@@ -865,6 +869,11 @@ export default class Checkout extends React.Component {
       longitude = location.coords.longitude;
     }
 
+    delivery_option = 0 // 0 - Pickup 1 - Delivery
+		if (delivery) {
+			delivery_option = 1
+    }
+    
     filtered_cart = _.filter(cart, { clazz: 'product' });
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
     const obj = new MakeOrderRequestObj(
@@ -876,7 +885,9 @@ export default class Checkout extends React.Component {
       pick_up_time,
       cart_order_id,
       latitude,
-      longitude
+      longitude,
+      delivery_option,
+      selected_address.id
     );
     obj.setUrlId(selectedShop.id);
     dispatch(
@@ -923,7 +934,8 @@ export default class Checkout extends React.Component {
       selected_payment,
       pick_up_status,
       final_price,
-      pick_up_time
+      pick_up_time,
+      selected_address
     } = this.state;
     const { currentMember, selectedShop, delivery } = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
@@ -932,7 +944,7 @@ export default class Checkout extends React.Component {
       new Event('Checkout', getMemberIdForApi(currentMember), 'Pay Now')
     );
     if (currentMember != undefined) {
-      if (delivery && !currentMember.defaultAddress) {
+      if (delivery && !selected_address) {
         this.setState({ visible: true });
       } else {
         if (selected_payment == '') {
@@ -2126,7 +2138,7 @@ export default class Checkout extends React.Component {
   };
 
   renderCheckoutReceipt() {
-    const { vouchers_to_use, final_price } = this.state;
+    const { vouchers_to_use, final_price, selected_address } = this.state;
     let {
       currentMember,
       selectedShop,
@@ -2249,8 +2261,8 @@ export default class Checkout extends React.Component {
                 <View style={styles.sectionSeperatorView} />
               </View>
               {delivery
-                ? currentMember.defaultAddress != undefined
-                  ? this.renderDeliveryAddress(currentMember.defaultAddress)
+                ? selected_address != undefined
+                  ? this.renderDeliveryAddress(selected_address)
                   : this.renderDeliveryAddress(false)
                 : undefined}
               {delivery && (
