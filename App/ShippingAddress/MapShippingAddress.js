@@ -65,7 +65,6 @@ export default class MapShippingAddress extends React.Component {
     }
 
     handlePress(e) {
-        console.log(e.nativeEvent.coordinate)
         this.setState({
             latitude: e.nativeEvent.coordinate.latitude,
             longitude: e.nativeEvent.coordinate.longitude

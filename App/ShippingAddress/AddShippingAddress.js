@@ -130,27 +130,9 @@ export default class AddShippingAddress extends React.Component {
         const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
             if (eventObject.success) {
-                const callback = eventObject => {
-                    if (eventObject.success) {
-                        navigation.navigate('ShippingAddress')
-                    }
-                }
-                AsyncStorage.getItem("notification_key", (err, result) => {
-                    var last_note = 0
-                    if (result != null) {
-                        last_note = result
-                    }
-                    const obj = new CurrentStatusRequestObject(last_note)
-                    obj.setUrlId(getMemberIdForApi(currentMember))
-                    dispatch(
-                        createAction('members/loadCurrentStatus')({
-                            object: obj,
-                            callback,
-                        })
-                    )
-                })
+                navigation.navigate("ShippingAddress")
             } else {
-                this.refs.toast.show("Something Happen", 500)
+                this.refs.toast.show(eventObject.message, 500)
 
             }
         }
@@ -208,7 +190,6 @@ export default class AddShippingAddress extends React.Component {
     }
 
     returnData(info) {
-        console.log(info)
         this.setState({
             address: info.address,
             city: info.city,
