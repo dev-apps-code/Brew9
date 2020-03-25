@@ -134,7 +134,7 @@ const DeliveryTimeSelector = ({
                 );
               }}
               onValueChange={(data, selectedIndex) => {
-                onHourValueChange(hour_range[selectedIndex], selectedIndex);
+                onHourValueChange(data, selectedIndex);
               }}
             />
             <ScrollPicker
@@ -172,7 +172,7 @@ const DeliveryTimeSelector = ({
                 );
               }}
               onValueChange={(data, selectedIndex) => {
-                onMinuteValueChange(minute_range[selectedIndex], selectedIndex);
+                onMinuteValueChange(data, selectedIndex);
               }}
             />
           </View>

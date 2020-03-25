@@ -283,6 +283,8 @@ export default class Checkout extends React.Component {
   }
 
   onHourValueChange = (option, index) => {
+    console.log('option', option)
+    console.log('index', index)
     if (option == '') {
       this.setState(
         {
@@ -410,7 +412,7 @@ export default class Checkout extends React.Component {
 
   onConfirmTimePicker() {
     const { selected_hour, selected_minute, pick_up_status, selected_date } = this.state;
-    console.log('selected_date', selected_date)
+    console.log('selected_date', selected_date, selected_hour, selected_minute)
     var now = new Moment().format('HH:mm');
     var selectorTime = `${selected_hour}:${selected_minute}`;
     if (pick_up_status == 'Order Now') {
@@ -451,7 +453,7 @@ export default class Checkout extends React.Component {
   // setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
 
   onSelectPickLater() {
-    var currentDate = Moment(new Date()).format('YYYY-MM-DD HH:mm')
+    var currentDate = Moment(new Date()).format('YYYY-MM-DD')
     this.setState({
       pick_up_status: `Pick Later`,
       selected_date: currentDate
@@ -460,7 +462,8 @@ export default class Checkout extends React.Component {
 
   onSelectOrderTomorrow = () => {
     var currentDate = Moment(new Date()).format('YYYY-MM-DD')
-    let tomorrow = moment(currentDate).add(1, 'days');
+    // let tomorrow = Moment(currentDate).add(1, 'days');
+    let tomorrow = Moment(currentDate).add(1, 'days').format('YYYY-MM-DD')
     this.setState({
       pick_up_status: `Pick Tomorrow`,
       selected_date: tomorrow
@@ -2204,8 +2207,8 @@ export default class Checkout extends React.Component {
       onSelectOrderLater={() => this.onSelectPickLater()}
       onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
       onConfirmDeliverySchedule={() => this.onConfirmTimePicker()}
-      onHourValueChange={() => this.onHourValueChange()}
-      onMinuteValueChange={() => this.onMinuteValueChange()}
+      onHourValueChange={this.onHourValueChange}
+      onMinuteValueChange={this.onMinuteValueChange}
     />
   );
 
