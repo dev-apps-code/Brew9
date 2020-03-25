@@ -75,7 +75,8 @@
     "sentry-expo": "^2.0.1"
   },
   "devDependencies": {
-    "babel-preset-expo": "^6.0.0"
+    "babel-preset-expo": "^6.0.0",
+    "jetifier": "^1.6.5"
   },
   "private": true
 }
