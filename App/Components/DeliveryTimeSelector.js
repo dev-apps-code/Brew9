@@ -21,7 +21,7 @@ import { month } from '../Utils/date';
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
 
-const DelieryTimeSelector = ({
+const DeliveryTimeSelector = ({
   styles,
   state,
   animation,
@@ -29,15 +29,18 @@ const DelieryTimeSelector = ({
   props,
   onSelectOrderNow,
   onSelectOrderLater,
+  onSelectOrderTomorrow,
   onHourValueChange,
-  onMinuteValueChange
+  onMinuteValueChange,
+  onConfirmDeliverySchedule,
+  delivery
 }) => {
   let { minute_range, hour_range } = state;
   const [isToday, setIsToday] = useState(true);
   const [selected, setSelected] = useState(0);
   let today = new Date();
   let tomorrow = new Date();
-
+  let title = delivery ? "Delivery" : "Pick Up"
   return (
     <Animated.View style={animation.getLayout()}>
       <View style={[styles.popOutPickupView, { flex: 1, height: 350 * alpha }]}>
@@ -48,7 +51,7 @@ const DelieryTimeSelector = ({
           >
             <Image source={closeButtonImage} style={styles.closeButtonImage} />
           </TouchableOpacity>
-          <Text style={styles.paymentMethodTwoText}>Delivery</Text>
+          <Text style={styles.paymentMethodTwoText}>{title}</Text>
         </View>
         <View
           style={{
@@ -77,12 +80,15 @@ const DelieryTimeSelector = ({
               }}
             />
 
-            <CustomCard
+            {delivery && <CustomCard
               cardStyle={componentStyle.tomorrowCard}
               isActive={selected == 2}
               text="Tomorrow"
-              press={() => setSelected(2)}
-            />
+              press={() => {
+                setSelected(2);
+                onSelectOrderTomorrow();
+              }}
+            />}
           </ScrollView>
         </View>
         {/* <View style={styles.menuRowLine2View} /> */}
@@ -253,4 +259,4 @@ const componentStyle = StyleSheet.create({
   }
 });
 
-export default DelieryTimeSelector;
+export default DeliveryTimeSelector;

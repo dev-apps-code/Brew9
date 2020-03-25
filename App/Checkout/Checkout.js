@@ -115,11 +115,12 @@ export default class Checkout extends React.Component {
       isPaymentToggle: false,
       payment_view_height: 0 * alpha,
       selected_payment: '',
-      pick_up_time: null,
-      pick_up_status: null,
+      pick_up_time: Moment(new Date()).format("YYYY-MM-DD HH:mm"),
+      pick_up_status: 'Order Now',
       selected_hour: '00',
       selected_minute: '00',
       selected_address: currentMember.defaultAddress,
+      selected_date: Moment(new Date()).format("YYYY-MM-DD"),
       hour_range: [],
       minute_range: [],
       isPickupToogle: false,
@@ -401,42 +402,63 @@ export default class Checkout extends React.Component {
   };
 
   onConfirmTimePicker() {
-    const { selected_hour, selected_minute, pick_up_status } = this.state;
+    const { selected_hour, selected_minute, pick_up_status, selected_date } = this.state;
+    console.log('selected_date', selected_date)
     var now = new Moment().format('HH:mm');
     var selectorTime = `${selected_hour}:${selected_minute}`;
     if (pick_up_status == 'Order Now') {
       this.setState(
         {
-          pick_up_time: `${now}`
+          pick_up_time: `${selected_date} ${now}`
         },
         function () {
-          this.tooglePickup();
+          this.toggleDeliveryTimeSelector();
         }
       );
     } else if (pick_up_status == 'Pick Later') {
       if (now < selectorTime) {
         this.setState(
           {
-            pick_up_time: `${selected_hour}:${selected_minute}`
+            pick_up_time: `${selected_date} ${selected_hour}:${selected_minute}`
           },
           function () {
-            this.tooglePickup();
+            this.toggleDeliveryTimeSelector();
           }
         );
       } else {
         this.refs.toast.show('Pick up time is not available', TOAST_DURATION);
       }
+    } else if (pick_up_status == 'Pick Tomorrow') {
+      this.setState(
+        {
+          pick_up_time: `${selected_date}  ${selected_hour}:${selected_minute}`
+        },
+        function () {
+          this.toggleDeliveryTimeSelector();
+        }
+      );
     }
+    console.log('pick up', this.state.pick_up_time, this.state.pick_up_status)
   }
 
-  setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
+  // setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
 
   onSelectPickLater() {
-    this.setState({ pick_up_status: `Pick Later` });
+    var currentDate = Moment(new Date()).format('YYYY-MM-DD HH:mm')
+    this.setState({
+      pick_up_status: `Pick Later`,
+      selected_date: currentDate
+    });
   }
 
   onSelectOrderTomorrow = () => {
-    this.setOrderSchedule('tomorrow'); 
+    var currentDate = Moment(new Date()).format('YYYY-MM-DD')
+    let tomorrow = moment(currentDate).add(1, 'days');
+    this.setState({
+      pick_up_status: `Pick Tomorrow`,
+      selected_date: tomorrow
+    });
+    // this.setOrderSchedule('tomorrow');
   }
 
   onSelectOrderNow() {
@@ -444,12 +466,13 @@ export default class Checkout extends React.Component {
     var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
     var time_now = Moment(new Date(), 'h:mm');
-
+    var currentDate = Moment(new Date()).format('YYYY-MM-DD')
     if (opening.hour() <= time_now.hour()) {
       if (opening.hour() == time_now.hour()) {
         if (opening.minutes() <= time_now.minutes()) {
           this.setState({
-            pick_up_status: `Order Now`
+            pick_up_status: `Order Now`,
+            selected_date: currentDate
           });
         } else {
           console.log('not available');
@@ -796,7 +819,7 @@ export default class Checkout extends React.Component {
       promotion_ids,
       cart_order_id,
       navigation,
-      location, 
+      location,
       delivery
     } = this.props;
     const { navigate } = this.props.navigation;
@@ -807,6 +830,7 @@ export default class Checkout extends React.Component {
       pick_up_time,
       selected_address
     } = this.state;
+    let address_id = selected_address == null ? null : selected_address.id
     this.setState({ loading: true });
     const callback = (eventObject) => {
       if (eventObject.success) {
@@ -878,10 +902,10 @@ export default class Checkout extends React.Component {
     }
 
     delivery_option = 0 // 0 - Pickup 1 - Delivery
-		if (delivery) {
-			delivery_option = 1
+    if (delivery) {
+      delivery_option = 1
     }
-    
+
     filtered_cart = _.filter(cart, { clazz: 'product' });
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
     const obj = new MakeOrderRequestObj(
@@ -895,7 +919,7 @@ export default class Checkout extends React.Component {
       latitude,
       longitude,
       delivery_option,
-      selected_address.id
+      address_id
     );
     obj.setUrlId(selectedShop.id);
     dispatch(
@@ -996,7 +1020,7 @@ export default class Checkout extends React.Component {
         }
 
         if (pick_up_status == null) {
-          this.tooglePickup();
+          this.toggleDeliveryTimeSelector();
           return;
         } else {
           if (selectedShop != null) {
@@ -1068,13 +1092,13 @@ export default class Checkout extends React.Component {
     var finalheight = pickup_view_height - content - BUTTONBOTTOMPADDING;
 
     if (isPickupToogle) {
-      this.setState({ isPickupToogle: false }, function () {
+      this.setState({ isPickupToogle: false, isDeliveryTimeSelectorToggle: false }, function () {
         Animated.spring(this.movePickAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
       });
     } else {
-      this.setState({ isPickupToogle: true }, function () {
+      this.setState({ isPickupToogle: true, isDeliveryTimeSelectorToggle: true }, function () {
         Animated.spring(this.movePickAnimation, {
           toValue: { x: 0, y: 52 * alpha }
         }).start();
@@ -1089,7 +1113,7 @@ export default class Checkout extends React.Component {
 
     this.setState(
       { isDeliveryTimeSelectorToggle: !isDeliveryTimeSelectorToggle },
-      function() {
+      function () {
         Animated.spring(this.deliveryTimeSelectorAnimation, {
           toValue: { x: 0, y: y() }
         }).start();
@@ -1634,13 +1658,14 @@ export default class Checkout extends React.Component {
   renderPickupTime() {
     const { pick_up_status } = this.state;
     let { delivery } = this.props;
+    console.log('this.state.pick_up_time', this.state.pick_up_time)
     let pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
             onPress={() =>
-              delivery ? this.toggleDeliveryTimeSelector() : this.tooglePickup()
+              this.toggleDeliveryTimeSelector()
             }
             style={styles.voucherButton}
           >
@@ -1668,7 +1693,7 @@ export default class Checkout extends React.Component {
                 </View>
                 <Text style={styles.productVoucherText}>
                   {this.state.pick_up_time != null
-                    ? Moment(this.state.pick_up_time, 'HH:mm').format('LT')
+                    ? Moment(this.state.pick_up_time).format("MMMM Do, h:mm a")
                     : 'Please select'}
                 </Text>
                 <Image
@@ -2165,21 +2190,22 @@ export default class Checkout extends React.Component {
     <DeliveryTimeSelector
       styles={styles}
       state={this.state}
+      delivery={this.props.delivery}
       animation={this.deliveryTimeSelectorAnimation}
       toggleDelivery={this.toggleDeliveryTimeSelector}
       onSelectOrderNow={() => this.onSelectOrderNow()}
       onSelectOrderLater={() => this.onSelectPickLater()}
       onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
-      onConfirmDeliveryTimeSchedule={() => this.onConfirmDeliveryTimeSchedule()}
+      onConfirmDeliverySchedule={() => this.onConfirmTimePicker()}
       onHourValueChange={() => this.onHourValueChange()}
       onMinuteValueChange={() => this.onMinuteValueChange()}
     />
   );
 
-  onConfirmDeliveryTimeSchedule = () => {
-    // WIP add confirmation here
-    console.log('order time schedule ', this.state.order_schedule);
-  };
+  // onConfirmDeliveryTimeSchedule = () => {
+  //   // WIP add confirmation here
+  //   console.log('order time schedule ', this.state.selected_date, this.state.selected_hour, this.state.selected_minute);
+  // };
 
   renderCheckoutReceipt() {
     const { vouchers_to_use, final_price, selected_address } = this.state;
@@ -2197,8 +2223,8 @@ export default class Checkout extends React.Component {
     );
     let defaultAddress = array
       ? shippingAddress.find((item) => {
-          return item.primary == true;
-        })
+        return item.primary == true;
+      })
       : undefined;
     return (
       <View style={styles.orderReceiptView}>
