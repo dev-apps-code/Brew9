@@ -287,7 +287,6 @@ export default {
           authtoken,
           object,
         )
-        console.log("Loading Profile")
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))

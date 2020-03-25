@@ -129,11 +129,10 @@ export default class AddShippingAddress extends React.Component {
     loadUpdateProfile(formData) {
         const { dispatch, currentMember, navigation } = this.props
         const callback = eventObject => {
-            console.log('loadUpdateProfile', eventObject)
             if (eventObject.success) {
-
+                navigation.navigate("ShippingAddress")
             } else {
-                this.refs.toast.show("Something Happen", 500)
+                this.refs.toast.show(eventObject.message, 500)
 
             }
         }
@@ -191,7 +190,6 @@ export default class AddShippingAddress extends React.Component {
     }
 
     returnData(info) {
-        console.log(info)
         this.setState({
             address: info.address,
             city: info.city,

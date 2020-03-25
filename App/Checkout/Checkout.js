@@ -283,8 +283,7 @@ export default class Checkout extends React.Component {
   }
 
   onHourValueChange = (option, index) => {
-    console.log('option', option)
-    console.log('index', index)
+   
     if (option == '') {
       this.setState(
         {
@@ -446,7 +445,6 @@ export default class Checkout extends React.Component {
         }
       );
     }
-    console.log('pick up', this.state.pick_up_time, this.state.pick_up_status)
   }
 
   // setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
@@ -1667,7 +1665,6 @@ export default class Checkout extends React.Component {
   renderPickupTime() {
     const { pick_up_status } = this.state;
     let { delivery } = this.props;
-    console.log('this.state.pick_up_time', this.state.pick_up_time)
     let pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     return (
       <View style={styles.drinksViewWrapper}>

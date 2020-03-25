@@ -72,7 +72,6 @@ export default class ShippingAddress extends React.Component {
         let { dispatch, currentMember } = this.props
         this.setState({ loading: true })
         const callback = eventObject => {
-            console.log('loadShippingAddress', eventObject)
             this.setState({
                 loading: false,
             })
