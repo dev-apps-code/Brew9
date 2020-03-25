@@ -152,20 +152,21 @@ export default class ShippingArea extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-
-        <Text style={styles.mainTitle}>Delivery Address</Text>
-        <View style={styles.addAddressForm}>
-          <Text style={styles.header}>Please Select your area</Text>
-          {this.state.loading ? <AnimationLoading /> : <View style={styles.placesWrapperView}>
-            <FlatList
-              renderItem={({ item }) => this.renderPlaces(item)}
-              data={this.state.area}
-              keyExtractor={(item, index) => index.toString()}
-              numColumns={3}
-              key={"THREE COLUMN"}
-            />
-          </View>}
-        </View>
+        {this.state.loading ? <AnimationLoading /> : <View>
+          <Text style={styles.mainTitle}>Delivery Address</Text>
+          <View style={styles.addAddressForm}>
+            <Text style={styles.header}>Please Select your area</Text>
+            <View style={styles.placesWrapperView}>
+              <FlatList
+                renderItem={({ item }) => this.renderPlaces(item)}
+                data={this.state.area}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={3}
+                key={"THREE COLUMN"}
+              />
+            </View>
+          </View>
+        </View>}
       </View>
     );
   }

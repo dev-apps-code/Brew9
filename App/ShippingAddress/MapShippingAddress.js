@@ -212,14 +212,15 @@ export default class MapShippingAddress extends React.Component {
                         {this.renderForm("City", "BSB", false, (text) => this.onChangeCity(text))}
                         {this.renderForm("Country", "Brunei", false, (text) => this.onChangeCountry(text))}
 
-                        <TouchableOpacity
-                            onPress={() => this.onSavePressed()}
-                            style={styles.saveButton}>
-                            <Text
-                                style={styles.saveButtonText}>SAVE</Text>
-                        </TouchableOpacity>
+
                     </View>
                 </ScrollView>
+                <TouchableOpacity
+                    onPress={() => this.onSavePressed()}
+                    style={styles.saveButton}>
+                    <Text
+                        style={styles.saveButtonText}>SAVE</Text>
+                </TouchableOpacity>
                 <Toast ref="toast" textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 
             </View>
@@ -287,15 +288,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignSelf: "center",
         backgroundColor: PRIMARY_COLOR,
-        // position: "absolute",
-        // left: 0 * alpha,
-        // right: 0 * alpha,
+        position: "absolute",
+        left: 0 * alpha,
+        right: 0 * alpha,
         marginHorizontal: 20 * alpha,
-        // bottom: BUTTONBOTTOMPADDING,
+        bottom: BUTTONBOTTOMPADDING,
         height: 47 * alpha,
         flexDirection: "row",
         alignItems: "center",
-        flex: 1
     },
     saveButtonText: {
         color: "white",
