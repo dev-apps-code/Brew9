@@ -170,6 +170,13 @@ export default class Checkout extends React.Component {
     ) {
       this.check_promotion_trigger();
     }
+    if (
+      prevProps.currentMember !== this.props.currentMember
+    ) {
+      this.setState({
+        selected_address: this.props.currentMember.defaultAddress,
+      })
+    }
   }
 
   setTimePickerDefault() {
