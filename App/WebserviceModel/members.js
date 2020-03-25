@@ -287,7 +287,6 @@ export default {
           authtoken,
           object,
         )
-        console.log("Loading Profile")
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
           yield put(createAction('updateUnclaimedMission')(eventObject.result.unclaimed_mission_count))
@@ -616,7 +615,8 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result['list of addresses']))
 
         }
         typeof callback === 'function' && callback(eventObject)
@@ -635,7 +635,8 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result['list of addresses']))
 
         }
         typeof callback === 'function' && callback(eventObject)
@@ -654,7 +655,8 @@ export default {
         )
         const eventObject = new EventObject(json)
         if (eventObject.success == true) {
-          yield put(createAction('saveCurrentShippingAddress')(eventObject.result))
+          yield put(createAction('saveCurrentUser')(eventObject.result))
+          yield put(createAction('saveCurrentShippingAddress')(eventObject.result['list of addresses']))
 
         }
         typeof callback === 'function' && callback(eventObject)

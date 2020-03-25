@@ -142,26 +142,9 @@ export default class ShippingAddress extends React.Component {
         const callback = eventObject => {
 
             if (eventObject.success) {
+                navigation.navigate("Checkout")
 
-                const callback = eventObject => {
-                    if (eventObject.success) {
-                        navigation.navigate("Checkout")
-                    }
-                }
-                AsyncStorage.getItem("notification_key", (err, result) => {
-                    var last_note = 0
-                    if (result != null) {
-                        last_note = result
-                    }
-                    const obj = new CurrentStatusRequestObject(last_note)
-                    obj.setUrlId(getMemberIdForApi(currentMember))
-                    dispatch(
-                        createAction('members/loadCurrentStatus')({
-                            object: obj,
-                            callback,
-                        })
-                    )
-                })
+
             } else {
                 this.refs.toast.show("Something Happen", 500)
 
