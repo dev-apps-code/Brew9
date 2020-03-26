@@ -181,7 +181,7 @@ export default class Checkout extends React.Component {
     const { selectedShop } = this.props;
     var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
-    var time_now = Moment(date);
+    var time_now = date || Moment();
 
     var hour = time_now.hours();
     var min = time_now.minutes();
@@ -279,6 +279,9 @@ export default class Checkout extends React.Component {
       });
     }
   }
+
+  // add 0 before hr if hr is single digit
+  formatSelectedHour = (hr) => (hr < 10 ? `0${hr}` : hr);
 
   onHourValueChange = (option, index) => {
     if (option == '') {
@@ -416,36 +419,22 @@ export default class Checkout extends React.Component {
     var now = new Moment().format('HH:mm');
     var selectorTime = `${selected_hour}:${selected_minute}`;
     if (pick_up_status == 'Order Now') {
-      this.setState(
-        {
-          pick_up_time: `${selected_date} ${now}`
-        },
-        function() {
-          this.toggleDeliveryTimeSelector();
-        }
-      );
+      var pick_up_time = `${selected_date} ${now}`;
+      this.setState({ pick_up_time });
+      this.toggleDeliveryTimeSelector();
     } else if (pick_up_status == 'Pick Later') {
       if (now < selectorTime) {
-        this.setState(
-          {
-            pick_up_time: `${selected_date} ${selected_hour}:${selected_minute}`
-          },
-          function() {
-            this.toggleDeliveryTimeSelector();
-          }
-        );
+        var pick_up_time = `${selected_date} ${selected_hour}:${selected_minute}`;
+        this.setState({ pick_up_time });
+        this.toggleDeliveryTimeSelector();
       } else {
         this.refs.toast.show('Pick up time is not available', TOAST_DURATION);
       }
     } else if (pick_up_status == 'Pick Tomorrow') {
-      this.setState(
-        {
-          pick_up_time: `${selected_date} ${selected_hour}:${selected_minute}`
-        },
-        function() {
-          this.toggleDeliveryTimeSelector();
-        }
-      );
+      var formatedHour = this.formatSelectedHour(selected_hour);
+      var pick_up_time = `${selected_date} ${formatedHour}:${selected_minute}`;
+      this.setState({ pick_up_time });
+      this.toggleDeliveryTimeSelector();
     }
   }
 
@@ -462,12 +451,13 @@ export default class Checkout extends React.Component {
 
   onSelectOrderTomorrow = () => {
     const { selectedShop } = this.props;
-    var tomorrow = Moment(selectedShop.opening_hour.start_time).add(1, 'days');
+    var tomorrow = Moment().add(1, 'days');
+    console.log('tomorrow ', tomorrow);
     var selected_date = tomorrow.format('YYYY-MM-DD');
     var pick_up_status = 'Pick Tomorrow'; // What if delivery?
 
-    // tomorrow.startOf()
-    this.setTimePickerDefault(tomorrow);
+    console.log('selected_date ', selected_date);
+    this.setTimePickerDefault(tomorrow.startOf('day'));
     this.setState({ pick_up_status, selected_date });
   };
 
