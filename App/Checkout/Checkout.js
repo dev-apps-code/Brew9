@@ -183,17 +183,6 @@ export default class Checkout extends React.Component {
     var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
     var time_now = Moment(date);
 
-    // var d = Moment();
-    // var [hours, minutes] = [d.getHours(), d.getMinutes()];
-
-    // console.log('selectedShop ', selectedShop);
-
-    // console.log('d ', d);
-    // console.log(`new date time ${hours}:${minutes}`);
-    console.log('date ', date);
-    console.log('time_now ', time_now);
-    console.log('opening ', selectedShop.opening_hour.start_time);
-
     var hour = time_now.hours();
     var min = time_now.minutes();
     var minute_array = ['00', '15', '30', '45'];
@@ -239,8 +228,6 @@ export default class Checkout extends React.Component {
     if (hour_array.length < 3) {
       hour_array.length = 3;
     }
-
-    console.log('hour_array ', hour_array);
 
     this.setState({
       selected_hour: first_hour,
@@ -492,7 +479,7 @@ export default class Checkout extends React.Component {
     var currentDate = Moment();
     var selected_date = currentDate.format('YYYY-MM-DD');
     var pick_up_status = 'Order Now';
-    
+
     this.setTimePickerDefault();
     if (opening.hour() <= time_now.hour()) {
       if (opening.hour() == time_now.hour()) {
