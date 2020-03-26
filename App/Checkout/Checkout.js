@@ -479,7 +479,7 @@ export default class Checkout extends React.Component {
           console.log('not available');
         }
       } else {
-        this.setState({ pick_up_status });
+        this.setState({ pick_up_status, selected_date });
       }
     }
   }
