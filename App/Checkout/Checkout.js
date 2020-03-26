@@ -115,12 +115,12 @@ export default class Checkout extends React.Component {
       isPaymentToggle: false,
       payment_view_height: 0 * alpha,
       selected_payment: '',
-      pick_up_time: Moment(new Date()).format("YYYY-MM-DD HH:mm"),
+      pick_up_time: Moment(new Date()).format('YYYY-MM-DD HH:mm'),
       pick_up_status: 'Order Now',
       selected_hour: '00',
       selected_minute: '00',
       selected_address: currentMember.defaultAddress,
-      selected_date: Moment(new Date()).format("YYYY-MM-DD"),
+      selected_date: Moment(new Date()).format('YYYY-MM-DD'),
       hour_range: [],
       minute_range: [],
       isPickupToogle: false,
@@ -153,7 +153,7 @@ export default class Checkout extends React.Component {
         valid_vouchers: [],
         deliveryFee: 0
       },
-      function () {
+      function() {
         this.loadValidVouchers();
         {
           delivery && this.loadDeliveryFee(this.state.final_price);
@@ -170,20 +170,29 @@ export default class Checkout extends React.Component {
     ) {
       this.check_promotion_trigger();
     }
-    if (
-      prevProps.currentMember !== this.props.currentMember
-    ) {
+    if (prevProps.currentMember !== this.props.currentMember) {
       this.setState({
-        selected_address: this.props.currentMember.defaultAddress,
-      })
+        selected_address: this.props.currentMember.defaultAddress
+      });
     }
   }
 
-  setTimePickerDefault() {
+  setTimePickerDefault(date) {
     const { selectedShop } = this.props;
     var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
-    var time_now = Moment(new Date(), 'h:mm');
+    var time_now = Moment(date);
+
+    // var d = Moment();
+    // var [hours, minutes] = [d.getHours(), d.getMinutes()];
+
+    // console.log('selectedShop ', selectedShop);
+
+    // console.log('d ', d);
+    // console.log(`new date time ${hours}:${minutes}`);
+    console.log('date ', date);
+    console.log('time_now ', time_now);
+    console.log('opening ', selectedShop.opening_hour.start_time);
 
     var hour = time_now.hours();
     var min = time_now.minutes();
@@ -193,20 +202,20 @@ export default class Checkout extends React.Component {
       hour > opening.hours() && min > 45
         ? hour + 1
         : hour > opening.hours()
-          ? hour
-          : opening.hours();
+        ? hour
+        : opening.hours();
     var last_hour = closing.hours();
 
     var hour_array = _.range(first_hour, last_hour + 1);
 
     var selected_minute = '';
     if (hour >= opening.hours() && min < 45) {
-      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
         return parseInt(o) > min;
       });
     }
     if (hour >= closing.hours()) {
-      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
         return parseInt(o) <= closing.minutes();
       });
     }
@@ -222,14 +231,16 @@ export default class Checkout extends React.Component {
       hour >= opening.hours() && min > 45
         ? hour + 1
         : hour > opening.hours()
-          ? hour
-          : opening.hours();
+        ? hour
+        : opening.hours();
     var last_hour = closing.hours();
 
     var hour_array = _.range(first_hour, last_hour + 1);
     if (hour_array.length < 3) {
       hour_array.length = 3;
     }
+
+    console.log('hour_array ', hour_array);
 
     this.setState({
       selected_hour: first_hour,
@@ -251,7 +262,7 @@ export default class Checkout extends React.Component {
     var min = time_now.minutes();
 
     if (hour == option) {
-      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
         let minOption = parseInt(o);
         return minOption > min;
       });
@@ -266,7 +277,7 @@ export default class Checkout extends React.Component {
       var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
 
       if (option == closing.hours()) {
-        minute_array = _.filter(['00', '15', '30', '45'], function (o) {
+        minute_array = _.filter(['00', '15', '30', '45'], function(o) {
           let minOption = parseInt(o);
           return minOption <= closing.minutes();
         });
@@ -283,13 +294,12 @@ export default class Checkout extends React.Component {
   }
 
   onHourValueChange = (option, index) => {
-   
     if (option == '') {
       this.setState(
         {
           selected_hour_index: index - 1
         },
-        function () {
+        function() {
           this.sphour.scrollToIndex(this.state.selected_hour_index);
         }
       );
@@ -317,7 +327,7 @@ export default class Checkout extends React.Component {
             minute_range: ['00', '15', '30', '45'],
             selected_hour: hour_range[selected_hour_index + 1]
           },
-          function () {
+          function() {
             this.spminute.scrollToIndex(0);
           }
         );
@@ -370,7 +380,7 @@ export default class Checkout extends React.Component {
           });
           var valid_voucher_counts = _.filter(
             this.state.valid_vouchers,
-            function (o) {
+            function(o) {
               if (o.is_valid == true) return o;
             }
           ).length;
@@ -410,7 +420,12 @@ export default class Checkout extends React.Component {
   };
 
   onConfirmTimePicker() {
-    const { selected_hour, selected_minute, pick_up_status, selected_date } = this.state;
+    const {
+      selected_hour,
+      selected_minute,
+      pick_up_status,
+      selected_date
+    } = this.state;
     var now = new Moment().format('HH:mm');
     var selectorTime = `${selected_hour}:${selected_minute}`;
     if (pick_up_status == 'Order Now') {
@@ -418,7 +433,7 @@ export default class Checkout extends React.Component {
         {
           pick_up_time: `${selected_date} ${now}`
         },
-        function () {
+        function() {
           this.toggleDeliveryTimeSelector();
         }
       );
@@ -428,7 +443,7 @@ export default class Checkout extends React.Component {
           {
             pick_up_time: `${selected_date} ${selected_hour}:${selected_minute}`
           },
-          function () {
+          function() {
             this.toggleDeliveryTimeSelector();
           }
         );
@@ -440,7 +455,7 @@ export default class Checkout extends React.Component {
         {
           pick_up_time: `${selected_date} ${selected_hour}:${selected_minute}`
         },
-        function () {
+        function() {
           this.toggleDeliveryTimeSelector();
         }
       );
@@ -450,49 +465,49 @@ export default class Checkout extends React.Component {
   // setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
 
   onSelectPickLater() {
-    var currentDate = Moment(new Date()).format('YYYY-MM-DD')
-    this.setState({
-      pick_up_status: `Pick Later`,
-      selected_date: currentDate
-    });
+    var currentDate = Moment();
+    var selected_date = currentDate.format('YYYY-MM-DD');
+    var pick_up_status = 'Pick Later';
+
+    this.setTimePickerDefault();
+    this.setState({ pick_up_status, selected_date });
   }
 
   onSelectOrderTomorrow = () => {
-    var currentDate = new Date()
-    // let tomorrow = Moment(currentDate).add(1, 'days');
-    let tomorrow = Moment(currentDate).add(1, 'days').format('YYYY-MM-DD')
-    this.setState({
-      pick_up_status: `Pick Tomorrow`,
-      selected_date: tomorrow
-    });
-    // this.setOrderSchedule('tomorrow');
-  }
+    const { selectedShop } = this.props;
+    var tomorrow = Moment(selectedShop.opening_hour.start_time).add(1, 'days');
+    var selected_date = tomorrow.format('YYYY-MM-DD');
+    var pick_up_status = 'Pick Tomorrow'; // What if delivery?
+
+    // tomorrow.startOf()
+    this.setTimePickerDefault(tomorrow);
+    this.setState({ pick_up_status, selected_date });
+  };
 
   onSelectOrderNow() {
     const { selectedShop } = this.props;
     var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
     var time_now = Moment(new Date(), 'h:mm');
-    var currentDate = Moment(new Date()).format('YYYY-MM-DD')
+    var currentDate = Moment();
+    var selected_date = currentDate.format('YYYY-MM-DD');
+    var pick_up_status = 'Order Now';
+    
+    this.setTimePickerDefault();
     if (opening.hour() <= time_now.hour()) {
       if (opening.hour() == time_now.hour()) {
         if (opening.minutes() <= time_now.minutes()) {
-          this.setState({
-            pick_up_status: `Order Now`,
-            selected_date: currentDate
-          });
+          this.setState({ pick_up_status, selected_date });
         } else {
           console.log('not available');
         }
       } else {
-        this.setState({
-          pick_up_status: `Order Now`
-        });
+        this.setState({ pick_up_status });
       }
     }
   }
 
-  onBranchButtonPressed = () => { };
+  onBranchButtonPressed = () => {};
 
   onLocationButtonPressed = () => {
     const { navigate } = this.props.navigation;
@@ -514,7 +529,7 @@ export default class Checkout extends React.Component {
     });
   };
 
-  onAutoFillPressed = () => { };
+  onAutoFillPressed = () => {};
 
   onVoucherButtonPressed = () => {
     const { navigate } = this.props.navigation;
@@ -552,7 +567,7 @@ export default class Checkout extends React.Component {
       {
         vouchers_to_use: new_voucher_list
       },
-      function () {
+      function() {
         this.calculateVoucherDiscount(new_voucher_list);
       }
     );
@@ -676,7 +691,7 @@ export default class Checkout extends React.Component {
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function () {
+      this.setState({ isCartToggle: false }, function() {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
@@ -732,7 +747,7 @@ export default class Checkout extends React.Component {
     }
     this.setState(
       { discount: discount, final_price: f_price.toFixed(2) },
-      function () {
+      function() {
         if (selected_payment == 'credit_card' && f_price <= 0) {
           this.setState({ selected_payment: '' });
         }
@@ -837,13 +852,13 @@ export default class Checkout extends React.Component {
       pick_up_time,
       selected_address
     } = this.state;
-    let address_id = selected_address == null ? null : selected_address.id
+    let address_id = selected_address == null ? null : selected_address.id;
     this.setState({ loading: true });
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (selected_payment == 'credits') {
           setTimeout(
-            function () {
+            function() {
               this.clearCart();
               this.setState({
                 loading: false
@@ -853,7 +868,7 @@ export default class Checkout extends React.Component {
           );
         } else if (selected_payment == 'counter') {
           setTimeout(
-            function () {
+            function() {
               this.clearCart();
               this.setState({
                 loading: false
@@ -908,9 +923,9 @@ export default class Checkout extends React.Component {
       longitude = location.coords.longitude;
     }
 
-    delivery_option = 0 // 0 - Pickup 1 - Delivery
+    delivery_option = 0; // 0 - Pickup 1 - Delivery
     if (delivery) {
-      delivery_option = 1
+      delivery_option = 1;
     }
 
     filtered_cart = _.filter(cart, { clazz: 'product' });
@@ -1002,7 +1017,7 @@ export default class Checkout extends React.Component {
             if (selectedShop.response_message != undefined) {
               insufficient_response = _.find(
                 selectedShop.response_message,
-                function (obj) {
+                function(obj) {
                   return obj.key === 'Popup - Insufficient credit';
                 }
               );
@@ -1099,17 +1114,23 @@ export default class Checkout extends React.Component {
     var finalheight = pickup_view_height - content - BUTTONBOTTOMPADDING;
 
     if (isPickupToogle) {
-      this.setState({ isPickupToogle: false, isDeliveryTimeSelectorToggle: false }, function () {
-        Animated.spring(this.movePickAnimation, {
-          toValue: { x: 0, y: windowHeight }
-        }).start();
-      });
+      this.setState(
+        { isPickupToogle: false, isDeliveryTimeSelectorToggle: false },
+        function() {
+          Animated.spring(this.movePickAnimation, {
+            toValue: { x: 0, y: windowHeight }
+          }).start();
+        }
+      );
     } else {
-      this.setState({ isPickupToogle: true, isDeliveryTimeSelectorToggle: true }, function () {
-        Animated.spring(this.movePickAnimation, {
-          toValue: { x: 0, y: 52 * alpha }
-        }).start();
-      });
+      this.setState(
+        { isPickupToogle: true, isDeliveryTimeSelectorToggle: true },
+        function() {
+          Animated.spring(this.movePickAnimation, {
+            toValue: { x: 0, y: 52 * alpha }
+          }).start();
+        }
+      );
     }
   };
 
@@ -1120,7 +1141,7 @@ export default class Checkout extends React.Component {
 
     this.setState(
       { isDeliveryTimeSelectorToggle: !isDeliveryTimeSelectorToggle },
-      function () {
+      function() {
         Animated.spring(this.deliveryTimeSelectorAnimation, {
           toValue: { x: 0, y: y() }
         }).start();
@@ -1135,13 +1156,13 @@ export default class Checkout extends React.Component {
     var content = 247 * alpha;
 
     if (isPaymentToggle) {
-      this.setState({ isPaymentToggle: false }, function () {
+      this.setState({ isPaymentToggle: false }, function() {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
       });
     } else {
-      this.setState({ isPaymentToggle: true }, function () {
+      this.setState({ isPaymentToggle: true }, function() {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: 52 * alpha }
         }).start();
@@ -1238,8 +1259,8 @@ export default class Checkout extends React.Component {
                     {this.state.selected_payment == 'credits' ? (
                       <View style={styles.selectTwoView} />
                     ) : (
-                        <View style={styles.selectView} />
-                      )}
+                      <View style={styles.selectView} />
+                    )}
                   </View>
                 </View>
 
@@ -1376,8 +1397,8 @@ export default class Checkout extends React.Component {
                     {this.state.selected_payment == 'credit_card' ? (
                       <View style={styles.selectTwoView} />
                     ) : (
-                        <View style={styles.selectView} />
-                      )}
+                      <View style={styles.selectView} />
+                    )}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -1461,8 +1482,8 @@ export default class Checkout extends React.Component {
                     {this.state.selected_payment == 'counter' ? (
                       <View style={styles.selectTwoView} />
                     ) : (
-                        <View style={styles.selectView} />
-                      )}
+                      <View style={styles.selectView} />
+                    )}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -1522,8 +1543,8 @@ export default class Checkout extends React.Component {
                 discount_value
               ).toFixed(2)}`}</Text>
             ) : (
-                undefined
-              )}
+              undefined
+            )}
 
             <TouchableOpacity
               onPress={() => this.onCancelVoucher(item)}
@@ -1544,7 +1565,7 @@ export default class Checkout extends React.Component {
       );
     });
 
-    var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (o) {
+    var valid_voucher_counts = _.filter(this.state.valid_vouchers, function(o) {
       if (o.is_valid == true) return o;
     }).length;
     return (
@@ -1553,7 +1574,7 @@ export default class Checkout extends React.Component {
           <TouchableOpacity
             onPress={
               this.state.valid_vouchers != null &&
-                this.state.valid_vouchers.length > 0
+              this.state.valid_vouchers.length > 0
                 ? () => this.onVoucherButtonPressed()
                 : () => null
             }
@@ -1576,7 +1597,7 @@ export default class Checkout extends React.Component {
                 <Text
                   style={
                     this.state.valid_vouchers != null &&
-                      this.state.valid_vouchers.length > 0
+                    this.state.valid_vouchers.length > 0
                       ? styles.productVoucherText
                       : styles.productVoucherDisableText
                   }
@@ -1643,12 +1664,12 @@ export default class Checkout extends React.Component {
                   {this.state.selected_payment == ''
                     ? 'Please select'
                     : this.state.selected_payment == 'credits'
-                      ? `Wallet ${this.props.members.currency}${credits}`
-                      : this.state.selected_payment == 'counter'
-                        ? delivery
-                          ? 'Cash On Delivery'
-                          : 'Pay In Store'
-                        : 'Credit Card'}
+                    ? `Wallet ${this.props.members.currency}${credits}`
+                    : this.state.selected_payment == 'counter'
+                    ? delivery
+                      ? 'Cash On Delivery'
+                      : 'Pay In Store'
+                    : 'Credit Card'}
                 </Text>
                 <Image
                   source={require('./../../assets/images/next.png')}
@@ -1670,9 +1691,7 @@ export default class Checkout extends React.Component {
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
-            onPress={() =>
-              this.toggleDeliveryTimeSelector()
-            }
+            onPress={() => this.toggleDeliveryTimeSelector()}
             style={styles.voucherButton}
           >
             <View style={styles.drinksView}>
@@ -1699,7 +1718,7 @@ export default class Checkout extends React.Component {
                 </View>
                 <Text style={styles.productVoucherText}>
                   {this.state.pick_up_time != null
-                    ? Moment(this.state.pick_up_time).format("MMMM Do, h:mm a")
+                    ? Moment(this.state.pick_up_time).format('MMMM Do, h:mm a')
                     : 'Please select'}
                 </Text>
                 <Image
@@ -1725,15 +1744,15 @@ export default class Checkout extends React.Component {
           : item.price != undefined &&
             item.price > 0 &&
             item.clazz == 'promotion'
-            ? `-$${parseFloat(item.price).toFixed(2)}`
-            : item.type != undefined && item.type == 'Free Items and vouchers'
-              ? 'Free'
-              : '';
+          ? `-$${parseFloat(item.price).toFixed(2)}`
+          : item.type != undefined && item.type == 'Free Items and vouchers'
+          ? 'Free'
+          : '';
       let filtered =
         item.selected_variants != null
-          ? item.selected_variants.filter(function (el) {
-            return el;
-          })
+          ? item.selected_variants.filter(function(el) {
+              return el;
+            })
           : [];
 
       let variant_array = filtered.map((a) => a.value);
@@ -1763,8 +1782,8 @@ export default class Checkout extends React.Component {
                   {variant_array.join(', ')}
                 </Text>
               ) : (
-                  <View style={styles.spacer} />
-                )}
+                <View style={styles.spacer} />
+              )}
             </View>
             <Text style={styles.productQuantityText}>
               {item.quantity != null &&
@@ -1884,8 +1903,8 @@ export default class Checkout extends React.Component {
                     {this.state.pick_up_status == 'Order Now' ? (
                       <View style={styles.selectTwoView} />
                     ) : (
-                        <View style={styles.selectView} />
-                      )}
+                      <View style={styles.selectView} />
+                    )}
                   </View>
                 </View>
 
@@ -1976,8 +1995,8 @@ export default class Checkout extends React.Component {
                     {this.state.pick_up_status == 'Pick Later' ? (
                       <View style={styles.selectTwoView} />
                     ) : (
-                        <View style={styles.selectView} />
-                      )}
+                      <View style={styles.selectView} />
+                    )}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -2108,9 +2127,9 @@ export default class Checkout extends React.Component {
   renderDeliveryAddress = (address) => {
     let { deliveryFee, subTotal_price } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
-    let non_negative_subTotal_price = parseFloat(Math.max(0, subTotal_price)).toFixed(
-      2
-    );
+    let non_negative_subTotal_price = parseFloat(
+      Math.max(0, subTotal_price)
+    ).toFixed(2);
 
     return (
       <View style={styles.deliveryAddressView}>
@@ -2165,15 +2184,14 @@ export default class Checkout extends React.Component {
           >
             <Text style={styles.productNameText}>Subtotal</Text>
             <Text style={styles.productVoucherText}>
-              {`$${parseFloat(
-                non_negative_subTotal_price
-              ).toFixed(2)}` || '$ 0.00'}
+              {`$${parseFloat(non_negative_subTotal_price).toFixed(2)}` ||
+                '$ 0.00'}
             </Text>
           </View>
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
               // paddingHorizontal: 10 * alpha
             }}
           >
@@ -2229,8 +2247,8 @@ export default class Checkout extends React.Component {
     );
     let defaultAddress = array
       ? shippingAddress.find((item) => {
-        return item.primary == true;
-      })
+          return item.primary == true;
+        })
       : undefined;
     return (
       <View style={styles.orderReceiptView}>

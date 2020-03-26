@@ -13,11 +13,8 @@ import { alpha, windowWidth } from '../Common/size';
 import {
   DEFAULT_GREY_BACKGROUND,
   PRIMARY_COLOR,
-  LIGHT_GREY,
-  TITLE_FONT,
-  NON_TITLE_FONT
+  TITLE_FONT
 } from '../Common/common_style';
-import { month } from '../Utils/date';
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
 
@@ -35,12 +32,11 @@ const DeliveryTimeSelector = ({
   onConfirmDeliverySchedule,
   delivery
 }) => {
-  let { minute_range, hour_range } = state;
-  const [isToday, setIsToday] = useState(true);
+  const { minute_range, hour_range } = state;
   const [selected, setSelected] = useState(0);
-  let today = new Date();
-  let tomorrow = new Date();
-  let title = delivery ? "Delivery" : "Pick Up"
+
+  const title = delivery ? 'Delivery' : 'Pick Up';
+
   return (
     <Animated.View style={animation.getLayout()}>
       <View style={[styles.popOutPickupView, { flex: 1, height: 350 * alpha }]}>
@@ -80,15 +76,17 @@ const DeliveryTimeSelector = ({
               }}
             />
 
-            {delivery && <CustomCard
-              cardStyle={componentStyle.tomorrowCard}
-              isActive={selected == 2}
-              text="Tomorrow"
-              press={() => {
-                setSelected(2);
-                onSelectOrderTomorrow();
-              }}
-            />}
+            {delivery && (
+              <CustomCard
+                cardStyle={componentStyle.tomorrowCard}
+                isActive={selected == 2}
+                text="Tomorrow"
+                press={() => {
+                  setSelected(2);
+                  onSelectOrderTomorrow();
+                }}
+              />
+            )}
           </ScrollView>
         </View>
         {/* <View style={styles.menuRowLine2View} /> */}
