@@ -33,7 +33,7 @@ const DeliveryTimeSelector = ({
   delivery
 }) => {
   const { minute_range, hour_range } = state;
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(null);
 
   const title = delivery ? 'Delivery' : 'Pick Up';
 
