@@ -132,6 +132,7 @@ export default class Checkout extends React.Component {
       paynow_clicked: false,
       subTotal_price: discount_cart_total,
       final_price: discount_cart_total,
+      delivery_final_price: discount_cart_total,
       visible: false,
       applyCode: false
     };
@@ -333,13 +334,14 @@ export default class Checkout extends React.Component {
   loadDeliveryFee = (total) => {
     const { dispatch, selectedShop, currentMember } = this.props;
     const callback = (eventObject) => {
+      console.log('loadDeliveryFee', eventObject);
       if (eventObject.success) {
         let deliveryFee = parseFloat(eventObject.result.delivery_fee);
         let final_price = parseFloat(total) + deliveryFee;
 
         this.setState({
           deliveryFee: deliveryFee,
-          delivery_description: eventObject.result.delivery_description,
+          delivery_description: eventObject.result.delivery_fee_description,
           final_price: final_price
         });
       }
@@ -697,7 +699,12 @@ export default class Checkout extends React.Component {
   };
 
   calculateVoucherDiscount(vouchers_to_use) {
-    const { discount_cart_total, cart_total, delivery } = this.props;
+    const {
+      delivery_final_price,
+      discount_cart_total,
+      cart_total,
+      delivery
+    } = this.props;
     const { selected_payment } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
@@ -720,8 +727,8 @@ export default class Checkout extends React.Component {
         }
       }
     }
-    const f_price = discount_cart_total - discount;
-   
+    const f_price = delivery_final_price - discount;
+
     this.setState(
       { discount: discount, final_price: f_price.toFixed(2) },
       function() {
@@ -2202,31 +2209,12 @@ export default class Checkout extends React.Component {
       onMinuteValueChange={this.onMinuteValueChange}
     />
   );
-
-  // onConfirmDeliveryTimeSchedule = () => {
-  //   // WIP add confirmation here
-  //   console.log('order time schedule ', this.state.selected_date, this.state.selected_hour, this.state.selected_minute);
-  // };
-
   renderCheckoutReceipt() {
     const { vouchers_to_use, final_price, selected_address } = this.state;
-    let {
-      currentMember,
-      selectedShop,
-      cart,
-      promotions,
-      delivery,
-      shippingAddress
-    } = this.props;
-    let array = Array.isArray(shippingAddress);
+    let { selectedShop, cart, promotions, delivery } = this.props;
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
       2
     );
-    let defaultAddress = array
-      ? shippingAddress.find((item) => {
-          return item.primary == true;
-        })
-      : undefined;
     return (
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
@@ -3439,7 +3427,7 @@ const styles = StyleSheet.create({
     marginLeft: 18 * alpha,
     marginRight: 18 * alpha,
     marginTop: 13 * alpha,
-    marginBottom: 20 * alpha,
+    marginBottom: 50 * alpha,
     borderRadius: 14 * alpha,
     flex: 1
   },
