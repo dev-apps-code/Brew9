@@ -727,7 +727,7 @@ export default class Checkout extends React.Component {
         }
       }
     }
-    const f_price = delivery_final_price - discount;
+    const f_price = discount_cart_total - discount;
 
     this.setState(
       { discount: discount, final_price: f_price.toFixed(2) },
