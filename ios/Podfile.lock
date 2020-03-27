@@ -34,7 +34,7 @@ PODS:
     - UMFileSystemInterface
     - UMImageLoaderInterface
     - UMPermissionsInterface
-  - EXConstants (6.0.0):
+  - EXConstants (7.0.1):
     - UMConstantsInterface
     - UMCore
   - EXFacebook (6.0.0):
@@ -157,7 +157,7 @@ PODS:
     - React/Core (= 0.59.8)
   - react-native-kochava-tracker (1.2.0):
     - React
-  - react-native-onesignal (3.6.4):
+  - react-native-onesignal (3.6.5):
     - OneSignal (= 2.12.6)
     - React (< 1.0.0, >= 0.13.0)
   - React/ART (0.59.8):
@@ -251,7 +251,7 @@ DEPENDENCIES:
   - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
   - EXBlur (from `../node_modules/expo-blur/ios`)
   - EXCamera (from `../node_modules/expo-camera/ios`)
-  - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXConstants (from `../node_modules/sentry-expo/node_modules/expo-constants/ios`)
   - EXFacebook (from `../node_modules/expo-facebook/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
@@ -343,7 +343,7 @@ EXTERNAL SOURCES:
     path: "../node_modules/expo-camera/ios"
   EXConstants:
     :path: !ruby/object:Pathname
-    path: "../node_modules/expo-constants/ios"
+    path: "../node_modules/sentry-expo/node_modules/expo-constants/ios"
   EXFacebook:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-facebook/ios"
@@ -448,23 +448,23 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 2800c03334042fe80589423c8d80e582dcaec482
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
-  EXAppLoaderProvider: 58b109d3e8dda60e8bfc650d107b9e8bd8b6d29b
-  EXBarCodeScanner: 736c9ff1a7ee5d5e4a19a3ad3703ce63cc8ace46
-  EXBlur: 2e830c1d47ccaf4a83742d4a1895e0d878af2869
-  EXCamera: ba216ed7ffa678416591722e707bd53159787f8d
-  EXConstants: a97440288c77a413e9d041737fa4801c9fd45eb5
-  EXFacebook: f9b1ef2a1126e6406ee152259f69e074bcc801e5
-  EXFileSystem: 052afe415f8d6542c70fd4a31d5b3f06e0f0d302
-  EXFont: c6534387236d850a896ee41e4c9523e6f8229628
-  EXImagePicker: d4ee67678e9786eec9f00dd9680dabd9d287cb0f
-  EXKeepAwake: ba2929f4b4269eb088089fa13baefdd35ebf36a1
-  EXLinearGradient: ac8c71b16c1996624f1c41475bb987221574f830
-  EXLocation: 89ec75877fcf40b3dfeca428c898d25fce299fb3
-  EXPermissions: 16ba0c231330b124ef69f2674319341b654f6a79
+  EXAppLoaderProvider: 7a8185228d8ba9e689a0e2d6d957fe9bdd49c8a0
+  EXBarCodeScanner: 3b36378bfc891b6fd3518e244784eb8d3ab00653
+  EXBlur: eb1cf2d78e94894e0406a8df47d1c2ea1136da17
+  EXCamera: 54623e310d33bccbb8d8fbc84a0081523d0436be
+  EXConstants: 857aa7b1c84e2878f8402d712061860bca16a697
+  EXFacebook: b71969e92a4d76632ee743d26e88c61b4d9a3e45
+  EXFileSystem: 091907902fcec9f9182b656fdead41a82f30986a
+  EXFont: c862449210fc86aa11d24a202cb22c71a0d39609
+  EXImagePicker: ec641e97b73db0fb1ef58b818cffaf7ff6d3c96c
+  EXKeepAwake: e7cb6516675052b12a7d23291e33078b4239653a
+  EXLinearGradient: b7d4a703ac9802078a8a8e212d205929c18b03e4
+  EXLocation: 452a1d9edceb1b93deb86fd785236606d33742dd
+  EXPermissions: 99e52dc3e5f8e55153f1958004f6df2a30a1f2f5
   ExpoKit: 2ea6908bcbf5e705ca6c37370718c07c9677ef15
-  EXSecureStore: c00896bd1470649d295e39ba78b67646184d9268
-  EXSQLite: 2ab71ca2a70661624a0ebca4dad9594ad80b23ff
-  EXWebBrowser: e8dea719b02532bf25cb84e6dfef014e10e1206c
+  EXSecureStore: e929213a8a5e8c55cdd4615e52e283c11cba975e
+  EXSQLite: 8dab6a5ab1b78be7925073d6071eb22095d4dda6
+  EXWebBrowser: def838b95aa9d396f9ce71ace4e614ee16e7ee30
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBAudienceNetwork: 56c2dc9b5f075f4a9757d7dc8a83d3972270f645
   FBSDKCoreKit: ae214474b25033399c131dc81d258e412582a2ba
@@ -483,26 +483,26 @@ SPEC CHECKSUMS:
   OneSignal: a6df91542d1cf133b9dd19d89f2b533d8f2d3163
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-kochava-tracker: e60cf0bb0fc228fa59be6b4c7935342f07969b6f
-  react-native-onesignal: 5ee6834ff54b56fc8ea33877803e8fa92633c87b
+  react-native-onesignal: f6e1f20292cba72076ddb97e52290b0d5cc0a51c
   RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
   RNUxcam: b9c9894811487add76986d8d018d75ca8bef5839
   SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
   SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
-  UMBarCodeScannerInterface: ea7d9374318227d7d86c8fc53fa03cb06e3e0f99
-  UMCameraInterface: be7baefbdf7d3ac010f3681da83ccd0021663eca
-  UMConstantsInterface: 4d8135cd90f5bfbaa55211040a1cd7e8296d1b6c
-  UMCore: 3adbb2e482cfbd594b418c3d1584e8bcfe703e77
-  UMFaceDetectorInterface: 5c3e0714631bc6b7efb2000b30eb0419a381dc8c
-  UMFileSystemInterface: 5809901ebcc7d88665f423cd6dce6e68459819a0
-  UMFontInterface: a45cb65daccf4256e9b48f23ca17966252611190
-  UMImageLoaderInterface: 90fda4be51245f18449e0aa0cce5d1bb01fc18c5
-  UMPermissionsInterface: 15d39905ec9fc2b93a8632d2af6f66349cfa4f9c
-  UMReactNativeAdapter: 60ee0aa561710150b3b1b70e56dbbdec45e2ad22
-  UMSensorsInterface: 465f125c55933673acc766f9e6bffd654aaa11ae
-  UMTaskManagerInterface: 3962594bfee05f30eab5694814cfd8e92dd670a6
+  UMBarCodeScannerInterface: 84ea2d6b58ff0dc27ef9b68bab71286be18ee020
+  UMCameraInterface: 26b26005d1756a0d5f4f04f1e168e39ea9154535
+  UMConstantsInterface: 038bacb19de12b6fd328c589122c8dc977cccf61
+  UMCore: 733094f43f7244c60ce1f0592d00013ed68fa52c
+  UMFaceDetectorInterface: c9c3ae4cb045421283667a1698c2f31331f55e3f
+  UMFileSystemInterface: e9adc71027017de38eaf7d05fa58b2848ecb3797
+  UMFontInterface: f0c5846977ee8a93d7cfa8ae7e666772c727d195
+  UMImageLoaderInterface: 36e54e570acc4d720856f03ceebc441f73ea472c
+  UMPermissionsInterface: 938d010c74c43fcefc9bb990633a7c5a1631267e
+  UMReactNativeAdapter: 131ea2b944ade8035f0b54c6570c405f6000548d
+  UMSensorsInterface: 0ed023ce9b96f2ca6fada7bda05b7760da60b293
+  UMTaskManagerInterface: 8664abd37a00715727e60df9ecd65e42ba47b548
   UXCam: 073f563d1486a9b021578e2c9f7c58d7bff79b0d
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
 PODFILE CHECKSUM: 0b5b76a3b97595ab142cfe6325d3705e370905f9
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.8.4

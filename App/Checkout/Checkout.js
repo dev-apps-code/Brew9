@@ -108,6 +108,7 @@ export default class Checkout extends React.Component {
     const { discount_cart_total, currentMember } = props;
     this.state = {
       delivery_options: 'pickup',
+      delivery_description: null,
       vouchers_to_use: [],
       voucher: '',
       valid_vouchers: [],
@@ -131,6 +132,7 @@ export default class Checkout extends React.Component {
       paynow_clicked: false,
       subTotal_price: discount_cart_total,
       final_price: discount_cart_total,
+      delivery_final_price: discount_cart_total,
       visible: false,
       applyCode: false
     };
@@ -332,12 +334,14 @@ export default class Checkout extends React.Component {
   loadDeliveryFee = (total) => {
     const { dispatch, selectedShop, currentMember } = this.props;
     const callback = (eventObject) => {
+      console.log('loadDeliveryFee', eventObject);
       if (eventObject.success) {
         let deliveryFee = parseFloat(eventObject.result.delivery_fee);
         let final_price = parseFloat(total) + deliveryFee;
 
         this.setState({
           deliveryFee: deliveryFee,
+          delivery_description: eventObject.result.delivery_fee_description,
           final_price: final_price
         });
       }
@@ -695,7 +699,12 @@ export default class Checkout extends React.Component {
   };
 
   calculateVoucherDiscount(vouchers_to_use) {
-    const { discount_cart_total, cart_total, delivery } = this.props;
+    const {
+      delivery_final_price,
+      discount_cart_total,
+      cart_total,
+      delivery
+    } = this.props;
     const { selected_payment } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
@@ -719,9 +728,7 @@ export default class Checkout extends React.Component {
       }
     }
     const f_price = discount_cart_total - discount;
-    {
-      delivery && this.loadDeliveryFee(f_price.toFixed(2));
-    }
+
     this.setState(
       { discount: discount, final_price: f_price.toFixed(2) },
       function() {
@@ -2102,7 +2109,7 @@ export default class Checkout extends React.Component {
     );
   }
   renderDeliveryAddress = (address) => {
-    let { deliveryFee, subTotal_price } = this.state;
+    let { deliveryFee, subTotal_price, delivery_description } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
     let non_negative_subTotal_price = parseFloat(
       Math.max(0, subTotal_price)
@@ -2174,9 +2181,9 @@ export default class Checkout extends React.Component {
           >
             <View>
               <Text style={styles.productNameText}>Delivery fees</Text>
-              <Text style={styles.deliveryNoted}>
-                *Get Free delivery with minimum purchase RM50
-              </Text>
+              {delivery_description && (
+                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
+              )}
             </View>
             <Text style={styles.productVoucherText}>{`$${parseFloat(
               deliveryFee
@@ -2202,31 +2209,12 @@ export default class Checkout extends React.Component {
       onMinuteValueChange={this.onMinuteValueChange}
     />
   );
-
-  // onConfirmDeliveryTimeSchedule = () => {
-  //   // WIP add confirmation here
-  //   console.log('order time schedule ', this.state.selected_date, this.state.selected_hour, this.state.selected_minute);
-  // };
-
   renderCheckoutReceipt() {
     const { vouchers_to_use, final_price, selected_address } = this.state;
-    let {
-      currentMember,
-      selectedShop,
-      cart,
-      promotions,
-      delivery,
-      shippingAddress
-    } = this.props;
-    let array = Array.isArray(shippingAddress);
+    let { selectedShop, cart, promotions, delivery } = this.props;
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
       2
     );
-    let defaultAddress = array
-      ? shippingAddress.find((item) => {
-          return item.primary == true;
-        })
-      : undefined;
     return (
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
@@ -3439,7 +3427,7 @@ const styles = StyleSheet.create({
     marginLeft: 18 * alpha,
     marginRight: 18 * alpha,
     marginTop: 13 * alpha,
-    marginBottom: 20 * alpha,
+    marginBottom: 50 * alpha,
     borderRadius: 14 * alpha,
     flex: 1
   },
