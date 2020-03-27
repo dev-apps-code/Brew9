@@ -108,6 +108,7 @@ export default class Checkout extends React.Component {
     const { discount_cart_total, currentMember } = props;
     this.state = {
       delivery_options: 'pickup',
+      delivery_description: null,
       vouchers_to_use: [],
       voucher: '',
       valid_vouchers: [],
@@ -338,6 +339,7 @@ export default class Checkout extends React.Component {
 
         this.setState({
           deliveryFee: deliveryFee,
+          delivery_description: eventObject.result.delivery_description,
           final_price: final_price
         });
       }
@@ -719,9 +721,7 @@ export default class Checkout extends React.Component {
       }
     }
     const f_price = discount_cart_total - discount;
-    {
-      delivery && this.loadDeliveryFee(f_price.toFixed(2));
-    }
+   
     this.setState(
       { discount: discount, final_price: f_price.toFixed(2) },
       function() {
@@ -2102,7 +2102,7 @@ export default class Checkout extends React.Component {
     );
   }
   renderDeliveryAddress = (address) => {
-    let { deliveryFee, subTotal_price } = this.state;
+    let { deliveryFee, subTotal_price, delivery_description } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
     let non_negative_subTotal_price = parseFloat(
       Math.max(0, subTotal_price)
@@ -2174,9 +2174,9 @@ export default class Checkout extends React.Component {
           >
             <View>
               <Text style={styles.productNameText}>Delivery fees</Text>
-              <Text style={styles.deliveryNoted}>
-                *Get Free delivery with minimum purchase RM50
-              </Text>
+              {delivery_description && (
+                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
+              )}
             </View>
             <Text style={styles.productVoucherText}>{`$${parseFloat(
               deliveryFee
