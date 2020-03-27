@@ -108,7 +108,7 @@ const TimeSelector = ({
               dataSource={hour_range}
               selectedIndex={0}
               itemHeight={50 * alpha}
-              wrapperHeight={80 * alpha}
+              wrapperHeight={50 * alpha}
               wrapperStyle={{
                 backgroundColor: 'transparent',
                 flex: 1
@@ -142,7 +142,7 @@ const TimeSelector = ({
               dataSource={minute_range}
               selectedIndex={0}
               itemHeight={50 * alpha}
-              wrapperHeight={80 * alpha}
+              wrapperHeight={50 * alpha}
               wrapperStyle={{
                 backgroundColor: 'transparent',
                 flex: 1
@@ -151,11 +151,7 @@ const TimeSelector = ({
                 return (
                   <TouchableOpacity
                     onPress={console.log()}
-                    style={{
-                      height: 50 * alpha,
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
+                    style={[styles.timePickerRow]}
                   >
                     <Text
                       style={
