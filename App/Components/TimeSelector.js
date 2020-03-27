@@ -18,7 +18,7 @@ import {
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
 
-const DeliveryTimeSelector = ({
+const TimeSelector = ({
   styles,
   state,
   animation,
@@ -33,7 +33,7 @@ const DeliveryTimeSelector = ({
   delivery
 }) => {
   const { minute_range, hour_range } = state;
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(null);
 
   const title = delivery ? 'Delivery' : 'Pick Up';
 
@@ -108,7 +108,7 @@ const DeliveryTimeSelector = ({
               dataSource={hour_range}
               selectedIndex={0}
               itemHeight={50 * alpha}
-              wrapperHeight={80 * alpha}
+              wrapperHeight={50 * alpha}
               wrapperStyle={{
                 backgroundColor: 'transparent',
                 flex: 1
@@ -142,7 +142,7 @@ const DeliveryTimeSelector = ({
               dataSource={minute_range}
               selectedIndex={0}
               itemHeight={50 * alpha}
-              wrapperHeight={80 * alpha}
+              wrapperHeight={50 * alpha}
               wrapperStyle={{
                 backgroundColor: 'transparent',
                 flex: 1
@@ -151,11 +151,7 @@ const DeliveryTimeSelector = ({
                 return (
                   <TouchableOpacity
                     onPress={console.log()}
-                    style={{
-                      height: 50 * alpha,
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
+                    style={[styles.timePickerRow]}
                   >
                     <Text
                       style={
@@ -257,4 +253,4 @@ const componentStyle = StyleSheet.create({
   }
 });
 
-export default DeliveryTimeSelector;
+export default TimeSelector;
