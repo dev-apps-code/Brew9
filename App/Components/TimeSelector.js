@@ -18,7 +18,7 @@ import {
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
 
-const DeliveryTimeSelector = ({
+const TimeSelector = ({
   styles,
   state,
   animation,
@@ -257,4 +257,4 @@ const componentStyle = StyleSheet.create({
   }
 });
 
-export default DeliveryTimeSelector;
+export default TimeSelector;
