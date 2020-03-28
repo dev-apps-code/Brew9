@@ -214,8 +214,15 @@ export default class PickUp extends React.Component {
 
   renderQueueView(current_order) {
     const { selectedShop } = this.props;
+    console.log('current_order', current_order);
     const queues = current_order.map((item, key) => {
       let cart_total = parseFloat(item.total) + parseFloat(item.discount);
+      var pick_up_title =
+        item.delivery_method == 0 && item.pickup_status == 'Order Now'
+          ? 'Order Time'
+          : item.delivery_method == 0 && item.pickup_status == 'Pick Later'
+          ? 'Pick Up'
+          : 'Delivery';
       var progress =
         item.status == 'pending'
           ? 0.33
@@ -455,9 +462,7 @@ export default class PickUp extends React.Component {
                 </View>
                 <View style={styles.queueHeaderBlock}>
                   <Text style={styles.pickupTimeheaderText}>
-                    {item.pickup_status == 'Order Now'
-                      ? 'Order Time'
-                      : 'Pick Up'}
+                    {pick_up_title}
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.pickupTimeText}>
