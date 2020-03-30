@@ -1052,8 +1052,8 @@ export default class Checkout extends React.Component {
             }
           }
         }
-        this.addressConfirmation();
-        // this.loadMakeOrder();
+        // this.addressConfirmation();
+        this.loadMakeOrder();
         return;
       }
     } else {
