@@ -594,7 +594,6 @@ export default class Checkout extends React.Component {
       selectedShop,
       delivery
     } = this.props;
-    const { deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
     let finalCart = [];
@@ -704,7 +703,7 @@ export default class Checkout extends React.Component {
       cart_total,
       delivery
     } = this.props;
-    const { selected_payment,deliveryFee } = this.state;
+    const { selected_payment, deliveryFee } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
       var item = vouchers_to_use[index];
