@@ -3167,8 +3167,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0 * alpha,
     right: 0 * alpha,
-    // bottom: (47 + BUTTONBOTTOMPADDING) * alpha,
-    bottom: 0 * alpha,
+    bottom: BUTTONBOTTOMPADDING * alpha,
+    // bottom: 0 * alpha,
     height: 265 * alpha
   },
   paymentMethodTwoView: {
