@@ -125,7 +125,6 @@ export default class VerifyUser extends React.Component {
 		this.setState({ loading: true })
 		const callback = eventObject => {
 			if (eventObject.success) {
-				console.log(eventObject)
 				this.setState({
 					login_success: true,
 					is_counting: true,
