@@ -726,9 +726,14 @@ export default class Checkout extends React.Component {
       }
     }
     const f_price = discount_cart_total - discount + deliveryFee;
+    const sub_f_price = discount_cart_total - discount;
 
     this.setState(
-      { discount: discount, final_price: f_price.toFixed(2) },
+      {
+        discount: discount,
+        final_price: f_price.toFixed(2),
+        subTotal_price: sub_f_price
+      },
       function() {
         if (selected_payment == 'credit_card' && f_price <= 0) {
           this.setState({ selected_payment: '' });
