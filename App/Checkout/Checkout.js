@@ -134,7 +134,8 @@ export default class Checkout extends React.Component {
       final_price: discount_cart_total,
       delivery_final_price: discount_cart_total,
       visible: false,
-      applyCode: false
+      applyCode: false,
+      addressConfirmation: false
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -1054,8 +1055,8 @@ export default class Checkout extends React.Component {
             }
           }
         }
-
-        this.loadMakeOrder();
+        this.addressConfirmation();
+        // this.loadMakeOrder();
         return;
       }
     } else {
@@ -1064,6 +1065,10 @@ export default class Checkout extends React.Component {
       });
       return;
     }
+  };
+
+  addressConfirmation = () => {
+    this.setState({ addressConfirmation: true });
   };
 
   measureView(event) {
@@ -2372,7 +2377,13 @@ export default class Checkout extends React.Component {
   }
 
   render() {
-    let { isPaymentToggle, discount, isPickupToogle, final_price } = this.state;
+    let {
+      isPaymentToggle,
+      discount,
+      isPickupToogle,
+      final_price,
+      selected_address
+    } = this.state;
     let { cart_total } = this.props;
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
       2
@@ -2412,6 +2423,33 @@ export default class Checkout extends React.Component {
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
         />
+        {selected_address && (
+          <Brew9PopUp
+            popUpVisible={this.state.addressConfirmation}
+            title={'Are you sure to use this address as delivery address?'}
+            description={
+              selected_address.address +
+              '\n' +
+              selected_address.city +
+              ' , ' +
+              selected_address.postal_code +
+              ', ' +
+              selected_address.state +
+              ', ' +
+              selected_address.country
+            }
+            OkText={'Confirm'}
+            cancelText={'Cancel'}
+            onPressOk={() =>
+              this.setState({ addressConfirmation: false }, () =>
+                this.loadMakeOrder()
+              )
+            }
+            onPressCancel={() => this.setState({ addressConfirmation: false })}
+            onBackgroundPress={this.closePopUp}
+            onChangeText={(text) => this.onChangeCoupon(text)}
+          />
+        )}
         {/* <TimePicker
 				ref={ref => {
 					this.TimePicker = ref;
@@ -3167,8 +3205,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0 * alpha,
     right: 0 * alpha,
-    // bottom: (47 + BUTTONBOTTOMPADDING) * alpha,
-    bottom: 0 * alpha,
+    bottom: BUTTONBOTTOMPADDING * alpha,
+    // bottom: 0 * alpha,
     height: 265 * alpha
   },
   paymentMethodTwoView: {
