@@ -334,7 +334,6 @@ export default class Checkout extends React.Component {
   loadDeliveryFee = (total) => {
     const { dispatch, selectedShop, currentMember } = this.props;
     const callback = (eventObject) => {
-      console.log('loadDeliveryFee', eventObject);
       if (eventObject.success) {
         let deliveryFee = parseFloat(eventObject.result.delivery_fee);
         let final_price = parseFloat(total) + deliveryFee;
@@ -456,11 +455,9 @@ export default class Checkout extends React.Component {
   onSelectOrderTomorrow = () => {
     const { selectedShop } = this.props;
     var tomorrow = Moment().add(1, 'days');
-    console.log('tomorrow ', tomorrow);
     var selected_date = tomorrow.format('YYYY-MM-DD');
     var pick_up_status = 'Pick Tomorrow'; // What if delivery?
 
-    console.log('selected_date ', selected_date);
     this.setTimePickerDefault(tomorrow.startOf('day'));
     this.setState({ pick_up_status, selected_date });
   };
