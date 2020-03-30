@@ -703,7 +703,7 @@ export default class Checkout extends React.Component {
       cart_total,
       delivery
     } = this.props;
-    const { selected_payment } = this.state;
+    const { selected_payment, deliveryFee } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
       var item = vouchers_to_use[index];
@@ -725,7 +725,7 @@ export default class Checkout extends React.Component {
         }
       }
     }
-    const f_price = discount_cart_total - discount;
+    const f_price = discount_cart_total - discount + deliveryFee;
 
     this.setState(
       { discount: discount, final_price: f_price.toFixed(2) },
@@ -1052,8 +1052,11 @@ export default class Checkout extends React.Component {
             }
           }
         }
-        this.addressConfirmation();
-        // this.loadMakeOrder();
+        if (delivery) {
+          this.addressConfirmation();
+        } else {
+          this.loadMakeOrder();
+        }
         return;
       }
     } else {
@@ -1513,13 +1516,13 @@ export default class Checkout extends React.Component {
                   <Text style={styles.voucherButtonText}>Voucher</Text>
                 </View>
               </View>
-              {item.voucher.description.length > 0 && (
+              {/* {item.voucher.description.length > 0 && (
                 <View style={styles.voucherDetailView}>
                   <Text style={styles.productVariantText}>
                     {item.voucher.description}
                   </Text>
                 </View>
-              )}
+              )} */}
               <View style={styles.spacer} />
             </View>
             {/* {item.voucher.free_quantity ? <Text

@@ -43,7 +43,7 @@ import { ANALYTICS_ID } from '../Common/config';
 import _ from 'lodash';
 import { getMemberIdForApi } from '../Services/members_helper';
 import AnimationLoading from '../Components/AnimationLoading';
-
+import HudLoading from '../Components/HudLoading';
 @connect(({ members, shops, config }) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -214,7 +214,6 @@ export default class PickUp extends React.Component {
 
   renderQueueView(current_order) {
     const { selectedShop } = this.props;
-    console.log('current_order', current_order);
     const queues = current_order.map((item, key) => {
       let cart_total = parseFloat(item.total) + parseFloat(item.discount);
       var pick_up_title =
@@ -1025,6 +1024,7 @@ export default class PickUp extends React.Component {
           this.renderEmpty()
         )}
         {this.renderPointExpModal()}
+        <HudLoading isLoading={this.state.refreshing} />
       </View>
     );
   }
