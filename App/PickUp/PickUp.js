@@ -471,6 +471,7 @@ export default class PickUp extends React.Component {
                       </Text>
                     </Text>
                   </View>
+                  {/* <Text style={styles.delivery_day}>TODAY</Text> */}
                 </View>
               </View>
 
@@ -1337,6 +1338,16 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     alignSelf: 'flex-end'
+  },
+  delivery_day: {
+    backgroundColor: 'transparent',
+    color: PRIMARY_COLOR,
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    alignSelf: 'center'
   },
   pickupTimeheaderText: {
     color: 'rgb(50, 50, 50)',
