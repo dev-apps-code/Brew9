@@ -440,6 +440,10 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		// this.setState({ loading: true })
 		const callback = eventObject => {
+			console.log("loadshops")
+			console.log(eventObject)
+			console.log("loadshops")
+
 			// this.setState({ loading: false })
 			if (eventObject.success) {
 				this.setState({
@@ -1777,20 +1781,23 @@ export default class Home extends React.Component {
 
 		if (shop != null) {
 			AsyncStorage.getItem("featured", (err, result) => {
-				if (result == null || result != shop.featured_promotion.id) {
-					if (currentMember != null) {
-						if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
-							AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
-							this.onFeaturedPromotionPressed(shop.featured_promotion)
-						} else if (shop.featured_promotion.for_new_user == false) {
+				if(shop.featured_promotion != null){
+					if (result == null || result != shop.featured_promotion.id) {
+						if (currentMember != null) {
+							if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+								AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+								this.onFeaturedPromotionPressed(shop.featured_promotion)
+							} else if (shop.featured_promotion.for_new_user == false) {
+								AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+								this.onFeaturedPromotionPressed(shop.featured_promotion)
+							}
+						} else {
 							AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
 							this.onFeaturedPromotionPressed(shop.featured_promotion)
 						}
-					} else {
-						AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
-						this.onFeaturedPromotionPressed(shop.featured_promotion)
 					}
 				}
+				
 			})
 		}
 
