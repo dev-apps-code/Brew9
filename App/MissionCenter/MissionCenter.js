@@ -257,12 +257,12 @@ export default class MissionCenter extends React.Component {
       return;
     }
 
-    this.setState({ loading: true });
+    this.setState({ isRefreshing: true });
     const callback = (eventObject) => {
       this.refs.toast.show(eventObject.message, TOAST_DURATION);
       this.setState(
         {
-          loading: false,
+          isRefreshing: false,
           mission_statements: eventObject.result,
           updated: true
         },
