@@ -215,6 +215,9 @@ export default class PickUp extends React.Component {
   renderQueueView(current_order) {
     const { selectedShop } = this.props;
     const queues = current_order.map((item, key) => {
+      var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
+      var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
+      var claim_day = claim_time != today ? 'TOMORROW' : '';
       let cart_total = parseFloat(item.total) + parseFloat(item.discount);
       var pick_up_title =
         item.delivery_method == 0 && item.pickup_status == 'Order Now'
@@ -471,7 +474,11 @@ export default class PickUp extends React.Component {
                       </Text>
                     </Text>
                   </View>
-                  {/* <Text style={styles.delivery_day}>TODAY</Text> */}
+                  {item.delivery_method == 1 && claim_day != null ? (
+                    <Text style={styles.delivery_day}>{claim_day}</Text>
+                  ) : (
+                    undefined
+                  )}
                 </View>
               </View>
 
