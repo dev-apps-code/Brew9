@@ -215,6 +215,9 @@ export default class PickUp extends React.Component {
   renderQueueView(current_order) {
     const { selectedShop } = this.props;
     const queues = current_order.map((item, key) => {
+      var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
+      var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
+      var claim_day = claim_time != today ? 'TOMORROW' : '';
       let cart_total = parseFloat(item.total) + parseFloat(item.discount);
       var pick_up_title =
         item.delivery_method == 0 && item.pickup_status == 'Order Now'
@@ -230,7 +233,8 @@ export default class PickUp extends React.Component {
           : item.status == 'ready'
           ? 1
           : 0;
-      var calculate_cart_total = cart_total;
+      var calculate_cart_total =
+        parseFloat(item.sub_total) + parseFloat(item.discount);
 
       var paid_order_message =
         'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable';
@@ -471,6 +475,11 @@ export default class PickUp extends React.Component {
                       </Text>
                     </Text>
                   </View>
+                  {item.delivery_method == 1 && claim_day != null ? (
+                    <Text style={styles.delivery_day}>{claim_day}</Text>
+                  ) : (
+                    undefined
+                  )}
                 </View>
               </View>
 
@@ -671,6 +680,36 @@ export default class PickUp extends React.Component {
               />
               <View style={styles.sectionSeperatorView} />
             </View>
+            {item.delivery_fee > 0 ? (
+              <View style={styles.totalViewWrapper}>
+                <View style={styles.orderTotalView}>
+                  <Text style={styles.totallabelText}>SubTotal</Text>
+                  <View
+                    style={{
+                      flex: 1
+                    }}
+                  />
+                  <Text style={styles.orderTotalText}>
+                    {item.delivery_fee > 0
+                      ? `$${parseFloat(item.sub_total).toFixed(2)}`
+                      : undefined}
+                  </Text>
+                </View>
+              </View>
+            ) : (
+              undefined
+            )}
+            {item.delivery_fee > 0 ? (
+              <View style={styles.receiptSectionSeperator}>
+                <Image
+                  source={require('./../../assets/images/curve_in_background.png')}
+                  style={styles.curve_in}
+                />
+                <View style={styles.sectionSeperatorView} />
+              </View>
+            ) : (
+              undefined
+            )}
             {item.delivery_fee > 0 ? (
               <View style={styles.totalViewWrapper}>
                 <View style={styles.orderTotalView}>
@@ -1337,6 +1376,16 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     alignSelf: 'flex-end'
+  },
+  delivery_day: {
+    backgroundColor: 'transparent',
+    color: PRIMARY_COLOR,
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    alignSelf: 'center'
   },
   pickupTimeheaderText: {
     color: 'rgb(50, 50, 50)',

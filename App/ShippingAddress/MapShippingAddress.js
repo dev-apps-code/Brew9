@@ -32,6 +32,7 @@ import {
 import MapView, { Marker } from 'react-native-maps';
 import { ScrollView } from 'react-native-gesture-handler';
 import Toast, { DURATION } from 'react-native-easy-toast';
+import { Header } from 'react-navigation-stack';
 
 export default class MapShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -215,7 +216,8 @@ export default class MapShippingAddress extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+        keyboardVerticalOffset={Header.HEIGHT + 20} // adjust the value here if you need more padding
         style={{ flex: 1 }}
       >
         <View style={styles.container}>

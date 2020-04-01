@@ -440,10 +440,6 @@ export default class Home extends React.Component {
 		const { first_promo_popup } = this.state
 		// this.setState({ loading: true })
 		const callback = eventObject => {
-			console.log("loadshops")
-			console.log(eventObject)
-			console.log("loadshops")
-
 			// this.setState({ loading: false })
 			if (eventObject.success) {
 				this.setState({
