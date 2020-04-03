@@ -255,7 +255,7 @@ export default class AddShippingAddress extends React.Component {
             <ScrollView>
                 <View style={styles.addAddressForm}>
                     {this.renderFormDetail("First Name", fullname, "Fill up receiver's first name", (text) => this.onChangeName(text), true)}
-                    {this.renderFormDetail("Contac No.", contact_number, "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
+                    {this.renderFormDetail("Contact No.", contact_number, "Fill up receiver's contact", (text) => this.onChangeContactNo(text), true)}
                     {this.renderFormDetail("Address", current_address, "", (text) => this.onChangeAddress(text), true)}
                     {this.renderFormDetail("City", city, "", (text) => console.log(text), false)}
                     {this.renderFormDetail("State", state, "", (text) => console.log(text), false)}
