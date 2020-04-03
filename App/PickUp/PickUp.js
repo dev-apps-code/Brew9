@@ -659,7 +659,6 @@ export default class PickUp extends React.Component {
               />
               <View style={styles.sectionSeperatorView} />
             </View>
-
             <View style={styles.totalViewWrapper}>
               <View style={styles.orderTotalView}>
                 <Text style={styles.totallabelText}>Status</Text>
