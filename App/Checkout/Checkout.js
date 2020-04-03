@@ -180,45 +180,39 @@ export default class Checkout extends React.Component {
     }
   }
 
-  setTimePickerDefault(option) {
-    const { selectedShop } = this.props;
+  setTimePickerDefault(day, isOrderForTomorrow) {
+    const { start_time, end_time } = day
+      ? day
+      : this.props.selectedShop.opening_hour;
 
-    //get Starttime and Endtime
-    var delivery = this.props.delivery;
-    
-    var startTime = delivery 
-      ? Moment(selectedShop.delivery_hour.today.start_time, 'h:mm')
-      : Moment(selectedShop.opening_hour.start_time, 'h:mm') 
- 
-    var endTime = delivery 
-      ? Moment(selectedShop.delivery_hour.today.end_time, 'h:mm')
-      : Moment(selectedShop.opening_hour.end_time, 'h:mm') 
+    var startTime = Moment(start_time, 'h:mm');
+    var endTime = Moment(end_time, 'h:mm');
+    var time_now = Moment(new Date(), 'h:mm');
 
-    if (option == 1){
-      var time_now = Moment();
-      var hour = startTime.hours();
-      var min = startTime.minutes();
-     
-    } else {
-      var time_now = Moment();
-      var hour = time_now.hours();
-      var min = time_now.minutes();
+    var hour = time_now.hours();
+    var min = time_now.minutes();
+
+    if (isOrderForTomorrow == true) {
+      hour = startTime.hours();
+      min = startTime.minutes();
     }
-    // var hour = time_now.hours();
-    // var min = time_now.minutes();
+
     var minute_array = ['00', '15', '30', '45'];
     var hour_array = _.range(first_hour, last_hour + 1);
     var selected_minute = '';
+
     if (hour >= startTime.hours() && min < 45) {
       minute_array = _.filter(['00', '15', '30', '45'], function(o) {
         return parseInt(o) > min;
       });
     }
+
     if (hour >= endTime.hours()) {
       minute_array = _.filter(['00', '15', '30', '45'], function(o) {
         return parseInt(o) <= endTime.minutes();
       });
     }
+
     if (hour) selected_minute = minute_array[0];
 
     if (minute_array.length < 3) {
@@ -233,11 +227,14 @@ export default class Checkout extends React.Component {
         : hour > startTime.hours()
         ? hour
         : startTime.hours();
+
     var last_hour = endTime.hours();
     var hour_array = _.range(first_hour, last_hour + 1);
+
     if (hour_array.length < 3) {
       hour_array.length = 3;
     }
+
     this.setState({
       selected_hour: first_hour,
       selected_minute: selected_minute,
@@ -248,10 +245,10 @@ export default class Checkout extends React.Component {
 
   checkAvailableMinute(option) {
     const { selectedShop } = this.props;
-    var delivery = this.props.delivery
-    var endTime = delivery 
+    var delivery = this.props.delivery;
+    var endTime = delivery
       ? Moment(selectedShop.delivery_hour.today.end_time, 'h:mm')
-      : Moment(selectedShop.opening_hour.end_time, 'h:mm') 
+      : Moment(selectedShop.opening_hour.end_time, 'h:mm');
 
     var minute_array = ['00', '15', '30', '45'];
     var time_now = Moment(new Date(), 'h:mm');
@@ -266,7 +263,6 @@ export default class Checkout extends React.Component {
       if (minute_array.length < 3) {
         minute_array.length = 3;
       }
-
 
       this.setState({
         minute_range: minute_array
@@ -456,8 +452,10 @@ export default class Checkout extends React.Component {
     var pick_up_status = 'Order Now';
     var now = new Moment().format('HH:mm');
     var pick_up_time = `${selected_date} ${now}`;
+    
     this.setState({ pick_up_status, selected_date, pick_up_time });
-    this.toggleTimeSelector();
+
+    // this.toggleTimeSelector(); User still needs to confirm
   }
 
   onSelectOrderTomorrow = () => {
@@ -467,9 +465,12 @@ export default class Checkout extends React.Component {
     var pick_up_status = 'Pick Tomorrow'; // What if delivery?
     // console.log('startOfDay: ', tomorrow.startOf('day'));
 
-    this.setTimePickerDefault(1);
+    console.log('delivery_hours ', selectedShop.delivery_hour);
+
+    this.setTimePickerDefault(selectedShop.delivery_hour.tomorrow, true);
     this.setState({ pick_up_status, selected_date });
   };
+
   onSelectOrderLater() {
     const { selectedShop } = this.props;
     var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm');
@@ -479,7 +480,14 @@ export default class Checkout extends React.Component {
     var selected_date = currentDate.format('YYYY-MM-DD');
     var pick_up_status = 'Pick Later';
 
-    this.setTimePickerDefault(0);
+    console.log('opening_hour ', selectedShop.opening_hour);
+    const day = {
+      start_time: selectedShop.opening_hour.order_start_time,
+      end_time: selectedShop.opening_hour.order_stop_time
+    };
+
+    this.setTimePickerDefault(day);
+
     if (opening.hour() <= time_now.hour()) {
       if (opening.hour() == time_now.hour()) {
         if (opening.minutes() <= time_now.minutes()) {
@@ -1816,7 +1824,6 @@ export default class Checkout extends React.Component {
       </View>
     );
   }
-
 
   renderDeliveryAddress = (address) => {
     let { deliveryFee, subTotal_price, delivery_description } = this.state;
