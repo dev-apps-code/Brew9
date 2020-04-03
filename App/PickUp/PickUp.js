@@ -218,7 +218,7 @@ export default class PickUp extends React.Component {
       var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
       var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
       var claim_day = claim_time != today ? 'TOMORROW' : '';
-      let cart_total = parseFloat(item.total) + parseFloat(item.discount);
+      let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
       var pick_up_title =
         item.delivery_method == 0 && item.pickup_status == 'Order Now'
           ? 'Order Time'
@@ -234,12 +234,7 @@ export default class PickUp extends React.Component {
           ? 1
           : 0;
       var delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
-      var calculate_cart_total =
-        parseFloat(item.total) +
-        parseFloat(item.discount) -
-        parseFloat(delivery_fee);
-      var sub_total =
-        parseFloat(calculate_cart_total) - parseFloat(item.discount);
+      var calculate_cart_total = cart_total;
 
       var paid_order_message =
         'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable';
@@ -696,7 +691,7 @@ export default class PickUp extends React.Component {
                   />
                   <Text style={styles.orderTotalText}>
                     {item.delivery_fee > 0
-                      ? `$${parseFloat(sub_total).toFixed(2)}`
+                      ? `$${parseFloat(item.sub_total).toFixed(2)}`
                       : undefined}
                   </Text>
                 </View>
