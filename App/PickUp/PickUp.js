@@ -321,50 +321,51 @@ export default class PickUp extends React.Component {
       const promotions = item.promotions.map((item, key) => {
         var promotion_discount = '';
 
-        if (item.reward_type == 'Discount') {
-          if (item.value_type == 'fixed') {
-            promotion_discount = `-$${item.value}`;
-            calculate_cart_total -= item.value;
-          } else if (item.value_type == 'percent') {
-            promotion_discount = `-$${parseFloat(
-              calculate_cart_total * (item.value / 100)
-            ).toFixed(2)}`;
-            calculate_cart_total -= parseFloat(
-              calculate_cart_total * (item.value / 100)
-            );
-          }
+        // if (item.reward_type == 'Discount') {
+        if (item.value_type == 'fixed') {
+          promotion_discount = `-$${item.value}`;
+          calculate_cart_total -= item.value;
+        } else if (item.value_type == 'percent') {
+          promotion_discount = `-$${parseFloat(
+            calculate_cart_total * (item.value / 100)
+          ).toFixed(2)}`;
+          calculate_cart_total -= parseFloat(
+            calculate_cart_total * (item.value / 100)
+          );
+        }
 
-          return (
-            <View style={styles.drinksView} key={key}>
-              <View
-                pointerEvents="box-none"
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row'
-                }}
-              >
-                <View style={styles.productDetailView}>
-                  <Text style={styles.productNameText}>{item.name}</Text>
+        return (
+          <View style={styles.drinksView} key={key}>
+            <View
+              pointerEvents="box-none"
+              style={{
+                justifyContent: 'center',
+                backgroundColor: 'transparent',
+                flex: 1,
+                flexDirection: 'row'
+              }}
+            >
+              <View style={styles.productDetailView}>
+                <Text style={styles.productNameText}>{item.name}</Text>
 
-                  <View style={styles.spacer} />
-                </View>
+                <View style={styles.spacer} />
+              </View>
 
+              {item.reward_type == 'Discount' && (
                 <Text style={styles.productPriceText}>
                   {promotion_discount}
                 </Text>
-                {item.promotions != null &&
-                  key < item.promotions.length - 1 && (
-                    <Image
-                      source={require('./../../assets/images/dotted-line.png')}
-                      style={styles.dottedLineImage}
-                    />
-                  )}
-              </View>
+              )}
+              {item.promotions != null && key < item.promotions.length - 1 && (
+                <Image
+                  source={require('./../../assets/images/dotted-line.png')}
+                  style={styles.dottedLineImage}
+                />
+              )}
             </View>
-          );
-        }
+          </View>
+        );
+        // }
       });
 
       const voucher_items = item.voucher_items.map((item, key) => {
