@@ -515,7 +515,8 @@ export default class Home extends React.Component {
 		}
 
 		const obj = new ProductRequestObject()
-		obj.setUrlId(company_id)
+		// obj.setUrlId(company_id)
+		obj.setUrlId(2)
 		dispatch(
 			createAction('products/loadStoreProducts')({
 				object: obj,

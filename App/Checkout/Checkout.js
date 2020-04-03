@@ -836,65 +836,68 @@ export default class Checkout extends React.Component {
     let address_id = selected_address == null ? null : selected_address.id;
     this.setState({ loading: true });
     const callback = (eventObject) => {
-      if (eventObject.success) {
-        if (selected_payment == 'credits') {
-          setTimeout(
-            function() {
-              this.clearCart();
-              this.setState({
-                loading: false
-              });
-            }.bind(this),
-            500
-          );
-        } else if (selected_payment == 'counter') {
-          setTimeout(
-            function() {
-              this.clearCart();
-              this.setState({
-                loading: false
-              });
-            }.bind(this),
-            500
-          );
-        } else {
-          this.setState({
-            loading: false
-          });
-          const order = eventObject.result;
+      this.setState({ loading: false }, () => {
+        if (eventObject.success) {
+          if (selected_payment == 'credits') {
+            setTimeout(
+              function() {
+                this.clearCart();
+                this.setState({
+                  loading: false
+                });
+              }.bind(this),
+              500
+            );
+          } else if (selected_payment == 'counter') {
+            setTimeout(
+              function() {
+                this.clearCart();
+                this.setState({
+                  loading: false
+                });
+              }.bind(this),
+              500
+            );
+          } else {
+            this.setState({
+              loading: false
+            });
+            const order = eventObject.result;
 
-          navigate('PaymentsWebview', {
-            name: `Brew9 Order`,
-            order_id: order.receipt_no,
-            session_id: order.session_id,
-            amount: order.total,
-            type: 'order',
-            returnToRoute: navigation.state,
-            clearCart: () => this.clearCart()
-          });
-        }
-      } else {
-        this.refs.toast.show(
-          <View style={{ justifyContent: 'center' }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>
-              {eventObject.message}
-            </Text>
-          </View>,
-          TOAST_DURATION
-        );
-        this.setState({
-          loading: false
-        });
-        if (Array.isArray(eventObject.result)) {
-          if (eventObject.result.length > 0) {
-            let item = eventObject.result[0];
-            if ((item.clazz = 'product')) {
-              this.removeItemFromCart(eventObject.result, eventObject.message);
-              return;
+            navigate('PaymentsWebview', {
+              name: `Brew9 Order`,
+              order_id: order.receipt_no,
+              session_id: order.session_id,
+              amount: order.total,
+              type: 'order',
+              returnToRoute: navigation.state,
+              clearCart: () => this.clearCart()
+            });
+          }
+        } else {
+          this.refs.toast.show(
+            <View style={{ justifyContent: 'center' }}>
+              <Text style={{ color: 'white', textAlign: 'center' }}>
+                {eventObject.message}
+              </Text>
+            </View>,
+            TOAST_DURATION
+          );
+
+          if (Array.isArray(eventObject.result)) {
+            if (eventObject.result.length > 0) {
+              let item = eventObject.result[0];
+              if ((item.clazz = 'product')) {
+                this.removeItemFromCart(
+                  eventObject.result,
+                  eventObject.message
+                );
+                return;
+              }
             }
           }
         }
-      }
+      });
     };
     var latitude = null;
     var longitude = null;
