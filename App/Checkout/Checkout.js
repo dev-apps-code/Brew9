@@ -885,7 +885,7 @@ export default class Checkout extends React.Component {
             }
           }
         }
-      }
+      });
     };
     var latitude = null;
     var longitude = null;
