@@ -456,7 +456,7 @@ export default class Checkout extends React.Component {
     
     this.setState({ pick_up_status, selected_date, pick_up_time });
 
-    // this.toggleTimeSelector(); User still needs to confirm
+    this.toggleTimeSelector(); 
   }
 
   onSelectOrderTomorrow = () => {
