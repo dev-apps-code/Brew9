@@ -137,7 +137,7 @@ export default class Checkout extends React.Component {
       applyCode: false,
       addressConfirmation: false,
       deliveryFee: 0,
-      loading:false,
+      loading: false
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -847,7 +847,7 @@ export default class Checkout extends React.Component {
       selected_payment,
       pick_up_status,
       pick_up_time,
-      selected_address,
+      selected_address
     } = this.state;
     let address_id = selected_address == null ? null : selected_address.id;
     this.setState({ loading: true });
@@ -900,7 +900,7 @@ export default class Checkout extends React.Component {
             }
           }
         }
-      });
+      }
     };
     var latitude = null;
     var longitude = null;
