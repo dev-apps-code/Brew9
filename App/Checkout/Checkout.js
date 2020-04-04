@@ -105,7 +105,7 @@ export default class Checkout extends React.Component {
       this.onPayNowPressed.bind(this),
       500 // no new clicks within 500ms time window
     );
-    const { discount_cart_total, currentMember } = props;
+    const { discount_cart_total, currentMember, cart_total } = props;
     this.state = {
       delivery_options: 'pickup',
       delivery_description: null,
@@ -130,9 +130,8 @@ export default class Checkout extends React.Component {
       selected_hour_index: 0,
       selected_minute_index: 0,
       paynow_clicked: false,
-      subTotal_price: discount_cart_total,
-      final_price: discount_cart_total,
-      delivery_final_price: discount_cart_total,
+      sub_total_voucher: 0,
+      final_price: cart_total,
       visible: false,
       applyCode: false,
       addressConfirmation: false,
@@ -157,7 +156,7 @@ export default class Checkout extends React.Component {
       {
         valid_vouchers: []
       },
-      function() {
+      function () {
         this.loadValidVouchers();
         {
           delivery && this.loadDeliveryFee(this.props.discount_cart_total);
@@ -203,13 +202,13 @@ export default class Checkout extends React.Component {
     var selected_minute = '';
 
     if (hour >= startTime.hours() && min < 45) {
-      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
         return parseInt(o) > min;
       });
     }
 
     if (hour >= endTime.hours()) {
-      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
         return parseInt(o) <= endTime.minutes();
       });
     }
@@ -257,7 +256,7 @@ export default class Checkout extends React.Component {
     var hour = time_now.hours();
     var min = time_now.minutes();
     if (hour == option) {
-      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
         let minOption = parseInt(o);
         return minOption > min;
       });
@@ -270,7 +269,7 @@ export default class Checkout extends React.Component {
       });
     } else {
       if (option == endTime.hours()) {
-        minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+        minute_array = _.filter(['00', '15', '30', '45'], function (o) {
           let minOption = parseInt(o);
           return minOption <= endTime.minutes();
         });
@@ -295,7 +294,7 @@ export default class Checkout extends React.Component {
         {
           selected_hour_index: index - 1
         },
-        function() {
+        function () {
           this.sphour.scrollToIndex(this.state.selected_hour_index);
         }
       );
@@ -323,7 +322,7 @@ export default class Checkout extends React.Component {
             minute_range: ['00', '15', '30', '45'],
             selected_hour: hour_range[selected_hour_index + 1]
           },
-          function() {
+          function () {
             this.spminute.scrollToIndex(0);
           }
         );
@@ -340,12 +339,9 @@ export default class Checkout extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         let deliveryFee = parseFloat(eventObject.result.delivery_fee);
-        let final_price = parseFloat(total) + deliveryFee;
-
         this.setState({
           deliveryFee: deliveryFee,
-          delivery_description: eventObject.result.delivery_fee_description,
-          final_price: final_price
+          delivery_description: eventObject.result.delivery_fee_description
         });
       }
     };
@@ -377,7 +373,7 @@ export default class Checkout extends React.Component {
           });
           var valid_voucher_counts = _.filter(
             this.state.valid_vouchers,
-            function(o) {
+            function (o) {
               if (o.is_valid == true) return o;
             }
           ).length;
@@ -453,10 +449,10 @@ export default class Checkout extends React.Component {
     var pick_up_status = 'Order Now';
     var now = new Moment().format('HH:mm');
     var pick_up_time = `${selected_date} ${now}`;
-    
+
     this.setState({ pick_up_status, selected_date, pick_up_time });
 
-    this.toggleTimeSelector(); 
+    this.toggleTimeSelector();
   }
 
   onSelectOrderTomorrow = () => {
@@ -562,7 +558,7 @@ export default class Checkout extends React.Component {
       {
         vouchers_to_use: new_voucher_list
       },
-      function() {
+      function () {
         this.calculateVoucherDiscount(new_voucher_list);
       }
     );
@@ -610,13 +606,16 @@ export default class Checkout extends React.Component {
       selectedShop,
       delivery
     } = this.props;
+    let { sub_total_voucher, deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
     let finalCart = [];
     var promotions_item = [];
-    var final_cart_value = cart_total;
+    var final_cart_value =
+      sub_total_voucher != 0 ? sub_total_voucher : cart_total;
+    var cart_total_voucher =
+      sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -643,20 +642,20 @@ export default class Checkout extends React.Component {
                   promotion.value_type == 'percent'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  price = (cart_total * discount_value) / 100;
+                  price = (cart_total_voucher * discount_value) / 100;
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
                   ) {
                     price = promotion.maximum_discount_allow;
                   }
-                  final_cart_value = cart_total - price;
+                  final_cart_value = cart_total_voucher - price;
                 } else if (
                   promotion.value_type != null &&
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  final_cart_value = cart_total - discount_value;
+                  final_cart_value = cart_total_voucher - discount_value;
                 }
               }
 
@@ -682,11 +681,12 @@ export default class Checkout extends React.Component {
           }
         }
       }
+      this.setState({ final_price: final_cart_value });
     }
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function() {
+      this.setState({ isCartToggle: false }, function () {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
@@ -731,23 +731,24 @@ export default class Checkout extends React.Component {
           if (voucher.discount_type.toLowerCase() == 'fixed') {
             discount = voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
-            discount = (discount_cart_total * voucher.discount_price) / 100.0;
+            discount = (cart_total * voucher.discount_price) / 100.0;
           }
         }
       }
     }
-    const subf_price = discount_cart_total - discount;
-    const f_price = subf_price + deliveryFee;
+    const subf_price = cart_total - discount;
+    const f_price = subf_price;
     this.setState(
       {
         discount: discount,
         final_price: f_price.toFixed(2),
-        subTotal_price: subf_price.toFixed(2)
+        sub_total_voucher: subf_price.toFixed(2)
       },
-      function() {
+      function () {
         if (selected_payment == 'credit_card' && f_price <= 0) {
           this.setState({ selected_payment: '' });
         }
+        this.check_promotion_trigger();
       }
     );
   }
@@ -856,14 +857,14 @@ export default class Checkout extends React.Component {
       if (eventObject.success) {
         if (selected_payment == 'credits') {
           setTimeout(
-            function() {
+            function () {
               this.clearCart();
             }.bind(this),
             500
           );
         } else if (selected_payment == 'counter') {
           setTimeout(
-            function() {
+            function () {
               this.clearCart();
             }.bind(this),
             500
@@ -1004,7 +1005,7 @@ export default class Checkout extends React.Component {
             if (selectedShop.response_message != undefined) {
               insufficient_response = _.find(
                 selectedShop.response_message,
-                function(obj) {
+                function (obj) {
                   return obj.key === 'Popup - Insufficient credit';
                 }
               );
@@ -1110,7 +1111,7 @@ export default class Checkout extends React.Component {
     if (isPickupToogle) {
       this.setState(
         { isPickupToogle: false, isTimeSelectorToggled: false },
-        function() {
+        function () {
           Animated.spring(this.movePickAnimation, {
             toValue: { x: 0, y: windowHeight }
           }).start();
@@ -1119,7 +1120,7 @@ export default class Checkout extends React.Component {
     } else {
       this.setState(
         { isPickupToogle: true, isTimeSelectorToggled: true },
-        function() {
+        function () {
           Animated.spring(this.movePickAnimation, {
             toValue: { x: 0, y: 52 * alpha }
           }).start();
@@ -1135,7 +1136,7 @@ export default class Checkout extends React.Component {
 
     this.setState(
       { isTimeSelectorToggled: !isTimeSelectorToggled },
-      function() {
+      function () {
         Animated.spring(this.timeSelectorAnimation, {
           toValue: { x: 0, y: y() }
         }).start();
@@ -1150,13 +1151,13 @@ export default class Checkout extends React.Component {
     var content = 247 * alpha;
 
     if (isPaymentToggle) {
-      this.setState({ isPaymentToggle: false }, function() {
+      this.setState({ isPaymentToggle: false }, function () {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
       });
     } else {
-      this.setState({ isPaymentToggle: true }, function() {
+      this.setState({ isPaymentToggle: true }, function () {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: 52 * alpha }
         }).start();
@@ -1490,8 +1491,6 @@ export default class Checkout extends React.Component {
 
   renderVoucherSection(vouchers) {
     const { cart_total, discount_cart_total } = this.props;
-    let { deliveryFee } = this.state;
-    // const delivery_final_price = discount_cart_total + deliveryFee;
     const voucher_items = vouchers.map((item, key) => {
       var discount_value = null;
 
@@ -1499,8 +1498,7 @@ export default class Checkout extends React.Component {
         if (item.voucher.discount_type == 'fixed') {
           discount_value = item.voucher.discount_price;
         } else if (item.voucher.discount_type == 'percent') {
-          discount_value =
-            (discount_cart_total * item.voucher.discount_price) / 100.0;
+          discount_value = (cart_total * item.voucher.discount_price) / 100.0;
         }
       }
 
@@ -1538,9 +1536,7 @@ export default class Checkout extends React.Component {
               <Text style={styles.voucherPriceText}>{`-$${parseFloat(
                 discount_value
               ).toFixed(2)}`}</Text>
-            ) : (
-              undefined
-            )}
+            ) : undefined}
 
             <TouchableOpacity
               onPress={() => this.onCancelVoucher(item)}
@@ -1561,7 +1557,9 @@ export default class Checkout extends React.Component {
       );
     });
 
-    var valid_voucher_counts = _.filter(this.state.valid_vouchers, function(o) {
+    var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (
+      o
+    ) {
       if (o.is_valid == true) return o;
     }).length;
     return (
@@ -1746,7 +1744,7 @@ export default class Checkout extends React.Component {
           : '';
       let filtered =
         item.selected_variants != null
-          ? item.selected_variants.filter(function(el) {
+          ? item.selected_variants.filter(function (el) {
               return el;
             })
           : [];
@@ -1817,10 +1815,10 @@ export default class Checkout extends React.Component {
   }
 
   renderDeliveryAddress = (address) => {
-    let { deliveryFee, subTotal_price, delivery_description } = this.state;
+    let { deliveryFee, final_price, delivery_description } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
     let non_negative_subTotal_price = parseFloat(
-      Math.max(0, subTotal_price)
+      Math.max(0, final_price)
     ).toFixed(2);
 
     return (
@@ -1918,11 +1916,18 @@ export default class Checkout extends React.Component {
     />
   );
   renderCheckoutReceipt() {
-    const { vouchers_to_use, final_price, selected_address } = this.state;
+    const {
+      vouchers_to_use,
+      final_price,
+      selected_address,
+      deliveryFee
+    } = this.state;
     let { selectedShop, cart, promotions, delivery } = this.props;
-    let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
-      2
-    );
+    var final_price_delivery =
+      parseFloat(final_price) + parseFloat(deliveryFee);
+    let non_negative_final_price = parseFloat(
+      Math.max(0, final_price_delivery)
+    ).toFixed(2);
     return (
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
@@ -2062,10 +2067,15 @@ export default class Checkout extends React.Component {
   }
 
   renderPayNow(final_price) {
+    let { deliveryFee } = this.state;
+    let final_price_delivery =
+      parseFloat(final_price) + parseFloat(deliveryFee);
     return (
       <View style={styles.totalPayNowView}>
         <View style={styles.paymentButton}>
-          <Text style={styles.paymentButtonText}>${final_price}</Text>
+          <Text style={styles.paymentButtonText}>
+            ${final_price_delivery.toFixed(2)}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() => this.onPayNowPressed()}
