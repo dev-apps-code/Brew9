@@ -145,30 +145,8 @@ export default class ShippingAddress extends React.Component {
     const { navigation, dispatch } = this.props;
     dispatch(createAction('members/savePrimaryShippingAddress')(item));
     navigation.navigate('Checkout');
-    // this.updateDefaultAddress(shippingAddress, item.id)
   };
 
-  updateDefaultAddress = (formData, address_id) => {
-    const { navigation, dispatch, currentMember } = this.props;
-    const callback = (eventObject) => {
-      if (eventObject.success) {
-        navigation.navigate('Checkout');
-      } else {
-        this.refs.toast.show('Something Happen', 500);
-      }
-    };
-    const obj = new UpdateShippingAddressObjectRequest(
-      formData,
-      currentMember.id
-    );
-    obj.setUrlId(address_id);
-    dispatch(
-      createAction('members/updateShippingAddress')({
-        object: obj,
-        callback
-      })
-    );
-  };
   renderShippingAddress = (item) => {
     let selected = item.primary ? styles.selectTwoView : styles.selectView;
     return (

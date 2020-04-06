@@ -1240,7 +1240,7 @@ export default class Home extends React.Component {
 		selected_variants[key] = selected_item
 		let filtered = selected_variants.filter(function (el) { return el })
 		let total = filtered.reduce((a, b) => +a + +b.price, 0)
-		selected_product.calculated_price = (parseFloat(selected_product.price) + parseFloat(total)).toFixed(2)
+		selected_product.calculated_price = (parseFloat(selected_product.discounted_price) + parseFloat(total)).toFixed(2)
 		this.setState({
 			products: this.state.products
 		})
@@ -1777,20 +1777,23 @@ export default class Home extends React.Component {
 
 		if (shop != null) {
 			AsyncStorage.getItem("featured", (err, result) => {
-				if (result == null || result != shop.featured_promotion.id) {
-					if (currentMember != null) {
-						if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
-							AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
-							this.onFeaturedPromotionPressed(shop.featured_promotion)
-						} else if (shop.featured_promotion.for_new_user == false) {
+				if(shop.featured_promotion != null){
+					if (result == null || result != shop.featured_promotion.id) {
+						if (currentMember != null) {
+							if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+								AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+								this.onFeaturedPromotionPressed(shop.featured_promotion)
+							} else if (shop.featured_promotion.for_new_user == false) {
+								AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
+								this.onFeaturedPromotionPressed(shop.featured_promotion)
+							}
+						} else {
 							AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
 							this.onFeaturedPromotionPressed(shop.featured_promotion)
 						}
-					} else {
-						AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
-						this.onFeaturedPromotionPressed(shop.featured_promotion)
 					}
 				}
+				
 			})
 		}
 
