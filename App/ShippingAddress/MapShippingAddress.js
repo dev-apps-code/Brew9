@@ -78,7 +78,10 @@ export default class MapShippingAddress extends React.Component {
       latitude: parseFloat(this.props.navigation.state.params.area.latitude),
       longitude: parseFloat(this.props.navigation.state.params.area.longitude),
       error: null,
-      delivery_area: this.props.navigation.state.params.area.area
+      delivery_area: this.props.navigation.state.params.area.area,
+      address: '',
+      address_detail: '',
+      name: ''
     };
   }
 
@@ -143,42 +146,30 @@ export default class MapShippingAddress extends React.Component {
       address
     });
   };
-  onChangeCity = (city) => {
+  onChangeName = (name) => {
     this.setState({
-      city
+      name
     });
   };
-  onChangePoscode = (postal_code) => {
+  onChangeAddressDetail = (address_detail) => {
     this.setState({
-      postal_code
+      address_detail
     });
   };
-  onChangeCountry = (country) => {
-    this.setState({
-      country
-    });
-  };
-  onChangeState = (state) => {
-    this.setState({
-      state
-    });
-  };
+  // onChangeCountry = (country) => {
+  //   this.setState({
+  //     country
+  //   });
+  // };
+  // onChangeState = (state) => {
+  //   this.setState({
+  //     state
+  //   });
+  // };
 
   checkForm = () => {
-    let { address, city, state, postal_code, country } = this.state;
-    if (!city) {
-      this.refs.toast.show('Please select a city', 500);
-      return false;
-    } else if (!state) {
-      this.refs.toast.show('Please select your state', 500);
-      return false;
-    } else if (!postal_code) {
-      this.refs.toast.show('Please select your postal code', 500);
-      return false;
-    } else if (!country) {
-      this.refs.toast.show('Please select your country', 500);
-      return false;
-    } else if (!address) {
+    let { address, address_detail, name } = this.state;
+    if (!address) {
       this.refs.toast.show('Please fill in your address', 500);
       return false;
     }
@@ -189,10 +180,9 @@ export default class MapShippingAddress extends React.Component {
     const { navigation } = this.props;
     let {
       address,
-      city,
-      state,
-      postal_code,
-      country,
+      name,
+      address_detail,
+
       latitude,
       longitude,
       delivery_area
@@ -200,11 +190,7 @@ export default class MapShippingAddress extends React.Component {
     let formcheck = this.checkForm();
     if (formcheck) {
       const shippingAddress = {
-        address: address,
-        city: city,
-        state: state,
-        postal_code: postal_code,
-        country: country,
+        address: name + ' ' + address_detail + ' ' + address,
         latitude: latitude,
         longitude: longitude,
         delivery_area: delivery_area
@@ -227,21 +213,27 @@ export default class MapShippingAddress extends React.Component {
             style={{ height: windowHeight / 4, marginBottom: 50 * alpha }}
           >
             <View style={styles.formView}>
-              {this.renderForm('Address', 'No.1, Spg1, Kg A', false, (text) =>
-                this.onChangeAddress(text)
+              {this.renderForm('Name', 'e.g. Gym/School', false, (text) =>
+                this.onChangeName(text)
               )}
-              {this.renderForm('State', 'Brunei Muara', false, (text) =>
-                this.onChangeState(text)
+              {this.renderForm(
+                'Address',
+                'e.g. No.1, Spg1, Kg A',
+                false,
+                (text) => this.onChangeAddress(text)
               )}
-              {this.renderForm('Poscode', 'XX1111', false, (text) =>
-                this.onChangePoscode(text)
+              {this.renderForm(
+                'Address details',
+                'e.g Floor, unit number',
+                false,
+                (text) => this.onChangeAddressDetail(text)
               )}
-              {this.renderForm('City', 'BSB', false, (text) =>
+              {/* {this.renderForm('City', 'BSB', false, (text) =>
                 this.onChangeCity(text)
               )}
               {this.renderForm('Country', 'Brunei', false, (text) =>
                 this.onChangeCountry(text)
-              )}
+              )} */}
             </View>
           </ScrollView>
           <TouchableOpacity
