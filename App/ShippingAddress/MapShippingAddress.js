@@ -78,7 +78,10 @@ export default class MapShippingAddress extends React.Component {
       latitude: parseFloat(this.props.navigation.state.params.area.latitude),
       longitude: parseFloat(this.props.navigation.state.params.area.longitude),
       error: null,
-      delivery_area: this.props.navigation.state.params.area.area
+      delivery_area: this.props.navigation.state.params.area.area,
+      address: '',
+      address_detail: '',
+      name: ''
     };
   }
 
@@ -187,7 +190,7 @@ export default class MapShippingAddress extends React.Component {
     let formcheck = this.checkForm();
     if (formcheck) {
       const shippingAddress = {
-        address: name + ',' + address_detail + ',' + address,
+        address: name + ' ' + address_detail + ' ' + address,
         latitude: latitude,
         longitude: longitude,
         delivery_area: delivery_area
