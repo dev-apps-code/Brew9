@@ -1780,10 +1780,10 @@ export default class Home extends React.Component {
 				if(shop.featured_promotion != null){
 					if (result == null || result != shop.featured_promotion.id) {
 						if (currentMember != null) {
-							if (shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
+							if (shop.featured_promotion != null && shop.featured_promotion.for_new_user == true && currentMember.first_time_buyer == true) {
 								AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
 								this.onFeaturedPromotionPressed(shop.featured_promotion)
-							} else if (shop.featured_promotion.for_new_user == false) {
+							} else if (shop.featured_promotion != null && shop.featured_promotion.for_new_user == false) {
 								AsyncStorage.setItem("featured", JSON.stringify(shop.featured_promotion.id))
 								this.onFeaturedPromotionPressed(shop.featured_promotion)
 							}
