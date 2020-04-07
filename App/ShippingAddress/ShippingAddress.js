@@ -60,7 +60,7 @@ export default class ShippingAddress extends React.Component {
             fontFamily: TITLE_FONT
           }}
         >
-          Shipping Address
+          Delivery Address
         </Text>
       ),
       headerTintColor: 'black',
@@ -157,9 +157,9 @@ export default class ShippingAddress extends React.Component {
             <View style={{ flex: 1, marginLeft: 15 * alpha }}>
               <Text style={styles.addressText}>{item.fullname}</Text>
               <Text style={styles.addressText}>{item.address}</Text>
-              <Text style={styles.addressText}>
+              {/* <Text style={styles.addressText}>
                 {item.city}, {item.postal_code},{item.state}, {item.country}
-              </Text>
+              </Text> */}
             </View>
             <View style={{ flex: 0.25 }} />
           </View>
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: 'black',
+    backgroundColor: PRIMARY_COLOR,
     paddingVertical: 10 * alpha,
     borderRadius: 4 * alpha,
     height: 47 * alpha
@@ -278,9 +278,9 @@ const styles = StyleSheet.create({
     marginBottom: 10 * alpha,
     paddingTop: 20 * alpha,
     paddingHorizontal: 10 * alpha,
-    borderRadius: 5 * alpha,
-    borderWidth: 0.5,
-    borderColor: LIGHT_GREY
+    borderRadius: 5 * alpha
+    // borderWidth: 0.5,
+    // borderColor: LIGHT_GREY
   },
   headingStyle: {
     fontSize: 18 * fontAlpha,

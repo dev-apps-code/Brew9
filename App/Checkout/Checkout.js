@@ -1848,15 +1848,17 @@ export default class Checkout extends React.Component {
               {address && (
                 <View>
                   <Text style={styles.addressText}>
-                    {address.address +
-                      '\n' +
-                      address.city +
-                      ' , ' +
-                      address.postal_code +
-                      ', ' +
-                      address.state +
-                      ', ' +
-                      address.country}
+                    {
+                      address.address
+                      // '\n' +
+                      // address.city +
+                      // ' , ' +
+                      // address.postal_code +
+                      // ', ' +
+                      // address.state +
+                      // ', ' +
+                      // address.country
+                    }
                   </Text>
                 </View>
               )}
