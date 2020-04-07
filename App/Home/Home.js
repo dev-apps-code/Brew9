@@ -1009,16 +1009,7 @@ export default class Home extends React.Component {
 
 							shop.all_promotions[index].has_triggered = true
 
-							let cartItem = {
-								clazz: "promotion",
-								id: promotion.id,
-								name: promotion.cart_text,
-								description: "",
-								price: price,
-								type: promotion.reward_type
-							}
-
-							promotions_item.push(cartItem)
+					
 
 							if (promotion.reward_type != null && promotion.reward_type == "Discount") {
 
@@ -1036,6 +1027,17 @@ export default class Home extends React.Component {
 									final_cart_value = cart_total - discount_value
 								}
 							}
+
+							let cartItem = {
+								clazz: "promotion",
+								id: promotion.id,
+								name: promotion.cart_text,
+								description: "",
+								price: price,
+								type: promotion.reward_type
+							}
+
+							promotions_item.push(cartItem)
 						} else {
 							var display_text = promotion.display_text
 							final_promo_text = display_text.replace("$remaining", `$${parseFloat(remaining).toFixed(2)}`);
