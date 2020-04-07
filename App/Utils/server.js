@@ -1,12 +1,13 @@
 import Constants from "expo-constants";
 import { Platform } from "react-native"
+import {getServerIndex} from './storage'
 // export const KSERVERURL = "https://app.brew9.co/api"
 // export const KURL_INFO = "https://app.brew9.co/info"
 // export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
 
-export const KSERVERURL = "http://test.brew9.co/api"
-export const KURL_INFO = "http://test.brew9.co/info"
-export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
+// export const KSERVERURL = "http://test.brew9.co/api"
+// export const KURL_INFO = "http://test.brew9.co/info"
+// export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
 
 // export const KSERVERURL = "https://dev.brew9.co/api"
 // export const KURL_INFO = "https://dev.brew9.co/info"
@@ -20,13 +21,63 @@ export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
 // export const KSERVERURL ='https://18624bd1.ngrok.io/api'
 // export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
 
-export const KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
-export const KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
-export const KURL_EULA = KURL_INFO + "?page=eula&id=1";
-export const KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export const KCURRENT_API_VERSION_HEADER = "application/dc.v5 gzip";
-export const APPBUILDVERSIONIOS = "14";
-export const APPBUILDVERSIONANDROID = "14";
+export const KSERVERURLLIST = [
+  "http://test.brew9.co/api",
+  "https://app.brew9.co/api",
+  "http://dev1.brew9.co/api",
+  "http://dev1.brew9.co/api",
+  // "http://dev2.brew9.co/api",
+  // "http://dev3.brew9.co/api",
+  // "http://dev4.brew9.co/api",
+];
+export const KURL_INFOLIST = [
+  "http://test.brew9.co/info",
+  "https://app.brew9.co/info",
+  "http://dev1.brew9.co/info",
+  "http://dev1.brew9.co/info",
+
+  // "http://dev2.brew9.co/info",
+  // "http://dev3.brew9.co/info",
+  // "http://dev4.brew9.co/info",
+
+];
+export const KPAYMENTYURLLIST = [
+  "http://test.brew9.co/payments/baiduri",
+  "https://app.brew9.co/payments/baiduri",
+  "http://dev1.brew9.co/payments/baiduri",
+  "http://dev1.brew9.co/payments/baiduri",
+  // "http://dev2.brew9.co/payments/baiduri",
+  // "http://dev3.brew9.co/payments/baiduri",
+  // "http://dev4.brew9.co/payments/baiduri",
+
+];
+
+
+export async function loadServer() {
+  // console.log("loadserverindex")
+  var serverIndex = await getServerIndex();
+  KSERVERURL = KSERVERURLLIST[serverIndex];
+  KURL_INFO = KURL_INFOLIST[serverIndex];
+  KPAYMENTYURL = KPAYMENTYURLLIST[serverIndex];
+  KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
+  KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
+  KURL_EULA = KURL_INFO + "?page=eula&id=1";
+  KURL_MEMBERSHIP_INFO = KURL_INFO + "/membership_info";
+  return;
+}
+
+export let KSERVERURL = KSERVERURLLIST[0];
+export let KURL_INFO = KURL_INFOLIST[0];
+export let KPAYMENTYURL = KPAYMENTYURLLIST[0];
+
+
+export let KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
+export let KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
+export let KURL_EULA = KURL_INFO + "?page=eula&id=1";
+export let KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
+export let KCURRENT_API_VERSION_HEADER = "application/dc.v5 gzip";
+export let APPBUILDVERSIONIOS = "14";
+export let APPBUILDVERSIONANDROID = "14";
 
 export const KTIMEOUT = 3 * 1000;
 

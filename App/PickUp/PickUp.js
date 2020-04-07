@@ -218,7 +218,7 @@ export default class PickUp extends React.Component {
       var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
       var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
       var claim_day = claim_time != today ? 'TOMORROW' : '';
-      let cart_total = parseFloat(item.total) + parseFloat(item.discount);
+      let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
       var pick_up_title =
         item.delivery_method == 0 && item.pickup_status == 'Order Now'
           ? 'Order Time'
@@ -233,8 +233,8 @@ export default class PickUp extends React.Component {
           : item.status == 'ready'
           ? 1
           : 0;
-      var calculate_cart_total =
-        parseFloat(item.sub_total) + parseFloat(item.discount);
+      var delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
+      var calculate_cart_total = cart_total;
 
       var paid_order_message =
         'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable';
@@ -321,50 +321,51 @@ export default class PickUp extends React.Component {
       const promotions = item.promotions.map((item, key) => {
         var promotion_discount = '';
 
-        if (item.reward_type == 'Discount') {
-          if (item.value_type == 'fixed') {
-            promotion_discount = `-$${item.value}`;
-            calculate_cart_total -= item.value;
-          } else if (item.value_type == 'percent') {
-            promotion_discount = `-$${parseFloat(
-              calculate_cart_total * (item.value / 100)
-            ).toFixed(2)}`;
-            calculate_cart_total -= parseFloat(
-              calculate_cart_total * (item.value / 100)
-            );
-          }
+        // if (item.reward_type == 'Discount') {
+        if (item.value_type == 'fixed') {
+          promotion_discount = `-$${item.value}`;
+          calculate_cart_total -= item.value;
+        } else if (item.value_type == 'percent') {
+          promotion_discount = `-$${parseFloat(
+            calculate_cart_total * (item.value / 100)
+          ).toFixed(2)}`;
+          calculate_cart_total -= parseFloat(
+            calculate_cart_total * (item.value / 100)
+          );
+        }
 
-          return (
-            <View style={styles.drinksView} key={key}>
-              <View
-                pointerEvents="box-none"
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row'
-                }}
-              >
-                <View style={styles.productDetailView}>
-                  <Text style={styles.productNameText}>{item.name}</Text>
+        return (
+          <View style={styles.drinksView} key={key}>
+            <View
+              pointerEvents="box-none"
+              style={{
+                justifyContent: 'center',
+                backgroundColor: 'transparent',
+                flex: 1,
+                flexDirection: 'row'
+              }}
+            >
+              <View style={styles.productDetailView}>
+                <Text style={styles.productNameText}>{item.name}</Text>
 
-                  <View style={styles.spacer} />
-                </View>
+                <View style={styles.spacer} />
+              </View>
 
+              {item.reward_type == 'Discount' && (
                 <Text style={styles.productPriceText}>
                   {promotion_discount}
                 </Text>
-                {item.promotions != null &&
-                  key < item.promotions.length - 1 && (
-                    <Image
-                      source={require('./../../assets/images/dotted-line.png')}
-                      style={styles.dottedLineImage}
-                    />
-                  )}
-              </View>
+              )}
+              {item.promotions != null && key < item.promotions.length - 1 && (
+                <Image
+                  source={require('./../../assets/images/dotted-line.png')}
+                  style={styles.dottedLineImage}
+                />
+              )}
             </View>
-          );
-        }
+          </View>
+        );
+        // }
       });
 
       const voucher_items = item.voucher_items.map((item, key) => {
@@ -659,7 +660,6 @@ export default class PickUp extends React.Component {
               />
               <View style={styles.sectionSeperatorView} />
             </View>
-
             <View style={styles.totalViewWrapper}>
               <View style={styles.orderTotalView}>
                 <Text style={styles.totallabelText}>Status</Text>

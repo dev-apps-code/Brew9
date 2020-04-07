@@ -31,7 +31,10 @@ import {
   KURL_INFO,
   KURL_TERMS_OF_SERVICE,
   KURL_PRIVACY_POLICY,
-  KURL_EULA
+  KURL_EULA,
+  KSERVERURL,
+  loadServer,
+  APPBUILDVERSIONANDROID
 } from '../Utils/server';
 import Hyperlink from 'react-native-hyperlink';
 import {
@@ -72,15 +75,41 @@ export default class VerifyUser extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    // await loadServer();
+    // console.log(KSERVERURL);
+    let str = KSERVERURL;
+    let r = str.match(/https?:\/\/(.*?)\//);
+    let link = r[1];
+    // console.log(link)
+    this.refs.toast.show(
+      link + ' - api version 2 - build no ' + APPBUILDVERSIONANDROID
+    );
+  }
+
+  async reset() {
+    // console.log("back to verify page");
+    // console.log(KSERVERURL);
+    let str = KSERVERURL;
+    let r = str.match(/https?:\/\/(.*?)\//);
+    let link = r[1];
+    // console.log(link)
+    this.refs.toast.show(
+      link + ' - api version 2 - build no ' + APPBUILDVERSIONANDROID
+    );
+    this.props.navigation.state.params.onGoBack();
+    this.props.navigation.goBack();
+  }
 
   componentWillMount() {}
 
   onTermsAndConditionsPressed = (url, title) => {
+    url = KURL_EULA;
     const { navigate } = this.props.navigation;
     navigate('WebCommon', {
       title: title,
-      web_url: url + '&id=' + this.props.company_id
+      web_url: url + '&id=' + this.props.company_id,
+      onGoBack: () => this.reset()
     });
   };
 
@@ -151,8 +180,8 @@ export default class VerifyUser extends React.Component {
 
     this.setState({ loading: true });
     const callback = (eventObject) => {
-      console.log('eventObject', eventObject);
       if (eventObject.success) {
+		  console.log(eventObject)
         this.setState({
           login_success: true,
           is_counting: true,

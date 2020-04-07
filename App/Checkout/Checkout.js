@@ -105,7 +105,7 @@ export default class Checkout extends React.Component {
       this.onPayNowPressed.bind(this),
       500 // no new clicks within 500ms time window
     );
-    const { discount_cart_total, currentMember } = props;
+    const { discount_cart_total, currentMember, cart_total } = props;
     this.state = {
       delivery_options: 'pickup',
       delivery_description: null,
@@ -130,13 +130,13 @@ export default class Checkout extends React.Component {
       selected_hour_index: 0,
       selected_minute_index: 0,
       paynow_clicked: false,
-      subTotal_price: discount_cart_total,
-      final_price: discount_cart_total,
-      delivery_final_price: discount_cart_total,
+      sub_total_voucher: 0,
+      final_price: cart_total,
       visible: false,
       applyCode: false,
       addressConfirmation: false,
-      deliveryFee: 0
+      deliveryFee: 0,
+      loading: false
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -156,7 +156,7 @@ export default class Checkout extends React.Component {
       {
         valid_vouchers: []
       },
-      function() {
+      function () {
         this.loadValidVouchers();
         {
           delivery && this.loadDeliveryFee(this.props.discount_cart_total);
@@ -180,37 +180,39 @@ export default class Checkout extends React.Component {
     }
   }
 
-  setTimePickerDefault(date) {
-    const { selectedShop } = this.props;
-    var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
-    var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
-    var time_now = date || Moment();
+  setTimePickerDefault(day, isOrderForTomorrow) {
+    const { start_time, end_time } = day
+      ? day
+      : this.props.selectedShop.opening_hour;
+
+    var startTime = Moment(start_time, 'h:mm');
+    var endTime = Moment(end_time, 'h:mm');
+    var time_now = Moment(new Date(), 'h:mm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
+
+    if (isOrderForTomorrow == true) {
+      hour = startTime.hours();
+      min = startTime.minutes();
+    }
+
     var minute_array = ['00', '15', '30', '45'];
-
-    var first_hour =
-      hour > opening.hours() && min > 45
-        ? hour + 1
-        : hour > opening.hours()
-        ? hour
-        : opening.hours();
-    var last_hour = closing.hours();
-
     var hour_array = _.range(first_hour, last_hour + 1);
-
     var selected_minute = '';
-    if (hour >= opening.hours() && min < 45) {
-      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+
+    if (hour >= startTime.hours() && min < 45) {
+      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
         return parseInt(o) > min;
       });
     }
-    if (hour >= closing.hours()) {
-      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
-        return parseInt(o) <= closing.minutes();
+
+    if (hour >= endTime.hours()) {
+      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
+        return parseInt(o) <= endTime.minutes();
       });
     }
+
     if (hour) selected_minute = minute_array[0];
 
     if (minute_array.length < 3) {
@@ -220,14 +222,15 @@ export default class Checkout extends React.Component {
     selected_minute = minute_array[0];
 
     var first_hour =
-      hour >= opening.hours() && min > 45
+      hour >= startTime.hours() && min > 45
         ? hour + 1
-        : hour > opening.hours()
+        : hour > startTime.hours()
         ? hour
-        : opening.hours();
-    var last_hour = closing.hours();
+        : startTime.hours();
 
+    var last_hour = endTime.hours();
     var hour_array = _.range(first_hour, last_hour + 1);
+
     if (hour_array.length < 3) {
       hour_array.length = 3;
     }
@@ -242,17 +245,18 @@ export default class Checkout extends React.Component {
 
   checkAvailableMinute(option) {
     const { selectedShop } = this.props;
-
-    var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
+    var delivery = this.props.delivery;
+    var endTime = delivery
+      ? Moment(selectedShop.delivery_hour.today.end_time, 'h:mm')
+      : Moment(selectedShop.opening_hour.end_time, 'h:mm');
 
     var minute_array = ['00', '15', '30', '45'];
     var time_now = Moment(new Date(), 'h:mm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
-
     if (hour == option) {
-      minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
         let minOption = parseInt(o);
         return minOption > min;
       });
@@ -264,12 +268,10 @@ export default class Checkout extends React.Component {
         minute_range: minute_array
       });
     } else {
-      var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
-
-      if (option == closing.hours()) {
-        minute_array = _.filter(['00', '15', '30', '45'], function(o) {
+      if (option == endTime.hours()) {
+        minute_array = _.filter(['00', '15', '30', '45'], function (o) {
           let minOption = parseInt(o);
-          return minOption <= closing.minutes();
+          return minOption <= endTime.minutes();
         });
       }
       if (minute_array.length < 3) {
@@ -292,7 +294,7 @@ export default class Checkout extends React.Component {
         {
           selected_hour_index: index - 1
         },
-        function() {
+        function () {
           this.sphour.scrollToIndex(this.state.selected_hour_index);
         }
       );
@@ -320,7 +322,7 @@ export default class Checkout extends React.Component {
             minute_range: ['00', '15', '30', '45'],
             selected_hour: hour_range[selected_hour_index + 1]
           },
-          function() {
+          function () {
             this.spminute.scrollToIndex(0);
           }
         );
@@ -337,12 +339,9 @@ export default class Checkout extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         let deliveryFee = parseFloat(eventObject.result.delivery_fee);
-        let final_price = parseFloat(total) + deliveryFee;
-
         this.setState({
           deliveryFee: deliveryFee,
-          delivery_description: eventObject.result.delivery_fee_description,
-          final_price: final_price
+          delivery_description: eventObject.result.delivery_fee_description
         });
       }
     };
@@ -374,7 +373,7 @@ export default class Checkout extends React.Component {
           });
           var valid_voucher_counts = _.filter(
             this.state.valid_vouchers,
-            function(o) {
+            function (o) {
               if (o.is_valid == true) return o;
             }
           ).length;
@@ -444,13 +443,16 @@ export default class Checkout extends React.Component {
 
   // setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
 
-  onSelectPickLater() {
+  onSelectOrderNow() {
     var currentDate = Moment();
     var selected_date = currentDate.format('YYYY-MM-DD');
-    var pick_up_status = 'Pick Later';
+    var pick_up_status = 'Order Now';
+    var now = new Moment().format('HH:mm');
+    var pick_up_time = `${selected_date} ${now}`;
 
-    this.setTimePickerDefault();
-    this.setState({ pick_up_status, selected_date });
+    this.setState({ pick_up_status, selected_date, pick_up_time });
+
+    this.toggleTimeSelector();
   }
 
   onSelectOrderTomorrow = () => {
@@ -458,21 +460,31 @@ export default class Checkout extends React.Component {
     var tomorrow = Moment().add(1, 'days');
     var selected_date = tomorrow.format('YYYY-MM-DD');
     var pick_up_status = 'Pick Tomorrow'; // What if delivery?
+    // console.log('startOfDay: ', tomorrow.startOf('day'));
 
-    this.setTimePickerDefault(tomorrow.startOf('day'));
+    console.log('delivery_hours ', selectedShop.delivery_hour);
+
+    this.setTimePickerDefault(selectedShop.delivery_hour.tomorrow, true);
     this.setState({ pick_up_status, selected_date });
   };
 
-  onSelectOrderNow() {
+  onSelectOrderLater() {
     const { selectedShop } = this.props;
     var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
     var time_now = Moment(new Date(), 'h:mm');
     var currentDate = Moment();
     var selected_date = currentDate.format('YYYY-MM-DD');
-    var pick_up_status = 'Order Now';
+    var pick_up_status = 'Pick Later';
 
-    this.setTimePickerDefault();
+    console.log('opening_hour ', selectedShop.opening_hour);
+    const day = {
+      start_time: selectedShop.opening_hour.order_start_time,
+      end_time: selectedShop.opening_hour.order_stop_time
+    };
+
+    this.setTimePickerDefault(day);
+
     if (opening.hour() <= time_now.hour()) {
       if (opening.hour() == time_now.hour()) {
         if (opening.minutes() <= time_now.minutes()) {
@@ -546,7 +558,7 @@ export default class Checkout extends React.Component {
       {
         vouchers_to_use: new_voucher_list
       },
-      function() {
+      function () {
         this.calculateVoucherDiscount(new_voucher_list);
       }
     );
@@ -594,13 +606,16 @@ export default class Checkout extends React.Component {
       selectedShop,
       delivery
     } = this.props;
+    let { sub_total_voucher, deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
     let finalCart = [];
     var promotions_item = [];
-    var final_cart_value = cart_total;
+    var final_cart_value =
+      sub_total_voucher != 0 ? sub_total_voucher : cart_total;
+    var cart_total_voucher =
+      sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -627,20 +642,20 @@ export default class Checkout extends React.Component {
                   promotion.value_type == 'percent'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  price = (cart_total * discount_value) / 100;
+                  price = (cart_total_voucher * discount_value) / 100;
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
                   ) {
                     price = promotion.maximum_discount_allow;
                   }
-                  final_cart_value = cart_total - price;
+                  final_cart_value = cart_total_voucher - price;
                 } else if (
                   promotion.value_type != null &&
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  final_cart_value = cart_total - discount_value;
+                  final_cart_value = cart_total_voucher - discount_value;
                 }
               }
 
@@ -666,11 +681,12 @@ export default class Checkout extends React.Component {
           }
         }
       }
+      this.setState({ final_price: final_cart_value });
     }
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function() {
+      this.setState({ isCartToggle: false }, function () {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
@@ -715,23 +731,24 @@ export default class Checkout extends React.Component {
           if (voucher.discount_type.toLowerCase() == 'fixed') {
             discount = voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
-            discount = (discount_cart_total * voucher.discount_price) / 100.0;
+            discount = (cart_total * voucher.discount_price) / 100.0;
           }
         }
       }
     }
-    const subf_price = discount_cart_total - discount;
-    const f_price = subf_price + deliveryFee;
+    const subf_price = cart_total - discount;
+    const f_price = subf_price;
     this.setState(
       {
         discount: discount,
         final_price: f_price.toFixed(2),
-        subTotal_price: subf_price.toFixed(2)
+        sub_total_voucher: subf_price.toFixed(2)
       },
-      function() {
+      function () {
         if (selected_payment == 'credit_card' && f_price <= 0) {
           this.setState({ selected_payment: '' });
         }
+        this.check_promotion_trigger();
       }
     );
   }
@@ -836,31 +853,23 @@ export default class Checkout extends React.Component {
     let address_id = selected_address == null ? null : selected_address.id;
     this.setState({ loading: true });
     const callback = (eventObject) => {
+      this.setState({ loading: false });
       if (eventObject.success) {
         if (selected_payment == 'credits') {
           setTimeout(
-            function() {
+            function () {
               this.clearCart();
-              this.setState({
-                loading: false
-              });
             }.bind(this),
             500
           );
         } else if (selected_payment == 'counter') {
           setTimeout(
-            function() {
+            function () {
               this.clearCart();
-              this.setState({
-                loading: false
-              });
             }.bind(this),
             500
           );
         } else {
-          this.setState({
-            loading: false
-          });
           const order = eventObject.result;
 
           navigate('PaymentsWebview', {
@@ -882,9 +891,7 @@ export default class Checkout extends React.Component {
           </View>,
           TOAST_DURATION
         );
-        this.setState({
-          loading: false
-        });
+
         if (Array.isArray(eventObject.result)) {
           if (eventObject.result.length > 0) {
             let item = eventObject.result[0];
@@ -998,7 +1005,7 @@ export default class Checkout extends React.Component {
             if (selectedShop.response_message != undefined) {
               insufficient_response = _.find(
                 selectedShop.response_message,
-                function(obj) {
+                function (obj) {
                   return obj.key === 'Popup - Insufficient credit';
                 }
               );
@@ -1104,7 +1111,7 @@ export default class Checkout extends React.Component {
     if (isPickupToogle) {
       this.setState(
         { isPickupToogle: false, isTimeSelectorToggled: false },
-        function() {
+        function () {
           Animated.spring(this.movePickAnimation, {
             toValue: { x: 0, y: windowHeight }
           }).start();
@@ -1113,7 +1120,7 @@ export default class Checkout extends React.Component {
     } else {
       this.setState(
         { isPickupToogle: true, isTimeSelectorToggled: true },
-        function() {
+        function () {
           Animated.spring(this.movePickAnimation, {
             toValue: { x: 0, y: 52 * alpha }
           }).start();
@@ -1129,7 +1136,7 @@ export default class Checkout extends React.Component {
 
     this.setState(
       { isTimeSelectorToggled: !isTimeSelectorToggled },
-      function() {
+      function () {
         Animated.spring(this.timeSelectorAnimation, {
           toValue: { x: 0, y: y() }
         }).start();
@@ -1144,13 +1151,13 @@ export default class Checkout extends React.Component {
     var content = 247 * alpha;
 
     if (isPaymentToggle) {
-      this.setState({ isPaymentToggle: false }, function() {
+      this.setState({ isPaymentToggle: false }, function () {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: windowHeight }
         }).start();
       });
     } else {
-      this.setState({ isPaymentToggle: true }, function() {
+      this.setState({ isPaymentToggle: true }, function () {
         Animated.spring(this.moveAnimation, {
           toValue: { x: 0, y: 52 * alpha }
         }).start();
@@ -1484,8 +1491,6 @@ export default class Checkout extends React.Component {
 
   renderVoucherSection(vouchers) {
     const { cart_total, discount_cart_total } = this.props;
-    let { deliveryFee } = this.state;
-    // const delivery_final_price = discount_cart_total + deliveryFee;
     const voucher_items = vouchers.map((item, key) => {
       var discount_value = null;
 
@@ -1493,8 +1498,7 @@ export default class Checkout extends React.Component {
         if (item.voucher.discount_type == 'fixed') {
           discount_value = item.voucher.discount_price;
         } else if (item.voucher.discount_type == 'percent') {
-          discount_value =
-            (discount_cart_total * item.voucher.discount_price) / 100.0;
+          discount_value = (cart_total * item.voucher.discount_price) / 100.0;
         }
       }
 
@@ -1532,9 +1536,7 @@ export default class Checkout extends React.Component {
               <Text style={styles.voucherPriceText}>{`-$${parseFloat(
                 discount_value
               ).toFixed(2)}`}</Text>
-            ) : (
-              undefined
-            )}
+            ) : undefined}
 
             <TouchableOpacity
               onPress={() => this.onCancelVoucher(item)}
@@ -1555,7 +1557,9 @@ export default class Checkout extends React.Component {
       );
     });
 
-    var valid_voucher_counts = _.filter(this.state.valid_vouchers, function(o) {
+    var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (
+      o
+    ) {
       if (o.is_valid == true) return o;
     }).length;
     return (
@@ -1740,7 +1744,7 @@ export default class Checkout extends React.Component {
           : '';
       let filtered =
         item.selected_variants != null
-          ? item.selected_variants.filter(function(el) {
+          ? item.selected_variants.filter(function (el) {
               return el;
             })
           : [];
@@ -1810,315 +1814,11 @@ export default class Checkout extends React.Component {
     );
   }
 
-  renderPickupTimeScroll() {
-    let { vouchers_to_use, discount, minute_range, hour_range } = this.state;
-    let {
-      currentMember,
-      selectedShop,
-      cart_total_quantity,
-      cart_total,
-      cart
-    } = this.props;
-    let order_now = this.pickUpNow();
-
-    return (
-      <Animated.View style={this.movePickAnimation.getLayout()}>
-        <View style={styles.popOutPickupView}>
-          <View style={styles.paymentMethodTwoView}>
-            <TouchableOpacity
-              onPress={() => this.tooglePickup()}
-              style={styles.closeButton}
-            >
-              <Image
-                source={require('./../../assets/images/x-3.png')}
-                style={styles.closeButtonImage}
-              />
-            </TouchableOpacity>
-            <Text style={styles.paymentMethodTwoText}></Text>
-            <TouchableOpacity
-              onPress={() => this.onConfirmTimePicker()}
-              style={styles.pickupConfirmButton}
-            >
-              <Text style={styles.pickupConfirmButtonText}>Confirm</Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            pointerEvents="box-none"
-            style={{
-              height: 160 * alpha
-            }}
-          >
-            <View style={styles.pickupNowView}>
-              <TouchableOpacity
-                onPress={() => this.onSelectOrderNow()}
-                style={styles.pickupNowbuttonButton}
-                disabled={!order_now}
-              >
-                <View
-                  pointerEvents="box-none"
-                  style={{
-                    position: 'absolute',
-                    left: 0 * alpha,
-                    right: 0 * alpha,
-                    top: 0 * alpha,
-                    bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
-                  <View
-                    pointerEvents="box-none"
-                    style={{
-                      // height: 18 * alpha,
-                      marginLeft: 61 * alpha,
-                      marginRight: 17 * alpha,
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text
-                      style={
-                        this.state.pick_up_status == 'Order Now'
-                          ? styles.pickupNowSelectedText
-                          : styles.pickupNowText
-                      }
-                    >
-                      Pick Up Now
-                    </Text>
-
-                    <View
-                      style={{
-                        flex: 1
-                      }}
-                    />
-                    {this.state.pick_up_status == 'Order Now' ? (
-                      <View style={styles.selectTwoView} />
-                    ) : (
-                      <View style={styles.selectView} />
-                    )}
-                  </View>
-                </View>
-
-                <View
-                  pointerEvents="box-none"
-                  style={{
-                    position: 'absolute',
-                    left: 17 * alpha,
-                    right: 0 * alpha,
-                    bottom: 0 * alpha,
-                    height: 52 * alpha,
-                    alignItems: 'flex-start'
-                  }}
-                >
-                  <View style={styles.walleticonView}>
-                    <View
-                      pointerEvents="box-none"
-                      style={{
-                        position: 'absolute',
-                        left: 0 * alpha,
-                        right: 0 * alpha,
-                        top: 0 * alpha,
-                        bottom: 0 * alpha,
-                        justifyContent: 'center'
-                      }}
-                    >
-                      <Image
-                        source={require('./../../assets/images/pickup_now.png')}
-                        style={
-                          this.state.pick_up_status == 'Order Now'
-                            ? styles.walletSelectImage
-                            : styles.walletImage
-                        }
-                      />
-                    </View>
-                  </View>
-                </View>
-
-                <View
-                  style={{
-                    flex: 1
-                  }}
-                />
-                <View style={styles.menuRowLineView} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.pickLaterView}>
-              <TouchableOpacity
-                onPress={() => this.onSelectPickLater()}
-                style={styles.pickupNowbuttonButton}
-              >
-                <View
-                  pointerEvents="box-none"
-                  style={{
-                    position: 'absolute',
-                    left: 0 * alpha,
-                    right: 0 * alpha,
-                    top: 0 * alpha,
-                    bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
-                  <View
-                    pointerEvents="box-none"
-                    style={{
-                      height: 18 * alpha,
-                      marginLeft: 61 * alpha,
-                      marginRight: 17 * alpha,
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text
-                      style={
-                        this.state.pick_up_status == 'Pick Later'
-                          ? styles.pickupNowSelectedText
-                          : styles.pickupNowText
-                      }
-                    >
-                      Pick Up Later
-                    </Text>
-
-                    <View
-                      style={{
-                        flex: 1
-                      }}
-                    />
-                    {this.state.pick_up_status == 'Pick Later' ? (
-                      <View style={styles.selectTwoView} />
-                    ) : (
-                      <View style={styles.selectView} />
-                    )}
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: 'absolute',
-                  left: 17 * alpha,
-                  right: 0 * alpha,
-                  bottom: 0 * alpha,
-                  height: 52 * alpha,
-                  alignItems: 'flex-start'
-                }}
-              >
-                <View style={styles.walleticonView}>
-                  <View
-                    pointerEvents="box-none"
-                    style={{
-                      position: 'absolute',
-                      left: 0 * alpha,
-                      right: 0 * alpha,
-                      top: 0 * alpha,
-                      bottom: 0 * alpha,
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <Image
-                      source={require('./../../assets/images/pickup_later.png')}
-                      style={
-                        this.state.pick_up_status == 'Pick Later'
-                          ? styles.walletSelectImage
-                          : styles.walletImage
-                      }
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.menuRowLine2View} />
-          <View style={styles.popOutTimePickerView}>
-            <View style={styles.timepickerTopBar} />
-            <ScrollPicker
-              ref={(sphour) => {
-                this.sphour = sphour;
-              }}
-              dataSource={hour_range}
-              selectedIndex={0}
-              itemHeight={50 * alpha}
-              wrapperHeight={150 * alpha}
-              wrapperStyle={{
-                backgroundColor: 'transparent',
-                flex: 1
-              }}
-              renderItem={(data, index, isSelected) => {
-                return (
-                  <TouchableOpacity
-                    onPress={console.log()}
-                    style={styles.timePickerRow}
-                  >
-                    <Text
-                      style={
-                        isSelected
-                          ? styles.timePickerSelected
-                          : styles.timePickerUnselected
-                      }
-                    >
-                      {data}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                this.onHourValueChange(
-                  hour_range[selectedIndex],
-                  selectedIndex
-                );
-              }}
-            />
-            <ScrollPicker
-              ref={(spminute) => {
-                this.spminute = spminute;
-              }}
-              dataSource={minute_range}
-              selectedIndex={0}
-              itemHeight={50 * alpha}
-              wrapperHeight={150 * alpha}
-              wrapperStyle={{
-                backgroundColor: 'transparent',
-                flex: 1
-              }}
-              renderItem={(data, index, isSelected) => {
-                return (
-                  <TouchableOpacity
-                    onPress={console.log()}
-                    style={{
-                      height: 50 * alpha,
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <Text
-                      style={
-                        isSelected
-                          ? styles.timePickerSelected
-                          : styles.timePickerUnselected
-                      }
-                    >
-                      {data}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                this.onMinuteValueChange(
-                  minute_range[selectedIndex],
-                  selectedIndex
-                );
-              }}
-            />
-          </View>
-          <View style={styles.timepickerBottomBar} />
-        </View>
-      </Animated.View>
-    );
-  }
   renderDeliveryAddress = (address) => {
-    let { deliveryFee, subTotal_price, delivery_description } = this.state;
+    let { deliveryFee, final_price, delivery_description } = this.state;
     let text = address ? 'Edit Address' : 'Please add address';
     let non_negative_subTotal_price = parseFloat(
-      Math.max(0, subTotal_price)
+      Math.max(0, final_price)
     ).toFixed(2);
 
     return (
@@ -2208,7 +1908,7 @@ export default class Checkout extends React.Component {
       animation={this.timeSelectorAnimation}
       toggleDelivery={this.toggleTimeSelector}
       onSelectOrderNow={() => this.onSelectOrderNow()}
-      onSelectOrderLater={() => this.onSelectPickLater()}
+      onSelectOrderLater={() => this.onSelectOrderLater()}
       onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
       onConfirmDeliverySchedule={() => this.onConfirmTimePicker()}
       onHourValueChange={this.onHourValueChange}
@@ -2216,11 +1916,18 @@ export default class Checkout extends React.Component {
     />
   );
   renderCheckoutReceipt() {
-    const { vouchers_to_use, final_price, selected_address } = this.state;
+    const {
+      vouchers_to_use,
+      final_price,
+      selected_address,
+      deliveryFee
+    } = this.state;
     let { selectedShop, cart, promotions, delivery } = this.props;
-    let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
-      2
-    );
+    var final_price_delivery =
+      parseFloat(final_price) + parseFloat(deliveryFee);
+    let non_negative_final_price = parseFloat(
+      Math.max(0, final_price_delivery)
+    ).toFixed(2);
     return (
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
@@ -2360,10 +2067,15 @@ export default class Checkout extends React.Component {
   }
 
   renderPayNow(final_price) {
+    let { deliveryFee } = this.state;
+    let final_price_delivery =
+      parseFloat(final_price) + parseFloat(deliveryFee);
     return (
       <View style={styles.totalPayNowView}>
         <View style={styles.paymentButton}>
-          <Text style={styles.paymentButtonText}>${final_price}</Text>
+          <Text style={styles.paymentButtonText}>
+            ${final_price_delivery.toFixed(2)}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() => this.onPayNowPressed()}
@@ -2405,7 +2117,6 @@ export default class Checkout extends React.Component {
         )}
         {this.renderPayNow(non_negative_final_price)}
         {this.renderPaymentMethod()}
-        {/* {this.renderPickupTimeScroll()} */}
         {this.renderTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
         <Toast

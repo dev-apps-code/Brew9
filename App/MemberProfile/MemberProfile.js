@@ -31,6 +31,7 @@ import { TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, DISABLED_COLOR, commonStyles
 import moment from 'moment';
 import { getMemberIdForApi } from '../Services/members_helper'
 import Brew9Modal from '../Components/Brew9Modal'
+import LogoutRequestObject from "../Requests/logout_request_object"
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -96,6 +97,41 @@ export default class MemberProfile extends React.Component {
 			onBackPressed: this.onBackPressed,
 			onItemPressed: this.onItemPressed,
 		})
+	}
+
+	lastTap = null;
+	handleDoubleTap = () => {
+		const now = Date.now();
+		const DOUBLE_PRESS_DELAY = 300;
+		if (this.lastTap && now - this.lastTap < DOUBLE_PRESS_DELAY) {
+		this.loadDestroy()
+		} else {
+		this.lastTap = now;
+		}
+	};
+
+	loadDestroy() {
+		const { dispatch } = this.props
+		const { navigate } = this.props.navigation
+		this.setState({ loading: true })
+
+		const callback = eventObject => {
+			if (eventObject.success) {
+				navigate("VerifyUser", {
+					returnToRoute: this.props.navigation.state
+				})
+			}
+			this.setState({
+				loading: false,
+			})
+		}
+		const obj = new LogoutRequestObject(Constants.installationId)
+		dispatch(
+			createAction('members/loadDestroy')({
+				object: obj,
+				callback,
+			})
+		)
 	}
 
 	getPermissionAsync = async () => {
@@ -829,7 +865,7 @@ export default class MemberProfile extends React.Component {
 			</View>
 			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
 			<HudLoading isLoading={this.state.loading} />
-			<Text
+			<Text onPress={()=>this.handleDoubleTap()}
 				style={styles.versionText}>Version {getAppVersion()} (Build {getBuildVersion()})</Text>
 		</KeyboardAvoidingView>
 

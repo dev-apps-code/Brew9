@@ -1240,7 +1240,7 @@ export default class Home extends React.Component {
 		selected_variants[key] = selected_item
 		let filtered = selected_variants.filter(function (el) { return el })
 		let total = filtered.reduce((a, b) => +a + +b.price, 0)
-		selected_product.calculated_price = (parseFloat(selected_product.price) + parseFloat(total)).toFixed(2)
+		selected_product.calculated_price = (parseFloat(selected_product.discounted_price) + parseFloat(total)).toFixed(2)
 		this.setState({
 			products: this.state.products
 		})
