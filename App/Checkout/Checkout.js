@@ -597,6 +597,24 @@ export default class Checkout extends React.Component {
     }
   };
 
+  roundOff(value) {
+    var value = value.toString()
+    var secondDecimal = parseInt(value.split('.')[1][1]);
+  
+    var roundOffValue = 0
+    secondDecimal <= 2 || isNaN(secondDecimal)
+      ? roundOffValue = parseFloat(value).toFixed(1)
+      : secondDecimal <= 5
+        ? roundOffValue = (value.substring(0, value.indexOf(".") + 2)) + '5'
+        : secondDecimal > 5
+            ? roundOffValue = parseFloat(value).toFixed(1)
+              : console.log("UNCATCH")
+    console.log("\n\nValue")
+    console.log(roundOffValue)
+
+    return roundOffValue
+  }
+
   check_promotion_trigger = () => {
     const {
       currentMember,
@@ -642,7 +660,8 @@ export default class Checkout extends React.Component {
                   promotion.value_type == 'percent'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  price = (cart_total_voucher * discount_value) / 100;
+                  // price = (cart_total_voucher * discount_value) / 100;
+                  price = this.roundOff((cart_total_voucher * discount_value) / 100)
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
@@ -682,6 +701,8 @@ export default class Checkout extends React.Component {
         }
       }
       this.setState({ final_price: final_cart_value });
+      console.log("\n\ncheck_promotion_trigger")
+      console.log(final_cart_value)
     }
 
     if (this.props.cart.length == 0) {
@@ -714,6 +735,10 @@ export default class Checkout extends React.Component {
 
   calculateVoucherDiscount(vouchers_to_use) {
     const { discount_cart_total, cart_total, delivery } = this.props;
+    console.log("\n\nCart_total")
+    console.log(cart_total)
+    console.log("\nDiscountCart_total")
+    console.log(discount_cart_total)
     const { selected_payment, deliveryFee } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
@@ -731,13 +756,15 @@ export default class Checkout extends React.Component {
           if (voucher.discount_type.toLowerCase() == 'fixed') {
             discount = voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
-            discount = (cart_total * voucher.discount_price) / 100.0;
+            discount = this.roundOff((discount_cart_total * voucher.discount_price) / 100.0);
           }
         }
       }
     }
-    const subf_price = cart_total - discount;
+    const subf_price = discount_cart_total - discount;
     const f_price = subf_price;
+    console.log("\n\ncalculatevoucher")
+    console.log(f_price.toFixed(2))
     this.setState(
       {
         discount: discount,
@@ -748,7 +775,7 @@ export default class Checkout extends React.Component {
         if (selected_payment == 'credit_card' && f_price <= 0) {
           this.setState({ selected_payment: '' });
         }
-        this.check_promotion_trigger();
+        // this.check_promotion_trigger();
       }
     );
   }
@@ -1498,7 +1525,7 @@ export default class Checkout extends React.Component {
         if (item.voucher.discount_type == 'fixed') {
           discount_value = item.voucher.discount_price;
         } else if (item.voucher.discount_type == 'percent') {
-          discount_value = (cart_total * item.voucher.discount_price) / 100.0;
+          discount_value = (discount_cart_total * item.voucher.discount_price) / 100.0;
         }
       }
 
@@ -1534,7 +1561,7 @@ export default class Checkout extends React.Component {
 						style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
             {discount_value ? (
               <Text style={styles.voucherPriceText}>{`-$${parseFloat(
-                discount_value
+                this.roundOff(discount_value)
               ).toFixed(2)}`}</Text>
             ) : undefined}
 
