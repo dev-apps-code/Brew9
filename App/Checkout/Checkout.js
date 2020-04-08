@@ -346,7 +346,7 @@ export default class Checkout extends React.Component {
       }
     };
 
-    const obj = new DeliveryFeeRequestObject(total);
+    const obj = new DeliveryFeeRequestObject(total, this.state.selected_address.id);
     obj.setUrlId(selectedShop.id);
     dispatch(
       createAction('shops/loadDeliveryFee')({
