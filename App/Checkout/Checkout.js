@@ -1907,6 +1907,7 @@ export default class Checkout extends React.Component {
       styles={styles}
       state={this.state}
       delivery={this.props.delivery}
+      selectedShop={this.props.selectedShop}
       animation={this.timeSelectorAnimation}
       toggleDelivery={this.toggleTimeSelector}
       onSelectOrderNow={() => this.onSelectOrderNow()}
