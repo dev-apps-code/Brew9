@@ -1685,7 +1685,7 @@ export default class Checkout extends React.Component {
 
     if (pick_up_time != null) {
       if (Moment(pick_up_time).format('YYYY-MM-DD') != today) {
-        pickup_time = Moment(pick_up_time).format('MMMM Do, h:mm a');
+        pickup_time = 'Tomorrow,' + Moment(pick_up_time).format(' h:mm a');
       } else {
         pickup_time = Moment(pick_up_time).format(' h:mm a');
       }
@@ -3815,7 +3815,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 12 * alpha,
     top: 19 * alpha,
-    // paddingVertical: 10 * alpha
+    // paddingVertical: 10 * alpha,
     height: 21 * alpha
   },
   pickupConfirmButtonText: {
