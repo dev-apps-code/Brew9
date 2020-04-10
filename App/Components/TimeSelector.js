@@ -75,25 +75,28 @@ const TimeSelector = ({
 
         // start minute of selection start of tom delivery start time
         minutes = order_start_time.minutes();
-    } // end delivery 
+      }
+    } // end delivery
 
-    var minutes_array  = ['00', '15', '30', '45'];
+    var minutes_array = ['00', '15', '30', '45'];
     var available_minutes = [];
 
     // get available minutes based on hour now and order start time hours
-    if (hours >= order_start_time.hours() & minutes < 45) {
-      available_minutes = _.filter(minutes_array, (min) => parseInt(min) > minutes);
+    if ((hours >= order_start_time.hours()) & (minutes < 45)) {
+      available_minutes = _.filter(
+        minutes_array,
+        (min) => parseInt(min) > minutes
+      );
     }
 
     // get available minutes if hour now is >= order_end_time hours
     if (hours >= order_end_time.hours()) {
-      available_minutes = _.filter(minutes_array, (min) => parseInt(min) < order_end_time.minutes())
+      available_minutes = _.filter(
+        minutes_array,
+        (min) => parseInt(min) < order_end_time.minutes()
+      );
     }
-
-    
-    
   };
-
   return (
     <Animated.View style={animation.getLayout()}>
       <View style={[styles.popOutPickupView, { flex: 1, height: 350 * alpha }]}>
@@ -248,7 +251,6 @@ const TimeSelector = ({
     </Animated.View>
   );
 };
-``;
 
 const CustomCard = ({
   cardStyle,
