@@ -20,7 +20,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import AnimationLoading from '../Components/AnimationLoading';
@@ -43,7 +43,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
 import { getMemberIdForApi } from '../Services/members_helper';
 
-@connect(({ members, shops, orders }) => ({
+@connect(({ members }) => ({
   currentMember: members.profile,
   members: members,
   shippingAddress: members.shippingAddress
@@ -148,20 +148,32 @@ export default class ShippingAddress extends React.Component {
   };
 
   renderShippingAddress = (item) => {
-    let selected = item.primary ? styles.selectTwoView : styles.selectView;
+    let selected = item.primary ? styles.selectTwoView : undefined;
+    let primary = item.primary ? 'Primary' : '';
     return (
       <TouchableOpacity onPress={() => this.onItemPress(item)}>
         <View style={styles.content}>
           <View style={styles.shippingAddressDetail}>
-            <View style={selected} />
-            <View style={{ flex: 1, marginLeft: 15 * alpha }}>
+            <View style={styles.selectView}>
+              <View style={selected} />
+            </View>
+            <View
+              style={{
+                flex: 1,
+                marginLeft: 15 * alpha,
+                paddingTop: 20 * alpha
+              }}
+            >
               <Text style={styles.addressText}>{item.fullname}</Text>
               <Text style={styles.addressText}>{item.address}</Text>
               {/* <Text style={styles.addressText}>
                 {item.city}, {item.postal_code},{item.state}, {item.country}
               </Text> */}
             </View>
-            <View style={{ flex: 0.25 }} />
+
+            <View style={{ flex: 0.25, paddingTop: 10 * alpha }}>
+              <Text style={styles.primaryText}>{primary}</Text>
+            </View>
           </View>
           <TouchableOpacity
             onPress={() => this.onEditAddress(item)}
@@ -173,6 +185,38 @@ export default class ShippingAddress extends React.Component {
       </TouchableOpacity>
     );
   };
+  renderEmpty() {
+    return (
+      <View style={styles.orderView}>
+        <View style={styles.noOrderView}>
+          <View style={styles.centerView}>
+            <Image
+              source={require('./../../assets/images/delivery_icon.png')}
+              style={styles.logoImage}
+            />
+            <View style={styles.messageView}>
+              <Text style={styles.youHavenTMakeAnyText}>
+                Ooops..You haven't add any address yet{' '}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={this.onAddAddress}
+              // style={styles.noOrderAddButton}
+            >
+              <Image
+                source={require('./../../assets/images/save_button.png')}
+                style={[
+                  // styles.addButtonImage,
+                  { height: 40 * alpha, width: 150 * alpha }
+                ]}
+              />
+              {/* <Text style={styles.addButtonText}>Add Address</Text> */}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   render() {
     const { location, shippingAddress } = this.props;
@@ -182,25 +226,31 @@ export default class ShippingAddress extends React.Component {
     } else {
       return (
         <View style={styles.Container}>
-          <ScrollView style={styles.scrollviewScrollView}>
-            <Text style={styles.headingStyle}>Delivery Address</Text>
-            <FlatList
-              data={shippingAddress}
-              renderItem={({ item }) => this.renderShippingAddress(item)}
-              refreshing={this.state.isRefreshing}
-              onRefresh={this.onRefresh.bind(this)}
-              keyExtractor={(item) => item.id}
-            />
-          </ScrollView>
-          <TouchableOpacity onPress={this.onAddAddress}>
-            <View style={styles.addButtonView}>
-              <Image
-                source={require('./../../assets/images/add.png')}
-                style={styles.addButtonImage}
-              />
-              <Text style={styles.addAddressText}>Add Address</Text>
+          {shippingAddress.length > 0 ? (
+            <View style={{ flex: 1 }}>
+              <ScrollView style={styles.scrollviewScrollView}>
+                <Text style={styles.headingStyle}></Text>
+                <FlatList
+                  data={shippingAddress}
+                  renderItem={({ item }) => this.renderShippingAddress(item)}
+                  refreshing={this.state.isRefreshing}
+                  onRefresh={this.onRefresh.bind(this)}
+                  keyExtractor={(item) => item.id}
+                />
+              </ScrollView>
+              <TouchableOpacity onPress={this.onAddAddress}>
+                <View style={styles.addButtonView}>
+                  <Image
+                    source={require('./../../assets/images/add.png')}
+                    style={styles.addButtonImage}
+                  />
+                  <Text style={styles.addAddressText}>Add Address</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          ) : (
+            this.renderEmpty()
+          )}
 
           <Toast
             ref="toast"
@@ -231,8 +281,8 @@ const styles = StyleSheet.create({
     height: 18 * alpha
   },
   addButtonImage: {
-    height: 18 * alpha,
-    width: 18 * alpha,
+    height: 14 * alpha,
+    width: 14 * alpha,
     tintColor: 'white'
   },
   addButtonView: {
@@ -245,8 +295,20 @@ const styles = StyleSheet.create({
     borderRadius: 4 * alpha,
     height: 47 * alpha
   },
+  noOrderAddButton: {
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: PRIMARY_COLOR,
+    marginTop: 20 * alpha,
+    paddingVertical: 10 * alpha,
+    paddingHorizontal: 10 * alpha,
+    borderRadius: 4 * alpha,
+    height: 40 * alpha,
+    width: 150 * alpha
+  },
   addAddressText: {
-    color: 'white',
+    color: '#ffffff',
     fontSize: 14 * fontAlpha,
     fontFamily: TITLE_FONT,
     marginHorizontal: 10 * alpha
@@ -267,6 +329,13 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT
     // marginHorizontal: 10 * alpha
   },
+  primaryText: {
+    color: 'rgb(130, 130, 130)',
+    fontSize: 12 * fontAlpha,
+    fontFamily: TITLE_FONT,
+    textAlign: 'right',
+    flex: 1
+  },
   editButton: {
     alignItems: 'baseline',
     alignItems: 'flex-end',
@@ -276,22 +345,18 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: 'white',
     marginBottom: 10 * alpha,
-    paddingTop: 20 * alpha,
-    paddingHorizontal: 10 * alpha,
+    paddingHorizontal: 20 * alpha,
+    // paddingVertical:10*alpha,
     borderRadius: 5 * alpha
     // borderWidth: 0.5,
     // borderColor: LIGHT_GREY
   },
   headingStyle: {
-    fontSize: 18 * fontAlpha,
-    fontFamily: TITLE_FONT,
-    paddingVertical: 10 * alpha,
-    marginTop: 10 * alpha,
-    color: '#696969'
+    paddingTop: 5 * alpha
   },
   addressText: {
     color: 'rgb(130, 130, 130)',
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     paddingBottom: 5 * alpha
     // marginTop: 10 * alpha
@@ -302,13 +367,83 @@ const styles = StyleSheet.create({
     borderWidth: 1 * alpha,
     borderColor: 'rgb(186, 183, 183)',
     borderStyle: 'solid',
-    width: 18 * alpha,
-    height: 18 * alpha
+    width: 14 * alpha,
+    height: 14 * alpha,
+    marginTop: 20 * alpha,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   selectTwoView: {
     backgroundColor: 'rgb(0, 178, 227)',
     borderRadius: 9 * alpha,
-    width: 18 * alpha,
-    height: 18 * alpha
+    width: 8 * alpha,
+    height: 8 * alpha
+    // marginTop: 20 * alpha
+  },
+  centerView: {
+    backgroundColor: 'transparent',
+    width: 181 * alpha,
+    height: 140 * alpha,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10 * alpha,
+    flex: 1
+  },
+  logoImage: {
+    resizeMode: 'contain',
+    backgroundColor: 'transparent',
+    width: 75 * alpha,
+    height: 75 * alpha
+  },
+  orderView: {
+    backgroundColor: 'rgb(239, 239, 239)',
+    flex: 1
+  },
+  noOrderView: {
+    backgroundColor: 'white',
+    borderRadius: 13 * alpha,
+    marginLeft: 24 * alpha,
+    marginRight: 24 * alpha,
+    marginTop: 70 * alpha,
+    height: windowWidth,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  viewView: {
+    width: 185 * alpha
+  },
+  messageView: {
+    backgroundColor: 'transparent',
+    width: windowWidth - 40 * alpha,
+    height: 35 * alpha,
+    alignItems: 'center'
+  },
+  youHavenTMakeAnyText: {
+    color: 'rgb(134, 134, 134)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    backgroundColor: 'transparent'
+  },
+  orderButton: {
+    backgroundColor: 'rgb(0, 178, 227)',
+    borderRadius: 5 * alpha,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    width: 185 * alpha,
+    height: 33 * alpha,
+    marginBottom: 23 * alpha
+  },
+  addButtonText: {
+    color: 'rgb(254, 254, 254)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left'
   }
 });
