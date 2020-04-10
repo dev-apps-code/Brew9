@@ -100,94 +100,103 @@ const TimeSelector = ({
             }
           ]}
         >
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <ScrollPicker
-              ref={(sphour) => {
-                this.sphour = sphour;
-              }}
-              dataSource={hour_range}
-              selectedIndex={0}
-              itemHeight={50 * alpha}
-              wrapperHeight={50 * alpha}
-              wrapperStyle={{
-                backgroundColor: 'transparent',
-                flex: 1
-              }}
-              renderItem={(data, index, isSelected) => {
-                return (
+          {selected != 0 ||
+            (selected != null && (
+              <View>
+                <View style={{ flexDirection: 'row', flex: 1 }}>
+                  <ScrollPicker
+                    ref={(sphour) => {
+                      this.sphour = sphour;
+                    }}
+                    dataSource={hour_range}
+                    selectedIndex={0}
+                    itemHeight={50 * alpha}
+                    wrapperHeight={50 * alpha}
+                    wrapperStyle={{
+                      backgroundColor: 'transparent',
+                      flex: 1
+                    }}
+                    renderItem={(data, index, isSelected) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={console.log()}
+                          style={[styles.timePickerRow]}
+                        >
+                          <Text
+                            style={
+                              isSelected
+                                ? styles.timePickerSelected
+                                : styles.timePickerUnselected
+                            }
+                          >
+                            {data}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    }}
+                    onValueChange={(data, selectedIndex) => {
+                      onHourValueChange(data, selectedIndex);
+                    }}
+                  />
+                  <ScrollPicker
+                    ref={(spminute) => {
+                      this.spminute = spminute;
+                    }}
+                    dataSource={minute_range}
+                    selectedIndex={0}
+                    itemHeight={50 * alpha}
+                    wrapperHeight={50 * alpha}
+                    wrapperStyle={{
+                      backgroundColor: 'transparent',
+                      flex: 1
+                    }}
+                    renderItem={(data, index, isSelected) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={console.log()}
+                          style={[styles.timePickerRow]}
+                        >
+                          <Text
+                            style={
+                              isSelected
+                                ? styles.timePickerSelected
+                                : styles.timePickerUnselected
+                            }
+                          >
+                            {data}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    }}
+                    onValueChange={(data, selectedIndex) => {
+                      onMinuteValueChange(data, selectedIndex);
+                    }}
+                  />
+                </View>
+                <View style={styles.timepickerBottomBar}></View>
+                <View style={{ height: 30 * alpha, marginTop: 10 }}>
                   <TouchableOpacity
-                    onPress={console.log()}
-                    style={[styles.timePickerRow]}
+                    onPress={() => onConfirmDeliverySchedule()}
+                    style={{ justifyContent: 'center' }}
                   >
                     <Text
-                      style={
-                        isSelected
-                          ? styles.timePickerSelected
-                          : styles.timePickerUnselected
-                      }
+                      style={[
+                        componentStyle.confirmText,
+                        { paddingVertical: 10 }
+                      ]}
                     >
-                      {data}
+                      Confirm
                     </Text>
                   </TouchableOpacity>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                onHourValueChange(data, selectedIndex);
-              }}
-            />
-            <ScrollPicker
-              ref={(spminute) => {
-                this.spminute = spminute;
-              }}
-              dataSource={minute_range}
-              selectedIndex={0}
-              itemHeight={50 * alpha}
-              wrapperHeight={50 * alpha}
-              wrapperStyle={{
-                backgroundColor: 'transparent',
-                flex: 1
-              }}
-              renderItem={(data, index, isSelected) => {
-                return (
-                  <TouchableOpacity
-                    onPress={console.log()}
-                    style={[styles.timePickerRow]}
-                  >
-                    <Text
-                      style={
-                        isSelected
-                          ? styles.timePickerSelected
-                          : styles.timePickerUnselected
-                      }
-                    >
-                      {data}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                onMinuteValueChange(data, selectedIndex);
-              }}
-            />
-          </View>
-          <View style={styles.timepickerBottomBar} />
-          <View style={{ height: 30 * alpha, marginTop: 10 }}>
-            <TouchableOpacity
-              onPress={() => onConfirmDeliverySchedule()}
-              style={{ justifyContent: 'center' }}
-            >
-              <Text
-                style={[componentStyle.confirmText, { paddingVertical: 10 }]}
-              >
-                Confirm
-              </Text>
-            </TouchableOpacity>
-          </View>
+                </View>
+              </View>
+            ))}
         </View>
       </View>
     </Animated.View>
   );
 };
+``;
 
 const CustomCard = ({
   cardStyle,
