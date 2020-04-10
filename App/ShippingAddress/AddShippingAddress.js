@@ -51,7 +51,8 @@ import SwitchSelector from 'react-native-switch-selector';
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
   selectedShop: shops.selectedShop,
-  company_id: members.company_id
+  company_id: members.company_id,
+  location: members.location
 }))
 export default class AddShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -96,6 +97,7 @@ export default class AddShippingAddress extends React.Component {
 
     if (this.address != null) {
       this.state = {
+        address_detail: '',
         fullname: this.address.fullname ? this.address.fullname : '',
         address: this.address.address ? this.address.address : '',
         contact_number: this.address.contact_number
@@ -123,6 +125,7 @@ export default class AddShippingAddress extends React.Component {
       };
     } else {
       this.state = {
+        address_detail: '',
         fullname: '',
         address: '',
         contact_number: '',
@@ -256,7 +259,7 @@ export default class AddShippingAddress extends React.Component {
   }
 
   loadTag = () => {
-    if (tag != undefined) {
+    if (this.state.tag != undefined) {
       let current_tag = this.state.tag.map((item) => {
         if (item.name == this.state.land_mark) {
           item.selected = true;
@@ -275,7 +278,16 @@ export default class AddShippingAddress extends React.Component {
     });
   }
   returnAddress(info) {
-    this.setState({ address: info.address });
+    this.setState({
+      address_detail: info.address_detail,
+      address: info.address,
+      city: info.city,
+      state: info.state,
+      postal_code: info.postal_code,
+      country: info.country,
+      latitude: this.props.location.coords.latitude,
+      longitude: this.props.location.coords.longitude
+    });
   }
 
   onBackPressed = () => {
@@ -381,7 +393,7 @@ export default class AddShippingAddress extends React.Component {
   };
 
   renderAddressForm = () => {
-    let { address } = this.state;
+    let { address, address_detail } = this.state;
     return (
       <View>
         <View>
@@ -438,7 +450,7 @@ export default class AddShippingAddress extends React.Component {
             >
               {address ? (
                 <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
-                  {address}
+                  {address_detail}
                 </Text>
               ) : (
                 <Text
@@ -567,7 +579,6 @@ export default class AddShippingAddress extends React.Component {
     let { fullname, contact_number } = this.state;
     let primary =
       this.state.primary == 0 ? DEFAULT_GREY_BACKGROUND : PRIMARY_COLOR;
-    console.log('selectedShop', this.props.selectedShop);
     return (
       <View style={styles.container}>
         <ScrollView>
