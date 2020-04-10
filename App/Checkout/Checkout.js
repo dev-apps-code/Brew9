@@ -2164,17 +2164,6 @@ export default class Checkout extends React.Component {
             onChangeText={(text) => this.onChangeCoupon(text)}
           />
         )}
-        {/* <TimePicker
-				ref={ref => {
-					this.TimePicker = ref;
-				}}
-				onCancel={() => this.onCancelTimePicker()}
-				maxHour={20}
-				minuteInterval={30}
-				selectedHour={this.state.selected_hour}
-				selectedMinute={this.state.selected_minute}
-				onConfirm={(hour, minute) => this.onConfirmTimePicker(hour, minute)}
-			/> */}
       </SafeAreaView>
     );
   }
