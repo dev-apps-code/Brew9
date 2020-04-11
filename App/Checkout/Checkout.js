@@ -1,11 +1,3 @@
-//
-//  Checkout
-//  Brew9
-//
-//  Created by .
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   Animated,
   StyleSheet,
@@ -186,8 +178,8 @@ export default class Checkout extends React.Component {
       : this.props.selectedShop.opening_hour;
 
     var startTime = Moment(start_time, 'h:mm');
-    var endTime = Moment(end_time, 'h:mm');
-    var time_now = Moment(new Date(), 'h:mm');
+    var endTime = Moment(end_time, 'h:mm').subtract(15, 'm');
+    var time_now = Moment(new Date(), 'h:mm').add(15, 'm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
@@ -251,7 +243,7 @@ export default class Checkout extends React.Component {
       : Moment(selectedShop.opening_hour.end_time, 'h:mm');
 
     var minute_array = ['00', '15', '30', '45'];
-    var time_now = Moment(new Date(), 'h:mm');
+    var time_now = Moment(new Date(), 'h:mm').add(15, 'm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
@@ -412,89 +404,81 @@ export default class Checkout extends React.Component {
     navigation.navigate({ routeName, key });
   };
 
-  onConfirmTimePicker() {
-    const {
-      selected_hour,
-      selected_minute,
-      pick_up_status,
-      selected_date
-    } = this.state;
-    var now = new Moment().format('HH:mm');
-    var selectorTime = `${selected_hour}:${selected_minute}`;
-    if (pick_up_status == 'Order Now') {
-      var pick_up_time = `${selected_date} ${now}`;
-      this.setState({ pick_up_time });
-      this.toggleTimeSelector();
-    } else if (pick_up_status == 'Pick Later') {
-      if (now < selectorTime) {
-        var pick_up_time = `${selected_date} ${selected_hour}:${selected_minute}`;
-        this.setState({ pick_up_time });
-        this.toggleTimeSelector();
-      } else {
-        this.refs.toast.show('Pick up time is not available', TOAST_DURATION);
-      }
-    } else if (pick_up_status == 'Pick Tomorrow') {
-      var formatedHour = this.formatSelectedHour(selected_hour);
-      var pick_up_time = `${selected_date} ${formatedHour}:${selected_minute}`;
-      this.setState({ pick_up_time });
-      this.toggleTimeSelector();
-    }
-  }
+  onConfirmTimePicker = (option, hour, min) => {
+    var today = Moment();
+    var tomorrow = Moment().add(1, 'days');
+    var selected_date = option == 'TOMORROW' ? tomorrow : today;
 
-  // setOrderSchedule = (sched) => this.setState({ order_schedule: sched });
+    // if (pick_up_status == 'Order Now') {
+    //   var pick_up_time = `${date} ${now}`;
+    //   this.setState({ pick_up_time });
+    //   this.toggleTimeSelector();
+    // } else if (pick_up_status == 'Pick Later') {
+    //   if (now < selectorTime) {
+    //     var pick_up_time = `${selected_date} ${selected_hour}:${selected_minute}`;
+    //     this.setState({ pick_up_time });
+    //     this.toggleTimeSelector();
+    //   } else {
+    //     this.refs.toast.show('Pick up time is not available', TOAST_DURATION);
+    //   }
+    // } else if (pick_up_status == 'Pick Tomorrow') {
+    //   var formatedHour = this.formatSelectedHour(selected_hour);
+    //   var pick_up_time = `${selected_date} ${formatedHour}:${selected_minute}`;
+    //   this.setState({ pick_up_time });
+    //   this.toggleTimeSelector();
+    // }
 
+    var pick_up_status = 'Later';
+    pick_up_status = option == 2 ? 'Tomorrow' : pick_up_status;
+
+    hour = this.formatSelectedHour(hour);
+
+    var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
+
+    this.setState({ pick_up_time, pick_up_status });
+    this.toggleTimeSelector();
+  };
+
+  // Callback when now is clicked
   onSelectOrderNow() {
-    var currentDate = Moment();
-    var selected_date = currentDate.format('YYYY-MM-DD');
-    var pick_up_status = 'Order Now';
-    var now = new Moment().format('HH:mm');
+    var pick_up_status = 'Now';
+    var now = Moment().format('HH:mm');
+    var selected_date = Moment().format('YYYY-MM-DD');
     var pick_up_time = `${selected_date} ${now}`;
 
-    this.setState({ pick_up_status, selected_date, pick_up_time });
-
+    this.setState({ pick_up_status, pick_up_time });
     this.toggleTimeSelector();
   }
 
-  onSelectOrderTomorrow = () => {
-    const { selectedShop } = this.props;
-    var tomorrow = Moment().add(1, 'days');
-    var selected_date = tomorrow.format('YYYY-MM-DD');
-    var pick_up_status = 'Pick Tomorrow'; // What if delivery?
-    // console.log('startOfDay: ', tomorrow.startOf('day'));
-
-    console.log('delivery_hours ', selectedShop.delivery_hour);
-
-    this.setTimePickerDefault(selectedShop.delivery_hour.tomorrow, true);
-    this.setState({ pick_up_status, selected_date });
-  };
+  // Callback when tomorrow button is clicked
+  onSelectOrderTomorrow = () =>
+    this.setTimePickerDefault(
+      this.props.selectedShop.delivery_hour.tomorrow,
+      true
+    );
 
   onSelectOrderLater() {
-    const { selectedShop } = this.props;
-    var opening = Moment(selectedShop.opening_hour.order_start_time, 'h:mm');
-    var closing = Moment(selectedShop.opening_hour.order_stop_time, 'h:mm');
-    var time_now = Moment(new Date(), 'h:mm');
-    var currentDate = Moment();
-    var selected_date = currentDate.format('YYYY-MM-DD');
-    var pick_up_status = 'Pick Later';
+    const { selectedShop, delivery } = this.props;
+    const { opening_hour, delivery_hour } = selectedShop;
 
-    console.log('opening_hour ', selectedShop.opening_hour);
-    const day = {
-      start_time: selectedShop.opening_hour.order_start_time,
-      end_time: selectedShop.opening_hour.order_stop_time
-    };
-
-    this.setTimePickerDefault(day);
-
-    if (opening.hour() <= time_now.hour()) {
-      if (opening.hour() == time_now.hour()) {
-        if (opening.minutes() <= time_now.minutes()) {
-          this.setState({ pick_up_status, selected_date });
-        } else {
-          console.log('not available');
-        }
-      } else {
-        this.setState({ pick_up_status, selected_date });
-      }
+    console.log('opening_hour ', opening_hour);
+    console.log('delivery_hour ', delivery_hour);
+    if (delivery) {
+      this.setTimePickerDefault(
+        {
+          start_time: delivery_hour.today.start_time,
+          end_time: delivery_hour.today.end_time
+        },
+        false
+      );
+    } else {
+      this.setTimePickerDefault(
+        {
+          start_time: opening_hour.order_start_time,
+          end_time: opening_hour.order_stop_time
+        },
+        false
+      );
     }
   }
 
@@ -1678,9 +1662,12 @@ export default class Checkout extends React.Component {
   }
 
   renderPickupTime() {
-    const { pick_up_status } = this.state;
-    let { delivery } = this.props;
-    let pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
+    const { pick_up_status, pick_up_time } = this.state;
+    var { delivery } = this.props;
+    var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
+    var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
+    var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
+    if (pick_up_status == 'Now') formatted_time = pick_up_status;
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
@@ -1711,9 +1698,7 @@ export default class Checkout extends React.Component {
                   </View>
                 </View>
                 <Text style={styles.productVoucherText}>
-                  {this.state.pick_up_time != null
-                    ? Moment(this.state.pick_up_time).format('MMMM Do, h:mm a')
-                    : 'Please select'}
+                  {pick_up_time != null ? formatted_time : 'Please select'}
                 </Text>
                 <Image
                   source={require('./../../assets/images/next.png')}
@@ -1913,7 +1898,7 @@ export default class Checkout extends React.Component {
       onSelectOrderNow={() => this.onSelectOrderNow()}
       onSelectOrderLater={() => this.onSelectOrderLater()}
       onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
-      onConfirmDeliverySchedule={() => this.onConfirmTimePicker()}
+      onConfirmDeliverySchedule={this.onConfirmTimePicker}
       onHourValueChange={this.onHourValueChange}
       onMinuteValueChange={this.onMinuteValueChange}
     />

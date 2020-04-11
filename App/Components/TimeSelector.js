@@ -9,6 +9,7 @@ import {
   StyleSheet
 } from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
+import _ from 'lodash';
 import { alpha, windowWidth } from '../Common/size';
 import {
   DEFAULT_GREY_BACKGROUND,
@@ -23,7 +24,6 @@ const TimeSelector = ({
   state,
   animation,
   toggleDelivery,
-  selectedShop,
   onSelectOrderNow,
   onSelectOrderLater,
   onSelectOrderTomorrow,
@@ -32,71 +32,10 @@ const TimeSelector = ({
   onConfirmDeliverySchedule,
   delivery
 }) => {
-  const { minute_range, hour_range } = state;
+  const { minute_range, hour_range, selected_hour, selected_minute } = state;
   const [selected, setSelected] = useState(null);
-  const [option, setOption] = useState(null); // Now, Later, Tomorrow
-  const [selectedHour, setSelectedHour] = useState(null); // selected hour
-  const [selectedMinute, setSelectedMinute] = useState(null); // selected minute
-  const { opening_hour, delivery_hour } = selectedShop;
-  const title = delivery ? 'Delivery' : 'Pick Up';
+  const title = delivery ? 'Delivery' : 'Pickup';
 
-  const setTimeOptions = () => {
-    var curr_time = Moment(new Date(), 'h:mm');
-    var hours = curr_time.hours();
-    var minutes = curr_time.minutes();
-
-    var start_time = opening_hour.start_time;
-    var end_time = opening_hour.end_time;
-
-    var order_start_time = Moment(start_time, 'h:mm');
-    var order_end_time = Moment(end_time, 'h:mm');
-
-    if (delivery) {
-      const { today, tomorrow } = delivery_hour;
-      start_time = today.start_time;
-      end_time = today.end_time;
-
-      // today delivery hours
-      order_start_time = Moment(start_time, 'h:mm');
-      order_end_time = Moment(end_time, 'h:mm');
-      hours = order_start_time.hours();
-      minutes = order_start_time.minutes();
-
-      if (option === 'Tomorrow') {
-        // Tomorrow option
-        start_time = tomorrow.start_time;
-        end_time = tomorrow.end_time;
-
-        order_start_time = Moment(start_time, 'h:mm');
-        order_end_time = Moment(end_time, 'h:mm');
-
-        // start hour of selection start of tom delivery start time
-        hours = order_start_time.hours();
-
-        // start minute of selection start of tom delivery start time
-        minutes = order_start_time.minutes();
-      }
-    } // end delivery
-
-    var minutes_array = ['00', '15', '30', '45'];
-    var available_minutes = [];
-
-    // get available minutes based on hour now and order start time hours
-    if ((hours >= order_start_time.hours()) & (minutes < 45)) {
-      available_minutes = _.filter(
-        minutes_array,
-        (min) => parseInt(min) > minutes
-      );
-    }
-
-    // get available minutes if hour now is >= order_end_time hours
-    if (hours >= order_end_time.hours()) {
-      available_minutes = _.filter(
-        minutes_array,
-        (min) => parseInt(min) < order_end_time.minutes()
-      );
-    }
-  };
   return (
     <Animated.View style={animation.getLayout()}>
       <View style={[styles.popOutPickupView, { flex: 1, height: 350 * alpha }]}>
@@ -113,12 +52,21 @@ const TimeSelector = ({
             <Image source={closeButtonImage} style={styles.closeButtonImage} />
           </TouchableOpacity>
           <Text style={styles.paymentMethodTwoText}>{title}</Text>
-          <TouchableOpacity
-            onPress={() => onConfirmDeliverySchedule()}
-            style={styles.pickupConfirmButton}
-          >
-            <Text style={[componentStyle.confirmText]}>Confirm</Text>
-          </TouchableOpacity>
+          {selected != null && selected != 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                console.log('selected %s %s', selected_hour, selected_minute);
+                onConfirmDeliverySchedule(
+                  selected,
+                  selected_hour,
+                  selected_minute
+                );
+              }}
+              style={styles.pickupConfirmButton}
+            >
+              <Text style={[componentStyle.confirmText]}>Confirm</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View
           style={{
