@@ -1726,7 +1726,19 @@ export default class Checkout extends React.Component {
   }
 
   renderPickupTime() {
-    const { pick_up_status } = this.state;
+    const { pick_up_status, pick_up_time } = this.state;
+    var currentDate = Moment();
+    var pickup_time = 'Please Select';
+    var today = currentDate.format('YYYY-MM-DD');
+
+    if (pick_up_time != null) {
+      if (Moment(pick_up_time).format('YYYY-MM-DD') != today) {
+        pickup_time = 'Tomorrow,' + Moment(pick_up_time).format(' h:mm a');
+      } else {
+        pickup_time = Moment(pick_up_time).format(' h:mm a');
+      }
+    }
+
     let { delivery } = this.props;
     let pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     return (
@@ -1758,11 +1770,7 @@ export default class Checkout extends React.Component {
                     <Text style={styles.productNameText}>{pick_up}</Text>
                   </View>
                 </View>
-                <Text style={styles.productVoucherText}>
-                  {this.state.pick_up_time != null
-                    ? Moment(this.state.pick_up_time).format('MMMM Do, h:mm a')
-                    : 'Please select'}
-                </Text>
+                <Text style={styles.productVoucherText}>{pickup_time}</Text>
                 <Image
                   source={require('./../../assets/images/next.png')}
                   style={styles.menuRowArrowImage}
@@ -1864,7 +1872,7 @@ export default class Checkout extends React.Component {
 
   renderDeliveryAddress = (address) => {
     let { deliveryFee, final_price, delivery_description } = this.state;
-    let text = address ? 'Edit Address' : 'Please add address';
+    let text = address ? 'Change Address' : 'Add Address';
     let non_negative_subTotal_price = parseFloat(
       Math.max(0, final_price)
     ).toFixed(2);
@@ -2248,15 +2256,16 @@ const styles = StyleSheet.create({
     marginBottom: 5 * alpha
   },
   addressText: {
-    color: 'rgb(164, 164, 164)',
+    color: 'rgb(128,128,128)',
     fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
+    // textAlign: 'left',
     backgroundColor: 'transparent',
-    width: 191 * alpha
-    // marginBottom: 10 * alpha,
+    width: 191 * alpha,
+    paddingLeft: 0,
+    paddingBottom: 5 * alpha
   },
   editAddressText: {
     color: 'rgb(50, 50, 50)',
@@ -3854,7 +3863,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 12 * alpha,
     top: 19 * alpha,
-    // paddingVertical: 10 * alpha
+    // paddingVertical: 10 * alpha,
     height: 21 * alpha
   },
   pickupConfirmButtonText: {
