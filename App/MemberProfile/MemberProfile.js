@@ -896,7 +896,7 @@ export default class MemberProfile extends React.Component {
                 >
                   <Text style={styles.phoneNumberText}>Address</Text>
                   <Text style={styles.textInputTextInput}>
-                    {defaultAddress}
+                    {defaultAddress.address}
                   </Text>
                   <View
                     style={{
@@ -1135,8 +1135,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     padding: 0,
-    width: 142 * alpha,
-    height: 18 * alpha
+    width: 142 * alpha
+    // height: 20 * alpha
   },
   updateButton: {
     backgroundColor: 'transparent',
