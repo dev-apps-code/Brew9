@@ -153,6 +153,7 @@ const TimeSelector = ({
                     );
                   }}
                   onValueChange={(data, selectedIndex) => {
+                    this.spminute.scrollToIndex(0);
                     onHourValueChange(data, selectedIndex);
                   }}
                 />
