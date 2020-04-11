@@ -174,10 +174,12 @@ export default class Checkout extends React.Component {
       this.check_promotion_trigger();
     }
     if (prevProps.currentMember !== this.props.currentMember) {
-      this.setState({
-        selected_address: this.props.currentMember.defaultAddress
-      });
-      this.loadDeliveryFee()
+      this.setState(
+        {
+          selected_address: this.props.currentMember.defaultAddress
+        },
+        () => this.loadDeliveryFee()
+      );
     }
   }
 
@@ -336,16 +338,15 @@ export default class Checkout extends React.Component {
     }
   };
   loadDeliveryFee = () => {
-    console.log("\n\nHERE")
+    console.log('\n\nHERE');
     var total = this.props.cart_total;
-    console.log("\n\nselected address")
-    console.log(this.state.selected_address)
-    if(this.state.selected_address === null)
-    {
+    console.log('\n\nselected address');
+    console.log(this.state.selected_address);
+    if (this.state.selected_address === null) {
       this.setState({
         deliveryFee: 0,
-        delivery_description: "please select address"
-      }); 
+        delivery_description: 'please select address'
+      });
       return;
     }
 
@@ -360,7 +361,11 @@ export default class Checkout extends React.Component {
       }
     };
 
-    const obj = new DeliveryFeeRequestObject(total, this.state.selected_address.id);
+    const obj = new DeliveryFeeRequestObject(
+      total,
+      this.state.selected_address.id
+    );
+    console.log('DeliveryFeeRequestObject', obj);
     obj.setUrlId(selectedShop.id);
     dispatch(
       createAction('shops/loadDeliveryFee')({
@@ -474,9 +479,6 @@ export default class Checkout extends React.Component {
     var tomorrow = Moment().add(1, 'days');
     var selected_date = tomorrow.format('YYYY-MM-DD');
     var pick_up_status = 'Pick Tomorrow'; // What if delivery?
-    // console.log('startOfDay: ', tomorrow.startOf('day'));
-
-    console.log('delivery_hours ', selectedShop.delivery_hour);
 
     this.setTimePickerDefault(selectedShop.delivery_hour.tomorrow, true);
     this.setState({ pick_up_status, selected_date });
@@ -491,7 +493,6 @@ export default class Checkout extends React.Component {
     var selected_date = currentDate.format('YYYY-MM-DD');
     var pick_up_status = 'Pick Later';
 
-    console.log('opening_hour ', selectedShop.opening_hour);
     const day = {
       start_time: selectedShop.opening_hour.order_start_time,
       end_time: selectedShop.opening_hour.order_stop_time
