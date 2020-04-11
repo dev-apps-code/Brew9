@@ -169,7 +169,7 @@ export default class AddShippingAddress extends React.Component {
       const shippingAddress = {
         member_id: this.props.currentMember.id,
         fullname: this.state.fullname,
-        address: this.state.address,
+        address: this.state.address_detail + ' ' + this.state.address,
         contact_number: this.state.contact_number,
         city: this.state.city,
         state: this.state.state,
@@ -181,6 +181,7 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.state.delivery_area,
         primary: primary
       };
+      console.log('shippingAddress', shippingAddress);
       this.loadUpdateProfile(shippingAddress);
     }
   };
@@ -379,7 +380,7 @@ export default class AddShippingAddress extends React.Component {
               )}
               <Image
                 source={require('./../../assets/images/next.png')}
-                style={styles.navigationBarItemIcon}
+                style={styles.menuRowArrowImage}
               />
             </TouchableOpacity>
           )}
@@ -426,7 +427,7 @@ export default class AddShippingAddress extends React.Component {
               )}
               <Image
                 source={require('./../../assets/images/next.png')}
-                style={styles.navigationBarItemIcon}
+                style={styles.menuRowArrowImage}
               />
             </TouchableOpacity>
           </View>
@@ -789,5 +790,10 @@ const styles = StyleSheet.create({
     marginRight: 5 * alpha,
     marginTop: 5 * alpha,
     alignItems: 'center'
+  },
+  menuRowArrowImage: {
+    width: 10 * alpha,
+    tintColor: 'rgb(195, 195, 195)',
+    resizeMode: 'contain'
   }
 });
