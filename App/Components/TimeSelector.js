@@ -88,7 +88,7 @@ const TimeSelector = ({
               }}
             />
             <CustomCard
-              cardStyle={componentStyle.tomorrowCard}
+              cardStyle={[componentStyle.tomorrowCard, { marginRight: 10 }]}
               isActive={selected == 1}
               text="Later"
               press={() => {
