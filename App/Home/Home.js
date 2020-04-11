@@ -280,11 +280,11 @@ export default class Home extends React.Component {
           (error) => console.log(error)
         );
 
-        let location = await Location.getCurrentPositionAsync({});
+        let location = await Location.getLastKnownPositionAsync({});
         dispatch(createAction('members/setLocation')(location));
       }
     } catch (error) {
-      alert(error.message);
+      // alert(error.message);
     }
   };
 

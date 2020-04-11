@@ -133,7 +133,7 @@ export default class MapShippingAddress extends React.Component {
         dispatch(createAction('members/setLocation')(location));
       }
     } catch (error) {
-      alert(error.message);
+      console.log(error.message);
     }
   };
 
