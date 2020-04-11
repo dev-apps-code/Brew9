@@ -9,6 +9,7 @@ import {
   StyleSheet
 } from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
+import _ from 'lodash';
 import { alpha, windowWidth } from '../Common/size';
 import {
   DEFAULT_GREY_BACKGROUND,
@@ -23,7 +24,6 @@ const TimeSelector = ({
   state,
   animation,
   toggleDelivery,
-  props,
   onSelectOrderNow,
   onSelectOrderLater,
   onSelectOrderTomorrow,
@@ -32,15 +32,19 @@ const TimeSelector = ({
   onConfirmDeliverySchedule,
   delivery
 }) => {
-  const { minute_range, hour_range } = state;
+  const { minute_range, hour_range, selected_hour, selected_minute } = state;
   const [selected, setSelected] = useState(null);
-
-  const title = delivery ? 'Delivery' : 'Pick Up';
+  const title = delivery ? 'Delivery' : 'Pickup';
 
   return (
     <Animated.View style={animation.getLayout()}>
       <View style={[styles.popOutPickupView, { flex: 1, height: 350 * alpha }]}>
-        <View style={styles.paymentMethodTwoView}>
+        <View
+          style={[
+            styles.paymentMethodTwoView,
+            { justifyContent: 'space-evenly' }
+          ]}
+        >
           <TouchableOpacity
             onPress={() => toggleDelivery()}
             style={styles.closeButton}
@@ -48,6 +52,21 @@ const TimeSelector = ({
             <Image source={closeButtonImage} style={styles.closeButtonImage} />
           </TouchableOpacity>
           <Text style={styles.paymentMethodTwoText}>{title}</Text>
+          {selected != null && selected != 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                console.log('selected %s %s', selected_hour, selected_minute);
+                onConfirmDeliverySchedule(
+                  selected,
+                  selected_hour,
+                  selected_minute
+                );
+              }}
+              style={styles.pickupConfirmButton}
+            >
+              <Text style={[componentStyle.confirmText]}>Confirm</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View
           style={{
@@ -100,89 +119,82 @@ const TimeSelector = ({
             }
           ]}
         >
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <ScrollPicker
-              ref={(sphour) => {
-                this.sphour = sphour;
-              }}
-              dataSource={hour_range}
-              selectedIndex={0}
-              itemHeight={50 * alpha}
-              wrapperHeight={50 * alpha}
-              wrapperStyle={{
-                backgroundColor: 'transparent',
-                flex: 1
-              }}
-              renderItem={(data, index, isSelected) => {
-                return (
-                  <TouchableOpacity
-                    onPress={console.log()}
-                    style={[styles.timePickerRow]}
-                  >
-                    <Text
-                      style={
-                        isSelected
-                          ? styles.timePickerSelected
-                          : styles.timePickerUnselected
-                      }
-                    >
-                      {data}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                onHourValueChange(data, selectedIndex);
-              }}
-            />
-            <ScrollPicker
-              ref={(spminute) => {
-                this.spminute = spminute;
-              }}
-              dataSource={minute_range}
-              selectedIndex={0}
-              itemHeight={50 * alpha}
-              wrapperHeight={50 * alpha}
-              wrapperStyle={{
-                backgroundColor: 'transparent',
-                flex: 1
-              }}
-              renderItem={(data, index, isSelected) => {
-                return (
-                  <TouchableOpacity
-                    onPress={console.log()}
-                    style={[styles.timePickerRow]}
-                  >
-                    <Text
-                      style={
-                        isSelected
-                          ? styles.timePickerSelected
-                          : styles.timePickerUnselected
-                      }
-                    >
-                      {data}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }}
-              onValueChange={(data, selectedIndex) => {
-                onMinuteValueChange(data, selectedIndex);
-              }}
-            />
-          </View>
-          <View style={styles.timepickerBottomBar} />
-          <View style={{ height: 30 * alpha, marginTop: 10 }}>
-            <TouchableOpacity
-              onPress={() => onConfirmDeliverySchedule()}
-              style={{ justifyContent: 'center' }}
-            >
-              <Text
-                style={[componentStyle.confirmText, { paddingVertical: 10 }]}
-              >
-                Confirm
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {selected != 0 && selected != null && (
+            <View>
+              <View style={{ flexDirection: 'row', flex: 1 }}>
+                <ScrollPicker
+                  ref={(sphour) => {
+                    this.sphour = sphour;
+                  }}
+                  dataSource={hour_range}
+                  selectedIndex={0}
+                  itemHeight={50 * alpha}
+                  wrapperHeight={50 * alpha}
+                  wrapperStyle={{
+                    backgroundColor: 'transparent',
+                    flex: 1
+                  }}
+                  renderItem={(data, index, isSelected) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={console.log()}
+                        style={[styles.timePickerRow]}
+                      >
+                        <Text
+                          style={
+                            isSelected
+                              ? styles.timePickerSelected
+                              : styles.timePickerUnselected
+                          }
+                        >
+                          {data}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  }}
+                  onValueChange={(data, selectedIndex) => {
+                    this.spminute.scrollToIndex(0);
+                    onHourValueChange(data, selectedIndex);
+                  }}
+                />
+                <ScrollPicker
+                  ref={(spminute) => {
+                    this.spminute = spminute;
+                  }}
+                  dataSource={minute_range}
+                  selectedIndex={0}
+                  itemHeight={50 * alpha}
+                  wrapperHeight={50 * alpha}
+                  wrapperStyle={{
+                    backgroundColor: 'transparent',
+                    flex: 1
+                  }}
+                  renderItem={(data, index, isSelected) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={console.log()}
+                        style={[styles.timePickerRow]}
+                      >
+                        <Text
+                          style={
+                            isSelected
+                              ? styles.timePickerSelected
+                              : styles.timePickerUnselected
+                          }
+                        >
+                          {data}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  }}
+                  onValueChange={(data, selectedIndex) => {
+                    onMinuteValueChange(data, selectedIndex);
+                  }}
+                />
+              </View>
+              {/* <View style={styles.timepickerBottomBar}></View> */}
+            </View>
+          )}
         </View>
       </View>
     </Animated.View>
