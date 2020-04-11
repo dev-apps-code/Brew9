@@ -572,17 +572,11 @@ export default class Checkout extends React.Component {
   roundOff(value) {
     console.log("before value: ")
     console.log(value)
-    var value = value.toString()
-    var secondDecimal = parseInt(value.split('.')[1][1]);
-  
-    var roundOffValue = 0
-    secondDecimal <= 2 || isNaN(secondDecimal)
-      ? roundOffValue = parseFloat(value).toFixed(1)
-      : secondDecimal <= 5
-        ? roundOffValue = (value.substring(0, value.indexOf(".") + 2)) + '5'
-        : secondDecimal > 5
-            ? roundOffValue = parseFloat(value).toFixed(1)
-              : console.log("UNCATCH")
+    roundOffValue = 0;
+    let n = parseInt((value * 100).toFixed(10)), x = n % 10;
+				let result = n + 10 - x;
+				if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+				roundOffValue = (result / 100).toFixed(2);
     console.log("\n\nValue")
     console.log(roundOffValue)
 
