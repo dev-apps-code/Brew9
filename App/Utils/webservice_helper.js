@@ -18,6 +18,8 @@ export function getBasicAuthentication(authToken) {
 
 export function getMethod(authtoken, object) {
   const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`
+  console.log("\n\nurl string:")
+  console.log(urlString)
 
   return fetch(urlString, {
     method: 'GET',

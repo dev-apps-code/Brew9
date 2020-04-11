@@ -159,7 +159,7 @@ export default class Checkout extends React.Component {
       function () {
         this.loadValidVouchers();
         {
-          delivery && this.loadDeliveryFee(this.props.discount_cart_total);
+          delivery && this.loadDeliveryFee();
         }
       }
     );
@@ -334,7 +334,19 @@ export default class Checkout extends React.Component {
       this.spminute.scrollToIndex(index - 1);
     }
   };
-  loadDeliveryFee = (total) => {
+  loadDeliveryFee = () => {
+    var total = this.props.cart_total;
+    console.log("\n\nselected address")
+    console.log(this.state.selected_address)
+    if(this.state.selected_address === null)
+    {
+      this.setState({
+        deliveryFee: 0,
+        delivery_description: "please select address"
+      }); 
+      return;
+    }
+
     const { dispatch, selectedShop, currentMember } = this.props;
     const callback = (eventObject) => {
       if (eventObject.success) {
