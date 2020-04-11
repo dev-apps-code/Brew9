@@ -22,50 +22,29 @@ import { getServerIndex } from './storage';
 // export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
 
 export const KSERVERURLLIST = [
-<<<<<<< HEAD
-  "http://test.brew9.co/api",
-  "https://app.brew9.co/api",
-  "https://dev.brew9.co/api",
-  "http://dev1.brew9.co/api",
-=======
   'http://test.brew9.co/api',
   'https://app.brew9.co/api',
   'https://dev.brew9.co/api',
   'https://dev.brew9.co/api'
->>>>>>> delivery
   // "http://dev2.brew9.co/api",
   // "http://dev3.brew9.co/api",
   // "http://dev4.brew9.co/api",
 ];
 export const KURL_INFOLIST = [
-<<<<<<< HEAD
-  "http://test.brew9.co/info",
-  "https://app.brew9.co/info",
-  "https://dev.brew9.co/info",
-  "http://dev1.brew9.co/info",
-=======
   'http://test.brew9.co/info',
   'https://app.brew9.co/info',
   'https://dev.brew9.co/info',
   'https://dev.brew9.co/info'
->>>>>>> delivery
 
   // "http://dev2.brew9.co/info",
   // "http://dev3.brew9.co/info",
   // "http://dev4.brew9.co/info",
 ];
 export const KPAYMENTYURLLIST = [
-<<<<<<< HEAD
-  "http://test.brew9.co/payments/baiduri",
-  "https://app.brew9.co/payments/baiduri",
-  "https://dev.brew9.co/payments/baiduri",
-  "http://dev1.brew9.co/payments/baiduri",
-=======
   'http://test.brew9.co/payments/baiduri',
   'https://app.brew9.co/payments/baiduri',
   'https://dev.brew9.co/payments/baiduri',
   'https://dev.brew9.co/payments/baiduri'
->>>>>>> delivery
   // "http://dev2.brew9.co/payments/baiduri",
   // "http://dev3.brew9.co/payments/baiduri",
   // "http://dev4.brew9.co/payments/baiduri",
