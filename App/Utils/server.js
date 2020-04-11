@@ -1,6 +1,6 @@
-import Constants from "expo-constants";
-import { Platform } from "react-native"
-import {getServerIndex} from './storage'
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
+import { getServerIndex } from './storage';
 // export const KSERVERURL = "https://app.brew9.co/api"
 // export const KURL_INFO = "https://app.brew9.co/info"
 // export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
@@ -39,7 +39,6 @@ export const KURL_INFOLIST = [
   // "http://dev2.brew9.co/info",
   // "http://dev3.brew9.co/info",
   // "http://dev4.brew9.co/info",
-
 ];
 export const KPAYMENTYURLLIST = [
   "http://test.brew9.co/payments/baiduri",
@@ -49,9 +48,7 @@ export const KPAYMENTYURLLIST = [
   // "http://dev2.brew9.co/payments/baiduri",
   // "http://dev3.brew9.co/payments/baiduri",
   // "http://dev4.brew9.co/payments/baiduri",
-
 ];
-
 
 export async function loadServer() {
   // console.log("loadserverindex")
@@ -59,10 +56,10 @@ export async function loadServer() {
   KSERVERURL = KSERVERURLLIST[serverIndex];
   KURL_INFO = KURL_INFOLIST[serverIndex];
   KPAYMENTYURL = KPAYMENTYURLLIST[serverIndex];
-  KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
-  KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
-  KURL_EULA = KURL_INFO + "?page=eula&id=1";
-  KURL_MEMBERSHIP_INFO = KURL_INFO + "/membership_info";
+  KURL_TERMS_OF_SERVICE = KURL_INFO + '?page=terms_conditions&id=f1';
+  KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy&id=1';
+  KURL_EULA = KURL_INFO + '?page=eula&id=1';
+  KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
   return;
 }
 
@@ -70,14 +67,13 @@ export let KSERVERURL = KSERVERURLLIST[0];
 export let KURL_INFO = KURL_INFOLIST[0];
 export let KPAYMENTYURL = KPAYMENTYURLLIST[0];
 
-
-export let KURL_TERMS_OF_SERVICE = KURL_INFO + "?page=terms_conditions&id=f1";
-export let KURL_PRIVACY_POLICY = KURL_INFO + "?page=privacy&id=1";
-export let KURL_EULA = KURL_INFO + "?page=eula&id=1";
+export let KURL_TERMS_OF_SERVICE = KURL_INFO + '?page=terms_conditions&id=f1';
+export let KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy&id=1';
+export let KURL_EULA = KURL_INFO + '?page=eula&id=1';
 export let KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export let KCURRENT_API_VERSION_HEADER = "application/dc.v5 gzip";
-export let APPBUILDVERSIONIOS = "14";
-export let APPBUILDVERSIONANDROID = "14";
+export let KCURRENT_API_VERSION_HEADER = 'application/dc.v5 gzip';
+export let APPBUILDVERSIONIOS = '14';
+export let APPBUILDVERSIONANDROID = '14';
 
 export const KTIMEOUT = 3 * 1000;
 
@@ -90,35 +86,33 @@ export function encodeForFormData(details) {
     const encodedValue = encodeURIComponent(details[property]);
     formBody.push(`${encodedKey}=${encodedValue}`);
   }
-  formBody = formBody.join("&");
+  formBody = formBody.join('&');
   return formBody;
 }
 
 export function getBuildVersion() {
-  if (Platform.OS === "android") {
-    return APPBUILDVERSIONANDROID
+  if (Platform.OS === 'android') {
+    return APPBUILDVERSIONANDROID;
   }
-  return APPBUILDVERSIONIOS
+  return APPBUILDVERSIONIOS;
 }
 
 export function getAppVersion() {
-  return Constants.manifest.version
+  return Constants.manifest.version;
 }
-
-
 
 export function getPaymentServer() {
   if (IS_TEST) {
-    return 'https://baiduri-bpgs.mtf.gateway.mastercard.com'
+    return 'https://baiduri-bpgs.mtf.gateway.mastercard.com';
   } else {
-    return 'https://baiduri-bpgs.gateway.mastercard.com'
+    return 'https://baiduri-bpgs.gateway.mastercard.com';
   }
 }
 
 export function getMerchantId() {
-  return '950029645'
+  return '950029645';
 }
 
 export function getBaiduriAuthorizationToken() {
-  return 'Basic TUVSQ0hBTlQuOTUwMDI5NjQ1Ojc0NTlkZWNiZWFiOWEwMzUxYzU4ZDk3YjFkZjg4NDdm'
+  return 'Basic TUVSQ0hBTlQuOTUwMDI5NjQ1Ojc0NTlkZWNiZWFiOWEwMzUxYzU4ZDk3YjFkZjg4NDdm';
 }

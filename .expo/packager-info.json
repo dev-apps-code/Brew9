@@ -1,9 +1,9 @@
 {
   "packagerPort": 19001,
-  "packagerPid": 1281,
+  "packagerPid": 2466,
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://c2-btn.martisya.brew9-app-v1.exp.direct",
-  "packagerNgrokUrl": "https://packager.c2-btn.martisya.brew9-app-v1.exp.direct",
-  "ngrokPid": 1300
+  "expoServerNgrokUrl": "https://vj-t92.martisya.brew9-app-v1.exp.direct",
+  "packagerNgrokUrl": "https://packager.vj-t92.martisya.brew9-app-v1.exp.direct",
+  "ngrokPid": 2491
 }

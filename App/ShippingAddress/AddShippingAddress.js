@@ -18,7 +18,11 @@ import {
   AsyncStorage
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha } from '../Common/size';
+import {
+  alpha,
+  fontAlpha,
+  windowHeight,
+} from '../Common/size';
 import { createAction } from '../Utils';
 import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
@@ -35,7 +39,7 @@ import {
   TOAST_DURATION,
   LIGHT_GREY,
   BUTTONBOTTOMPADDING,
-  windowHeight
+  DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
@@ -50,7 +54,8 @@ import SwitchSelector from 'react-native-switch-selector';
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
   selectedShop: shops.selectedShop,
-  company_id: members.company_id
+  company_id: members.company_id,
+  location: members.location
 }))
 export default class AddShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -92,8 +97,10 @@ export default class AddShippingAddress extends React.Component {
   constructor(props) {
     super(props);
     this.address = this.props.navigation.state.params.params;
+
     if (this.address != null) {
       this.state = {
+        address_detail: '',
         fullname: this.address.fullname ? this.address.fullname : '',
         address: this.address.address ? this.address.address : '',
         contact_number: this.address.contact_number
@@ -116,10 +123,12 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.address.delivery_area
           ? this.address.delivery_area
           : '',
-        primary: this.address.primary == true ? 1 : 0
+        primary: this.address.primary == true ? 1 : 0,
+        tag: this.props.selectedShop.address_tags
       };
     } else {
       this.state = {
+        address_detail: '',
         fullname: '',
         address: '',
         contact_number: '',
@@ -138,7 +147,8 @@ export default class AddShippingAddress extends React.Component {
         ],
         verification_code: '',
         gender: 2,
-        genderIndex: 0
+        genderIndex: 0,
+        tag: this.props.selectedShop.address_tags
       };
     }
   }
@@ -148,13 +158,7 @@ export default class AddShippingAddress extends React.Component {
   onChangeContactNo = (contact_number) => {
     this.setState({ contact_number });
   };
-  onChangeAddress = (address) => {
-    this.setState({ address });
-  };
 
-  onChangeTag = (land_mark) => {
-    this.setState({ land_mark });
-  };
   onSavePressed = () => {
     let formcheck = this.checkForm();
     let primary = this.state.primary == 1 ? true : false;
@@ -162,7 +166,7 @@ export default class AddShippingAddress extends React.Component {
       const shippingAddress = {
         member_id: this.props.currentMember.id,
         fullname: this.state.fullname,
-        address: this.state.address,
+        address: this.state.address_detail + ' ' + this.state.address,
         contact_number: this.state.contact_number,
         city: this.state.city,
         state: this.state.state,
@@ -174,6 +178,7 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.state.delivery_area,
         primary: primary
       };
+      console.log('shippingAddress', shippingAddress);
       this.loadUpdateProfile(shippingAddress);
     }
   };
@@ -248,14 +253,38 @@ export default class AddShippingAddress extends React.Component {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
+    this.loadTag();
   }
+
+  loadTag = () => {
+    if (this.state.tag != undefined) {
+      let current_tag = this.state.tag.map((item) => {
+        if (item.name == this.state.land_mark) {
+          item.selected = true;
+        } else {
+          item.selected = false;
+        }
+        return item;
+      });
+      this.setState({ tag: current_tag });
+    }
+  };
 
   returnData(info) {
     this.setState({
+      delivery_area: info.area
+    });
+  }
+  returnAddress(info) {
+    this.setState({
+      address_detail: info.address_detail,
       address: info.address,
-      latitude: info.latitude,
-      longitude: info.longitude,
-      delivery_area: info.delivery_area
+      city: info.city,
+      state: info.state,
+      postal_code: info.postal_code,
+      country: info.country,
+      latitude: this.props.location.coords.latitude,
+      longitude: this.props.location.coords.longitude
     });
   }
 
@@ -265,19 +294,54 @@ export default class AddShippingAddress extends React.Component {
   onChangeDefaultAddress = (value) => {
     this.setState({ primary: value });
   };
-  onSelectAddress = () => {
+  onSelectShippingArea = () => {
     const { navigate } = this.props.navigation;
     navigate('ShippingArea', {
       returnToRoute: this.props.navigation.state,
       returnData: this.returnData.bind(this)
     });
   };
-  renderFormDetail = (title, value, placeholder, onChangeText, edit) => {
+  onSelectAddress = () => {
+    const { navigate } = this.props.navigation;
+    let { area, delivery_area } = this.state;
+
+    if (delivery_area) {
+      navigate('MapShippingAddress', {
+        returnToRoute: this.props.navigation.state,
+        returnAddress: this.returnAddress.bind(this)
+      });
+    } else {
+      this.refs.toast.show('Please select your area first', 500);
+    }
+  };
+  onSelectTag = (item) => {
+    const { navigation } = this.props;
+    let { tag } = this.state;
+    let selectedTag = tag.map((tag) => {
+      if (tag.name == item.name) {
+        tag.selected = true;
+      } else {
+        tag.selected = false;
+      }
+      return tag;
+    });
+    this.setState({ tag: selectedTag, land_mark: item.name });
+  };
+  renderFormDetail = (
+    title,
+    value,
+    placeholder,
+    onChangeText,
+    edit,
+    selected,
+    onPress
+  ) => {
+    let current_value = value == '' ? false : true;
     return (
       <View>
         <View style={styles.formDetail}>
           <Text style={styles.title}>{title}</Text>
-          {title != 'Address' ? (
+          {!selected ? (
             edit ? (
               <TextInput
                 defaultValue={value}
@@ -290,7 +354,7 @@ export default class AddShippingAddress extends React.Component {
                 editable={edit}
               />
             ) : (
-              <Text>{value}</Text>
+              <Text>{current_value}</Text>
             )
           ) : (
             <TouchableOpacity
@@ -299,19 +363,148 @@ export default class AddShippingAddress extends React.Component {
                 flex: 1,
                 marginRight: 10 * alpha,
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'center'
               }}
-              onPress={() => this.onSelectAddress()}
+              onPress={onPress}
             >
-              <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
-                {value}
-              </Text>
+              {current_value ? (
+                <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
+                  {value}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textInput,
+                    { paddingTop: 10 * alpha, color: LIGHT_GREY }
+                  ]}
+                >
+                  {placeholder}
+                </Text>
+              )}
               <Image
                 source={require('./../../assets/images/next.png')}
-                style={styles.navigationBarItemIcon}
+                style={styles.menuRowArrowImage}
               />
             </TouchableOpacity>
           )}
+        </View>
+        <Image
+          source={require('./../../assets/images/line-17.png')}
+          style={styles.seperatorImage}
+        />
+      </View>
+    );
+  };
+
+  renderAddressForm = () => {
+    let { address, address_detail } = this.state;
+    return (
+      <View>
+        <View>
+          <View style={styles.formDetail}>
+            <Text style={styles.title}>Address</Text>
+
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                marginRight: 10 * alpha,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onPress={this.onSelectAddress}
+            >
+              {address ? (
+                <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
+                  {address}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textInput,
+                    { paddingTop: 10 * alpha, color: LIGHT_GREY }
+                  ]}
+                >
+                  {'line 1'}
+                </Text>
+              )}
+              <Image
+                source={require('./../../assets/images/next.png')}
+                style={styles.menuRowArrowImage}
+              />
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={require('./../../assets/images/line-17.png')}
+            style={styles.seperatorImage}
+          />
+        </View>
+        <View>
+          <View style={styles.formDetail}>
+            <Text style={styles.title}></Text>
+
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                marginRight: 10 * alpha,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              {address ? (
+                <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
+                  {address_detail}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    styles.textInput,
+                    { paddingTop: 10 * alpha, color: LIGHT_GREY }
+                  ]}
+                >
+                  {'line 2'}
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={require('./../../assets/images/line-17.png')}
+            style={styles.seperatorImage}
+          />
+        </View>
+      </View>
+    );
+  };
+  renderPlaces = (item) => {
+    let button_selected = item.selected ? PRIMARY_COLOR : 'lightgray';
+    let text_selected = item.selected ? 'white' : 'black';
+    return (
+      <TouchableOpacity
+        style={[styles.tagButton, { backgroundColor: button_selected }]}
+        onPress={() => this.onSelectTag(item)}
+      >
+        <Text style={[styles.tagText, { color: text_selected }]}>
+          {item.name}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  renderTag = () => {
+    return (
+      <View>
+        <View style={[styles.formDetail]}>
+          <Text style={styles.title}>{'Tag'}</Text>
+
+          <View style={styles.placesWrapperView}>
+            <FlatList
+              renderItem={({ item }) => this.renderPlaces(item)}
+              data={this.state.tag}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={3}
+              key={'THREE COLUMN'}
+            />
+          </View>
         </View>
         <Image
           source={require('./../../assets/images/line-17.png')}
@@ -383,43 +576,45 @@ export default class AddShippingAddress extends React.Component {
   };
 
   render() {
-    let current_address = this.state.address
-      ? this.state.address
-      : 'Select shipping Address';
+    let current_area = this.state.delivery_area;
     let { fullname, contact_number } = this.state;
+    let primary =
+      this.state.primary == 0 ? DEFAULT_GREY_BACKGROUND : PRIMARY_COLOR;
     return (
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.addAddressForm}>
             {this.renderFormDetail(
-              'Name',
+              'Recipient',
               fullname,
-              "Fill up receiver's first name",
+              'Recipient Name',
               (text) => this.onChangeName(text),
               true
             )}
-            {this.renderRadioForm()}
+            {/* {this.renderRadioForm()} */}
             {this.renderFormDetail(
-              'Contact No.',
+              'Phone No.',
               contact_number,
-              "Fill up receiver's contact",
+              '01191291',
               (text) => this.onChangeContactNo(text),
               true
             )}
             {this.renderFormDetail(
-              'Address',
-              current_address,
-              '',
+              'Area',
+              current_area,
+              'Select area',
               (text) => this.onChangeAddress(text),
-              true
+              true,
+              true,
+              () => this.onSelectShippingArea()
             )}
-            {/* {this.renderFormDetail("City", city, "", (text) => console.log(text), false)}
-                    {this.renderFormDetail("State", state, "", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Poscode", postal_code, "", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Country", country, "", (text) => console.log(text), false)}
-                    {this.renderFormDetail("Tag", land_mark, "", (text) => this.onChangeTag(text), true)} */}
+            {this.renderAddressForm()}
+            {this.renderTag()}
+
             <View style={[styles.defaultAddressView]}>
-              <Text style={styles.title}>Default address</Text>
+              <Text style={[styles.title, { width: 100 * alpha }]}>
+                Default address
+              </Text>
               <SwitchSelector
                 options={[
                   { label: '', value: 0 },
@@ -429,9 +624,10 @@ export default class AddShippingAddress extends React.Component {
                 value={0}
                 textColor={'#4E4D4D'}
                 selectedColor={'#FFFFFF'}
-                buttonColor={'#2A2929'}
-                borderColor={'red'}
-                backgroundColor={'rgb(240,240,240)'}
+                buttonColor={primary}
+                borderColor={DEFAULT_GREY_BACKGROUND}
+                hasPadding={true}
+                backgroundColor={'#FFFFFF'}
                 style={styles.defaultAddressOption}
                 textStyle={styles.optionText}
                 fontSize={10 * alpha}
@@ -449,6 +645,7 @@ export default class AddShippingAddress extends React.Component {
         </TouchableOpacity>
         <Toast
           ref="toast"
+          style={{ bottom: windowHeight / 2 }}
           textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
         />
       </View>
@@ -477,14 +674,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgb(243, 243, 243)',
-    justifyContent: 'space-between'
+    backgroundColor: 'rgb(243, 243, 243)'
   },
   addAddressForm: {
     backgroundColor: 'white',
     paddingVertical: 10 * alpha,
     paddingHorizontal: 10 * alpha,
     marginHorizontal: 10 * alpha,
+    marginTop: 20 * alpha,
     borderRadius: 10 * alpha,
     paddingBottom: 10 * alpha
   },
@@ -506,8 +703,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    paddingVertical: 10 * alpha
-    // flex: 1
+    paddingVertical: 10 * alpha,
+    flex: 1
   },
   title: {
     backgroundColor: 'transparent',
@@ -515,8 +712,16 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
-    width: 110 * alpha,
+    width: 75 * alpha,
     textAlign: 'left'
+  },
+  tagText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'center'
   },
   seperatorImage: {
     backgroundColor: 'transparent',
@@ -530,11 +735,10 @@ const styles = StyleSheet.create({
   },
   defaultAddressOption: {
     borderRadius: 10 * alpha,
-    width: 65 * alpha,
+    width: 50 * alpha,
     // height: 10 * alpha,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: 'black'
+    alignItems: 'center'
   },
   optionText: {
     fontFamily: NON_TITLE_FONT,
@@ -567,5 +771,29 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left'
+  },
+  placesWrapperView: {
+    backgroundColor: 'transparent',
+    // marginVertical: 10 * alpha,
+    // width: windowWidth / 2,
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
+  },
+  tagButton: {
+    // width: 75 * alpha,
+    paddingVertical: 5 * alpha,
+    paddingHorizontal: 10 * alpha,
+    backgroundColor: 'lightgray',
+    borderRadius: 5 * alpha,
+    // borderWidth: 1,
+    // borderColor: PRIMARY_COLOR,
+    marginRight: 5 * alpha,
+    marginTop: 5 * alpha,
+    alignItems: 'center'
+  },
+  menuRowArrowImage: {
+    width: 10 * alpha,
+    tintColor: 'rgb(195, 195, 195)',
+    resizeMode: 'contain'
   }
 });
