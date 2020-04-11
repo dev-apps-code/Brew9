@@ -56,7 +56,7 @@ export default class MapShippingAddress extends React.Component {
             fontFamily: TITLE_FONT
           }}
         >
-          Location
+          Delivery Address
         </Text>
       ),
       headerTintColor: 'black',
@@ -295,9 +295,12 @@ export default class MapShippingAddress extends React.Component {
     } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
+        <TouchableOpacity style={styles.clearView}>
+          <Text style={styles.clearText}>Clear</Text>
+        </TouchableOpacity>
         <View
           style={{
-            marginTop: 20 * alpha,
+            // marginTop: 20 * alpha,
             marginHorizontal: 10 * alpha,
             borderRadius: 5 * alpha,
             backgroundColor: 'white'
@@ -378,6 +381,21 @@ export default class MapShippingAddress extends React.Component {
         listViewDisplayed="auto" // true/false/undefined
         fetchDetails={true}
         renderDescription={(row) => row.description} // custom description render
+        renderLeftButton={() => (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginLeft: 10 * alpha,
+              width: 22 * alpha
+            }}
+          >
+            <Image
+              source={require('./../../assets/images/location.png')}
+              style={styles.locationIcon}
+            />
+          </View>
+        )}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
           this.getAddressDetails(data, details);
@@ -393,9 +411,22 @@ export default class MapShippingAddress extends React.Component {
           radius: '1000'
         }}
         styles={{
+          container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
           textInputContainer: {
-            width: '100%'
+            marginHorizontal: 15 * alpha,
+            backgroundColor: 'white',
+            marginVertical: 10 * alpha,
+            borderRadius: 5 * alpha,
+            borderTopWidth: 0,
+            borderBottomWidth: 0
           },
+          textInput: {
+            marginLeft: 0
+          },
+          row: {
+            backgroundColor: 'white'
+          },
+
           description: {
             fontWeight: 'bold'
           },
@@ -438,6 +469,10 @@ const styles = StyleSheet.create({
     width: 18 * alpha,
     height: 18 * alpha,
     tintColor: 'black'
+  },
+  locationIcon: {
+    width: 14 * alpha,
+    height: 20 * alpha
   },
   container: {
     flex: 1,
@@ -488,7 +523,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     marginHorizontal: 20 * alpha,
-    bottom: BUTTONBOTTOMPADDING,
+    bottom: BUTTONBOTTOMPADDING + 20 * alpha,
     height: 47 * alpha,
     flexDirection: 'row',
     alignItems: 'center'
@@ -515,5 +550,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     resizeMode: 'cover',
     height: 3 * alpha
+  },
+  clearText: {
+    color: PRIMARY_COLOR,
+    fontSize: 15 * fontAlpha,
+    fontFamily: TITLE_FONT
+  },
+  clearView: {
+    // flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20 * alpha,
+    marginRight: 15 * alpha,
+    marginBottom: 10 * alpha
   }
 });
