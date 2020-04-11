@@ -123,7 +123,7 @@ export default class ShippingAddress extends React.Component {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
-    // this.loadShippingAddress();
+    this.loadShippingAddress();
   }
 
   componentDidUpdate(prevProps, prevState) {}
