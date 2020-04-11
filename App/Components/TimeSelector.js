@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
 import {
   Animated,
   Image,
@@ -32,6 +32,8 @@ const TimeSelector = ({
   onConfirmDeliverySchedule,
   delivery
 }) => {
+  const sphour = createRef();
+  const spminute = createRef();
   const { minute_range, hour_range, selected_hour, selected_minute } = state;
   const [selected, setSelected] = useState(null);
   const title = delivery ? 'Delivery' : 'Pickup';
@@ -91,6 +93,9 @@ const TimeSelector = ({
               text="Later"
               press={() => {
                 setSelected(1);
+                if (sphour && sphour.current) {
+                  sphour.current.scrollToIndex(0);
+                }
                 onSelectOrderLater();
               }}
             />
@@ -102,6 +107,9 @@ const TimeSelector = ({
                 text="Tomorrow"
                 press={() => {
                   setSelected(2);
+                  if (sphour && sphour.current) {
+                    sphour.current.scrollToIndex(0);
+                  }
                   onSelectOrderTomorrow();
                 }}
               />
@@ -123,9 +131,7 @@ const TimeSelector = ({
             <View>
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <ScrollPicker
-                  ref={(sphour) => {
-                    this.sphour = sphour;
-                  }}
+                  ref={sphour}
                   dataSource={hour_range}
                   selectedIndex={0}
                   itemHeight={50 * alpha}
@@ -153,14 +159,12 @@ const TimeSelector = ({
                     );
                   }}
                   onValueChange={(data, selectedIndex) => {
-                    this.spminute.scrollToIndex(0);
+                    spminute.current.scrollToIndex(0);
                     onHourValueChange(data, selectedIndex);
                   }}
                 />
                 <ScrollPicker
-                  ref={(spminute) => {
-                    this.spminute = spminute;
-                  }}
+                  ref={spminute}
                   dataSource={minute_range}
                   selectedIndex={0}
                   itemHeight={50 * alpha}
