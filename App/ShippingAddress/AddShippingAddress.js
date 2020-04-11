@@ -18,7 +18,11 @@ import {
   AsyncStorage
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha } from '../Common/size';
+import {
+  alpha,
+  fontAlpha,
+  windowHeight,
+} from '../Common/size';
 import { createAction } from '../Utils';
 import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
@@ -35,7 +39,6 @@ import {
   TOAST_DURATION,
   LIGHT_GREY,
   BUTTONBOTTOMPADDING,
-  windowHeight,
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
 import { Analytics, Event, PageHit } from 'expo-analytics';
@@ -155,13 +158,7 @@ export default class AddShippingAddress extends React.Component {
   onChangeContactNo = (contact_number) => {
     this.setState({ contact_number });
   };
-  onChangeAddress = (address) => {
-    this.setState({ address });
-  };
 
-  onChangeTag = (land_mark) => {
-    this.setState({ land_mark });
-  };
   onSavePressed = () => {
     let formcheck = this.checkForm();
     let primary = this.state.primary == 1 ? true : false;
@@ -306,10 +303,16 @@ export default class AddShippingAddress extends React.Component {
   };
   onSelectAddress = () => {
     const { navigate } = this.props.navigation;
-    navigate('MapShippingAddress', {
-      returnToRoute: this.props.navigation.state,
-      returnAddress: this.returnAddress.bind(this)
-    });
+    let { area, delivery_area } = this.state;
+
+    if (delivery_area) {
+      navigate('MapShippingAddress', {
+        returnToRoute: this.props.navigation.state,
+        returnAddress: this.returnAddress.bind(this)
+      });
+    } else {
+      this.refs.toast.show('Please select your area first', 500);
+    }
   };
   onSelectTag = (item) => {
     const { navigation } = this.props;
@@ -573,10 +576,7 @@ export default class AddShippingAddress extends React.Component {
   };
 
   render() {
-    let current_address = this.state.address;
-
     let current_area = this.state.delivery_area;
-
     let { fullname, contact_number } = this.state;
     let primary =
       this.state.primary == 0 ? DEFAULT_GREY_BACKGROUND : PRIMARY_COLOR;
@@ -645,6 +645,7 @@ export default class AddShippingAddress extends React.Component {
         </TouchableOpacity>
         <Toast
           ref="toast"
+          style={{ bottom: windowHeight / 2 }}
           textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
         />
       </View>
@@ -673,8 +674,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgb(243, 243, 243)',
-    justifyContent: 'space-between'
+    backgroundColor: 'rgb(243, 243, 243)'
   },
   addAddressForm: {
     backgroundColor: 'white',
