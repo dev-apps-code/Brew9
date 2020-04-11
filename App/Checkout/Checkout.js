@@ -243,38 +243,28 @@ export default class Checkout extends React.Component {
       : Moment(selectedShop.opening_hour.end_time, 'h:mm');
 
     var minute_array = ['00', '15', '30', '45'];
-    var time_now = Moment(new Date(), 'h:mm').add(15, 'm');
+    var time_now = Moment(new Date(), 'h:mm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
     if (hour == option) {
-      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
-        let minOption = parseInt(o);
-        return minOption > min;
-      });
-      if (minute_array.length < 3) {
-        minute_array.length = 3;
-      }
-
-      this.setState({
-        minute_range: minute_array
-      });
+      minute_array = _.filter(
+        ['00', '15', '30', '45'],
+        (o) => parseInt(o) > min + 15
+      );
     } else {
       if (option == endTime.hours()) {
-        minute_array = _.filter(['00', '15', '30', '45'], function (o) {
-          let minOption = parseInt(o);
-          return minOption <= endTime.minutes();
-        });
+        minute_array = _.filter(
+          ['00', '15', '30', '45'],
+          (o) => parseInt(o) <= endTime.minutes() - 15
+        );
       }
-      if (minute_array.length < 3) {
-        minute_array.length = 3;
-      }
-
-      this.setState({
-        minute_range: minute_array,
-        selected_minute: minute_array[0]
-      });
     }
+
+    this.setState({
+      minute_range: minute_array,
+      selected_minute: minute_array[0]
+    });
   }
 
   // add 0 before hr if hr is single digit
@@ -287,7 +277,7 @@ export default class Checkout extends React.Component {
           selected_hour_index: index - 1
         },
         function () {
-          this.sphour.scrollToIndex(this.state.selected_hour_index);
+          // this.sphour.scrollToIndex(this.state.selected_hour_index);
         }
       );
     } else {
@@ -308,14 +298,14 @@ export default class Checkout extends React.Component {
       var min = time_now.minutes();
 
       if (hour == selected_hour && min > 15 && option == '00') {
-        this.sphour.scrollToIndex(selected_hour_index + 1);
+        // this.sphour.scrollToIndex(selected_hour_index + 1);
         this.setState(
           {
             minute_range: ['00', '15', '30', '45'],
             selected_hour: hour_range[selected_hour_index + 1]
           },
           function () {
-            this.spminute.scrollToIndex(0);
+            // this.spminute.scrollToIndex(0);
           }
         );
       }
@@ -323,7 +313,7 @@ export default class Checkout extends React.Component {
         selected_minute: option
       });
     } else {
-      this.spminute.scrollToIndex(index - 1);
+      // this.spminute.scrollToIndex(index - 1);
     }
   };
   loadDeliveryFee = (total) => {
@@ -407,26 +397,7 @@ export default class Checkout extends React.Component {
   onConfirmTimePicker = (option, hour, min) => {
     var today = Moment();
     var tomorrow = Moment().add(1, 'days');
-    var selected_date = option == 'TOMORROW' ? tomorrow : today;
-
-    // if (pick_up_status == 'Order Now') {
-    //   var pick_up_time = `${date} ${now}`;
-    //   this.setState({ pick_up_time });
-    //   this.toggleTimeSelector();
-    // } else if (pick_up_status == 'Pick Later') {
-    //   if (now < selectorTime) {
-    //     var pick_up_time = `${selected_date} ${selected_hour}:${selected_minute}`;
-    //     this.setState({ pick_up_time });
-    //     this.toggleTimeSelector();
-    //   } else {
-    //     this.refs.toast.show('Pick up time is not available', TOAST_DURATION);
-    //   }
-    // } else if (pick_up_status == 'Pick Tomorrow') {
-    //   var formatedHour = this.formatSelectedHour(selected_hour);
-    //   var pick_up_time = `${selected_date} ${formatedHour}:${selected_minute}`;
-    //   this.setState({ pick_up_time });
-    //   this.toggleTimeSelector();
-    // }
+    var selected_date = option == 2 ? tomorrow : today;
 
     var pick_up_status = 'Later';
     pick_up_status = option == 2 ? 'Tomorrow' : pick_up_status;
@@ -461,8 +432,6 @@ export default class Checkout extends React.Component {
     const { selectedShop, delivery } = this.props;
     const { opening_hour, delivery_hour } = selectedShop;
 
-    console.log('opening_hour ', opening_hour);
-    console.log('delivery_hour ', delivery_hour);
     if (delivery) {
       this.setTimePickerDefault(
         {
