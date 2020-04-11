@@ -177,6 +177,7 @@ export default class Checkout extends React.Component {
       this.setState({
         selected_address: this.props.currentMember.defaultAddress
       });
+      this.loadDeliveryFee()
     }
   }
 
@@ -335,6 +336,7 @@ export default class Checkout extends React.Component {
     }
   };
   loadDeliveryFee = () => {
+    console.log("\n\nHERE")
     var total = this.props.cart_total;
     console.log("\n\nselected address")
     console.log(this.state.selected_address)

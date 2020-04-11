@@ -15,7 +15,7 @@ class DeliveryFeeRequestObject extends BaseRequestObject {
     }
 
     getFormData() {
-        var string = "total=" + this.total + '&address_id' + this.address_id;
+        var string = "total=" + this.total + '&address_id=' + this.address_id;
         console.log("\n\nID:")
         console.log(this.address_id)
 
