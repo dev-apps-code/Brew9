@@ -131,6 +131,8 @@ export default {
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(deliveryFee, authtoken, object);
         const eventObject = new EventObject(json);
+        console.log("\n\nDeliveryFeeResponse")
+        console.log(eventObject)
         if (eventObject.success == true) {
         }
         typeof callback === 'function' && callback(eventObject);

@@ -2,9 +2,10 @@ import BaseRequestObject from "./base_request_object";
 
 class DeliveryFeeRequestObject extends BaseRequestObject {
 
-    constructor(total) {
+    constructor(total,address_id) {
         super();
         this.total = total
+        this.address_id = address_id
 
 
     }
@@ -14,7 +15,9 @@ class DeliveryFeeRequestObject extends BaseRequestObject {
     }
 
     getFormData() {
-        var string = "total=" + this.total;
+        var string = "total=" + this.total + '&address_id=' + this.address_id;
+        console.log("\n\nID:")
+        console.log(this.address_id)
 
         return string
     }
