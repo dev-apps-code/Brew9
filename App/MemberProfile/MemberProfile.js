@@ -120,7 +120,8 @@ export default class MemberProfile extends React.Component {
       selected_image: null,
       has_send_code: false,
       member_have_dob: false,
-      birthdayAlert: false
+      birthdayAlert: false,
+      default_address: ''
     };
   }
 
@@ -297,7 +298,8 @@ export default class MemberProfile extends React.Component {
       nickname: members.nickname,
       gender: members.gender,
       email: members.email,
-      member_phone_number: members.phone_no
+      member_phone_number: members.phone_no,
+      default_address: members.defaultAddress
     });
 
     if (members.dob != undefined) {
@@ -454,6 +456,11 @@ export default class MemberProfile extends React.Component {
     this.setState({ dob: dob, birthdayAlert: true });
   };
 
+  onChangeAddress = () => {
+    const { navigation } = this.props;
+    navigation.navigate('ShippingAddress');
+  };
+
   renderModalContent = () => (
     <View style={styles.popOutView}>
       <View
@@ -587,15 +594,17 @@ export default class MemberProfile extends React.Component {
       gender,
       member_phone_number,
       email,
-      selected_image
+      selected_image,
+      default_address
     } = this.state;
     const preview = { uri: require('./../../assets/images/user.png') };
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
+    let defaultAddress = default_address ? default_address : 'Address';
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
         style={{ flex: 1 }}
         enabled
@@ -816,62 +825,7 @@ export default class MemberProfile extends React.Component {
                         );
                       })}
                     </RadioForm>
-                    {/*<RadioForm*/}
-                    {/*	formHorizontal={true}*/}
-                    {/*	radio_props={radio_props}*/}
-                    {/*	initial={members.gender}*/}
-                    {/*	style={{backgroundColor: "blue", justifyContent: "center", alignItems: "center"}}*/}
-                    {/*	buttonStyle={{backgroundColor: "black", position: "absolute", top: 20}}*/}
-                    {/*	borderWidth={0}*/}
-                    {/*	buttonSize={13 * alpha}*/}
-                    {/*	buttonOuterSize={13 * alpha}*/}
-                    {/*	buttonInnerColor={'#EEEAEA'}*/}
-                    {/*	selectedButtonColor={'#00B2E3'}*/}
-                    {/*	buttonColor={'#EEEAEA'}*/}
-                    {/*	labelStyle={{backgroundColor:"red",fontSize: 13 * alpha, marginRight: 10 * alpha, alignSelf: 'center'}}*/}
-                    {/*	onPress={(value) => {this.setState({gender:value})}}*/}
-                    {/*/>*/}
-                    {/*<View*/}
-                    {/*	pointerEvents="box-none"*/}
-                    {/*	style={{*/}
-                    {/*		position: "absolute",*/}
-                    {/*		left: 0 * alpha,*/}
-                    {/*		right: 0 * alpha,*/}
-                    {/*		top: 0 * alpha,*/}
-                    {/*		bottom: 0 * alpha,*/}
-                    {/*		justifyContent: "center",*/}
-                    {/*	}}>*/}
-                    {/*	<Image*/}
-                    {/*		source={require("./../../assets/images/tick.png")}*/}
-                    {/*		style={styles.selectedImage}/>*/}
-                    {/*</View>*/}
-                    {/*<View*/}
-                    {/*	pointerEvents="box-none"*/}
-                    {/*	style={{*/}
-                    {/*		position: "absolute",*/}
-                    {/*		left: 0 * alpha,*/}
-                    {/*		top: 0 * alpha,*/}
-                    {/*		bottom: 0 * alpha,*/}
-                    {/*		justifyContent: "center",*/}
-                    {/*	}}>*/}
-                    {/*	<View*/}
-                    {/*		style={styles.tickView}>*/}
-                    {/*		<Image*/}
-                    {/*			source={require("./../../assets/images/tick.png")}*/}
-                    {/*			style={styles.tickImage}/>*/}
-                    {/*	</View>*/}
-                    {/*</View>*/}
                   </View>
-                  {/*<Text*/}
-                  {/*	style={styles.maleText}>Male</Text>*/}
-                  {/*<View*/}
-                  {/*	style={{*/}
-                  {/*		flex: 1,*/}
-                  {/*	}}/>*/}
-                  {/*<View*/}
-                  {/*	style={styles.radioView}/>*/}
-                  {/*<Text*/}
-                  {/*	style={styles.femaleText}>Female</Text>*/}
                 </View>
               </View>
             </View>
@@ -881,6 +835,7 @@ export default class MemberProfile extends React.Component {
                 date={this.state.dob}
                 mode="date"
                 placeholder="Birthday"
+                placeholderText={styles.birthdayDatePicker}
                 format="DD-MM-YYYY"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -915,6 +870,47 @@ export default class MemberProfile extends React.Component {
               {/*	style={styles.birthdayTextInput}*/}
               {/*	defaultValue={"1973-11-10"}*/}
               {/*/>*/}
+            </View>
+            <View style={styles.phoneNumberView}>
+              {/* <View style={styles.seperatorView} /> */}
+              <View
+                pointerEvents="box-none"
+                style={{
+                  position: 'absolute',
+                  left: 0 * alpha,
+                  right: 0 * alpha,
+                  top: 0 * alpha,
+                  bottom: 0 * alpha,
+                  justifyContent: 'center'
+                }}
+              >
+                <View
+                  pointerEvents="box-none"
+                  style={{
+                    height: 25 * alpha,
+                    marginLeft: 22 * alpha,
+                    marginRight: 22 * alpha,
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={styles.phoneNumberText}>Address</Text>
+                  <Text style={styles.textInputTextInput}>
+                    {defaultAddress}
+                  </Text>
+                  <View
+                    style={{
+                      flex: 1
+                    }}
+                  />
+                  <TouchableOpacity onPress={this.onChangeAddress}>
+                    <Image
+                      source={require('./../../assets/images/next.png')}
+                      style={styles.menuRowArrowImage}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
           <TouchableOpacity
@@ -1047,7 +1043,7 @@ const styles = StyleSheet.create({
   },
   personalInfoView: {
     backgroundColor: 'white',
-    height: 270 * alpha,
+    height: 323 * alpha,
     marginTop: 10 * alpha
   },
   nicknameView: {
@@ -1453,5 +1449,10 @@ const styles = StyleSheet.create({
   confirmButtonImage: {
     resizeMode: 'contain',
     marginRight: 10 * alpha
+  },
+  menuRowArrowImage: {
+    width: 10 * alpha,
+    tintColor: 'rgb(195, 195, 195)',
+    resizeMode: 'contain'
   }
 });
