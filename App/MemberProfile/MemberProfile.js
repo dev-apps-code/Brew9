@@ -458,7 +458,9 @@ export default class MemberProfile extends React.Component {
 
   onChangeAddress = () => {
     const { navigation } = this.props;
-    navigation.navigate('ShippingAddress');
+    navigation.navigate('ShippingAddress', {
+      origin: navigation.state
+    });
   };
 
   renderModalContent = () => (

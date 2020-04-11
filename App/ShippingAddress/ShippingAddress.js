@@ -143,8 +143,10 @@ export default class ShippingAddress extends React.Component {
   }
   onItemPress = (item) => {
     const { navigation, dispatch } = this.props;
-    dispatch(createAction('members/savePrimaryShippingAddress')(item));
-    navigation.navigate('Checkout');
+    if (navigation.state.params.origin == undefined) {
+      dispatch(createAction('members/savePrimaryShippingAddress')(item));
+      navigation.navigate('Checkout');
+    }
   };
 
   renderShippingAddress = (item) => {
@@ -219,7 +221,7 @@ export default class ShippingAddress extends React.Component {
   }
 
   render() {
-    const { location, shippingAddress } = this.props;
+    const { location, shippingAddress, navigation } = this.props;
     let { loading } = this.state;
     if (loading) {
       return <AnimationLoading />;
