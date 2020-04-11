@@ -81,7 +81,8 @@ export default {
     location: null,
     notifications: [],
     unreadNotificationCount: 0,
-    unclaimedMission: 0
+    unclaimedMission: 0,
+    shippingAddress:[]
   },
 
   reducers: {
@@ -521,6 +522,7 @@ export default {
         if (eventObject.success == true) {
           let members = Array.isArray(eventObject.result);
           if (!members) {
+            console.log('eventObject.result', eventObject.result);
             yield put(createAction('saveCurrentUser')(eventObject.result));
           }
           yield put(
