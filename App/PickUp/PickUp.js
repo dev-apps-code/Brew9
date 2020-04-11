@@ -213,6 +213,7 @@ export default class PickUp extends React.Component {
   }
 
   renderQueueView(current_order) {
+    console.log("renderQueue")
     const { selectedShop } = this.props;
     const queues = current_order.map((item, key) => {
       // console.log("/n/nITEM")
