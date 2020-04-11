@@ -24,7 +24,7 @@ import {getServerIndex} from './storage'
 export const KSERVERURLLIST = [
   "http://test.brew9.co/api",
   "https://app.brew9.co/api",
-  "http://dev1.brew9.co/api",
+  "https://dev.brew9.co/api",
   "http://dev1.brew9.co/api",
   // "http://dev2.brew9.co/api",
   // "http://dev3.brew9.co/api",
@@ -33,7 +33,7 @@ export const KSERVERURLLIST = [
 export const KURL_INFOLIST = [
   "http://test.brew9.co/info",
   "https://app.brew9.co/info",
-  "http://dev1.brew9.co/info",
+  "https://dev.brew9.co/info",
   "http://dev1.brew9.co/info",
 
   // "http://dev2.brew9.co/info",
@@ -44,7 +44,7 @@ export const KURL_INFOLIST = [
 export const KPAYMENTYURLLIST = [
   "http://test.brew9.co/payments/baiduri",
   "https://app.brew9.co/payments/baiduri",
-  "http://dev1.brew9.co/payments/baiduri",
+  "https://dev.brew9.co/payments/baiduri",
   "http://dev1.brew9.co/payments/baiduri",
   // "http://dev2.brew9.co/payments/baiduri",
   // "http://dev3.brew9.co/payments/baiduri",

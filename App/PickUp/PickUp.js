@@ -215,6 +215,10 @@ export default class PickUp extends React.Component {
   renderQueueView(current_order) {
     const { selectedShop } = this.props;
     const queues = current_order.map((item, key) => {
+      // console.log("/n/nITEM")
+      // console.log(item)
+      // console.log("/n/nITEM")
+
       var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
       var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
       var claim_day = claim_time != today ? 'TOMORROW' : '';
@@ -267,7 +271,7 @@ export default class PickUp extends React.Component {
       const order_items = item.order_items.map((item, key) => {
         var price_string =
           item.total_price != undefined && item.total_price > 0
-            ? `$${parseFloat(item.total_price).toFixed(2)}`
+            ? `$${item.total_price}`
             : item.total_price != undefined && item.total_price == 0
             ? 'Free'
             : '';
@@ -323,12 +327,10 @@ export default class PickUp extends React.Component {
 
         // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
-          promotion_discount = `-$${item.value}`;
+          promotion_discount = `-$${item.promotion_value}`;
           calculate_cart_total -= item.value;
         } else if (item.value_type == 'percent') {
-          promotion_discount = `-$${parseFloat(
-            calculate_cart_total * (item.value / 100)
-          ).toFixed(2)}`;
+          promotion_discount = `-$${item.promotion_value}`;
           calculate_cart_total -= parseFloat(
             calculate_cart_total * (item.value / 100)
           );
@@ -368,16 +370,9 @@ export default class PickUp extends React.Component {
         // }
       });
 
-      const voucher_items = item.voucher_items.map((item, key) => {
+      const voucher_items = item.voucher_items.map((voucherItem, key) => {
         var voucher_discount = '';
 
-        if (item.voucher.discount_type == 'fixed') {
-          voucher_discount = `-$${item.voucher.discount_price}`;
-        } else if (item.voucher.discount_type == 'percent') {
-          voucher_discount = `-$${parseFloat(
-            calculate_cart_total * (item.voucher.discount_price / 100)
-          ).toFixed(2)}`;
-        }
         return (
           <View style={styles.drinksView} key={key}>
             <View
@@ -390,13 +385,13 @@ export default class PickUp extends React.Component {
               }}
             >
               <View style={styles.productDetailView}>
-                <Text style={styles.productNameText}>{item.voucher.name}</Text>
+                <Text style={styles.productNameText}>{voucherItem.voucher.name}</Text>
 
                 <View style={styles.spacer} />
               </View>
 
-              <Text style={styles.productPriceText}>{voucher_discount}</Text>
-              {item.voucher_items != null &&
+              <Text style={styles.productPriceText}>-${item.voucher_value}</Text>
+              {voucherItem.voucher_items != null &&
                 key < item.voucher_items.length - 1 && (
                   <Image
                     source={require('./../../assets/images/dotted-line.png')}
@@ -407,6 +402,8 @@ export default class PickUp extends React.Component {
           </View>
         );
       });
+
+      
 
       return (
         <View style={styles.pickUpQueueView} key={key}>
@@ -691,7 +688,7 @@ export default class PickUp extends React.Component {
                   />
                   <Text style={styles.orderTotalText}>
                     {item.delivery_fee > 0
-                      ? `$${parseFloat(item.sub_total).toFixed(2)}`
+                      ? `$${item.sub_total}`
                       : undefined}
                   </Text>
                 </View>
@@ -721,7 +718,7 @@ export default class PickUp extends React.Component {
                   />
                   <Text style={styles.orderTotalText}>
                     {item.delivery_fee > 0
-                      ? `$${parseFloat(item.delivery_fee).toFixed(2)}`
+                      ? `$${item.delivery_fee}`
                       : undefined}
                   </Text>
                 </View>
@@ -749,7 +746,7 @@ export default class PickUp extends React.Component {
                   }}
                 />
                 <Text style={styles.orderTotalText}>
-                  ${parseFloat(item.total).toFixed(2)}
+                  ${item.total}
                 </Text>
               </View>
             </View>

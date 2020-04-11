@@ -598,6 +598,8 @@ export default class Checkout extends React.Component {
   };
 
   roundOff(value) {
+    console.log("before value: ")
+    console.log(value)
     var value = value.toString()
     var secondDecimal = parseInt(value.split('.')[1][1]);
   
@@ -627,6 +629,8 @@ export default class Checkout extends React.Component {
     let { sub_total_voucher, deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
+    console.log("\n\nCartTotal:")
+    console.log(cart_total)
     let finalCart = [];
     var promotions_item = [];
     var final_cart_value =
@@ -634,6 +638,8 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
+    console.log("final cart value")
+    console.log(final_cart_value)
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -644,6 +650,8 @@ export default class Checkout extends React.Component {
     if (shop.all_promotions != null && shop.all_promotions.length > 0) {
       for (var index in shop.all_promotions) {
         var promotion = shop.all_promotions[index];
+        console.log("\n\n Promotions")
+        console.log(promotion)
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
@@ -661,20 +669,30 @@ export default class Checkout extends React.Component {
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   // price = (cart_total_voucher * discount_value) / 100;
-                  price = this.roundOff((cart_total_voucher * discount_value) / 100)
+                  price = this.roundOff((final_cart_value * discount_value) / 100)
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
                   ) {
                     price = promotion.maximum_discount_allow;
                   }
-                  final_cart_value = cart_total_voucher - price;
+                  final_cart_value = final_cart_value - price;
+                  console.log("after Deducted PERCENTAGE DISCOUNT:")
+                  console.log("the discount value:")
+                  console.log(discount_value + '%')
+                  console.log("the final value:")
+                  console.log(final_cart_value)
                 } else if (
                   promotion.value_type != null &&
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  final_cart_value = cart_total_voucher - discount_value;
+                  final_cart_value = final_cart_value - discount_value;
+                  console.log("after Deducted FIXED DISCOUNT:")
+                  console.log("the discount value:")
+                  console.log(discount_value)
+                  console.log("the final value:")
+                  console.log(final_cart_value)
                 }
               }
 
@@ -686,6 +704,9 @@ export default class Checkout extends React.Component {
                 price: price,
                 type: promotion.reward_type
               };
+
+              console.log("\n\ncartitem")
+              console.log(cartItem)
 
               promotions_item.push(cartItem);
             } else {
