@@ -171,8 +171,7 @@ export default class Checkout extends React.Component {
         {
           selected_address: this.props.currentMember.defaultAddress
         },
-        () => this.loadDeliveryFee(),
-        () => this.check_promotion_trigger()
+        () => this.loadDeliveryFee()        
       );
     }
   }
@@ -1804,7 +1803,7 @@ export default class Checkout extends React.Component {
           ? 'Free'
           : '';
 
-      console.log(`item price ${item.price} - ${item.roundedPrice}`)
+    
       let filtered =
         item.selected_variants != null
           ? item.selected_variants.filter(function (el) {
