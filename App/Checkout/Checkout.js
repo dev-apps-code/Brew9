@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import { createAction, Storage } from '../Utils';
+import { isTimeWithin } from '../Utils/date';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
@@ -182,8 +183,8 @@ export default class Checkout extends React.Component {
       : this.props.selectedShop.opening_hour;
 
     var startTime = Moment(start_time, 'h:mm');
-    var endTime = Moment(end_time, 'h:mm').subtract(15, 'm');
-    var time_now = Moment(new Date(), 'h:mm').add(15, 'm');
+    var endTime = Moment(end_time, 'h:mm');
+    var time_now = Moment(new Date(), 'h:mm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
@@ -205,7 +206,7 @@ export default class Checkout extends React.Component {
 
     if (hour >= endTime.hours()) {
       minute_array = _.filter(['00', '15', '30', '45'], function (o) {
-        return parseInt(o) <= endTime.minutes();
+        return parseInt(o) <= endTime.minutes() && parseInt(o) > min;
       });
     }
 
@@ -254,13 +255,13 @@ export default class Checkout extends React.Component {
     if (hour == option) {
       minute_array = _.filter(
         ['00', '15', '30', '45'],
-        (o) => parseInt(o) > min + 15
+        (o) => parseInt(o) > min
       );
     } else {
       if (option == endTime.hours()) {
         minute_array = _.filter(
           ['00', '15', '30', '45'],
-          (o) => parseInt(o) <= endTime.minutes() - 15
+          (o) => parseInt(o) <= endTime.minutes()
         );
       }
     }
@@ -431,46 +432,85 @@ export default class Checkout extends React.Component {
   };
 
   // Callback when now is clicked
-  onSelectOrderNow() {
+  onSelectOrderNow = () => {
     var pick_up_status = 'Now';
     var now = Moment().format('HH:mm');
     var selected_date = Moment().format('YYYY-MM-DD');
     var pick_up_time = `${selected_date} ${now}`;
 
-    this.setState({ pick_up_status, pick_up_time });
-    this.toggleTimeSelector();
-  }
+    const { delivery, selectedShop } = this.props;
+    const { opening_hour, delivery_hour } = selectedShop;
+
+    var toast_text = delivery ? 'Delivery' : 'Pickup';
+    var start = delivery
+      ? delivery_hour.today.start_time
+      : opening_hour.order_start_time;
+    var end = delivery
+      ? delivery_hour.today.end_time
+      : opening_hour.order_stop_time;
+
+    if (!isTimeWithin(now, start, end)) {
+      this.refs.toast.close();
+      this.refs.toast.show(
+        `Selected ${toast_text} time is not available.`,
+        TOAST_DURATION
+      );
+      return false;
+    } else {
+      this.refs.toast.close();
+      this.setState({ pick_up_status, pick_up_time });
+      this.toggleTimeSelector();
+      return true;
+    }
+  };
+
+  onSelectOrderLater = () => {
+    var now = Moment().format('HH:mm');
+    const { selectedShop, delivery } = this.props;
+    const { opening_hour, delivery_hour } = selectedShop;
+
+    var toast_text = delivery ? 'Delivery' : 'Pickup';
+    var start = delivery
+      ? delivery_hour.today.start_time
+      : opening_hour.order_start_time;
+    var end = delivery
+      ? delivery_hour.today.end_time
+      : opening_hour.order_stop_time;
+
+    if (!isTimeWithin(now, start, end)) {
+      this.refs.toast.close();
+      this.refs.toast.show(
+        `Selected ${toast_text} time is not available.`,
+        TOAST_DURATION
+      );
+      return false;
+    } else {
+      this.refs.toast.close();
+      var timeOptions = {
+        start_time: opening_hour.order_start_time,
+        end_time: opening_hour.order_stop_time
+      };
+      if (delivery) {
+        timeOptions = {
+          start_time: delivery_hour.today.start_time,
+          end_time: delivery_hour.today.end_time
+        };
+      }
+      this.setTimePickerDefault(timeOptions, false);
+
+      return true;
+    }
+  };
 
   // Callback when tomorrow button is clicked
-  onSelectOrderTomorrow = () =>
+  onSelectOrderTomorrow = () => {
+    this.refs.toast.close();
     this.setTimePickerDefault(
       this.props.selectedShop.delivery_hour.tomorrow,
       true
     );
-
-  onSelectOrderLater() {
-    const { selectedShop, delivery } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
-
-    if (delivery) {
-      this.setTimePickerDefault(
-        {
-          start_time: delivery_hour.today.start_time,
-          end_time: delivery_hour.today.end_time
-        },
-        false
-      );
-    } else {
-      this.setTimePickerDefault(
-        {
-          start_time: opening_hour.order_start_time,
-          end_time: opening_hour.order_stop_time
-        },
-        false
-      );
-    }
-  }
-
+  };
+  
   onBranchButtonPressed = () => {};
 
   onLocationButtonPressed = () => {
@@ -675,7 +715,6 @@ export default class Checkout extends React.Component {
         }
       }
       this.setState({ final_price: final_cart_value });
-
     }
 
     if (this.props.cart.length == 0) {
@@ -734,7 +773,6 @@ export default class Checkout extends React.Component {
     }
     const subf_price = discount_cart_total - discount;
     const f_price = subf_price;
-
     this.setState(
       {
         discount: discount,
