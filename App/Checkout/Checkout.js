@@ -171,8 +171,7 @@ export default class Checkout extends React.Component {
         {
           selected_address: this.props.currentMember.defaultAddress
         },
-        () => this.loadDeliveryFee(),
-        () => this.loadDeliveryFee()
+        () => this.loadDeliveryFee()        
       );
     }
   }
@@ -1794,7 +1793,7 @@ export default class Checkout extends React.Component {
 
     const order_items = fullList.map((item, key) => {
       var price_string =
-        item.price != undefined && item.roundedPrice > 0 && item.clazz == 'product'
+        item.price != undefined && item.price > 0 && item.clazz == 'product'
           ? `$${parseFloat(item.price).toFixed(2)}`
           : item.price != undefined &&
             item.price > 0 &&
@@ -1803,6 +1802,8 @@ export default class Checkout extends React.Component {
           : item.type != undefined && item.type == 'Free Items and vouchers'
           ? 'Free'
           : '';
+
+    
       let filtered =
         item.selected_variants != null
           ? item.selected_variants.filter(function (el) {
