@@ -603,7 +603,8 @@ export default class MemberProfile extends React.Component {
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
-    let defaultAddress = default_address ? default_address : 'Address';
+    let defaultAddress =
+      default_address != null ? default_address.address : 'Address';
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -897,15 +898,23 @@ export default class MemberProfile extends React.Component {
                   }}
                 >
                   <Text style={styles.phoneNumberText}>Address</Text>
-                  <Text style={styles.textInputTextInput}>
-                    {defaultAddress.address}
-                  </Text>
-                  <View
+                  <TouchableOpacity
+                    onPress={this.onChangeAddress}
                     style={{
-                      flex: 1
+                      flexDirection: 'row',
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center'
                     }}
-                  />
-                  <TouchableOpacity onPress={this.onChangeAddress}>
+                  >
+                    <Text style={styles.textInputTextInput}>
+                      {defaultAddress}
+                    </Text>
+                    <View
+                      style={{
+                        flex: 1
+                      }}
+                    />
                     <Image
                       source={require('./../../assets/images/next.png')}
                       style={styles.menuRowArrowImage}

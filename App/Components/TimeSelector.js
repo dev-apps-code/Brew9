@@ -141,7 +141,7 @@ const TimeSelector = ({
         >
           {selected != 0 && selected != null && (
             <View>
-              <View style={{ flexDirection: 'row', flex: 1 }}>
+              <View style={{ flexDirection: 'row', flex: 1, paddingTop: '3%' }}>
                 <ScrollPicker
                   ref={sphour}
                   dataSource={hour_range}
@@ -149,7 +149,6 @@ const TimeSelector = ({
                   itemHeight={ITEM_HEIGHT}
                   wrapperHeight={PICKER_WRAPPER_HEIGHT}
                   wrapperStyle={{
-                    backgroundColor: 'red',
                     flex: 1
                   }}
                   renderItem={(data, index, isSelected) => {
@@ -184,7 +183,6 @@ const TimeSelector = ({
                   itemHeight={ITEM_HEIGHT}
                   wrapperHeight={PICKER_WRAPPER_HEIGHT}
                   wrapperStyle={{
-                    backgroundColor: 'red',
                     flex: 1
                   }}
                   renderItem={(data, index, isSelected) => {
@@ -252,6 +250,12 @@ const CustomCard = ({
     </TouchableOpacity>
   );
 };
+
+const TOTAL_HEIGHT = 350 * alpha;
+const BAR_HEIGHT = 80 * alpha;
+const ITEM_HEIGHT = 50 * alpha;
+const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44;
+const PICKER_WRAPPER_HEIGHT = 150 * alpha;
 
 const componentStyle = StyleSheet.create({
   card: {
