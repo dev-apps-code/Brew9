@@ -1065,8 +1065,6 @@ export default class Home extends React.Component {
   }
 
   check_promotion_trigger = () => {
-
-    alert ("home")
     const {
       currentMember,
       dispatch,
