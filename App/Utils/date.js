@@ -1,3 +1,5 @@
+import Moment from 'moment';
+
 const months = [
   'January',
   'February',
@@ -25,3 +27,20 @@ export const month = (idx) => months[idx];
  * @returns {Date} from +/- n days
  */
 export const getDayNFrom = (from, n) => from.setDate(from.getDay() + n);
+
+/**
+ * Check if time is within range
+ * 
+ * @param {string} time time
+ * @param {string} start time
+ * @param {string} end time
+ */
+
+export const isTimeWithin = (time, start, end) => {
+  var format = 'hh:mm';
+  var _time = Moment(time, format);
+  var startTime = Moment(start, format);
+  var endTime = Moment(end, format);
+
+  return _time.isBetween(startTime, endTime);
+};

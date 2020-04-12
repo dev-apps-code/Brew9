@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
     borderRadius: 5 * alpha
   },
   popUpInput1: {
-    // backgroundColor: '#fff5ee',
+    // backgroundColor: 'red',
     paddingHorizontal: 10 * alpha,
     paddingVertical: 10 * alpha,
     borderRadius: 5 * alpha,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   couponCode: {
     // backgroundColor: '#f5f5f5',
@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
   descriptionText: {
     color: 'rgb(135, 135, 135)',
     fontFamily: TITLE_FONT,
-    textAlign: 'center'
+    textAlign: 'center',
+    flex:1
   },
   okButtonText: {
     color: 'rgb(254, 254, 254)',

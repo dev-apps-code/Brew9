@@ -1050,6 +1050,20 @@ export default class Home extends React.Component {
     }
   };
 
+  roundOff(value) {
+    console.log("before value: ")
+    console.log(value)
+    roundOffValue = 0;
+    let n = parseInt((value * 100).toFixed(10)), x = n % 10;
+				let result = n + 10 - x;
+				if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+				roundOffValue = (result / 100).toFixed(2);
+    console.log("\n\nValue")
+    console.log(roundOffValue)
+
+    return roundOffValue
+  }
+
   check_promotion_trigger = () => {
     const {
       currentMember,
@@ -1080,6 +1094,7 @@ export default class Home extends React.Component {
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
+            var roundedPrice = 0
 
             var trigger_price = parseFloat(promotion.trigger_price);
             var remaining = trigger_price - cart_total;
@@ -1097,6 +1112,8 @@ export default class Home extends React.Component {
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = (cart_total * discount_value) / 100;
+                  price = this.roundOff((final_cart_value * discount_value) / 100)
+                  roundedPrice = this.roundOff((final_cart_value * discount_value) / 100)
 
                   if (
                     promotion.maximum_discount_allow != null &&
@@ -1120,7 +1137,8 @@ export default class Home extends React.Component {
                 name: promotion.cart_text,
                 description: '',
                 price: price,
-                type: promotion.reward_type
+                type: promotion.reward_type,
+                roundedPrice: roundedPrice
               };
 
               promotions_item.push(cartItem);
