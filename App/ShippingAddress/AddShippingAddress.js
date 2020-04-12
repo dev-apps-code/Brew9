@@ -364,16 +364,9 @@ export default class AddShippingAddress extends React.Component {
               onPress={onPress}
             >
               {current_value ? (
-                <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
-                  {value}
-                </Text>
+                <Text style={[styles.textInput]}>{value}</Text>
               ) : (
-                <Text
-                  style={[
-                    styles.textInput,
-                    { paddingTop: 10 * alpha, color: LIGHT_GREY }
-                  ]}
-                >
+                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
                   {placeholder}
                 </Text>
               )}
@@ -411,16 +404,9 @@ export default class AddShippingAddress extends React.Component {
               onPress={this.onSelectAddress}
             >
               {address ? (
-                <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
-                  {address}
-                </Text>
+                <Text style={[styles.textInput]}>{address}</Text>
               ) : (
-                <Text
-                  style={[
-                    styles.textInput,
-                    { paddingTop: 10 * alpha, color: LIGHT_GREY }
-                  ]}
-                >
+                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
                   {'line 1'}
                 </Text>
               )}
@@ -449,16 +435,9 @@ export default class AddShippingAddress extends React.Component {
               }}
             >
               {address ? (
-                <Text style={[styles.textInput, { paddingTop: 10 * alpha }]}>
-                  {address_detail}
-                </Text>
+                <Text style={[styles.textInput]}>{address_detail}</Text>
               ) : (
-                <Text
-                  style={[
-                    styles.textInput,
-                    { paddingTop: 10 * alpha, color: LIGHT_GREY }
-                  ]}
-                >
+                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
                   {'line 2'}
                 </Text>
               )}
@@ -691,7 +670,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     width: 193 * alpha,
-    height: 30 * alpha,
+    // height: 30 * alpha,
     flex: 1
   },
   formDetail: {
