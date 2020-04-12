@@ -35,6 +35,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { ScrollView } from 'react-native-gesture-handler';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { Header } from 'react-navigation-stack';
+
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { connect } from 'react-redux';
 import * as Permissions from 'expo-permissions';
@@ -83,74 +84,22 @@ export default class MapShippingAddress extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handlePress = this.handlePress.bind(this);
+    
     this.state = {
       latitude: 0,
       longitude: 0,
       error: null,
       address: '',
       address_detail: '',
-      name: '',
-      address_form: false
     };
   }
 
-  getLocationAsync = async () => {
-    const { dispatch } = this.props;
-    try {
-      const value = await AsyncStorage.getItem('location permission');
-      if (value != 'denied') {
-        this.getLocation();
-      } else {
-        return;
-      }
-    } catch (error) {
-      console.log('error', error);
-
-      // Error retrieving data
-    }
-  };
-  getLocation = async () => {
-    const { dispatch } = this.props;
-    try {
-      const response = await Permissions.getAsync(Permissions.LOCATION);
-      if (response.status !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION);
-      } else {
-        Location.watchPositionAsync(
-          {
-            distanceInterval: 100,
-            timeInterval: 10000
-          },
-          (newLocation) => {
-            dispatch(createAction('members/setLocation')(newLocation));
-          },
-          (error) => console.log(error)
-        );
-
-        let location = await Location.getCurrentPositionAsync({});
-
-        dispatch(createAction('members/setLocation')(location));
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  handlePress(e) {
-    this.setState({
-      latitude: e.nativeEvent.coordinate.latitude,
-      longitude: e.nativeEvent.coordinate.longitude
-    });
-
-    //get the user identified coordinates here
-  }
+ 
 
   componentDidMount() {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
-    this.getLocationAsync();
   }
   onBackPressed = () => {
     this.props.navigation.goBack();
@@ -176,34 +125,13 @@ export default class MapShippingAddress extends React.Component {
     );
   };
 
-  renderMap = () => {
-    let { latitude, longitude } = this.state;
-    return (
-      <MapView
-        style={styles.container}
-        initialRegion={{
-          latitude: latitude,
-          longitude: longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        }}
-        onPress={this.handlePress}
-      >
-        <Marker coordinate={this.state} />
-      </MapView>
-    );
-  };
-
+ 
   onChangeAddress = (address) => {
     this.setState({
       address
     });
   };
-  onChangeName = (name) => {
-    this.setState({
-      name
-    });
-  };
+  
   onChangeAddressDetail = (address_detail) => {
     this.setState({
       address_detail
@@ -221,7 +149,7 @@ export default class MapShippingAddress extends React.Component {
   // };
 
   checkForm = () => {
-    let { address, address_detail, name } = this.state;
+    let { address } = this.state;
     if (!address) {
       this.refs.toast.show('Please fill in your address', 500);
       return false;
@@ -229,33 +157,34 @@ export default class MapShippingAddress extends React.Component {
     return true;
   };
   getAddressDetails = (data, details) => {
-    var address_detail = details.formatted_address.split(',');
-    var address = address_detail[0];
-    var poscode_city = address_detail[1].split(' ');
-    var postal_code = poscode_city[1];
-    var city = poscode_city[2];
-    var state = address_detail[2];
-    var country = address_detail[3];
-    console.log('address_detail', details);
-    this.setState(
-      {
-        address,
-        postal_code,
-        city,
-        state,
-        country,
-        address_form: true,
-        address1: data.structured_formatting.main_text,
-        address2: data.structured_formatting.secondary_text
-      },
-      () => console.log(this.state)
-    );
+    if (details.formatted_address != null){
+      console.log("details "+details)
+      var address_detail = details.formatted_address.split(',');
+      var address = details.formatted_address
+      var poscode_city = address_detail[1].split(' ');
+      var postal_code = poscode_city[1];
+      var city = poscode_city[2];
+      var state = address_detail[2];
+      var country = address_detail[3];
+      console.log('address_detail', details);
+      this.setState(
+        {
+          address,
+          postal_code,
+          city,
+          state,
+          country,
+          address_detail: '',
+        },
+        () => console.log(this.state)
+      );
+    }
+    
   };
 
   onSavePressed = () => {
     const { navigation } = this.props;
     let {
-      name,
       address_detail,
       address,
       postal_code,
@@ -290,12 +219,12 @@ export default class MapShippingAddress extends React.Component {
       city,
       state,
       country,
-      address1,
-      address2
     } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-        <TouchableOpacity style={styles.clearView}>
+        <TouchableOpacity style={styles.clearView}  onPress={() => {
+                this.setState({ address: '' });
+              }} >
           <Text style={styles.clearText}>Clear</Text>
         </TouchableOpacity>
         <View
@@ -316,19 +245,18 @@ export default class MapShippingAddress extends React.Component {
             }}
           >
             <View style={{ flex: 1 }}>
-              <Text style={styles.title}>{address1}</Text>
-              <Text style={styles.text}>{address2}</Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ address_form: false });
-              }}
-            >
-              <Image
-                source={require('./../../assets/images/next.png')}
-                style={styles.navigationBarItemIcon}
+              <Text style={styles.title}>Address Line 1</Text>
+              <TextInput
+                keyboardType="default"
+                clearButtonMode="always"
+                autoCorrect={false}
+                value={address}
+                onChangeText={(address) => {
+                  this.setState({ address });
+                }}
+                style={styles.textInput}
               />
-            </TouchableOpacity>
+            </View>         
           </View>
           <Image
             source={require('./../../assets/images/line-17.png')}
@@ -341,13 +269,13 @@ export default class MapShippingAddress extends React.Component {
               marginTop: 10 * alpha
             }}
           >
-            <Text style={styles.title}>Address Details</Text>
+            <Text style={styles.title}>Address Line 2</Text>
             <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
               <TextInput
                 keyboardType="default"
                 clearButtonMode="always"
                 autoCorrect={false}
-                placeholder={'6C Block C'}
+                placeholder={'Enter Detailed Location'}
                 onChangeText={(address_detail) => {
                   this.setState({ address_detail });
                 }}
@@ -367,13 +295,14 @@ export default class MapShippingAddress extends React.Component {
   };
   render() {
   
-    let { address_form } = this.state;
+    let { address } = this.state;
 
-    return !address_form ? (
+    return (!address || address.length == 0) ? (
       <GooglePlacesAutocomplete
         placeholder="Search"
         minLength={2} // minimum length of text to search
         autoFocus={false}
+        autoCorrect={false}
         returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
         keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
         listViewDisplayed="auto" // true/false/undefined
@@ -402,13 +331,10 @@ export default class MapShippingAddress extends React.Component {
         getDefaultValue={() => ''}
         query={{
           key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
-          language: 'en', // language of the results
-          types: 'geocode',          
-          components: "country:bn"
+          components: "country:bn",
         }}
         currentLocation={true}
-        currentLocationLabel="Current location"
-       
+        currentLocationLabel="Current location"       
         styles={{
           container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
           textInputContainer: {
@@ -433,15 +359,6 @@ export default class MapShippingAddress extends React.Component {
             color: '#1faadb'
           }
         }}
-        nearbyPlacesAPI="GooglePlacesSearch"
-        GooglePlacesDetailsQuery={{
-          fields: 'formatted_address'
-        }}
-        // filterReverseGeocodingByTypes={[
-        //   'locality',
-        //   'administrative_area_level_3'
-        // ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-        // predefinedPlaces={[homePlace, workPlace]}
         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
       />
     ) : (
