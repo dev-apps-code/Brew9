@@ -182,8 +182,8 @@ export default class Checkout extends React.Component {
       : this.props.selectedShop.opening_hour;
 
     var startTime = Moment(start_time, 'h:mm');
-    var endTime = Moment(end_time, 'h:mm').subtract(15, 'm');
-    var time_now = Moment(new Date(), 'h:mm').add(15, 'm');
+    var endTime = Moment(end_time, 'h:mm');
+    var time_now = Moment(new Date(), 'h:mm');
 
     var hour = time_now.hours();
     var min = time_now.minutes();
@@ -205,7 +205,7 @@ export default class Checkout extends React.Component {
 
     if (hour >= endTime.hours()) {
       minute_array = _.filter(['00', '15', '30', '45'], function (o) {
-        return parseInt(o) <= endTime.minutes();
+        return parseInt(o) <= endTime.minutes() && parseInt(o) > min;
       });
     }
 
@@ -254,13 +254,13 @@ export default class Checkout extends React.Component {
     if (hour == option) {
       minute_array = _.filter(
         ['00', '15', '30', '45'],
-        (o) => parseInt(o) > min + 15
+        (o) => parseInt(o) > min
       );
     } else {
       if (option == endTime.hours()) {
         minute_array = _.filter(
           ['00', '15', '30', '45'],
-          (o) => parseInt(o) <= endTime.minutes() - 15
+          (o) => parseInt(o) <= endTime.minutes()
         );
       }
     }
