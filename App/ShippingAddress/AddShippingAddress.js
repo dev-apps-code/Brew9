@@ -99,6 +99,7 @@ export default class AddShippingAddress extends React.Component {
         address_detail: '',
         fullname: this.address.fullname ? this.address.fullname : '',
         address: this.address.address ? this.address.address : '',
+        address_detail: this.address.address_details ? this.address.address_details : '',
         contact_number: this.address.contact_number
           ? this.address.contact_number
           : '',
@@ -162,7 +163,8 @@ export default class AddShippingAddress extends React.Component {
       const shippingAddress = {
         member_id: this.props.currentMember.id,
         fullname: this.state.fullname,
-        address: this.state.address_detail + ' ' + this.state.address,
+        address:  this.state.address,
+        address_detail: this.state.address_detail,
         contact_number: this.state.contact_number,
         city: this.state.city,
         state: this.state.state,
@@ -316,7 +318,7 @@ export default class AddShippingAddress extends React.Component {
     }
   };
   onSelectTag = (item) => {
-    
+    const tag = this.state.tag
     let selectedTag = tag.map((tag) => {
       if (tag.name == item.name) {
         tag.selected = true;
