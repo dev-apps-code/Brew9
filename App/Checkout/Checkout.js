@@ -570,17 +570,16 @@ export default class Checkout extends React.Component {
   };
 
   roundOff(value) {
-    console.log("before value: ")
-    console.log(value)
+    
     roundOffValue = 0;
-    let n = parseInt((value * 100).toFixed(10)), x = n % 10;
-				let result = n + 10 - x;
-				if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
-				roundOffValue = (result / 100).toFixed(2);
-    console.log("\n\nValue")
-    console.log(roundOffValue)
+    let n = parseInt((value * 100).toFixed(10)),
+      x = n % 10;
+    let result = n + 10 - x;
+    if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+    roundOffValue = (result / 100).toFixed(2);
+  
 
-    return roundOffValue
+    return roundOffValue;
   }
 
   check_promotion_trigger = () => {
@@ -595,8 +594,6 @@ export default class Checkout extends React.Component {
     let { sub_total_voucher, deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
-    console.log("\n\nCartTotal:")
-    console.log(cart_total)
     let finalCart = [];
     var promotions_item = [];
     var final_cart_value =
@@ -604,8 +601,7 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-    console.log("final cart value")
-    console.log(final_cart_value)
+    
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -616,8 +612,6 @@ export default class Checkout extends React.Component {
     if (shop.all_promotions != null && shop.all_promotions.length > 0) {
       for (var index in shop.all_promotions) {
         var promotion = shop.all_promotions[index];
-        console.log("\n\n Promotions")
-        console.log(promotion)
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
@@ -635,7 +629,9 @@ export default class Checkout extends React.Component {
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   // price = (cart_total_voucher * discount_value) / 100;
-                  price = this.roundOff((final_cart_value * discount_value) / 100)
+                  price = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
@@ -643,22 +639,12 @@ export default class Checkout extends React.Component {
                     price = promotion.maximum_discount_allow;
                   }
                   final_cart_value = final_cart_value - price;
-                  console.log("after Deducted PERCENTAGE DISCOUNT:")
-                  console.log("the discount value:")
-                  console.log(discount_value + '%')
-                  console.log("the final value:")
-                  console.log(final_cart_value)
                 } else if (
                   promotion.value_type != null &&
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   final_cart_value = final_cart_value - discount_value;
-                  console.log("after Deducted FIXED DISCOUNT:")
-                  console.log("the discount value:")
-                  console.log(discount_value)
-                  console.log("the final value:")
-                  console.log(final_cart_value)
                 }
               }
 
@@ -670,9 +656,6 @@ export default class Checkout extends React.Component {
                 price: price,
                 type: promotion.reward_type
               };
-
-              console.log("\n\ncartitem")
-              console.log(cartItem)
 
               promotions_item.push(cartItem);
             } else {
@@ -688,8 +671,7 @@ export default class Checkout extends React.Component {
         }
       }
       this.setState({ final_price: final_cart_value });
-      console.log("\n\ncheck_promotion_trigger")
-      console.log(final_cart_value)
+
     }
 
     if (this.props.cart.length == 0) {
@@ -722,10 +704,6 @@ export default class Checkout extends React.Component {
 
   calculateVoucherDiscount(vouchers_to_use) {
     const { discount_cart_total, cart_total, delivery } = this.props;
-    console.log("\n\nCart_total")
-    console.log(cart_total)
-    console.log("\nDiscountCart_total")
-    console.log(discount_cart_total)
     const { selected_payment, deliveryFee } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
@@ -743,15 +721,16 @@ export default class Checkout extends React.Component {
           if (voucher.discount_type.toLowerCase() == 'fixed') {
             discount = voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
-            discount = this.roundOff((discount_cart_total * voucher.discount_price) / 100.0);
+            discount = this.roundOff(
+              (discount_cart_total * voucher.discount_price) / 100.0
+            );
           }
         }
       }
     }
     const subf_price = discount_cart_total - discount;
     const f_price = subf_price;
-    console.log("\n\ncalculatevoucher")
-    console.log(f_price.toFixed(2))
+
     this.setState(
       {
         discount: discount,
@@ -1512,7 +1491,8 @@ export default class Checkout extends React.Component {
         if (item.voucher.discount_type == 'fixed') {
           discount_value = item.voucher.discount_price;
         } else if (item.voucher.discount_type == 'percent') {
-          discount_value = (discount_cart_total * item.voucher.discount_price) / 100.0;
+          discount_value =
+            (discount_cart_total * item.voucher.discount_price) / 100.0;
         }
       }
 
@@ -1592,33 +1572,38 @@ export default class Checkout extends React.Component {
               <View
                 pointerEvents="box-none"
                 style={{
-                  justifyContent: 'center',
+                  justifyContent: 'space-between',
                   backgroundColor: 'transparent',
                   flex: 1,
                   flexDirection: 'row'
                 }}
               >
-                <View style={styles.productDetailView}>
-                  <Text style={styles.productNameText}>Brew9 Vouchers</Text>
-                  <View style={styles.spacer} />
-                </View>
-                <Text
-                  style={
-                    this.state.valid_vouchers != null &&
-                    this.state.valid_vouchers.length > 0
-                      ? styles.productVoucherText
-                      : styles.productVoucherDisableText
-                  }
+                <Text style={styles.productNameText}>Brew9 Vouchers</Text>
+                <View style={styles.spacer} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}
                 >
-                  {this.state.valid_vouchers != null
-                    ? valid_voucher_counts
-                    : '-'}{' '}
-                  usable
-                </Text>
-                <Image
-                  source={require('./../../assets/images/next.png')}
-                  style={styles.menuRowArrowImage}
-                />
+                  <Text
+                    style={
+                      this.state.valid_vouchers != null &&
+                      this.state.valid_vouchers.length > 0
+                        ? styles.productVoucherText
+                        : styles.productVoucherDisableText
+                    }
+                  >
+                    {this.state.valid_vouchers != null
+                      ? valid_voucher_counts
+                      : '-'}{' '}
+                    usable
+                  </Text>
+                  <Image
+                    source={require('./../../assets/images/next.png')}
+                    style={styles.menuRowArrowImage}
+                  />
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -1647,42 +1632,53 @@ export default class Checkout extends React.Component {
           >
             <View style={styles.drinksView}>
               <View
-                pointerEvents="box-none"
                 style={{
-                  justifyContent: 'center',
                   backgroundColor: 'transparent',
                   flex: 1,
-                  flexDirection: 'row'
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
                 }}
               >
-                <View style={styles.productDetailView}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View
-                      style={
-                        selected_payment != ''
-                          ? styles.greenCircle
-                          : styles.redCircle
-                      }
-                    />
-                    <Text style={styles.productNameText}>Payment</Text>
-                  </View>
-                  <View style={styles.spacer} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <View
+                    style={[
+                      selected_payment != ''
+                        ? styles.greenCircle
+                        : styles.redCircle
+                    ]}
+                  />
+                  <Text style={[styles.productNameText]}>Payment</Text>
                 </View>
-                <Text style={styles.productVoucherText}>
-                  {this.state.selected_payment == ''
-                    ? 'Please select'
-                    : this.state.selected_payment == 'credits'
-                    ? `Wallet ${this.props.members.currency}${credits}`
-                    : this.state.selected_payment == 'counter'
-                    ? delivery
-                      ? 'Cash On Delivery'
-                      : 'Pay In Store'
-                    : 'Credit Card'}
-                </Text>
-                <Image
-                  source={require('./../../assets/images/next.png')}
-                  style={styles.menuRowArrowImage}
-                />
+                {/* <View style={styles.spacer} /> */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={[styles.productVoucherText]}>
+                    {this.state.selected_payment == ''
+                      ? 'Please select'
+                      : this.state.selected_payment == 'credits'
+                      ? `Wallet ${this.props.members.currency}${credits}`
+                      : this.state.selected_payment == 'counter'
+                      ? delivery
+                        ? 'Cash On Delivery'
+                        : 'Pay In Store'
+                      : 'Credit Card'}
+                  </Text>
+                  <Image
+                    source={require('./../../assets/images/next.png')}
+                    style={[styles.menuRowArrowImage]}
+                  />
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -1709,31 +1705,38 @@ export default class Checkout extends React.Component {
               <View
                 pointerEvents="box-none"
                 style={{
-                  justifyContent: 'center',
+                  justifyContent: 'space-between',
                   backgroundColor: 'transparent',
                   flex: 1,
-                  flexDirection: 'row'
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingBottom: 10 * alpha
                 }}
               >
-                <View style={styles.productDetailView}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View
-                      style={
-                        pick_up_status != null
-                          ? styles.greenCircle
-                          : styles.redCircle
-                      }
-                    />
-                    <Text style={styles.productNameText}>{pick_up}</Text>
-                  </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View
+                    style={
+                      pick_up_status != null
+                        ? styles.greenCircle
+                        : styles.redCircle
+                    }
+                  />
+                  <Text style={styles.productNameText}>{pick_up}</Text>
                 </View>
-                <Text style={styles.productVoucherText}>
-                  {pick_up_time != null ? formatted_time : 'Please select'}
-                </Text>
-                <Image
-                  source={require('./../../assets/images/next.png')}
-                  style={styles.menuRowArrowImage}
-                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={styles.productVoucherText}>
+                    {pick_up_time != null ? formatted_time : 'Please select'}
+                  </Text>
+                  <Image
+                    source={require('./../../assets/images/next.png')}
+                    style={styles.menuRowArrowImage}
+                  />
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -1844,13 +1847,19 @@ export default class Checkout extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
+                  paddingBottom: 10 * alpha
                 }}
               >
                 <Text style={[styles.productNameText]}>Delivery Address</Text>
                 <TouchableOpacity
                   onPress={() => this.addShippingAddress()}
-                  style={{ flexDirection: 'row', flex: 1 }}
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
                 >
                   <Text style={[styles.editAddressText]}>{text}</Text>
                   <Image
@@ -3542,7 +3551,8 @@ const styles = StyleSheet.create({
   productDetailView: {
     backgroundColor: 'transparent',
     flex: 1,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    justifyContent: 'center'
   },
   voucherDetailView: {
     backgroundColor: 'transparent',
@@ -3556,8 +3566,8 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left',
-    marginBottom: 5 * alpha
+    textAlign: 'left'
+    // marginBottom: 5 * alpha
   },
   productNameDisabledText: {
     backgroundColor: 'transparent',
@@ -3697,7 +3707,7 @@ const styles = StyleSheet.create({
     width: 10 * alpha,
     height: 10 * alpha,
     marginLeft: 5 * alpha,
-    marginTop: 4 * alpha,
+    // marginTop: 4 * alpha,
     tintColor: 'rgb(50, 50, 50)',
     resizeMode: 'contain'
   },
@@ -4012,16 +4022,14 @@ const styles = StyleSheet.create({
     width: 10 * alpha,
     height: 10 * alpha,
     borderRadius: 5 * alpha,
-    marginRight: 5 * alpha,
-    marginBottom: 5 * alpha
+    marginRight: 5 * alpha
   },
   greenCircle: {
     backgroundColor: 'green',
     width: 10 * alpha,
     height: 10 * alpha,
     borderRadius: 5 * alpha,
-    marginRight: 5 * alpha,
-    marginBottom: 5 * alpha
+    marginRight: 5 * alpha
   },
   cancelVoucherButton: {
     width: 15 * alpha,
