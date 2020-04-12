@@ -128,7 +128,7 @@ const TimeSelector = ({
         >
           {selected != 0 && selected != null && (
             <View>
-              <View style={{ flexDirection: 'row', flex: 1 }}>
+              <View style={{ flexDirection: 'row', flex: 1, paddingTop: '3%' }}>
                 <ScrollPicker
                   ref={sphour}
                   dataSource={hour_range}
@@ -136,8 +136,7 @@ const TimeSelector = ({
                   itemHeight={ITEM_HEIGHT}
                   wrapperHeight={PICKER_WRAPPER_HEIGHT}
                   wrapperStyle={{
-                    backgroundColor: 'red',
-                    flex: 1
+                    flex: 1,
                   }}
                   renderItem={(data, index, isSelected) => {
                     return (
@@ -169,7 +168,6 @@ const TimeSelector = ({
                   itemHeight={ITEM_HEIGHT}
                   wrapperHeight={PICKER_WRAPPER_HEIGHT}
                   wrapperStyle={{
-                    backgroundColor: 'red',
                     flex: 1
                   }}
                   renderItem={(data, index, isSelected) => {
@@ -241,7 +239,7 @@ const TOTAL_HEIGHT = 350 * alpha
 const BAR_HEIGHT = 80 * alpha
 const ITEM_HEIGHT = 50 * alpha
 const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44
-const PICKER_WRAPPER_HEIGHT = WRAPPER_HEIGHT - 50 * alpha
+const PICKER_WRAPPER_HEIGHT = 150 * alpha
 
 
 const componentStyle = StyleSheet.create({
@@ -251,6 +249,7 @@ const componentStyle = StyleSheet.create({
     justifyContent: 'center',
     margin: 20,
     width: windowWidth / 2 - 40
+    
   },
   todayCard: {
     marginLeft: 30,
