@@ -9,7 +9,6 @@ import {
   StyleSheet
 } from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
-import _ from 'lodash';
 import { alpha, windowWidth } from '../Common/size';
 import {
   DEFAULT_GREY_BACKGROUND,
@@ -18,6 +17,12 @@ import {
 } from '../Common/common_style';
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
+
+const TOTAL_HEIGHT = 350 * alpha;
+const BAR_HEIGHT = 80 * alpha;
+const ITEM_HEIGHT = 50 * alpha;
+const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44;
+const PICKER_WRAPPER_HEIGHT = WRAPPER_HEIGHT - 50 * alpha;
 
 const TimeSelector = ({
   styles,
@@ -40,7 +45,9 @@ const TimeSelector = ({
 
   return (
     <Animated.View style={animation.getLayout()}>
-      <View style={[styles.popOutPickupView, { flex: 1, height: TOTAL_HEIGHT }]}>
+      <View
+        style={[styles.popOutPickupView, { flex: 1, height: TOTAL_HEIGHT }]}
+      >
         <View
           style={[
             styles.paymentMethodTwoView,
@@ -83,8 +90,11 @@ const TimeSelector = ({
               isActive={selected == 0}
               text="Now"
               press={() => {
-                setSelected(0);
-                onSelectOrderNow();
+                if (onSelectOrderNow()) {
+                  setSelected(0);
+                } else {
+                  setSelected(null);
+                }
               }}
             />
             <CustomCard
@@ -92,11 +102,14 @@ const TimeSelector = ({
               isActive={selected == 1}
               text="Later"
               press={() => {
-                setSelected(1);
-                if (sphour && sphour.current) {
-                  sphour.current.scrollToIndex(0);
+                if (onSelectOrderLater()) {
+                  setSelected(1);
+                  if (sphour && sphour.current) {
+                    sphour.current.scrollToIndex(0);
+                  }
+                } else {
+                  setSelected(null);
                 }
-                onSelectOrderLater();
               }}
             />
 
@@ -122,7 +135,7 @@ const TimeSelector = ({
             styles.popOutTimePickerView,
             {
               height: WRAPPER_HEIGHT,
-              flexDirection: 'column',              
+              flexDirection: 'column'
             }
           ]}
         >
@@ -158,7 +171,9 @@ const TimeSelector = ({
                     );
                   }}
                   onValueChange={(data, selectedIndex) => {
-                    spminute.current.scrollToIndex(0);
+                    if (spminute && spminute.current) {
+                      spminute.current.scrollToIndex(0);
+                    }
                     onHourValueChange(data, selectedIndex);
                   }}
                 />
@@ -221,7 +236,8 @@ const CustomCard = ({
           backgroundColor: isActive ? PRIMARY_COLOR : '#fff'
         }
       ]}
-      onPress={() => press()}
+      onPress={press}
+      activeOpacity={isActive ? 0.8 : 1}
     >
       <Text
         style={[
@@ -236,13 +252,6 @@ const CustomCard = ({
     </TouchableOpacity>
   );
 };
-
-const TOTAL_HEIGHT = 350 * alpha
-const BAR_HEIGHT = 80 * alpha
-const ITEM_HEIGHT = 50 * alpha
-const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44
-const PICKER_WRAPPER_HEIGHT = WRAPPER_HEIGHT - 50 * alpha
-
 
 const componentStyle = StyleSheet.create({
   card: {

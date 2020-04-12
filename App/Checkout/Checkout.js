@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import { createAction, Storage } from '../Utils';
+import { isTimeWithin } from '../Utils/date';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
@@ -430,46 +431,85 @@ export default class Checkout extends React.Component {
   };
 
   // Callback when now is clicked
-  onSelectOrderNow() {
+  onSelectOrderNow = () => {
     var pick_up_status = 'Now';
     var now = Moment().format('HH:mm');
     var selected_date = Moment().format('YYYY-MM-DD');
     var pick_up_time = `${selected_date} ${now}`;
 
-    this.setState({ pick_up_status, pick_up_time });
-    this.toggleTimeSelector();
-  }
+    const { delivery, selectedShop } = this.props;
+    const { opening_hour, delivery_hour } = selectedShop;
+
+    var toast_text = delivery ? 'Delivery' : 'Pickup';
+    var start = delivery
+      ? delivery_hour.today.start_time
+      : opening_hour.order_start_time;
+    var end = delivery
+      ? delivery_hour.today.end_time
+      : opening_hour.order_stop_time;
+
+    if (!isTimeWithin(now, start, end)) {
+      this.refs.toast.close();
+      this.refs.toast.show(
+        `Selected ${toast_text} time is not available.`,
+        TOAST_DURATION
+      );
+      return false;
+    } else {
+      this.refs.toast.close();
+      this.setState({ pick_up_status, pick_up_time });
+      this.toggleTimeSelector();
+      return true;
+    }
+  };
+
+  onSelectOrderLater = () => {
+    var now = Moment().format('HH:mm');
+    const { selectedShop, delivery } = this.props;
+    const { opening_hour, delivery_hour } = selectedShop;
+
+    var toast_text = delivery ? 'Delivery' : 'Pickup';
+    var start = delivery
+      ? delivery_hour.today.start_time
+      : opening_hour.order_start_time;
+    var end = delivery
+      ? delivery_hour.today.end_time
+      : opening_hour.order_stop_time;
+
+    if (!isTimeWithin(now, start, end)) {
+      this.refs.toast.close();
+      this.refs.toast.show(
+        `Selected ${toast_text} time is not available.`,
+        TOAST_DURATION
+      );
+      return false;
+    } else {
+      this.refs.toast.close();
+      var timeOptions = {
+        start_time: opening_hour.order_start_time,
+        end_time: opening_hour.order_stop_time
+      };
+      if (delivery) {
+        timeOptions = {
+          start_time: delivery_hour.today.start_time,
+          end_time: delivery_hour.today.end_time
+        };
+      }
+      this.setTimePickerDefault(timeOptions, false);
+
+      return true;
+    }
+  };
 
   // Callback when tomorrow button is clicked
-  onSelectOrderTomorrow = () =>
+  onSelectOrderTomorrow = () => {
+    this.refs.toast.close();
     this.setTimePickerDefault(
       this.props.selectedShop.delivery_hour.tomorrow,
       true
     );
-
-  onSelectOrderLater() {
-    const { selectedShop, delivery } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
-
-    if (delivery) {
-      this.setTimePickerDefault(
-        {
-          start_time: delivery_hour.today.start_time,
-          end_time: delivery_hour.today.end_time
-        },
-        false
-      );
-    } else {
-      this.setTimePickerDefault(
-        {
-          start_time: opening_hour.order_start_time,
-          end_time: opening_hour.order_stop_time
-        },
-        false
-      );
-    }
-  }
-
+  };
+  
   onBranchButtonPressed = () => {};
 
   onLocationButtonPressed = () => {
@@ -570,17 +610,18 @@ export default class Checkout extends React.Component {
   };
 
   roundOff(value) {
-    console.log("before value: ")
-    console.log(value)
+    console.log('before value: ');
+    console.log(value);
     roundOffValue = 0;
-    let n = parseInt((value * 100).toFixed(10)), x = n % 10;
-				let result = n + 10 - x;
-				if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
-				roundOffValue = (result / 100).toFixed(2);
-    console.log("\n\nValue")
-    console.log(roundOffValue)
+    let n = parseInt((value * 100).toFixed(10)),
+      x = n % 10;
+    let result = n + 10 - x;
+    if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+    roundOffValue = (result / 100).toFixed(2);
+    console.log('\n\nValue');
+    console.log(roundOffValue);
 
-    return roundOffValue
+    return roundOffValue;
   }
 
   check_promotion_trigger = () => {
@@ -595,8 +636,8 @@ export default class Checkout extends React.Component {
     let { sub_total_voucher, deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
-    console.log("\n\nCartTotal:")
-    console.log(cart_total)
+    console.log('\n\nCartTotal:');
+    console.log(cart_total);
     let finalCart = [];
     var promotions_item = [];
     var final_cart_value =
@@ -604,8 +645,8 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-    console.log("final cart value")
-    console.log(final_cart_value)
+    console.log('final cart value');
+    console.log(final_cart_value);
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -616,8 +657,8 @@ export default class Checkout extends React.Component {
     if (shop.all_promotions != null && shop.all_promotions.length > 0) {
       for (var index in shop.all_promotions) {
         var promotion = shop.all_promotions[index];
-        console.log("\n\n Promotions")
-        console.log(promotion)
+        console.log('\n\n Promotions');
+        console.log(promotion);
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
@@ -635,7 +676,9 @@ export default class Checkout extends React.Component {
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   // price = (cart_total_voucher * discount_value) / 100;
-                  price = this.roundOff((final_cart_value * discount_value) / 100)
+                  price = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
@@ -643,22 +686,22 @@ export default class Checkout extends React.Component {
                     price = promotion.maximum_discount_allow;
                   }
                   final_cart_value = final_cart_value - price;
-                  console.log("after Deducted PERCENTAGE DISCOUNT:")
-                  console.log("the discount value:")
-                  console.log(discount_value + '%')
-                  console.log("the final value:")
-                  console.log(final_cart_value)
+                  console.log('after Deducted PERCENTAGE DISCOUNT:');
+                  console.log('the discount value:');
+                  console.log(discount_value + '%');
+                  console.log('the final value:');
+                  console.log(final_cart_value);
                 } else if (
                   promotion.value_type != null &&
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   final_cart_value = final_cart_value - discount_value;
-                  console.log("after Deducted FIXED DISCOUNT:")
-                  console.log("the discount value:")
-                  console.log(discount_value)
-                  console.log("the final value:")
-                  console.log(final_cart_value)
+                  console.log('after Deducted FIXED DISCOUNT:');
+                  console.log('the discount value:');
+                  console.log(discount_value);
+                  console.log('the final value:');
+                  console.log(final_cart_value);
                 }
               }
 
@@ -671,8 +714,8 @@ export default class Checkout extends React.Component {
                 type: promotion.reward_type
               };
 
-              console.log("\n\ncartitem")
-              console.log(cartItem)
+              console.log('\n\ncartitem');
+              console.log(cartItem);
 
               promotions_item.push(cartItem);
             } else {
@@ -688,8 +731,8 @@ export default class Checkout extends React.Component {
         }
       }
       this.setState({ final_price: final_cart_value });
-      console.log("\n\ncheck_promotion_trigger")
-      console.log(final_cart_value)
+      console.log('\n\ncheck_promotion_trigger');
+      console.log(final_cart_value);
     }
 
     if (this.props.cart.length == 0) {
@@ -722,10 +765,10 @@ export default class Checkout extends React.Component {
 
   calculateVoucherDiscount(vouchers_to_use) {
     const { discount_cart_total, cart_total, delivery } = this.props;
-    console.log("\n\nCart_total")
-    console.log(cart_total)
-    console.log("\nDiscountCart_total")
-    console.log(discount_cart_total)
+    console.log('\n\nCart_total');
+    console.log(cart_total);
+    console.log('\nDiscountCart_total');
+    console.log(discount_cart_total);
     const { selected_payment, deliveryFee } = this.state;
     var discount = 0;
     for (var index in vouchers_to_use) {
@@ -743,15 +786,17 @@ export default class Checkout extends React.Component {
           if (voucher.discount_type.toLowerCase() == 'fixed') {
             discount = voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
-            discount = this.roundOff((discount_cart_total * voucher.discount_price) / 100.0);
+            discount = this.roundOff(
+              (discount_cart_total * voucher.discount_price) / 100.0
+            );
           }
         }
       }
     }
     const subf_price = discount_cart_total - discount;
     const f_price = subf_price;
-    console.log("\n\ncalculatevoucher")
-    console.log(f_price.toFixed(2))
+    console.log('\n\ncalculatevoucher');
+    console.log(f_price.toFixed(2));
     this.setState(
       {
         discount: discount,
@@ -1512,7 +1557,8 @@ export default class Checkout extends React.Component {
         if (item.voucher.discount_type == 'fixed') {
           discount_value = item.voucher.discount_price;
         } else if (item.voucher.discount_type == 'percent') {
-          discount_value = (discount_cart_total * item.voucher.discount_price) / 100.0;
+          discount_value =
+            (discount_cart_total * item.voucher.discount_price) / 100.0;
         }
       }
 
