@@ -324,7 +324,6 @@ export default class PickUp extends React.Component {
 
       const promotions = item.promotions.map((item, key) => {
         var promotion_discount = '';
-        // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
           promotion_discount = `-$${item.promotion_value}`;
           calculate_cart_total -= item.value;
