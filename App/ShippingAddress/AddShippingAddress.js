@@ -18,11 +18,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import React from 'react';
-import {
-  alpha,
-  fontAlpha,
-  windowHeight,
-} from '../Common/size';
+import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import { createAction } from '../Utils';
 import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
@@ -760,7 +756,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     marginHorizontal: 20 * alpha,
-    bottom: BUTTONBOTTOMPADDING,
+    bottom: BUTTONBOTTOMPADDING + 20 * alpha,
     height: 47 * alpha,
     flexDirection: 'row',
     alignItems: 'center'
