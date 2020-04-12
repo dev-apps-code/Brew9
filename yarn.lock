@@ -5952,7 +5952,7 @@ progress@2.0.0:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6341,6 +6341,13 @@ react-native-phone-input@0.2.2:
     google-libphonenumber "^2.0.9"
     lodash "^4.17.4"
     prop-types "^15.5.10"
+
+react-native-places-input@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-places-input/-/react-native-places-input-1.1.1.tgz#a4420dd80c840f9ce337ab19d10f57e6029ec678"
+  integrity sha512-edD+q0gBkwYyumQ0RgRnQ07ThRRKsZ81p64WHMlvxKKwAFn/QQDFFXE13qztlqKtz4kR9oEoT2x/0/WsYNdOyg==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-progress-hud@^1.0.4:
   version "1.0.4"

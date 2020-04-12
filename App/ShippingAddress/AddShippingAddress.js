@@ -276,6 +276,9 @@ export default class AddShippingAddress extends React.Component {
     });
   }
   returnAddress(info) {
+
+    const latitude = this.props.location ? this.props.location.coords.latitude : null
+    const longitude = this.props.location ? this.props.location.coords.longitude : null
     this.setState({
       address_detail: info.address_detail,
       address: info.address,
@@ -283,8 +286,8 @@ export default class AddShippingAddress extends React.Component {
       state: info.state,
       postal_code: info.postal_code,
       country: info.country,
-      latitude: this.props.location.coords.latitude,
-      longitude: this.props.location.coords.longitude
+      latitude,
+      longitude
     });
   }
 
