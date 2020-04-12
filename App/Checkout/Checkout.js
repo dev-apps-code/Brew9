@@ -637,7 +637,9 @@ export default class Checkout extends React.Component {
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   // price = (cart_total_voucher * discount_value) / 100;
-                  price = this.roundOff((final_cart_value * discount_value) / 100)
+                  price = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
                   roundedPrice = this.roundOff((final_cart_value * discount_value) / 100)
                   if (
                     promotion.maximum_discount_allow != null &&
