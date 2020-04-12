@@ -603,7 +603,7 @@ export default class MemberProfile extends React.Component {
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
-    let defaultAddress = default_address.address || 'Address';
+    let defaultAddress = default_address?.address?.trim() || 'Address';
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -907,7 +907,7 @@ export default class MemberProfile extends React.Component {
                     }}
                   >
                     <Text style={styles.textInputTextInput}>
-                      {defaultAddress.trim()}
+                      {defaultAddress}
                     </Text>
                     <Image
                       source={require('./../../assets/images/next.png')}
