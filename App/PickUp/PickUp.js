@@ -213,11 +213,10 @@ export default class PickUp extends React.Component {
   }
 
   renderQueueView(current_order) {
-    console.log("renderQueue")
     const { selectedShop } = this.props;
     const queues = current_order.map((item, key) => {
       // console.log("/n/nITEM")
-      // console.log(item)
+      console.log(item);
       // console.log("/n/nITEM")
 
       var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
@@ -248,7 +247,7 @@ export default class PickUp extends React.Component {
 
       if (selectedShop.response_message != undefined) {
         if (item.paid == true) {
-          paid_response = _.find(selectedShop.response_message, function(obj) {
+          paid_response = _.find(selectedShop.response_message, function (obj) {
             return obj.key === 'Not Collected Order';
           });
 
@@ -256,7 +255,7 @@ export default class PickUp extends React.Component {
             paid_order_message = paid_response.text;
           }
         } else {
-          unpaid_response = _.find(selectedShop.response_message, function(
+          unpaid_response = _.find(selectedShop.response_message, function (
             obj
           ) {
             return obj.key === 'Pending Payment (Remarks)';
@@ -325,7 +324,7 @@ export default class PickUp extends React.Component {
 
       const promotions = item.promotions.map((item, key) => {
         var promotion_discount = '';
-
+        console.log('promotions', item);
         // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
           promotion_discount = `-$${item.promotion_value}`;
@@ -338,9 +337,8 @@ export default class PickUp extends React.Component {
         }
 
         return (
-          <View style={styles.drinksView} key={key}>
+          <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
             <View
-              pointerEvents="box-none"
               style={{
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
@@ -349,7 +347,9 @@ export default class PickUp extends React.Component {
               }}
             >
               <View style={styles.productDetailView}>
-                <Text style={styles.productNameText}>{item.name}</Text>
+                <Text style={[styles.productNameText, { marginBottom: 0 }]}>
+                  {item.name}
+                </Text>
 
                 <View style={styles.spacer} />
               </View>
@@ -375,7 +375,7 @@ export default class PickUp extends React.Component {
         var voucher_discount = '';
 
         return (
-          <View style={styles.drinksView} key={key}>
+          <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
             <View
               pointerEvents="box-none"
               style={{
@@ -386,12 +386,16 @@ export default class PickUp extends React.Component {
               }}
             >
               <View style={styles.productDetailView}>
-                <Text style={styles.productNameText}>{voucherItem.voucher.name}</Text>
+                <Text style={styles.productNameText}>
+                  {voucherItem.voucher.name}
+                </Text>
 
                 <View style={styles.spacer} />
               </View>
 
-              <Text style={styles.productPriceText}>-${item.voucher_value}</Text>
+              <Text style={styles.productPriceText}>
+                -${item.voucher_value}
+              </Text>
               {voucherItem.voucher_items != null &&
                 key < item.voucher_items.length - 1 && (
                   <Image
@@ -403,8 +407,6 @@ export default class PickUp extends React.Component {
           </View>
         );
       });
-
-      
 
       return (
         <View style={styles.pickUpQueueView} key={key}>
@@ -476,9 +478,7 @@ export default class PickUp extends React.Component {
                   </View>
                   {item.delivery_method == 1 && claim_day != null ? (
                     <Text style={styles.delivery_day}>{claim_day}</Text>
-                  ) : (
-                    undefined
-                  )}
+                  ) : undefined}
                 </View>
               </View>
 
@@ -648,7 +648,7 @@ export default class PickUp extends React.Component {
             </View>
             <View style={styles.drinksViewWrapper}>
               {order_items}
-              {promotions}
+              <View style={{ marginTop: 5 * alpha }}>{promotions}</View>
               {voucher_items}
             </View>
             <View style={styles.receiptSectionSeperator}>
@@ -688,15 +688,11 @@ export default class PickUp extends React.Component {
                     }}
                   />
                   <Text style={styles.orderTotalText}>
-                    {item.delivery_fee > 0
-                      ? `$${item.sub_total}`
-                      : undefined}
+                    {item.delivery_fee > 0 ? `$${item.sub_total}` : undefined}
                   </Text>
                 </View>
               </View>
-            ) : (
-              undefined
-            )}
+            ) : undefined}
             {item.delivery_fee > 0 ? (
               <View style={styles.receiptSectionSeperator}>
                 <Image
@@ -705,9 +701,7 @@ export default class PickUp extends React.Component {
                 />
                 <View style={styles.sectionSeperatorView} />
               </View>
-            ) : (
-              undefined
-            )}
+            ) : undefined}
             {item.delivery_fee > 0 ? (
               <View style={styles.totalViewWrapper}>
                 <View style={styles.orderTotalView}>
@@ -724,9 +718,7 @@ export default class PickUp extends React.Component {
                   </Text>
                 </View>
               </View>
-            ) : (
-              undefined
-            )}
+            ) : undefined}
             {item.delivery_fee > 0 ? (
               <View style={styles.receiptSectionSeperator}>
                 <Image
@@ -735,9 +727,7 @@ export default class PickUp extends React.Component {
                 />
                 <View style={styles.sectionSeperatorView} />
               </View>
-            ) : (
-              undefined
-            )}
+            ) : undefined}
             <View style={styles.totalViewWrapper}>
               <View style={styles.orderTotalView}>
                 <Text style={styles.totallabelText}>TOTAL</Text>
@@ -746,9 +736,7 @@ export default class PickUp extends React.Component {
                     flex: 1
                   }}
                 />
-                <Text style={styles.orderTotalText}>
-                  ${item.total}
-                </Text>
+                <Text style={styles.orderTotalText}>${item.total}</Text>
               </View>
             </View>
             <View style={styles.receiptSectionSeperator}>
