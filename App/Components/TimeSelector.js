@@ -23,6 +23,8 @@ const BAR_HEIGHT = 80 * alpha;
 const ITEM_HEIGHT = 50 * alpha;
 const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44;
 const PICKER_WRAPPER_HEIGHT = WRAPPER_HEIGHT - 50 * alpha;
+const OPTION_WIDTH_PICKUP = ((windowWidth - 20) / 2 - 40) * alpha;
+const OPTION_WIDTH_DELIVERY = ((windowWidth - 20) / 3) * alpha;
 
 const TimeSelector = ({
   styles,
@@ -37,6 +39,7 @@ const TimeSelector = ({
   onConfirmDeliverySchedule,
   delivery
 }) => {
+  const optionScroll = createRef();
   const sphour = createRef();
   const spminute = createRef();
   const { minute_range, hour_range, selected_hour, selected_minute } = state;
@@ -81,12 +84,18 @@ const TimeSelector = ({
           style={{
             backgroundColor: DEFAULT_GREY_BACKGROUND,
             height: BAR_HEIGHT,
-            flexDirection: 'row'
+            flexDirection: 'row',
+            alignItems: 'center'
           }}
         >
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            ref={optionScroll}
+            style={{ paddingStart: 20 }}
+          >
             <CustomCard
-              cardStyle={componentStyle.todayCard}
+              delivery={delivery}
               isActive={selected == 0}
               text="Now"
               press={() => {
@@ -98,7 +107,7 @@ const TimeSelector = ({
               }}
             />
             <CustomCard
-              cardStyle={[componentStyle.tomorrowCard, { marginRight: 10 }]}
+              delivery={delivery}
               isActive={selected == 1}
               text="Later"
               press={() => {
@@ -115,7 +124,7 @@ const TimeSelector = ({
 
             {delivery && (
               <CustomCard
-                cardStyle={componentStyle.tomorrowCard}
+                delivery={delivery}
                 isActive={selected == 2}
                 text="Tomorrow"
                 press={() => {
@@ -223,7 +232,8 @@ const CustomCard = ({
   text,
   dateText,
   isActive,
-  press
+  press,
+  delivery
 }) => {
   return (
     <TouchableOpacity
@@ -231,7 +241,8 @@ const CustomCard = ({
         componentStyle.card,
         cardStyle,
         {
-          backgroundColor: isActive ? PRIMARY_COLOR : '#fff'
+          backgroundColor: isActive ? PRIMARY_COLOR : '#fff',
+          width: delivery ? OPTION_WIDTH_DELIVERY : OPTION_WIDTH_PICKUP
         }
       ]}
       onPress={press}
@@ -251,27 +262,12 @@ const CustomCard = ({
   );
 };
 
-const TOTAL_HEIGHT = 350 * alpha;
-const BAR_HEIGHT = 80 * alpha;
-const ITEM_HEIGHT = 50 * alpha;
-const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44;
-const PICKER_WRAPPER_HEIGHT = 150 * alpha;
-
 const componentStyle = StyleSheet.create({
   card: {
     borderRadius: 5 * alpha,
     height: 40 * alpha,
     justifyContent: 'center',
-    margin: 20,
-    width: windowWidth / 2 - 40
-  },
-  todayCard: {
-    marginLeft: 30,
-    marginRight: 10
-  },
-  tomorrowCard: {
-    marginLeft: 10,
-    marginRight: 30
+    marginRight: 20
   },
   cardTextStyle: {
     textAlign: 'center',
