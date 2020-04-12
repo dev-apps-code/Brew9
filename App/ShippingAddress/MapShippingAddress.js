@@ -366,11 +366,9 @@ export default class MapShippingAddress extends React.Component {
     );
   };
   render() {
-    let { location } = this.props;
+  
     let { address_form } = this.state;
 
-    let currentLocation =
-      location.coords.latitude + ',' + location.coords.longitude;
     return !address_form ? (
       <GooglePlacesAutocomplete
         placeholder="Search"
@@ -405,11 +403,12 @@ export default class MapShippingAddress extends React.Component {
         query={{
           key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
           language: 'en', // language of the results
-          // location: '7.2539601,125.1708828',
-          types: 'geocode',
-          location: currentLocation,
-          radius: '1000'
+          types: 'geocode',          
+          components: "country:bn"
         }}
+        currentLocation={true}
+        currentLocationLabel="Current location"
+       
         styles={{
           container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
           textInputContainer: {

@@ -3725,8 +3725,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0 * alpha,
     right: 0 * alpha,
-    bottom: 50 * alpha,
-    height: 150 * alpha,
+    bottom: 0 * alpha,
+    // height: 150 * alpha,
     flexDirection: 'row'
   },
   popOutTimePickerViewDone: {

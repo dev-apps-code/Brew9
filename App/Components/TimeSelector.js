@@ -40,7 +40,7 @@ const TimeSelector = ({
 
   return (
     <Animated.View style={animation.getLayout()}>
-      <View style={[styles.popOutPickupView, { flex: 1, height: 350 * alpha }]}>
+      <View style={[styles.popOutPickupView, { flex: 1, height: TOTAL_HEIGHT }]}>
         <View
           style={[
             styles.paymentMethodTwoView,
@@ -73,7 +73,7 @@ const TimeSelector = ({
         <View
           style={{
             backgroundColor: DEFAULT_GREY_BACKGROUND,
-            height: 80 * alpha,
+            height: BAR_HEIGHT,
             flexDirection: 'row'
           }}
         >
@@ -121,9 +121,8 @@ const TimeSelector = ({
           style={[
             styles.popOutTimePickerView,
             {
-              height: 100 * alpha,
-              flexDirection: 'column',
-              bottom: 80 * alpha
+              height: WRAPPER_HEIGHT,
+              flexDirection: 'column',              
             }
           ]}
         >
@@ -134,10 +133,10 @@ const TimeSelector = ({
                   ref={sphour}
                   dataSource={hour_range}
                   selectedIndex={0}
-                  itemHeight={50 * alpha}
-                  wrapperHeight={50 * alpha}
+                  itemHeight={ITEM_HEIGHT}
+                  wrapperHeight={PICKER_WRAPPER_HEIGHT}
                   wrapperStyle={{
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'red',
                     flex: 1
                   }}
                   renderItem={(data, index, isSelected) => {
@@ -167,10 +166,10 @@ const TimeSelector = ({
                   ref={spminute}
                   dataSource={minute_range}
                   selectedIndex={0}
-                  itemHeight={50 * alpha}
-                  wrapperHeight={50 * alpha}
+                  itemHeight={ITEM_HEIGHT}
+                  wrapperHeight={PICKER_WRAPPER_HEIGHT}
                   wrapperStyle={{
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'red',
                     flex: 1
                   }}
                   renderItem={(data, index, isSelected) => {
@@ -237,6 +236,13 @@ const CustomCard = ({
     </TouchableOpacity>
   );
 };
+
+const TOTAL_HEIGHT = 350 * alpha
+const BAR_HEIGHT = 80 * alpha
+const ITEM_HEIGHT = 50 * alpha
+const WRAPPER_HEIGHT = TOTAL_HEIGHT - BAR_HEIGHT - 44
+const PICKER_WRAPPER_HEIGHT = WRAPPER_HEIGHT - 50 * alpha
+
 
 const componentStyle = StyleSheet.create({
   card: {
