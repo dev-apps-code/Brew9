@@ -234,9 +234,11 @@ export default class AddShippingAddress extends React.Component {
       this.refs.toast.show('Please select your address', 500);
       return false;
     } else if (!contact_number) {
-      this.refs.toast.show('Please select your contact number', 500);
+      this.refs.toast.show('Please enter your contact number', 500);
       return false;
     }
+
+    
     // else if (!this.state.tag) {
     //     this.refs.toast.show("Please select your tag", 500)
     //     return false
@@ -314,8 +316,7 @@ export default class AddShippingAddress extends React.Component {
     }
   };
   onSelectTag = (item) => {
-    const { navigation } = this.props;
-    let { tag } = this.state;
+    
     let selectedTag = tag.map((tag) => {
       if (tag.name == item.name) {
         tag.selected = true;
