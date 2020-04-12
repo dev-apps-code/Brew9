@@ -570,14 +570,12 @@ export default class Checkout extends React.Component {
   };
 
   roundOff(value) {
-    
     roundOffValue = 0;
     let n = parseInt((value * 100).toFixed(10)),
       x = n % 10;
     let result = n + 10 - x;
     if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
     roundOffValue = (result / 100).toFixed(2);
-  
 
     return roundOffValue;
   }
@@ -601,7 +599,7 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-    
+
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -671,7 +669,6 @@ export default class Checkout extends React.Component {
         }
       }
       this.setState({ final_price: final_cart_value });
-
     }
 
     if (this.props.cart.length == 0) {
@@ -1746,7 +1743,7 @@ export default class Checkout extends React.Component {
   }
 
   renderOrderItems(items, promotions) {
-    let fullList = [...items, ...promotions];
+    let fullList = [...items];
     let last_item = fullList[fullList.length - 1];
 
     const order_items = fullList.map((item, key) => {
@@ -1831,6 +1828,72 @@ export default class Checkout extends React.Component {
       </View>
     );
   }
+
+  renderPromotions = (promotions) => {
+    const promotions_item = promotions.map((item, key) => {
+      var price_string =
+        item.price != undefined && item.price > 0 && item.clazz == 'product'
+          ? `$${parseFloat(item.price).toFixed(2)}`
+          : item.price != undefined &&
+            item.price > 0 &&
+            item.clazz == 'promotion'
+          ? `-$${parseFloat(item.price).toFixed(2)}`
+          : item.type != undefined && item.type == 'Free Items and vouchers'
+          ? 'Free'
+          : '';
+      let filtered =
+        item.selected_variants != null
+          ? item.selected_variants.filter(function (el) {
+              return el;
+            })
+          : [];
+
+      return (
+        <View
+          style={[
+            styles.drinksView,
+            { marginTop: 0, marginBottom: 5 * alpha }
+          ]}
+          key={key}
+        >
+          <View
+            pointerEvents="box-none"
+            style={{
+              justifyContent: 'center',
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row'
+            }}
+          >
+            <View style={styles.productDetailView}>
+              <Text
+                style={[
+                  item.cannot_order != undefined && item.cannot_order == true
+                    ? styles.productNameDisabledText
+                    : styles.productNameText,
+                  { marginBottom: 0 }
+                ]}
+              >
+                {item.name}
+              </Text>
+            </View>
+            <Text style={styles.productQuantityText}>
+              {item.quantity != null &&
+                item.quantity > 0 &&
+                `x${item.quantity}`}
+            </Text>
+            <Text style={styles.productPriceText}>{price_string}</Text>
+          </View>
+        </View>
+      );
+    });
+
+    return (
+      <View style={styles.drinksViewWrapper}>
+        <View style={styles.orderitemsView}>{promotions_item}</View>
+      </View>
+    );
+  };
 
   renderDeliveryAddress = (address) => {
     let { deliveryFee, final_price, delivery_description } = this.state;
@@ -2042,6 +2105,7 @@ export default class Checkout extends React.Component {
               </View>
 
               {this.renderOrderItems(cart, promotions)}
+              {this.renderPromotions(promotions)}
               <View style={styles.receiptSectionSeperator}>
                 <Image
                   source={require('./../../assets/images/curve_in_background.png')}
