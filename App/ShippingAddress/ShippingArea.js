@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     marginHorizontal: 20 * alpha,
-    bottom: BUTTONBOTTOMPADDING,
+    bottom: BUTTONBOTTOMPADDING + 20 * alpha,
     height: 47 * alpha,
     flexDirection: 'row',
     alignItems: 'center'
