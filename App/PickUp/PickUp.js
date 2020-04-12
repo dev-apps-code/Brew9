@@ -327,10 +327,10 @@ export default class PickUp extends React.Component {
         console.log('promotions', item);
         // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
-          promotion_discount = `-$${item.value}`;
+          promotion_discount = `-$${item.promotion_value}`;
           calculate_cart_total -= item.value;
         } else if (item.value_type == 'percent') {
-          promotion_discount = `-$${item.value}`;
+          promotion_discount = `-$${item.promotion_value}`;
           calculate_cart_total -= parseFloat(
             calculate_cart_total * (item.value / 100)
           );
