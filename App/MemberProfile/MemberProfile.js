@@ -603,8 +603,7 @@ export default class MemberProfile extends React.Component {
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
-    let defaultAddress =
-      default_address != null ? default_address.address : 'Address';
+    let defaultAddress = default_address?.address?.trim() || 'Address';
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -903,18 +902,13 @@ export default class MemberProfile extends React.Component {
                     style={{
                       flexDirection: 'row',
                       flex: 1,
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
                       alignItems: 'center'
                     }}
                   >
                     <Text style={styles.textInputTextInput}>
                       {defaultAddress}
                     </Text>
-                    <View
-                      style={{
-                        flex: 1
-                      }}
-                    />
                     <Image
                       source={require('./../../assets/images/next.png')}
                       style={styles.menuRowArrowImage}
@@ -1145,9 +1139,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    padding: 0,
-    width: 142 * alpha
-    // height: 20 * alpha
+    padding: 0
   },
   updateButton: {
     backgroundColor: 'transparent',

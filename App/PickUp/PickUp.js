@@ -215,28 +215,18 @@ export default class PickUp extends React.Component {
   renderQueueView(current_order) {
     const { selectedShop } = this.props;
     const queues = current_order.map((item, key) => {
-      // console.log("/n/nITEM")
-      console.log(item);
-      // console.log("/n/nITEM")
-
       var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
       var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
       var claim_day = claim_time != today ? 'TOMORROW' : '';
       let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
-      var pick_up_title =
-        item.delivery_method == 0 && item.pickup_status == 'Order Now'
-          ? 'Order Time'
-          : item.delivery_method == 0 && item.pickup_status == 'Pick Later'
-          ? 'Pick Up'
-          : 'Delivery';
-      var progress =
-        item.status == 'pending'
-          ? 0.33
-          : item.status == 'processing'
-          ? 0.66
-          : item.status == 'ready'
-          ? 1
-          : 0;
+
+      // Pick up title
+      var pick_up_title = item.delivery_method ? 'Delivery' : 'Pickup';
+
+      // Set progress bar values
+      var progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
+      var progress = progressValues[item.status] || 0;
+
       var delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
       var calculate_cart_total = cart_total;
 
