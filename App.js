@@ -322,7 +322,10 @@ const PushProfile = createStackNavigator(
     },
     About: {
       screen: About
-    }
+    },
+    ShippingAddress: {
+      screen: ShippingAddress
+    },
   },
   {
     initialRouteName: 'Profile'
