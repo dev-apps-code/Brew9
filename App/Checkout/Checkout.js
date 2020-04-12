@@ -322,9 +322,9 @@ export default class Checkout extends React.Component {
     }
   };
   loadDeliveryFee = () => {
-    console.log('\n\nHERE');
+    
     var total = this.props.cart_total;
-    console.log('\n\nselected address');
+    
     console.log(this.state.selected_address);
     if (this.state.selected_address === null) {
       this.setState({
@@ -554,8 +554,11 @@ export default class Checkout extends React.Component {
   // }
   addShippingAddress = () => {
     const { navigation } = this.props;
+    const {selected_address} = this.state
+
+    console.log("oassinse selected address",selected_address)
     this.setState({ visible: false });
-    navigation.navigate('ShippingAddress', {
+    navigation.navigate('ShippingAddress', {selected_address:selected_address,
       returnToRoute: navigation.state
     });
   };
