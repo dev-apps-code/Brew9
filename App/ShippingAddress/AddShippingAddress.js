@@ -125,9 +125,9 @@ export default class AddShippingAddress extends React.Component {
     } else {
       this.state = {
         address_detail: '',
-        fullname: '',
+        fullname: this.props.currentMember.nickname,
         address: '',
-        contact_number: '',
+        contact_number: this.props.currentMember.phone_no,
         city: '',
         state: '',
         postal_code: '',
@@ -246,6 +246,7 @@ export default class AddShippingAddress extends React.Component {
   };
 
   componentDidMount() {
+    console.log(this.props.currentMember)
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
@@ -349,6 +350,7 @@ export default class AddShippingAddress extends React.Component {
                 autoCorrect={false}
                 placeholder={placeholder}
                 onChangeText={(text) => onChangeText(text)}
+                value = {value}
                 style={styles.textInput}
                 editable={edit}
               />
@@ -565,7 +567,7 @@ export default class AddShippingAddress extends React.Component {
             {this.renderFormDetail(
               'Recipient',
               fullname,
-              'Recipient Name',
+              '',
               (text) => this.onChangeName(text),
               true
             )}
