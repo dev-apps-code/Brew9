@@ -170,6 +170,7 @@ export default class Checkout extends React.Component {
         {
           selected_address: this.props.currentMember.defaultAddress
         },
+        () => this.loadDeliveryFee(),
         () => this.loadDeliveryFee()
       );
     }
@@ -621,6 +622,7 @@ export default class Checkout extends React.Component {
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
+            var roundedPrice = 0
             var trigger_price = parseFloat(promotion.trigger_price);
             var remaining = trigger_price - cart_total;
             if (remaining <= 0) {
@@ -636,6 +638,7 @@ export default class Checkout extends React.Component {
                   var discount_value = promotion.value ? promotion.value : 0;
                   // price = (cart_total_voucher * discount_value) / 100;
                   price = this.roundOff((final_cart_value * discount_value) / 100)
+                  roundedPrice = this.roundOff((final_cart_value * discount_value) / 100)
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
@@ -668,7 +671,8 @@ export default class Checkout extends React.Component {
                 name: promotion.cart_text,
                 description: '',
                 price: price,
-                type: promotion.reward_type
+                type: promotion.reward_type,
+                roundedPrice: roundedPrice
               };
 
               console.log("\n\ncartitem")
@@ -1748,12 +1752,12 @@ export default class Checkout extends React.Component {
 
     const order_items = fullList.map((item, key) => {
       var price_string =
-        item.price != undefined && item.price > 0 && item.clazz == 'product'
+        item.price != undefined && item.roundedPrice > 0 && item.clazz == 'product'
           ? `$${parseFloat(item.price).toFixed(2)}`
           : item.price != undefined &&
             item.price > 0 &&
             item.clazz == 'promotion'
-          ? `-$${parseFloat(item.price).toFixed(2)}`
+          ? `-$${parseFloat(item.roundedPrice).toFixed(2)}`
           : item.type != undefined && item.type == 'Free Items and vouchers'
           ? 'Free'
           : '';
