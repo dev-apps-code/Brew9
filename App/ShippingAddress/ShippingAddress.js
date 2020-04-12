@@ -209,7 +209,11 @@ export default class ShippingAddress extends React.Component {
                 source={require('./../../assets/images/save_button.png')}
                 style={[
                   // styles.addButtonImage,
-                  { height: 40 * alpha, width: 150 * alpha }
+                  {
+                    height: 40 * alpha,
+                    width: 150 * alpha,
+                    marginTop: 20 * alpha
+                  }
                 ]}
               />
               {/* <Text style={styles.addButtonText}>Add Address</Text> */}
@@ -399,15 +403,15 @@ const styles = StyleSheet.create({
   },
   orderView: {
     backgroundColor: 'rgb(239, 239, 239)',
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   noOrderView: {
     backgroundColor: 'white',
     borderRadius: 13 * alpha,
-    marginLeft: 24 * alpha,
-    marginRight: 24 * alpha,
-    marginTop: 70 * alpha,
-    height: windowWidth,
+    height: windowWidth - 60 * alpha,
+    aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
