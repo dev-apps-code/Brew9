@@ -565,7 +565,7 @@ export default class Checkout extends React.Component {
   addFirstShippingAddress = () => {
     const { navigation } = this.props;
     this.setState({ visible: false });
-    navigation.navigate('AddShippingAddress', { params: null });
+    navigation.navigate('AddShippingAddress', { params: null, initialAddress: true });
   };
 
   onCancelVoucher = (item) => {

@@ -182,9 +182,12 @@ export default class AddShippingAddress extends React.Component {
   };
   loadUpdateProfile(formData) {
     const { dispatch, currentMember, navigation } = this.props;
+    isInitialAddress = this.props.navigation.state.params.initialAddress
     const callback = (eventObject) => {
       if (eventObject.success) {
-        navigation.navigate('ShippingAddress');
+        isInitialAddress 
+        ? navigation.navigate('Checkout')
+        : navigation.navigate('ShippingAddress');
       } else {
         this.refs.toast.show(eventObject.message, 500);
       }
