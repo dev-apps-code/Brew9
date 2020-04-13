@@ -226,7 +226,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10 * alpha,
     marginHorizontal: 10 * alpha,
     borderRadius: 10 * alpha,
-    paddingBottom: 10 * alpha
+    paddingBottom: 10 * alpha,
+    marginBottom: BUTTONBOTTOMPADDING
   },
   textInput: {
     backgroundColor: 'transparent',
@@ -274,7 +275,8 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop: 10 * alpha
   },
   areaTitle: {
     color: 'rgb(54, 54, 54)',
@@ -314,7 +316,6 @@ const styles = StyleSheet.create({
   },
 
   placesButton: {
-    width: 90 * alpha,
     paddingVertical: 5 * alpha,
     paddingHorizontal: 10 * alpha,
     backgroundColor: 'rgb(233,233,233)',
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
   },
   placesWrapperView: {
     backgroundColor: 'transparent',
-    marginVertical: 20 * alpha,
+    marginTop: 10 * alpha,
     // width: windowWidth / 2,
     justifyContent: 'space-evenly',
     alignItems: 'center'

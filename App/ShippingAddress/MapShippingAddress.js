@@ -84,17 +84,15 @@ export default class MapShippingAddress extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       latitude: 0,
       longitude: 0,
       error: null,
       address: '',
-      address_detail: '',
+      address_detail: ''
     };
   }
-
- 
 
   componentDidMount() {
     this.props.navigation.setParams({
@@ -125,13 +123,12 @@ export default class MapShippingAddress extends React.Component {
     );
   };
 
- 
   onChangeAddress = (address) => {
     this.setState({
       address
     });
   };
-  
+
   onChangeAddressDetail = (address_detail) => {
     this.setState({
       address_detail
@@ -157,10 +154,9 @@ export default class MapShippingAddress extends React.Component {
     return true;
   };
   getAddressDetails = (data, details) => {
-    if (details.formatted_address != null){
-      
+    if (details.formatted_address != null) {
       var address_detail = details.formatted_address.split(',');
-      var address = details.formatted_address
+      var address = details.formatted_address;
       var poscode_city = address_detail[1].split(' ');
       var postal_code = poscode_city[1];
       var city = poscode_city[2];
@@ -174,12 +170,11 @@ export default class MapShippingAddress extends React.Component {
           city,
           state,
           country,
-          address_detail: '',
+          address_detail: ''
         },
         () => console.log(this.state)
       );
     }
-    
   };
 
   onSavePressed = () => {
@@ -219,26 +214,32 @@ export default class MapShippingAddress extends React.Component {
       postal_code,
       city,
       state,
-      country,
+      country
     } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-        <TouchableOpacity style={styles.clearView}  onPress={() => {
-                this.setState({ address: '' });
-              }} >
+        <TouchableOpacity
+          style={styles.clearView}
+          onPress={() => {
+            this.setState({ address: '' });
+          }}
+        >
           <Text style={styles.clearText}>Clear</Text>
         </TouchableOpacity>
         <View
           style={{
             // marginTop: 20 * alpha,
+            paddingVertical: 10 * alpha,
             marginHorizontal: 10 * alpha,
             borderRadius: 5 * alpha,
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
           <View
             style={{
-              paddingVertical: 20 * alpha,
+              paddingVertical: 10 * alpha,
               flexDirection: 'row',
               paddingHorizontal: 20 * alpha,
               justifyContent: 'center',
@@ -257,7 +258,7 @@ export default class MapShippingAddress extends React.Component {
                 }}
                 style={styles.textInput}
               />
-            </View>         
+            </View>
           </View>
           <Image
             source={require('./../../assets/images/line-17.png')}
@@ -266,17 +267,19 @@ export default class MapShippingAddress extends React.Component {
           <View
             style={{
               paddingVertical: 10 * alpha,
+              flexDirection: 'row',
               paddingHorizontal: 20 * alpha,
-              marginTop: 10 * alpha
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
-            <Text style={styles.title}>Address Line 2</Text>
-            <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.title}>Address Line 2</Text>
               <TextInput
                 keyboardType="default"
                 clearButtonMode="always"
                 autoCorrect={false}
-                placeholder={'Enter Detailed Location'}
+                placeholder={'Unit# /Floor / Block'}
                 onChangeText={(address_detail) => {
                   this.setState({ address_detail });
                 }}
@@ -295,10 +298,9 @@ export default class MapShippingAddress extends React.Component {
     );
   };
   render() {
-  
     let { address } = this.state;
 
-    return (!address || address.length == 0) ? (
+    return !address || address.length == 0 ? (
       <GooglePlacesAutocomplete
         placeholder="Search"
         minLength={2} // minimum length of text to search
@@ -332,10 +334,10 @@ export default class MapShippingAddress extends React.Component {
         getDefaultValue={() => ''}
         query={{
           key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
-          components: "country:bn",
+          components: 'country:bn'
         }}
         currentLocation={true}
-        currentLocationLabel="Current location"       
+        currentLocationLabel="Current location"
         styles={{
           container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
           textInputContainer: {
@@ -405,7 +407,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-
+    paddingBottom: 2 * alpha,
     textAlign: 'left'
   },
   text: {
@@ -419,7 +421,7 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: 'transparent',
     padding: 0,
-    color: 'black',
+    color: 'rgb(128,128,128)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
