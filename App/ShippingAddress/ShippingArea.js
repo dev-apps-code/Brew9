@@ -170,7 +170,7 @@ export default class ShippingArea extends React.Component {
         {this.state.loading ? (
           <AnimationLoading />
         ) : (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, height: '100%' }}>
             <View style={styles.addAddressForm}>
               <Text style={styles.header}>Please select your area</Text>
               <View style={styles.placesWrapperView}>
@@ -222,12 +222,13 @@ const styles = StyleSheet.create({
   addAddressForm: {
     backgroundColor: 'white',
     marginTop: 20 * alpha,
-    paddingVertical: 10 * alpha,
+    paddingTop: 10 * alpha,
     paddingHorizontal: 10 * alpha,
     marginHorizontal: 10 * alpha,
     borderRadius: 10 * alpha,
-    paddingBottom: 10 * alpha,
-    marginBottom: BUTTONBOTTOMPADDING
+    marginBottom: BUTTONBOTTOMPADDING + 30 * alpha
+
+    // paddingBottom: 10 * alpha,
   },
   textInput: {
     backgroundColor: 'transparent',
@@ -328,9 +329,7 @@ const styles = StyleSheet.create({
   placesWrapperView: {
     backgroundColor: 'transparent',
     marginTop: 10 * alpha,
-    // width: windowWidth / 2,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    marginBottom: BUTTONBOTTOMPADDING + 50 * alpha
   },
   saveButton: {
     borderRadius: 4 * alpha,
