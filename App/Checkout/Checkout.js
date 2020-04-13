@@ -562,6 +562,12 @@ export default class Checkout extends React.Component {
     });
   };
 
+  addFirstShippingAddress = () => {
+    const { navigation } = this.props;
+    this.setState({ visible: false });
+    navigation.navigate('AddShippingAddress', { params: null });
+  };
+
   onCancelVoucher = (item) => {
     let new_voucher_list = [...this.state.vouchers_to_use];
     const search_voucher_index = new_voucher_list.findIndex(
@@ -2268,7 +2274,7 @@ export default class Checkout extends React.Component {
           description={'Please add delivery address'}
           OkText={'Add address'}
           cancelText={'Cancel'}
-          onPressOk={this.addShippingAddress}
+          onPressOk={this.addFirstShippingAddress}
           onPressCancel={() => this.setState({ visible: false })}
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
