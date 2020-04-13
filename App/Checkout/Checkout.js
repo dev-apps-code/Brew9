@@ -171,7 +171,7 @@ export default class Checkout extends React.Component {
         {
           selected_address: this.props.currentMember.defaultAddress
         },
-        () => this.loadDeliveryFee()        
+        () => this.loadDeliveryFee()
       );
     }
   }
@@ -321,9 +321,8 @@ export default class Checkout extends React.Component {
     }
   };
   loadDeliveryFee = () => {
-    
     var total = this.props.cart_total;
-    
+
     console.log(this.state.selected_address);
     if (this.state.selected_address === null) {
       this.setState({
@@ -509,7 +508,7 @@ export default class Checkout extends React.Component {
       true
     );
   };
-  
+
   onBranchButtonPressed = () => {};
 
   onLocationButtonPressed = () => {
@@ -553,11 +552,12 @@ export default class Checkout extends React.Component {
   // }
   addShippingAddress = () => {
     const { navigation } = this.props;
-    const {selected_address} = this.state
+    const { selected_address } = this.state;
 
-    console.log("oassinse selected address",selected_address)
+    console.log('oassinse selected address', selected_address);
     this.setState({ visible: false });
-    navigation.navigate('ShippingAddress', {selected_address:selected_address,
+    navigation.navigate('ShippingAddress', {
+      selected_address: selected_address,
       returnToRoute: navigation.state
     });
   };
@@ -656,7 +656,7 @@ export default class Checkout extends React.Component {
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
-            var roundedPrice = 0
+            var roundedPrice = 0;
             var trigger_price = parseFloat(promotion.trigger_price);
             var remaining = trigger_price - cart_total;
             if (remaining <= 0) {
@@ -674,7 +674,9 @@ export default class Checkout extends React.Component {
                   price = this.roundOff(
                     (final_cart_value * discount_value) / 100
                   );
-                  roundedPrice = this.roundOff((final_cart_value * discount_value) / 100)
+                  roundedPrice = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
@@ -1093,11 +1095,13 @@ export default class Checkout extends React.Component {
             }
           }
         }
-        if (delivery) {
-          this.addressConfirmation();
-        } else {
-          this.loadMakeOrder();
-        }
+        // if (delivery) {
+        //   this.addressConfirmation();
+        // } else {
+        //   this.loadMakeOrder();
+        // }
+        this.loadMakeOrder();
+
         return;
       }
     } else {
@@ -1803,7 +1807,6 @@ export default class Checkout extends React.Component {
           ? 'Free'
           : '';
 
-    
       let filtered =
         item.selected_variants != null
           ? item.selected_variants.filter(function (el) {
@@ -1897,10 +1900,7 @@ export default class Checkout extends React.Component {
 
       return (
         <View
-          style={[
-            styles.drinksView,
-            { marginTop: 0, marginBottom: 5 * alpha }
-          ]}
+          style={[styles.drinksView, { marginTop: 0, marginBottom: 5 * alpha }]}
           key={key}
         >
           <View
