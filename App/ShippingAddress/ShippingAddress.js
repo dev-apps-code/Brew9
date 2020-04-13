@@ -220,7 +220,7 @@ export default class ShippingAddress extends React.Component {
             />
             <View style={styles.messageView}>
               <Text style={styles.youHavenTMakeAnyText}>
-                Ooops.You haven't add any address yet{' '}
+                Oops. You haven't add any address yet{' '}
               </Text>
             </View>
             <TouchableOpacity
