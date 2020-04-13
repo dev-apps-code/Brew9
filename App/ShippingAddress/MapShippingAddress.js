@@ -84,17 +84,15 @@ export default class MapShippingAddress extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       latitude: 0,
       longitude: 0,
       error: null,
       address: '',
-      address_detail: '',
+      address_detail: ''
     };
   }
-
- 
 
   componentDidMount() {
     this.props.navigation.setParams({
@@ -125,13 +123,12 @@ export default class MapShippingAddress extends React.Component {
     );
   };
 
- 
   onChangeAddress = (address) => {
     this.setState({
       address
     });
   };
-  
+
   onChangeAddressDetail = (address_detail) => {
     this.setState({
       address_detail
@@ -157,10 +154,11 @@ export default class MapShippingAddress extends React.Component {
     return true;
   };
   getAddressDetails = (data, details) => {
-    if (details.formatted_address != null){
-      
+    console.log('data', data);
+    console.log('details', details);
+    if (details.formatted_address != null) {
       var address_detail = details.formatted_address.split(',');
-      var address = details.formatted_address
+      var address = details.formatted_address;
       var poscode_city = address_detail[1].split(' ');
       var postal_code = poscode_city[1];
       var city = poscode_city[2];
@@ -174,12 +172,11 @@ export default class MapShippingAddress extends React.Component {
           city,
           state,
           country,
-          address_detail: '',
+          address_detail: ''
         },
         () => console.log(this.state)
       );
     }
-    
   };
 
   onSavePressed = () => {
@@ -219,13 +216,16 @@ export default class MapShippingAddress extends React.Component {
       postal_code,
       city,
       state,
-      country,
+      country
     } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-        <TouchableOpacity style={styles.clearView}  onPress={() => {
-                this.setState({ address: '' });
-              }} >
+        <TouchableOpacity
+          style={styles.clearView}
+          onPress={() => {
+            this.setState({ address: '' });
+          }}
+        >
           <Text style={styles.clearText}>Clear</Text>
         </TouchableOpacity>
         <View
@@ -257,7 +257,7 @@ export default class MapShippingAddress extends React.Component {
                 }}
                 style={styles.textInput}
               />
-            </View>         
+            </View>
           </View>
           <Image
             source={require('./../../assets/images/line-17.png')}
@@ -295,10 +295,9 @@ export default class MapShippingAddress extends React.Component {
     );
   };
   render() {
-  
     let { address } = this.state;
 
-    return (!address || address.length == 0) ? (
+    return !address || address.length == 0 ? (
       <GooglePlacesAutocomplete
         placeholder="Search"
         minLength={2} // minimum length of text to search
@@ -308,7 +307,10 @@ export default class MapShippingAddress extends React.Component {
         keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
         listViewDisplayed="auto" // true/false/undefined
         fetchDetails={true}
-        renderDescription={(row) => row.description} // custom description render
+        // renderDescription={(row) => row.description} // custom description render
+        renderDescription={(row) =>
+          row.description || row.formatted_address || row.name
+        }
         renderLeftButton={() => (
           <View
             style={{
@@ -332,10 +334,11 @@ export default class MapShippingAddress extends React.Component {
         getDefaultValue={() => ''}
         query={{
           key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
-          components: "country:bn",
+          components: 'country:bn'
         }}
         currentLocation={true}
-        currentLocationLabel="Current location"       
+        currentLocationLabel="Current location"
+        nearbyPlacesAPI='GoogleReverseGeocoding'
         styles={{
           container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
           textInputContainer: {
