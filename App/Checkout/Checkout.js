@@ -10,7 +10,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
+import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
@@ -30,14 +30,14 @@ import {
   LIGHT_GREY
 } from '../Common/common_style';
 import Moment from 'moment';
-import ScrollPicker from 'rn-scrollable-picker';
-import { Analytics, Event, PageHit } from 'expo-analytics';
+import { Analytics, Event } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import TimeSelector from '../Components/TimeSelector';
-import newLinking from 'expo/build/Linking/Linking';
+
+const OPTION_NOW_MESSAGE = 'Estimated within 30mins';
 
 @connect(({ members, shops, orders }) => ({
   currentMember: members.profile,
@@ -1739,7 +1739,7 @@ export default class Checkout extends React.Component {
     var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
     var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
-    if (pick_up_status == 'Now') formatted_time = pick_up_status;
+    if (pick_up_status == 'Now') formatted_time = OPTION_NOW_MESSAGE;
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
@@ -2014,24 +2014,27 @@ export default class Checkout extends React.Component {
                 '$ 0.00'}
             </Text>
           </View>
-          {address &&
-          (<View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-              // paddingHorizontal: 10 * alpha
-            }}
-          >
-            <View>
-              <Text style={styles.productNameText}>Delivery fees</Text>
-              {delivery_description && (
-                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
-              )}
+          {address && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+                // paddingHorizontal: 10 * alpha
+              }}
+            >
+              <View>
+                <Text style={styles.productNameText}>Delivery fees</Text>
+                {delivery_description && (
+                  <Text style={styles.deliveryNoted}>
+                    {delivery_description}
+                  </Text>
+                )}
+              </View>
+              <Text style={styles.productVoucherText}>{`$${parseFloat(
+                deliveryFee
+              ).toFixed(2)}`}</Text>
             </View>
-            <Text style={styles.productVoucherText}>{`$${parseFloat(
-              deliveryFee
-            ).toFixed(2)}`}</Text>
-          </View>)}
+          )}
         </View>
       </View>
     );
