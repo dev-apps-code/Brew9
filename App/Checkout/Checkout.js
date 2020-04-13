@@ -1861,12 +1861,12 @@ export default class Checkout extends React.Component {
                 />
               </TouchableOpacity>
             )}
-            {item.id != last_item.id && (
-              <Image
-                source={require('./../../assets/images/dotted-line.png')}
-                style={styles.dottedLineImage}
-              />
-            )}
+            {/* {item.id != last_item.id && ( */}
+            <Image
+              source={require('./../../assets/images/dotted-line.png')}
+              style={styles.dottedLineImage}
+            />
+            {/* )} */}
           </View>
         </View>
       );
@@ -1900,7 +1900,7 @@ export default class Checkout extends React.Component {
 
       return (
         <View
-          style={[styles.drinksView, { marginTop: 0, marginBottom: 5 * alpha }]}
+          style={[styles.drinksView, { marginVertical: 10 * alpha }]}
           key={key}
         >
           <View
@@ -2014,24 +2014,27 @@ export default class Checkout extends React.Component {
                 '$ 0.00'}
             </Text>
           </View>
-          {address &&
-          (<View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-              // paddingHorizontal: 10 * alpha
-            }}
-          >
-            <View>
-              <Text style={styles.productNameText}>Delivery fees</Text>
-              {delivery_description && (
-                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
-              )}
+          {address && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+                // paddingHorizontal: 10 * alpha
+              }}
+            >
+              <View>
+                <Text style={styles.productNameText}>Delivery fees</Text>
+                {delivery_description && (
+                  <Text style={styles.deliveryNoted}>
+                    {delivery_description}
+                  </Text>
+                )}
+              </View>
+              <Text style={styles.productVoucherText}>{`$${parseFloat(
+                deliveryFee
+              ).toFixed(2)}`}</Text>
             </View>
-            <Text style={styles.productVoucherText}>{`$${parseFloat(
-              deliveryFee
-            ).toFixed(2)}`}</Text>
-          </View>)}
+          )}
         </View>
       </View>
     );
@@ -2153,6 +2156,10 @@ export default class Checkout extends React.Component {
               </View>
 
               {this.renderOrderItems(cart, promotions)}
+              <Image
+                source={require('./../../assets/images/dotted-line.png')}
+                style={styles.dottedLineImage}
+              />
               {this.renderPromotions(promotions)}
               <View style={styles.receiptSectionSeperator}>
                 <Image
