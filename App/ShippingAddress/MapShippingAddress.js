@@ -8,7 +8,9 @@ import {
   Platform,
   TextInput,
   KeyboardAvoidingView,
-  AsyncStorage
+  AsyncStorage,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
@@ -293,95 +295,97 @@ export default class MapShippingAddress extends React.Component {
       country
     } = this.state;
     return (
-      <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-        <TouchableOpacity
-          style={styles.clearView}
-          onPress={() => {
-            this.setState({ address: '' });
-          }}
-        >
-          <Text style={styles.clearText}>Clear</Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            // marginTop: 20 * alpha,
-            marginHorizontal: 10 * alpha,
-            borderRadius: 5 * alpha,
-            backgroundColor: 'white'
-          }}
-        >
-          <View
-            style={{
-              paddingVertical: 20 * alpha,
-              flexDirection: 'row',
-              paddingHorizontal: 20 * alpha,
-              justifyContent: 'center',
-              alignItems: 'center'
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+        <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
+          <TouchableOpacity
+            style={styles.clearView}
+            onPress={() => {
+              this.setState({ address: '' });
             }}
           >
-            <View style={{ flex: 1 }}>
-              <Text style={styles.title}>Address Line 1</Text>
-              <TextInput
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                value={address}
-                onChangeText={(address) => {
-                  this.setState({ address });
-                }}
-                style={styles.textInput}
-              />
-            </View>
-          </View>
-          <Image
-            source={require('./../../assets/images/line-17.png')}
-            style={styles.seperatorImage}
-          />
+            <Text style={styles.clearText}>Clear</Text>
+          </TouchableOpacity>
           <View
             style={{
-              paddingVertical: 10 * alpha,
-              paddingHorizontal: 20 * alpha,
-              marginTop: 10 * alpha
+              // marginTop: 20 * alpha,
+              marginHorizontal: 10 * alpha,
+              borderRadius: 5 * alpha,
+              backgroundColor: 'white'
             }}
           >
-            <Text style={styles.title}>Address Line 2</Text>
-            <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
-              <TextInput
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                value={address_detail}
-                placeholder={'Enter Detailed Location'}
-                onChangeText={(address_detail) => {
-                  this.setState({ address_detail });
-                }}
-                style={styles.textInput}
-              />
+            <View
+              style={{
+                paddingVertical: 20 * alpha,
+                flexDirection: 'row',
+                paddingHorizontal: 20 * alpha,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={styles.title}>Address Line 1</Text>
+                <TextInput
+                  keyboardType="default"
+                  clearButtonMode="always"
+                  autoCorrect={false}
+                  value={address}
+                  onChangeText={(address) => {
+                    this.setState({ address });
+                  }}
+                  style={styles.textInput}
+                />
+              </View>
+            </View>
+            <Image
+              source={require('./../../assets/images/line-17.png')}
+              style={styles.seperatorImage}
+            />
+            <View
+              style={{
+                paddingVertical: 10 * alpha,
+                paddingHorizontal: 20 * alpha,
+                marginTop: 10 * alpha
+              }}
+            >
+              <Text style={styles.title}>Address Line 2</Text>
+              <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+                <TextInput
+                  keyboardType="default"
+                  clearButtonMode="always"
+                  autoCorrect={false}
+                  value={address_detail}
+                  placeholder={'Enter Detailed Location'}
+                  onChangeText={(address_detail) => {
+                    this.setState({ address_detail });
+                  }}
+                  style={styles.textInput}
+                />
+              </View>
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => this.onSavePressed()}
+            style={styles.saveButton}
+          >
+            <Text style={styles.saveButtonText}>SAVE</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => this.onSavePressed()}
-          style={styles.saveButton}
-        >
-          <Text style={styles.saveButtonText}>SAVE</Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
   renderSearchForm = () => (
     <GooglePlacesAutocomplete
       placeholder="Search"
-      minLength={2} // minimum length of text to search
+      minLength={2}
       autoFocus={false}
       enablePoweredByContainer={false}
       autoCorrect={false}
-      returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-      keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
-      listViewDisplayed="auto" // true/false/undefined
+      returnKeyType={'search'}
+      keyboardAppearance={'light'}
+      listViewDisplayed="auto"
       fetchDetails={true}
-      renderDescription={(row) => row.description} // custom description render
+      renderDescription={(row) => row.description}
       textInputProps={{ clearButtonMode: 'never' }}
       renderLeftButton={() => (
         <View
@@ -412,7 +416,6 @@ export default class MapShippingAddress extends React.Component {
         </TouchableOpacity>
       )}
       onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
         this.getAddressDetails(data, details);
         console.log('fetchDetails', data, details);
       }}
@@ -447,7 +450,7 @@ export default class MapShippingAddress extends React.Component {
           color: '#1faadb'
         }
       }}
-      debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+      debounce={200} 
     />
   );
 
