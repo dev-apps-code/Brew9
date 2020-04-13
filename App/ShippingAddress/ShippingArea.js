@@ -172,7 +172,7 @@ export default class ShippingArea extends React.Component {
         ) : (
           <View style={{ flex: 1 }}>
             <View style={styles.addAddressForm}>
-              <Text style={styles.header}>Please Select your area</Text>
+              <Text style={styles.header}>Please select your area</Text>
               <View style={styles.placesWrapperView}>
                 <FlatList
                   renderItem={({ item }) => this.renderPlaces(item)}
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   addAddressForm: {
     backgroundColor: 'white',
     marginTop: 20 * alpha,
-    paddingVertical: 20 * alpha,
+    paddingVertical: 10 * alpha,
     paddingHorizontal: 10 * alpha,
     marginHorizontal: 10 * alpha,
     borderRadius: 10 * alpha,
