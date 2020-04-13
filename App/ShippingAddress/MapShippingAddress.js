@@ -95,9 +95,18 @@ export default class MapShippingAddress extends React.Component {
   }
 
   componentDidMount() {
+    const { navigation } = this.props;
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
+    console.log(navigation.state.params.addressInfo)
+
+    this.setState(
+      {
+        address: navigation.state.params.addressInfo.address,
+        address_detail: navigation.state.params.addressInfo.address_detail
+      }
+    )
   }
   onBackPressed = () => {
     this.props.navigation.goBack();
@@ -162,7 +171,7 @@ export default class MapShippingAddress extends React.Component {
       var city = poscode_city[2];
       var state = address_detail[2];
       var country = address_detail[3];
-      console.log('address_detail', details);
+      // console.log('address_detail', details);
       this.setState(
         {
           address,
@@ -279,6 +288,7 @@ export default class MapShippingAddress extends React.Component {
                 keyboardType="default"
                 clearButtonMode="always"
                 autoCorrect={false}
+                value={address_detail}
                 placeholder={'Unit# /Floor / Block'}
                 onChangeText={(address_detail) => {
                   this.setState({ address_detail });
@@ -305,6 +315,7 @@ export default class MapShippingAddress extends React.Component {
         placeholder="Search"
         minLength={2} // minimum length of text to search
         autoFocus={false}
+        enablePoweredByContainer={false}
         autoCorrect={false}
         returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
         keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
