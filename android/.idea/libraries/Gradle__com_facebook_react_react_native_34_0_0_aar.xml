@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.facebook.react:react-native:34.0.0@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/a460dc6f12f12b688801b6a0706173d5/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-react-native-34.0.0.aar/8f06aa58d70269554fc8a257f2d5269c/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/a460dc6f12f12b688801b6a0706173d5/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/react-native-34.0.0.aar/a460dc6f12f12b688801b6a0706173d5/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-react-native-34.0.0.aar/8f06aa58d70269554fc8a257f2d5269c/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-react-native-34.0.0.aar/8f06aa58d70269554fc8a257f2d5269c/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/../node_modules/expokit/maven/com/facebook/react/react-native/34.0.0/react-native-34.0.0-javadoc.jar!/" />

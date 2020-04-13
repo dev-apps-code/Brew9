@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.android.instantapps:instantapps:1.1.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/instantapps-1.1.0.aar/3fad550d5a108b19618a2185afab2ace/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/instantapps-1.1.0.aar/3fad550d5a108b19618a2185afab2ace/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-instantapps-1.1.0.aar/46b101a75b9cdb61bddc9dc11171c506/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-instantapps-1.1.0.aar/46b101a75b9cdb61bddc9dc11171c506/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
