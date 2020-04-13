@@ -1,12 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: com.facebook.android:facebook-messenger:5.0.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-messenger-5.0.1.aar/648c2bcc37edd78803cdb2909c5859a1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-messenger-5.0.1.aar/648c2bcc37edd78803cdb2909c5859a1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-messenger-5.0.1.aar/86b8f862a9b3249e35adb32f1b47cd03/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/facebook-messenger-5.0.1.aar/86b8f862a9b3249e35adb32f1b47cd03/res" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.facebook.android/facebook-messenger/5.0.1/893055e7cbc7677c7aa7f711e313af94040dca98/facebook-messenger-5.0.1-javadoc.jar!/" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.facebook.android/facebook-messenger/5.0.1/42a3a87fd9924ceec287f5ed0d3795ca191cc2be/facebook-messenger-5.0.1-sources.jar!/" />
     </SOURCES>
