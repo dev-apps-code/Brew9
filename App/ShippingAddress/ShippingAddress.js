@@ -88,10 +88,13 @@ export default class ShippingAddress extends React.Component {
   constructor(props) {
     super(props);
 
-    const selected_address = props.navigation.state.params != null ? props.navigation.state.params.selected_address : null
+    const selected_address =
+      props.navigation.state.params != null
+        ? props.navigation.state.params.selected_address
+        : null;
 
-    console.log("selected addres si passed", props.navigation.state.params )
-    console.log("selected addres si passed",selected_address)
+    console.log('selected addres si passed', props.navigation.state.params);
+    console.log('selected addres si passed', selected_address);
     this.state = {
       delivery_options: 'pickup',
       selected_address: selected_address,
@@ -155,23 +158,23 @@ export default class ShippingAddress extends React.Component {
     }
   };
 
-  getAddressIsSelected(item){
+  getAddressIsSelected(item) {
+    const { selected_address } = this.state;
 
-    const {selected_address} = this.state
+    var address_selected = false;
 
-    var address_selected = false
-
-    if (selected_address != null){
-      address_selected = selected_address.id == item.id
-    }else{
-      address_selected = item.primary ? true: false
+    if (selected_address != null) {
+      address_selected = selected_address.id == item.id;
+    } else {
+      address_selected = item.primary ? true : false;
     }
-    return address_selected
+    return address_selected;
   }
 
   renderShippingAddress = (item) => {
-   
-    let selected = this.getAddressIsSelected(item) ? styles.selectTwoView : undefined;
+    let selected = this.getAddressIsSelected(item)
+      ? styles.selectTwoView
+      : undefined;
     let primary = item.primary ? 'Primary' : '';
     return (
       <TouchableOpacity onPress={() => this.onItemPress(item)}>
@@ -262,7 +265,7 @@ export default class ShippingAddress extends React.Component {
                   renderItem={({ item }) => this.renderShippingAddress(item)}
                   refreshing={this.state.isRefreshing}
                   onRefresh={this.onRefresh.bind(this)}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => 'id-' + item.id}
                 />
               </ScrollView>
               <TouchableOpacity onPress={this.onAddAddress}>
