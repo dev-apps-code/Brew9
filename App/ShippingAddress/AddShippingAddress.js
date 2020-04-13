@@ -305,12 +305,13 @@ export default class AddShippingAddress extends React.Component {
   };
   onSelectAddress = () => {
     const { navigate } = this.props.navigation;
-    let { area, delivery_area } = this.state;
+    let { address, address_detail , delivery_area } = this.state;
 
     if (delivery_area) {
       navigate('MapShippingAddress', {
         returnToRoute: this.props.navigation.state,
-        returnAddress: this.returnAddress.bind(this)
+        returnAddress: this.returnAddress.bind(this),
+        addressInfo: {address, address_detail}
       });
     } else {
       this.refs.toast.show('Please select your area first', 500);

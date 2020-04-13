@@ -65,6 +65,8 @@ const styles = StyleSheet.create({
     onboarding_container: {
         width: 120 * alpha,
         height: 240 * alpha,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 })
 export default AnimationLoading
