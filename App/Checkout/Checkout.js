@@ -2014,7 +2014,8 @@ export default class Checkout extends React.Component {
                 '$ 0.00'}
             </Text>
           </View>
-          <View
+          {address &&
+          (<View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between'
@@ -2030,7 +2031,7 @@ export default class Checkout extends React.Component {
             <Text style={styles.productVoucherText}>{`$${parseFloat(
               deliveryFee
             ).toFixed(2)}`}</Text>
-          </View>
+          </View>)}
         </View>
       </View>
     );
