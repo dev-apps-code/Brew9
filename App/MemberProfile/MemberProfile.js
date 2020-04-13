@@ -603,7 +603,7 @@ export default class MemberProfile extends React.Component {
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
-    let defaultAddress = default_address?.address?.trim() || 'Address';
+    let defaultAddress = default_address?.address?.trim() || 'Address (optional)';
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -896,7 +896,7 @@ export default class MemberProfile extends React.Component {
                     alignItems: 'center'
                   }}
                 >
-                  <Text style={styles.phoneNumberText}>Address</Text>
+                  <Text style={styles.phoneNumberText}>Delivery Address</Text>
                   <TouchableOpacity
                     onPress={this.onChangeAddress}
                     style={{
