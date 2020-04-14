@@ -4,7 +4,8 @@ import {
   makeOrder,
   missions,
   review,
-  deliveryFee
+  deliveryFee,
+  shopTown
 } from '../Services/shops';
 import EventObject from './event_object';
 import { createAction } from '../Utils/index';
@@ -33,7 +34,7 @@ export default {
 
       let data = [...state.orders];
 
-      _.remove(data, function(currentObject) {
+      _.remove(data, function (currentObject) {
         return currentObject.id === order.id;
       });
 
@@ -131,13 +132,26 @@ export default {
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(deliveryFee, authtoken, object);
         const eventObject = new EventObject(json);
-        console.log("\n\nDeliveryFeeResponse")
-        console.log(eventObject)
+        console.log('\n\nDeliveryFeeResponse');
+        console.log(eventObject);
         if (eventObject.success == true) {
         }
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {
         console.log('err', err);
+      }
+    },
+    *loadShopTown({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shopTown, authtoken, object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {
+        console.log('loadShopTown', err);
       }
     }
   }

@@ -23,6 +23,7 @@ import { createAction } from '../Utils';
 import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
 import UpdateShippingAddressObjectRequest from '../Requests/update_shipping_address_request_object';
+import ShopTownRequestObject from '../Requests/shop_town_request_object';
 import CurrentStatusRequestObject from '../Requests/current_status_request_object';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import { KURL_INFO } from '../Utils/server';
@@ -94,12 +95,13 @@ export default class AddShippingAddress extends React.Component {
     super(props);
     this.address = this.props.navigation.state.params.params;
 
-
     if (this.address != null) {
       this.state = {
         fullname: this.address.fullname ? this.address.fullname : '',
         address: this.address.address ? this.address.address : '',
-        address_details: this.address.address_details ? this.address.address_details : '',
+        address_details: this.address.address_details
+          ? this.address.address_details
+          : '',
         contact_number: this.address.contact_number
           ? this.address.contact_number
           : '',
@@ -163,7 +165,7 @@ export default class AddShippingAddress extends React.Component {
       const shippingAddress = {
         member_id: this.props.currentMember.id,
         fullname: this.state.fullname,
-        address:  this.state.address,
+        address: this.state.address,
         address_details: this.state.address_details,
         contact_number: this.state.contact_number,
         city: this.state.city,
@@ -181,12 +183,12 @@ export default class AddShippingAddress extends React.Component {
   };
   loadUpdateProfile(formData) {
     const { dispatch, currentMember, navigation } = this.props;
-    isInitialAddress = this.props.navigation.state.params.initialAddress
+    isInitialAddress = this.props.navigation.state.params.initialAddress;
     const callback = (eventObject) => {
       if (eventObject.success) {
-        isInitialAddress 
-        ? navigation.navigate('Checkout')
-        : navigation.navigate('ShippingAddress');
+        isInitialAddress
+          ? navigation.navigate('Checkout')
+          : navigation.navigate('ShippingAddress');
       } else {
         this.refs.toast.show(eventObject.message, 500);
       }
@@ -255,7 +257,29 @@ export default class AddShippingAddress extends React.Component {
       onBackPressed: this.onBackPressed
     });
     this.loadTag();
+    this.loadShopTown();
   }
+  loadShopTown = () => {
+    console.log('loadShopTown');
+    let { dispatch, selectedShop } = this.props;
+    this.setState({ loading: true });
+    const callback = (eventObject) => {
+      console.log('loadShopTown', eventObject);
+      if (eventObject.success) {
+        this.setState({
+          town: eventObject.result
+        });
+      }
+    };
+    const obj = new ShopTownRequestObject();
+    // obj.setUrlId(members.company_id);
+    dispatch(
+      createAction('shops/loadShopTown')({
+        object: obj,
+        callback
+      })
+    );
+  };
 
   loadTag = () => {
     if (this.state.tag != undefined) {
