@@ -36,6 +36,7 @@ import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import TimeSelector from '../Components/TimeSelector';
+import OrderForSelector from '../Components/OrderForSelector';
 
 const OPTION_NOW_MESSAGE = 'Estimated within 30mins';
 
@@ -2046,8 +2047,8 @@ export default class Checkout extends React.Component {
     );
   };
 
-  renderTimeSelector = () => (
-    <TimeSelector
+  renderOrderForSelector = () => (
+    <OrderForSelector
       styles={styles}
       state={this.state}
       delivery={this.props.delivery}
@@ -2276,7 +2277,7 @@ export default class Checkout extends React.Component {
         )}
         {this.renderPayNow(non_negative_final_price)}
         {this.renderPaymentMethod()}
-        {this.renderTimeSelector()}
+        {this.renderOrderForSelector()}
         <HudLoading isLoading={this.state.loading} />
         <Toast
           ref="toast"
@@ -3900,7 +3901,7 @@ const styles = StyleSheet.create({
   timePickerSelected: {
     color: 'rgb(54, 54, 54)',
     textAlign: 'center',
-    fontSize: 24 * fontAlpha,
+    fontSize: 30 * fontAlpha,
     fontFamily: TITLE_FONT
   },
   timePickerUnselected: {
