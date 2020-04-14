@@ -94,12 +94,12 @@ export default class AddShippingAddress extends React.Component {
     super(props);
     this.address = this.props.navigation.state.params.params;
 
+
     if (this.address != null) {
       this.state = {
-        address_detail: '',
         fullname: this.address.fullname ? this.address.fullname : '',
         address: this.address.address ? this.address.address : '',
-        address_detail: this.address.address_details ? this.address.address_details : '',
+        address_details: this.address.address_details ? this.address.address_details : '',
         contact_number: this.address.contact_number
           ? this.address.contact_number
           : '',
@@ -125,7 +125,7 @@ export default class AddShippingAddress extends React.Component {
       };
     } else {
       this.state = {
-        address_detail: '',
+        address_details: '',
         fullname: this.props.currentMember.nickname,
         address: '',
         contact_number: this.props.currentMember.phone_no,
@@ -164,7 +164,7 @@ export default class AddShippingAddress extends React.Component {
         member_id: this.props.currentMember.id,
         fullname: this.state.fullname,
         address:  this.state.address,
-        address_detail: this.state.address_detail,
+        address_details: this.state.address_details,
         contact_number: this.state.contact_number,
         city: this.state.city,
         state: this.state.state,
@@ -176,7 +176,6 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.state.delivery_area,
         primary: primary
       };
-      console.log('shippingAddress', shippingAddress);
       this.loadUpdateProfile(shippingAddress);
     }
   };
@@ -250,7 +249,6 @@ export default class AddShippingAddress extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props.currentMember)
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
@@ -281,7 +279,7 @@ export default class AddShippingAddress extends React.Component {
     const latitude = this.props.location ? this.props.location.coords.latitude : null
     const longitude = this.props.location ? this.props.location.coords.longitude : null
     this.setState({
-      address_detail: info.address_detail,
+      address_details: info.address_details,
       address: info.address,
       city: info.city,
       state: info.state,
@@ -395,7 +393,7 @@ export default class AddShippingAddress extends React.Component {
   };
 
   renderAddressForm = () => {
-    let { address, address_detail } = this.state;
+    let { address, address_details } = this.state;
     return (
       <View>
         <View>
@@ -443,8 +441,8 @@ export default class AddShippingAddress extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              {address ? (
-                <Text style={[styles.textInput]}>{address_detail}</Text>
+              {address_details ? (
+                <Text style={[styles.textInput]}>{address_details}</Text>
               ) : (
                 <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
                   {'line 2'}

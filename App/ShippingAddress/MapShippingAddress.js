@@ -92,7 +92,7 @@ export default class MapShippingAddress extends React.Component {
       longitude: 0,
       error: null,
       address: '',
-      address_detail: ''
+      address_details: '',
     };
   }
 
@@ -137,10 +137,10 @@ export default class MapShippingAddress extends React.Component {
       address
     });
   };
-
-  onChangeAddressDetail = (address_detail) => {
+  
+  onChangeAddressDetail = (address_details) => {
     this.setState({
-      address_detail
+      address_details
     });
   };
   // onChangeCountry = (country) => {
@@ -163,15 +163,17 @@ export default class MapShippingAddress extends React.Component {
     return true;
   };
   getAddressDetails = (data, details) => {
-    if (details.formatted_address != null) {
-      var address_detail = details.formatted_address.split(',');
-      var address = details.formatted_address;
-      var poscode_city = address_detail[1].split(' ');
+    if (details.formatted_address != null){
+      
+      var address_details = details.formatted_address.split(',');
+      var address = details.formatted_address
+      var poscode_city = address_details[1].split(' ');
       var postal_code = poscode_city[1];
       var city = poscode_city[2];
-      var state = address_detail[2];
-      var country = address_detail[3];
-      // console.log('address_detail', details);
+      var state = address_details[2];
+      var country = address_details[3];
+      console.log('address_details', details);
+
       this.setState(
         {
           address,
@@ -179,7 +181,7 @@ export default class MapShippingAddress extends React.Component {
           city,
           state,
           country,
-          address_detail: ''
+          address_details: '',
         },
         () => console.log(this.state)
       );
@@ -189,7 +191,7 @@ export default class MapShippingAddress extends React.Component {
   onSavePressed = () => {
     const { navigation } = this.props;
     let {
-      address_detail,
+      address_details,
       address,
       postal_code,
       city,
@@ -202,7 +204,7 @@ export default class MapShippingAddress extends React.Component {
     let formcheck = true;
     if (formcheck) {
       const shippingAddress = {
-        address_detail,
+        address_details,
         address,
         postal_code,
         city,
@@ -219,7 +221,7 @@ export default class MapShippingAddress extends React.Component {
   renderAddressForm = () => {
     let {
       address,
-      address_detail,
+      address_details,
       postal_code,
       city,
       state,
@@ -285,7 +287,7 @@ export default class MapShippingAddress extends React.Component {
                   clearButtonMode="always"
                   autoCorrect={false}
                   value={address_detail}
-                  placeholder={'Enter Detailed Location'}
+                  placeholder={'Unit # / Floor / Block'}
                   onChangeText={(address_detail) => {
                     this.setState({ address_detail });
                   }}
