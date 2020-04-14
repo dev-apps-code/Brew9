@@ -94,12 +94,12 @@ export default class AddShippingAddress extends React.Component {
     super(props);
     this.address = this.props.navigation.state.params.params;
 
+
     if (this.address != null) {
       this.state = {
-        address_detail: '',
         fullname: this.address.fullname ? this.address.fullname : '',
         address: this.address.address ? this.address.address : '',
-        address_detail: this.address.address_details ? this.address.address_details : '',
+        address_details: this.address.address_details ? this.address.address_details : '',
         contact_number: this.address.contact_number
           ? this.address.contact_number
           : '',
@@ -125,7 +125,7 @@ export default class AddShippingAddress extends React.Component {
       };
     } else {
       this.state = {
-        address_detail: '',
+        address_details: '',
         fullname: this.props.currentMember.nickname,
         address: '',
         contact_number: this.props.currentMember.phone_no,
@@ -164,7 +164,7 @@ export default class AddShippingAddress extends React.Component {
         member_id: this.props.currentMember.id,
         fullname: this.state.fullname,
         address:  this.state.address,
-        address_detail: this.state.address_detail,
+        address_details: this.state.address_details,
         contact_number: this.state.contact_number,
         city: this.state.city,
         state: this.state.state,
@@ -176,15 +176,17 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.state.delivery_area,
         primary: primary
       };
-      console.log('shippingAddress', shippingAddress);
       this.loadUpdateProfile(shippingAddress);
     }
   };
   loadUpdateProfile(formData) {
     const { dispatch, currentMember, navigation } = this.props;
+    isInitialAddress = this.props.navigation.state.params.initialAddress
     const callback = (eventObject) => {
       if (eventObject.success) {
-        navigation.navigate('ShippingAddress');
+        isInitialAddress 
+        ? navigation.navigate('Checkout')
+        : navigation.navigate('ShippingAddress');
       } else {
         this.refs.toast.show(eventObject.message, 500);
       }
@@ -240,7 +242,6 @@ export default class AddShippingAddress extends React.Component {
       return false;
     }
 
-    
     // else if (!this.state.tag) {
     //     this.refs.toast.show("Please select your tag", 500)
     //     return false
@@ -250,7 +251,6 @@ export default class AddShippingAddress extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props.currentMember)
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
@@ -277,11 +277,14 @@ export default class AddShippingAddress extends React.Component {
     });
   }
   returnAddress(info) {
-
-    const latitude = this.props.location ? this.props.location.coords.latitude : null
-    const longitude = this.props.location ? this.props.location.coords.longitude : null
+    const latitude = this.props.location
+      ? this.props.location.coords.latitude
+      : null;
+    const longitude = this.props.location
+      ? this.props.location.coords.longitude
+      : null;
     this.setState({
-      address_detail: info.address_detail,
+      address_details: info.address_details,
       address: info.address,
       city: info.city,
       state: info.state,
@@ -307,20 +310,20 @@ export default class AddShippingAddress extends React.Component {
   };
   onSelectAddress = () => {
     const { navigate } = this.props.navigation;
-    let { address, address_detail , delivery_area } = this.state;
+    let { address, address_detail, delivery_area } = this.state;
 
     if (delivery_area) {
       navigate('MapShippingAddress', {
         returnToRoute: this.props.navigation.state,
         returnAddress: this.returnAddress.bind(this),
-        addressInfo: {address, address_detail}
+        addressInfo: { address, address_detail }
       });
     } else {
       this.refs.toast.show('Please select your area first', 500);
     }
   };
   onSelectTag = (item) => {
-    const tag = this.state.tag
+    const tag = this.state.tag;
     let selectedTag = tag.map((tag) => {
       if (tag.name == item.name) {
         tag.selected = true;
@@ -354,7 +357,7 @@ export default class AddShippingAddress extends React.Component {
                 autoCorrect={false}
                 placeholder={placeholder}
                 onChangeText={(text) => onChangeText(text)}
-                value = {value}
+                value={value}
                 style={styles.textInput}
                 editable={edit}
               />
@@ -395,7 +398,7 @@ export default class AddShippingAddress extends React.Component {
   };
 
   renderAddressForm = () => {
-    let { address, address_detail } = this.state;
+    let { address, address_details } = this.state;
     return (
       <View>
         <View>
@@ -416,7 +419,7 @@ export default class AddShippingAddress extends React.Component {
                 <Text style={[styles.textInput]}>{address}</Text>
               ) : (
                 <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'line 1'}
+                  {'Line 1'}
                 </Text>
               )}
               <Image
@@ -443,11 +446,11 @@ export default class AddShippingAddress extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              {address ? (
-                <Text style={[styles.textInput]}>{address_detail}</Text>
+              {address_details ? (
+                <Text style={[styles.textInput]}>{address_details}</Text>
               ) : (
                 <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'line 2'}
+                  {'Line 2'}
                 </Text>
               )}
             </TouchableOpacity>
@@ -486,7 +489,7 @@ export default class AddShippingAddress extends React.Component {
               data={this.state.tag}
               keyExtractor={(item, index) => index.toString()}
               numColumns={3}
-              key={'THREE COLUMN'}
+              key={(item) => 'id-' + item.name}
             />
           </View>
         </View>
@@ -569,7 +572,7 @@ export default class AddShippingAddress extends React.Component {
         <ScrollView>
           <View style={styles.addAddressForm}>
             {this.renderFormDetail(
-              'Recipient',
+              'Receiver',
               fullname,
               '',
               (text) => this.onChangeName(text),

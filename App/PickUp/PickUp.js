@@ -263,7 +263,12 @@ export default class PickUp extends React.Component {
       }
 
       const order_items = item.order_items.map((item, key) => {
-        let price_string = '$' + item?.total_price || 'Free';
+        var price_string =
+          item.total_price != undefined && item.total_price > 0
+            ? `$${parseFloat(item.total_price).toFixed(2)}`
+            : item.total_price != undefined && item.total_price == 0
+            ? 'Free'
+            : '';
 
         return (
           <View style={styles.drinksView} key={key}>
@@ -312,14 +317,17 @@ export default class PickUp extends React.Component {
       });
 
       const promotions = item.promotions.map((item, key) => {
-        let promotion_discount = '';
-        // console.log('promotions', item);
+        var promotion_discount = '';
         // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
-          promotion_discount = `-$${item.promotion_value}`;
+          promotion_discount = `-$${parseFloat(item.promotion_value).toFixed(
+            2
+          )}`;
           calculate_cart_total -= item.value;
         } else if (item.value_type == 'percent') {
-          promotion_discount = `-$${item.promotion_value}`;
+          promotion_discount = `-$${parseFloat(item.promotion_value).toFixed(
+            2
+          )}`;
           calculate_cart_total -= parseFloat(
             calculate_cart_total * (item.value / 100)
           );
@@ -683,7 +691,7 @@ export default class PickUp extends React.Component {
                   />
                   <Text style={styles.orderTotalText}>
                     {item.delivery_fee > 0
-                      ? `$${item.delivery_fee}`
+                      ? `$${parseFloat(item.delivery_fee).toFixed(2)}`
                       : undefined}
                   </Text>
                 </View>
@@ -706,7 +714,9 @@ export default class PickUp extends React.Component {
                     flex: 1
                   }}
                 />
-                <Text style={styles.orderTotalText}>${item.total}</Text>
+                <Text style={styles.orderTotalText}>
+                  ${parseFloat(item.total).toFixed(2)}
+                </Text>
               </View>
             </View>
             <View style={styles.receiptSectionSeperator}>
