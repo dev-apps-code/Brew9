@@ -15,7 +15,9 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  Dimensions,
+  Animated
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
@@ -123,7 +125,15 @@ export default class AddShippingAddress extends React.Component {
           ? this.address.delivery_area
           : '',
         primary: this.address.primary == true ? 1 : 0,
-        tag: this.props.selectedShop.address_tags
+        tag: this.props.selectedShop.address_tags,
+        showArea: false,
+        tabTitles: ['Towns', 'Areas'],
+        animation: new Animated.Value(0),
+        populateTowns: false,
+        populateAreas: false,
+        chosenTown: 0,
+        chosenArea: 0,
+
       };
     } else {
       this.state = {
@@ -147,10 +157,79 @@ export default class AddShippingAddress extends React.Component {
         verification_code: '',
         gender: 2,
         genderIndex: 0,
-        tag: this.props.selectedShop.address_tags
+        tag: this.props.selectedShop.address_tags,
+        showArea: false,
+        tabTitles: ['Towns', 'Areas'],
+        animation: new Animated.Value(0),
+        populateTowns: false,
+        populateAreas: false,
+        chosenTown: 0,
+        chosenArea: 0,
       };
     }
   }
+
+  //editing here
+
+  handleOpen = () => {
+    Animated.timing(this.state.animation, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true
+    }).start();
+  };
+  handleClose = () => {
+    Animated.timing(this.state.animation, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start();
+
+    this.setState({
+      showArea: false,
+      populateTowns: true,
+      populateAreas: false,
+    });
+  };
+
+  renderRow(record) {
+    return (
+      <View>
+        <TouchableHighlight onPress={() => this._pressRow()}>
+          <View>
+            <Text>{record.nom}</Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+  }
+
+  selectTown(index) {
+    console.log('selectTown');
+    console.log(index)
+    this.setState({
+      chosenTown: index,
+      showArea: true,
+      populateTowns: false,
+      populateAreas: true,
+      
+    });
+  }
+
+  selectArea(index) {
+    console.log('selectArea');
+    console.log(index)
+    this.setState({
+      chosenArea: index,
+      delivery_area: this.state.town[this.state.chosenTown].areas[index].area
+    });
+    this.handleClose()
+    console.log("Final:")
+    console.log(this.state.town[this.state.chosenTown].areas[this.state.chosenArea].area)
+
+  }
+
+  //editing here
   onChangeName = (fullname) => {
     this.setState({ fullname });
   };
@@ -267,8 +346,12 @@ export default class AddShippingAddress extends React.Component {
       console.log('loadShopTown', eventObject);
       if (eventObject.success) {
         this.setState({
-          town: eventObject.result
+          town: eventObject.result,
+          populateTowns: true
         });
+
+        console.log('\n\ncheck here');
+        console.log(this.state.town.areas);
       }
     };
     const obj = new ShopTownRequestObject();
@@ -587,6 +670,36 @@ export default class AddShippingAddress extends React.Component {
   };
 
   render() {
+    const screenHeight = Dimensions.get('window').height;
+
+    const backdrop = {
+      transform: [
+        {
+          translateY: this.state.animation.interpolate({
+            inputRange: [0, 0.01],
+            outputRange: [screenHeight, 0],
+            extrapolate: 'clamp'
+          })
+        }
+      ],
+      opacity: this.state.animation.interpolate({
+        inputRange: [0.01, 0.5],
+        outputRange: [0, 1],
+        extrapolate: 'clamp'
+      })
+    };
+
+    const slideUp = {
+      transform: [
+        {
+          translateY: this.state.animation.interpolate({
+            inputRange: [0.01, 1],
+            outputRange: [0, -1 * screenHeight],
+            extrapolate: 'clamp'
+          })
+        }
+      ]
+    };
     let current_area = this.state.delivery_area;
     let { fullname, contact_number } = this.state;
     let primary =
@@ -617,7 +730,7 @@ export default class AddShippingAddress extends React.Component {
               (text) => this.onChangeAddress(text),
               true,
               true,
-              () => this.onSelectShippingArea()
+              () => this.handleOpen()
             )}
             {this.renderAddressForm()}
             {this.renderTag()}
@@ -647,6 +760,7 @@ export default class AddShippingAddress extends React.Component {
               />
             </View>
           </View>
+          
         </ScrollView>
         <TouchableOpacity
           onPress={() => this.onSavePressed()}
@@ -654,6 +768,75 @@ export default class AddShippingAddress extends React.Component {
         >
           <Text style={styles.saveButtonText}>SAVE</Text>
         </TouchableOpacity>
+        <Animated.View
+            style={[StyleSheet.absoluteFill, styles.cover, backdrop]}
+          >
+            <View style={[styles.sheet]}>
+              <Animated.View style={[styles.popup, slideUp]}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Text>Please Select Address</Text>
+                  <TouchableOpacity onPress={this.handleClose}>
+                    <Text>Close</Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row'
+                  }}
+                >
+                  {this.state.showArea == true ? (
+                    <Text style={{ marginRight: '3%' }}>
+                      {this.state.tabTitles[1]}
+                    </Text>
+                  ) : null}
+                  <Text
+                    style={{ borderBottomColor: 'red', borderBottomWidth: 2 }}
+                  >
+                    {this.state.tabTitles[0]}
+                  </Text>
+                </View>
+                {/* <ScrollView scrollsToTop={false}> */}
+                <ScrollView>
+                  {this.state.populateTowns
+                    ? this.state.town.map((item, key) => {
+                        return (
+                          <View style={styles.item}>
+                            <TouchableOpacity onPress={() => this.selectTown(key)}>
+                              <Text style={{ marginTop: '5%' }}>
+                                {item.name}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        );
+                      })
+                    : null}
+
+                  {this.state.populateAreas
+                    ? this.state.town[this.state.chosenTown].areas.map(
+                        (item, key) => {
+                          return (
+                            <View style={styles.item}>
+                              <TouchableOpacity onPress={() => this.selectArea(key)}>
+                                <Text style={{ marginTop: '5%' }}>
+                                  {item.area}
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          );
+                        }
+                      )
+                    : null}
+                </ScrollView>
+                {/* </ScrollView> */}
+              </Animated.View>
+            </View>
+          </Animated.View>
+        
         <Toast
           ref="toast"
           style={{ bottom: windowHeight / 2 }}
@@ -669,6 +852,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 8 * alpha,
     width: 70 * alpha
+  },
+  cover: {
+    backgroundColor: 'rgba(0,0,0,.5)'
+  },
+  sheet: {
+    position: 'absolute',
+    top: Dimensions.get('window').height,
+    left: 0,
+    right: 0,
+    height: '100%',
+    justifyContent: 'flex-end'
+  },
+  popup: {
+    backgroundColor: '#FFF',
+    marginHorizontal: 10,
+    // borderTopLeftRadius: 5,
+    // borderTopRightRadius: 5,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // paddingRight: "50%",
+    minHeight: 400,
+    maxHeight: 400,
+
+    padding: '3%'
   },
   navigationBarItem: {
     width: '100%'
