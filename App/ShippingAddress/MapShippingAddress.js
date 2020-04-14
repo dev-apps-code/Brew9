@@ -90,7 +90,7 @@ export default class MapShippingAddress extends React.Component {
 
     this.setState({
       address: navigation.state.params.addressInfo.address,
-      address_detail: navigation.state.params.addressInfo.address_detail
+      address_details: navigation.state.params.addressInfo.address_detail
     });
   }
   onBackPressed = () => {
@@ -205,7 +205,7 @@ export default class MapShippingAddress extends React.Component {
 
   renderAddAddressMode = () => {
     let address = '';
-    let address_detail = '';
+    let address_details = '';
     return (
       <Animated.View style={{ flex: 1 }}>
         <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
@@ -265,10 +265,10 @@ export default class MapShippingAddress extends React.Component {
                   keyboardType="default"
                   clearButtonMode="always"
                   autoCorrect={false}
-                  value={address_detail}
+                  value={address_details}
                   placeholder={'Enter Detailed Location'}
-                  onChangeText={(address_detail) => {
-                    this.setState({ address_detail });
+                  onChangeText={(address_details) => {
+                    this.setState({ address_details });
                   }}
                   style={styles.textInput}
                 />
@@ -358,7 +358,7 @@ export default class MapShippingAddress extends React.Component {
                   value={address_detail}
                   placeholder={'Unit # / Floor / Block'}
                   onChangeText={(address_detail) => {
-                    this.setState({ address_detail });
+                    this.setState({ address_details });
                   }}
                   style={styles.textInput}
                 />
