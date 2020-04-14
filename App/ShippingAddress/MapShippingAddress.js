@@ -266,7 +266,7 @@ export default class MapShippingAddress extends React.Component {
                   clearButtonMode="always"
                   autoCorrect={false}
                   value={address_details}
-                  placeholder={'Enter Detailed Location'}
+                  placeholder={'Unit # / Floor / Block '}
                   onChangeText={(address_details) => {
                     this.setState({ address_details });
                   }}
@@ -375,11 +375,11 @@ export default class MapShippingAddress extends React.Component {
       );
   };
 
-  renderSearchForm = () => (
+  renderSearchForm = (autofocus) => (
     <GooglePlacesAutocomplete
       placeholder="Search"
       minLength={2}
-      autoFocus={false}
+      autoFocus={autofocus}
       enablePoweredByContainer={false}
       autoCorrect={false}
       returnKeyType={'search'}
@@ -425,8 +425,6 @@ export default class MapShippingAddress extends React.Component {
         key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
         components: 'country:bn'
       }}
-      currentLocation={true}
-      currentLocationLabel="Current location"
       styles={{
         container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
         textInputContainer: {
@@ -464,7 +462,8 @@ export default class MapShippingAddress extends React.Component {
       return this.renderAddAddressMode();
     }
 
-    return this.renderSearchForm();
+    let auto_focus = this.state.isAddAddressMode ? true : false
+    return this.renderSearchForm(auto_focus);
   }
 }
 
