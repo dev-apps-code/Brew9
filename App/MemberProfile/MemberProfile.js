@@ -832,12 +832,12 @@ export default class MemberProfile extends React.Component {
               </View>
             </View>
             <View style={styles.birthdayView}>
+              <View style={styles.seperatorView} />
               <Text style={styles.birthdayText}>Birthday</Text>
               <DatePicker
                 date={this.state.dob}
                 mode="date"
                 placeholder="Birthday"
-                placeholderText={styles.birthdayDatePicker}
                 format="DD-MM-YYYY"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -846,6 +846,12 @@ export default class MemberProfile extends React.Component {
                 style={styles.birthdayDatePicker}
                 disabled={this.state.member_have_dob}
                 customStyles={{
+                  placeholderText: {
+                    fontFamily: NON_TITLE_FONT,
+                    fontSize: 13 * fontAlpha,
+                    color: 'rgb(135, 135, 135)'
+                  },
+
                   dateText: {
                     fontFamily: NON_TITLE_FONT,
                     fontSize: 13 * fontAlpha,
