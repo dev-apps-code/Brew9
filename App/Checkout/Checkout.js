@@ -1957,7 +1957,7 @@ export default class Checkout extends React.Component {
 
     return (
       <View style={styles.deliveryAddressView}>
-        <TouchableOpacity style={styles.voucherButton} onPress={() => this.addShippingAddress()}>
+        <View style={styles.voucherButton}>
           <View style={styles.drinksView}>
             <View style={[styles.deliveryAddressDetail, { flex: 1 }]}>
               <View
@@ -2004,7 +2004,7 @@ export default class Checkout extends React.Component {
               )}
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
         <View>
           <View
             style={{
