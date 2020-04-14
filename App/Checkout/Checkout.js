@@ -565,7 +565,10 @@ export default class Checkout extends React.Component {
   addFirstShippingAddress = () => {
     const { navigation } = this.props;
     this.setState({ visible: false });
-    navigation.navigate('AddShippingAddress', { params: null, initialAddress: true });
+    navigation.navigate('AddShippingAddress', {
+      params: null,
+      initialAddress: true
+    });
   };
 
   onCancelVoucher = (item) => {
@@ -1745,7 +1748,8 @@ export default class Checkout extends React.Component {
     var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
     var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
-    if (pick_up_status == 'Now') formatted_time = OPTION_NOW_MESSAGE;
+    if (pick_up_status == 'Now' && delivery)
+      formatted_time = OPTION_NOW_MESSAGE;
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
