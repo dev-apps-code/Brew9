@@ -258,17 +258,19 @@ export default class Home extends React.Component {
   // }
   getLocation = async () => {
     const { dispatch } = this.props;
+    
     try {
       const response = await Permissions.getAsync(Permissions.LOCATION);
-      if (response.status !== 'granted') {
-        if (response.status === 'denied') {
-          if (Platform.OS == 'android') {
-            AsyncStorage.setItem('location permission', response.status);
-          }
-        } else {
-          const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (response.status === 'denied') {
+        if (Platform.OS == 'android') {
+          AsyncStorage.setItem('location permission', response.status);
         }
-      } else {
+        return
+      }
+
+      if (response.status !== 'granted') {     
+          const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        } else {
         Location.watchPositionAsync(
           {
             distanceInterval: 100,

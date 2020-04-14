@@ -15,7 +15,9 @@ import {
   Platform,
   TextInput,
   KeyboardAvoidingView,
-  AsyncStorage
+  AsyncStorage,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
@@ -84,21 +86,26 @@ export default class MapShippingAddress extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       latitude: 0,
       longitude: 0,
       error: null,
       address: '',
-      address_detail: '',
+      address_details: '',
     };
   }
 
- 
-
   componentDidMount() {
+    const { navigation } = this.props;
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
+    });
+    console.log(navigation.state.params.addressInfo);
+
+    this.setState({
+      address: navigation.state.params.addressInfo.address,
+      address_detail: navigation.state.params.addressInfo.address_detail
     });
   }
   onBackPressed = () => {
@@ -125,16 +132,15 @@ export default class MapShippingAddress extends React.Component {
     );
   };
 
- 
   onChangeAddress = (address) => {
     this.setState({
       address
     });
   };
   
-  onChangeAddressDetail = (address_detail) => {
+  onChangeAddressDetail = (address_details) => {
     this.setState({
-      address_detail
+      address_details
     });
   };
   // onChangeCountry = (country) => {
@@ -159,14 +165,15 @@ export default class MapShippingAddress extends React.Component {
   getAddressDetails = (data, details) => {
     if (details.formatted_address != null){
       
-      var address_detail = details.formatted_address.split(',');
+      var address_details = details.formatted_address.split(',');
       var address = details.formatted_address
-      var poscode_city = address_detail[1].split(' ');
+      var poscode_city = address_details[1].split(' ');
       var postal_code = poscode_city[1];
       var city = poscode_city[2];
-      var state = address_detail[2];
-      var country = address_detail[3];
-      console.log('address_detail', details);
+      var state = address_details[2];
+      var country = address_details[3];
+      console.log('address_details', details);
+
       this.setState(
         {
           address,
@@ -174,18 +181,17 @@ export default class MapShippingAddress extends React.Component {
           city,
           state,
           country,
-          address_detail: '',
+          address_details: '',
         },
         () => console.log(this.state)
       );
     }
-    
   };
 
   onSavePressed = () => {
     const { navigation } = this.props;
     let {
-      address_detail,
+      address_details,
       address,
       postal_code,
       city,
@@ -198,7 +204,7 @@ export default class MapShippingAddress extends React.Component {
     let formcheck = true;
     if (formcheck) {
       const shippingAddress = {
-        address_detail,
+        address_details,
         address,
         postal_code,
         city,
@@ -215,90 +221,95 @@ export default class MapShippingAddress extends React.Component {
   renderAddressForm = () => {
     let {
       address,
-      address_detail,
+      address_details,
       postal_code,
       city,
       state,
-      country,
+      country
     } = this.state;
     return (
-      <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-        <TouchableOpacity style={styles.clearView}  onPress={() => {
-                this.setState({ address: '' });
-              }} >
-          <Text style={styles.clearText}>Clear</Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            // marginTop: 20 * alpha,
-            marginHorizontal: 10 * alpha,
-            borderRadius: 5 * alpha,
-            backgroundColor: 'white'
-          }}
-        >
-          <View
-            style={{
-              paddingVertical: 20 * alpha,
-              flexDirection: 'row',
-              paddingHorizontal: 20 * alpha,
-              justifyContent: 'center',
-              alignItems: 'center'
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+        <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
+          <TouchableOpacity
+            style={styles.clearView}
+            onPress={() => {
+              this.setState({ address: '' });
             }}
           >
-            <View style={{ flex: 1 }}>
-              <Text style={styles.title}>Address Line 1</Text>
-              <TextInput
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                value={address}
-                onChangeText={(address) => {
-                  this.setState({ address });
-                }}
-                style={styles.textInput}
-              />
-            </View>         
-          </View>
-          <Image
-            source={require('./../../assets/images/line-17.png')}
-            style={styles.seperatorImage}
-          />
+            <Text style={styles.clearText}>Clear</Text>
+          </TouchableOpacity>
           <View
             style={{
-              paddingVertical: 10 * alpha,
-              paddingHorizontal: 20 * alpha,
-              marginTop: 10 * alpha
+              // marginTop: 20 * alpha,
+              marginHorizontal: 10 * alpha,
+              borderRadius: 5 * alpha,
+              backgroundColor: 'white'
             }}
           >
-            <Text style={styles.title}>Address Line 2</Text>
-            <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
-              <TextInput
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                placeholder={'Unit # / Floor / Block'}
-                onChangeText={(address_detail) => {
-                  this.setState({ address_detail });
-                }}
-                style={styles.textInput}
-              />
+            <View
+              style={{
+                paddingVertical: 20 * alpha,
+                flexDirection: 'row',
+                paddingHorizontal: 20 * alpha,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={styles.title}>Address Line 1</Text>
+                <TextInput
+                  keyboardType="default"
+                  clearButtonMode="always"
+                  autoCorrect={false}
+                  value={address}
+                  onChangeText={(address) => {
+                    this.setState({ address });
+                  }}
+                  style={styles.textInput}
+                />
+              </View>
+            </View>
+            <Image
+              source={require('./../../assets/images/line-17.png')}
+              style={styles.seperatorImage}
+            />
+            <View
+              style={{
+                paddingVertical: 10 * alpha,
+                paddingHorizontal: 20 * alpha,
+                marginTop: 10 * alpha
+              }}
+            >
+              <Text style={styles.title}>Address Line 2</Text>
+              <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+                <TextInput
+                  keyboardType="default"
+                  clearButtonMode="always"
+                  autoCorrect={false}
+                  value={address_detail}
+                  placeholder={'Unit # / Floor / Block'}
+                  onChangeText={(address_detail) => {
+                    this.setState({ address_detail });
+                  }}
+                  style={styles.textInput}
+                />
+              </View>
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => this.onSavePressed()}
+            style={styles.saveButton}
+          >
+            <Text style={styles.saveButtonText}>SAVE</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => this.onSavePressed()}
-          style={styles.saveButton}
-        >
-          <Text style={styles.saveButtonText}>SAVE</Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
   render() {
-  
     let { address } = this.state;
 
-    return (!address || address.length == 0) ? (
+    return !address || address.length == 0 ? (
       <GooglePlacesAutocomplete
         placeholder="Search"
         minLength={2} // minimum length of text to search
@@ -333,10 +344,10 @@ export default class MapShippingAddress extends React.Component {
         getDefaultValue={() => ''}
         query={{
           key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
-          components: "country:bn",
+          components: 'country:bn'
         }}
         currentLocation={true}
-        currentLocationLabel="Current location"       
+        currentLocationLabel="Current location"
         styles={{
           container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
           textInputContainer: {
