@@ -23,3 +23,7 @@ export function review(authtoken, object) {
 export function deliveryFee(authtoken, object) {
    return getMethod(authtoken, object)
 }
+
+export function shopTown(authtoken, object) {
+   return getMethod(authtoken, object)
+}
