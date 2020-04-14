@@ -574,7 +574,7 @@ export default class AddShippingAddress extends React.Component {
             {this.renderFormDetail(
               'Receiver',
               fullname,
-              '',
+              'Name',
               (text) => this.onChangeName(text),
               true
             )}
@@ -582,7 +582,7 @@ export default class AddShippingAddress extends React.Component {
             {this.renderFormDetail(
               'Phone No.',
               contact_number,
-              '01191291',
+              '8851234',
               (text) => this.onChangeContactNo(text),
               true
             )}
