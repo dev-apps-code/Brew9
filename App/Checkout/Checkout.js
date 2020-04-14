@@ -565,10 +565,7 @@ export default class Checkout extends React.Component {
   addFirstShippingAddress = () => {
     const { navigation } = this.props;
     this.setState({ visible: false });
-    navigation.navigate('AddShippingAddress', {
-      params: null,
-      initialAddress: true
-    });
+    navigation.navigate('AddShippingAddress', { params: null, initialAddress: true });
   };
 
   onCancelVoucher = (item) => {
@@ -1597,10 +1594,10 @@ export default class Checkout extends React.Component {
               />
             </TouchableOpacity>
 
-            <Image
+            {/* <Image
               source={require('./../../assets/images/dotted-line.png')}
               style={styles.dottedLineImage}
-            />
+            /> */}
           </View>
         </View>
       );
@@ -1748,8 +1745,7 @@ export default class Checkout extends React.Component {
     var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
     var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
-    if (pick_up_status == 'Now' && delivery)
-      formatted_time = OPTION_NOW_MESSAGE;
+    if (pick_up_status == 'Now') formatted_time = OPTION_NOW_MESSAGE;
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
@@ -1871,12 +1867,12 @@ export default class Checkout extends React.Component {
                 />
               </TouchableOpacity>
             )}
-            {/* {item.id != last_item.id && ( */}
-            <Image
+             {item.id != last_item.id && ( 
+             <Image
               source={require('./../../assets/images/dotted-line.png')}
               style={styles.dottedLineImage}
-            />
-            {/* )} */}
+            /> 
+             )} 
           </View>
         </View>
       );
@@ -1909,8 +1905,12 @@ export default class Checkout extends React.Component {
           : [];
 
       return (
-        <View style={[styles.drinksView]} key={key}>
+        <View
+          style={[styles.drinksView, { marginVertical: 10 * alpha }]}
+          key={key}
+        >
           <View
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -2028,7 +2028,7 @@ export default class Checkout extends React.Component {
                 // paddingHorizontal: 10 * alpha
               }}
             >
-              <View style={{ flex: 1 }}>
+              <View>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description && (
                   <Text style={styles.deliveryNoted}>
@@ -2160,15 +2160,13 @@ export default class Checkout extends React.Component {
                 />
                 <View style={styles.sectionSeperatorView} />
               </View>
-              <View style={{ backgroundColor: 'rgb(245,245,245)' }}>
-                {this.renderOrderItems(cart, promotions)}
-                <Image
-                  source={require('./../../assets/images/dotted-line.png')}
-                  style={styles.dottedLineImage}
-                />
-                {this.renderPromotions(promotions)}
-              </View>
 
+              {this.renderOrderItems(cart, promotions)}
+              <Image
+                source={require('./../../assets/images/dotted-line.png')}
+                style={styles.dottedLineImage}
+              />
+              {this.renderPromotions(promotions)}
               <View style={styles.receiptSectionSeperator}>
                 <Image
                   source={require('./../../assets/images/curve_in_background.png')}
@@ -2176,11 +2174,9 @@ export default class Checkout extends React.Component {
                 />
                 <View style={styles.sectionSeperatorView} />
               </View>
-              <View style={{ backgroundColor: 'rgb(245,245,245)' }}>
-                {this.renderVoucherSection(vouchers_to_use)}
-                {this.renderPaymentSection()}
-                {this.renderPickupTime()}
-              </View>
+              {this.renderVoucherSection(vouchers_to_use)}
+              {this.renderPaymentSection()}
+               {this.renderPickupTime()} 
               <View style={styles.receiptSectionSeperator}>
                 <Image
                   source={require('./../../assets/images/curve_in_background.png')}
@@ -2188,14 +2184,11 @@ export default class Checkout extends React.Component {
                 />
                 <View style={styles.sectionSeperatorView} />
               </View>
-              <View style={{ backgroundColor: 'rgb(245,245,245)' }}>
-                {delivery
-                  ? selected_address != undefined
-                    ? this.renderDeliveryAddress(selected_address)
-                    : this.renderDeliveryAddress(false)
-                  : undefined}
-              </View>
-
+              {delivery
+                ? selected_address != undefined
+                  ? this.renderDeliveryAddress(selected_address)
+                  : this.renderDeliveryAddress(false)
+                : undefined}
               {delivery && (
                 <View style={styles.receiptSectionSeperator}>
                   <Image
@@ -3781,7 +3774,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   spacer: {
-    // marginBottom: 10 * alpha
+    marginBottom: 10 * alpha
   },
   dottedLineImage: {
     backgroundColor: 'transparent',
@@ -3825,15 +3818,7 @@ const styles = StyleSheet.create({
     height: 1 * alpha,
     left: 20 * alpha
   },
-  menuRowLine2View: {
-    backgroundColor: 'rgb(245, 245, 245)',
-    width: 375 * alpha,
-    height: 1 * alpha,
-    left: 20 * alpha,
-    position: 'absolute',
-    alignSelf: 'center',
-    bottom: 200 * alpha
-  },
+ 
 
   menuRowArrowImage: {
     width: 10 * alpha,
