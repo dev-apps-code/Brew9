@@ -296,50 +296,16 @@ export default class MapShippingAddress extends React.Component {
       country
     } = this.state;
     return (
-      <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-        <TouchableOpacity
-          style={styles.clearView}
-          onPress={() => {
-            this.setState({ address: '' });
-          }}
-        >
-          <Text style={styles.clearText}>Clear</Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            // marginTop: 20 * alpha,
-            marginHorizontal: 10 * alpha,
-            borderRadius: 5 * alpha,
-            backgroundColor: 'white'
-          }}
-        >
-          <View
-            style={{
-              paddingVertical: 20 * alpha,
-              flexDirection: 'row',
-              paddingHorizontal: 20 * alpha,
-              justifyContent: 'center',
-              alignItems: 'center'
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+        <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
+          <TouchableOpacity
+            style={styles.clearView}
+            onPress={() => {
+              this.setState({ address: '' });
             }}
           >
-            <View style={{ flex: 1 }}>
-              <Text style={styles.title}>Address Line 1</Text>
-              <TextInput
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                value={address}
-                onChangeText={(address) => {
-                  this.setState({ address });
-                }}
-                style={styles.textInput}
-              />
-            </View>
-          </View>
-          <Image
-            source={require('./../../assets/images/line-17.png')}
-            style={styles.seperatorImage}
-          />
+            <Text style={styles.clearText}>Clear</Text>
+          </TouchableOpacity>
           <View
             style={{
               // marginTop: 20 * alpha,

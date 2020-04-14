@@ -232,13 +232,13 @@ export default class AddShippingAddress extends React.Component {
       delivery_area
     } = this.state;
     if (!fullname) {
-      this.refs.toast.show('Please select a fullname', 500);
+      this.refs.toast.show('Please enter receiver name', 500);
       return false;
     } else if (!address) {
-      this.refs.toast.show('Please select your address', 500);
+      this.refs.toast.show('Please enter your address', 500);
       return false;
     } else if (!contact_number) {
-      this.refs.toast.show('Please enter your contact number', 500);
+      this.refs.toast.show('Please enter contact number of the receiver', 500);
       return false;
     }
 
@@ -574,7 +574,7 @@ export default class AddShippingAddress extends React.Component {
             {this.renderFormDetail(
               'Receiver',
               fullname,
-              '',
+              'Name',
               (text) => this.onChangeName(text),
               true
             )}
@@ -582,7 +582,7 @@ export default class AddShippingAddress extends React.Component {
             {this.renderFormDetail(
               'Phone No.',
               contact_number,
-              '01191291',
+              '8851234',
               (text) => this.onChangeContactNo(text),
               true
             )}

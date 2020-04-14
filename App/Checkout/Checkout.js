@@ -418,7 +418,7 @@ export default class Checkout extends React.Component {
     var tomorrow = Moment().add(1, 'days');
     var selected_date = option == 2 ? tomorrow : today;
 
-    var pick_up_status = 'Later';
+    var pick_up_status = '';
     pick_up_status = option == 2 ? 'Tomorrow' : pick_up_status;
 
     hour = this.formatSelectedHour(hour);

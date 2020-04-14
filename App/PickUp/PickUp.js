@@ -226,7 +226,7 @@ export default class PickUp extends React.Component {
       let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
 
       // Pick up title
-      let pick_up_title = item.delivery_method ? 'Delivery' : 'Pickup';
+      var pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
 
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
@@ -367,9 +367,17 @@ export default class PickUp extends React.Component {
         );
         // }
       });
+      var queue_no_remarks = item.queue_no 
 
+
+      if (!item.delivery_method && !item.paid){
+        queue_no_remarks = "-"
+      }
       const voucher_items = item.voucher_items.map((voucherItem, key) => {
         let voucher_discount = '';
+
+        /* Queue no should only not show when item is pickup and not paid  */
+    
 
         return (
           <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
@@ -439,7 +447,7 @@ export default class PickUp extends React.Component {
                 <View style={styles.queueHeaderBlock}>
                   <Text style={styles.queueheaderText}>Order Number</Text>
                   <Text style={styles.queuenumberText}>
-                    {item.paid == false ? '-' : item.queue_no}
+                    {queue_no_remarks}
                   </Text>
                 </View>
                 <View style={styles.queueHeaderBlock}>
