@@ -372,7 +372,7 @@ export default class MapShippingAddress extends React.Component {
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
-    );
+      );
   };
 
   renderSearchForm = () => (
@@ -456,66 +456,13 @@ export default class MapShippingAddress extends React.Component {
   );
 
   render() {
-    let { address } = this.state;
+    if (this.state.address && this.state.address.length > 0) {
+      return this.renderAddressForm();
+    }
 
-    return !address || address.length == 0 ? (
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        minLength={2} // minimum length of text to search
-        autoFocus={false}
-        autoCorrect={false}
-        returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-        keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
-        listViewDisplayed="auto" // true/false/undefined
-        fetchDetails={true}
-        // renderDescription={(row) => row.description} // custom description render
-        renderDescription={(row) =>
-          row.description || row.formatted_address || row.name
-        }
-        renderLeftButton={() => (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginLeft: 10 * alpha,
-              width: 22 * alpha
-            }}
-          >
-            <Image
-              source={require('./../../assets/images/location.png')}
-              style={styles.locationIcon}
-            />
-          </View>
-        )}
-        onPress={(data, details = null) => {
-          // 'details' is provided when fetchDetails = true
-          this.getAddressDetails(data, details);
-          console.log('fetchDetails', data, details);
-        }}
-        getDefaultValue={() => ''}
-        query={{
-          key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
-          components: 'country:bn'
-        }}
-        currentLocation={true}
-        currentLocationLabel="Current location"
-        nearbyPlacesAPI='GoogleReverseGeocoding'
-        styles={{
-          container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
-          textInputContainer: {
-            marginHorizontal: 15 * alpha,
-            backgroundColor: 'white',
-            marginVertical: 10 * alpha,
-            borderRadius: 5 * alpha,
-            borderTopWidth: 0,
-            borderBottomWidth: 0
-          },
-          textInput: {
-            marginLeft: 0
-          },
-          row: {
-            backgroundColor: 'white'
-          },
+    if (this.state.isAddAddressMode) {
+      return this.renderAddAddressMode();
+    }
 
     return this.renderSearchForm();
   }
