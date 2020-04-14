@@ -176,6 +176,7 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.state.delivery_area,
         primary: primary
       };
+      console.log(shippingAddress)
       this.loadUpdateProfile(shippingAddress);
     }
   };

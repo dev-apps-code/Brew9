@@ -198,6 +198,7 @@ export default class MapShippingAddress extends React.Component {
         longitude,
         delivery_area
       };
+      console.log(shippingAddress)
       navigation.state.params.returnAddress(shippingAddress);
       navigation.navigate('AddShippingAddress');
     }
