@@ -367,17 +367,17 @@ export default class PickUp extends React.Component {
         );
         // }
       });
+      var queue_no_remarks = item.queue_no 
 
+
+      if (!item.delivery_method && !item.paid){
+        queue_no_remarks = "-"
+      }
       const voucher_items = item.voucher_items.map((voucherItem, key) => {
         let voucher_discount = '';
 
         /* Queue no should only not show when item is pickup and not paid  */
-        var queue_no_remarks = item.queue_no 
-
-
-        if (!item.delivery_method && !item.paid){
-          queue_no_remarks = "-"
-        }
+    
 
         return (
           <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
