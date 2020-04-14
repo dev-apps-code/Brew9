@@ -137,7 +137,6 @@ export default class MapShippingAddress extends React.Component {
       address
     });
   };
-  
   onChangeAddressDetail = (address_details) => {
     this.setState({
       address_details
@@ -228,6 +227,7 @@ export default class MapShippingAddress extends React.Component {
       country
     } = this.state;
     return (
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
         <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
           <TouchableOpacity
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-
+    paddingBottom: 2 * alpha,
     textAlign: 'left'
   },
   text: {
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: 'transparent',
     padding: 0,
-    color: 'black',
+    color: 'rgb(128,128,128)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',

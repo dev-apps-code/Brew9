@@ -417,7 +417,7 @@ export default class AddShippingAddress extends React.Component {
                 <Text style={[styles.textInput]}>{address}</Text>
               ) : (
                 <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'line 1'}
+                  {'Line 1'}
                 </Text>
               )}
               <Image
@@ -448,7 +448,7 @@ export default class AddShippingAddress extends React.Component {
                 <Text style={[styles.textInput]}>{address_details}</Text>
               ) : (
                 <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'line 2'}
+                  {'Line 2'}
                 </Text>
               )}
             </TouchableOpacity>
@@ -570,7 +570,7 @@ export default class AddShippingAddress extends React.Component {
         <ScrollView>
           <View style={styles.addAddressForm}>
             {this.renderFormDetail(
-              'Recipient',
+              'Receiver',
               fullname,
               '',
               (text) => this.onChangeName(text),
