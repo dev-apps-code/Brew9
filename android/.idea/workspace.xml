@@ -200,7 +200,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
-<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/Pods/Pods.xcodeproj/xcuserdata/alex.xcuserdatad/xcschemes/xcschememanagement.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/Pods/Pods.xcodeproj/xcuserdata/alex.xcuserdatad/xcschemes/xcschememanagement.plist" afterDir="false" />
@@ -208,24 +207,6 @@
       <change beforePath="$PROJECT_DIR$/../ios/brew9.xcworkspace/xcuserdata/alex.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9.xcworkspace/xcuserdata/alex.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.plist" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/shell-app-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/shell-app-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/assets/shell-app.bundle" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/shell-app.bundle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/AppConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/AppConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/host/exp/exponent/generated/DetachBuildConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/lint-cache/maven.google/com/android/installreferrer/group-index.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/lint-cache/maven.google/com/android/installreferrer/group-index.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/lint-cache/maven.google/com/google/android/gms/group-index.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/lint-cache/maven.google/com/google/android/gms/group-index.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/intermediates/lint-cache/maven.google/master-index.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/intermediates/lint-cache/maven.google/master-index.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app.json" beforeDir="false" afterPath="$PROJECT_DIR$/../app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9.xcworkspace/xcuserdata/minghuifoo.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9.xcworkspace/xcuserdata/minghuifoo.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.plist.bak" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/EXBuildConstants.plist.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/shell-app-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/shell-app-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/brew9/Supporting/shell-app.bundle" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/brew9/Supporting/shell-app.bundle" afterDir="false" />
->>>>>>> f2bdf1c7cb6ce17f171dc8ed2cfdbf4d360279cc
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -264,14 +245,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-<<<<<<< HEAD
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
-=======
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
->>>>>>> f2bdf1c7cb6ce17f171dc8ed2cfdbf4d360279cc
           <expand>
             <path>
               <item name="android" type="b2602c69:ProjectViewProjectNode" />
@@ -293,10 +269,6 @@
         </subPane>
       </pane>
       <pane id="AndroidView" />
-<<<<<<< HEAD
-=======
-      <pane id="PackagesPane" />
->>>>>>> f2bdf1c7cb6ce17f171dc8ed2cfdbf4d360279cc
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -411,15 +383,9 @@
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="TODO" order="1" />
       <window_info anchor="bottom" id="Terminal" order="2" />
-<<<<<<< HEAD
       <window_info active="true" anchor="bottom" id="Event Log" order="3" sideWeight="0.5056543" side_tool="true" visible="true" weight="0.25159237" />
       <window_info anchor="bottom" id="Build" order="4" sideWeight="0.49434572" visible="true" weight="0.25159237" />
       <window_info anchor="bottom" id="Run" order="5" weight="0.32961783" />
-=======
-      <window_info active="true" anchor="bottom" id="Event Log" order="3" sideWeight="0.5064851" side_tool="true" visible="true" weight="0.25214198" />
-      <window_info anchor="bottom" id="Build" order="4" sideWeight="0.49351493" visible="true" weight="0.25214198" />
-      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.4993515" weight="0.32925338" />
->>>>>>> f2bdf1c7cb6ce17f171dc8ed2cfdbf4d360279cc
       <window_info anchor="bottom" id="Logcat" order="6" weight="0.32961783" />
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="Debug" order="8" />

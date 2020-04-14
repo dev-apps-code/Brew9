@@ -92,9 +92,6 @@ export default class ShippingAddress extends React.Component {
       props.navigation.state.params != null
         ? props.navigation.state.params.selected_address
         : null;
-
-    console.log('selected addres si passed', props.navigation.state.params);
-    console.log('selected addres si passed', selected_address);
     this.state = {
       delivery_options: 'pickup',
       selected_address: selected_address,
@@ -222,25 +219,25 @@ export default class ShippingAddress extends React.Component {
             />
             <View style={styles.messageView}>
               <Text style={styles.youHavenTMakeAnyText}>
-                Ooops..You haven't add any address yet{' '}
+                Oops. You haven't add any address yet{' '}
               </Text>
             </View>
             <TouchableOpacity
               onPress={this.onAddAddress}
-              // style={styles.noOrderAddButton}
+              style={styles.noOrderAddButton}
             >
-              <Image
+              {/* <Image
                 source={require('./../../assets/images/save_button.png')}
                 style={[
-                  // styles.addButtonImage,
+                  styles.addButtonImage,
                   {
                     height: 40 * alpha,
                     width: 150 * alpha,
                     marginTop: 20 * alpha
                   }
                 ]}
-              />
-              {/* <Text style={styles.addButtonText}>Add Address</Text> */}
+              /> */}
+              <Text style={styles.addButtonText}>Add Address</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -270,10 +267,10 @@ export default class ShippingAddress extends React.Component {
               </ScrollView>
               <TouchableOpacity onPress={this.onAddAddress}>
                 <View style={styles.addButtonView}>
-                  <Image
+                  {/* <Image
                     source={require('./../../assets/images/add.png')}
                     style={styles.addButtonImage}
-                  />
+                  /> */}
                   <Text style={styles.addAddressText}>Add Address</Text>
                 </View>
               </TouchableOpacity>

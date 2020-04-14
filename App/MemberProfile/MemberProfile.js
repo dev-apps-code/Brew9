@@ -603,7 +603,7 @@ export default class MemberProfile extends React.Component {
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
-    let defaultAddress = default_address?.address?.trim() || 'Address';
+    let defaultAddress = default_address?.address?.trim() || 'Address (optional)';
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -832,12 +832,12 @@ export default class MemberProfile extends React.Component {
               </View>
             </View>
             <View style={styles.birthdayView}>
+              <View style={styles.seperatorView} />
               <Text style={styles.birthdayText}>Birthday</Text>
               <DatePicker
                 date={this.state.dob}
                 mode="date"
                 placeholder="Birthday"
-                placeholderText={styles.birthdayDatePicker}
                 format="DD-MM-YYYY"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
@@ -846,6 +846,12 @@ export default class MemberProfile extends React.Component {
                 style={styles.birthdayDatePicker}
                 disabled={this.state.member_have_dob}
                 customStyles={{
+                  placeholderText: {
+                    fontFamily: NON_TITLE_FONT,
+                    fontSize: 13 * fontAlpha,
+                    color: 'rgb(135, 135, 135)'
+                  },
+
                   dateText: {
                     fontFamily: NON_TITLE_FONT,
                     fontSize: 13 * fontAlpha,
@@ -896,7 +902,7 @@ export default class MemberProfile extends React.Component {
                     alignItems: 'center'
                   }}
                 >
-                  <Text style={styles.phoneNumberText}>Address</Text>
+                  <Text style={styles.phoneNumberText}>Delivery Address</Text>
                   <TouchableOpacity
                     onPress={this.onChangeAddress}
                     style={{
