@@ -90,7 +90,7 @@ export default class MapShippingAddress extends React.Component {
 
     this.setState({
       address: navigation.state.params.addressInfo.address,
-      address_details: navigation.state.params.addressInfo.address_detail
+      address_details: navigation.state.params.addressInfo.address_details
     });
   }
   onBackPressed = () => {
@@ -198,6 +198,7 @@ export default class MapShippingAddress extends React.Component {
         longitude,
         delivery_area
       };
+      console.log(shippingAddress)
       navigation.state.params.returnAddress(shippingAddress);
       navigation.navigate('AddShippingAddress');
     }
@@ -354,9 +355,9 @@ export default class MapShippingAddress extends React.Component {
                   keyboardType="default"
                   clearButtonMode="always"
                   autoCorrect={false}
-                  value={address_detail}
+                  value={address_details}
                   placeholder={'Unit # / Floor / Block'}
-                  onChangeText={(address_detail) => {
+                  onChangeText={(address_details) => {
                     this.setState({ address_details });
                   }}
                   style={styles.textInput}
