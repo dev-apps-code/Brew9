@@ -213,55 +213,59 @@ export default class PickUp extends React.Component {
   }
 
   renderQueueView(current_order) {
-    const { selectedShop } = this.props;
+    // create key value map for response messages
+    const responses = new Map();
+    this.props.selectedShop?.response_message?.map((i) => {
+      responses.set(i.key, i.text);
+    });
+
     const queues = current_order.map((item, key) => {
-      var claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
-      var today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
-      var claim_day = claim_time != today ? 'TOMORROW' : '';
+      let claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
+      let today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
+      let claim_day = claim_time != today ? 'TOMORROW' : '';
       let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
 
       // Pick up title
       var pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
 
       // Set progress bar values
-      var progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
-      var progress = progressValues[item.status] || 0;
+      let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
+      let progress = progressValues[item.status] || 0;
 
-      var delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
-      var calculate_cart_total = cart_total;
+      let delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
+      let calculate_cart_total = cart_total;
 
-      var paid_order_message =
-        'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable';
-      var unpaid_order_message =
+      // Suggesting this must be added to a default values
+      let paid_order_message =
+        'Order must be collected within 30 minutes of collection time. ' +
+        'Otherwise it will be canceled and non-refundable';
+
+      let unpaid_order_message =
         'Your order will be processed upon receiving payment.';
 
-      if (selectedShop.response_message != undefined) {
-        if (item.paid == true) {
-          paid_response = _.find(selectedShop.response_message, function (obj) {
-            return obj.key === 'Not Collected Order';
-          });
+      let remarks = '';
+      if (item.delivery_method) {
+        let default_remark =
+          'Your order is now in process and will be delivered to ' +
+          'you estimated 30 minutes.';
 
-          if (paid_response != undefined) {
-            paid_order_message = paid_response.text;
-          }
-        } else {
-          unpaid_response = _.find(selectedShop.response_message, function (
-            obj
-          ) {
-            return obj.key === 'Pending Payment (Remarks)';
-          });
-          if (unpaid_response != undefined) {
-            unpaid_order_message = unpaid_response.text;
+        remarks = responses.get('Delivery Remark') || default_remark;
+      } else {
+        if (responses.size > 0) {
+          if (item.paid == true) {
+            paid_response = responses.get('Not Collected Order');
+          } else {
+            unpaid_response = responses.get('Pending Payment (Remarks)');
           }
         }
-      }
 
-      var remarks = item.paid ? paid_order_message : unpaid_order_message;
+        remarks = item.paid ? paid_order_message : unpaid_order_message;
+      }
 
       const order_items = item.order_items.map((item, key) => {
         var price_string =
           item.total_price != undefined && item.total_price > 0
-            ? `$${item.total_price}`
+            ? `$${parseFloat(item.total_price).toFixed(2)}`
             : item.total_price != undefined && item.total_price == 0
             ? 'Free'
             : '';
@@ -299,14 +303,14 @@ export default class PickUp extends React.Component {
                 <Text style={styles.productQuantityText}>x{item.quantity}</Text>
 
                 <Text style={styles.productPriceText}>{price_string}</Text>
-                {item.order_items != null &&
-                  key < item.order_items.length - 1 && (
-                    <Image
-                      source={require('./../../assets/images/dotted-line.png')}
-                      style={styles.dottedLineImage}
-                    />
-                  )}
               </View>
+              {/* {item.order_items != null &&
+                key < item.order_items.length - 1 && ( */}
+              <Image
+                source={require('./../../assets/images/dotted-line.png')}
+                style={styles.dottedLineImage}
+              />
+              {/* )} */}
             </View>
           </View>
         );
@@ -314,13 +318,16 @@ export default class PickUp extends React.Component {
 
       const promotions = item.promotions.map((item, key) => {
         var promotion_discount = '';
-        console.log('promotions', item);
         // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
-          promotion_discount = `-$${item.promotion_value}`;
+          promotion_discount = `-$${parseFloat(item.promotion_value).toFixed(
+            2
+          )}`;
           calculate_cart_total -= item.value;
         } else if (item.value_type == 'percent') {
-          promotion_discount = `-$${item.promotion_value}`;
+          promotion_discount = `-$${parseFloat(item.promotion_value).toFixed(
+            2
+          )}`;
           calculate_cart_total -= parseFloat(
             calculate_cart_total * (item.value / 100)
           );
@@ -362,7 +369,7 @@ export default class PickUp extends React.Component {
       });
 
       const voucher_items = item.voucher_items.map((voucherItem, key) => {
-        var voucher_discount = '';
+        let voucher_discount = '';
 
         /* Queue no should only not show when item is pickup and not paid  */
         var queue_no_remarks = item.queue_no 
@@ -418,26 +425,7 @@ export default class PickUp extends React.Component {
               flexDirection: 'row',
               alignItems: 'flex-start'
             }}
-          >
-            {/* <TouchableOpacity
-						onPress={this.onCustomerServicePressed}
-						style={styles.customerServiceButton}>
-						<Image
-							source={require("./../../assets/images/group-8-22.png")}
-							style={styles.customerServiceButtonImage}/>
-						<Text
-							style={styles.customerServiceButtonText}>Customer {"\n"}Service</Text>
-					</TouchableOpacity> */}
-            {/* <TouchableOpacity
-						onPress={this.onSaySomethingPressed}
-						style={styles.saySomethingButton}>
-						<Image
-							source={require("./../../assets/images/group-9-12.png")}
-							style={styles.saySomethingButtonImage}/>
-						<Text
-							style={styles.saySomethingButtonText}>Say{"\n"}Something</Text>
-					</TouchableOpacity> */}
-          </View>
+          ></View>
           <View style={[styles.queueView, { marginTop: 15 * alpha }]}>
             <View
               style={[
@@ -646,7 +634,7 @@ export default class PickUp extends React.Component {
             </View>
             <View style={styles.drinksViewWrapper}>
               {order_items}
-              <View style={{ marginTop: 5 * alpha }}>{promotions}</View>
+              <View style={{ marginTop: 10 * alpha }}>{promotions}</View>
               {voucher_items}
             </View>
             <View style={styles.receiptSectionSeperator}>
@@ -711,7 +699,7 @@ export default class PickUp extends React.Component {
                   />
                   <Text style={styles.orderTotalText}>
                     {item.delivery_fee > 0
-                      ? `$${item.delivery_fee}`
+                      ? `$${parseFloat(item.delivery_fee).toFixed(2)}`
                       : undefined}
                   </Text>
                 </View>
@@ -734,7 +722,9 @@ export default class PickUp extends React.Component {
                     flex: 1
                   }}
                 />
-                <Text style={styles.orderTotalText}>${item.total}</Text>
+                <Text style={styles.orderTotalText}>
+                  ${parseFloat(item.total).toFixed(2)}
+                </Text>
               </View>
             </View>
             <View style={styles.receiptSectionSeperator}>
@@ -838,6 +828,7 @@ export default class PickUp extends React.Component {
         }
       >
         {queues}
+        <View style={{ height: 60 * alpha }} />
       </ScrollView>
     );
   }
@@ -1037,6 +1028,7 @@ export default class PickUp extends React.Component {
 
   render() {
     const { orders } = this.props;
+    // console.log('orders ', orders);
     return (
       <View style={styles.pickUpMainView}>
         {this.state.loading ? (

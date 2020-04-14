@@ -170,9 +170,9 @@ export default class ShippingArea extends React.Component {
         {this.state.loading ? (
           <AnimationLoading />
         ) : (
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, height: '100%' }}>
             <View style={styles.addAddressForm}>
-              <Text style={styles.header}>Please Select your area</Text>
+              <Text style={styles.header}>Please select your area</Text>
               <View style={styles.placesWrapperView}>
                 <FlatList
                   renderItem={({ item }) => this.renderPlaces(item)}
@@ -222,11 +222,13 @@ const styles = StyleSheet.create({
   addAddressForm: {
     backgroundColor: 'white',
     marginTop: 20 * alpha,
-    paddingVertical: 20 * alpha,
+    paddingTop: 10 * alpha,
     paddingHorizontal: 10 * alpha,
     marginHorizontal: 10 * alpha,
     borderRadius: 10 * alpha,
-    paddingBottom: 10 * alpha
+    marginBottom: BUTTONBOTTOMPADDING + 30 * alpha
+
+    // paddingBottom: 10 * alpha,
   },
   textInput: {
     backgroundColor: 'transparent',
@@ -274,7 +276,8 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop: 10 * alpha
   },
   areaTitle: {
     color: 'rgb(54, 54, 54)',
@@ -314,7 +317,6 @@ const styles = StyleSheet.create({
   },
 
   placesButton: {
-    width: 90 * alpha,
     paddingVertical: 5 * alpha,
     paddingHorizontal: 10 * alpha,
     backgroundColor: 'rgb(233,233,233)',
@@ -326,10 +328,8 @@ const styles = StyleSheet.create({
   },
   placesWrapperView: {
     backgroundColor: 'transparent',
-    marginVertical: 20 * alpha,
-    // width: windowWidth / 2,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    marginTop: 10 * alpha,
+    marginBottom: BUTTONBOTTOMPADDING + 50 * alpha
   },
   saveButton: {
     borderRadius: 4 * alpha,
