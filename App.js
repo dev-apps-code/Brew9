@@ -73,10 +73,10 @@ import {
   TABBAR_INACTIVE_TINT
 } from './App/Common/common_style';
 import { Asset } from 'react-native-unimodules';
-import RNUxcam from 'react-native-ux-cam';
+// import RNUxcam from 'react-native-ux-cam';
 
-RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
-RNUxcam.startWithKey('qlswr42nsngf21b'); // Add this line after
+// RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
+// RNUxcam.startWithKey('qlswr42nsngf21b'); // Add this line after
 
 Sentry.init({
   dsn: 'https://a6c00af5b64644139799e721b45d61f4@sentry.io/1797623',
@@ -325,6 +325,15 @@ const PushProfile = createStackNavigator(
     },
     ShippingAddress: {
       screen: ShippingAddress
+    },
+    MapShippingAddress: {
+      screen: MapShippingAddress
+    },
+    AddShippingAddress: {
+      screen: AddShippingAddress
+    },
+    ShippingArea: {
+      screen: ShippingArea
     },
   },
   {

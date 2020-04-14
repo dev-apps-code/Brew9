@@ -10,7 +10,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
+import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
@@ -30,14 +30,14 @@ import {
   LIGHT_GREY
 } from '../Common/common_style';
 import Moment from 'moment';
-import ScrollPicker from 'rn-scrollable-picker';
-import { Analytics, Event, PageHit } from 'expo-analytics';
+import { Analytics, Event } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import TimeSelector from '../Components/TimeSelector';
-import newLinking from 'expo/build/Linking/Linking';
+
+const OPTION_NOW_MESSAGE = 'Estimated within 30mins';
 
 @connect(({ members, shops, orders }) => ({
   currentMember: members.profile,
@@ -171,7 +171,7 @@ export default class Checkout extends React.Component {
         {
           selected_address: this.props.currentMember.defaultAddress
         },
-        () => this.loadDeliveryFee()        
+        () => this.loadDeliveryFee()
       );
     }
   }
@@ -321,9 +321,8 @@ export default class Checkout extends React.Component {
     }
   };
   loadDeliveryFee = () => {
-    
     var total = this.props.cart_total;
-    
+
     console.log(this.state.selected_address);
     if (this.state.selected_address === null) {
       this.setState({
@@ -509,7 +508,7 @@ export default class Checkout extends React.Component {
       true
     );
   };
-  
+
   onBranchButtonPressed = () => {};
 
   onLocationButtonPressed = () => {
@@ -553,13 +552,20 @@ export default class Checkout extends React.Component {
   // }
   addShippingAddress = () => {
     const { navigation } = this.props;
-    const {selected_address} = this.state
+    const { selected_address } = this.state;
 
-    console.log("oassinse selected address",selected_address)
+    console.log('oassinse selected address', selected_address);
     this.setState({ visible: false });
-    navigation.navigate('ShippingAddress', {selected_address:selected_address,
+    navigation.navigate('ShippingAddress', {
+      selected_address: selected_address,
       returnToRoute: navigation.state
     });
+  };
+
+  addFirstShippingAddress = () => {
+    const { navigation } = this.props;
+    this.setState({ visible: false });
+    navigation.navigate('AddShippingAddress', { params: null, initialAddress: true });
   };
 
   onCancelVoucher = (item) => {
@@ -656,7 +662,7 @@ export default class Checkout extends React.Component {
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
-            var roundedPrice = 0
+            var roundedPrice = 0;
             var trigger_price = parseFloat(promotion.trigger_price);
             var remaining = trigger_price - cart_total;
             if (remaining <= 0) {
@@ -674,7 +680,9 @@ export default class Checkout extends React.Component {
                   price = this.roundOff(
                     (final_cart_value * discount_value) / 100
                   );
-                  roundedPrice = this.roundOff((final_cart_value * discount_value) / 100)
+                  roundedPrice = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
                   if (
                     promotion.maximum_discount_allow != null &&
                     price > promotion.maximum_discount_allow
@@ -1093,11 +1101,13 @@ export default class Checkout extends React.Component {
             }
           }
         }
-        if (delivery) {
-          this.addressConfirmation();
-        } else {
-          this.loadMakeOrder();
-        }
+        // if (delivery) {
+        //   this.addressConfirmation();
+        // } else {
+        //   this.loadMakeOrder();
+        // }
+        this.loadMakeOrder();
+
         return;
       }
     } else {
@@ -1735,7 +1745,7 @@ export default class Checkout extends React.Component {
     var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
     var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
-    if (pick_up_status == 'Now') formatted_time = pick_up_status;
+    if (pick_up_status == 'Now') formatted_time = OPTION_NOW_MESSAGE;
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
@@ -1803,7 +1813,6 @@ export default class Checkout extends React.Component {
           ? 'Free'
           : '';
 
-    
       let filtered =
         item.selected_variants != null
           ? item.selected_variants.filter(function (el) {
@@ -1858,12 +1867,12 @@ export default class Checkout extends React.Component {
                 />
               </TouchableOpacity>
             )}
-            {item.id != last_item.id && (
-              <Image
-                source={require('./../../assets/images/dotted-line.png')}
-                style={styles.dottedLineImage}
-              />
-            )}
+            {/* {item.id != last_item.id && ( */}
+            <Image
+              source={require('./../../assets/images/dotted-line.png')}
+              style={styles.dottedLineImage}
+            />
+            {/* )} */}
           </View>
         </View>
       );
@@ -1897,10 +1906,7 @@ export default class Checkout extends React.Component {
 
       return (
         <View
-          style={[
-            styles.drinksView,
-            { marginTop: 0, marginBottom: 5 * alpha }
-          ]}
+          style={[styles.drinksView, { marginVertical: 10 * alpha }]}
           key={key}
         >
           <View
@@ -1951,7 +1957,7 @@ export default class Checkout extends React.Component {
 
     return (
       <View style={styles.deliveryAddressView}>
-        <TouchableOpacity style={styles.voucherButton}>
+        <View style={styles.voucherButton}>
           <View style={styles.drinksView}>
             <View style={[styles.deliveryAddressDetail, { flex: 1 }]}>
               <View
@@ -1998,7 +2004,7 @@ export default class Checkout extends React.Component {
               )}
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
         <View>
           <View
             style={{
@@ -2014,23 +2020,27 @@ export default class Checkout extends React.Component {
                 '$ 0.00'}
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-              // paddingHorizontal: 10 * alpha
-            }}
-          >
-            <View>
-              <Text style={styles.productNameText}>Delivery fees</Text>
-              {delivery_description && (
-                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
-              )}
+          {address && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+                // paddingHorizontal: 10 * alpha
+              }}
+            >
+              <View>
+                <Text style={styles.productNameText}>Delivery fees</Text>
+                {delivery_description && (
+                  <Text style={styles.deliveryNoted}>
+                    {delivery_description}
+                  </Text>
+                )}
+              </View>
+              <Text style={styles.productVoucherText}>{`$${parseFloat(
+                deliveryFee
+              ).toFixed(2)}`}</Text>
             </View>
-            <Text style={styles.productVoucherText}>{`$${parseFloat(
-              deliveryFee
-            ).toFixed(2)}`}</Text>
-          </View>
+          )}
         </View>
       </View>
     );
@@ -2152,6 +2162,10 @@ export default class Checkout extends React.Component {
               </View>
 
               {this.renderOrderItems(cart, promotions)}
+              <Image
+                source={require('./../../assets/images/dotted-line.png')}
+                style={styles.dottedLineImage}
+              />
               {this.renderPromotions(promotions)}
               <View style={styles.receiptSectionSeperator}>
                 <Image
@@ -2268,7 +2282,7 @@ export default class Checkout extends React.Component {
           description={'Please add delivery address'}
           OkText={'Add address'}
           cancelText={'Cancel'}
-          onPressOk={this.addShippingAddress}
+          onPressOk={this.addFirstShippingAddress}
           onPressCancel={() => this.setState({ visible: false })}
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
