@@ -16,14 +16,7 @@
 	<key>TEMPORARY_SDK_VERSION</key>
 	<string>34.0.0</string>
 	<key>developmentUrl</key>
-<<<<<<< HEAD
-<<<<<<< HEAD
 	<string>exp://192.168.0.113:19000</string>
-=======
-	<string>exp://192.168.254.104:19000</string>
->>>>>>> 3f412028d3812ef0fb01e7fdd58527b42b47c68d
-=======
 	<string>exp://192.168.254.100:19000</string>
->>>>>>> 8976bcb45f6af707c42bb8a2f630618a2e61b601
 </dict>
 </plist>
