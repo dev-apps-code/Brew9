@@ -242,7 +242,6 @@ export default class AddShippingAddress extends React.Component {
       return false;
     }
 
-    
     // else if (!this.state.tag) {
     //     this.refs.toast.show("Please select your tag", 500)
     //     return false
@@ -278,9 +277,12 @@ export default class AddShippingAddress extends React.Component {
     });
   }
   returnAddress(info) {
-
-    const latitude = this.props.location ? this.props.location.coords.latitude : null
-    const longitude = this.props.location ? this.props.location.coords.longitude : null
+    const latitude = this.props.location
+      ? this.props.location.coords.latitude
+      : null;
+    const longitude = this.props.location
+      ? this.props.location.coords.longitude
+      : null;
     this.setState({
       address_details: info.address_details,
       address: info.address,
@@ -308,20 +310,20 @@ export default class AddShippingAddress extends React.Component {
   };
   onSelectAddress = () => {
     const { navigate } = this.props.navigation;
-    let { address, address_detail , delivery_area } = this.state;
+    let { address, address_detail, delivery_area } = this.state;
 
     if (delivery_area) {
       navigate('MapShippingAddress', {
         returnToRoute: this.props.navigation.state,
         returnAddress: this.returnAddress.bind(this),
-        addressInfo: {address, address_detail}
+        addressInfo: { address, address_detail }
       });
     } else {
       this.refs.toast.show('Please select your area first', 500);
     }
   };
   onSelectTag = (item) => {
-    const tag = this.state.tag
+    const tag = this.state.tag;
     let selectedTag = tag.map((tag) => {
       if (tag.name == item.name) {
         tag.selected = true;
@@ -355,7 +357,7 @@ export default class AddShippingAddress extends React.Component {
                 autoCorrect={false}
                 placeholder={placeholder}
                 onChangeText={(text) => onChangeText(text)}
-                value = {value}
+                value={value}
                 style={styles.textInput}
                 editable={edit}
               />
@@ -487,7 +489,7 @@ export default class AddShippingAddress extends React.Component {
               data={this.state.tag}
               keyExtractor={(item, index) => index.toString()}
               numColumns={3}
-              key={'THREE COLUMN'}
+              key={(item) => 'id-' + item.name}
             />
           </View>
         </View>

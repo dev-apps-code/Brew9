@@ -92,7 +92,6 @@ export default class ShippingAddress extends React.Component {
       props.navigation.state.params != null
         ? props.navigation.state.params.selected_address
         : null;
-
     this.state = {
       delivery_options: 'pickup',
       selected_address: selected_address,
@@ -263,7 +262,7 @@ export default class ShippingAddress extends React.Component {
                   renderItem={({ item }) => this.renderShippingAddress(item)}
                   refreshing={this.state.isRefreshing}
                   onRefresh={this.onRefresh.bind(this)}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => 'id-' + item.id}
                 />
               </ScrollView>
               <TouchableOpacity onPress={this.onAddAddress}>
