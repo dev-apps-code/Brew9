@@ -262,11 +262,17 @@ export default class PickUp extends React.Component {
         remarks = item.paid ? paid_order_message : unpaid_order_message;
       }
 
-      const order_items = item.order_items.map((item, key) => {
+      const order_items = item.order_items.map((productItem, key) => {
+        console.log("currentKey: ")
+        console.log(key)
+        // console.log( item.order_items)
+        // console.log("lastkey")
+        // console.log((item.order_items).length)
+        // var countKey = Object.keys(jsonObj).length;
         var price_string =
-          item.total_price != undefined && item.total_price > 0
-            ? `$${parseFloat(item.total_price).toFixed(2)}`
-            : item.total_price != undefined && item.total_price == 0
+        productItem.total_price != undefined && productItem.total_price > 0
+            ? `$${parseFloat(productItem.total_price).toFixed(2)}`
+            : productItem.total_price != undefined && productItem.total_price == 0
             ? 'Free'
             : '';
 
@@ -284,10 +290,10 @@ export default class PickUp extends React.Component {
               <View
                 style={[styles.productDetailView, { marginRight: 5 * alpha }]}
               >
-                <Text style={styles.productNameText}>{item.product_name}</Text>
-                {item.variations != null && item.variations != '' ? (
+                <Text style={styles.productNameText}>{productItem.product_name}</Text>
+                {productItem.variations != null && productItem.variations != '' ? (
                   <Text style={styles.productVariantText}>
-                    {item.variations}
+                    {productItem.variations}
                   </Text>
                 ) : (
                   <View style={styles.spacer} />
@@ -300,17 +306,17 @@ export default class PickUp extends React.Component {
                   justifyContent: 'space-between'
                 }}
               >
-                <Text style={styles.productQuantityText}>x{item.quantity}</Text>
+                <Text style={styles.productQuantityText}>x{productItem.quantity}</Text>
 
                 <Text style={styles.productPriceText}>{price_string}</Text>
               </View>
-              {/* {item.order_items != null &&
-                key < item.order_items.length - 1 && ( */}
+              {item.order_items != null &&
+                key < item.order_items.length - 1 && (
               <Image
                 source={require('./../../assets/images/dotted-line.png')}
                 style={styles.dottedLineImage}
               />
-              {/* )} */}
+              )}
             </View>
           </View>
         );
@@ -395,19 +401,19 @@ export default class PickUp extends React.Component {
                   {voucherItem.voucher.name}
                 </Text>
 
-                <View style={styles.spacer} />
+                <View style={{marginBottom: 10 * alpha}} />
               </View>
 
               <Text style={styles.productPriceText}>
                 -${item.voucher_value}
               </Text>
-              {voucherItem.voucher_items != null &&
+              {/* {voucherItem.voucher_items != null &&
                 key < item.voucher_items.length - 1 && (
                   <Image
                     source={require('./../../assets/images/dotted-line.png')}
                     style={styles.dottedLineImage}
                   />
-                )}
+                )} */}
             </View>
           </View>
         );

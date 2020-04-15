@@ -13,7 +13,7 @@ import {
   Keyboard
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import openMap from 'react-native-open-maps';
 import {
   TITLE_FONT,
@@ -147,11 +147,9 @@ export default class MapShippingAddress extends React.Component {
     return true;
   };
   getAddressDetails = (data, details) => {
-
-    if (details.formatted_address != null){
-      
+    if (details.formatted_address != null) {
       var address_details = details.formatted_address.split(',');
-      var address = details.formatted_address
+      var address = details.formatted_address;
       var poscode_city = address_details[1].split(' ');
       var postal_code = poscode_city[1];
       var city = poscode_city[2];
@@ -165,7 +163,7 @@ export default class MapShippingAddress extends React.Component {
           city,
           state,
           country,
-          address_details: '',
+          address_details: ''
         },
         () => console.log(this.state)
       );
@@ -198,7 +196,7 @@ export default class MapShippingAddress extends React.Component {
         longitude,
         delivery_area
       };
-      console.log(shippingAddress)
+      console.log(shippingAddress);
       navigation.state.params.returnAddress(shippingAddress);
       navigation.navigate('AddShippingAddress');
     }
@@ -219,24 +217,14 @@ export default class MapShippingAddress extends React.Component {
           >
             <Text style={styles.clearText}>Clear</Text>
           </TouchableOpacity>
-          <View
-            style={{
-              // marginTop: 20 * alpha,
-              marginHorizontal: 10 * alpha,
-              borderRadius: 5 * alpha,
-              backgroundColor: 'white'
-            }}
-          >
-            <View
-              style={{
-                paddingVertical: 20 * alpha,
-                flexDirection: 'row',
-                paddingHorizontal: 20 * alpha,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <View style={{ flex: 1 }}>
+          <View style={styles.whiteContent}>
+            <View style={styles.bodyContent}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-start'
+                }}
+              >
                 <Text style={styles.title}>Address Line 1</Text>
                 <TextInput
                   keyboardType="default"
@@ -250,19 +238,16 @@ export default class MapShippingAddress extends React.Component {
                 />
               </View>
             </View>
-            <Image
-              source={require('./../../assets/images/line-17.png')}
-              style={styles.seperatorImage}
-            />
-            <View
-              style={{
-                paddingVertical: 10 * alpha,
-                paddingHorizontal: 20 * alpha,
-                marginTop: 10 * alpha
-              }}
-            >
-              <Text style={styles.title}>Address Line 2</Text>
-              <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+            <View style={styles.sectionSeperatorView} />
+
+            <View style={styles.bodyContent}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-start'
+                }}
+              >
+                <Text style={styles.title}>Address Line 2</Text>
                 <TextInput
                   keyboardType="default"
                   clearButtonMode="always"
@@ -309,24 +294,14 @@ export default class MapShippingAddress extends React.Component {
           >
             <Text style={styles.clearText}>Clear</Text>
           </TouchableOpacity>
-          <View
-            style={{
-              // marginTop: 20 * alpha,
-              marginHorizontal: 10 * alpha,
-              borderRadius: 5 * alpha,
-              backgroundColor: 'white'
-            }}
-          >
-            <View
-              style={{
-                paddingVertical: 20 * alpha,
-                flexDirection: 'row',
-                paddingHorizontal: 20 * alpha,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <View style={{ flex: 1 }}>
+          <View style={styles.whiteContent}>
+            <View style={styles.bodyContent}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-start'
+                }}
+              >
                 <Text style={styles.title}>Address Line 1</Text>
                 <TextInput
                   keyboardType="default"
@@ -340,19 +315,16 @@ export default class MapShippingAddress extends React.Component {
                 />
               </View>
             </View>
-            <Image
-              source={require('./../../assets/images/line-17.png')}
-              style={styles.seperatorImage}
-            />
-            <View
-              style={{
-                paddingVertical: 10 * alpha,
-                paddingHorizontal: 20 * alpha,
-                marginTop: 10 * alpha
-              }}
-            >
-              <Text style={styles.title}>Address Line 2</Text>
-              <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+            <View style={styles.sectionSeperatorView} />
+
+            <View style={styles.bodyContent}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'flex-start'
+                }}
+              >
+                <Text style={styles.title}>Address Line 2</Text>
                 <TextInput
                   keyboardType="default"
                   clearButtonMode="always"
@@ -375,7 +347,7 @@ export default class MapShippingAddress extends React.Component {
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
-      );
+    );
   };
 
   renderSearchForm = () => (
@@ -457,7 +429,7 @@ export default class MapShippingAddress extends React.Component {
           color: '#1faadb'
         }
       }}
-      debounce={200} 
+      debounce={200}
     />
   );
 
@@ -536,11 +508,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left'
   },
-  formView: {
-    paddingHorizontal: 20 * alpha,
-    marginTop: 20 * alpha,
-    flex: 1
-  },
+
   saveButton: {
     borderRadius: 4 * alpha,
     justifyContent: 'center',
@@ -576,7 +544,9 @@ const styles = StyleSheet.create({
   seperatorImage: {
     backgroundColor: 'transparent',
     resizeMode: 'cover',
-    height: 3 * alpha
+    height: 3 * alpha,
+    width: windowWidth - 40 * alpha,
+    tintColor: 'rgb(54, 54, 54)'
   },
   clearText: {
     color: PRIMARY_COLOR,
@@ -590,5 +560,28 @@ const styles = StyleSheet.create({
     marginTop: 20 * alpha,
     marginRight: 15 * alpha,
     marginBottom: 10 * alpha
+  },
+  whiteContent: {
+    marginHorizontal: 10 * alpha,
+    borderRadius: 5 * alpha,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  bodyContent: {
+    paddingVertical: 20 * alpha,
+    flexDirection: 'row',
+    paddingHorizontal: 20 * alpha,
+    justifyContent: 'space-between'
+    // alignItems: 'center'
+    // flex: 1
+  },
+  sectionSeperatorView: {
+    backgroundColor: 'rgb(126, 126, 126)',
+    position: 'absolute',
+    alignSelf: 'center',
+    width: windowWidth - 60 * alpha,
+    height: 1 * alpha,
+    marginLeft: 10 * alpha
   }
 });
