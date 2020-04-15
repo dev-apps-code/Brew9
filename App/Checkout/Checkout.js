@@ -463,7 +463,7 @@ export default class Checkout extends React.Component {
   };
 
   _getFormattedSchedule = () => {
-    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mm a');
+    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
     switch (this.state.pick_up_status) {
       case 'Now':
         if (this.props.delivery) {
