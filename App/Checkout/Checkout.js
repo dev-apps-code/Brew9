@@ -414,13 +414,12 @@ export default class Checkout extends React.Component {
     navigation.navigate({ routeName, key });
   };
 
-  onConfirmTimePicker = (option, hour, min) => {
+  onConfirmOrderSchedule = (option, hour, min) => {
     var today = Moment();
     var tomorrow = Moment().add(1, 'days');
-    var selected_date = option == 2 ? tomorrow : today;
+    var selected_date = option == 'Tomorrow' ? tomorrow : today;
 
-    var pick_up_status = '';
-    pick_up_status = option == 2 ? 'Tomorrow' : pick_up_status;
+    var pick_up_status = option;
 
     hour = this.formatSelectedHour(hour);
 
@@ -2058,7 +2057,7 @@ export default class Checkout extends React.Component {
       onSelectOrderNow={() => this.onSelectOrderNow()}
       onSelectOrderLater={() => this.onSelectOrderLater()}
       onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
-      onConfirmDeliverySchedule={this.onConfirmTimePicker}
+      onConfirm={this.onConfirmOrderSchedule}
       onHourValueChange={this.onHourValueChange}
       onMinuteValueChange={this.onMinuteValueChange}
     />
