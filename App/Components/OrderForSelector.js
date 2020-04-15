@@ -49,7 +49,6 @@ export default class OrderForSelector extends React.Component {
       const { today, tomorrow } = this.props.selectedShop.delivery_hour;
 
       if (selected_day === 'Tomorrow') {
-        console.log('is tml selected ');
         day_time = Moment(tomorrow.start_time, 'h:mm');
         start_time = tomorrow.start_time;
         end_time = tomorrow.end_time;
@@ -81,7 +80,6 @@ export default class OrderForSelector extends React.Component {
         if (hr == day_time.hours()) {
           return min > day_time.minutes();
         } else if (hr == closing_time.hours()) {
-          console.log('hr == closing time hr %s min %s', hr, min);
           return min < closing_time.minutes();
         } else {
           return true;
