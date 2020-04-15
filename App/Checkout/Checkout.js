@@ -462,6 +462,18 @@ export default class Checkout extends React.Component {
     }
   };
 
+  _getFormattedSchedule = () => {
+    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mm a');
+    switch (this.state.pick_up_status) {
+      case 'Now':
+        return 'Estimated within 30mins';
+      case 'Later':
+        return _pick_up_time;
+      case 'Tomorrow':
+        return 'Tomorrow, ' + _pick_up_time;
+    }
+  };
+
   onSelectOrderLater = () => {
     var now = Moment().format('HH:mm');
     const { selectedShop, delivery } = this.props;
@@ -565,7 +577,10 @@ export default class Checkout extends React.Component {
   addFirstShippingAddress = () => {
     const { navigation } = this.props;
     this.setState({ visible: false });
-    navigation.navigate('AddShippingAddress', { params: null, initialAddress: true });
+    navigation.navigate('AddShippingAddress', {
+      params: null,
+      initialAddress: true
+    });
   };
 
   onCancelVoucher = (item) => {
@@ -1743,9 +1758,7 @@ export default class Checkout extends React.Component {
     const { pick_up_status, pick_up_time } = this.state;
     var { delivery } = this.props;
     var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
-    var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
-    var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
-    if (pick_up_status == 'Now') formatted_time = OPTION_NOW_MESSAGE;
+    var formatted_time = this._getFormattedSchedule();
     return (
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
@@ -1867,12 +1880,12 @@ export default class Checkout extends React.Component {
                 />
               </TouchableOpacity>
             )}
-             {item.id != last_item.id && ( 
-             <Image
-              source={require('./../../assets/images/dotted-line.png')}
-              style={styles.dottedLineImage}
-            /> 
-             )} 
+            {item.id != last_item.id && (
+              <Image
+                source={require('./../../assets/images/dotted-line.png')}
+                style={styles.dottedLineImage}
+              />
+            )}
           </View>
         </View>
       );
@@ -2176,7 +2189,7 @@ export default class Checkout extends React.Component {
               </View>
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
-               {this.renderPickupTime()} 
+              {this.renderPickupTime()}
               <View style={styles.receiptSectionSeperator}>
                 <Image
                   source={require('./../../assets/images/curve_in_background.png')}
@@ -3818,7 +3831,6 @@ const styles = StyleSheet.create({
     height: 1 * alpha,
     left: 20 * alpha
   },
- 
 
   menuRowArrowImage: {
     width: 10 * alpha,
