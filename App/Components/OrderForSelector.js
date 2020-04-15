@@ -13,9 +13,9 @@ import _ from 'lodash';
 
 const closeButtonImage = require('./../../assets/images/x-3.png');
 
-const TOTAL_HEIGHT = 300 * alpha;
+const TOTAL_HEIGHT = 220 * alpha;
 const BAR_HEIGHT = 50 * alpha;
-const ITEM_HEIGHT = 60 * alpha;
+const ITEM_HEIGHT = 35 * alpha;
 const WRAPPER_HEIGHT = ITEM_HEIGHT * 3;
 
 export default class OrderForSelector extends React.Component {
@@ -223,7 +223,8 @@ export default class OrderForSelector extends React.Component {
               {
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                alignSelf: 'center'
               }
             ]}
           >
@@ -301,8 +302,8 @@ export default class OrderForSelector extends React.Component {
               }}
             />
 
-            <Line style={{ top: ITEM_HEIGHT + 10 }} />
-            <Line style={{ top: WRAPPER_HEIGHT - ITEM_HEIGHT - 10 }} />
+            <Line style={{ top: ITEM_HEIGHT }} />
+            <Line style={{ top: WRAPPER_HEIGHT - ITEM_HEIGHT }} />
           </View>
         </View>
       </Animated.View>
@@ -316,9 +317,10 @@ const Line = (props) => (
       props.style,
       {
         position: 'absolute',
-        borderWidth: 0.4 * alpha,
+        backgroundColor: 'rgb(245, 245, 245)',
+        alignSelf: 'center',
         width: windowWidth,
-        borderColor: 'rgb(140, 140, 140)'
+        height: 1 * alpha
       }
     ]}
   />
