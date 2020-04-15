@@ -1594,10 +1594,10 @@ export default class Checkout extends React.Component {
               />
             </TouchableOpacity>
 
-            {/* <Image
+            <Image
               source={require('./../../assets/images/dotted-line.png')}
               style={styles.dottedLineImage}
-            /> */}
+            />
           </View>
         </View>
       );
