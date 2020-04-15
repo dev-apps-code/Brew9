@@ -205,15 +205,16 @@ export default class MapShippingAddress extends React.Component {
   };
 
   renderAddAddressMode = () => {
-    let address = '';
+    let address = this.state.address;
     let address_details = '';
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true} >
       <Animated.View style={{ flex: 1 }}>
         <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
           <TouchableOpacity
             style={styles.clearView}
             onPress={() => {
-              this.setState({ address: '' });
+              this.setState({  isAddAddressMode:false,address: '' });
             }}
           >
             <Text style={styles.clearText}>Clear</Text>
@@ -284,6 +285,7 @@ export default class MapShippingAddress extends React.Component {
           </TouchableOpacity>
         </View>
       </Animated.View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -297,12 +299,12 @@ export default class MapShippingAddress extends React.Component {
       country
     } = this.state;
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true} >
         <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
           <TouchableOpacity
             style={styles.clearView}
             onPress={() => {
-              this.setState({ address: '' });
+              this.setState({  isAddAddressMode:false,address: '' });
             }}
           >
             <Text style={styles.clearText}>Clear</Text>
@@ -383,12 +385,17 @@ export default class MapShippingAddress extends React.Component {
       autoFocus={true}
       enablePoweredByContainer={false}
       autoCorrect={false}
+      currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+      currentLocationLabel="Use My Location"
       returnKeyType={'search'}
       keyboardAppearance={'light'}
       listViewDisplayed="auto"
       fetchDetails={true}
-      renderDescription={(row) => row.description}
+      renderDescription={(row) =>
+                row.description || row.formatted_address || row.name
+      }
       textInputProps={{ clearButtonMode: 'never' }}
+      nearbyPlacesAPI='GoogleReverseGeocoding' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       renderLeftButton={() => (
         <View
           style={{
@@ -455,14 +462,18 @@ export default class MapShippingAddress extends React.Component {
   );
 
   render() {
-    if (this.state.address && this.state.address.length > 0) {
-      return this.renderAddressForm();
-    }
-
     if (this.state.isAddAddressMode) {
+      console.log('is addres')
       return this.renderAddAddressMode();
     }
 
+    
+    if (this.state.address && this.state.address.length > 0) {
+      console.log('addres')
+      return this.renderAddressForm();
+    }
+
+  
     return this.renderSearchForm();
   }
 }
