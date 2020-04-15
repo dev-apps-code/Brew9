@@ -359,8 +359,13 @@ export default class MapShippingAddress extends React.Component {
       keyboardAppearance={'light'}
       listViewDisplayed="auto"
       fetchDetails={true}
-      renderDescription={(row) => row.description}
+      renderDescription={(row) =>
+        row.description || row.formatted_address || row.name
+      }
       textInputProps={{ clearButtonMode: 'never' }}
+      currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+      currentLocationLabel="Current location"
+      // nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       renderLeftButton={() => (
         <View
           style={{
@@ -552,13 +557,14 @@ const styles = StyleSheet.create({
   },
   whiteContent: {
     marginHorizontal: 10 * alpha,
+    // paddingVertical: 10 * alpha,
     borderRadius: 5 * alpha,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center'
   },
   bodyContent: {
-    paddingVertical: 20 * alpha,
+    paddingVertical: 10 * alpha,
     flexDirection: 'row',
     paddingHorizontal: 20 * alpha,
     justifyContent: 'space-between'
@@ -566,7 +572,7 @@ const styles = StyleSheet.create({
     // flex: 1
   },
   sectionSeperatorView: {
-    backgroundColor: 'rgb(126, 126, 126)',
+    backgroundColor: 'rgb(234, 234, 234)',
     position: 'absolute',
     alignSelf: 'center',
     width: windowWidth - 60 * alpha,
