@@ -48,7 +48,8 @@ export default class OrderForSelector extends React.Component {
     if (this.props.delivery) {
       const { today, tomorrow } = this.props.selectedShop.delivery_hour;
 
-      if (selected_day === 'Tommorow') {
+      if (selected_day === 'Tomorrow') {
+        console.log('is tml selected ');
         day_time = Moment(tomorrow.start_time, 'h:mm');
         start_time = tomorrow.start_time;
         end_time = tomorrow.end_time;
@@ -61,21 +62,21 @@ export default class OrderForSelector extends React.Component {
     let opening_time = Moment(start_time, 'h:mm');
     let closing_time = Moment(end_time, 'h:mm');
 
-    let _hours_options = _.range(day_time.hours(), closing_time.hours() - 1);
-
-    console.log(_hours_options);
+    let _hours_options = _.range(0, 24);
 
     // show only available time starting from opening time
     _hours_options = _.filter(
       _hours_options,
-      (hr) => parseInt(hr) >= opening_time.hours()
+      (hr) =>
+        parseInt(hr) >= opening_time.hours() &&
+        hr <= closing_time.hours() &&
+        hr >= day_time.hours()
     );
 
     let _minutes_arraay = ['00', '15', '30', '45'];
 
     _hours_options.forEach((hr) => {
       let _minutes_options = _.filter(_minutes_arraay, (min) => {
-        console.log('hour is %s closing hr is %s', hr, closing_time.hours());
         min = parseInt(min);
         if (hr == day_time.hours()) {
           return min > day_time.minutes();
@@ -156,6 +157,7 @@ export default class OrderForSelector extends React.Component {
     this.setState({
       selected_time_index: index
     });
+    this.sp.scrollToIndex(index);
   };
 
   render() {
@@ -209,8 +211,8 @@ export default class OrderForSelector extends React.Component {
             ]}
           >
             <ScrollPicker
-              dataSource={this.state.day_options}
               rotationEnabled={false}
+              dataSource={this.state.day_options}
               selectedIndex={0}
               itemHeight={ITEM_HEIGHT}
               fixedHeight={true}
