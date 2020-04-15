@@ -20,7 +20,7 @@ import {
   Animated
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { createAction } from '../Utils';
 import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
@@ -132,8 +132,7 @@ export default class AddShippingAddress extends React.Component {
         populateTowns: false,
         populateAreas: false,
         chosenTown: 0,
-        chosenArea: 0,
-
+        chosenArea: 0
       };
     } else {
       this.state = {
@@ -164,7 +163,7 @@ export default class AddShippingAddress extends React.Component {
         populateTowns: false,
         populateAreas: false,
         chosenTown: 0,
-        chosenArea: 0,
+        chosenArea: 0
       };
     }
   }
@@ -188,7 +187,7 @@ export default class AddShippingAddress extends React.Component {
     this.setState({
       showArea: false,
       populateTowns: true,
-      populateAreas: false,
+      populateAreas: false
     });
   };
 
@@ -205,28 +204,20 @@ export default class AddShippingAddress extends React.Component {
   }
 
   selectTown(index) {
-    console.log('selectTown');
-    console.log(index)
     this.setState({
       chosenTown: index,
       showArea: true,
       populateTowns: false,
-      populateAreas: true,
-      
+      populateAreas: true
     });
   }
 
   selectArea(index) {
-    console.log('selectArea');
-    console.log(index)
     this.setState({
       chosenArea: index,
       delivery_area: this.state.town[this.state.chosenTown].areas[index].area
     });
-    this.handleClose()
-    console.log("Final:")
-    console.log(this.state.town[this.state.chosenTown].areas[this.state.chosenArea].area)
-
+    this.handleClose();
   }
 
   //editing here
@@ -257,7 +248,7 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.state.delivery_area,
         primary: primary
       };
-      console.log(shippingAddress)
+      console.log(shippingAddress);
       this.loadUpdateProfile(shippingAddress);
     }
   };
@@ -340,19 +331,14 @@ export default class AddShippingAddress extends React.Component {
     this.loadShopTown();
   }
   loadShopTown = () => {
-    console.log('loadShopTown');
     let { dispatch, selectedShop } = this.props;
     this.setState({ loading: true });
     const callback = (eventObject) => {
-      console.log('loadShopTown', eventObject);
       if (eventObject.success) {
         this.setState({
           town: eventObject.result,
           populateTowns: true
         });
-
-        console.log('\n\ncheck here');
-        console.log(this.state.town.areas);
       }
     };
     const obj = new ShopTownRequestObject();
@@ -363,6 +349,14 @@ export default class AddShippingAddress extends React.Component {
         callback
       })
     );
+  };
+  defaultTown = () => {
+    this.setState({
+      populateTowns: true,
+      showArea: false,
+      chosenTown: 0,
+      populateAreas: false
+    });
   };
 
   loadTag = () => {
@@ -609,6 +603,122 @@ export default class AddShippingAddress extends React.Component {
     );
   };
 
+  toogleDeliveryArea = () => {
+    const screenHeight = Dimensions.get('window').height;
+
+    const backdrop = {
+      transform: [
+        {
+          translateY: this.state.animation.interpolate({
+            inputRange: [0, 0.01],
+            outputRange: [screenHeight, 0],
+            extrapolate: 'clamp'
+          })
+        }
+      ],
+      opacity: this.state.animation.interpolate({
+        inputRange: [0.01, 0.5],
+        outputRange: [0, 1],
+        extrapolate: 'clamp'
+      })
+    };
+
+    const slideUp = {
+      transform: [
+        {
+          translateY: this.state.animation.interpolate({
+            inputRange: [0.01, 1],
+            outputRange: [0, -1 * screenHeight],
+            extrapolate: 'clamp'
+          })
+        }
+      ]
+    };
+    return (
+      <Animated.View style={[StyleSheet.absoluteFill, styles.cover, backdrop]}>
+        <View style={[styles.sheet]}>
+          <Animated.View style={[styles.popup, slideUp]}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 10 * alpha
+              }}
+            >
+              <Text style={styles.PleaseSelectText}>Please Select Address</Text>
+              <TouchableOpacity
+                onPress={this.handleClose}
+                style={styles.cancelVoucherButton}
+              >
+                <Image
+                  source={require('./../../assets/images/cancel.png')}
+                  style={styles.cancelImage}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingHorizontal: 10 * alpha
+              }}
+            >
+              <View style={styles.sectionSeperatorView} />
+              {this.state.showArea == true ? (
+                <TouchableOpacity
+                  onPress={this.defaultTown}
+                  style={styles.areaView}
+                >
+                  <Text style={[styles.townText]}>
+                    {this.state.town[this.state.chosenTown].name}
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
+              <TouchableOpacity
+                style={styles.townView}
+                onPress={this.defaultTown}
+              >
+                <Text style={[styles.townText, { color: PRIMARY_COLOR }]}>
+                  {this.state.tabTitles[0]}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* <ScrollView scrollsToTop={false}> */}
+            <ScrollView style={{ paddingVertical: 10 * alpha }}>
+              {this.state.populateTowns
+                ? this.state.town.map((item, key) => {
+                    return (
+                      <View style={styles.itemView}>
+                        <TouchableOpacity onPress={() => this.selectTown(key)}>
+                          <Text style={styles.itemText}>{item.name}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })
+                : null}
+
+              {this.state.populateAreas
+                ? this.state.town[this.state.chosenTown].areas.map(
+                    (item, key) => {
+                      return (
+                        <View style={styles.itemView}>
+                          <TouchableOpacity
+                            onPress={() => this.selectArea(key)}
+                          >
+                            <Text style={styles.itemText}>{item.area}</Text>
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    }
+                  )
+                : null}
+            </ScrollView>
+            {/* </ScrollView> */}
+          </Animated.View>
+        </View>
+      </Animated.View>
+    );
+  };
+
   renderRadioForm = () => {
     return (
       <View>
@@ -671,36 +781,6 @@ export default class AddShippingAddress extends React.Component {
   };
 
   render() {
-    const screenHeight = Dimensions.get('window').height;
-
-    const backdrop = {
-      transform: [
-        {
-          translateY: this.state.animation.interpolate({
-            inputRange: [0, 0.01],
-            outputRange: [screenHeight, 0],
-            extrapolate: 'clamp'
-          })
-        }
-      ],
-      opacity: this.state.animation.interpolate({
-        inputRange: [0.01, 0.5],
-        outputRange: [0, 1],
-        extrapolate: 'clamp'
-      })
-    };
-
-    const slideUp = {
-      transform: [
-        {
-          translateY: this.state.animation.interpolate({
-            inputRange: [0.01, 1],
-            outputRange: [0, -1 * screenHeight],
-            extrapolate: 'clamp'
-          })
-        }
-      ]
-    };
     let current_area = this.state.delivery_area;
     let { fullname, contact_number } = this.state;
     let primary =
@@ -761,7 +841,6 @@ export default class AddShippingAddress extends React.Component {
               />
             </View>
           </View>
-          
         </ScrollView>
         <TouchableOpacity
           onPress={() => this.onSavePressed()}
@@ -769,75 +848,8 @@ export default class AddShippingAddress extends React.Component {
         >
           <Text style={styles.saveButtonText}>SAVE</Text>
         </TouchableOpacity>
-        <Animated.View
-            style={[StyleSheet.absoluteFill, styles.cover, backdrop]}
-          >
-            <View style={[styles.sheet]}>
-              <Animated.View style={[styles.popup, slideUp]}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Text>Please Select Address</Text>
-                  <TouchableOpacity onPress={this.handleClose}>
-                    <Text>Close</Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row'
-                  }}
-                >
-                  {this.state.showArea == true ? (
-                    <Text style={{ marginRight: '3%' }}>
-                      {this.state.tabTitles[1]}
-                    </Text>
-                  ) : null}
-                  <Text
-                    style={{ borderBottomColor: 'red', borderBottomWidth: 2 }}
-                  >
-                    {this.state.tabTitles[0]}
-                  </Text>
-                </View>
-                {/* <ScrollView scrollsToTop={false}> */}
-                <ScrollView>
-                  {this.state.populateTowns
-                    ? this.state.town.map((item, key) => {
-                        return (
-                          <View style={styles.item}>
-                            <TouchableOpacity onPress={() => this.selectTown(key)}>
-                              <Text style={{ marginTop: '5%' }}>
-                                {item.name}
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })
-                    : null}
+        {this.toogleDeliveryArea()}
 
-                  {this.state.populateAreas
-                    ? this.state.town[this.state.chosenTown].areas.map(
-                        (item, key) => {
-                          return (
-                            <View style={styles.item}>
-                              <TouchableOpacity onPress={() => this.selectArea(key)}>
-                                <Text style={{ marginTop: '5%' }}>
-                                  {item.area}
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
-                          );
-                        }
-                      )
-                    : null}
-                </ScrollView>
-                {/* </ScrollView> */}
-              </Animated.View>
-            </View>
-          </Animated.View>
-        
         <Toast
           ref="toast"
           style={{ bottom: windowHeight / 2 }}
@@ -867,16 +879,16 @@ const styles = StyleSheet.create({
   },
   popup: {
     backgroundColor: '#FFF',
-    marginHorizontal: 10,
-    // borderTopLeftRadius: 5,
-    // borderTopRightRadius: 5,
-    // alignItems: "center",
-    // justifyContent: "center",
-    // paddingRight: "50%",
-    minHeight: 400,
-    maxHeight: 400,
 
+    minHeight: windowHeight / 3,
+    maxHeight: windowHeight / 2,
     padding: '3%'
+  },
+  cancelImage: {
+    width: 18 * alpha,
+    height: 18 * alpha,
+    resizeMode: 'contain',
+    tintColor: DEFAULT_GREY_BACKGROUND
   },
   navigationBarItem: {
     width: '100%'
@@ -967,7 +979,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // backgroundColor: 'red',
     paddingVertical: 10 * alpha
   },
   saveButton: {
@@ -1014,5 +1025,52 @@ const styles = StyleSheet.create({
     width: 10 * alpha,
     tintColor: 'rgb(195, 195, 195)',
     resizeMode: 'contain'
+  },
+  PleaseSelectText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 18 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left'
+  },
+  townText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 15 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    paddingBottom: 10 * alpha
+  },
+  townView: {
+    borderBottomWidth: 1,
+    marginRight: 10 * alpha,
+    borderBottomColor: PRIMARY_COLOR
+  },
+  areaView: {
+    marginRight: 10 * alpha
+  },
+  sectionSeperatorView: {
+    backgroundColor: 'rgb(234, 234, 234)',
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    width: windowWidth - 40 * alpha,
+    height: 1 * alpha,
+    marginLeft: 10 * alpha
+  },
+  itemView: {
+    paddingHorizontal: 10 * alpha
+  },
+  itemText: {
+    color: 'black',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    paddingVertical: 5 * alpha
   }
 });
