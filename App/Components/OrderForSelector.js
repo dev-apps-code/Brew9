@@ -1,7 +1,7 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
-import { alpha, fontAlpha } from '../Common/size';
+import { alpha, fontAlpha, windowWidth } from '../Common/size';
 
 import {
   PRIMARY_COLOR,
@@ -17,7 +17,6 @@ const TOTAL_HEIGHT = 300 * alpha;
 const BAR_HEIGHT = 50 * alpha;
 const ITEM_HEIGHT = 60 * alpha;
 const WRAPPER_HEIGHT = 200 * alpha;
-const DELIVERY_OPTIONS = ['Today', 'Tomorrow'];
 
 export default class OrderForSelector extends React.Component {
   constructor(props) {
@@ -31,7 +30,7 @@ export default class OrderForSelector extends React.Component {
     time_options_tomorrow: [],
     selected_day_index: 0,
     selected_time_index: 0,
-    day_options: ['Today', 'Tomorrow']
+    day_options: this.props.delivery ? ['Today', 'Tomorrow'] : ['Today']
   });
 
   componentDidMount() {
@@ -49,8 +48,7 @@ export default class OrderForSelector extends React.Component {
     if (this.props.delivery) {
       const { today, tomorrow } = this.props.selectedShop.delivery_hour;
 
-      if (selected_day = 'Tommorow') {
-        console.log('woop');
+      if (selected_day === 'Tommorow') {
         day_time = Moment(tomorrow.start_time, 'h:mm');
         start_time = tomorrow.start_time;
         end_time = tomorrow.end_time;
@@ -78,8 +76,16 @@ export default class OrderForSelector extends React.Component {
         (min) => parseInt(min) > day_time.minutes()
       );
 
+      // create the time options
       _minutes_options.forEach((min) => _time_options.push(hr + ':' + min));
     });
+
+    if (
+      day_time.isBetween(opening_time, closing_time) &&
+      selected_day === 'Today'
+    ) {
+      _time_options.unshift('NOW');
+    }
 
     this.setState(
       { time_options_today: _time_options },
@@ -89,15 +95,55 @@ export default class OrderForSelector extends React.Component {
     );
   };
 
+  _confirm = () => {
+    let hour = null;
+    let mins = null;
+    let option = null;
+    let selected = this.state.day_options[this.state.selected_day_index];
+
+    if (selected == 'Today') {
+      let _t = this.state.time_options_today[this.state.selected_time_index];
+
+      if (_t !== 'NOW') {
+        option = 'Later';
+        _t = _t.split(':');
+        hour = _t[0];
+        mins = _t[1];
+      } else {
+        option = 'Now';
+        let time_now = Moment(new Date(), 'h:mm');
+        hour = time_now.hours();
+        mins = time_now.minutes();
+      }
+    } else {
+      option = 'Tomorrow';
+      let _t = this.state.time_options_today[this.state.selected_time_index];
+      _t = _t.split(':');
+
+      hour = _t[0];
+      mins = _t[1];
+    }
+
+    // confirm
+    this.props.onConfirm(option, hour, mins);
+  };
+
   _onDayChange = (data, index) => {
     this.setState(
       {
-        selected_day_index: index
+        selected_day_index: index,
+        selected_time_index: 0
       },
       () => {
         this._setTimeOptions(index);
       }
     );
+  };
+
+  _onTimeValueChange = (index) => {
+    this.setState({
+      selected_time_index: index
+    });
   };
 
   render() {
@@ -111,9 +157,7 @@ export default class OrderForSelector extends React.Component {
 
     return (
       <Animated.View style={animation.getLayout()}>
-        <View
-          style={[styles.popOutPickupView, { flex: 1, height: TOTAL_HEIGHT }]}
-        >
+        <View style={[defaultStyles.container]}>
           <View
             style={[
               {
@@ -135,12 +179,7 @@ export default class OrderForSelector extends React.Component {
             <Text style={styles.paymentMethodTwoText}>{TITLE}</Text>
             <TouchableOpacity
               onPress={() => {
-                console.log('selected %s %s', selected_hour, selected_minute);
-                this.props.onConfirmDeliverySchedule(
-                  selected,
-                  selected_hour,
-                  selected_minute
-                );
+                this._confirm();
               }}
               style={styles.pickupConfirmButton}
             >
@@ -157,58 +196,40 @@ export default class OrderForSelector extends React.Component {
               }
             ]}
           >
-            {delivery ? (
-              <ScrollPicker
-                dataSource={DELIVERY_OPTIONS}
-                rotationEnabled={false}
-                selectedIndex={0}
-                itemHeight={ITEM_HEIGHT}
-                fixedHeight={true}
-                wrapperHeight={ITEM_HEIGHT * 3}
-                wrapperStyle={{ flex: 1 }}
-                renderItem={(data, index, isSelected) => {
-                  return (
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: ITEM_HEIGHT
-                      }}
+            <ScrollPicker
+              dataSource={this.state.day_options}
+              rotationEnabled={false}
+              selectedIndex={0}
+              itemHeight={ITEM_HEIGHT}
+              fixedHeight={true}
+              wrapperHeight={ITEM_HEIGHT * 3}
+              wrapperStyle={{ flex: 1 }}
+              renderItem={(data, index, isSelected) => {
+                return (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: ITEM_HEIGHT
+                    }}
+                  >
+                    <Text
+                      style={
+                        isSelected
+                          ? defaultStyles.selected
+                          : defaultStyles.notSelected
+                      }
                     >
-                      <Text
-                        style={
-                          isSelected
-                            ? defaultStyles.selected
-                            : defaultStyles.notSelected
-                        }
-                      >
-                        {data}
-                      </Text>
-                    </View>
-                  );
-                }}
-                onValueChange={(data, selectedIndex) => {
-                  this._onDayChange(data, selectedIndex);
-                }}
-              />
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: WRAPPER_HEIGHT
-                }}
-              >
-                <View
-                  style={{
-                    height: ITEM_HEIGHT
-                  }}
-                >
-                  <Text style={defaultStyles.selected}>Today</Text>
-                </View>
-              </View>
-            )}
+                      {data}
+                    </Text>
+                  </View>
+                );
+              }}
+              onValueChange={(data, selectedIndex) => {
+                this._onDayChange(data, selectedIndex);
+              }}
+            />
+
             {/* Time picker */}
             <ScrollPicker
               ref={(sp) => (this.sp = sp)}
@@ -226,7 +247,6 @@ export default class OrderForSelector extends React.Component {
               renderItem={(data, index, isSelected) => {
                 return (
                   <View
-                    onPress={console.log()}
                     style={{
                       alignItems: 'center',
                       justifyContent: 'center'
@@ -245,7 +265,7 @@ export default class OrderForSelector extends React.Component {
                 );
               }}
               onValueChange={(data, selectedIndex) => {
-                // onMinuteValueChange(data, selectedIndex);
+                this._onTimeValueChange(selectedIndex);
               }}
             />
           </View>
@@ -256,17 +276,13 @@ export default class OrderForSelector extends React.Component {
 }
 
 const defaultStyles = {
-  card: {
-    borderRadius: 5 * alpha,
-    height: 40 * alpha,
-    justifyContent: 'center',
-    marginRight: 20
-  },
-  cardTextStyle: {
-    textAlign: 'center',
-    fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontWeight: '900'
+  container: {
+    flex: 1,
+    position: 'absolute',
+    backgroundColor: '#fff',
+    bottom: 0 * alpha,
+    width: windowWidth,
+    height: TOTAL_HEIGHT
   },
   confirmText: {
     color: PRIMARY_COLOR,
