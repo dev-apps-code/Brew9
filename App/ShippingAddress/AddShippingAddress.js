@@ -584,14 +584,12 @@ export default class AddShippingAddress extends React.Component {
       <View>
         <View style={[styles.formDetail]}>
           <Text style={styles.title}>{'Tag'}</Text>
-
           <View style={styles.placesWrapperView}>
             <FlatList
               renderItem={({ item }) => this.renderPlaces(item)}
               data={this.state.tag}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => item.name}
               numColumns={3}
-              key={(item) => 'id-' + item.name}
             />
           </View>
         </View>

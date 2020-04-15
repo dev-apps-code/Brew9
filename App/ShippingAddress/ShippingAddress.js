@@ -262,7 +262,7 @@ export default class ShippingAddress extends React.Component {
                   renderItem={({ item }) => this.renderShippingAddress(item)}
                   refreshing={this.state.isRefreshing}
                   onRefresh={this.onRefresh.bind(this)}
-                  keyExtractor={(item) => 'id-' + item.id}
+                  keyExtractor={(item,index) => 'id-' + index}
                 />
               </ScrollView>
               <TouchableOpacity onPress={this.onAddAddress}>
