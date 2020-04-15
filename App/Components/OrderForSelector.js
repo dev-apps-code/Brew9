@@ -16,7 +16,7 @@ const closeButtonImage = require('./../../assets/images/x-3.png');
 const TOTAL_HEIGHT = 300 * alpha;
 const BAR_HEIGHT = 50 * alpha;
 const ITEM_HEIGHT = 60 * alpha;
-const WRAPPER_HEIGHT = 200 * alpha;
+const WRAPPER_HEIGHT = ITEM_HEIGHT * 3;
 
 export default class OrderForSelector extends React.Component {
   constructor(props) {
@@ -74,20 +74,28 @@ export default class OrderForSelector extends React.Component {
 
     let _minutes_arraay = ['00', '15', '30', '45'];
 
-    _hours_options.forEach((hr) => {
+    _hours_options.forEach((hr, index) => {
       let _minutes_options = _.filter(_minutes_arraay, (min) => {
         min = parseInt(min);
         if (hr == day_time.hours()) {
           return min > day_time.minutes();
         } else if (hr == closing_time.hours()) {
-          return min < closing_time.minutes();
+          return min <= closing_time.minutes();
         } else {
           return true;
         }
       });
 
       // create the time options
+
       _minutes_options.forEach((min) => _time_options.push(hr + ':' + min));
+    });
+
+    let time_options_today = [];
+    _time_options.forEach((_time_option, idx) => {
+      if (idx + 1 < _time_options.length) {
+        time_options_today.push(_time_option + ' - ' + _time_options[idx + 1]);
+      }
     });
 
     // Add NOW time option
@@ -95,11 +103,11 @@ export default class OrderForSelector extends React.Component {
       day_time.isBetween(opening_time, closing_time) &&
       selected_day === 'Today'
     ) {
-      _time_options.unshift('NOW');
+      time_options_today.unshift('NOW');
     }
 
     this.setState(
-      { time_options_today: _time_options },
+      { time_options_today },
 
       // go back to first available time
       this.sp.scrollToIndex(0)
@@ -164,7 +172,7 @@ export default class OrderForSelector extends React.Component {
       time_options_tomorrow,
       isTomorrowSelected
     } = this.state;
-    const { animation, delivery, selectedShop, styles } = this.props;
+    const { animation, delivery, styles } = this.props;
     const TITLE = delivery ? 'Delivery' : 'Pickup';
 
     return (
@@ -188,7 +196,7 @@ export default class OrderForSelector extends React.Component {
                 style={styles.closeButtonImage}
               />
             </TouchableOpacity>
-            <Text style={styles.paymentMethodTwoText}>{TITLE}</Text>
+            <Text style={defaultStyles.title}>{TITLE}</Text>
             <TouchableOpacity
               onPress={() => {
                 this._confirm();
@@ -202,9 +210,9 @@ export default class OrderForSelector extends React.Component {
           <View
             style={[
               {
-                flex: 1,
                 flexDirection: 'row',
-                alignItems: 'flex-start'
+                alignItems: 'center',
+                justifyContent: 'center'
               }
             ]}
           >
@@ -214,15 +222,15 @@ export default class OrderForSelector extends React.Component {
               selectedIndex={0}
               itemHeight={ITEM_HEIGHT}
               fixedHeight={true}
-              wrapperHeight={ITEM_HEIGHT * 3}
+              wrapperHeight={WRAPPER_HEIGHT}
               wrapperStyle={{ flex: 1 }}
               renderItem={(data, index, isSelected) => {
                 return (
                   <View
                     style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      height: ITEM_HEIGHT
+                      width: '100%',
+                      alignItems: 'flex-end',
+                      paddingEnd: 20
                     }}
                   >
                     <Text
@@ -254,21 +262,22 @@ export default class OrderForSelector extends React.Component {
               selectedIndex={0}
               itemHeight={ITEM_HEIGHT}
               fixedHeight={true}
-              wrapperHeight={ITEM_HEIGHT * 3}
+              wrapperHeight={WRAPPER_HEIGHT}
               wrapperStyle={{ flex: 1 }}
               renderItem={(data, index, isSelected) => {
                 return (
                   <View
                     style={{
-                      alignItems: 'center',
-                      justifyContent: 'center'
+                      width: '100%',
+                      alignItems: 'flex-start',
+                      paddingStart: 20
                     }}
                   >
                     <Text
                       style={
                         isSelected
                           ? defaultStyles.selected
-                          : defaultStyles.notSelecteds
+                          : defaultStyles.notSelected
                       }
                     >
                       {data}
@@ -280,12 +289,29 @@ export default class OrderForSelector extends React.Component {
                 this._onTimeValueChange(selectedIndex);
               }}
             />
+
+            <Line style={{ top: ITEM_HEIGHT + 10 }} />
+            <Line style={{ top: WRAPPER_HEIGHT - ITEM_HEIGHT - 10 }} />
           </View>
         </View>
       </Animated.View>
     );
   }
 }
+
+const Line = (props) => (
+  <View
+    style={[
+      props.style,
+      {
+        position: 'absolute',
+        borderWidth: 0.4 * alpha,
+        width: windowWidth,
+        borderColor: 'rgb(140, 140, 140)'
+      }
+    ]}
+  />
+);
 
 const defaultStyles = {
   container: {
@@ -296,6 +322,18 @@ const defaultStyles = {
     width: windowWidth,
     height: TOTAL_HEIGHT
   },
+  title: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 17 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    position: 'absolute',
+    alignSelf: 'center',
+    top: 19 * alpha
+  },
   confirmText: {
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
@@ -305,16 +343,13 @@ const defaultStyles = {
   },
   selected: {
     color: 'rgb(54, 54, 54)',
-    textAlign: 'center',
-    fontSize: 20 * fontAlpha,
-    fontFamily: TITLE_FONT,
+    fontSize: 17 * fontAlpha,
+    fontFamily: NON_TITLE_FONT,
     fontWeight: 'bold'
   },
   notSelected: {
-    color: 'rgb(54, 54, 54)',
-    textAlign: 'center',
+    color: 'rgb(82, 82, 82)',
     fontSize: 15 * fontAlpha,
-    fontFamily: NON_TITLE_FONT,
-    fontWeight: '300'
+    fontFamily: NON_TITLE_FONT
   }
 };
