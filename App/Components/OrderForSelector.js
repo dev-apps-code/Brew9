@@ -61,25 +61,37 @@ export default class OrderForSelector extends React.Component {
     let opening_time = Moment(start_time, 'h:mm');
     let closing_time = Moment(end_time, 'h:mm');
 
-    let _hours_options = _.range(day_time.hours(), closing_time.hours());
+    let _hours_options = _.range(day_time.hours(), closing_time.hours() - 1);
 
-    // show only available hours starting from opening time
+    console.log(_hours_options);
+
+    // show only available time starting from opening time
     _hours_options = _.filter(
       _hours_options,
       (hr) => parseInt(hr) >= opening_time.hours()
     );
 
     let _minutes_arraay = ['00', '15', '30', '45'];
+
     _hours_options.forEach((hr) => {
-      let _minutes_options = _.filter(
-        _minutes_arraay,
-        (min) => parseInt(min) > day_time.minutes()
-      );
+      let _minutes_options = _.filter(_minutes_arraay, (min) => {
+        console.log('hour is %s closing hr is %s', hr, closing_time.hours());
+        min = parseInt(min);
+        if (hr == day_time.hours()) {
+          return min > day_time.minutes();
+        } else if (hr == closing_time.hours()) {
+          console.log('hr == closing time hr %s min %s', hr, min);
+          return min < closing_time.minutes();
+        } else {
+          return true;
+        }
+      });
 
       // create the time options
       _minutes_options.forEach((min) => _time_options.push(hr + ':' + min));
     });
 
+    // Add NOW time option
     if (
       day_time.isBetween(opening_time, closing_time) &&
       selected_day === 'Today'
