@@ -368,7 +368,7 @@ export default class MapShippingAddress extends React.Component {
       }
       textInputProps={{ clearButtonMode: 'never' }}
       currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      currentLocationLabel="Current location"
+      currentLocationLabel="Use my location"
       // nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       renderLeftButton={() => (
         <View
