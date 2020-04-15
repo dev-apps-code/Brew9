@@ -183,7 +183,7 @@ export default class OrderForSelector extends React.Component {
       time_options_tomorrow,
       isTomorrowSelected
     } = this.state;
-    const { animation, delivery, styles } = this.props;
+    const { animation, delivery } = this.props;
     const TITLE = delivery ? 'Delivery' : 'Pickup';
 
     return (
@@ -200,11 +200,11 @@ export default class OrderForSelector extends React.Component {
           >
             <TouchableOpacity
               onPress={() => this.props.toggleDelivery()}
-              style={styles.closeButton}
+              style={defaultStyles.closeButton}
             >
               <Image
                 source={closeButtonImage}
-                style={styles.closeButtonImage}
+                style={{ resizeMode: 'contain' }}
               />
             </TouchableOpacity>
             <Text style={defaultStyles.title}>{TITLE}</Text>
@@ -212,7 +212,7 @@ export default class OrderForSelector extends React.Component {
               onPress={() => {
                 this._confirm();
               }}
-              style={styles.pickupConfirmButton}
+              style={defaultStyles.pickupConfirmButton}
             >
               <Text style={[defaultStyles.confirmText]}>Confirm</Text>
             </TouchableOpacity>
@@ -333,6 +333,19 @@ const defaultStyles = {
     width: windowWidth,
     height: TOTAL_HEIGHT
   },
+  closeButton: {
+    backgroundColor: 'white',
+    borderRadius: 10.5 * alpha,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    position: 'absolute',
+    left: 12 * alpha,
+    width: 21 * alpha,
+    top: 19 * alpha,
+    height: 21 * alpha
+  },
   title: {
     backgroundColor: 'transparent',
     color: 'rgb(54, 54, 54)',
@@ -345,12 +358,24 @@ const defaultStyles = {
     alignSelf: 'center',
     top: 19 * alpha
   },
+  pickupConfirmButton: {
+    backgroundColor: 'white',
+    borderRadius: 10.5 * alpha,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    position: 'absolute',
+    right: 12 * alpha,
+    top: 19 * alpha,
+    // paddingVertical: 10 * alpha,
+    height: 21 * alpha
+  },
   confirmText: {
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
     fontSize: 15 * fontAlpha,
-    textAlign: 'center',
-    fontWeight: 'bold'
+    textAlign: 'center'
   },
   selected: {
     color: 'rgb(54, 54, 54)',
