@@ -1744,7 +1744,9 @@ export default class Checkout extends React.Component {
     var { delivery } = this.props;
     var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
     var formatted_pick_up_time = Moment(pick_up_time).format('h:mm a');
-    var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
+    // var formatted_time = `${pick_up_status}, ${formatted_pick_up_time}`;
+    var formatted_time = ` ${formatted_pick_up_time}`;
+
     if (pick_up_status == 'Now') formatted_time = OPTION_NOW_MESSAGE;
     return (
       <View style={styles.drinksViewWrapper}>

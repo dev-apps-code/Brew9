@@ -491,10 +491,12 @@ export default class AddShippingAddress extends React.Component {
             </TouchableOpacity>
           )}
         </View>
-        <Image
+        {/* <Image
           source={require('./../../assets/images/line-17.png')}
           style={styles.seperatorImage}
-        />
+        /> */}
+        <View style={styles.sectionSeperatorView2} />
+
       </View>
     );
   };
@@ -530,10 +532,12 @@ export default class AddShippingAddress extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          <Image
+          {/* <Image
             source={require('./../../assets/images/line-17.png')}
             style={styles.seperatorImage}
-          />
+          /> */}
+        <View style={styles.sectionSeperatorView2} />
+
         </View>
         <View>
           <View style={styles.formDetail}>
@@ -557,10 +561,12 @@ export default class AddShippingAddress extends React.Component {
               )}
             </TouchableOpacity>
           </View>
-          <Image
+          {/* <Image
             source={require('./../../assets/images/line-17.png')}
             style={styles.seperatorImage}
-          />
+          /> */}
+        <View style={styles.sectionSeperatorView2} />
+
         </View>
       </View>
     );
@@ -593,10 +599,12 @@ export default class AddShippingAddress extends React.Component {
             />
           </View>
         </View>
-        <Image
+        {/* <Image
           source={require('./../../assets/images/line-17.png')}
           style={styles.seperatorImage}
-        />
+        /> */}
+        <View style={styles.sectionSeperatorView2} />
+
       </View>
     );
   };
@@ -660,7 +668,7 @@ export default class AddShippingAddress extends React.Component {
                 paddingHorizontal: 10 * alpha
               }}
             >
-              <View style={styles.sectionSeperatorView} />
+              <View style={styles.sectionSeperatorView2} />
               {this.state.showArea == true ? (
                 <TouchableOpacity
                   onPress={this.defaultTown}
@@ -770,10 +778,12 @@ export default class AddShippingAddress extends React.Component {
             </RadioForm>
           </View>
         </View>
-        <Image
+        {/* <Image
           source={require('./../../assets/images/line-17.png')}
           style={styles.seperatorImage}
-        />
+        /> */}
+        <View style={styles.sectionSeperatorView2} />
+
       </View>
     );
   };
@@ -1058,6 +1068,14 @@ const styles = StyleSheet.create({
     width: windowWidth - 40 * alpha,
     height: 1 * alpha,
     marginLeft: 10 * alpha
+  },
+  sectionSeperatorView2: {
+    backgroundColor: 'rgb(234, 234, 234)',
+    // position: 'absolute',
+    // alignSelf: 'flex-end',
+    // width: windowWidth - 40 * alpha,
+    height: 1 * alpha,
+    // marginLeft: 10 * alpha
   },
   itemView: {
     paddingHorizontal: 10 * alpha
