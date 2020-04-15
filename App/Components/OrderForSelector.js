@@ -125,6 +125,12 @@ export default class OrderForSelector extends React.Component {
 
       if (_t !== 'NOW') {
         option = 'Later';
+        _t = _t.split(' - ');
+
+        if (_.length > 0) {
+          _t = _t[0];
+        }
+
         _t = _t.split(':');
         hour = _t[0];
         mins = _t[1];
@@ -137,8 +143,13 @@ export default class OrderForSelector extends React.Component {
     } else {
       option = 'Tomorrow';
       let _t = this.state.time_options_today[this.state.selected_time_index];
-      _t = _t.split(':');
+      _t = _t.split(' - ');
 
+      if (_.length > 0) {
+        _t = _t[0];
+      }
+
+      _t = _t.split(':');
       hour = _t[0];
       mins = _t[1];
     }
