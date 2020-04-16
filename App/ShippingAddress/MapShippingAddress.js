@@ -169,7 +169,7 @@ export default class MapShippingAddress extends React.Component {
   getAddressDetails = (data, details) => {
     if (details.formatted_address != null) {
       var address_details = details.formatted_address.split(',');
-      var address = details.formatted_address;
+      var address = data.description;
       var poscode_city = address_details[1].split(' ');
       var postal_code = poscode_city[1];
       var city = poscode_city[2];
