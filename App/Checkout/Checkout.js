@@ -130,7 +130,8 @@ export default class Checkout extends React.Component {
       applyCode: false,
       addressConfirmation: false,
       deliveryFee: 0,
-      loading: false
+      loading: false,
+      range: ""
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -419,7 +420,7 @@ export default class Checkout extends React.Component {
     navigation.navigate({ routeName, key });
   };
 
-  onConfirmOrderSchedule = (option, hour, min) => {
+  onConfirmOrderSchedule = (option, hour, min, range) => {
     var today = Moment();
     var tomorrow = Moment().add(1, 'days');
     var selected_date = option == 'Tomorrow' ? tomorrow : today;
@@ -430,7 +431,7 @@ export default class Checkout extends React.Component {
 
     var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
 
-    this.setState({ pick_up_time, pick_up_status });
+    this.setState({ pick_up_time, pick_up_status, range });
     this.toggleTimeSelector();
   };
 
@@ -468,20 +469,21 @@ export default class Checkout extends React.Component {
   };
 
   _getFormattedSchedule = () => {
-    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
-    switch (this.state.pick_up_status) {
-      case 'Now':
-        // if (this.props.delivery) {
-        //   return 'Estimated within 30mins';
-        // }
-        return 'Now';
+    // var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
+    // switch (this.state.pick_up_status) {
+    //   case 'Now':
+    //     // if (this.props.delivery) {
+    //     //   return 'Estimated within 30mins';
+    //     // }
+    //     return 'Now';
 
-      case 'Later':
-        return _pick_up_time;
+    //   case 'Later':
+    //     return _pick_up_time;
 
-      case 'Tomorrow':
-        return 'Tomorrow, ' + _pick_up_time;
-    }
+    //   case 'Tomorrow':
+    //     return 'Tomorrow, ' + _pick_up_time;
+    // }
+    return this.state.range;
   };
 
   onSelectOrderLater = () => {
@@ -1770,7 +1772,7 @@ export default class Checkout extends React.Component {
   renderPickupTime() {
     const { pick_up_status, pick_up_time } = this.state;
     var { delivery } = this.props;
-    var pick_up = delivery ? 'Delivery time' : 'Pick Up Time';
+    var pick_up = delivery ? 'Delivery Time' : 'Pick Up Time';
     var formatted_time = this._getFormattedSchedule();
     return (
       <View style={styles.drinksViewWrapper}>
