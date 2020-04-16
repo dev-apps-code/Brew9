@@ -1569,7 +1569,7 @@ export default class Checkout extends React.Component {
       }
 
       return (
-        <View style={styles.drinksView} key={key}>
+        <View style={[styles.drinksView,]} key={key}>
           <View
             pointerEvents="box-none"
             style={{
@@ -2914,7 +2914,7 @@ const styles = StyleSheet.create({
     height: 11 * alpha
   },
   voucherButton: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -3415,6 +3415,7 @@ const styles = StyleSheet.create({
     marginTop: 13 * alpha,
     marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
     borderRadius: 14 * alpha,
+    // backgroundColor:'orange',
     flex: 1
   },
   whiteboxView: {
@@ -3762,9 +3763,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   drinksView: {
-    backgroundColor: 'blue',
+    backgroundColor: 'transparent',
     flex: 1,
-    marginTop: 10 * alpha
+    paddingTop: 10 * alpha
   },
 
   productDetailView: {
@@ -3890,8 +3891,8 @@ const styles = StyleSheet.create({
   // },
   receiptSectionSeperator: {
     flex: 1,
-    backgroundColor: 'green',
-    // backgroundColor: 'rgb(245,245,245)',
+    // backgroundColor: 'transparent',
+    backgroundColor: 'rgb(245,245,245)',
 
     flexDirection:'row',
     // alignContent: 'center',
@@ -3900,8 +3901,6 @@ const styles = StyleSheet.create({
 
   sectionSeperatorView: {
     backgroundColor: 'rgb(234, 234, 234)',
-    // backgroundColor: 'blue',
-
     // position: 'absolute',
     alignSelf: 'center',
     width: 300 * alpha,
