@@ -466,9 +466,9 @@ export default class Checkout extends React.Component {
     var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
     switch (this.state.pick_up_status) {
       case 'Now':
-        if (this.props.delivery) {
-          return 'Estimated within 30mins';
-        }
+        // if (this.props.delivery) {
+        //   return 'Estimated within 30mins';
+        // }
         return 'Now';
 
       case 'Later':
