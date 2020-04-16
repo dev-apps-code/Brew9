@@ -15,6 +15,7 @@ import {
 import React from 'react';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import openMap from 'react-native-open-maps';
+import _ from 'lodash';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -29,7 +30,8 @@ import * as Permissions from 'expo-permissions';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 @connect(({ members, shops, config, orders }) => ({
-  location: members.location
+  location: members.location,
+  selectedShop: shops.selectedShop
 }))
 export default class MapShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -97,6 +99,23 @@ export default class MapShippingAddress extends React.Component {
     this.props.navigation.goBack();
   };
 
+  placeHolderText = () => {
+    var placeholder = 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
+
+    if (this.props.selectedShop.response_message != undefined) {
+      placeholder_response = _.find(
+        this.props.selectedShop.response_message,
+        function (obj) {
+          return obj.key === 'Address Search Placeholder';
+        }
+      );
+      if (placeholder_response != undefined) {
+        placeholder = placeholder_response.text;
+      }
+    }
+    return placeholder;
+  };
+
   renderForm = (title, placeholder, text, onChangeText, description) => {
     return (
       <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
@@ -111,6 +130,7 @@ export default class MapShippingAddress extends React.Component {
             placeholder={placeholder}
             onChangeText={onChangeText}
             style={styles.textInput}
+            multiline={true}
           />
         )}
       </View>
@@ -206,70 +226,71 @@ export default class MapShippingAddress extends React.Component {
     let address = this.state.address;
     let address_details = '';
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true} >
-      <Animated.View style={{ flex: 1 }}>
-        <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-          <TouchableOpacity
-            style={styles.clearView}
-            onPress={() => {
-              this.setState({  isAddAddressMode:false,address: '' });
-            }}
-          >
-            <Text style={styles.clearText}>Clear</Text>
-          </TouchableOpacity>
-          <View style={styles.whiteContent}>
-            <View style={styles.bodyContent}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'flex-start'
-                }}
-              >
-                <Text style={styles.title}>Address Line 1</Text>
-                <TextInput
-                  keyboardType="default"
-                  clearButtonMode="always"
-                  autoCorrect={false}
-                  value={address}
-                  onChangeText={(address) => {
-                    this.setState({ address });
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
+        <Animated.View style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
+            <TouchableOpacity
+              style={styles.clearView}
+              onPress={() => {
+                this.setState({ isAddAddressMode: false, address: '' });
+              }}
+            >
+              <Text style={styles.clearText}>Clear</Text>
+            </TouchableOpacity>
+            <View style={styles.whiteContent}>
+              <View style={styles.bodyContent}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'flex-start'
                   }}
-                  style={styles.textInput}
-                />
+                >
+                  <Text style={styles.title}>Address Line 1</Text>
+                  <TextInput
+                    keyboardType="default"
+                    clearButtonMode="always"
+                    autoCorrect={false}
+                    value={address}
+                    multiline={true}
+                    onChangeText={(address) => {
+                      this.setState({ address });
+                    }}
+                    style={styles.textInput}
+                  />
+                </View>
               </View>
-            </View>
-            <View style={styles.sectionSeperatorView} />
+              <View style={styles.sectionSeperatorView} />
 
-            <View style={styles.bodyContent}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'flex-start'
-                }}
-              >
-                <Text style={styles.title}>Address Line 2</Text>
-                <TextInput
-                  keyboardType="default"
-                  clearButtonMode="always"
-                  autoCorrect={false}
-                  value={address_details}
-                  placeholder={'Unit # / Floor / Block '}
-                  onChangeText={(address_details) => {
-                    this.setState({ address_details });
+              <View style={styles.bodyContent}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'flex-start'
                   }}
-                  style={styles.textInput}
-                />
+                >
+                  <Text style={styles.title}>Address Line 2</Text>
+                  <TextInput
+                    keyboardType="default"
+                    clearButtonMode="always"
+                    autoCorrect={false}
+                    value={address_details}
+                    placeholder={'Unit # / Floor / Block '}
+                    onChangeText={(address_details) => {
+                      this.setState({ address_details });
+                    }}
+                    style={styles.textInput}
+                  />
+                </View>
               </View>
             </View>
+            <TouchableOpacity
+              onPress={() => this.onSavePressed()}
+              style={styles.saveButton}
+            >
+              <Text style={styles.saveButtonText}>SAVE</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => this.onSavePressed()}
-            style={styles.saveButton}
-          >
-            <Text style={styles.saveButtonText}>SAVE</Text>
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
+        </Animated.View>
       </TouchableWithoutFeedback>
     );
   };
@@ -284,12 +305,12 @@ export default class MapShippingAddress extends React.Component {
       country
     } = this.state;
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true} >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
         <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
           <TouchableOpacity
             style={styles.clearView}
             onPress={() => {
-              this.setState({  isAddAddressMode:false,address: '' });
+              this.setState({ isAddAddressMode: false, address: '' });
             }}
           >
             <Text style={styles.clearText}>Clear</Text>
@@ -308,6 +329,7 @@ export default class MapShippingAddress extends React.Component {
                   clearButtonMode="always"
                   autoCorrect={false}
                   value={address}
+                  multiline={true}
                   onChangeText={(address) => {
                     this.setState({ address });
                   }}
@@ -352,7 +374,7 @@ export default class MapShippingAddress extends React.Component {
 
   renderSearchForm = () => (
     <GooglePlacesAutocomplete
-      placeholder="Search"
+      placeholder={this.placeHolderText()}
       minLength={2}
       autoFocus={true}
       enablePoweredByContainer={false}
@@ -437,17 +459,13 @@ export default class MapShippingAddress extends React.Component {
 
   render() {
     if (this.state.isAddAddressMode) {
-      console.log('is addres')
       return this.renderAddAddressMode();
     }
 
-    
     if (this.state.address && this.state.address.length > 0) {
-      console.log('addres')
       return this.renderAddressForm();
     }
 
-  
     return this.renderSearchForm();
   }
 }
@@ -508,7 +526,8 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
+    width: windowWidth - 60 * alpha
   },
 
   saveButton: {

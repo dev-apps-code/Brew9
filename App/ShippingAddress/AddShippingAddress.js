@@ -17,7 +17,8 @@ import {
   TextInput,
   AsyncStorage,
   Dimensions,
-  Animated
+  Animated,
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
@@ -127,7 +128,8 @@ export default class AddShippingAddress extends React.Component {
         primary: this.address.primary == true ? 1 : 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
-        tabTitles: ['Towns', 'Areas'],
+        tabTitles: ['Districts', 'Areas'],
+        defTab: 0,
         animation: new Animated.Value(0),
         populateTowns: false,
         populateAreas: false,
@@ -158,7 +160,9 @@ export default class AddShippingAddress extends React.Component {
         genderIndex: 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
-        tabTitles: ['Towns', 'Areas'],
+        tabTitles: ['Districts', 'Areas'],
+        defTab: 0,
+
         animation: new Animated.Value(0),
         populateTowns: false,
         populateAreas: false,
@@ -187,7 +191,8 @@ export default class AddShippingAddress extends React.Component {
     this.setState({
       showArea: false,
       populateTowns: true,
-      populateAreas: false
+      populateAreas: false,
+      defTab:0
     });
   };
 
@@ -208,14 +213,15 @@ export default class AddShippingAddress extends React.Component {
       chosenTown: index,
       showArea: true,
       populateTowns: false,
-      populateAreas: true
+      populateAreas: true,
+      defTab: 1,
     });
   }
 
   selectArea(index) {
     this.setState({
       chosenArea: index,
-      delivery_area: this.state.town[this.state.chosenTown].areas[index].area
+      delivery_area: this.state.town[this.state.chosenTown].areas[index].area,
     });
     this.handleClose();
   }
@@ -355,7 +361,8 @@ export default class AddShippingAddress extends React.Component {
       populateTowns: true,
       showArea: false,
       chosenTown: 0,
-      populateAreas: false
+      populateAreas: false,
+      defTab: 0,
     });
   };
 
@@ -642,7 +649,7 @@ export default class AddShippingAddress extends React.Component {
     };
     return (
       <Animated.View style={[StyleSheet.absoluteFill, styles.cover, backdrop]}>
-        <View style={[styles.sheet]}>
+        <SafeAreaView style={[styles.sheet]}>
           <Animated.View style={[styles.popup, slideUp]}>
             <View
               style={{
@@ -684,7 +691,7 @@ export default class AddShippingAddress extends React.Component {
                 onPress={this.defaultTown}
               >
                 <Text style={[styles.townText, { color: PRIMARY_COLOR }]}>
-                  {this.state.tabTitles[0]}
+                  {this.state.tabTitles[this.state.defTab]}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -720,7 +727,7 @@ export default class AddShippingAddress extends React.Component {
             </ScrollView>
             {/* </ScrollView> */}
           </Animated.View>
-        </View>
+        </SafeAreaView>
       </Animated.View>
     );
   };
@@ -945,6 +952,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10 * alpha,
     flex: 1
   },
+  areasDistrictsText:{
+    fontSize: 14 * fontAlpha,
+    
+  },
   title: {
     backgroundColor: 'transparent',
     color: 'rgb(54, 54, 54)',
@@ -1038,7 +1049,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
-    fontSize: 18 * fontAlpha,
+    fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left'
@@ -1062,7 +1073,7 @@ const styles = StyleSheet.create({
     marginRight: 10 * alpha
   },
   sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
+    backgroundColor: 'rgb(244, 244, 244)',
     position: 'absolute',
     alignSelf: 'flex-end',
     width: windowWidth - 40 * alpha,
@@ -1070,7 +1081,7 @@ const styles = StyleSheet.create({
     marginLeft: 10 * alpha
   },
   sectionSeperatorView2: {
-    backgroundColor: 'rgb(234, 234, 234)',
+    backgroundColor: 'rgb(244, 244, 244)',
     // position: 'absolute',
     // alignSelf: 'flex-end',
     // width: windowWidth - 40 * alpha,

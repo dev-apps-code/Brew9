@@ -177,6 +177,11 @@ export default class Checkout extends React.Component {
     }
   }
 
+  /**
+   * Format price
+   */
+  _formattedPrice = (price) => '$' + parseFloat(price).toFixed(2);
+
   setTimePickerDefault(day, isOrderForTomorrow) {
     const { start_time, end_time } = day
       ? day
@@ -463,12 +468,12 @@ export default class Checkout extends React.Component {
   };
 
   _getFormattedSchedule = () => {
-    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mm a');
+    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
     switch (this.state.pick_up_status) {
       case 'Now':
-        if (this.props.delivery) {
-          return 'Estimated within 30mins';
-        }
+        // if (this.props.delivery) {
+        //   return 'Estimated within 30mins';
+        // }
         return 'Now';
 
       case 'Later':
@@ -1050,7 +1055,10 @@ export default class Checkout extends React.Component {
     );
     if (currentMember != undefined) {
       if (delivery && !selected_address) {
-        this.setState({ visible: true });
+        // console.log('what');
+        // this.setState({ visible: true });
+        this.addShippingAddress();
+        return;
       } else {
         if (selected_payment == '') {
           this.tooglePayment();
@@ -1569,7 +1577,7 @@ export default class Checkout extends React.Component {
       }
 
       return (
-        <View style={styles.drinksView} key={key}>
+        <View style={[styles.drinksView,]} key={key}>
           <View
             pointerEvents="box-none"
             style={{
@@ -2046,7 +2054,7 @@ export default class Checkout extends React.Component {
                 // paddingHorizontal: 10 * alpha
               }}
             >
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description && (
                   <Text style={styles.deliveryNoted}>
@@ -2054,9 +2062,9 @@ export default class Checkout extends React.Component {
                   </Text>
                 )}
               </View>
-              <Text style={styles.productVoucherText}>{`$${parseFloat(
-                deliveryFee
-              ).toFixed(2)}`}</Text>
+              <Text style={styles.productVoucherText}>
+                {this._formattedPrice(deliveryFee)}
+              </Text>
             </View>
           )}
         </View>
@@ -2172,12 +2180,31 @@ export default class Checkout extends React.Component {
                 )}
               </View>
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
+            </View>
 
               {this.renderOrderItems(cart, promotions)}
               <Image
@@ -2186,22 +2213,60 @@ export default class Checkout extends React.Component {
               />
               {this.renderPromotions(promotions)}
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
+            </View>
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
               {this.renderPickupTime()}
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
+            </View>
               {delivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
@@ -2209,12 +2274,31 @@ export default class Checkout extends React.Component {
                 : undefined}
               {delivery && (
                 <View style={styles.receiptSectionSeperator}>
-                  <Image
-                    source={require('./../../assets/images/curve_in_background.png')}
-                    style={styles.curve_in}
-                  />
-                  <View style={styles.sectionSeperatorView} />
-                </View>
+                <View
+                  style={{
+                    width:  (alpha * 14) /2,
+                    height: alpha * 14,
+                    borderBottomRightRadius: (alpha * 14) /2,
+                    borderTopRightRadius: (alpha * 14) /2,
+                    backgroundColor: 'rgb(239, 239, 239)',
+                  }}
+                />
+                <View style={styles.sectionSeperatorView} /> 
+  
+                    <View
+                  style={{
+                    width:  (alpha * 14) /2,
+                    height: alpha * 14,
+                    borderBottomRightRadius: (alpha * 14) /2,
+                    borderTopRightRadius: (alpha * 14) /2,
+                    backgroundColor: 'rgb(239, 239, 239)',
+                    transform: [
+                      { scaleX: -1 }
+                    ]
+                  }}
+                />
+        
+              </View>
               )}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
@@ -2339,13 +2423,24 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
   deliveryNoted: {
-    backgroundColor: 'transparent',
+    // backgroundColor: 'transparent',
     color: '#ff4500',
-    fontFamily: TITLE_FONT,
-    fontSize: 10 * fontAlpha,
+    // fontFamily: TITLE_FONT,
+    // fontSize: 10 * fontAlpha,
+    // fontStyle: 'normal',
+    // textAlign: 'left',
+    // marginBottom: 5 * alpha,
+    // new style overrides above
+
+    // color: 'rgb(164, 164, 164)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
+    fontWeight: 'normal',
     textAlign: 'left',
-    marginBottom: 5 * alpha
+    backgroundColor: 'transparent',
+    // width: 210 * alpha,
+    marginBottom: 10 * alpha
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
@@ -3339,6 +3434,7 @@ const styles = StyleSheet.create({
     marginTop: 13 * alpha,
     marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
     borderRadius: 14 * alpha,
+    // backgroundColor:'orange',
     flex: 1
   },
   whiteboxView: {
@@ -3688,7 +3784,7 @@ const styles = StyleSheet.create({
   drinksView: {
     backgroundColor: 'transparent',
     flex: 1,
-    marginTop: 10 * alpha
+    paddingTop: 10 * alpha
   },
 
   productDetailView: {
@@ -3804,13 +3900,30 @@ const styles = StyleSheet.create({
     height: 2 * alpha
   },
 
+  // receiptSectionSeperator: {
+  //   flex: 1,
+  //   height: 14 * alpha,
+  //   marginTop: -1 * alpha,
+  //   marginBottom: -1 * alpha,
+  //   alignContent: 'center',
+  //   justifyContent: 'center'
+  // },
   receiptSectionSeperator: {
     flex: 1,
-    height: 14 * alpha,
-    marginTop: -1 * alpha,
-    marginBottom: -1 * alpha,
-    alignContent: 'center',
-    justifyContent: 'center'
+    // backgroundColor: 'transparent',
+    backgroundColor: 'rgb(245,245,245)',
+
+    flexDirection:'row',
+    // alignContent: 'center',
+    justifyContent: 'space-between'
+  },
+
+  sectionSeperatorView: {
+    backgroundColor: 'rgb(234, 234, 234)',
+    // position: 'absolute',
+    alignSelf: 'center',
+    width: 300 * alpha,
+    height: 1 * alpha
   },
 
   curve_in: {
@@ -3820,13 +3933,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
 
-  sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
-    position: 'absolute',
-    alignSelf: 'center',
-    width: 300 * alpha,
-    height: 1 * alpha
-  },
+  // sectionSeperatorView: {
+  //   backgroundColor: 'rgb(234, 234, 234)',
+  //   position: 'absolute',
+  //   alignSelf: 'center',
+  //   width: 300 * alpha,
+  //   height: 1 * alpha
+  // },
 
   menuRowLineView: {
     backgroundColor: 'rgb(245, 245, 245)',
