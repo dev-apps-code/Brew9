@@ -1966,10 +1966,16 @@ export default class Checkout extends React.Component {
         </View>
       );
     });
-
     return (
-      <View style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}>
-        <View style={styles.orderitemsView}>{promotions_item}</View>
+      <View>
+        {promotions_item.length > 0 && (
+          <View style={styles.receiptSectionSeperator}>
+            <View style={styles.sectionSeperatorView} />
+          </View>
+        )}
+        <View style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}>
+          <View style={styles.orderitemsView}>{promotions_item}</View>
+        </View>
       </View>
     );
   };
@@ -2197,13 +2203,6 @@ export default class Checkout extends React.Component {
                 source={require('./../../assets/images/dotted-line.png')}
                 style={styles.dottedLineImage}
               />
-              <View style={styles.receiptSectionSeperator}>
-                {/* <Image
-          source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curve_in}
-        /> */}
-                <View style={styles.sectionSeperatorView} />
-              </View>
 
               {this.renderPromotions(promotions)}
               {this.renderReceiptSeperation()}
