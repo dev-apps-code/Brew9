@@ -177,6 +177,11 @@ export default class Checkout extends React.Component {
     }
   }
 
+  /**
+   * Format price
+   */
+  _formattedPrice = (price) => '$' + parseFloat(price).toFixed(2);
+
   setTimePickerDefault(day, isOrderForTomorrow) {
     const { start_time, end_time } = day
       ? day
@@ -327,8 +332,8 @@ export default class Checkout extends React.Component {
     console.log(this.state.selected_address);
     if (this.state.selected_address === null) {
       this.setState({
-        deliveryFee: 0,
-        delivery_description: 'please select address'
+        deliveryFee: 0
+        // delivery_description: 'please select address'
       });
       return;
     }
@@ -466,9 +471,9 @@ export default class Checkout extends React.Component {
     var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
     switch (this.state.pick_up_status) {
       case 'Now':
-        if (this.props.delivery) {
-          return 'Estimated within 30mins';
-        }
+        // if (this.props.delivery) {
+        //   return 'Estimated within 30mins';
+        // }
         return 'Now';
 
       case 'Later':
@@ -1050,7 +1055,10 @@ export default class Checkout extends React.Component {
     );
     if (currentMember != undefined) {
       if (delivery && !selected_address) {
-        this.setState({ visible: true });
+        // console.log('what');
+        // this.setState({ visible: true });
+        this.addShippingAddress();
+        return;
       } else {
         if (selected_payment == '') {
           this.tooglePayment();
@@ -1569,7 +1577,7 @@ export default class Checkout extends React.Component {
       }
 
       return (
-        <View style={styles.drinksView} key={key}>
+        <View style={[styles.drinksView]} key={key}>
           <View
             pointerEvents="box-none"
             style={{
@@ -1924,7 +1932,7 @@ export default class Checkout extends React.Component {
 
       return (
         <View
-          style={[styles.drinksView, { marginVertical: 10 * alpha }]}
+          style={[styles.drinksView, { marginVertical: 0 * alpha }]}
           key={key}
         >
           <View
@@ -1960,7 +1968,7 @@ export default class Checkout extends React.Component {
     });
 
     return (
-      <View style={styles.drinksViewWrapper}>
+      <View style={[styles.drinksViewWrapper, { paddingVertical: 10 * alpha }]}>
         <View style={styles.orderitemsView}>{promotions_item}</View>
       </View>
     );
@@ -2046,7 +2054,7 @@ export default class Checkout extends React.Component {
                 // paddingHorizontal: 10 * alpha
               }}
             >
-              <View style={{flex:1}}>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description && (
                   <Text style={styles.deliveryNoted}>
@@ -2054,9 +2062,9 @@ export default class Checkout extends React.Component {
                   </Text>
                 )}
               </View>
-              <Text style={styles.productVoucherText}>{`$${parseFloat(
-                deliveryFee
-              ).toFixed(2)}`}</Text>
+              <Text style={styles.productVoucherText}>
+                {this._formattedPrice(deliveryFee)}
+              </Text>
             </View>
           )}
         </View>
@@ -2080,6 +2088,17 @@ export default class Checkout extends React.Component {
       onMinuteValueChange={this.onMinuteValueChange}
     />
   );
+  renderReceiptSeperation = () => {
+    return (
+      <View style={styles.receiptSectionSeperator}>
+        <Image
+          source={require('./../../assets/images/curve_in_background.png')}
+          style={styles.curve_in}
+        />
+        <View style={styles.sectionSeperatorView} />
+      </View>
+    );
+  };
   renderCheckoutReceipt() {
     const {
       vouchers_to_use,
@@ -2171,13 +2190,7 @@ export default class Checkout extends React.Component {
                   </View>
                 )}
               </View>
-              <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              {this.renderReceiptSeperation()}
 
               {this.renderOrderItems(cart, promotions)}
               <Image
@@ -2185,37 +2198,19 @@ export default class Checkout extends React.Component {
                 style={styles.dottedLineImage}
               />
               {this.renderPromotions(promotions)}
-              <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              {this.renderReceiptSeperation()}
+
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
               {this.renderPickupTime()}
-              <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              {this.renderReceiptSeperation()}
+
               {delivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
                   : this.renderDeliveryAddress(false)
                 : undefined}
-              {delivery && (
-                <View style={styles.receiptSectionSeperator}>
-                  <Image
-                    source={require('./../../assets/images/curve_in_background.png')}
-                    style={styles.curve_in}
-                  />
-                  <View style={styles.sectionSeperatorView} />
-                </View>
-              )}
+              {delivery && this.renderReceiptSeperation()}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
                   <Text style={styles.totallabelText}>TOTAL</Text>
@@ -2339,13 +2334,24 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
   deliveryNoted: {
-    backgroundColor: 'transparent',
+    // backgroundColor: 'transparent',
     color: '#ff4500',
-    fontFamily: TITLE_FONT,
-    fontSize: 10 * fontAlpha,
+    // fontFamily: TITLE_FONT,
+    // fontSize: 10 * fontAlpha,
+    // fontStyle: 'normal',
+    // textAlign: 'left',
+    // marginBottom: 5 * alpha,
+    // new style overrides above
+
+    // color: 'rgb(164, 164, 164)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
+    fontWeight: 'normal',
     textAlign: 'left',
-    marginBottom: 5 * alpha
+    backgroundColor: 'transparent',
+    // width: 210 * alpha,
+    marginBottom: 10 * alpha
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
@@ -3339,6 +3345,7 @@ const styles = StyleSheet.create({
     marginTop: 13 * alpha,
     marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
     borderRadius: 14 * alpha,
+    backgroundColor: 'rgb(245, 245, 245)',
     flex: 1
   },
   whiteboxView: {
@@ -3688,7 +3695,7 @@ const styles = StyleSheet.create({
   drinksView: {
     backgroundColor: 'transparent',
     flex: 1,
-    marginTop: 10 * alpha
+    paddingTop: 10 * alpha
   },
 
   productDetailView: {
@@ -3802,30 +3809,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: 291 * alpha,
     height: 2 * alpha
-  },
-
-  receiptSectionSeperator: {
-    flex: 1,
-    height: 14 * alpha,
-    marginTop: -1 * alpha,
-    marginBottom: -1 * alpha,
-    alignContent: 'center',
-    justifyContent: 'center'
-  },
-
-  curve_in: {
-    height: 14 * alpha,
-    resizeMode: 'cover',
-    width: '100%',
-    backgroundColor: 'transparent'
-  },
-
-  sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
-    position: 'absolute',
-    alignSelf: 'center',
-    width: 300 * alpha,
-    height: 1 * alpha
   },
 
   menuRowLineView: {
@@ -4174,5 +4157,26 @@ const styles = StyleSheet.create({
     width: 15 * alpha,
     height: 15 * alpha,
     resizeMode: 'contain'
+  },
+  receiptSectionSeperator: {
+    flex: 1,
+    backgroundColor: DEFAULT_GREY_BACKGROUND,
+    alignContent: 'center',
+    justifyContent: 'center'
+  },
+
+  curve_in: {
+    height: 14 * alpha,
+    resizeMode: 'stretch',
+    width: '100%',
+    backgroundColor: 'transparent'
+  },
+
+  sectionSeperatorView: {
+    backgroundColor: 'rgb(234, 234, 234)',
+    position: 'absolute',
+    alignSelf: 'center',
+    width: 300 * alpha,
+    height: 1 * alpha
   }
 });

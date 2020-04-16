@@ -534,6 +534,7 @@ export default class MemberProfile extends React.Component {
               clearButtonMode="always"
               autoCorrect={false}
               placeholder="Phone Number"
+              placeholderTextColor={LIGHT_GREY}
               onChangeText={(phone_no) => this.setState({ phone_no })}
               style={styles.phoneNumberTextInput}
             />
@@ -553,6 +554,7 @@ export default class MemberProfile extends React.Component {
               autoCorrect={false}
               placeholder="SMS Code"
               keyboardType="number-pad"
+              placeholderTextColor={LIGHT_GREY}
               onChangeText={(verification_code) =>
                 this.setState({ verification_code })
               }
@@ -603,7 +605,8 @@ export default class MemberProfile extends React.Component {
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
-    let defaultAddress = default_address?.address?.trim() || 'Address (optional)';
+    let defaultAddress =
+      default_address?.address?.trim() || 'Address (optional)';
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -638,10 +641,12 @@ export default class MemberProfile extends React.Component {
           </View>
           <View style={styles.personalInfoView}>
             <View style={styles.nicknameView}>
-              <Image
+              {/* <Image
                 source={require('./../../assets/images/line-17.png')}
                 style={styles.seperatorImage}
-              />
+              /> */}
+              <View style={styles.seperatorView} />
+
               <View
                 pointerEvents="box-none"
                 style={{
@@ -668,6 +673,7 @@ export default class MemberProfile extends React.Component {
                     placeholder="Nickname"
                     style={styles.usernameTextInput}
                     returnKeyType={'done'}
+                    placeholderTextColor={LIGHT_GREY}
                     onChangeText={(nickname) => this.setState({ nickname })}
                     defaultValue={nickname}
                   />
@@ -675,10 +681,12 @@ export default class MemberProfile extends React.Component {
               </View>
             </View>
             <View style={styles.emailView}>
-              <Image
+              {/* <Image
                 source={require('./../../assets/images/line-17.png')}
                 style={styles.seperatorImage}
-              />
+              /> */}
+              <View style={styles.seperatorView} />
+
               <View
                 pointerEvents="box-none"
                 style={{
@@ -705,6 +713,7 @@ export default class MemberProfile extends React.Component {
                     placeholder="Email (optional)"
                     style={styles.emailTextInput}
                     returnKeyType={'done'}
+                    placeholderTextColor={LIGHT_GREY}
                     onChangeText={(email) => this.setState({ email })}
                     defaultValue={email}
                   />
@@ -753,10 +762,12 @@ export default class MemberProfile extends React.Component {
               </View>
             </View>
             <View style={styles.genderView}>
-              <Image
+              {/* <Image
                 source={require('./../../assets/images/line-3-copy.png')}
                 style={styles.seperatorTwoImage}
-              />
+              /> */}
+              <View style={styles.seperatorView} />
+
               <View
                 pointerEvents="box-none"
                 style={{
@@ -849,7 +860,7 @@ export default class MemberProfile extends React.Component {
                   placeholderText: {
                     fontFamily: NON_TITLE_FONT,
                     fontSize: 13 * fontAlpha,
-                    color: 'rgb(135, 135, 135)'
+                    color: LIGHT_GREY
                   },
 
                   dateText: {
@@ -912,7 +923,16 @@ export default class MemberProfile extends React.Component {
                       alignItems: 'center'
                     }}
                   >
-                    <Text style={styles.textInputTextInput}>
+                    <Text
+                      style={[
+                        styles.textInputTextInput,
+                        {
+                          color: defaultAddress
+                            ? 'rgb(135, 135, 135)'
+                            : LIGHT_GREY
+                        }
+                      ]}
+                    >
                       {defaultAddress}
                     </Text>
                     <Image

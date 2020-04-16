@@ -15,6 +15,7 @@ import {
 import React from 'react';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import openMap from 'react-native-open-maps';
+import _ from 'lodash';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -29,7 +30,8 @@ import * as Permissions from 'expo-permissions';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 @connect(({ members, shops, config, orders }) => ({
-  location: members.location
+  location: members.location,
+  selectedShop: shops.selectedShop
 }))
 export default class MapShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -95,6 +97,23 @@ export default class MapShippingAddress extends React.Component {
   }
   onBackPressed = () => {
     this.props.navigation.goBack();
+  };
+
+  placeHolderText = () => {
+    var placeholder = 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
+
+    if (this.props.selectedShop.response_message != undefined) {
+      placeholder_response = _.find(
+        this.props.selectedShop.response_message,
+        function (obj) {
+          return obj.key === 'Address Search Placeholder';
+        }
+      );
+      if (placeholder_response != undefined) {
+        placeholder = placeholder_response.text;
+      }
+    }
+    return placeholder;
   };
 
   renderForm = (title, placeholder, text, onChangeText, description) => {
@@ -355,13 +374,13 @@ export default class MapShippingAddress extends React.Component {
 
   renderSearchForm = () => (
     <GooglePlacesAutocomplete
-      placeholder="Search"
+      placeholder={this.placeHolderText()}
       minLength={2}
       autoFocus={true}
       enablePoweredByContainer={false}
       autoCorrect={false}
       currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      currentLocationLabel="Use My Location"
+      currentLocationLabel="  Use My Location"
       returnKeyType={'search'}
       keyboardAppearance={'light'}
       listViewDisplayed="auto"
@@ -369,9 +388,9 @@ export default class MapShippingAddress extends React.Component {
       renderDescription={(row) =>
         row.description || row.formatted_address || row.name
       }
-      textInputProps={{ clearButtonMode: 'never' }}
-      currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      currentLocationLabel="Use my location"
+      textInputProps={{ clearButtonMode: 'never', onBlur: () => {} }}
+      // currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+      // currentLocationLabel="Use my location"
       // nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       renderLeftButton={() => (
         <View
