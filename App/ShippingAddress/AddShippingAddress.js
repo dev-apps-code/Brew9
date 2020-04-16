@@ -1094,7 +1094,7 @@ const styles = StyleSheet.create({
   itemText: {
     color: 'black',
     fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
