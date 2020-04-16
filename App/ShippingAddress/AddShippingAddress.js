@@ -545,6 +545,7 @@ export default class AddShippingAddress extends React.Component {
         <View style={styles.sectionSeperatorView2} />
 
         </View>
+        {address_details ? (
         <View>
           <View style={styles.formDetail}>
             <Text style={styles.title}></Text>
@@ -558,13 +559,9 @@ export default class AddShippingAddress extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              {address_details ? (
+              {/* {address_details ? ( */}
                 <Text style={[styles.textInput]}>{address_details}</Text>
-              ) : (
-                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'Line 2'}
-                </Text>
-              )}
+              {/* ) : null} */}
             </TouchableOpacity>
           </View>
           {/* <Image
@@ -574,6 +571,8 @@ export default class AddShippingAddress extends React.Component {
         <View style={styles.sectionSeperatorView2} />
 
         </View>
+        ) : null}
+
       </View>
     );
   };
