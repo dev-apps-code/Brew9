@@ -26,16 +26,29 @@ export default class OrderForSelector extends React.Component {
   }
 
   getInitialState = () => ({
-    time_options_today: [],
-    time_options_tomorrow: [],
+    time_options_today: [
+      'NOW',
+      '9:00-9:15',
+      '9:15-9:30',
+      '9:30-9:45',
+      '10:15-10:30',
+      '11:45-12:00'
+    ],
+    time_options_tomorrow: [
+      '9:00-9:15',
+      '9:15-9:30',
+      '9:30-9:45',
+      '10:15-10:30',
+      '11:45-12:00'
+    ],
     selected_day_index: 0,
     selected_time_index: 0,
-    day_options: this.props.delivery ? ['Today', 'Tomorrow'] : ['Today']
+    day_options: this.props.delivery ? ['Today', 'tomorrow'] : ['Today']
   });
 
   componentDidMount() {
     // initialize time options
-    this._setTimeOptions(this.state.selected_day_index);
+    // this._setTimeOptions(this.state.selected_day_index);
   }
 
   _setTimeOptions = (selected_day_index) => {
@@ -165,7 +178,7 @@ export default class OrderForSelector extends React.Component {
         selected_time_index: 0
       },
       () => {
-        this._setTimeOptions(index);
+        // this._setTimeOptions(index);
       }
     );
   };
