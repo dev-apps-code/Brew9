@@ -33,7 +33,8 @@ import {
   TABBAR_INACTIVE_TINT,
   TABBAR_ACTIVE_TINT,
   PRIMARY_COLOR,
-  LIGHT_BLUE
+  LIGHT_BLUE,
+  DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
 import Moment from 'moment';
 import NotificationsRequestObject from '../Requests/notifications_request_object';
@@ -211,6 +212,18 @@ export default class PickUp extends React.Component {
       );
     }
   }
+
+  renderSeparator = () => {
+    return (
+      <View style={styles.receiptSectionSeperator}>
+        <Image
+          source={require('./../../assets/images/curve_in_background.png')}
+          style={styles.curve_in}
+        />
+        <View style={styles.sectionSeperatorView} />
+      </View>
+    );
+  };
 
   renderQueueView(current_order) {
     // create key value map for response messages
@@ -633,63 +646,15 @@ export default class PickUp extends React.Component {
                 </View>
               </View>
             </View>
-            <View style={styles.receiptSectionSeperator}>
-              <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                }}
-              />
-              <View style={styles.sectionSeperatorView} /> 
+            {this.renderSeparator()}
 
-                  <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                  transform: [
-                    { scaleX: -1 }
-                  ]
-                }}
-              />
-      
-            </View>
             <View style={styles.drinksViewWrapper}>
               {order_items}
               <View style={{ marginTop: 10 * alpha }}>{promotions}</View>
               {voucher_items}
             </View>
-            <View style={styles.receiptSectionSeperator}>
-                    
-                    <View
-                      style={{
-                        width:  (alpha * 14) /2,
-                        height: alpha * 14,
-                        borderBottomRightRadius: (alpha * 14) /2,
-                        borderTopRightRadius: (alpha * 14) /2,
-                        backgroundColor: 'rgb(239, 239, 239)',
-                      }}
-                    />
-                    <View style={styles.sectionSeperatorView} /> 
-      
-                        <View
-                      style={{
-                        width:  (alpha * 14) /2,
-                        height: alpha * 14,
-                        borderBottomRightRadius: (alpha * 14) /2,
-                        borderTopRightRadius: (alpha * 14) /2,
-                        backgroundColor: 'rgb(239, 239, 239)',
-                        transform: [
-                          { scaleX: -1 }
-                        ]
-                      }}
-                    />
-                    </View>
+            {this.renderSeparator()}
+
             <View style={styles.totalViewWrapper}>
               <View style={styles.orderTotalView}>
                 <Text style={styles.totallabelText}>Status</Text>
@@ -703,32 +668,8 @@ export default class PickUp extends React.Component {
                 </Text>
               </View>
             </View>
-            <View style={styles.receiptSectionSeperator}>
-              
-            <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                }}
-              />
-              <View style={styles.sectionSeperatorView} /> 
+            {this.renderSeparator()}
 
-                  <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                  transform: [
-                    { scaleX: -1 }
-                  ]
-                }}
-              />
-            </View>
             {item.delivery_fee > 0 ? (
               <View style={styles.totalViewWrapper}>
                 <View style={styles.orderTotalView}>
@@ -744,34 +685,7 @@ export default class PickUp extends React.Component {
                 </View>
               </View>
             ) : undefined}
-            {item.delivery_fee > 0 ? (
-              <View style={styles.receiptSectionSeperator}>
-                    
-              <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                }}
-              />
-              <View style={styles.sectionSeperatorView} /> 
-
-                  <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                  transform: [
-                    { scaleX: -1 }
-                  ]
-                }}
-              />
-              </View>
-            ) : undefined}
+            {item.delivery_fee > 0 ? this.renderSeparator() : undefined}
             {item.delivery_fee > 0 ? (
               <View style={styles.totalViewWrapper}>
                 <View style={styles.orderTotalView}>
@@ -789,34 +703,7 @@ export default class PickUp extends React.Component {
                 </View>
               </View>
             ) : undefined}
-            {item.delivery_fee > 0 ? (
-              <View style={styles.receiptSectionSeperator}>
-                   
-              <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                }}
-              />
-              <View style={styles.sectionSeperatorView} /> 
-
-                  <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                  transform: [
-                    { scaleX: -1 }
-                  ]
-                }}
-              />
-              </View>
-            ) : undefined}
+            {item.delivery_fee > 0 ? this.renderSeparator() : undefined}
             <View style={styles.totalViewWrapper}>
               <View style={styles.orderTotalView}>
                 <Text style={styles.totallabelText}>TOTAL</Text>
@@ -830,45 +717,15 @@ export default class PickUp extends React.Component {
                 </Text>
               </View>
             </View>
-            <View style={styles.receiptSectionSeperator}>
-                  
-            <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                }}
-              />
-              <View style={styles.sectionSeperatorView} /> 
-
-                  <View
-                style={{
-                  width:  (alpha * 14) /2,
-                  height: alpha * 14,
-                  borderBottomRightRadius: (alpha * 14) /2,
-                  borderTopRightRadius: (alpha * 14) /2,
-                  backgroundColor: 'rgb(239, 239, 239)',
-                  transform: [
-                    { scaleX: -1 }
-                  ]
-                }}
-              />
-            </View>
+            {this.renderSeparator()}
             <View style={styles.remarkViewWrapper}>
               <View style={styles.remarkView}>
                 <View
                   pointerEvents="box-none"
                   style={{
-                    // left: 22 * alpha,
-                    // right: 21 * alpha,
-                    // top: 11 * alpha,
-                    // bottom: 11 * alpha,
                     marginHorizontal: 20 * alpha,
                     marginVertical: 11 * alpha,
                     alignItems: 'flex-start'
-                    // backgroundColor: 'red'
                   }}
                 >
                   <View
@@ -1682,7 +1539,7 @@ const styles = StyleSheet.create({
     marginBottom: 20 * alpha
   },
   orderDetailView: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgb(245,245,245)',
     flex: 1,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
@@ -2144,12 +2001,9 @@ const styles = StyleSheet.create({
   },
   receiptSectionSeperator: {
     flex: 1,
-    // backgroundColor: 'orange',
-    backgroundColor: 'rgb(245,245,245)',
-
-    flexDirection:'row',
-    // alignContent: 'center',
-    justifyContent: 'space-between'
+    backgroundColor: 'rgb(239, 239, 239)',
+    alignContent: 'center',
+    justifyContent: 'center'
   },
 
   curve_in: {
@@ -2161,9 +2015,7 @@ const styles = StyleSheet.create({
 
   sectionSeperatorView: {
     backgroundColor: 'rgb(234, 234, 234)',
-    // backgroundColor: 'blue',
-
-    // position: 'absolute',
+    position: 'absolute',
     alignSelf: 'center',
     width: 300 * alpha,
     height: 1 * alpha

@@ -1968,7 +1968,7 @@ export default class Checkout extends React.Component {
     });
 
     return (
-      <View style={[styles.drinksViewWrapper, { paddingVertical: 10 * alpha }]}>
+      <View style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}>
         <View style={styles.orderitemsView}>{promotions_item}</View>
       </View>
     );
@@ -2197,6 +2197,14 @@ export default class Checkout extends React.Component {
                 source={require('./../../assets/images/dotted-line.png')}
                 style={styles.dottedLineImage}
               />
+              <View style={styles.receiptSectionSeperator}>
+                {/* <Image
+          source={require('./../../assets/images/curve_in_background.png')}
+          style={styles.curve_in}
+        /> */}
+                <View style={styles.sectionSeperatorView} />
+              </View>
+
               {this.renderPromotions(promotions)}
               {this.renderReceiptSeperation()}
 
