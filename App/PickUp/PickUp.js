@@ -233,9 +233,15 @@ export default class PickUp extends React.Component {
     });
 
     const queues = current_order.map((item, key) => {
+      console.log('item', item);
       let claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
       let today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
-      let claim_day = claim_time != today ? 'TOMORROW' : '';
+      // let claim_day = claim_time != today ? 'TOMORROW' : '';
+      let claim_day = item.pickup_status == 'Tomorrow' ? 'TOMORROW' : '';
+      console.log('claim_day', claim_day);
+      console.log('today', today);
+      console.log('claim_time', claim_time);
+
       let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
 
       // Pick up title
