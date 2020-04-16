@@ -177,6 +177,11 @@ export default class Checkout extends React.Component {
     }
   }
 
+  /**
+   * Format price
+   */
+  _formattedPrice = (price) => '$' + parseFloat(price).toFixed(2);
+
   setTimePickerDefault(day, isOrderForTomorrow) {
     const { start_time, end_time } = day
       ? day
@@ -466,9 +471,9 @@ export default class Checkout extends React.Component {
     var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
     switch (this.state.pick_up_status) {
       case 'Now':
-        if (this.props.delivery) {
-          return 'Estimated within 30mins';
-        }
+        // if (this.props.delivery) {
+        //   return 'Estimated within 30mins';
+        // }
         return 'Now';
 
       case 'Later':
@@ -1050,7 +1055,10 @@ export default class Checkout extends React.Component {
     );
     if (currentMember != undefined) {
       if (delivery && !selected_address) {
-        this.setState({ visible: true });
+        // console.log('what');
+        // this.setState({ visible: true });
+        this.addShippingAddress();
+        return;
       } else {
         if (selected_payment == '') {
           this.tooglePayment();
@@ -2046,7 +2054,7 @@ export default class Checkout extends React.Component {
                 // paddingHorizontal: 10 * alpha
               }}
             >
-              <View style={{flex:1}}>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description && (
                   <Text style={styles.deliveryNoted}>
@@ -2054,9 +2062,9 @@ export default class Checkout extends React.Component {
                   </Text>
                 )}
               </View>
-              <Text style={styles.productVoucherText}>{`$${parseFloat(
-                deliveryFee
-              ).toFixed(2)}`}</Text>
+              <Text style={styles.productVoucherText}>
+                {this._formattedPrice(deliveryFee)}
+              </Text>
             </View>
           )}
         </View>
@@ -2415,13 +2423,24 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
   deliveryNoted: {
-    backgroundColor: 'transparent',
+    // backgroundColor: 'transparent',
     color: '#ff4500',
-    fontFamily: TITLE_FONT,
-    fontSize: 10 * fontAlpha,
+    // fontFamily: TITLE_FONT,
+    // fontSize: 10 * fontAlpha,
+    // fontStyle: 'normal',
+    // textAlign: 'left',
+    // marginBottom: 5 * alpha,
+    // new style overrides above
+
+    // color: 'rgb(164, 164, 164)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
+    fontWeight: 'normal',
     textAlign: 'left',
-    marginBottom: 5 * alpha
+    backgroundColor: 'transparent',
+    // width: 210 * alpha,
+    marginBottom: 10 * alpha
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',

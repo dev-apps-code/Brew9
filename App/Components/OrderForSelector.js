@@ -381,13 +381,13 @@ const defaultStyles = {
   },
   selected: {
     color: 'rgb(54, 54, 54)',
-    fontSize: 17 * fontAlpha,
-    fontFamily: NON_TITLE_FONT,
+    fontSize: 20 * fontAlpha,
+    fontFamily: TITLE_FONT,
     fontWeight: 'bold'
   },
   notSelected: {
     color: 'rgb(82, 82, 82)',
-    fontSize: 15 * fontAlpha,
+    fontSize: 19 * fontAlpha,
     fontFamily: NON_TITLE_FONT
   }
 };
