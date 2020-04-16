@@ -1577,7 +1577,7 @@ export default class Checkout extends React.Component {
       }
 
       return (
-        <View style={styles.drinksView} key={key}>
+        <View style={[styles.drinksView,]} key={key}>
           <View
             pointerEvents="box-none"
             style={{
@@ -3434,6 +3434,7 @@ const styles = StyleSheet.create({
     marginTop: 13 * alpha,
     marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
     borderRadius: 14 * alpha,
+    // backgroundColor:'orange',
     flex: 1
   },
   whiteboxView: {
@@ -3783,7 +3784,7 @@ const styles = StyleSheet.create({
   drinksView: {
     backgroundColor: 'transparent',
     flex: 1,
-    marginTop: 10 * alpha
+    paddingTop: 10 * alpha
   },
 
   productDetailView: {
@@ -3909,7 +3910,7 @@ const styles = StyleSheet.create({
   // },
   receiptSectionSeperator: {
     flex: 1,
-    // backgroundColor: 'orange',
+    // backgroundColor: 'transparent',
     backgroundColor: 'rgb(245,245,245)',
 
     flexDirection:'row',
@@ -3919,8 +3920,6 @@ const styles = StyleSheet.create({
 
   sectionSeperatorView: {
     backgroundColor: 'rgb(234, 234, 234)',
-    // backgroundColor: 'blue',
-
     // position: 'absolute',
     alignSelf: 'center',
     width: 300 * alpha,
