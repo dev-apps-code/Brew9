@@ -128,7 +128,7 @@ export default class AddShippingAddress extends React.Component {
         primary: this.address.primary == true ? 1 : 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
-        tabTitles: ['Districts', 'Areas'],
+        tabTitles: ['District', 'Area'],
         defTab: 0,
         animation: new Animated.Value(0),
         populateTowns: false,
@@ -160,9 +160,8 @@ export default class AddShippingAddress extends React.Component {
         genderIndex: 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
-        tabTitles: ['Districts', 'Areas'],
+        tabTitles: ['District', 'Area'],
         defTab: 0,
-
         animation: new Animated.Value(0),
         populateTowns: false,
         populateAreas: false,
@@ -658,7 +657,7 @@ export default class AddShippingAddress extends React.Component {
                 marginBottom: 10 * alpha
               }}
             >
-              <Text style={styles.PleaseSelectText}>Please Select Address</Text>
+              <Text style={styles.PleaseSelectText}>Please select / District / Area</Text>
               <TouchableOpacity
                 onPress={this.handleClose}
                 style={styles.cancelVoucherButton}
