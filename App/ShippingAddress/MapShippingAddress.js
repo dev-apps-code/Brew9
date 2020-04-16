@@ -364,7 +364,7 @@ export default class MapShippingAddress extends React.Component {
       currentLocationLabel="Use My Location"
       returnKeyType={'search'}
       keyboardAppearance={'light'}
-      // listViewDisplayed="auto"
+      listViewDisplayed="auto"
       fetchDetails={true}
       renderDescription={(row) =>
         row.description || row.formatted_address || row.name
