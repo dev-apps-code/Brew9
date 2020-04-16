@@ -1073,7 +1073,7 @@ const styles = StyleSheet.create({
     marginRight: 10 * alpha
   },
   sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
+    backgroundColor: 'rgb(244, 244, 244)',
     position: 'absolute',
     alignSelf: 'flex-end',
     width: windowWidth - 40 * alpha,
@@ -1081,7 +1081,7 @@ const styles = StyleSheet.create({
     marginLeft: 10 * alpha
   },
   sectionSeperatorView2: {
-    backgroundColor: 'rgb(234, 234, 234)',
+    backgroundColor: 'rgb(244, 244, 244)',
     // position: 'absolute',
     // alignSelf: 'flex-end',
     // width: windowWidth - 40 * alpha,
