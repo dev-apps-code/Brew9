@@ -128,7 +128,7 @@ export default class AddShippingAddress extends React.Component {
         primary: this.address.primary == true ? 1 : 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
-        tabTitles: ['Districts', 'Areas'],
+        tabTitles: ['District', 'Area'],
         defTab: 0,
         animation: new Animated.Value(0),
         populateTowns: false,
@@ -160,9 +160,8 @@ export default class AddShippingAddress extends React.Component {
         genderIndex: 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
-        tabTitles: ['Districts', 'Areas'],
+        tabTitles: ['District', 'Area'],
         defTab: 0,
-
         animation: new Animated.Value(0),
         populateTowns: false,
         populateAreas: false,
@@ -546,6 +545,7 @@ export default class AddShippingAddress extends React.Component {
         <View style={styles.sectionSeperatorView2} />
 
         </View>
+        {address_details ? (
         <View>
           <View style={styles.formDetail}>
             <Text style={styles.title}></Text>
@@ -559,13 +559,9 @@ export default class AddShippingAddress extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              {address_details ? (
+              {/* {address_details ? ( */}
                 <Text style={[styles.textInput]}>{address_details}</Text>
-              ) : (
-                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'Line 2'}
-                </Text>
-              )}
+              {/* ) : null} */}
             </TouchableOpacity>
           </View>
           {/* <Image
@@ -575,6 +571,8 @@ export default class AddShippingAddress extends React.Component {
         <View style={styles.sectionSeperatorView2} />
 
         </View>
+        ) : null}
+
       </View>
     );
   };
@@ -658,7 +656,7 @@ export default class AddShippingAddress extends React.Component {
                 marginBottom: 10 * alpha
               }}
             >
-              <Text style={styles.PleaseSelectText}>Please Select Address</Text>
+              <Text style={styles.PleaseSelectText}>Please select / District / Area</Text>
               <TouchableOpacity
                 onPress={this.handleClose}
                 style={styles.cancelVoucherButton}
