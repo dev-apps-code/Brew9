@@ -1984,7 +1984,7 @@ export default class Checkout extends React.Component {
 
   renderDeliveryAddress = (address) => {
     let { deliveryFee, final_price, delivery_description } = this.state;
-    let text = address ? 'Change Address' : 'Add Address';
+    let text = address ? 'Change' : 'Add';
     let non_negative_subTotal_price = parseFloat(
       Math.max(0, final_price)
     ).toFixed(2);
