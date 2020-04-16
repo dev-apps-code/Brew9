@@ -656,7 +656,7 @@ export default class AddShippingAddress extends React.Component {
                 marginBottom: 10 * alpha
               }}
             >
-              <Text style={styles.PleaseSelectText}>Please select / District / Area</Text>
+              <Text style={styles.PleaseSelectText}>Please select</Text>
               <TouchableOpacity
                 onPress={this.handleClose}
                 style={styles.cancelVoucherButton}
