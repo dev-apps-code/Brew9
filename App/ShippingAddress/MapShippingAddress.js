@@ -380,7 +380,7 @@ export default class MapShippingAddress extends React.Component {
       enablePoweredByContainer={false}
       autoCorrect={false}
       currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      currentLocationLabel="Use My Location"
+      currentLocationLabel="  Use My Location"
       returnKeyType={'search'}
       keyboardAppearance={'light'}
       listViewDisplayed="auto"
