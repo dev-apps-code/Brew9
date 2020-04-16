@@ -2914,7 +2914,7 @@ const styles = StyleSheet.create({
     height: 11 * alpha
   },
   voucherButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'yellow',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -3762,7 +3762,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   drinksView: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'blue',
     flex: 1,
     marginTop: 10 * alpha
   },
@@ -3890,8 +3890,8 @@ const styles = StyleSheet.create({
   // },
   receiptSectionSeperator: {
     flex: 1,
-    // backgroundColor: 'orange',
-    backgroundColor: 'rgb(245,245,245)',
+    backgroundColor: 'green',
+    // backgroundColor: 'rgb(245,245,245)',
 
     flexDirection:'row',
     // alignContent: 'center',
