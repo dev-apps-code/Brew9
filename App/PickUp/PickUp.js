@@ -263,16 +263,17 @@ export default class PickUp extends React.Component {
       }
 
       const order_items = item.order_items.map((productItem, key) => {
-        console.log("currentKey: ")
-        console.log(key)
+        console.log('currentKey: ');
+        console.log(key);
         // console.log( item.order_items)
         // console.log("lastkey")
         // console.log((item.order_items).length)
         // var countKey = Object.keys(jsonObj).length;
         var price_string =
-        productItem.total_price != undefined && productItem.total_price > 0
+          productItem.total_price != undefined && productItem.total_price > 0
             ? `$${parseFloat(productItem.total_price).toFixed(2)}`
-            : productItem.total_price != undefined && productItem.total_price == 0
+            : productItem.total_price != undefined &&
+              productItem.total_price == 0
             ? 'Free'
             : '';
 
@@ -290,8 +291,11 @@ export default class PickUp extends React.Component {
               <View
                 style={[styles.productDetailView, { marginRight: 5 * alpha }]}
               >
-                <Text style={styles.productNameText}>{productItem.product_name}</Text>
-                {productItem.variations != null && productItem.variations != '' ? (
+                <Text style={styles.productNameText}>
+                  {productItem.product_name}
+                </Text>
+                {productItem.variations != null &&
+                productItem.variations != '' ? (
                   <Text style={styles.productVariantText}>
                     {productItem.variations}
                   </Text>
@@ -306,17 +310,19 @@ export default class PickUp extends React.Component {
                   justifyContent: 'space-between'
                 }}
               >
-                <Text style={styles.productQuantityText}>x{productItem.quantity}</Text>
+                <Text style={styles.productQuantityText}>
+                  x{productItem.quantity}
+                </Text>
 
                 <Text style={styles.productPriceText}>{price_string}</Text>
               </View>
               {item.order_items != null &&
                 key < item.order_items.length - 1 && (
-              <Image
-                source={require('./../../assets/images/dotted-line.png')}
-                style={styles.dottedLineImage}
-              />
-              )}
+                  <Image
+                    source={require('./../../assets/images/dotted-line.png')}
+                    style={styles.dottedLineImage}
+                  />
+                )}
             </View>
           </View>
         );
@@ -373,17 +379,15 @@ export default class PickUp extends React.Component {
         );
         // }
       });
-      var queue_no_remarks = item.queue_no 
+      var queue_no_remarks = item.queue_no;
 
-
-      if (!item.delivery_method && !item.paid){
-        queue_no_remarks = "-"
+      if (!item.delivery_method && !item.paid) {
+        queue_no_remarks = '-';
       }
       const voucher_items = item.voucher_items.map((voucherItem, key) => {
         let voucher_discount = '';
 
         /* Queue no should only not show when item is pickup and not paid  */
-    
 
         return (
           <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
@@ -401,7 +405,7 @@ export default class PickUp extends React.Component {
                   {voucherItem.voucher.name}
                 </Text>
 
-                <View style={{marginBottom: 10 * alpha}} />
+                <View style={{ marginBottom: 10 * alpha }} />
               </View>
 
               <Text style={styles.productPriceText}>
@@ -452,9 +456,7 @@ export default class PickUp extends React.Component {
               >
                 <View style={styles.queueHeaderBlock}>
                   <Text style={styles.queueheaderText}>Order Number</Text>
-                  <Text style={styles.queuenumberText}>
-                    {queue_no_remarks}
-                  </Text>
+                  <Text style={styles.queuenumberText}>{queue_no_remarks}</Text>
                 </View>
                 <View style={styles.queueHeaderBlock}>
                   <Text style={styles.pickupTimeheaderText}>
@@ -632,11 +634,30 @@ export default class PickUp extends React.Component {
               </View>
             </View>
             <View style={styles.receiptSectionSeperator}>
-              <Image
-                source={require('./../../assets/images/curve_in_background.png')}
-                style={styles.curve_in}
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
               />
-              <View style={styles.sectionSeperatorView} />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
             </View>
             <View style={styles.drinksViewWrapper}>
               {order_items}
@@ -644,12 +665,31 @@ export default class PickUp extends React.Component {
               {voucher_items}
             </View>
             <View style={styles.receiptSectionSeperator}>
-              <Image
-                source={require('./../../assets/images/curve_in_background.png')}
-                style={styles.curve_in}
-              />
-              <View style={styles.sectionSeperatorView} />
-            </View>
+                    
+                    <View
+                      style={{
+                        width:  (alpha * 14) /2,
+                        height: alpha * 14,
+                        borderBottomRightRadius: (alpha * 14) /2,
+                        borderTopRightRadius: (alpha * 14) /2,
+                        backgroundColor: 'rgb(239, 239, 239)',
+                      }}
+                    />
+                    <View style={styles.sectionSeperatorView} /> 
+      
+                        <View
+                      style={{
+                        width:  (alpha * 14) /2,
+                        height: alpha * 14,
+                        borderBottomRightRadius: (alpha * 14) /2,
+                        borderTopRightRadius: (alpha * 14) /2,
+                        backgroundColor: 'rgb(239, 239, 239)',
+                        transform: [
+                          { scaleX: -1 }
+                        ]
+                      }}
+                    />
+                    </View>
             <View style={styles.totalViewWrapper}>
               <View style={styles.orderTotalView}>
                 <Text style={styles.totallabelText}>Status</Text>
@@ -664,11 +704,30 @@ export default class PickUp extends React.Component {
               </View>
             </View>
             <View style={styles.receiptSectionSeperator}>
-              <Image
-                source={require('./../../assets/images/curve_in_background.png')}
-                style={styles.curve_in}
+              
+            <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
               />
-              <View style={styles.sectionSeperatorView} />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
             </View>
             {item.delivery_fee > 0 ? (
               <View style={styles.totalViewWrapper}>
@@ -687,11 +746,30 @@ export default class PickUp extends React.Component {
             ) : undefined}
             {item.delivery_fee > 0 ? (
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
+                    
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
               </View>
             ) : undefined}
             {item.delivery_fee > 0 ? (
@@ -713,11 +791,30 @@ export default class PickUp extends React.Component {
             ) : undefined}
             {item.delivery_fee > 0 ? (
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
+                   
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
               </View>
             ) : undefined}
             <View style={styles.totalViewWrapper}>
@@ -734,11 +831,30 @@ export default class PickUp extends React.Component {
               </View>
             </View>
             <View style={styles.receiptSectionSeperator}>
-              <Image
-                source={require('./../../assets/images/curve_in_background.png')}
-                style={styles.curve_in}
+                  
+            <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
               />
-              <View style={styles.sectionSeperatorView} />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
             </View>
             <View style={styles.remarkViewWrapper}>
               <View style={styles.remarkView}>
@@ -2028,9 +2144,12 @@ const styles = StyleSheet.create({
   },
   receiptSectionSeperator: {
     flex: 1,
-    backgroundColor: 'transparent',
-    alignContent: 'center',
-    justifyContent: 'center'
+    // backgroundColor: 'orange',
+    backgroundColor: 'rgb(245,245,245)',
+
+    flexDirection:'row',
+    // alignContent: 'center',
+    justifyContent: 'space-between'
   },
 
   curve_in: {
@@ -2042,7 +2161,9 @@ const styles = StyleSheet.create({
 
   sectionSeperatorView: {
     backgroundColor: 'rgb(234, 234, 234)',
-    position: 'absolute',
+    // backgroundColor: 'blue',
+
+    // position: 'absolute',
     alignSelf: 'center',
     width: 300 * alpha,
     height: 1 * alpha

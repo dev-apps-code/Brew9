@@ -2172,12 +2172,31 @@ export default class Checkout extends React.Component {
                 )}
               </View>
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
+            </View>
 
               {this.renderOrderItems(cart, promotions)}
               <Image
@@ -2186,22 +2205,60 @@ export default class Checkout extends React.Component {
               />
               {this.renderPromotions(promotions)}
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
+            </View>
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
               {this.renderPickupTime()}
               <View style={styles.receiptSectionSeperator}>
-                <Image
-                  source={require('./../../assets/images/curve_in_background.png')}
-                  style={styles.curve_in}
-                />
-                <View style={styles.sectionSeperatorView} />
-              </View>
+              <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                }}
+              />
+              <View style={styles.sectionSeperatorView} /> 
+
+                  <View
+                style={{
+                  width:  (alpha * 14) /2,
+                  height: alpha * 14,
+                  borderBottomRightRadius: (alpha * 14) /2,
+                  borderTopRightRadius: (alpha * 14) /2,
+                  backgroundColor: 'rgb(239, 239, 239)',
+                  transform: [
+                    { scaleX: -1 }
+                  ]
+                }}
+              />
+      
+            </View>
               {delivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
@@ -2209,12 +2266,31 @@ export default class Checkout extends React.Component {
                 : undefined}
               {delivery && (
                 <View style={styles.receiptSectionSeperator}>
-                  <Image
-                    source={require('./../../assets/images/curve_in_background.png')}
-                    style={styles.curve_in}
-                  />
-                  <View style={styles.sectionSeperatorView} />
-                </View>
+                <View
+                  style={{
+                    width:  (alpha * 14) /2,
+                    height: alpha * 14,
+                    borderBottomRightRadius: (alpha * 14) /2,
+                    borderTopRightRadius: (alpha * 14) /2,
+                    backgroundColor: 'rgb(239, 239, 239)',
+                  }}
+                />
+                <View style={styles.sectionSeperatorView} /> 
+  
+                    <View
+                  style={{
+                    width:  (alpha * 14) /2,
+                    height: alpha * 14,
+                    borderBottomRightRadius: (alpha * 14) /2,
+                    borderTopRightRadius: (alpha * 14) /2,
+                    backgroundColor: 'rgb(239, 239, 239)',
+                    transform: [
+                      { scaleX: -1 }
+                    ]
+                  }}
+                />
+        
+              </View>
               )}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
@@ -3804,13 +3880,32 @@ const styles = StyleSheet.create({
     height: 2 * alpha
   },
 
+  // receiptSectionSeperator: {
+  //   flex: 1,
+  //   height: 14 * alpha,
+  //   marginTop: -1 * alpha,
+  //   marginBottom: -1 * alpha,
+  //   alignContent: 'center',
+  //   justifyContent: 'center'
+  // },
   receiptSectionSeperator: {
     flex: 1,
-    height: 14 * alpha,
-    marginTop: -1 * alpha,
-    marginBottom: -1 * alpha,
-    alignContent: 'center',
-    justifyContent: 'center'
+    // backgroundColor: 'orange',
+    backgroundColor: 'rgb(245,245,245)',
+
+    flexDirection:'row',
+    // alignContent: 'center',
+    justifyContent: 'space-between'
+  },
+
+  sectionSeperatorView: {
+    backgroundColor: 'rgb(234, 234, 234)',
+    // backgroundColor: 'blue',
+
+    // position: 'absolute',
+    alignSelf: 'center',
+    width: 300 * alpha,
+    height: 1 * alpha
   },
 
   curve_in: {
@@ -3820,13 +3915,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
 
-  sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
-    position: 'absolute',
-    alignSelf: 'center',
-    width: 300 * alpha,
-    height: 1 * alpha
-  },
+  // sectionSeperatorView: {
+  //   backgroundColor: 'rgb(234, 234, 234)',
+  //   position: 'absolute',
+  //   alignSelf: 'center',
+  //   width: 300 * alpha,
+  //   height: 1 * alpha
+  // },
 
   menuRowLineView: {
     backgroundColor: 'rgb(245, 245, 245)',
