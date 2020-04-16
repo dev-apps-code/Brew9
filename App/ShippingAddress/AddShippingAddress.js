@@ -529,7 +529,7 @@ export default class AddShippingAddress extends React.Component {
                 <Text style={[styles.textInput]}>{address}</Text>
               ) : (
                 <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {'Line 1'}
+                  {'Select address'}
                 </Text>
               )}
               <Image
