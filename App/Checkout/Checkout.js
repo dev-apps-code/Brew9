@@ -177,6 +177,11 @@ export default class Checkout extends React.Component {
     }
   }
 
+  /**
+   * Format price
+   */
+  _formattedPrice = (price) => '$' + parseFloat(price).toFixed(2);
+
   setTimePickerDefault(day, isOrderForTomorrow) {
     const { start_time, end_time } = day
       ? day
@@ -2046,7 +2051,7 @@ export default class Checkout extends React.Component {
                 // paddingHorizontal: 10 * alpha
               }}
             >
-              <View style={{flex:1}}>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description && (
                   <Text style={styles.deliveryNoted}>
@@ -2054,9 +2059,9 @@ export default class Checkout extends React.Component {
                   </Text>
                 )}
               </View>
-              <Text style={styles.productVoucherText}>{`$${parseFloat(
-                deliveryFee
-              ).toFixed(2)}`}</Text>
+              <Text style={styles.productVoucherText}>
+                {this._formattedPrice(deliveryFee)}
+              </Text>
             </View>
           )}
         </View>
@@ -2339,13 +2344,24 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
   deliveryNoted: {
-    backgroundColor: 'transparent',
-    color: '#ff4500',
-    fontFamily: TITLE_FONT,
-    fontSize: 10 * fontAlpha,
+    // backgroundColor: 'transparent',
+    // color: '#ff4500',
+    // fontFamily: TITLE_FONT,
+    // fontSize: 10 * fontAlpha,
+    // fontStyle: 'normal',
+    // textAlign: 'left',
+    // marginBottom: 5 * alpha,
+    // new style overrides above
+
+    color: 'rgb(164, 164, 164)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
+    fontWeight: 'normal',
     textAlign: 'left',
-    marginBottom: 5 * alpha
+    backgroundColor: 'transparent',
+    // width: 210 * alpha,
+    marginBottom: 10 * alpha
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
