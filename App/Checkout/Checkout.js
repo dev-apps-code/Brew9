@@ -1055,7 +1055,10 @@ export default class Checkout extends React.Component {
     );
     if (currentMember != undefined) {
       if (delivery && !selected_address) {
-        this.setState({ visible: true });
+        // console.log('what');
+        // this.setState({ visible: true });
+        this.addShippingAddress();
+        return;
       } else {
         if (selected_payment == '') {
           this.tooglePayment();
@@ -2345,7 +2348,7 @@ export default class Checkout extends React.Component {
 const styles = StyleSheet.create({
   deliveryNoted: {
     // backgroundColor: 'transparent',
-    // color: '#ff4500',
+    color: '#ff4500',
     // fontFamily: TITLE_FONT,
     // fontSize: 10 * fontAlpha,
     // fontStyle: 'normal',
@@ -2353,7 +2356,7 @@ const styles = StyleSheet.create({
     // marginBottom: 5 * alpha,
     // new style overrides above
 
-    color: 'rgb(164, 164, 164)',
+    // color: 'rgb(164, 164, 164)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
