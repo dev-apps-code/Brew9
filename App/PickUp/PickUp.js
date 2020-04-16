@@ -240,7 +240,10 @@ export default class PickUp extends React.Component {
 
       // Pick up title
       var pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
-
+      var pick_time = Moment(item.pickup_time, 'h:mm:ss A')
+        .add(30, 'minutes')
+        .format('LTS');
+      var pick_up_time = item.delivery_method ? pick_time : item.pickup_time;
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
       let progress = progressValues[item.status] || 0;
@@ -477,9 +480,9 @@ export default class PickUp extends React.Component {
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.pickupTimeText}>
-                      {Moment(item.pickup_time, 'HH:mm').format('h:mm')}
+                      {Moment(pick_up_time, 'HH:mm').format('h:mm')}
                       <Text style={styles.pickupTimeAMPMText}>
-                        {Moment(item.pickup_time, 'HH:mm').format('A')}
+                        {Moment(pick_up_time, 'HH:mm').format('A')}
                       </Text>
                     </Text>
                   </View>
