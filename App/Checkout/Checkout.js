@@ -1317,8 +1317,8 @@ export default class Checkout extends React.Component {
                       <Text
                         style={
                           this.state.selected_payment == 'credits'
-                            ? styles.brew9WalletSelectedText
-                            : styles.brew9WalletText
+                            ? styles.selectedPaymentTitleText
+                            : styles.paymentTitleText
                         }
                       >
                         Wallet
@@ -1453,8 +1453,8 @@ export default class Checkout extends React.Component {
                     <Text
                       style={
                         this.state.selected_payment == 'credit_card'
-                          ? styles.creditCardSelectedText
-                          : styles.creditCardText
+                          ? styles.selectedPaymentTitleText
+                          : styles.paymentTitleText
                       }
                     >
                       Credit Card
@@ -1533,8 +1533,8 @@ export default class Checkout extends React.Component {
                     <Text
                       style={
                         this.state.selected_payment == 'counter'
-                          ? styles.creditCardSelectedText
-                          : styles.creditCardText
+                          ? styles.selectedPaymentTitleText
+                          : styles.paymentTitleText
                       }
                     >
                       {cashPayment}
@@ -3125,7 +3125,7 @@ const styles = StyleSheet.create({
   paymentMethodTwoText: {
     backgroundColor: 'transparent',
     color: 'rgb(54, 54, 54)',
-    fontFamily: NON_TITLE_FONT,
+    fontFamily: TITLE_FONT,
     fontSize: 17 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
@@ -3166,6 +3166,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'rgb(186, 183, 183)',
     fontFamily: NON_TITLE_FONT,
+    fontSize: 15 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left'
+  },
+  paymentTitleText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 15 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left'
+  },
+  selectedPaymentTitleText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
     fontSize: 15 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
