@@ -374,7 +374,7 @@ export default class PickUp extends React.Component {
             >
               <View style={styles.productDetailView}>
                 <Text style={[styles.productNameText, { marginBottom: 0 }]}>
-                  {item.name}
+                  {item.cart_text}
                 </Text>
 
                 <View style={styles.spacer} />
