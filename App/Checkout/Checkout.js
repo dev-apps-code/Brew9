@@ -1275,6 +1275,17 @@ export default class Checkout extends React.Component {
             </TouchableOpacity>
             <Text style={styles.paymentMethodTwoText}>Payment Method</Text>
           </View>
+          <View
+            style={{
+              backgroundColor: 'rgb(245, 245, 245)',
+              alignSelf: 'flex-end',
+              width: 375 * alpha,
+              // top: 57 * alpha,
+              height: 1 * alpha,
+              left: 0,
+              right: 0 * alpha
+            }}
+          />
           <View pointerEvents="box-none" style={{ height: 150 * alpha }}>
             <View style={styles.brew9walletView}>
               <TouchableOpacity
@@ -1353,11 +1364,7 @@ export default class Checkout extends React.Component {
                     />
                   </View>
                 </View>
-                <View
-                  style={{
-                    flex: 1
-                  }}
-                />
+
                 <View style={styles.menuRowLineView} />
               </TouchableOpacity>
             </View>
@@ -1421,11 +1428,6 @@ export default class Checkout extends React.Component {
 								</View>
 							</View> */}
 
-                <View
-                  style={{
-                    flex: 1
-                  }}
-                />
                 <View style={styles.menuRowLineView} />
                 <View
                   pointerEvents="box-none"
@@ -1506,11 +1508,6 @@ export default class Checkout extends React.Component {
                   </View>
                 </View>
 
-                <View
-                  style={{
-                    flex: 1
-                  }}
-                />
                 <View style={styles.menuRowLineView} />
                 <View
                   pointerEvents="box-none"
@@ -3824,10 +3821,11 @@ const styles = StyleSheet.create({
   menuRowLineView: {
     backgroundColor: 'rgb(245, 245, 245)',
     alignSelf: 'flex-end',
-    width: 375 * alpha,
+    width: 350 * alpha,
     // top: 57 * alpha,
     height: 1 * alpha,
-    left: 20 * alpha
+    left: 0 * alpha,
+    right: 20 * alpha
   },
 
   menuRowArrowImage: {
