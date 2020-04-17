@@ -2353,7 +2353,7 @@ const styles = StyleSheet.create({
   deliveryNoted: {
     color: '#ff4500',
     fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
+    fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
