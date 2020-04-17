@@ -130,7 +130,7 @@ export default class Checkout extends React.Component {
       addressConfirmation: false,
       deliveryFee: 0,
       loading: false,
-      range: ""
+      range: ''
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -2058,7 +2058,6 @@ export default class Checkout extends React.Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between'
-                // paddingHorizontal: 10 * alpha
               }}
             >
               <View style={{ flex: 1 }}>
@@ -2342,24 +2341,14 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
   deliveryNoted: {
-    // backgroundColor: 'transparent',
     color: '#ff4500',
-    // fontFamily: TITLE_FONT,
-    // fontSize: 10 * fontAlpha,
-    // fontStyle: 'normal',
-    // textAlign: 'left',
-    // marginBottom: 5 * alpha,
-    // new style overrides above
-
-    // color: 'rgb(164, 164, 164)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    // width: 210 * alpha,
-    marginBottom: 10 * alpha
+    width: 191 * alpha
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
