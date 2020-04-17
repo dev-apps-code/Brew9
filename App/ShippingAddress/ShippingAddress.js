@@ -174,7 +174,6 @@ export default class ShippingAddress extends React.Component {
   };
   loadUpdateProfile(formData, address_id) {
     const { dispatch, currentMember, navigation } = this.props;
-    isInitialAddress = this.props.navigation.state.params.initialAddress;
     const callback = (eventObject) => {
     };
 
