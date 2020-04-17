@@ -468,21 +468,17 @@ export default class Checkout extends React.Component {
   };
 
   _getFormattedSchedule = () => {
-    // var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
-    // switch (this.state.pick_up_status) {
-    //   case 'Now':
-    //     // if (this.props.delivery) {
-    //     //   return 'Estimated within 30mins';
-    //     // }
-    //     return 'Now';
+    var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
+    switch (this.state.pick_up_status) {
+      case 'Now':
+        return 'Now';
 
-    //   case 'Later':
-    //     return _pick_up_time;
+      case 'Later':
+        return this.state.range;
 
-    //   case 'Tomorrow':
-    //     return 'Tomorrow, ' + _pick_up_time;
-    // }
-    return this.state.range;
+      case 'Tomorrow':
+        return 'Tomorrow ' + this.state.range;
+    }
   };
 
   onSelectOrderLater = () => {
