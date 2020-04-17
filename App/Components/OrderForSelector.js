@@ -148,7 +148,7 @@ export default class OrderForSelector extends React.Component {
 
   render() {
     const { animation, delivery } = this.props;
-    const TITLE = delivery ? 'Delivery' : 'Pick Up Time';
+    const TITLE = delivery ? 'Delivery Time' : 'Pick Up Time';
 
     return (
       <Animated.View style={animation.getLayout()}>
