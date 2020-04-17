@@ -25,122 +25,61 @@ export default class OrderForSelector extends React.Component {
     this.state = this.getInitialState.call(this);
   }
 
-  getInitialState = () => {
-    const { delivery, selectedShop } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
-
-    let today_time_slot = delivery
-      ? opening_hour?.ordering_time_slot || []
-      : delivery_hour?.today?.delivery_time_slot || [];
-
-    let tomorrow_time_slot = delivery_hour?.tomorrow?.delivery_time_slot || [];
-
-    return {
-      time_options_today: today_time_slot,
-      time_options_tomorrow: tomorrow_time_slot,
-      time_options: today_time_slot,
-      selected_day_index: 0,
-      selected_time_index: 0,
-      day_options: this.props.delivery ? ['Today', 'tomorrow'] : ['Today']
-    };
-  };
+  getInitialState = () => ({
+    day_options: [],
+    current_time_options: [],
+    time_options: [],
+    selected_day_index: 0,
+    selected_time_index: 0
+  });
 
   componentDidMount() {
-   
+    this._setTimeOptions();
   }
 
-  _setTimeOptions = (selected_day_index) => {
-    let _time_options = [];
-    let selected_day = this.state.day_options[selected_day_index];
-    let day_time = Moment(new Date(), 'h:mm');
+  /**
+   * Set the proper time options using data from the API
+   */
+  _setTimeOptions = () => {
+    const { delivery, today, tomorrow } = this.props;
+    
+    let day_options = [];
+    let time_options = [];
 
-    let { start_time, end_time } = this.props.selectedShop.opening_hour;
-
-    if (this.props.delivery) {
-      const { today, tomorrow } = this.props.selectedShop.delivery_hour;
-
-      if (selected_day === 'Tomorrow') {
-        day_time = Moment(tomorrow.start_time, 'h:mm');
-        start_time = tomorrow.start_time;
-        end_time = tomorrow.end_time;
-      } else {
-        start_time = today.start_time;
-        end_time = today.end_time;
-      }
+    if (today.length > 0) {
+      day_options.push('Today');
+      time_options.push(today);
     }
 
-    let opening_time = Moment(start_time, 'h:mm');
-    let closing_time = Moment(end_time, 'h:mm');
-
-    let _hours_options = _.range(0, 24);
-
-    // show only available time starting from opening time
-    _hours_options = _.filter(
-      _hours_options,
-      (hr) =>
-        parseInt(hr) >= opening_time.hours() &&
-        hr <= closing_time.hours() &&
-        hr >= day_time.hours()
-    );
-
-    let _minutes_arraay = ['00', '15', '30', '45'];
-
-    _hours_options.forEach((hr, index) => {
-      let _minutes_options = _.filter(_minutes_arraay, (min) => {
-        min = parseInt(min);
-        if (hr == day_time.hours()) {
-          return min > day_time.minutes();
-        } else if (hr == closing_time.hours()) {
-          return min <= closing_time.minutes();
-        } else {
-          return true;
-        }
-      });
-
-      // create the time options
-
-      _minutes_options.forEach((min) => _time_options.push(hr + ':' + min));
-    });
-
-    let time_options_today = [];
-    _time_options.forEach((_time_option, idx) => {
-      if (idx + 1 < _time_options.length) {
-        time_options_today.push(_time_option + ' - ' + _time_options[idx + 1]);
-      }
-    });
-
-    // Add NOW time option
-    if (
-      day_time.isBetween(opening_time, closing_time) &&
-      selected_day === 'Today'
-    ) {
-      time_options_today.unshift('NOW');
+    if (delivery && tomorrow.length > 0) {
+      day_options.push('Tomorrow');
+      time_options.push(tomorrow);
     }
 
-    this.setState(
-      { time_options_today },
+    let current_time_options = time_options.length > 0 ? time_options[0] : [];
 
-      // go back to first available time
-      this.sp.scrollToIndex(0)
-    );
+    this.setState({
+      day_options,
+      current_time_options,
+      time_options
+    });
   };
 
   _confirm = () => {
-    
     let selected = this.state.day_options[this.state.selected_day_index];
-    
-    const {option, hour, mins, range} = this.getOptionHourMinsRange(selected);
+
+    const { option, hour, mins, range } = this.getOptionHourMinsRange(selected);
     // confirm
     this.props.onConfirm(option, hour, mins, range);
   };
 
-  getOptionHourMinsRange(selected){
+  getOptionHourMinsRange(selected) {
     let hour = null;
     let mins = null;
     let option = null;
-    let range = "";
+    let range = '';
+    let _t = this.state.current_time_options[this.state.selected_time_index];
     if (selected == 'Today') {
-      let _t = this.state.time_options_today[this.state.selected_time_index];
       range = _t;
       if (_t !== 'NOW') {
         option = 'Later';
@@ -161,7 +100,6 @@ export default class OrderForSelector extends React.Component {
       }
     } else {
       option = 'Tomorrow';
-      let _t = this.state.time_options_tomorrow[this.state.selected_time_index];
       range = _t;
       _t = _t.split(' - ');
 
@@ -173,14 +111,20 @@ export default class OrderForSelector extends React.Component {
       hour = _t[0];
       mins = _t[1];
     }
-    return (option, hour, mins, range)
+    return { option, hour, mins, range };
   }
 
+  /**
+   * Returns true if there are time options available
+   * else returns false
+   * @public
+   */
+  hasSchedule = () => this.state.time_options.length;
+
   _changeTimeOptions = (index) => {
-    const options = [this.state.time_options_today, this.state.time_options_tomorrow];
-    const time_options = options[index];
-    this.setState({time_options}, () => this.sp.scrollToIndex(0));
-  }
+    const current_time_options = this.state.time_options[index];
+    this.setState({ current_time_options }, () => this.sp.scrollToIndex(0));
+  };
 
   _onDayChange = (data, index) => {
     this.setState(
@@ -203,9 +147,8 @@ export default class OrderForSelector extends React.Component {
   };
 
   render() {
-    const { time_options } = this.state;
     const { animation, delivery } = this.props;
-    const TITLE = delivery ? 'Delivery' : 'Pickup';
+    const TITLE = delivery ? 'Delivery' : 'Pick Up Time';
 
     return (
       <Animated.View style={animation.getLayout()}>
@@ -286,7 +229,7 @@ export default class OrderForSelector extends React.Component {
             {/* Time picker */}
             <ScrollPicker
               ref={(sp) => (this.sp = sp)}
-              dataSource={time_options}
+              dataSource={this.state.current_time_options}
               rotationEnabled={false}
               selectedIndex={0}
               itemHeight={ITEM_HEIGHT}
