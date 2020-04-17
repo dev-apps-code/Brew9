@@ -687,6 +687,8 @@ export default class Checkout extends React.Component {
         var promotion = shop.all_promotions[index];
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
+            console.log("\n\npromotion")
+            console.log(promotion)
             var price = 0;
             var roundedPrice = 0;
             var trigger_price = parseFloat(promotion.trigger_price);
@@ -721,6 +723,7 @@ export default class Checkout extends React.Component {
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
+                  price = promotion.value
                   final_cart_value = final_cart_value - discount_value;
                 }
               }
@@ -1930,7 +1933,7 @@ export default class Checkout extends React.Component {
           ? `-$${parseFloat(item.price).toFixed(2)}`
           : item.type != undefined && item.type == 'Free Items and vouchers'
           ? 'Free'
-          : '';
+          : 'Rebate';
       let filtered =
         item.selected_variants != null
           ? item.selected_variants.filter(function (el) {
@@ -2065,7 +2068,6 @@ export default class Checkout extends React.Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between'
-                // paddingHorizontal: 10 * alpha
               }}
             >
               <View style={{ flex: 1 }}>
@@ -2350,24 +2352,14 @@ export default class Checkout extends React.Component {
 
 const styles = StyleSheet.create({
   deliveryNoted: {
-    // backgroundColor: 'transparent',
     color: '#ff4500',
-    // fontFamily: TITLE_FONT,
-    // fontSize: 10 * fontAlpha,
-    // fontStyle: 'normal',
-    // textAlign: 'left',
-    // marginBottom: 5 * alpha,
-    // new style overrides above
-
-    // color: 'rgb(164, 164, 164)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    // width: 210 * alpha,
-    marginBottom: 10 * alpha
+    width: 191 * alpha
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',

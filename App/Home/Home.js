@@ -1103,6 +1103,7 @@ export default class Home extends React.Component {
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
+                  price = promotion.value
                   final_cart_value = cart_total - discount_value;
                 }
               }
