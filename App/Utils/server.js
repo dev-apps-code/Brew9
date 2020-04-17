@@ -22,7 +22,6 @@ import { getServerIndex } from './storage';
 // export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
 
 export const KSERVERURLLIST = [
-  "http://localhost:3000/api",
   "https://dev.brew9.co/api",
   "http://test.brew9.co/api",
   "https://app.brew9.co/api",

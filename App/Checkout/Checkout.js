@@ -35,7 +35,6 @@ import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
-import TimeSelector from '../Components/TimeSelector';
 import OrderForSelector from '../Components/OrderForSelector';
 
 const OPTION_NOW_MESSAGE = 'Estimated within 30mins';

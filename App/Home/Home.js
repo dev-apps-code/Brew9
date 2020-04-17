@@ -189,7 +189,9 @@ export default class Home extends React.Component {
       member_distance: 1000,
       first_promo_popup: false,
       popUpVisible: false,
-      scroll_Index: null
+      scroll_Index: null,
+      refresh_products: true,
+      monitorLocation: null,
     };
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
@@ -226,93 +228,62 @@ export default class Home extends React.Component {
     }
   };
 
-  // registerForPushNotificationsAsync = async () => {
-  // 	const { status: existingStatus } = await Permissions.getAsync(
-  // 		Permissions.NOTIFICATIONS
-  // 	);
-  // 	let finalStatus = existingStatus;
-
-  // 	// only ask if permissions have not already been determined, because
-  // 	// iOS won't necessarily prompt the user a second time.
-  // 	if (existingStatus !== 'granted') {
-  // 		// Android remote notification permissions are granted during the app
-  // 		// install, so this will only ask on iOS
-  // 		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-  // 		finalStatus = status;
-  // 	}
-
-  // 	// Stop here if the user did not grant permissions
-  // 	if (finalStatus !== 'granted') {
-  // 		return;
-  // 	}
-
-  // 	// Get the token that uniquely identifies this device
-  // 	let token = await Notifications.getExpoPushTokenAsync();
-
-  // 	// POST the token to your backend server from where you can retrieve it to send push notifications.
-  // 	this.loadStorePushToken(token)
-  // }
-
-  // getNotificationAsync = async () => {
-  // 	await this.registerForPushNotificationsAsync()
-  // }
-  getLocation = async () => {
-    const { dispatch } = this.props;
+  getLocationAndLoadShops = async () => {
     
+    const {dispatch} = this.props;
     try {
       const response = await Permissions.getAsync(Permissions.LOCATION);
       if (response.status === 'denied') {
-        if (Platform.OS == 'android') {
-          AsyncStorage.setItem('location permission', response.status);
-        }
+        this.loadShops()
         return
       }
-
       if (response.status !== 'granted') {     
-          const { status } = await Permissions.askAsync(Permissions.LOCATION);
-        } else {
-        Location.watchPositionAsync(
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        // api will be called when by location if it is not denied
+        if (status === 'denied') {
+          this.loadShops()
+          return
+        }
+      } 
+        
+      const {monitorLocation} = this.state
+
+      if (monitorLocation == null){
+        this.setState({monitorLocation:mLocation});
+        
+        const mLocation = Location.watchPositionAsync(
           {
-            distanceInterval: 100,
+            distanceInterval: 1000,
             timeInterval: 10000
           },
           (newLocation) => {
+            
             dispatch(createAction('members/setLocation')(newLocation));
           },
           (error) => console.log(error)
         );
-
-        let location = await Location.getCurrentPositionAsync({});
-        dispatch(createAction('members/setLocation')(location));
-      }
-    } catch (error) {
-      console.log(error);
+        
     }
-  };
-
-  getLocationAsync = async () => {
-    const { dispatch } = this.props;
-    try {
-      const value = await AsyncStorage.getItem('location permission');
-      if (value != 'denied') {
-        this.getLocation();
-      } else {
-        return;
-      }
+  
     } catch (error) {
       // Error retrieving data
     }
   };
 
+  
+ 
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.location !== this.props.location) {
+
       if (prevProps.location != null) {
-        this.loadShops(false);
+        this.loadShops();
       }
       this.computeDistance();
     }
     if (prevProps.currentMember !== this.props.currentMember) {
-      this.loadShops(false);
+      this.loadShops();
+      this.computeDistance();
     }
     if (prevProps.cart !== this.props.cart) {
       this.check_promotion_trigger();
@@ -361,25 +332,17 @@ export default class Home extends React.Component {
   }
 
   componentWillMount() {
-    // this.getNotificationAsync()
-    if (Platform.OS === 'android') {
-      this.setState({
-        errorMessage:
-          'Oops, this will not work in an Android emulator. Try it on your device!'
-      });
-    } else {
-      this.getLocationAsync();
-    }
-
+   
     this.setState({ isPromoToggle: false });
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     Keyboard.dismiss();
     this.props.navigation.setParams({
       onQrScanPressed: this.onQrScanPressed
     });
-    this.loadShops(true);
+    this.getLocationAndLoadShops();
+    
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
@@ -429,9 +392,12 @@ export default class Home extends React.Component {
   _handleAppStateChange = (nextAppState) => {
     if (
       this.state.appState.match(/inactive|background/) &&
-      nextAppState === 'active'
+      nextAppState === 'active'      
     ) {
-      this.getLocationAsync();
+      console.log("active")
+      this.setState({refresh_products:true})
+      this.getLocationAndLoadShops();
+      console.log("--getlocation439--")
     }
     this.setState({
       appState: nextAppState,
@@ -440,7 +406,7 @@ export default class Home extends React.Component {
   };
 
   handleBackPress = () => {
-    const { dispatch, navigation } = this.props;
+    const { navigation } = this.props;
     if (!navigation.isFocused()) {
       // The screen is not focused, so don't do anything
       return false;
@@ -472,10 +438,10 @@ export default class Home extends React.Component {
     );
   };
 
-  loadShops(loadProducts) {
+  loadShops() {
     const { dispatch, company_id, location } = this.props;
     const { first_promo_popup } = this.state;
-    // this.setState({ loading: true })
+
     const callback = (eventObject) => {
       // this.setState({ loading: false })
       if (eventObject.success) {
@@ -485,9 +451,12 @@ export default class Home extends React.Component {
           },
           function () {
             this.check_promotion_trigger();
-            if (loadProducts) {
+
+            const {refresh_products} = this.state
+            if (refresh_products) {
               this.loadStoreProducts();
-              this.getLocationAsync();
+              
+              console.log("--getlocation496--")
               if (first_promo_popup == false) {
                 this.shouldShowFeatured(this.props.shop);
               }
@@ -525,7 +494,8 @@ export default class Home extends React.Component {
             {
               data: eventObject.result,
               total: eventObject.total,
-              page: this.state.page + 1
+              page: this.state.page + 1,
+              refresh_products:false,
             },
             function () {
               let data = [...this.state.data];
@@ -572,9 +542,11 @@ export default class Home extends React.Component {
     this.setState({
       isRefreshing: true,
       data: [],
-      products: []
+      products: [],
+      refresh_products:true,
     });
-    this.loadShops(true);
+    console.log("--loadshops580--")
+    this.loadShops();
   }
 
   onCheckoutPressed = () => {
@@ -604,6 +576,7 @@ export default class Home extends React.Component {
           const { clearCart } = this.props;
 
           if (clearCart == true) {
+            console.log("--loadshops604--")
             this.loadShops();
             navigate('PickUp');
           } else {
@@ -621,6 +594,7 @@ export default class Home extends React.Component {
         (payload) => {
           this.removeNavigationListener();
           this.loadShops();
+          console.log("--loadshops633--")
         }
       );
       navigate('VerifyUser', {

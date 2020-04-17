@@ -46,10 +46,7 @@ export default class OrderForSelector extends React.Component {
   };
 
   componentDidMount() {
-    // initialize time options
-    // this._setTimeOptions(this.state.selected_day_index);
-    console.log('opening hour shop ', this.props.selectedShop.opening_hour);
-    console.log('delivery hour shop ', this.props.selectedShop.delivery_hour);
+   
   }
 
   _setTimeOptions = (selected_day_index) => {
@@ -129,10 +126,18 @@ export default class OrderForSelector extends React.Component {
   };
 
   _confirm = () => {
+    
+    let selected = this.state.day_options[this.state.selected_day_index];
+    
+    const {option, hour, mins, range} = this.getOptionHourMinsRange(selected);
+    // confirm
+    this.props.onConfirm(option, hour, mins, range);
+  };
+
+  getOptionHourMinsRange(selected){
     let hour = null;
     let mins = null;
     let option = null;
-    let selected = this.state.day_options[this.state.selected_day_index];
     let range = "";
     if (selected == 'Today') {
       let _t = this.state.time_options_today[this.state.selected_time_index];
@@ -156,7 +161,7 @@ export default class OrderForSelector extends React.Component {
       }
     } else {
       option = 'Tomorrow';
-      let _t = this.state.time_options_today[this.state.selected_time_index];
+      let _t = this.state.time_options_tomorrow[this.state.selected_time_index];
       range = _t;
       _t = _t.split(' - ');
 
@@ -168,10 +173,8 @@ export default class OrderForSelector extends React.Component {
       hour = _t[0];
       mins = _t[1];
     }
-
-    // confirm
-    this.props.onConfirm(option, hour, mins, range);
-  };
+    return (option, hour, mins, range)
+  }
 
   _changeTimeOptions = (index) => {
     const options = [this.state.time_options_today, this.state.time_options_tomorrow];
