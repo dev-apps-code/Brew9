@@ -191,7 +191,7 @@ export default class AddShippingAddress extends React.Component {
       showArea: false,
       populateTowns: true,
       populateAreas: false,
-      defTab:0
+      defTab: 0
     });
   };
 
@@ -213,14 +213,14 @@ export default class AddShippingAddress extends React.Component {
       showArea: true,
       populateTowns: false,
       populateAreas: true,
-      defTab: 1,
+      defTab: 1
     });
   }
 
   selectArea(index) {
     this.setState({
       chosenArea: index,
-      delivery_area: this.state.town[this.state.chosenTown].areas[index].area,
+      delivery_area: this.state.town[this.state.chosenTown].areas[index].area
     });
     this.handleClose();
   }
@@ -361,7 +361,7 @@ export default class AddShippingAddress extends React.Component {
       showArea: false,
       chosenTown: 0,
       populateAreas: false,
-      defTab: 0,
+      defTab: 0
     });
   };
 
@@ -497,12 +497,7 @@ export default class AddShippingAddress extends React.Component {
             </TouchableOpacity>
           )}
         </View>
-        {/* <Image
-          source={require('./../../assets/images/line-17.png')}
-          style={styles.seperatorImage}
-        /> */}
         <View style={styles.sectionSeperatorView2} />
-
       </View>
     );
   };
@@ -538,41 +533,32 @@ export default class AddShippingAddress extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          {/* <Image
-            source={require('./../../assets/images/line-17.png')}
-            style={styles.seperatorImage}
-          /> */}
-        <View style={styles.sectionSeperatorView2} />
 
+          <View style={styles.sectionSeperatorView2} />
         </View>
         {address_details ? (
-        <View>
-          <View style={styles.formDetail}>
-            <Text style={styles.title}></Text>
+          <View>
+            <View style={styles.formDetail}>
+              <Text style={styles.title}></Text>
 
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-                marginRight: 10 * alpha,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              {/* {address_details ? ( */}
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  marginRight: 10 * alpha,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {/* {address_details ? ( */}
                 <Text style={[styles.textInput]}>{address_details}</Text>
-              {/* ) : null} */}
-            </TouchableOpacity>
+                {/* ) : null} */}
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.sectionSeperatorView2} />
           </View>
-          {/* <Image
-            source={require('./../../assets/images/line-17.png')}
-            style={styles.seperatorImage}
-          /> */}
-        <View style={styles.sectionSeperatorView2} />
-
-        </View>
         ) : null}
-
       </View>
     );
   };
@@ -604,12 +590,8 @@ export default class AddShippingAddress extends React.Component {
             />
           </View>
         </View>
-        {/* <Image
-          source={require('./../../assets/images/line-17.png')}
-          style={styles.seperatorImage}
-        /> */}
-        <View style={styles.sectionSeperatorView2} />
 
+        <View style={styles.sectionSeperatorView2} />
       </View>
     );
   };
@@ -694,102 +676,43 @@ export default class AddShippingAddress extends React.Component {
               </TouchableOpacity>
             </View>
             {/* <ScrollView scrollsToTop={false}> */}
-            <ScrollView style={{ paddingVertical: 10 * alpha }}>
-              {this.state.populateTowns
-                ? this.state.town.map((item, key) => {
-                    return (
-                      <View style={styles.itemView}>
-                        <TouchableOpacity onPress={() => this.selectTown(key)}>
-                          <Text style={styles.itemText}>{item.name}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })
-                : null}
-
-              {this.state.populateAreas
-                ? this.state.town[this.state.chosenTown].areas.map(
-                    (item, key) => {
+            <SafeAreaView style={{ flex: 1 }}>
+              <ScrollView>
+                {this.state.populateTowns
+                  ? this.state.town.map((item, key) => {
                       return (
                         <View style={styles.itemView}>
                           <TouchableOpacity
-                            onPress={() => this.selectArea(key)}
+                            onPress={() => this.selectTown(key)}
                           >
-                            <Text style={styles.itemText}>{item.area}</Text>
+                            <Text style={styles.itemText}>{item.name}</Text>
                           </TouchableOpacity>
                         </View>
                       );
-                    }
-                  )
-                : null}
-            </ScrollView>
+                    })
+                  : null}
+
+                {this.state.populateAreas
+                  ? this.state.town[this.state.chosenTown].areas.map(
+                      (item, key) => {
+                        return (
+                          <View style={styles.itemView}>
+                            <TouchableOpacity
+                              onPress={() => this.selectArea(key)}
+                            >
+                              <Text style={styles.itemText}>{item.area}</Text>
+                            </TouchableOpacity>
+                          </View>
+                        );
+                      }
+                    )
+                  : null}
+              </ScrollView>
+            </SafeAreaView>
             {/* </ScrollView> */}
           </Animated.View>
         </SafeAreaView>
       </Animated.View>
-    );
-  };
-
-  renderRadioForm = () => {
-    return (
-      <View>
-        <View style={styles.formDetail}>
-          <Text style={styles.title}>{'Gender'}</Text>
-
-          <View style={styles.selectedradioView}>
-            <RadioForm formHorizontal={true} animation={true}>
-              {this.state.gender_options.map((obj, i) => {
-                var onPress = (value, index) => {
-                  this.setState({
-                    gender: value,
-                    genderIndex: index
-                  });
-                };
-                return (
-                  <RadioButton labelHorizontal={true} key={i}>
-                    <RadioButtonInput
-                      obj={obj}
-                      index={i}
-                      isSelected={this.state.gender === i}
-                      onPress={onPress}
-                      buttonInnerColor={PRIMARY_COLOR}
-                      buttonOuterColor={
-                        this.state.genderIndex === i ? '#00B2E3' : PRIMARY_COLOR
-                      }
-                      selectedButtonColor={'#00B2E3'}
-                      buttonSize={5 * alpha}
-                      buttonStyle={{
-                        backgroundColor: 'rgb(200, 200, 200)',
-                        borderWidth: 0,
-                        marginRight: 5 * alpha,
-                        marginTop: 2 * alpha
-                      }}
-                    />
-                    <RadioButtonLabel
-                      obj={obj}
-                      index={i}
-                      onPress={onPress}
-                      labelStyle={{
-                        color: 'rgb(135, 135, 135)',
-                        fontSize: 13 * fontAlpha,
-                        marginRight: 10 * alpha,
-                        fontFamily: NON_TITLE_FONT
-                      }}
-                      labelWrapStyle={{}}
-                    />
-                  </RadioButton>
-                );
-              })}
-            </RadioForm>
-          </View>
-        </View>
-        {/* <Image
-          source={require('./../../assets/images/line-17.png')}
-          style={styles.seperatorImage}
-        /> */}
-        <View style={styles.sectionSeperatorView2} />
-
-      </View>
     );
   };
 
@@ -809,7 +732,6 @@ export default class AddShippingAddress extends React.Component {
               (text) => this.onChangeName(text),
               true
             )}
-            {/* {this.renderRadioForm()} */}
             {this.renderFormDetail(
               'Phone No.',
               contact_number,
@@ -821,7 +743,7 @@ export default class AddShippingAddress extends React.Component {
               'Area',
               current_area,
               'Select area',
-              (text) => this.onChangeAddress(text),
+              (text) => console.log(text),
               true,
               true,
               () => this.handleOpen()
@@ -950,9 +872,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10 * alpha,
     flex: 1
   },
-  areasDistrictsText:{
-    fontSize: 14 * fontAlpha,
-    
+  areasDistrictsText: {
+    fontSize: 14 * fontAlpha
   },
   title: {
     backgroundColor: 'transparent',
@@ -1083,7 +1004,7 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     // alignSelf: 'flex-end',
     // width: windowWidth - 40 * alpha,
-    height: 1 * alpha,
+    height: 1 * alpha
     // marginLeft: 10 * alpha
   },
   itemView: {
