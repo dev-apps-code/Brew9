@@ -52,7 +52,7 @@ export const KPAYMENTYURLLIST = [
 
 export async function loadServer() {
   // console.log("loadserverindex")
-  var serverIndex = 0;//await getServerIndex();
+  var serverIndex = await getServerIndex();
   KSERVERURL = KSERVERURLLIST[serverIndex];
   KURL_INFO = KURL_INFOLIST[serverIndex];
   KPAYMENTYURL = KPAYMENTYURLLIST[serverIndex];

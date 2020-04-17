@@ -163,14 +163,12 @@ export default class FirstScreen extends React.Component {
         loading: false
       });
       if (eventObject.result.force_upgrade) {
-        // this.setState({
-        //   popUpVisible: true,
-        //   title: eventObject.result.title,
-        //   description: eventObject.result.description,
-        //   url: eventObject.result.url
-        // });
-        this.checkLoginStatus();
-
+        this.setState({
+          popUpVisible: true,
+          title: eventObject.result.title,
+          description: eventObject.result.description,
+          url: eventObject.result.url
+        });
       } else if (eventObject.result.maintenance) {
         this.setState({
           popUpVisible: true,

@@ -88,7 +88,7 @@ export default class MapShippingAddress extends React.Component {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
-    console.log(navigation.state.params.addressInfo);
+    
 
     this.setState({
       address: navigation.state.params.addressInfo.address,
