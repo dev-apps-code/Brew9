@@ -130,7 +130,7 @@ export default class Checkout extends React.Component {
       addressConfirmation: false,
       deliveryFee: 0,
       loading: false,
-      range: ""
+      range: ''
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -431,7 +431,7 @@ export default class Checkout extends React.Component {
     var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
 
     this.setState({ pick_up_time, pick_up_status, range });
-    this.toggleTimeSelector();
+    this._toggleTimeSelector();
   };
 
   // Callback when now is clicked
@@ -462,7 +462,7 @@ export default class Checkout extends React.Component {
     } else {
       this.refs.toast.close();
       this.setState({ pick_up_status, pick_up_time });
-      this.toggleTimeSelector();
+      this._toggleTimeSelector();
       return true;
     }
   };
@@ -1102,7 +1102,7 @@ export default class Checkout extends React.Component {
         }
 
         if (pick_up_status == null) {
-          this.toggleTimeSelector();
+          this._toggleTimeSelector();
           return;
         } else {
           if (selectedShop != null) {
@@ -1203,7 +1203,7 @@ export default class Checkout extends React.Component {
     }
   };
 
-  toggleTimeSelector = () => {
+  _toggleTimeSelector = () => {
     const { isTimeSelectorToggled } = this.state;
 
     const y = () => (isTimeSelectorToggled ? windowHeight : 52 * alpha);
@@ -1768,6 +1768,13 @@ export default class Checkout extends React.Component {
     );
   }
 
+  changeTimeSchedule = () => {
+    if (!this.refs.timepicker.hasSchedule()) {
+      this.refs.toast.show('No time slots available.');
+    }
+    this._toggleTimeSelector();
+  }
+
   renderPickupTime() {
     const { pick_up_status, pick_up_time } = this.state;
     var { delivery } = this.props;
@@ -1777,7 +1784,7 @@ export default class Checkout extends React.Component {
       <View style={styles.drinksViewWrapper}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
-            onPress={() => this.toggleTimeSelector()}
+            onPress={() => this.changeTimeSchedule()}
             style={styles.voucherButton}
           >
             <View style={styles.drinksView}>
@@ -2081,12 +2088,13 @@ export default class Checkout extends React.Component {
 
   renderOrderForSelector = () => (
     <OrderForSelector
+      ref="timepicker"
       styles={styles}
       state={this.state}
       delivery={this.props.delivery}
       selectedShop={this.props.selectedShop}
       animation={this.timeSelectorAnimation}
-      toggleDelivery={this.toggleTimeSelector}
+      toggleDelivery={this._toggleTimeSelector}
       onSelectOrderNow={() => this.onSelectOrderNow()}
       onSelectOrderLater={() => this.onSelectOrderLater()}
       onSelectOrderTomorrow={() => this.onSelectOrderTomorrow()}
