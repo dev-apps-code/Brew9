@@ -1404,29 +1404,29 @@ export default class Checkout extends React.Component {
                 </View>
 
                 {/* <View
-								pointerEvents="box-none"
-								style={{
-									flex: 1,
-									alignSelf: "stretch",
-								}}>
-								<View
-									style={styles.cardiconView}>
-									<View
-										pointerEvents="box-none"
-										style={{
-											position: "absolute",
-											left: 0 * alpha,
-											right: 0 * alpha,
-											top: 0 * alpha,
-											bottom: 0 * alpha,
-											justifyContent: "center",
-										}}>
-										<Image
-											source={require("./../../assets/images/credit_card.png")}
-											style={this.state.selected_payment == "credit_card" ? styles.creditCardSelectImage : styles.creditCardImage} />
-									</View>
-								</View>
-							</View> */}
+                                pointerEvents="box-none"
+                                style={{
+                                    flex: 1,
+                                    alignSelf: "stretch",
+                                }}>
+                                <View
+                                    style={styles.cardiconView}>
+                                    <View
+                                        pointerEvents="box-none"
+                                        style={{
+                                            position: "absolute",
+                                            left: 0 * alpha,
+                                            right: 0 * alpha,
+                                            top: 0 * alpha,
+                                            bottom: 0 * alpha,
+                                            justifyContent: "center",
+                                        }}>
+                                        <Image
+                                            source={require("./../../assets/images/credit_card.png")}
+                                            style={this.state.selected_payment == "credit_card" ? styles.creditCardSelectImage : styles.creditCardImage} />
+                                    </View>
+                                </View>
+                            </View> */}
 
                 <View style={styles.menuRowLineView} />
                 <View
@@ -1602,7 +1602,7 @@ export default class Checkout extends React.Component {
               <View style={styles.spacer} />
             </View>
             {/* {item.voucher.free_quantity ? <Text
-						style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
+                        style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
             {discount_value ? (
               <Text style={styles.voucherPriceText}>{`-$${parseFloat(
                 this.roundOff(discount_value)
@@ -2000,7 +2000,7 @@ export default class Checkout extends React.Component {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  paddingBottom: 10 * alpha
+                  paddingBottom: 5 * alpha
                 }}
               >
                 <Text style={[styles.productNameText]}>Delivery Address</Text>
@@ -2370,9 +2370,10 @@ const styles = StyleSheet.create({
     marginBottom: 5 * alpha
   },
   addressText: {
-    color: 'rgb(128,128,128)',
+    color: 'rgb(146, 146, 146)',
+    fontSize: 11 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
-    fontSize: 13 * fontAlpha,
+    // fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     // textAlign: 'left',
@@ -3861,7 +3862,7 @@ const styles = StyleSheet.create({
     width: 60 * alpha,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 5 * alpha,
+    // marginBottom: 5 * alpha,
     marginLeft: 5 * alpha
   },
   voucherButtonText: {

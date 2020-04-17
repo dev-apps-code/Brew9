@@ -134,7 +134,8 @@ export default class AddShippingAddress extends React.Component {
         populateTowns: false,
         populateAreas: false,
         chosenTown: 0,
-        chosenArea: 0
+        chosenArea: 0,
+        isSaveDisabled: false
       };
     } else {
       this.state = {
@@ -166,7 +167,9 @@ export default class AddShippingAddress extends React.Component {
         populateTowns: false,
         populateAreas: false,
         chosenTown: 0,
-        chosenArea: 0
+        chosenArea: 0,
+        isSaveDisabled: false
+
       };
     }
   }
@@ -234,6 +237,9 @@ export default class AddShippingAddress extends React.Component {
   };
 
   onSavePressed = () => {
+    this.setState({
+      isSaveDisabled: true
+    })
     let formcheck = this.checkForm();
     let primary = this.state.primary == 1 ? true : false;
     if (formcheck) {
@@ -261,6 +267,9 @@ export default class AddShippingAddress extends React.Component {
     const { dispatch, currentMember, navigation } = this.props;
     isInitialAddress = this.props.navigation.state.params.initialAddress;
     const callback = (eventObject) => {
+      this.setState({
+        isSaveDisabled: false
+      })
       if (eventObject.success) {
         isInitialAddress
           ? navigation.navigate('Checkout')
@@ -778,6 +787,7 @@ export default class AddShippingAddress extends React.Component {
           </View>
         </ScrollView>
         <TouchableOpacity
+          disabled={this.state.isSaveDisabled}
           onPress={() => this.onSavePressed()}
           style={styles.saveButton}
         >

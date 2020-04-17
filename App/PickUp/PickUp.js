@@ -245,6 +245,8 @@ export default class PickUp extends React.Component {
         .add(30, 'minutes')
         .format('LTS');
       var pick_up_time = item.delivery_method ? pick_time : item.pickup_time;
+
+      var meridiem = pick_up_time.split(" ")[1];
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
       let progress = progressValues[item.status] || 0;
@@ -483,7 +485,7 @@ export default class PickUp extends React.Component {
                     <Text style={styles.pickupTimeText}>
                       {Moment(pick_up_time, 'HH:mm').format('h:mm')}
                       <Text style={styles.pickupTimeAMPMText}>
-                        {Moment(pick_up_time, 'HH:mm').format('A')}
+                        {meridiem}
                       </Text>
                     </Text>
                   </View>
