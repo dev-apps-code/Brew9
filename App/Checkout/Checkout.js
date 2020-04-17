@@ -687,6 +687,8 @@ export default class Checkout extends React.Component {
         var promotion = shop.all_promotions[index];
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
+            console.log("\n\npromotion")
+            console.log(promotion)
             var price = 0;
             var roundedPrice = 0;
             var trigger_price = parseFloat(promotion.trigger_price);
@@ -721,6 +723,7 @@ export default class Checkout extends React.Component {
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
+                  price = promotion.value
                   final_cart_value = final_cart_value - discount_value;
                 }
               }
@@ -1923,7 +1926,7 @@ export default class Checkout extends React.Component {
           ? `-$${parseFloat(item.price).toFixed(2)}`
           : item.type != undefined && item.type == 'Free Items and vouchers'
           ? 'Free'
-          : '';
+          : 'Rebate';
       let filtered =
         item.selected_variants != null
           ? item.selected_variants.filter(function (el) {
