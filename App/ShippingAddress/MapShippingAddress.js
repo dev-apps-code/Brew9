@@ -1,20 +1,15 @@
 import {
-  Animated,
   View,
   Image,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Platform,
   TextInput,
-  KeyboardAvoidingView,
-  AsyncStorage,
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
-import openMap from 'react-native-open-maps';
 import _ from 'lodash';
 import {
   TITLE_FONT,
@@ -26,7 +21,6 @@ import {
 } from '../Common/common_style';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { connect } from 'react-redux';
-import * as Permissions from 'expo-permissions';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 @connect(({ members, shops, config, orders }) => ({
@@ -79,7 +73,8 @@ export default class MapShippingAddress extends React.Component {
       error: null,
       address: '',
       address_details: '',
-      isAddAddressMode: false
+      isAddAddressMode: false,
+      address_temp: ''
     };
   }
 
@@ -88,7 +83,6 @@ export default class MapShippingAddress extends React.Component {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed
     });
-    
 
     this.setState({
       address: navigation.state.params.addressInfo.address,
@@ -142,21 +136,12 @@ export default class MapShippingAddress extends React.Component {
       address
     });
   };
+
   onChangeAddressDetail = (address_details) => {
     this.setState({
       address_details
     });
   };
-  // onChangeCountry = (country) => {
-  //   this.setState({
-  //     country
-  //   });
-  // };
-  // onChangeState = (state) => {
-  //   this.setState({
-  //     state
-  //   });
-  // };
 
   checkForm = () => {
     let { address } = this.state;
@@ -222,88 +207,8 @@ export default class MapShippingAddress extends React.Component {
     }
   };
 
-  renderAddAddressMode = () => {
-    let address = this.state.address;
-    let address_details = '';
-    return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
-        <Animated.View style={{ flex: 1 }}>
-          <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
-            <TouchableOpacity
-              style={styles.clearView}
-              onPress={() => {
-                this.setState({ isAddAddressMode: false, address: '' });
-              }}
-            >
-              <Text style={styles.clearText}>Clear</Text>
-            </TouchableOpacity>
-            <View style={styles.whiteContent}>
-              <View style={styles.bodyContent}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'flex-start'
-                  }}
-                >
-                  <Text style={styles.title}>Address Line 1</Text>
-                  <TextInput
-                    keyboardType="default"
-                    clearButtonMode="always"
-                    autoCorrect={false}
-                    value={address}
-                    multiline={true}
-                    onChangeText={(address) => {
-                      this.setState({ address });
-                    }}
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-              <View style={styles.sectionSeperatorView} />
-
-              <View style={styles.bodyContent}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'flex-start'
-                  }}
-                >
-                  <Text style={styles.title}>Address Line 2</Text>
-                  <TextInput
-                    keyboardType="default"
-                    clearButtonMode="always"
-                    autoCorrect={false}
-                    value={address_details}
-                    placeholder={'Unit # / Floor / Block '}
-                    onChangeText={(address_details) => {
-                      this.setState({ address_details });
-                    }}
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => this.onSavePressed()}
-              style={styles.saveButton}
-            >
-              <Text style={styles.saveButtonText}>SAVE</Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
   renderAddressForm = () => {
-    let {
-      address,
-      address_details,
-      postal_code,
-      city,
-      state,
-      country
-    } = this.state;
+    let { address, address_details } = this.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
         <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
@@ -327,6 +232,7 @@ export default class MapShippingAddress extends React.Component {
                 <TextInput
                   keyboardType="default"
                   clearButtonMode="always"
+                  placeholder={this.placeHolderText()}
                   autoCorrect={false}
                   value={address}
                   multiline={true}
@@ -379,7 +285,7 @@ export default class MapShippingAddress extends React.Component {
       autoFocus={true}
       enablePoweredByContainer={false}
       autoCorrect={false}
-      currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+      currentLocation={false}
       currentLocationLabel="  Use My Location"
       returnKeyType={'search'}
       keyboardAppearance={'light'}
@@ -388,10 +294,13 @@ export default class MapShippingAddress extends React.Component {
       renderDescription={(row) =>
         row.description || row.formatted_address || row.name
       }
-      textInputProps={{ clearButtonMode: 'never', onBlur: () => {} }}
-      // currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      // currentLocationLabel="Use my location"
-      // nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+      textInputProps={{
+        clearButtonMode: 'never',
+        onBlur: () => {},
+        onChangeText: (address_temp) => {
+          this.setState({ address_temp });
+        }
+      }}
       renderLeftButton={() => (
         <View
           style={{
@@ -412,12 +321,20 @@ export default class MapShippingAddress extends React.Component {
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            marginLeft: 10 * alpha,
+            marginRight: 10 * alpha,
             width: 22 * alpha
           }}
-          onPress={() => this.setState({ isAddAddressMode: true })}
+          onPress={() =>
+            this.setState({
+              address: this.state.address_temp,
+              isAddAddressMode: true
+            })
+          }
         >
-          <Icon name="ios-add" size={20 * fontAlpha} color={TINT_COLOR} />
+        <Image
+          source={require('./../../assets/images/add_address.png')}
+          style={styles.addIcon}
+        />
         </TouchableOpacity>
       )}
       onPress={(data, details = null) => {
@@ -458,11 +375,10 @@ export default class MapShippingAddress extends React.Component {
   );
 
   render() {
-    if (this.state.isAddAddressMode) {
-      return this.renderAddAddressMode();
-    }
-
-    if (this.state.address && this.state.address.length > 0) {
+    if (
+      (this.state.address && this.state.address.length > 0) ||
+      this.state.isAddAddressMode
+    ) {
       return this.renderAddressForm();
     }
 
@@ -492,6 +408,10 @@ const styles = StyleSheet.create({
   locationIcon: {
     width: 14 * alpha,
     height: 20 * alpha
+  },
+  addIcon: {
+    width: 20 * alpha,
+    height: 20 * alpha,
   },
   container: {
     flex: 1,
