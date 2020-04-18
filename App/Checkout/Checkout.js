@@ -2087,13 +2087,13 @@ export default class Checkout extends React.Component {
   };
 
   renderOrderForSelector = () => {
-    const {delivery, selectedShop} = this.props;
-    const { opening_hour, delivery_hour} = selectedShop
-    let today =[];
+    const { delivery, selectedShop } = this.props;
+    const { opening_hour, delivery_hour } = selectedShop;
+    let today = [];
     let tomorrow = [];
     if (delivery) {
-      today = delivery_hour?.today?.delivery_time_slot || [],
-      tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || [];
+      (today = delivery_hour?.today?.delivery_time_slot || []),
+        (tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || []);
     } else {
       today = opening_hour?.ordering_time_slot || [];
     }
@@ -4194,7 +4194,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: DEFAULT_GREY_BACKGROUND,
     alignContent: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: -1 * alpha,
+    marginTop: -1 * alpha
   },
 
   curve_in: {
