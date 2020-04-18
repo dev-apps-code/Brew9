@@ -101,7 +101,7 @@ export default class Checkout extends React.Component {
     const { discount_cart_total, currentMember, cart_total } = props;
     this.state = {
       delivery_options: 'pickup',
-      delivery_description: null,
+      delivery_description: '',
       vouchers_to_use: [],
       voucher: '',
       valid_vouchers: [],
@@ -1838,9 +1838,11 @@ export default class Checkout extends React.Component {
             >
               <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
-                {/* {delivery_description != null && ( */}
-                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
-                {/* )} */}
+                {delivery_description != '' && (
+                  <Text style={styles.deliveryNoted}>
+                    {delivery_description}
+                  </Text>
+                )}
               </View>
               <Text style={styles.productVoucherText}>
                 {this._formattedPrice(deliveryFee)}
