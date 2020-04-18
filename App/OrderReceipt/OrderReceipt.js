@@ -776,6 +776,7 @@ const styles = StyleSheet.create({
 	},
 
 	curve_in: {
+		tintColor: 'rgb(245, 245, 245)',
 		height: 14 * alpha,
 		resizeMode: "stretch",
 		width: "100%",

@@ -218,7 +218,7 @@ export default class PickUp extends React.Component {
       <View style={styles.receiptSectionSeperator}>
         <Image
           source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curve_in}
+          style={styles.curveSeparator}
         />
         <View style={styles.sectionSeperatorView} />
       </View>
@@ -245,7 +245,7 @@ export default class PickUp extends React.Component {
         .format('LTS');
       var pick_up_time = item.delivery_method ? pick_time : item.pickup_time;
 
-      var meridiem = pick_up_time.split(" ")[1];
+      var meridiem = pick_up_time.split(' ')[1];
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
       let progress = progressValues[item.status] || 0;
@@ -483,9 +483,7 @@ export default class PickUp extends React.Component {
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.pickupTimeText}>
                       {Moment(pick_up_time, 'HH:mm').format('h:mm')}
-                      <Text style={styles.pickupTimeAMPMText}>
-                        {meridiem}
-                      </Text>
+                      <Text style={styles.pickupTimeAMPMText}>{meridiem}</Text>
                     </Text>
                   </View>
                   {item.delivery_method == 1 && claim_day != null ? (
@@ -2011,7 +2009,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
 
-  curve_in: {
+  curveSeparator: {
+    tintColor: 'rgb(245, 245, 245)',
     height: 14 * alpha,
     resizeMode: 'stretch',
     width: '100%',

@@ -42,7 +42,6 @@ export default class CategoryCell extends React.Component {
     const { categoryImage, categoryname, label } = this.props;
     return (
       <TouchableWithoutFeedback onPress={this.onCategoryCellPress}>
-
         <View
           navigation={this.props.navigation}
           style={
@@ -51,13 +50,16 @@ export default class CategoryCell extends React.Component {
               : styles.categorycell
           }
         >
-
           {this.props.selected ? <View style={styles.selectbarView} /> : null}
-          <View style={{ flex: 1, paddingLeft: 7 * alpha, paddingTop: 5 * alpha }}>
-
-            <View style={{ paddingBottom: 7 * alpha }}>
-              {/* <Text style={styles.textWrapper}> */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{
+              flex: 1,
+              paddingLeft: 7 * alpha,
+              paddingTop: 5 * alpha,
+              marginBottom: 7 * alpha
+            }}
+          >
+             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 {categoryImage && (
                   <Image
                     style={styles.categoryIconImage}
@@ -85,7 +87,6 @@ export default class CategoryCell extends React.Component {
               {/* </Text> */}
             </View>
           </View>
-        </View>
       </TouchableWithoutFeedback>
     );
   }
@@ -97,8 +98,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5 * alpha,
     borderBottomLeftRadius: 5 * alpha,
     paddingHorizontal: 5 * alpha,
-    paddingVertical: 2.5 * alpha,
-    alignSelf: 'flex-end'
+    marginVertical: 2.5 * alpha,
+    alignSelf: 'flex-end',
+    minWidth: 0,
+    maxWidth: 60 * alpha
   },
   promoBoxText: {
     color: '#f05071',
@@ -107,7 +110,6 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: 'right',
-
   },
   categorycell: {
     backgroundColor: "transparent",
