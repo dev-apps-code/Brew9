@@ -1994,7 +1994,6 @@ export default class Checkout extends React.Component {
     let non_negative_subTotal_price = parseFloat(
       Math.max(0, final_price)
     ).toFixed(2);
-
     return (
       <View style={styles.deliveryAddressView}>
         <View style={styles.voucherButton}>
@@ -2069,7 +2068,7 @@ export default class Checkout extends React.Component {
             >
               <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
-                {delivery_description != null ?  (
+                {delivery_description != null && (
                   <Text style={styles.deliveryNoted}>
                     {delivery_description}
                   </Text>

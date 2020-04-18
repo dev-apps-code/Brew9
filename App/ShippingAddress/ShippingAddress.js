@@ -152,8 +152,43 @@ export default class ShippingAddress extends React.Component {
     if (navigation.state.params.origin == undefined) {
       dispatch(createAction('members/savePrimaryShippingAddress')(item));
       navigation.navigate('Checkout');
+      const shippingAddress = {
+        member_id: this.props.currentMember.id,
+        fullname: item.fullname,
+        address: item.address,
+        address_details: item.address_details,
+        contact_number: item.contact_number,
+        city: item.city,
+        state: item.state,
+        postal_code: item.postal_code,
+        country: item.country,
+        land_mark: item.land_mark,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        delivery_area: item.delivery_area,
+        primary: true
+      };
+      console.log(shippingAddress, item.id);
+      this.loadUpdateProfile(shippingAddress, item.id);
     }
   };
+  loadUpdateProfile(formData, address_id) {
+    const { dispatch, currentMember, navigation } = this.props;
+    const callback = (eventObject) => {
+    };
+
+    const obj = new UpdateShippingAddressObjectRequest(
+      formData,
+      currentMember.id
+    );
+    obj.setUrlId(address_id);
+    dispatch(
+      createAction('members/updateShippingAddress')({
+        object: obj,
+        callback
+      })
+    );
+  }
 
   getAddressIsSelected(item) {
     const { selected_address } = this.state;
@@ -262,7 +297,7 @@ export default class ShippingAddress extends React.Component {
                   renderItem={({ item }) => this.renderShippingAddress(item)}
                   refreshing={this.state.isRefreshing}
                   onRefresh={this.onRefresh.bind(this)}
-                  keyExtractor={(item,index) => 'id-' + index}
+                  keyExtractor={(item, index) => 'id-' + index}
                 />
               </ScrollView>
               <TouchableOpacity onPress={this.onAddAddress}>
