@@ -128,7 +128,7 @@ export default class Checkout extends React.Component {
       visible: false,
       applyCode: false,
       addressConfirmation: false,
-      deliveryFee: 0,
+      deliveryFee: 0.0,
       loading: false,
       range: ''
     };
@@ -145,7 +145,7 @@ export default class Checkout extends React.Component {
     });
 
     const { dispatch, delivery } = this.props;
-    this.setTimePickerDefault();
+
     this.setState(
       {
         valid_vouchers: []
@@ -178,190 +178,47 @@ export default class Checkout extends React.Component {
   }
 
   /**
-   * Format price
+   * Formatted price text
+   * @returns {string}
    */
   _formattedPrice = (price) => '$' + parseFloat(price).toFixed(2);
-
-  setTimePickerDefault(day, isOrderForTomorrow) {
-    const { start_time, end_time } = day
-      ? day
-      : this.props.selectedShop.opening_hour;
-
-    var startTime = Moment(start_time, 'h:mm');
-    var endTime = Moment(end_time, 'h:mm');
-    var time_now = Moment(new Date(), 'h:mm');
-
-    var hour = time_now.hours();
-    var min = time_now.minutes();
-
-    if (isOrderForTomorrow == true) {
-      hour = startTime.hours();
-      min = startTime.minutes();
-    }
-
-    var minute_array = ['00', '15', '30', '45'];
-    var hour_array = _.range(first_hour, last_hour + 1);
-    var selected_minute = '';
-
-    if (hour >= startTime.hours() && min < 45) {
-      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
-        return parseInt(o) > min;
-      });
-    }
-
-    if (hour >= endTime.hours()) {
-      minute_array = _.filter(['00', '15', '30', '45'], function (o) {
-        return parseInt(o) <= endTime.minutes() && parseInt(o) > min;
-      });
-    }
-
-    if (hour) selected_minute = minute_array[0];
-
-    if (minute_array.length < 3) {
-      minute_array.length = 3;
-    }
-
-    selected_minute = minute_array[0];
-
-    var first_hour =
-      hour >= startTime.hours() && min > 45
-        ? hour + 1
-        : hour > startTime.hours()
-        ? hour
-        : startTime.hours();
-
-    var last_hour = endTime.hours();
-    var hour_array = _.range(first_hour, last_hour + 1);
-
-    if (hour_array.length < 3) {
-      hour_array.length = 3;
-    }
-
-    this.setState({
-      selected_hour: first_hour,
-      selected_minute: selected_minute,
-      minute_range: minute_array,
-      hour_range: hour_array
-    });
-  }
-
-  checkAvailableMinute(option) {
-    const { selectedShop } = this.props;
-    var delivery = this.props.delivery;
-    var endTime = delivery
-      ? Moment(selectedShop.delivery_hour.today.end_time, 'h:mm')
-      : Moment(selectedShop.opening_hour.end_time, 'h:mm');
-
-    var minute_array = ['00', '15', '30', '45'];
-    var time_now = Moment(new Date(), 'h:mm');
-
-    var hour = time_now.hours();
-    var min = time_now.minutes();
-    if (hour == option) {
-      minute_array = _.filter(
-        ['00', '15', '30', '45'],
-        (o) => parseInt(o) > min
-      );
-    } else {
-      if (option == endTime.hours()) {
-        minute_array = _.filter(
-          ['00', '15', '30', '45'],
-          (o) => parseInt(o) <= endTime.minutes()
-        );
-      }
-    }
-
-    this.setState({
-      minute_range: minute_array,
-      selected_minute: minute_array[0]
-    });
-  }
 
   // add 0 before hr if hr is single digit
   formatSelectedHour = (hr) => (hr < 10 ? `0${hr}` : hr);
 
-  onHourValueChange = (option, index) => {
-    if (option == '') {
-      this.setState(
-        {
-          selected_hour_index: index - 1
-        },
-        function () {
-          // this.sphour.scrollToIndex(this.state.selected_hour_index);
-        }
-      );
-    } else {
-      this.checkAvailableMinute(option);
-      this.setState({
-        selected_hour: option,
-        selected_hour_index: index
-      });
-    }
-  };
-
-  onMinuteValueChange = (option, index) => {
-    const { selected_hour_index, selected_hour, hour_range } = this.state;
-    if (option != '') {
-      var time_now = Moment(new Date(), 'h:mm');
-
-      var hour = time_now.hours();
-      var min = time_now.minutes();
-
-      if (hour == selected_hour && min > 15 && option == '00') {
-        // this.sphour.scrollToIndex(selected_hour_index + 1);
-        this.setState(
-          {
-            minute_range: ['00', '15', '30', '45'],
-            selected_hour: hour_range[selected_hour_index + 1]
-          },
-          function () {
-            // this.spminute.scrollToIndex(0);
-          }
-        );
-      }
-      this.setState({
-        selected_minute: option
-      });
-    } else {
-      // this.spminute.scrollToIndex(index - 1);
-    }
-  };
   loadDeliveryFee = () => {
-    var total = this.props.cart_total;
-
-    console.log(this.state.selected_address);
+    // delivery fees are based on location so if recipient address is empty
+    // no delivery fee is calculated
     if (this.state.selected_address === null) {
-      this.setState({
-        deliveryFee: 0
-        // delivery_description: 'please select address'
-      });
+      this.setState({ deliveryFee: 0.0, delivery_description: '' });
       return;
     }
 
-    const { dispatch, selectedShop, currentMember } = this.props;
-    const callback = (eventObject) => {
-      if (eventObject.success) {
-        let deliveryFee = parseFloat(eventObject.result.delivery_fee);
-        console.log('\n\n=======================');
-        console.log(eventObject.result.delivery_fee_description);
-        console.log('=======================\n\n');
-
+    const callback = (response) => {
+      if (response.success) {
+        let deliveryFee = response?.result?.delivery_fee || 0;
+        let description = response?.result?.delivery_fee_description || '';
         this.setState({
-          deliveryFee: deliveryFee,
-          delivery_description: eventObject.result.delivery_fee_description
+          deliveryFee: parseFloat(deliveryFee).toFixed(2),
+          delivery_description: description
         });
+      } else {
+        // Reset values if in case request fails
+        console.log('Something went wrong.');
+        this.setState({ deliveryFee: 0.0, delivery_description: '' });
       }
     };
 
-    const obj = new DeliveryFeeRequestObject(
-      total,
+    const object = new DeliveryFeeRequestObject(
+      this.props.cart_total,
       this.state.selected_address.id
     );
-    console.log('DeliveryFeeRequestObject', obj);
-    obj.setUrlId(selectedShop.id);
-    dispatch(
+
+    object.setUrlId(this.props.selectedShop.id);
+
+    this.props.dispatch(
       createAction('shops/loadDeliveryFee')({
-        object: obj,
+        object,
         callback
       })
     );
@@ -438,7 +295,6 @@ export default class Checkout extends React.Component {
     this._toggleTimeSelector();
   };
 
-
   _getFormattedSchedule = () => {
     var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
     switch (this.state.pick_up_status) {
@@ -490,19 +346,12 @@ export default class Checkout extends React.Component {
       addVoucherAction: this.addVoucherItemsToCart
     });
   };
-  // onEditAddress = (item) => {
-  // 	const { navigation } = this.props
-  // 	navigation.navigate("AddShippingAddress", { params: null })
-  // }
-  addShippingAddress = () => {
-    const { navigation } = this.props;
-    const { selected_address } = this.state;
 
-    console.log('oassinse selected address', selected_address);
+  addShippingAddress = () => {
     this.setState({ visible: false });
     navigation.navigate('ShippingAddress', {
-      selected_address: selected_address,
-      returnToRoute: navigation.state
+      selected_address: this.state.selected_address,
+      returnToRoute: this.props.navigation.state
     });
   };
 
@@ -1989,11 +1838,9 @@ export default class Checkout extends React.Component {
             >
               <View style={{ flex: 1 }}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
-                {delivery_description != null && (
-                  <Text style={styles.deliveryNoted}>
-                    {delivery_description}
-                  </Text>
-                )}
+                {/* {delivery_description != null && ( */}
+                <Text style={styles.deliveryNoted}>{delivery_description}</Text>
+                {/* )} */}
               </View>
               <Text style={styles.productVoucherText}>
                 {this._formattedPrice(deliveryFee)}
@@ -2034,7 +1881,7 @@ export default class Checkout extends React.Component {
       <View style={styles.receiptSectionSeperator}>
         <Image
           source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curve_in}
+          style={styles.curveSeparator}
         />
         <View style={styles.sectionSeperatorView} />
       </View>
@@ -4120,7 +3967,8 @@ const styles = StyleSheet.create({
     marginTop: -1 * alpha
   },
 
-  curve_in: {
+  curveSeparator: {
+    tintColor: 'rgb(245,245,245)',
     height: 14 * alpha,
     resizeMode: 'stretch',
     width: '100%',
