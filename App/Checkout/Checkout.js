@@ -1690,7 +1690,7 @@ export default class Checkout extends React.Component {
   }
 
   renderPromotions = (promotions) => {
-    const promotions_item = promotions.map((item, key) => {
+    let promotions_item = promotions.map((item, key) => {
       var price_string =
         item.price != undefined && item.price > 0 && item.clazz == 'product'
           ? `$${parseFloat(item.price).toFixed(2)}`
@@ -1744,18 +1744,19 @@ export default class Checkout extends React.Component {
         </View>
       );
     });
-    return (
-      <View>
-        {promotions_item.length > 0 && (
-          <View style={styles.receiptSectionSeperator}>
-            <View style={styles.sectionSeperatorView} />
+
+    if (promotions_item && promotions_item.length > 0) {
+      return (
+        <View>
+          {this._renderSeparator()}
+          <View
+            style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}
+          >
+            <View style={styles.orderitemsView}>{promotions_item}</View>
           </View>
-        )}
-        <View style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}>
-          <View style={styles.orderitemsView}>{promotions_item}</View>
         </View>
-      </View>
-    );
+      );
+    }
   };
 
   renderDeliveryAddress = (address) => {
@@ -1878,7 +1879,7 @@ export default class Checkout extends React.Component {
     );
   };
 
-  renderReceiptSeperation = () => {
+  _renderSeparator = () => {
     return (
       <View style={styles.receiptSectionSeperator}>
         <Image
@@ -1981,28 +1982,24 @@ export default class Checkout extends React.Component {
                   </View>
                 )}
               </View>
-              {this.renderReceiptSeperation()}
+              {this._renderSeparator()}
 
               {this.renderOrderItems(cart, promotions)}
-              <Image
-                source={require('./../../assets/images/dotted-line.png')}
-                style={styles.dottedLineImage}
-              />
 
               {this.renderPromotions(promotions)}
-              {this.renderReceiptSeperation()}
+              {this._renderSeparator()}
 
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
               {this.renderPickupTime()}
-              {this.renderReceiptSeperation()}
+              {this._renderSeparator()}
 
               {delivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
                   : this.renderDeliveryAddress(false)
                 : undefined}
-              {delivery && this.renderReceiptSeperation()}
+              {delivery && this._renderSeparator()}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
                   <Text style={styles.totallabelText}>TOTAL</Text>
@@ -3964,9 +3961,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: DEFAULT_GREY_BACKGROUND,
     alignContent: 'center',
-    justifyContent: 'center',
-    marginBottom: -1 * alpha,
-    marginTop: -1 * alpha
+    justifyContent: 'center'
   },
 
   curveSeparator: {
