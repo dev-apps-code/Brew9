@@ -638,7 +638,8 @@ export default class Home extends React.Component {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
     let delivery = value == 1 ? true : false;
-    if(shop.delivery_option == false) {
+
+    if(delivery == false && shop.delivery_option == false) {
       var delivery_disabled =
               'Our delivery is too busy at the moment.\nplease try again in 30 mins.';
       if (selectedShop.response_message != undefined) {
