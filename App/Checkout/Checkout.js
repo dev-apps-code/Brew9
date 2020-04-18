@@ -342,9 +342,9 @@ export default class Checkout extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         let deliveryFee = parseFloat(eventObject.result.delivery_fee);
-        console.log("\n\n=======================")
-        console.log(eventObject.result.delivery_fee_description)
-        console.log("=======================\n\n")
+        console.log('\n\n=======================');
+        console.log(eventObject.result.delivery_fee_description);
+        console.log('=======================\n\n');
 
         this.setState({
           deliveryFee: deliveryFee,
@@ -2072,9 +2072,7 @@ export default class Checkout extends React.Component {
                   <Text style={styles.deliveryNoted}>
                     {delivery_description}
                   </Text>
-                ):
-                 null
-                }
+                )}
               </View>
               <Text style={styles.productVoucherText}>
                 {this._formattedPrice(deliveryFee)}
