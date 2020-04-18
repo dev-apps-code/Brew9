@@ -634,11 +634,29 @@ export default class Home extends React.Component {
   };
 
   _toggleDelivery = (value) => {
-    const { dispatch } = this.props;
+    const { dispatch, shop } = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
     let delivery = value == 1 ? true : false;
-    dispatch(createAction('members/setDeliveryOption')(delivery));
+
+    if(delivery == false && shop.delivery_option == false) {
+      var delivery_disabled =
+              'Our delivery is too busy at the moment.\nplease try again in 30 mins.';
+      if (selectedShop.response_message != undefined) {
+        delivery_disabled_response = _.find(
+          selectedShop.response_message,
+          function (obj) {
+            return obj.key === 'Delivery Disabled';
+          }
+        );
+        if (delivery_disabled_response != undefined) {
+          delivery_disabled = delivery_disabled_response.text;
+        }
+      }
+      this.refs.toast.show(delivery_disabled, TOAST_DURATION)
+    } else {
+      dispatch(createAction('members/setDeliveryOption')(delivery));
+    }
   };
 
   onSelectCategory = (scroll_index, selected_index) => {
