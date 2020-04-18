@@ -627,7 +627,8 @@ export default class App extends React.Component {
   async initProjectImages() {
     await cacheImages([
       require('./assets/images/x-3.png'),
-      require('./assets/images/back.png')
+      require('./assets/images/back.png'),
+      require('./assets/images/curve_in_background.png')
     ]);
   }
 

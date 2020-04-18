@@ -438,38 +438,6 @@ export default class Checkout extends React.Component {
     this._toggleTimeSelector();
   };
 
-  // Callback when now is clicked
-  onSelectOrderNow = () => {
-    var pick_up_status = 'Now';
-    var now = Moment().format('HH:mm');
-    var selected_date = Moment().format('YYYY-MM-DD');
-    var pick_up_time = `${selected_date} ${now}`;
-
-    const { delivery, selectedShop } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
-
-    var toast_text = delivery ? 'Delivery' : 'Pickup';
-    var start = delivery
-      ? delivery_hour.today.start_time
-      : opening_hour.order_start_time;
-    var end = delivery
-      ? delivery_hour.today.end_time
-      : opening_hour.order_stop_time;
-
-    if (!isTimeWithin(now, start, end)) {
-      this.refs.toast.close();
-      this.refs.toast.show(
-        `Selected ${toast_text} time is not available.`,
-        TOAST_DURATION
-      );
-      return false;
-    } else {
-      this.refs.toast.close();
-      this.setState({ pick_up_status, pick_up_time });
-      this._toggleTimeSelector();
-      return true;
-    }
-  };
 
   _getFormattedSchedule = () => {
     var _pick_up_time = Moment(this.state.pick_up_time).format('H:mma');
@@ -483,53 +451,6 @@ export default class Checkout extends React.Component {
       case 'Tomorrow':
         return 'Tomorrow ' + this.state.range;
     }
-  };
-
-  onSelectOrderLater = () => {
-    var now = Moment().format('HH:mm');
-    const { selectedShop, delivery } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
-
-    var toast_text = delivery ? 'Delivery' : 'Pickup';
-    var start = delivery
-      ? delivery_hour.today.start_time
-      : opening_hour.order_start_time;
-    var end = delivery
-      ? delivery_hour.today.end_time
-      : opening_hour.order_stop_time;
-
-    if (!isTimeWithin(now, start, end)) {
-      this.refs.toast.close();
-      this.refs.toast.show(
-        `Selected ${toast_text} time is not available.`,
-        TOAST_DURATION
-      );
-      return false;
-    } else {
-      this.refs.toast.close();
-      var timeOptions = {
-        start_time: opening_hour.order_start_time,
-        end_time: opening_hour.order_stop_time
-      };
-      if (delivery) {
-        timeOptions = {
-          start_time: delivery_hour.today.start_time,
-          end_time: delivery_hour.today.end_time
-        };
-      }
-      this.setTimePickerDefault(timeOptions, false);
-
-      return true;
-    }
-  };
-
-  // Callback when tomorrow button is clicked
-  onSelectOrderTomorrow = () => {
-    this.refs.toast.close();
-    this.setTimePickerDefault(
-      this.props.selectedShop.delivery_hour.tomorrow,
-      true
-    );
   };
 
   onBranchButtonPressed = () => {};
@@ -2107,6 +2028,7 @@ export default class Checkout extends React.Component {
       />
     );
   };
+
   renderReceiptSeperation = () => {
     return (
       <View style={styles.receiptSectionSeperator}>
@@ -2118,6 +2040,7 @@ export default class Checkout extends React.Component {
       </View>
     );
   };
+
   renderCheckoutReceipt() {
     const {
       vouchers_to_use,
