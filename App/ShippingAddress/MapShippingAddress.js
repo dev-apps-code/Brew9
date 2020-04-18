@@ -17,7 +17,8 @@ import {
   PRIMARY_COLOR,
   BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND,
-  TINT_COLOR
+  TINT_COLOR,
+  LIGHT_GREY
 } from '../Common/common_style';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { connect } from 'react-redux';
@@ -97,6 +98,10 @@ export default class MapShippingAddress extends React.Component {
     var placeholder = 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
 
     if (this.props.selectedShop.response_message != undefined) {
+      console.log("\n\nresponse message \n\n")
+      console.log(this.props.selectedShop.response_message)
+      console.log("\n\nresponse message \n\n")
+
       placeholder_response = _.find(
         this.props.selectedShop.response_message,
         function (obj) {
@@ -281,6 +286,7 @@ export default class MapShippingAddress extends React.Component {
   renderSearchForm = () => (
     <GooglePlacesAutocomplete
       placeholder={this.placeHolderText()}
+      placeholderTextColor = 'rgb(200, 200, 200)'
       minLength={2}
       autoFocus={true}
       enablePoweredByContainer={false}
@@ -354,10 +360,11 @@ export default class MapShippingAddress extends React.Component {
           marginVertical: 10 * alpha,
           borderRadius: 5 * alpha,
           borderTopWidth: 0,
-          borderBottomWidth: 0
+          borderBottomWidth: 0,
         },
         textInput: {
-          marginLeft: 0
+          marginLeft: 0,
+          fontStyle: NON_TITLE_FONT,
         },
         row: {
           backgroundColor: 'white'
