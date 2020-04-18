@@ -241,8 +241,7 @@ export default class PickUp extends React.Component {
 
       // Pick up title
       var pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
-      var pick_time = Moment(item.pickup_time, 'h:mm:ss A')
-        .add(30, 'minutes')
+      var pick_time = Moment(item.delivery_time_interval, 'h:mm:ss A')
         .format('LTS');
       var pick_up_time = item.delivery_method ? pick_time : item.pickup_time;
 
