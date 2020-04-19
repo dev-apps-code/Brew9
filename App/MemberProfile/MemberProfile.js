@@ -917,16 +917,19 @@ export default class MemberProfile extends React.Component {
                   <TouchableOpacity
                     onPress={this.onChangeAddress}
                     style={{
-                      flexDirection: 'row',
                       flex: 1,
+                      flexDirection: 'row',
                       justifyContent: 'space-between',
                       alignItems: 'center'
                     }}
                   >
                     <Text
+                      ellipsizeMode="tail"
+                      numberOfLines={20}
                       style={[
                         styles.textInputTextInput,
                         {
+                          paddingRight: 10,
                           color: defaultAddress
                             ? 'rgb(135, 135, 135)'
                             : LIGHT_GREY
@@ -937,7 +940,7 @@ export default class MemberProfile extends React.Component {
                     </Text>
                     <Image
                       source={require('./../../assets/images/next.png')}
-                      style={styles.menuRowArrowImage}
+                      style={[styles.menuRowArrowImage]}
                     />
                   </TouchableOpacity>
                 </View>
@@ -1163,6 +1166,7 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    flexWrap: 'wrap',
     textAlign: 'left',
     backgroundColor: 'transparent',
     padding: 0
