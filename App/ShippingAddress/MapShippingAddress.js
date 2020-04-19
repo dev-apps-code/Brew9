@@ -98,10 +98,6 @@ export default class MapShippingAddress extends React.Component {
     var placeholder = 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
 
     if (this.props.selectedShop.response_message != undefined) {
-      console.log("\n\nresponse message \n\n")
-      console.log(this.props.selectedShop.response_message)
-      console.log("\n\nresponse message \n\n")
-
       placeholder_response = _.find(
         this.props.selectedShop.response_message,
         function (obj) {
@@ -286,7 +282,7 @@ export default class MapShippingAddress extends React.Component {
   renderSearchForm = () => (
     <GooglePlacesAutocomplete
       placeholder={this.placeHolderText()}
-      placeholderTextColor = 'rgb(200, 200, 200)'
+      placeholderTextColor="rgb(200, 200, 200)"
       minLength={2}
       autoFocus={true}
       enablePoweredByContainer={false}
@@ -302,6 +298,7 @@ export default class MapShippingAddress extends React.Component {
       }
       textInputProps={{
         clearButtonMode: 'never',
+        // style: {},
         onBlur: () => {},
         onChangeText: (address_temp) => {
           this.setState({ address_temp });
@@ -337,10 +334,10 @@ export default class MapShippingAddress extends React.Component {
             })
           }
         >
-        <Image
-          source={require('./../../assets/images/add_address.png')}
-          style={styles.addIcon}
-        />
+          <Image
+            source={require('./../../assets/images/add_address.png')}
+            style={styles.addIcon}
+          />
         </TouchableOpacity>
       )}
       onPress={(data, details = null) => {
@@ -352,26 +349,37 @@ export default class MapShippingAddress extends React.Component {
         key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
         components: 'country:bn'
       }}
+      // suppressDefaultStyles={true}
       styles={{
-        container: { backgroundColor: DEFAULT_GREY_BACKGROUND },
+        container: { backgroundColor: DEFAULT_GREY_BACKGROUND, paddingTop: 10 },
         textInputContainer: {
           marginHorizontal: 15 * alpha,
           backgroundColor: 'white',
-          marginVertical: 10 * alpha,
           borderRadius: 5 * alpha,
           borderTopWidth: 0,
           borderBottomWidth: 0,
+          justifyContent: 'center'
         },
         textInput: {
-          marginLeft: 0,
-          fontStyle: NON_TITLE_FONT,
+          padding: 0,
+          margin: 0,
+          color: 'black',
+          fontFamily: NON_TITLE_FONT,
+          fontSize: 14 * fontAlpha,
+          fontStyle: 'normal',
+          fontWeight: 'normal',
+          textAlign: 'left',
+          paddingLeft: 0,
+          paddingRight: 0,
+          flex: 1
         },
         row: {
-          backgroundColor: 'white'
+          backgroundColor: 'white',
+          marginHorizontal: 15 * alpha
         },
-
         description: {
-          fontWeight: 'bold'
+          fontFamily: NON_TITLE_FONT,
+          flexWrap: 'wrap'
         },
         predefinedPlacesDescription: {
           color: '#1faadb'
@@ -418,7 +426,7 @@ const styles = StyleSheet.create({
   },
   addIcon: {
     width: 20 * alpha,
-    height: 20 * alpha,
+    height: 20 * alpha
   },
   container: {
     flex: 1,

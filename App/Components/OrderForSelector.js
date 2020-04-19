@@ -81,7 +81,7 @@ export default class OrderForSelector extends React.Component {
     let _t = this.state.current_time_options[this.state.selected_time_index];
     if (selected == 'Today') {
       range = _t;
-      if (_t !== 'NOW') {
+      if (_t.toLowerCase() !== 'now') {
         option = 'Later';
         _t = _t.split(' - ');
 
