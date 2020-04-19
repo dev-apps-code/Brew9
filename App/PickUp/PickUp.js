@@ -242,7 +242,7 @@ export default class PickUp extends React.Component {
       let isDelivery = item.delivery_method == 1;
       let eta_time = item?.estimate_collection_time || item.pickup_time;
       let pick_up_time = isDelivery ? eta_time : item.pickup_time;
-      let meridiem = pick_up_time.split(' ')[1];
+      let meridiem = pick_up_time.split(' ')[1] || '';
 
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
@@ -480,7 +480,7 @@ export default class PickUp extends React.Component {
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.pickupTimeText}>
-                      {/* {Moment(pick_up_time, 'h:mm').format('h:mm')} */}
+                      {Moment(pick_up_time, 'h:mm').format('h:mm')}
                       <Text style={styles.pickupTimeAMPMText}>{meridiem}</Text>
                     </Text>
                   </View>
