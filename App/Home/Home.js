@@ -1,12 +1,4 @@
-//
-//  Home
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-import { StackActions, NavigationActions } from 'react-navigation';
-
+import React from 'react';
 import Constants from 'expo-constants';
 import {
   Text,
@@ -16,45 +8,33 @@ import {
   TouchableOpacity,
   View,
   Animated,
-  TouchableHighlight,
-  TextInput,
   ScrollView,
-  TouchableWithoutFeedback,
   ActivityIndicator,
   Platform,
-  Alert,
   Linking,
   AppState,
   Keyboard,
   BackHandler
 } from 'react-native';
 import Brew9Modal from '../Components/Brew9Modal';
-import React from 'react';
 import Modal from 'react-native-modal';
 import PushRequestObject from '../Requests/push_request_object';
 import { connect } from 'react-redux';
-import { createAction, dispatch, toRad } from '../Utils/index';
+import { createAction } from '../Utils/index';
 import ProductCell from './ProductCell';
 import CategoryCell from './CategoryCell';
-import BannerCell from './BannerCell';
 import CartCell from './CartCell';
-import CartPromoCell from './CartPromoCell';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import ProductRequestObject from '../Requests/product_request_object';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
-import LogoutRequestObject from '../Requests/logout_request_object.js';
 import SwitchSelector from 'react-native-switch-selector';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import Toast from 'react-native-easy-toast';
 import _ from 'lodash';
 import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import MapView from 'react-native-maps';
-import openMap from 'react-native-open-maps';
-// import { Notifications } from 'expo';
 import CategoryHeaderCell from './CategoryHeaderCell';
-import NotificationsRequestObject from '../Requests/notifications_request_object';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -65,14 +45,10 @@ import {
   LIGHT_BLUE_BACKGROUND,
   TOAST_DURATION
 } from '../Common/common_style';
-import { select } from 'redux-saga/effects';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
-import ProfileRequestObject from '../Requests/profile_request_object';
-import CurrentStatusRequestObject from '../Requests/current_status_request_object';
-import { getDistance, getPreciseDistance } from 'geolib';
+import { getPreciseDistance } from 'geolib';
 import { AsyncStorage } from 'react-native';
-import Moment from 'moment';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
@@ -191,7 +167,7 @@ export default class Home extends React.Component {
       popUpVisible: false,
       scroll_Index: null,
       refresh_products: true,
-      monitorLocation: null,
+      monitorLocation: null
     };
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
@@ -229,53 +205,45 @@ export default class Home extends React.Component {
   };
 
   getLocationAndLoadShops = async () => {
-    
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     try {
       const response = await Permissions.getAsync(Permissions.LOCATION);
       if (response.status === 'denied') {
-        this.loadShops()
-        return
+        this.loadShops();
+        return;
       }
-      if (response.status !== 'granted') {     
+      if (response.status !== 'granted') {
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         // api will be called when by location if it is not denied
         if (status === 'denied') {
-          this.loadShops()
-          return
+          this.loadShops();
+          return;
         }
-      } 
-        
-      const {monitorLocation} = this.state
+      }
 
-      if (monitorLocation == null){
-        this.setState({monitorLocation:mLocation});
-        
+      const { monitorLocation } = this.state;
+
+      if (monitorLocation == null) {
+        this.setState({ monitorLocation: mLocation });
+
         const mLocation = Location.watchPositionAsync(
           {
             distanceInterval: 1000,
             timeInterval: 10000
           },
           (newLocation) => {
-            
             dispatch(createAction('members/setLocation')(newLocation));
           },
           (error) => console.log(error)
         );
-        
-    }
-  
+      }
     } catch (error) {
       // Error retrieving data
     }
   };
 
-  
- 
-
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.location !== this.props.location) {
-
       if (prevProps.location != null) {
         this.loadShops();
       }
@@ -332,7 +300,6 @@ export default class Home extends React.Component {
   }
 
   componentWillMount() {
-   
     this.setState({ isPromoToggle: false });
   }
 
@@ -342,7 +309,7 @@ export default class Home extends React.Component {
       onQrScanPressed: this.onQrScanPressed
     });
     this.getLocationAndLoadShops();
-    
+
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
@@ -392,12 +359,12 @@ export default class Home extends React.Component {
   _handleAppStateChange = (nextAppState) => {
     if (
       this.state.appState.match(/inactive|background/) &&
-      nextAppState === 'active'      
+      nextAppState === 'active'
     ) {
-      console.log("active")
-      this.setState({refresh_products:true})
+      console.log('active');
+      this.setState({ refresh_products: true });
       this.getLocationAndLoadShops();
-      console.log("--getlocation439--")
+      console.log('--getlocation439--');
     }
     this.setState({
       appState: nextAppState,
@@ -452,11 +419,11 @@ export default class Home extends React.Component {
           function () {
             this.check_promotion_trigger();
 
-            const {refresh_products} = this.state
+            const { refresh_products } = this.state;
             if (refresh_products) {
               this.loadStoreProducts();
-              
-              console.log("--getlocation496--")
+
+              console.log('--getlocation496--');
               if (first_promo_popup == false) {
                 this.shouldShowFeatured(this.props.shop);
               }
@@ -495,7 +462,7 @@ export default class Home extends React.Component {
               data: eventObject.result,
               total: eventObject.total,
               page: this.state.page + 1,
-              refresh_products:false,
+              refresh_products: false
             },
             function () {
               let data = [...this.state.data];
@@ -543,9 +510,9 @@ export default class Home extends React.Component {
       isRefreshing: true,
       data: [],
       products: [],
-      refresh_products:true,
+      refresh_products: true
     });
-    console.log("--loadshops580--")
+    console.log('--loadshops580--');
     this.loadShops();
   }
 
@@ -576,7 +543,7 @@ export default class Home extends React.Component {
           const { clearCart } = this.props;
 
           if (clearCart == true) {
-            console.log("--loadshops604--")
+            console.log('--loadshops604--');
             this.loadShops();
             navigate('PickUp');
           } else {
@@ -594,7 +561,7 @@ export default class Home extends React.Component {
         (payload) => {
           this.removeNavigationListener();
           this.loadShops();
-          console.log("--loadshops633--")
+          console.log('--loadshops633--');
         }
       );
       navigate('VerifyUser', {
@@ -639,24 +606,25 @@ export default class Home extends React.Component {
     analytics.event(new Event('Home', 'Click', 'Delivery'));
     let delivery = value == 1 ? true : false;
 
-    if(delivery == false && shop.delivery_option == false) {
-      var delivery_disabled =
-              'Our delivery is too busy at the moment.\nplease try again in 30 mins.';
-      if (selectedShop.response_message != undefined) {
-        delivery_disabled_response = _.find(
-          selectedShop.response_message,
-          function (obj) {
-            return obj.key === 'Delivery Disabled';
-          }
-        );
-        if (delivery_disabled_response != undefined) {
-          delivery_disabled = delivery_disabled_response.text;
+    if (delivery && shop.delivery_option == false) {
+      this.setState({ delivery: 0 }, () => {
+        this.refs.toggle.toggleItem(0, false);
+
+        var msg =
+          'Our delivery is too busy at the moment.Please try again in 30 mins.';
+        if (shop.response_message != undefined) {
+          delivery_disabled_response = _.find(
+            shop.response_message,
+            (obj) => obj.key === 'Delivery Disabled'
+          );
+
+          msg = delivery_disabled_response?.text || msg;
         }
-      }
-      this.refs.toast.show(delivery_disabled, TOAST_DURATION)
-    } else {
-      dispatch(createAction('members/setDeliveryOption')(delivery));
+        this.refs.toast.show(msg, TOAST_DURATION);
+      });
+      return;
     }
+    dispatch(createAction('members/setDeliveryOption')(delivery));
   };
 
   onSelectCategory = (scroll_index, selected_index) => {
@@ -1045,17 +1013,18 @@ export default class Home extends React.Component {
   };
 
   roundOff(value) {
-    console.log("before value: ")
-    console.log(value)
+    console.log('before value: ');
+    console.log(value);
     roundOffValue = 0;
-    let n = parseInt((value * 100).toFixed(10)), x = n % 10;
-				let result = n + 10 - x;
-				if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
-				roundOffValue = (result / 100).toFixed(2);
-    console.log("\n\nValue")
-    console.log(roundOffValue)
+    let n = parseInt((value * 100).toFixed(10)),
+      x = n % 10;
+    let result = n + 10 - x;
+    if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+    roundOffValue = (result / 100).toFixed(2);
+    console.log('\n\nValue');
+    console.log(roundOffValue);
 
-    return roundOffValue
+    return roundOffValue;
   }
 
   check_promotion_trigger = () => {
@@ -1088,7 +1057,7 @@ export default class Home extends React.Component {
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
             var price = 0;
-            var roundedPrice = 0
+            var roundedPrice = 0;
 
             var trigger_price = parseFloat(promotion.trigger_price);
             var remaining = trigger_price - cart_total;
@@ -1106,8 +1075,12 @@ export default class Home extends React.Component {
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = (cart_total * discount_value) / 100;
-                  price = this.roundOff((final_cart_value * discount_value) / 100)
-                  roundedPrice = this.roundOff((final_cart_value * discount_value) / 100)
+                  price = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
+                  roundedPrice = this.roundOff(
+                    (final_cart_value * discount_value) / 100
+                  );
 
                   if (
                     promotion.maximum_discount_allow != null &&
@@ -1121,7 +1094,7 @@ export default class Home extends React.Component {
                   promotion.value_type == 'fixed'
                 ) {
                   var discount_value = promotion.value ? promotion.value : 0;
-                  price = promotion.value
+                  price = promotion.value;
                   final_cart_value = cart_total - discount_value;
                 }
               }
@@ -1723,25 +1696,27 @@ export default class Home extends React.Component {
               }}
             />
             <View style={styles.pickUpDeliveryView}>
-              <SwitchSelector
-                options={[
-                  { label: 'Pick Up', value: 0 },
-                  { label: 'Delivery', value: 1 }
-                ]}
-                initial={this.state.delivery}
-                value={delivery}
-                textColor={'#4E4D4D'}
-                selectedColor={'#FFFFFF'}
-                buttonColor={'#2A2929'}
-                borderColor={'#979797'}
-                backgroundColor={'rgb(240,240,240)'}
-                style={styles.pickUpDeliveryViewTemp}
-                textStyle={styles.optionText}
-                fontSize={10 * alpha}
-                height={32 * alpha}
-                onPress={(value) => this._toggleDelivery(value)}
-              />
-              {/* <TouchableOpacity style={styles.pickUpDeliveryViewTemp} onPress={() => this._toggleDelivery(1)}></TouchableOpacity> */}
+              {shop && (
+                <SwitchSelector
+                  ref="toggle"
+                  options={[
+                    { label: 'Pick Up', value: 0 },
+                    { label: 'Delivery', value: 1 }
+                  ]}
+                  initial={this.state.delivery}
+                  value={this.state.delivery}
+                  textColor={'#4E4D4D'}
+                  selectedColor={'#FFFFFF'}
+                  buttonColor={'#2A2929'}
+                  borderColor={'#979797'}
+                  backgroundColor={'rgb(240,240,240)'}
+                  style={styles.pickUpDeliveryViewTemp}
+                  textStyle={styles.optionText}
+                  fontSize={10 * alpha}
+                  height={32 * alpha}
+                  onPress={(value) => this._toggleDelivery(value)}
+                />
+              )}
             </View>
           </View>
           <View
