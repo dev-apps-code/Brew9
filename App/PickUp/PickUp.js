@@ -233,19 +233,17 @@ export default class PickUp extends React.Component {
     });
 
     const queues = current_order.map((item, key) => {
-      let claim_time = Moment(item.claim_time, 'DD-MM-YYYY').format('MM-DD');
-      let today = Moment(new Date(), 'DD-MM-YYYY').format('MM-DD');
-      // let claim_day = claim_time != today ? 'TOMORROW' : '';
       let claim_day = item.pickup_status == 'Tomorrow' ? 'TOMORROW' : '';
       let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
 
       // Pick up title
-      var pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
-      var pick_time = Moment(item.delivery_time_interval, 'h:mm:ss A')
-        .format('LTS');
-      var pick_up_time = item.delivery_method ? pick_time : item.pickup_time;
+      let pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
 
-      var meridiem = pick_up_time.split(' ')[1];
+      let isDelivery = item.delivery_method == 1;
+      let eta_time = item?.estimate_collection_time || item.pickup_time;
+      let pick_up_time = isDelivery ? eta_time : item.pickup_time;
+      let meridiem = pick_up_time.split(' ')[1];
+
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
       let progress = progressValues[item.status] || 0;
@@ -482,7 +480,7 @@ export default class PickUp extends React.Component {
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.pickupTimeText}>
-                      {Moment(pick_up_time, 'HH:mm').format('h:mm')}
+                      {/* {Moment(pick_up_time, 'h:mm').format('h:mm')} */}
                       <Text style={styles.pickupTimeAMPMText}>{meridiem}</Text>
                     </Text>
                   </View>
