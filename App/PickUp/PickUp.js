@@ -235,14 +235,16 @@ export default class PickUp extends React.Component {
     const queues = current_order.map((item, key) => {
       let claim_day = item.pickup_status == 'Tomorrow' ? 'TOMORROW' : '';
       let cart_total = parseFloat(item.sub_total) + parseFloat(item.discount);
-
       // Pick up title
       let pick_up_title = item.delivery_method ? 'ETA Delivery' : 'Pickup';
 
       let isDelivery = item.delivery_method == 1;
       let eta_time = item?.estimate_collection_time || item.pickup_time;
       let pick_up_time = isDelivery ? eta_time : item.pickup_time;
-      let meridiem = pick_up_time.split(' ')[1] || '';
+      pick_up_time = Moment(pick_up_time, 'H:mm').format('h:mm A');
+      let _eta_time = pick_up_time.split(' ');
+      let estimated_time = _eta_time[0];
+      let meridiem = _eta_time[1];
 
       // Set progress bar values
       let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
@@ -480,7 +482,7 @@ export default class PickUp extends React.Component {
                   </Text>
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.pickupTimeText}>
-                      {Moment(pick_up_time, 'h:mm').format('h:mm')}
+                      {estimated_time}
                       <Text style={styles.pickupTimeAMPMText}>{meridiem}</Text>
                     </Text>
                   </View>
