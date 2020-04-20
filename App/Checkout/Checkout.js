@@ -348,6 +348,8 @@ export default class Checkout extends React.Component {
   };
 
   addShippingAddress = () => {
+    const { navigation } = this.props;
+
     this.setState({ visible: false });
     navigation.navigate('ShippingAddress', {
       selected_address: this.state.selected_address,
