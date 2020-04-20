@@ -82,12 +82,19 @@ export default class ScanQr extends React.Component {
         
         const callback = eventObject => {        
             if (eventObject.success) {
-                this.refs.toast.show(eventObject.message, 1500, () => {
+                if (eventObject?.message) {
 
+                    this.refs.toast.show(eventObject.message, 1500, () => {
+
+                        if (eventObject.result.clazz == "member") {
+                            this.onSuccessfulScan()
+                        }                     
+                    })
+                } else {
                     if (eventObject.result.clazz == "member") {
                         this.onSuccessfulScan()
-                    }                     
-                })
+                    }
+                }
                 this.setState({ loading: false })
             }
             else {
@@ -118,7 +125,9 @@ export default class ScanQr extends React.Component {
             }
             else {
                 this.setState({ loading: false })
-                this.refs.toast.show(eventObject.message, TOAST_DURATION)
+                if (eventObject?.message) {
+                    this.refs.toast.show(eventObject.message, TOAST_DURATION);
+                }
             }   
         }
         const obj = new QrCodeScanRequestObject(qr_code)

@@ -21,7 +21,6 @@ export default class ImageCell extends React.PureComponent {
                         <Swiper showsPagination={true} autoplay={false} paginationStyle={{ bottom: 5 }}>
                             {
                                 image.map((item, index) => {
-                                    console.log('item', item)
                                     return (<Image
                                         key={index}
                                         source={{ uri: item.url }}

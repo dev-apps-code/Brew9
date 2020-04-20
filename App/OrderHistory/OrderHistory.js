@@ -7,13 +7,14 @@
 //
 
 import OrderCell from "./OrderCell.js"
-import {Text, View, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator} from "react-native"
+import { Text, View, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native"
 import React from "react"
 import { alpha, fontAlpha } from "../Common/size";
 import { connect } from "react-redux";
 import GetOrdersRequestObject from '../Requests/get_orders_request_object'
-import {createAction} from '../Utils'
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import { createAction } from '../Utils'
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+import AnimationLoading from "../Components/AnimationLoading"
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -27,7 +28,7 @@ export default class OrderHistory extends React.Component {
 
 		const { params = {} } = navigation.state
 		return {
-			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT}}>Order History</Text>,
+			headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Order History</Text>,
 			headerTintColor: "black",
 			headerLeft: <View
 				style={styles.headerLeftContainer}>
@@ -36,7 +37,7 @@ export default class OrderHistory extends React.Component {
 					style={styles.navigationBarItem}>
 					<Image
 						source={require("./../../assets/images/back.png")}
-						style={styles.navigationBarItemIcon}/>
+						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>,
 			headerRight: null,
@@ -54,40 +55,40 @@ export default class OrderHistory extends React.Component {
 			orders_initial: true,
 			orders_data: [],
 			orders_page: 1,
-		 }
+		}
 	}
 
-	loadOrders(page){
-		const { dispatch ,currentMember} = this.props	
+	loadOrders(page) {
+		const { dispatch, currentMember } = this.props
 		this.setState({ loading_list: true })
 		const callback = eventObject => {
-			this.setState({loading_list: false,})
+			this.setState({ loading_list: false, })
 			if (eventObject.success) {
 				this.setState({
-				orders_initial: false,
-				orders_data: this.state.orders_data.concat(eventObject.result),
-				orders_total: eventObject.total,
-				orders_page: this.state.orders_page + 1,				
-				})        				
+					orders_initial: false,
+					orders_data: this.state.orders_data.concat(eventObject.result),
+					orders_total: eventObject.total,
+					orders_page: this.state.orders_page + 1,
+				})
 			}
-			
+
 		}
 		const obj = new GetOrdersRequestObject(page)
-		obj.setUrlId(currentMember.id) 
+		obj.setUrlId(currentMember.id)
 		// obj.setUrlId(1) 
 		obj.setPage(page)
 		dispatch(
 			createAction('members/loadOrders')({
-				object:obj,
+				object: obj,
 				callback,
 			})
 		)
 	}
 
 
-	loadMore(){
-		const { loading_list , orders_data , orders_total , orders_page} = this.state
-		if (!loading_list){
+	loadMore() {
+		const { loading_list, orders_data, orders_total, orders_page } = this.state
+		if (!loading_list) {
 			if (orders_total > orders_data.length) {
 				this.loadOrders(orders_page)
 			}
@@ -105,10 +106,10 @@ export default class OrderHistory extends React.Component {
 		if (currentMember != null) {
 			this.loadOrders(this.state.orders_page)
 		}
-		
+
 	}
 
-	loadGetOrders(){
+	loadGetOrders() {
 		const { dispatch, currentMember } = this.props
 		if (currentMember !== null) {
 			this.setState({ loading: true })
@@ -120,78 +121,76 @@ export default class OrderHistory extends React.Component {
 				}
 				this.setState({
 					loading: false,
-				})        
+				})
 			}
 			const obj = new GetOrderRequestObject()
 			obj.setUrlId(currentMember.id)
 			// obj.setUrlId(1)
 			dispatch(
 				createAction('orders/loadGetOrders')({
-					object:obj,
+					object: obj,
 					callback,
 				})
 			)
 		}
 	}
-	
+
 	onBackPressed = () => {
 
 		this.props.navigation.goBack()
 	}
 
 	renderOrderHistoryFlatListCell = ({ item }) => {
-	
+
 		return <OrderCell
-				navigation={this.props.navigation}
-				item={item}
-				order_id={item.id}
-				total={item.total}
-				receipt_no={item.receipt_no}
-				payment_time={item.payment_time}
-				shop_name={item.shop.name}
-				products={item.order_items}
-				status={item.status}
+			navigation={this.props.navigation}
+			item={item}
+			order_id={item.id}
+			total={item.total}
+			receipt_no={item.receipt_no}
+			payment_time={item.payment_time}
+			shop_name={item.shop.name}
+			products={item.order_items}
+			status={item.status}
 		/>
 	}
 
 	render() {
-		const {orders_data} = this.state
+		const { orders_data } = this.state
 		return <View
-				style={styles.OrderHistoryView}>
+			style={styles.OrderHistoryView}>
+			<View
+				style={styles.headerView}>
+				<Text
+					style={styles.purchaseHistoryText}>Order History</Text>
 				<View
-					style={styles.headerView}>
-					<Text
-						style={styles.purchaseHistoryText}>Order History</Text>
-					<View
-						style={{
-							flex: 1,
-						}}/>
-					{/*<Text*/}
-					{/*	style={styles.seeAllText}>See all</Text>*/}
-					{/*<Image*/}
-					{/*	source={require("./../../assets/images/group-16.png")}*/}
-					{/*	style={styles.groupImage}/>*/}
-				</View>
-				{this.state.loading_list ?
-					<View style={[styles.container, styles.horizontal]}>
-						<ActivityIndicator size="large" />
-					</View> : 
-					<View
-						style={styles.orderHistoryFlatListViewWrapper}>
-						{(!this.state.loading_list && this.state.orders_data.length > 0) ?
+					style={{
+						flex: 1,
+					}} />
+				{/*<Text*/}
+				{/*	style={styles.seeAllText}>See all</Text>*/}
+				{/*<Image*/}
+				{/*	source={require("./../../assets/images/group-16.png")}*/}
+				{/*	style={styles.groupImage}/>*/}
+			</View>
+			{this.state.loading_list ?
+				<AnimationLoading /> :
+				<View
+					style={styles.orderHistoryFlatListViewWrapper}>
+					{(!this.state.loading_list && this.state.orders_data.length > 0) ?
 						<FlatList
 							onEndReached={this.loadMore.bind(this)}
 							renderItem={this.renderOrderHistoryFlatListCell}
 							data={orders_data}
 							style={styles.orderHistoryFlatList}
-							keyExtractor={(item, index) => index.toString()}/>
-							: <View
-								style={styles.blankView}>
-									<Text style={styles.noLabelText}>You have not place any order yet</Text>
-						</View> }
-					</View>
-				}
-			</View>
+							keyExtractor={(item, index) => index.toString()} />
+						: <View
+							style={styles.blankView}>
+							<Text style={styles.noLabelText}>You have not place any order yet</Text>
+						</View>}
+				</View>
+			}
+		</View>
 	}
 }
 
@@ -242,7 +241,7 @@ const styles = StyleSheet.create({
 		fontFamily: TITLE_FONT,
 		fontSize: 16 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		marginLeft: 20 * alpha,
 	},
@@ -252,7 +251,7 @@ const styles = StyleSheet.create({
 		fontFamily: NON_TITLE_FONT,
 		fontSize: 10 * fontAlpha,
 		fontStyle: "normal",
-		
+
 		textAlign: "left",
 		marginRight: 5 * alpha,
 	},
