@@ -251,6 +251,9 @@ export default class PickUp extends React.Component {
       let progress = progressValues[item.status] || 0;
 
       let delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
+      let subtotal = item.sub_total || 0;
+      let subtotal_string = '$' + parseFloat(subtotal).toFixed(2);
+
       let calculate_cart_total = cart_total;
 
       // Suggesting this must be added to a default values
@@ -281,12 +284,6 @@ export default class PickUp extends React.Component {
       }
 
       const order_items = item.order_items.map((productItem, key) => {
-        console.log('currentKey: ');
-        console.log(key);
-        // console.log( item.order_items)
-        // console.log("lastkey")
-        // console.log((item.order_items).length)
-        // var countKey = Object.keys(jsonObj).length;
         var price_string =
           productItem.total_price != undefined && productItem.total_price > 0
             ? `$${parseFloat(productItem.total_price).toFixed(2)}`
@@ -682,9 +679,7 @@ export default class PickUp extends React.Component {
                       flex: 1
                     }}
                   />
-                  <Text style={styles.orderTotalText}>
-                    {item.delivery_fee > 0 ? `$${item.sub_total}` : undefined}
-                  </Text>
+                  <Text style={styles.orderTotalText}>{subtotal_string}</Text>
                 </View>
               </View>
             ) : undefined}
