@@ -87,7 +87,6 @@ export default class VerifyUser extends React.Component {
         `${link} +  - api version ${KCURRENT_API_VERSION_HEADER} - build no  ${APPBUILDVERSIONANDROID}`
       );
     }
-    
   }
 
   async reset() {
