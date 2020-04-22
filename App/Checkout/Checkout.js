@@ -624,7 +624,7 @@ export default class Checkout extends React.Component {
                 var productsID = products[x].id
                 if(cartProductID == productsID){
                   cart[i].discount_voucher_quantity = products[x].quantity
-                  cart[i].discount_voucher_id = vouchers_to_use[0].id
+                  cart[i].discount_voucher_item_id = vouchers_to_use[0].id
                 }
               }
             }
