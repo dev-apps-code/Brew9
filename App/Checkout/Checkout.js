@@ -560,7 +560,7 @@ export default class Checkout extends React.Component {
 
  
   applyVoucher(vouchers_to_use) {
-    const { discount_cart_total } = this.props;
+    const { discount_cart_total, cart } = this.props;
     const { selected_payment } = this.state;
     var voucherDeductedTotal = discount_cart_total;
     console.log("Current Cart Total: ")
@@ -614,7 +614,34 @@ export default class Checkout extends React.Component {
           
             }
             
-            
+            let cart = [...this.props.cart];
+            console.log("updateCart")
+            console.log(cart)
+
+            for(var i in cart){
+              var cartProductID = cart[i].id
+              for(var x in products){
+                var productsID = products[x].id
+                if(cartProductID == productsID){
+                  cart[i].discount_voucher_quantity = products[x].quantity
+                  cart[i].discount_voucher_id = vouchers_to_use[0].id
+                }
+              }
+            }
+
+
+            console.log("addedtocart")
+            console.log(cart)
+        
+            this.props.dispatch(
+              createAction('orders/updateCart')({
+                cart
+              })
+            );
+        
+            console.log("newCart :")
+            console.log(this.props.cart)
+       
 
           }
           else if (voucher.discount_type.toLowerCase() == 'fixed') {
