@@ -579,7 +579,7 @@ export default class Checkout extends React.Component {
           voucher.discount_price != 0
         ) {
           if(vouchers_to_use[index].product_ids.length != 0){
-            var maxQuantity = 5;
+            var maxQuantity =   voucher.target_quantity;
             var products = this.filterProductsByVoucher(vouchers_to_use[index], maxQuantity)
             console.log("products")
             console.log(products)
