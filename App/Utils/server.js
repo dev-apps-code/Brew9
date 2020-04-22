@@ -22,7 +22,7 @@ import { getServerIndex } from './storage';
 // export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
 
 export const KSERVERURLLIST = [
-  "https://app.brew9.co/api",
+  // "https://app.brew9.co/api",
   "https://dev.brew9.co/api",
   "http://test.brew9.co/api",  
   "http://dev1.brew9.co/api",
@@ -31,7 +31,7 @@ export const KSERVERURLLIST = [
   // "http://dev4.brew9.co/api",
 ];
 export const KURL_INFOLIST = [
-  "https://app.brew9.co/info",
+  // "https://app.brew9.co/info",
   "https://dev.brew9.co/info",
   "http://test.brew9.co/info",
   "http://dev1.brew9.co/info",
@@ -41,7 +41,7 @@ export const KURL_INFOLIST = [
   // "http://dev4.brew9.co/info",
 ];
 export const KPAYMENTYURLLIST = [
-  "https://app.brew9.co/payments/baiduri",
+  // "https://app.brew9.co/payments/baiduri",
   "https://dev.brew9.co/payments/baiduri",
   "http://test.brew9.co/payments/baiduri",  
   "http://dev1.brew9.co/payments/baiduri",
@@ -71,7 +71,7 @@ export let KURL_TERMS_OF_SERVICE = KURL_INFO + '?page=terms_conditions&id=f1';
 export let KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy&id=1';
 export let KURL_EULA = KURL_INFO + '?page=eula&id=1';
 export let KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export let KCURRENT_API_VERSION_HEADER = 'application/dc.v5 gzip';
+export let KCURRENT_API_VERSION_HEADER = 'application/dc.v6 gzip';
 export let APPBUILDVERSIONIOS = '14';
 export let APPBUILDVERSIONANDROID = '14';
 
