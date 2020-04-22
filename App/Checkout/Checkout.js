@@ -161,7 +161,6 @@ export default class Checkout extends React.Component {
     );
     dispatch(createAction('orders/noClearCart')());
     this.check_promotion_trigger();
-    this.loadStoreProducts()
 
   }
 
@@ -533,31 +532,6 @@ export default class Checkout extends React.Component {
       })
     );
   };
-
-  loadStoreProducts() {
-    const { dispatch, company_id } = this.props;
-
-    const callback = (eventObject) => {
-      // console.log("\n\nStore Prodcuts")
-      // console.log(eventObject)
-      if (eventObject.success) {
-      }
-      this.setState({
-        isRefreshing: false,
-        loading: false
-      });
-    };
-
-    const obj = new ProductRequestObject();
-    obj.setUrlId(company_id);
-    dispatch(
-      createAction('products/loadStoreProducts')({
-        object: obj,
-        callback
-      })
-    );
-  }
-
  
   applyVoucher(vouchers_to_use) {
     const { discount_cart_total, cart } = this.props;
