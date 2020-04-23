@@ -436,8 +436,8 @@ export default class Checkout extends React.Component {
       
     // })
 
-    console.log("quantity:")
-    console.log(cartTotalQuantity)
+    // console.log("quantity:")
+    // console.log(cartTotalQuantity)
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
