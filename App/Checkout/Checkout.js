@@ -136,7 +136,7 @@ export default class Checkout extends React.Component {
       promotionTotalDiscount: 0,
       promotionDiscountValue: {
         value: 0,
-        type: ''
+        type: null
       },
     };
     const xy = { x: 0, y: windowHeight };
@@ -580,8 +580,8 @@ export default class Checkout extends React.Component {
     //console.log(this.state.promotionTotalDiscount)
     //console.log("Voucher: ")
     //console.log(voucher)
-    //console.log("ELIGIBLE_QTY")
-    //console.log(targetQuantity)
+    console.log("ELIGIBLE_QTY")
+    console.log(targetQuantity)
 
     cart.sort(function (a, b) {
       if (a.price < b.price) {
@@ -624,6 +624,34 @@ export default class Checkout extends React.Component {
               //console.log("Product Price")
               //console.log(productPrice)
               productPrice -= this.roundOff(productPrice * promotionSettings.value / 100)
+              var voucherDeductionValue = this.roundOff(((productPrice) * voucherDetails.discount_price) / 100.0);
+              //console.log("V value")
+              //console.log(voucherDeductionValue)
+              voucherDiscountTotal = voucherDiscountTotal + (voucherDeductionValue * discountVoucherQuantity);
+              //console.log("Current Cart Total: ")
+              //console.log(voucherDiscountTotal)
+                       
+            }   
+          }
+
+          else if (promotionSettings.type == null){
+            if (voucherDetails.discount_type.toLowerCase() == 'fixed') {         
+              voucherDiscountTotal = voucherDiscountTotal + (voucherDetails.discount_price * discountVoucherQuantity);
+                //console.log("Deduction Fixed Value: ")
+                //console.log("$" +voucherDetails.discount_price)
+                //console.log("quantity x value to be deducted")
+                //console.log(voucherDetails.discount_price * discountVoucherQuantity)
+                //console.log("Current Cart Total: ")
+                //console.log(voucherDiscountTotal)
+                
+            }   
+            else if (voucherDetails.discount_type.toLowerCase() == 'percent') {       
+              var voucherDeductionPercentage =  voucherDetails.discount_price
+              //console.log("V percentage")
+              //console.log(voucherDeductionPercentage)
+              //console.log("Product Price")
+              //console.log(productPrice)
+              // productPrice -= this.roundOff(productPrice * promotionSettings.value / 100)
               var voucherDeductionValue = this.roundOff(((productPrice) * voucherDetails.discount_price) / 100.0);
               //console.log("V value")
               //console.log(voucherDeductionValue)
