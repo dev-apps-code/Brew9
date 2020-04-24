@@ -582,14 +582,18 @@ export default class Checkout extends React.Component {
     //console.log(voucher)
     console.log("ELIGIBLE_QTY")
     console.log(targetQuantity)
-
+    console.log("before")
+    console.log(cart)
+    
     cart.sort(function (a, b) {
-      if (a.price < b.price) {
+      if (parseFloat(a.price) < parseFloat(b.price)) {
         return -1;
       }
       return 0;
     });
 
+    console.log("after")
+    console.log(cart)
     
 
     cart.map((value, key) => {
@@ -619,17 +623,19 @@ export default class Checkout extends React.Component {
             }   
             else if (voucherDetails.discount_type.toLowerCase() == 'percent') {       
               var voucherDeductionPercentage =  voucherDetails.discount_price
-              //console.log("V percentage")
-              //console.log(voucherDeductionPercentage)
-              //console.log("Product Price")
-              //console.log(productPrice)
+              console.log("V percentage")
+              console.log(voucherDeductionPercentage)
+              console.log("Product Price")
+              console.log(productPrice)
               productPrice -= this.roundOff(productPrice * promotionSettings.value / 100)
+              console.log("Product Price - promotion")
+              console.log(productPrice)
               var voucherDeductionValue = this.roundOff(((productPrice) * voucherDetails.discount_price) / 100.0);
-              //console.log("V value")
-              //console.log(voucherDeductionValue)
+              console.log("V value")
+              console.log(voucherDeductionValue)
               voucherDiscountTotal = voucherDiscountTotal + (voucherDeductionValue * discountVoucherQuantity);
-              //console.log("Current Cart Total: ")
-              //console.log(voucherDiscountTotal)
+              console.log("Current Cart Total: ")
+              console.log(voucherDiscountTotal)
                        
             }   
           }
