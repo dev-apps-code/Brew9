@@ -92,15 +92,15 @@ export default class FirstScreen extends React.Component {
 
     dispatch(createAction('members/loadCurrentUserFromCache')({}));
     AppState.addEventListener('change', this._handleAppStateChange);
-    // var configMapObject = {}
-    // if (__DEV__) {
-    //     configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
-    // } else {
-    //     configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
-    // }
-    // configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] = "kobrew9-npv3ph2ns";
-    // configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] = "kobrew9-82rqs2pdf";
-    // KochavaTracker.configure(configMapObject);
+    var configMapObject = {}
+    if (__DEV__) {
+        configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
+    } else {
+        configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
+    }
+    configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] = "kobrew9-npv3ph2ns";
+    configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] = "kobrew9-82rqs2pdf";
+    KochavaTracker.configure(configMapObject);
   }
 
   componentWillUnmount() {
