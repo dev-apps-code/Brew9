@@ -77,15 +77,15 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app requires you to provide your location to suggest you the nearest shop</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow Brew9 to access your microphone</string>
+	<string>Allow Brew9 to access your microphone so you can record your voice</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Allow Brew9 to access your device's accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Give Brew9 permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give Brew9 permission to access your photos</string>
+	<string>Allow Brew9 to access your photo library to upload your profile photo</string>
 	<key>NSRemindersUsageDescription</key>
-	<string>Allow Brew9 to access your reminders</string>
+	<string>Allow Brew9 to access your reminders to add to your reminder</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
