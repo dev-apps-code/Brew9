@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.1.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "updates": {
       "fallbackToCacheTimeout": 0,
@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "buildNumber":"1",
+      "buildNumber":"24",
       "bundleIdentifier": "com.dreamcode.brew9",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan qr code to allow you to pay or redeem for vouchers.",
@@ -38,7 +38,7 @@
           "apiKey": "AIzaSyDAJsylYVu_i2yPaOVtqVnVtP9wjlOlxPo"
         }
       },
-      "versionCode":8,
+      "versionCode":13,
       "googleServicesFile": "./assets/fcm/google-services.json",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
