@@ -34,7 +34,8 @@ import {
   KURL_EULA,
   KSERVERURL,
   loadServer,
-  APPBUILDVERSIONANDROID
+  APPBUILDVERSIONANDROID,
+  KCURRENT_API_VERSION_HEADER
 } from '../Utils/server';
 import Hyperlink from 'react-native-hyperlink';
 import {
@@ -76,15 +77,16 @@ export default class VerifyUser extends React.Component {
   }
 
   async componentDidMount() {
-    // await loadServer();
-    // console.log(KSERVERURL);
+  
     let str = KSERVERURL;
     let r = str.match(/https?:\/\/(.*?)\//);
     let link = r[1];
-    // console.log(link)
-    this.refs.toast.show(
-      link + ' - api version 2 - build no ' + APPBUILDVERSIONANDROID
-    );
+  
+    if (link != 'app.brew9.co'){
+      this.refs.toast.show(
+        `${link} +  - api version ${KCURRENT_API_VERSION_HEADER} - build no  ${APPBUILDVERSIONANDROID}`
+      );
+    }
   }
 
   async reset() {

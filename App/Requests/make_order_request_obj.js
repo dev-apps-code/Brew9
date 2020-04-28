@@ -47,6 +47,8 @@ class MakeOrderRequestObj extends BaseRequestObject {
       address_id: this.address_id
     });
 
+    console.log("string")
+    console.log(string)
     return string;
   }
 }

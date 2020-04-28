@@ -620,7 +620,11 @@ export default class Home extends React.Component {
 
           msg = delivery_disabled_response?.text || msg;
         }
-        this.refs.toast.show(msg, TOAST_DURATION);
+        this.refs.toast.show(<View style={{ justifyContent: 'center' }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>
+                  {msg}
+                </Text>
+              </View>, TOAST_DURATION);
       });
       return;
     }
@@ -2066,9 +2070,7 @@ export default class Home extends React.Component {
       }
     }
 
-    if (shop !== null && shop.featured_promotion !== null) {
-      // let should_show = this.shouldShowFeatured(shop)
-      // if (should_show == true) {
+    if (shop && shop.featured_promotion && shop.featured_promotion.icon) {
       return (
         <TouchableOpacity
           onPress={() =>

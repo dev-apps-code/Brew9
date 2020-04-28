@@ -36,10 +36,12 @@ import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
+import ProductRequestObject from '../Requests/product_request_object';
 
 const OPTION_NOW_MESSAGE = 'Estimated within 30mins';
 
 @connect(({ members, shops, orders }) => ({
+  company_id: members.company_id,
   currentMember: members.profile,
   members: members,
   selectedShop: shops.selectedShop,
@@ -105,7 +107,6 @@ export default class Checkout extends React.Component {
       vouchers_to_use: [],
       voucher: '',
       valid_vouchers: [],
-      discount: 0,
       isPaymentToggle: false,
       payment_view_height: 0 * alpha,
       selected_payment: '',
@@ -130,7 +131,13 @@ export default class Checkout extends React.Component {
       addressConfirmation: false,
       deliveryFee: 0.0,
       loading: false,
-      range: ''
+      range: '',
+      voucherTotalDiscount: 0,
+      promotionTotalDiscount: 0,
+      promotionDiscountValue: {
+        value: 0,
+        type: null
+      },
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -159,6 +166,7 @@ export default class Checkout extends React.Component {
     );
     dispatch(createAction('orders/noClearCart')());
     this.check_promotion_trigger();
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -204,7 +212,7 @@ export default class Checkout extends React.Component {
         });
       } else {
         // Reset values if in case request fails
-        console.log('Something went wrong.');
+        ////console.log('Something went wrong.');
         this.setState({ deliveryFee: 0.0, delivery_description: '' });
       }
     };
@@ -236,6 +244,8 @@ export default class Checkout extends React.Component {
     if (currentMember != null) {
       const callback = (eventObject) => {
         if (eventObject.success) {
+          // ////console.log("Vouchers")
+          // ////console.log(eventObject)
           this.setState({
             valid_vouchers: eventObject.result
           });
@@ -378,42 +388,18 @@ export default class Checkout extends React.Component {
         vouchers_to_use: new_voucher_list
       },
       function () {
-        this.calculateVoucherDiscount(new_voucher_list);
+        this.applyVoucher(new_voucher_list);
       }
     );
   };
 
   addVoucherItemsToCart = (voucher_item) => {
     const { vouchers_to_use } = this.state;
-
-    if (vouchers_to_use.length == 0) {
+    // ////console.log("\nSelected Voucher:")
+    // ////console.log(voucher_item)
       this.setState({ vouchers_to_use: [voucher_item] });
-      this.calculateVoucherDiscount([voucher_item]);
-    } else {
-      let array = [];
-
-      for (var index in vouchers_to_use) {
-        var v = vouchers_to_use[index];
-        if (
-          voucher_item.voucher_type == 'SkipQueue' &&
-          v.voucher.voucher_type !== 'SkipQueue'
-        ) {
-          array.push(v);
-          continue;
-        }
-        if (
-          voucher_item.voucher_type !== 'SkipQueue' &&
-          v.voucher.voucher_type == 'SkipQueue'
-        ) {
-          array.push(v);
-          continue;
-        }
-      }
-      array.push(voucher_item);
-
-      this.setState({ vouchers_to_use: array });
-      this.calculateVoucherDiscount(array);
-    }
+      this.applyVoucher([voucher_item]);
+    
   };
 
   roundOff(value) {
@@ -434,8 +420,10 @@ export default class Checkout extends React.Component {
       promotions,
       cart_total,
       selectedShop,
-      delivery
+      delivery, 
+      cart
     } = this.props;
+   
     let { sub_total_voucher, deliveryFee } = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
@@ -446,7 +434,14 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
+    // var cartTotalQuantity = 0;
+    // cart.map((value, key) => {
+    //   cartTotalQuantity += value.quantity
+      
+    // })
 
+    // ////console.log("quantity:")
+    // ////console.log(cartTotalQuantity)
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -459,8 +454,6 @@ export default class Checkout extends React.Component {
         var promotion = shop.all_promotions[index];
         if (currentMember != null) {
           if (promotion.trigger_price != null) {
-            console.log('\n\npromotion');
-            console.log(promotion);
             var price = 0;
             var roundedPrice = 0;
             var trigger_price = parseFloat(promotion.trigger_price);
@@ -475,8 +468,12 @@ export default class Checkout extends React.Component {
                   promotion.value_type != null &&
                   promotion.value_type == 'percent'
                 ) {
+                  var promotionSettings = {value: promotion.value, type: promotion.value_type}
+                  this.setState({
+                    promotionDiscountValue:promotionSettings
+                  }
+                  )
                   var discount_value = promotion.value ? promotion.value : 0;
-                  // price = (cart_total_voucher * discount_value) / 100;
                   price = this.roundOff(
                     (final_cart_value * discount_value) / 100
                   );
@@ -494,9 +491,14 @@ export default class Checkout extends React.Component {
                   promotion.value_type != null &&
                   promotion.value_type == 'fixed'
                 ) {
+                  var promotionSettings = {value: promotion.value, type: promotion.value_type}
+                  this.setState({
+                    promotionDiscountValue:promotionSettings
+                  }
+                  )
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = promotion.value;
-                  final_cart_value = final_cart_value - discount_value;
+                  final_cart_value = final_cart_value - (discount_value);
                 }
               }
 
@@ -523,7 +525,10 @@ export default class Checkout extends React.Component {
           }
         }
       }
-      this.setState({ final_price: final_cart_value });
+      this.setState({ 
+        final_price: final_cart_value ,
+        promotionTotalDiscount: cart_total - final_cart_value
+      });
     }
 
     if (this.props.cart.length == 0) {
@@ -554,39 +559,174 @@ export default class Checkout extends React.Component {
     );
   };
 
-  calculateVoucherDiscount(vouchers_to_use) {
-    const { discount_cart_total, cart_total, delivery } = this.props;
-    const { selected_payment, deliveryFee } = this.state;
-    var discount = 0;
+  filterProductsByVoucher(voucher, qty) {
+    const { cart, discount_cart_total } = this.props;
+    var targetQuantity = voucher.eligible_discount_quantity;
+    var targetProductIDList = voucher.product_ids;
+    var voucherID = voucher.id;
+    var voucherDetails = voucher.voucher;
+    var voucherDiscountTotal  = 0
+    var promotionDiscountTotal = this.state.promotionTotalDiscount
+    var promotionSettings = this.state.promotionDiscountValue
+    var promotionValue = 0
+
+    // if(promotionSettings.type == 'percent'){
+    //   promotionValue = promotionSettings.value/100
+    // }
+
+    ////console.log("VALUE")
+    ////console.log(promotionSettings)
+    ////console.log("Promotion Total Discount: ")
+    ////console.log(this.state.promotionTotalDiscount)
+    ////console.log("Voucher: ")
+    ////console.log(voucher)
+    //console.log("ELIGIBLE_QTY")
+    //console.log(targetQuantity)
+    //console.log("before")
+    //console.log(cart)
+    
+    cart.sort(function (a, b) {
+      if (parseFloat(a.price) < parseFloat(b.price)) {
+        return -1;
+      }
+      return 0;
+    });
+
+    //console.log("after")
+    //console.log(cart)
+    
+
+    cart.map((value, key) => {
+      var productID = value.id
+      var productQuantity = value.quantity
+      var productPrice = value.price
+      if (targetProductIDList.includes(productID))
+      {
+        ////console.log("\n\nmatched: ")
+        ////console.log("target: " + productID)
+        var discountVoucherQuantity = Math.min(targetQuantity, productQuantity);
+        if (targetQuantity > 0) {
+          targetQuantity -= discountVoucherQuantity;
+          value.discount_voucher_quantity = discountVoucherQuantity; 
+          value.discount_voucher_item_id = voucherID
+
+          if(promotionSettings.type == 'percent'){
+            if (voucherDetails.discount_type.toLowerCase() == 'fixed') {         
+              voucherDiscountTotal = voucherDiscountTotal + (voucherDetails.discount_price * discountVoucherQuantity);
+                ////console.log("Deduction Fixed Value: ")
+                ////console.log("$" +voucherDetails.discount_price)
+                ////console.log("quantity x value to be deducted")
+                ////console.log(voucherDetails.discount_price * discountVoucherQuantity)
+                ////console.log("Current Cart Total: ")
+                ////console.log(voucherDiscountTotal)
+                
+            }   
+            else if (voucherDetails.discount_type.toLowerCase() == 'percent') {       
+              var voucherDeductionPercentage =  voucherDetails.discount_price
+              //console.log("V percentage")
+              //console.log(voucherDeductionPercentage)
+              //console.log("Product Price")
+              //console.log(productPrice)
+              productPrice -= this.roundOff(productPrice * promotionSettings.value / 100)
+              //console.log("Product Price - promotion")
+              //console.log(productPrice)
+              var voucherDeductionValue = this.roundOff(((productPrice) * voucherDetails.discount_price) / 100.0);
+              //console.log("V value")
+              //console.log(voucherDeductionValue)
+              voucherDiscountTotal = voucherDiscountTotal + (voucherDeductionValue * discountVoucherQuantity);
+              //console.log("Current Cart Total: ")
+              //console.log(voucherDiscountTotal)
+                       
+            }   
+          }
+
+          else if (promotionSettings.type == null){
+            if (voucherDetails.discount_type.toLowerCase() == 'fixed') {         
+              voucherDiscountTotal = voucherDiscountTotal + (voucherDetails.discount_price * discountVoucherQuantity);
+                ////console.log("Deduction Fixed Value: ")
+                ////console.log("$" +voucherDetails.discount_price)
+                ////console.log("quantity x value to be deducted")
+                ////console.log(voucherDetails.discount_price * discountVoucherQuantity)
+                ////console.log("Current Cart Total: ")
+                ////console.log(voucherDiscountTotal)
+                
+            }   
+            else if (voucherDetails.discount_type.toLowerCase() == 'percent') {       
+              var voucherDeductionPercentage =  voucherDetails.discount_price
+              ////console.log("V percentage")
+              ////console.log(voucherDeductionPercentage)
+              ////console.log("Product Price")
+              ////console.log(productPrice)
+              // productPrice -= this.roundOff(productPrice * promotionSettings.value / 100)
+              var voucherDeductionValue = this.roundOff(((productPrice) * voucherDetails.discount_price) / 100.0);
+              ////console.log("V value")
+              ////console.log(voucherDeductionValue)
+              voucherDiscountTotal = voucherDiscountTotal + (voucherDeductionValue * discountVoucherQuantity);
+              ////console.log("Current Cart Total: ")
+              ////console.log(voucherDiscountTotal)
+                       
+            }   
+          }
+        
+        }        
+      }           
+    })
+
+    ////console.log("Voucher Final Deduction total: ")
+    ////console.log(voucherDiscountTotal)
+    return discount_cart_total - voucherDiscountTotal
+  }
+
+ 
+  applyVoucher(vouchers_to_use) {
+    const { discount_cart_total, cart } = this.props;
+    const { selected_payment } = this.state;
+    var voucherDeductedTotal = discount_cart_total;
+    // ////console.log("Current Cart Total: ")
+    // ////console.log(voucherDeductedTotal)
     for (var index in vouchers_to_use) {
-      var item = vouchers_to_use[index];
-      let voucher = item.voucher;
+      let voucher = vouchers_to_use[index].voucher;
+      // ////console.log("current Voucher")
+      // ////console.log(voucher)
       if (voucher.voucher_type == 'Cash Voucher') {
-        discount = voucher.discount_price;
-      } else {
+        voucherDeductedTotal = voucherDeductedTotal - voucher.discount_price;
+      } else if (voucher.voucher_type == 'Discount'){
         if (
           voucher.discount_type != null &&
           voucher.discount_type != '' &&
           voucher.discount_price != null &&
           voucher.discount_price != 0
         ) {
-          if (voucher.discount_type.toLowerCase() == 'fixed') {
-            discount = voucher.discount_price;
+          if(vouchers_to_use[index].product_ids.length != 0){
+            voucherDeductedTotal = this.filterProductsByVoucher(vouchers_to_use[index])
+    
+
+
+          }
+          else if (voucher.discount_type.toLowerCase() == 'fixed') {
+            voucherDeductedTotal = voucherDeductedTotal - voucher.discount_price;
+            ////console.log("Deduction Fixed Value: ")
+            ////console.log("$" +voucher.discount_price)
+            ////console.log("Current Cart Total: ")
+            ////console.log(voucherDeductedTotal)
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
-            discount = this.roundOff(
-              (discount_cart_total * voucher.discount_price) / 100.0
-            );
+            var voucherConvertedToFix = this.roundOff((voucherDeductedTotal * voucher.discount_price) / 100.0);
+            voucherDeductedTotal = voucherDeductedTotal - voucherConvertedToFix;
+            ////console.log("Deduction Percentage : ")
+            ////console.log(voucher.discount_price + "%")
+            ////console.log("Deduction Percent Value: ")
+            ////console.log("$" + voucherConvertedToFix)
+            ////console.log("Current Cart Total: ")
+            ////console.log(voucherDeductedTotal)
           }
         }
       }
     }
-    const subf_price = discount_cart_total - discount;
-    const f_price = subf_price;
+
     this.setState(
       {
-        discount: discount,
-        final_price: f_price.toFixed(2),
-        sub_total_voucher: subf_price.toFixed(2)
+        final_price: voucherDeductedTotal,
+        voucherTotalDiscount: discount_cart_total - voucherDeductedTotal
       },
       function () {
         if (selected_payment == 'credit_card' && f_price <= 0) {
@@ -643,7 +783,7 @@ export default class Checkout extends React.Component {
 
   // removeItemFromCart(products,description) {
 
-  // 	console.log("remove", products)
+  // 	////console.log("remove", products)
   // 	let cart = [...this.state.cart]
 
   // 	let newCart = [];
@@ -831,7 +971,7 @@ export default class Checkout extends React.Component {
     );
     if (currentMember != undefined) {
       if (delivery && !selected_address) {
-        // console.log('what');
+        // ////console.log('what');
         // this.setState({ visible: true });
         this.addShippingAddress();
         return;
@@ -1335,11 +1475,30 @@ export default class Checkout extends React.Component {
     );
   }
 
-  renderVoucherSection(vouchers) {
-    const { cart_total, discount_cart_total } = this.props;
-    const voucher_items = vouchers.map((item, key) => {
-      var discount_value = null;
+  getCheapestProduct(items) {
+    var cheapestPrice = Infinity;
+    var cheapestProduct = null;
+    for (var i in items) {
+      var price = items[i].price
+      if (cheapestPrice > price){
+      cheapestPrice = price;
+      cheapestProduct = items[i];
+      }
+    }
+    
+    
+    return cheapestProduct;
 
+  }
+
+ 
+  renderVoucherSection(vouchers) {
+    const { cart, discount_cart_total } = this.props;
+    
+    const voucher_items = vouchers.map((item, key) => {
+
+      var discount_value = null;
+      var voucherDisplayName = item.voucher.name
       if (item.voucher.discount_price) {
         if (item.voucher.discount_type == 'fixed') {
           discount_value = item.voucher.discount_price;
@@ -1348,6 +1507,10 @@ export default class Checkout extends React.Component {
             (discount_cart_total * item.voucher.discount_price) / 100.0;
         }
       }
+      if (item.product_ids.length != 0){
+        // this.filterProductsByVoucher(item)
+      }
+   
 
       return (
         <View style={[styles.drinksView]} key={key}>
@@ -1363,7 +1526,7 @@ export default class Checkout extends React.Component {
           >
             <View style={styles.productDetailView}>
               <View style={styles.voucherDetailView}>
-                <Text style={styles.productNameText}>{item.voucher.name}</Text>
+                <Text style={styles.productNameText}>{voucherDisplayName}</Text>
                 <View style={styles.voucherButtonView}>
                   <Text style={styles.voucherButtonText}>Voucher</Text>
                 </View>
@@ -1381,7 +1544,7 @@ export default class Checkout extends React.Component {
                         style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
             {discount_value ? (
               <Text style={styles.voucherPriceText}>{`-$${parseFloat(
-                this.roundOff(discount_value)
+                this.roundOff(this.state.voucherTotalDiscount)
               ).toFixed(2)}`}</Text>
             ) : undefined}
 
@@ -2048,7 +2211,6 @@ export default class Checkout extends React.Component {
   render() {
     let {
       isPaymentToggle,
-      discount,
       isPickupToogle,
       final_price,
       selected_address
