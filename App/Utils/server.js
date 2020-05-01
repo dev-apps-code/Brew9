@@ -73,8 +73,8 @@ export let KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy&id=1';
 export let KURL_EULA = KURL_INFO + '?page=eula&id=1';
 export let KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
 export let KCURRENT_API_VERSION_HEADER = 'application/dc.v6 gzip';
-export let APPBUILDVERSIONIOS = '24';
-export let APPBUILDVERSIONANDROID = '24';
+export let APPBUILDVERSIONIOS = '26';
+export let APPBUILDVERSIONANDROID = '26';
 
 export const KTIMEOUT = 3 * 1000;
 
