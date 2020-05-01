@@ -259,7 +259,7 @@ export default class MapShippingAddress extends React.Component {
                   clearButtonMode="always"
                   autoCorrect={false}
                   value={address_details}
-                  placeholder={'Unit # / Floor / Block'}
+                  placeholder={'Unit # / Floor / Block (Optional)'}
                   onChangeText={(address_details) => {
                     this.setState({ address_details });
                   }}

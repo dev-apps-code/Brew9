@@ -620,11 +620,12 @@ export default class Home extends React.Component {
 
           msg = delivery_disabled_response?.text || msg;
         }
-        this.refs.toast.show(<View style={{ justifyContent: 'center' }}>
-                <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {msg}
-                </Text>
-              </View>, TOAST_DURATION);
+        this.refs.toast.show(
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={{ color: 'white', textAlign: 'center' }}>{msg}</Text>
+          </View>,
+          TOAST_DURATION
+        );
       });
       return;
     }
@@ -1350,10 +1351,18 @@ export default class Home extends React.Component {
     let filtered = selected_variants.filter(function (el) {
       return el;
     });
+
     let total = filtered.reduce((a, b) => +a + +b.price, 0);
-    selected_product.calculated_price = (
-      parseFloat(selected_product.discounted_price) + parseFloat(total)
-    ).toFixed(2);
+    total = parseFloat(total);
+
+    let { discounted_price, price } = selected_product;
+    discounted_price = parseFloat(discounted_price);
+    price = parseFloat(price);
+
+    let _price =
+      discounted_price && discounted_price != 0 ? discounted_price : price;
+    selected_product.calculated_price = _price + total;
+
     this.setState({
       products: this.state.products
     });
@@ -1374,9 +1383,7 @@ export default class Home extends React.Component {
   renderModalContent = (selected_product, shop) => {
     let select_quantity = this.state.select_quantity;
 
-    let filtered = selected_product.selected_variants.filter(function (el) {
-      return el;
-    });
+    let filtered = selected_product.selected_variants.filter((el) => el);
     let variant_array = filtered.map((a) => a.value);
 
     let order_limit = 100;
@@ -1413,6 +1420,8 @@ export default class Home extends React.Component {
         </View>
       );
     });
+
+    console.log('selected_product ', selected_product);
 
     const variants = selected_product.variants.map((item, key) => {
       let selected_variants = selected_product.selected_variants;
