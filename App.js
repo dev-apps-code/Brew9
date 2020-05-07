@@ -338,10 +338,7 @@ const PushProfile = createStackNavigator(
     },
     ShippingArea: {
       screen: ShippingArea
-    },
-    ChangeServer: {
-      screen: ChangeServer
-    },
+    }
   },
   {
     initialRouteName: 'Profile'
