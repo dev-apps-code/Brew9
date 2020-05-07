@@ -1,11 +1,3 @@
-//
-//  VerifyUser
-//  Brew9
-//
-//  Created by .
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   StyleSheet,
@@ -13,29 +5,24 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-  Keyboard
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowWidth, windowHeight } from '../Common/size';
 import { connect } from 'react-redux';
-import PhoneInput from 'react-native-phone-input'; // react-native-phone-input@0.2.2
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object';
 import LoginWithSmsRequestObject from '../Requests/login_with_sms_request_object';
-import { createAction, Storage } from '../Utils';
+import { createAction } from '../Utils';
 import CountDown from 'react-native-countdown-component';
 import {
-  KURL_INFO,
   KURL_TERMS_OF_SERVICE,
   KURL_PRIVACY_POLICY,
   KURL_EULA,
   KSERVERURL,
-  loadServer,
-  APPBUILDVERSIONANDROID,
-  KCURRENT_API_VERSION_HEADER
+  APPBUILDVERSIONANDROID
 } from '../Utils/server';
 import Hyperlink from 'react-native-hyperlink';
 import {
@@ -43,8 +30,6 @@ import {
   NON_TITLE_FONT,
   TOAST_DURATION
 } from '../Common/common_style';
-import NotificationsRequestObject from '../Requests/notifications_request_object';
-import ProfileRequestObject from '../Requests/profile_request_object';
 
 @connect(({ members }) => ({
   members: members.profile,
@@ -77,16 +62,14 @@ export default class VerifyUser extends React.Component {
   }
 
   async componentDidMount() {
-  
-    let str = KSERVERURL;
-    let r = str.match(/https?:\/\/(.*?)\//);
-    let link = r[1];
-  
-    if (link != 'app.brew9.co'){
-      this.refs.toast.show(
-        `${link} +  - api version ${KCURRENT_API_VERSION_HEADER} - build no  ${APPBUILDVERSIONANDROID}`
-      );
-    }
+    // let str = KSERVERURL;
+    // let r = str.match(/https?:\/\/(.*?)\//);
+    // let link = r[1];
+    // if (link != 'app.brew9.co'){
+    //   this.refs.toast.show(
+    //     `${link} +  - api version ${KCURRENT_API_VERSION_HEADER} - build no  ${APPBUILDVERSIONANDROID}`
+    //   );
+    // }
   }
 
   async reset() {
@@ -183,7 +166,7 @@ export default class VerifyUser extends React.Component {
     this.setState({ loading: true });
     const callback = (eventObject) => {
       if (eventObject.success) {
-		  console.log(eventObject)
+        console.log(eventObject);
         this.setState({
           login_success: true,
           is_counting: true,
@@ -250,6 +233,37 @@ export default class VerifyUser extends React.Component {
     );
   }
 
+  lastTap = null;
+  tapCount = 1;
+  /**
+   * Tap 10 times within 15 seconds
+   */
+  handleChangeServerTap = async () => {
+    const now = Date.now();
+    const PRESS_DELAY = 15000;
+
+    if (this.lastTap && now - this.lastTap < PRESS_DELAY) {
+      // await changeServerIndex(KSERVERURLLIST.length);
+      this.tapCount++;
+      console.log('tapped %s times', this.tapCount);
+
+      if (this.tapCount >= 5 && this.tapCount < 10) {
+        let count = this.tapCount;
+        let tap = count < 9 ? 'taps': 'tap';
+        let toastText = `You are ${10 - count} ${tap} away to change server.`;
+        this.refs.tapToast.show(toastText, DURATION.FOREVER);
+      }
+      if (this.tapCount == 10) {
+        this.refs.tapToast.close();
+        this.props.navigation.push('ChangeServer');
+        this.tapCount = 1;
+      }
+    } else {
+      this.lastTap = now;
+      this.tapCount = 1;
+    }
+  };
+
   render() {
     const { members } = this.props;
     return (
@@ -261,10 +275,15 @@ export default class VerifyUser extends React.Component {
           >
             <Text style={styles.closeButtonText}>Skip</Text>
           </TouchableOpacity>
-          <Image
-            source={require('./../../assets/images/group-24-4.png')}
-            style={styles.logoImage}
-          />
+
+          <TouchableWithoutFeedback
+            onPressOut={this.handleChangeServerTap.bind(this)}
+          >
+            <Image
+              source={require('./../../assets/images/group-24-4.png')}
+              style={styles.logoImage}
+            />
+          </TouchableWithoutFeedback>
           <Text style={styles.welcomeText}>Welcome!</Text>
           <Text style={styles.messageText}>
             Enter your mobile number to continue.
@@ -373,9 +392,7 @@ export default class VerifyUser extends React.Component {
                     timeLabels={{ m: null, s: null }}
                     showSeparator
                   />
-                ) : (
-                  undefined
-                )}
+                ) : undefined}
               </View>
             </View>
           </View>
@@ -389,7 +406,6 @@ export default class VerifyUser extends React.Component {
               flex: 1
             }}
           />
-
           {/* <TouchableOpacity
 						onPress={this.onTermsAndConditionsPressed}
 						style={styles.termsAndConditionsButton}>
@@ -442,6 +458,13 @@ export default class VerifyUser extends React.Component {
           ref="toast"
           style={{ bottom: windowHeight / 2 - 40 }}
           textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
+        />
+        <Toast
+          ref="tapToast"
+          // style={{ bottom: windowHeight / 2 - 40 }}
+          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
+          position="bottom"
+          defaultCloseDelay={0}
         />
       </View>
     );
