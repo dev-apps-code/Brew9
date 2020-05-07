@@ -74,6 +74,7 @@ import {
 } from './App/Common/common_style';
 import { Asset } from 'react-native-unimodules';
 import RNUxcam from 'react-native-ux-cam';
+import ChangeServer from './App/ChangeServer/ChangeServer';
 
 RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
 RNUxcam.startWithKey('qlswr42nsngf21b'); // Add this line after
@@ -88,6 +89,9 @@ const VerifyUserStack = createStackNavigator(
   {
     VerifyUser: {
       screen: VerifyUser
+    },
+    ChangeServer: {
+      screen: ChangeServer
     },
     Register: {
       screen: Register
@@ -334,6 +338,9 @@ const PushProfile = createStackNavigator(
     },
     ShippingArea: {
       screen: ShippingArea
+    },
+    ChangeServer: {
+      screen: ChangeServer
     },
   },
   {
