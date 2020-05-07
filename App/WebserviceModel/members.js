@@ -82,7 +82,7 @@ export default {
     notifications: [],
     unreadNotificationCount: 0,
     unclaimedMission: 0,
-    shippingAddress:[]
+    shippingAddress: []
   },
 
   reducers: {
@@ -393,11 +393,10 @@ export default {
         const json = yield call(getCurrentUser);
         // const last_read = yield call(getLastRead)
         const currentUser = JSON.parse(json);
-
+        console.log('loading current user from cache');
         yield put(createAction('loadCurrentUser')(currentUser));
-        // yield put(createAction('loadNotification')({currentUser, last_read}))
       } catch (err) {
-        console.log('loadingCurrentUser', err);
+        console.log('Error loading current user from cache: ', err);
       }
     },
     *loadDestroy({ payload }, { call, put, select }) {
