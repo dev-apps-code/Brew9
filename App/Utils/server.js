@@ -1,80 +1,34 @@
 import Constants from 'expo-constants';
-import { Platform } from 'react-native';
-import { getServerIndex } from './storage';
-// export const KSERVERURL = "https://app.brew9.co/api"
-// export const KURL_INFO = "https://app.brew9.co/info"
-// export const KPAYMENTYURL = "https://app.brew9.co/payments/baiduri"
+import { Platform, AsyncStorage } from 'react-native';
 
-// export const KSERVERURL = "http://test.brew9.co/api"
-// export const KURL_INFO = "http://test.brew9.co/info"
-// export const KPAYMENTYURL = "http://test.brew9.co/payments/baiduri"
+import {
+  SERVERS as AVAILABLE_SERVERS,
+  DEFAULT_SERVER,
+  DEFAULT_PROTOCOL
+} from '../Constants/server_list';
 
-// export const KSERVERURL = "https://dev.brew9.co/api"
-// export const KURL_INFO = "https://dev.brew9.co/info"
-// export const KPAYMENTYURL = "https://dev.brew9.co/payments/baiduri"
+const URL = async () => {
+  let server =
+    (await AsyncStorage.getItem('selected_server_url')) || DEFAULT_SERVER;
+  console.log('server ', server);
+  let protocol =
+    (await AsyncStorage.getItem('selected_server_protocol')) ||
+    DEFAULT_PROTOCOL;
+  return `${protocol}${server}`;
+};
 
-// export const KSERVERURL ='http://localhost:3000/api'
-// export const KURL_INFO ='http://localhost:3000/info'
-// export const KPAYMENTYURL ='http://localhost:3000/payments/baiduri'
+export const KSERVERURL = async () => (await URL()) + 'api';
+export const KURL_INFO = async () => (await URL()) + 'info';
+export const KPAYMENTYURL = async () => (await URL()) + 'payment/baiduri';
 
-// export const KPAYMENTYURL ='http://payment.brew9.com'
-// export const KSERVERURL ='https://18624bd1.ngrok.io/api'
-// export const KURL_INFO = 'https://18624bd1.ngrok.io/info'
+export var KURL_TERMS_OF_SERVICE = '';
+export var KURL_PRIVACY_POLICY = '';
+export var KURL_EULA = '';
+export var KURL_MEMBERSHIP_INFO = '';
 
-export const KSERVERURLLIST = [
-  "https://app.brew9.co/api",
-  // "http://localhost:3000/api",
-  // "https://dev.brew9.co/api",
-  // "http://test.brew9.co/api",  
-  // "http://dev1.brew9.co/api",
-  // "http://dev2.brew9.co/api",
-  // "http://dev3.brew9.co/api",
-  // "http://dev4.brew9.co/api",
-];
-export const KURL_INFOLIST = [
-  "https://app.brew9.co/info",
-  // "https://dev.brew9.co/info",
-  // "http://test.brew9.co/info",
-  // "http://dev1.brew9.co/info",
-
-  // "http://dev2.brew9.co/info",
-  // "http://dev3.brew9.co/info",
-  // "http://dev4.brew9.co/info",
-];
-export const KPAYMENTYURLLIST = [
-  "https://app.brew9.co/payments/baiduri",
-  // "https://dev.brew9.co/payments/baiduri",
-  // "http://test.brew9.co/payments/baiduri",  
-  // "http://dev1.brew9.co/payments/baiduri",
-  // "http://dev2.brew9.co/payments/baiduri",
-  // "http://dev3.brew9.co/payments/baiduri",
-  // "http://dev4.brew9.co/payments/baiduri",
-];
-
-export async function loadServer() {
-  // console.log("loadserverindex")
-  var serverIndex = await getServerIndex();
-  KSERVERURL = KSERVERURLLIST[serverIndex];
-  KURL_INFO = KURL_INFOLIST[serverIndex];
-  KPAYMENTYURL = KPAYMENTYURLLIST[serverIndex];
-  KURL_TERMS_OF_SERVICE = KURL_INFO + '?page=terms_conditions&id=f1';
-  KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy&id=1';
-  KURL_EULA = KURL_INFO + '?page=eula&id=1';
-  KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-  return;
-}
-
-export let KSERVERURL = KSERVERURLLIST[0];
-export let KURL_INFO = KURL_INFOLIST[0];
-export let KPAYMENTYURL = KPAYMENTYURLLIST[0];
-
-export let KURL_TERMS_OF_SERVICE = KURL_INFO + '?page=terms_conditions&id=f1';
-export let KURL_PRIVACY_POLICY = KURL_INFO + '?page=privacy&id=1';
-export let KURL_EULA = KURL_INFO + '?page=eula&id=1';
-export let KURL_MEMBERSHIP_INFO = KURL_INFO + '/membership_info';
-export let KCURRENT_API_VERSION_HEADER = 'application/dc.v6 gzip';
-export let APPBUILDVERSIONIOS = '26';
-export let APPBUILDVERSIONANDROID = '26';
+export var KCURRENT_API_VERSION_HEADER = 'application/dc.v6 gzip';
+export var APPBUILDVERSIONIOS = '27';
+export var APPBUILDVERSIONANDROID = '27';
 
 export const KTIMEOUT = 3 * 1000;
 
@@ -116,4 +70,22 @@ export function getMerchantId() {
 
 export function getBaiduriAuthorizationToken() {
   return 'Basic TUVSQ0hBTlQuOTUwMDI5NjQ1Ojc0NTlkZWNiZWFiOWEwMzUxYzU4ZDk3YjFkZjg4NDdm';
+}
+
+async function initialize_server() {
+  const server = AsyncStorage.getItem('selected_server_url') || DEFAULT_SERVER;
+  const protocol =
+    AsyncStorage.getItem('selected_server_protocol') || DEFAULT_PROTOCOL;
+
+  return Promise.all([await server, await protocol]);
+}
+
+export async function loadServer() {
+  await initialize_server();
+  const url = await KURL_INFO();
+  console.log('url ', url);
+  KURL_TERMS_OF_SERVICE = `${url}?page=terms_conditions&id=f1`;
+  KURL_PRIVACY_POLICY = `${url}?page=privacy&id=1`;
+  KURL_EULA = `${url}?page=eula&id=1`;
+  KURL_MEMBERSHIP_INFO = `${url}/membership_info`;
 }
