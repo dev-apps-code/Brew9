@@ -7,7 +7,9 @@ import { LIGHT_GREY, TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR, TABBAR_INACTIVE_
 export default class ProfileMenu extends React.PureComponent {
 
     render() {
-        let { onPress, text } = this.props
+        let { onPress, text, icon } = this.props
+        console.log("icon address")
+        console.log(icon)
         return (
             <TouchableOpacity
                 onPress={onPress}
@@ -33,6 +35,12 @@ export default class ProfileMenu extends React.PureComponent {
                                 flexDirection: "row",
                                 alignItems: "center",
                             }}>
+                            {icon ? (<Image
+                                source={icon}
+                                style={styles.icomImage} 
+                                />)
+                            : null}
+                            
                             <Text
                                 style={styles.menuRowLabelText}>{text}</Text>
                             <View
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     menuRowLabelText: {
-        color: "rgb(54, 54, 54)",
+        // color: "rgb(54, 54, 54)",
         fontFamily: NON_TITLE_FONT,
         fontSize: 14 * fontAlpha,
         fontStyle: "normal",
@@ -95,6 +103,13 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         textAlign: "center",
         backgroundColor: "transparent",
+    },
+
+    icomImage: {
+        resizeMode: "contain",
+        width: 27 * alpha,
+        height: 22 * alpha,
+        marginRight: 10 * alpha
     },
     menuRowDescriptionText: {
         color: "rgb(188, 188, 188)",
@@ -127,7 +142,7 @@ const styles = StyleSheet.create({
     },
     menuRowArrowImage: {
         width: 10 * alpha,
-        tintColor: "rgb(195, 195, 195)",
+        tintColor: "rgb(54, 54, 54)",
         resizeMode: "contain",
     },
 })
