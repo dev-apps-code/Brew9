@@ -27,14 +27,17 @@ import { getMemberIdForApi } from '../Services/members_helper'
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import Brew9PopUp from "../Components/Brew9PopUp"
+import _ from 'lodash';
 
-@connect(({ members, config }) => ({
+@connect(({ members, config, shops }) => ({
 	selectedTab: config.selectedTab,
 	members: members,
 	company_id: members.company_id,
 	currentMember: members.profile,
 	free_membership: members.free_membership,
-	premium_membership: members.premium_membership
+	premium_membership: members.premium_membership,
+	selectedShop: shops.selectedShop
+
 }))
 export default class Profile extends React.Component {
 
@@ -81,7 +84,8 @@ export default class Profile extends React.Component {
 			appState: AppState.currentState,
 			timestamp: undefined,
 			showRedeemVoucher: false,
-			loading: false
+			loading: false,
+			appSlogan: ''
 
 		}
 		this.loadProfile = this.loadProfile.bind(this)
@@ -89,11 +93,26 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
+		this.loadappSlogan()
 		this.loadProfile()
 		this.loopShimmer()
 		this.timer = setInterval(() => this.loopShimmer(), 3000)
 		this.props.navigation.addListener('didFocus', this.loadProfile)
 		AppState.addEventListener('change', this._handleAppStateChange);
+	}
+
+	loadappSlogan () {
+		const {selectedShop} = this.props
+			var appSlogan = _.find(
+			selectedShop.response_message,
+			function (obj) {
+			  return obj.key === 'App Slogan';
+			}
+		);
+		console.log(appSlogan)
+		this.setState({
+			appSlogan: appSlogan != undefined ? appSlogan.text :  ''
+		})
 	}
 
 	componentWillUnmount() {
@@ -554,6 +573,7 @@ export default class Profile extends React.Component {
 		var next_level_name
 		var isLogin = true;
 		var membership_progress
+	
 
 		var vouchers_count;
 		if (currentMember != null) {
@@ -754,7 +774,7 @@ export default class Profile extends React.Component {
 						<Text
 							style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
 						<Text
-							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
+							style={styles.companySloganText}>{this.state.appSlogan}</Text>
 					</View>
 				</View>
 				{/* <TouchableOpacity
