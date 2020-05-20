@@ -24,7 +24,7 @@ export function getBasicAuthentication(authToken) {
 export async function getMethod(authtoken, object) {
   const url = await KSERVERURL();
   const urlString = `${url}/${object.getUrlString()}?${object.getFormData()}`;
-  console.log('url string');
+  console.log('[GET]');
   console.log(urlString);
 
   return fetch(urlString, {
@@ -48,7 +48,7 @@ export async function getMethod(authtoken, object) {
 export async function postMethod(authtoken, object) {
   const url = await KSERVERURL();
   const urlString = `${url}/${object.getUrlString()}`;
-  console.log('url string');
+  console.log('[POST]');
   console.log(urlString);
 
   return fetch(urlString, {
@@ -73,7 +73,7 @@ export async function postMethod(authtoken, object) {
 export async function postJsonMethod(authtoken, object) {
   const url = await KSERVERURL();
   const urlString = `${url}/${object.getUrlString()}`;
-  console.log('url string');
+  console.log('[POST JSON]');
   console.log(urlString);
 
   return fetch(urlString, {
@@ -95,8 +95,11 @@ export async function postJsonMethod(authtoken, object) {
     });
 }
 
-export function postMultipartMethod(authtoken, object) {
-  const urlString = `${KSERVERURL}/${object.getUrlString()}`;
+export async function postMultipartMethod(authtoken, object) {
+  const url = await KSERVERURL();
+  const urlString = `${url}/${object.getUrlString()}`;
+  console.log('[POST MULTIPART]');
+  console.log(urlString);
   return fetch(urlString, {
     method: 'POST',
     headers: {
@@ -115,8 +118,11 @@ export function postMultipartMethod(authtoken, object) {
       console.error(error);
     });
 }
-export function putMethod(authtoken, object) {
-  const urlString = `${KSERVERURL}/${object.getUrlString()}`;
+export async function putMethod(authtoken, object) {
+  const url = await KSERVERURL();
+  const urlString = `${url}/${object.getUrlString()}`;
+  console.log('[PUT]');
+  console.log(urlString);
   return fetch(urlString, {
     method: 'PUT',
     headers: {
@@ -136,8 +142,11 @@ export function putMethod(authtoken, object) {
     });
 }
 
-export function deleteMethod(authtoken, object) {
-  const urlString = `${KSERVERURL}/${object.getUrlString()}?${object.getFormData()}`;
+export async function deleteMethod(authtoken, object) {
+  const url = await KSERVERURL();
+  const urlString = `${url}/${object.getUrlString()}?${object.getFormData()}`;
+  console.log('[DELETE]');
+  console.log(urlString);
   return fetch(urlString, {
     method: 'DELETE',
     headers: {

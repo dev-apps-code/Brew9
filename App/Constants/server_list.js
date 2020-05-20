@@ -5,10 +5,15 @@ const SERVERS = [
   'dev2.brew9.co/',
   'dev3.brew9.co/',
   'dev4.brew9.co/',
-  'dev11.brew9.co/'
+  'dev5.brew9.co/',
+  'dev6.brew9.co/',
+  'dev7.brew9.co/',
+  'dev8.brew9.co/',
+  'dev9.brew9.co/',
+  'dev10.brew9.co/',
 ];
 
-const DEFAULT_SERVER = 'app.brew9.co/';
+const DEFAULT_SERVER = 'dev.brew9.co/';
 
 const PROTOCOLS = ['https://'];
 
