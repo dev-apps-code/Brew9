@@ -792,13 +792,17 @@ export default class Profile extends React.Component {
 
 				<View
 					style={styles.menuView}>
-					<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} />
-					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
-					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
-					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
+					<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} icon={require("./../../assets/images/Icon_Profile-OrderHistory.png")} />
+					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} icon={require("./../../assets/images/voucher.png")}/>
+					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} icon={require("./../../assets/images/rewards.png")}/>
+					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} icon={require("./../../assets/images/myprofile.png")}/>
 					{/* <ProfileMenu onPress={this.onAddressPress} text={'My Address'} /> */}
+					<View style={styles.graySeparator}></View>
 					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
 					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
+					<ProfileMenu onPress={this.onFeedbackPressed} text={'Version'} />
+					<ProfileMenu onPress={this.onFeedbackPressed} text={'About'} />
+
 				</View>
 				{this.renderRedeemVoucher()}
 
@@ -820,9 +824,15 @@ const styles = StyleSheet.create({
 		top: 15 * alpha
 	},
 	cancelImage: {
-		width: 15 * alpha,
-		height: 15 * alpha,
+		height: '100%',
+		width: '100%',
 		tintColor: LIGHT_GREY
+	},
+	graySeparator: {
+		// width: 15 * alpha,
+		height: 15 * alpha,
+		flex:1,
+		backgroundColor: "rgb(244, 246,245)"
 	},
 	titleText: {
 		color: '#696969',
