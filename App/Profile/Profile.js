@@ -111,7 +111,7 @@ export default class Profile extends React.Component {
 		);
 		console.log(appSlogan)
 		this.setState({
-			appSlogan: appSlogan != undefined ? appSlogan.text :  ''
+			appSlogan: appSlogan != undefined ? appSlogan.text :  "Redefine Coffee. Chocolate. Juice."
 		})
 	}
 
