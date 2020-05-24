@@ -156,9 +156,10 @@ export default class MemberProfile extends React.Component {
       }
       if (this.tapCount == 10) {
         this.refs.tapToast.close();
-        this.props.navigation.navigate('VerifyUser', {
-          screen: 'ChangeServer'
-        });
+        this.loadDestroy()
+        // this.props.navigation.navigate('VerifyUser', {
+        //   screen: 'ChangeServer'
+        // });
         this.tapCount = 1;
       }
     } else {
