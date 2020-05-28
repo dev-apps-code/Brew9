@@ -394,49 +394,39 @@ export default class Profile extends React.Component {
 		}
 	}
 	onRedeemCouponCode = () => {
+		this.setState({ loading: true, showRedeemVoucher: false })
+
 		let { coupon, validVouchers } = this.state
 		let { dispatch, navigation } = this.props
-		this.setState({ loading: true, showRedeemVoucher: false })
-		if (coupon) {
-			const callback = eventObject => {
-				this.setState({ loading: false })
+		
+		const callback = eventObject => {
+			this.setState({ loading: false });
+			this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
 				if (eventObject.success == true) {
-					navigation.navigate("MemberVoucher", { validVouchers: validVouchers })
-				} else {
-					this.refs.toast.show(eventObject.message, TOAST_DURATION)
+					navigation.navigate("MemberVoucher", { validVouchers: validVouchers });
 				}
-			}
-			const obj = new VerifyCouponCodeObj(coupon)
-			dispatch(
-				createAction('members/loadVerifyCouponCode')({
-					object: obj,
-					callback,
-				})
-			)
-		} else {
-			this.setState({ loading: false, })
-			this.refs.toast.show('Please fill in coupon code', TOAST_DURATION)
+			});
 		}
+		
+		const obj = new VerifyCouponCodeObj(coupon);
+		
+		dispatch(
+			createAction('members/loadVerifyCouponCode')({
+				object: obj,
+				callback,
+			})
+		);
 	}
+
 	closePopUp = () => {
 		this.setState({
 			showRedeemVoucher: false
 		})
 	}
-	onChangeCoupon = (text) => {
-		this.setState({
-			coupon: text
-		})
-	}
-	onOK = () => {
-		this.setState({
-			showRedeemVoucher: false
-		})
-
-	}
+	
 	onRedeemVoucherPressed = () => {
 		const { currentMember } = this.props
-		const { navigate } = this.props.navigation
+
 		if (currentMember !== null) {
 			this.setState({
 				showRedeemVoucher: true
@@ -528,8 +518,8 @@ export default class Profile extends React.Component {
 				inputPlaceholder={'Enter voucher code'}
 				OkText={'Ok'}
 				onPressOk={this.onRedeemCouponCode}
-				onBackgroundPress={this.closePopUp}
-				onChangeText={text => this.onChangeCoupon(text)} />
+				onBackgroundPress={() => this.setState({showRedeemVoucher: false})}
+				onChangeText={coupon => this.setState({coupon})} />
 		)
 	}
 
