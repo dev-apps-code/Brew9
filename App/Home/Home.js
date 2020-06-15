@@ -1420,9 +1420,7 @@ export default class Home extends React.Component {
         </View>
       );
     });
-
-    console.log('selected_product ', selected_product);
-
+    
     const variants = selected_product.variants.map((item, key) => {
       let selected_variants = selected_product.selected_variants;
       let required_variant = item.required;

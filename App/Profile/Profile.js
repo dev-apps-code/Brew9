@@ -27,14 +27,17 @@ import { getMemberIdForApi } from '../Services/members_helper'
 import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import Brew9PopUp from "../Components/Brew9PopUp"
+import _ from 'lodash';
 
-@connect(({ members, config }) => ({
+@connect(({ members, config, shops }) => ({
 	selectedTab: config.selectedTab,
 	members: members,
 	company_id: members.company_id,
 	currentMember: members.profile,
 	free_membership: members.free_membership,
-	premium_membership: members.premium_membership
+	premium_membership: members.premium_membership,
+	selectedShop: shops.selectedShop
+
 }))
 export default class Profile extends React.Component {
 
@@ -81,7 +84,8 @@ export default class Profile extends React.Component {
 			appState: AppState.currentState,
 			timestamp: undefined,
 			showRedeemVoucher: false,
-			loading: false
+			loading: false,
+			appSlogan: ''
 
 		}
 		this.loadProfile = this.loadProfile.bind(this)
@@ -89,11 +93,26 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
+		this.loadappSlogan()
 		this.loadProfile()
 		this.loopShimmer()
 		this.timer = setInterval(() => this.loopShimmer(), 3000)
 		this.props.navigation.addListener('didFocus', this.loadProfile)
 		AppState.addEventListener('change', this._handleAppStateChange);
+	}
+
+	loadappSlogan () {
+		const {selectedShop} = this.props
+			var appSlogan = _.find(
+			selectedShop.response_message,
+			function (obj) {
+			  return obj.key === 'App Slogan';
+			}
+		);
+		console.log(appSlogan)
+		this.setState({
+			appSlogan: appSlogan != undefined ? appSlogan.text :  "Redefine Coffee. Chocolate. Juice."
+		})
 	}
 
 	componentWillUnmount() {
@@ -375,49 +394,39 @@ export default class Profile extends React.Component {
 		}
 	}
 	onRedeemCouponCode = () => {
+		this.setState({ loading: true, showRedeemVoucher: false })
+
 		let { coupon, validVouchers } = this.state
 		let { dispatch, navigation } = this.props
-		this.setState({ loading: true, showRedeemVoucher: false })
-		if (coupon) {
-			const callback = eventObject => {
-				this.setState({ loading: false })
+		
+		const callback = eventObject => {
+			this.setState({ loading: false });
+			this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
 				if (eventObject.success == true) {
-					navigation.navigate("MemberVoucher", { validVouchers: validVouchers })
-				} else {
-					this.refs.toast.show(eventObject.message, TOAST_DURATION)
+					navigation.navigate("MemberVoucher", { validVouchers: validVouchers });
 				}
-			}
-			const obj = new VerifyCouponCodeObj(coupon)
-			dispatch(
-				createAction('members/loadVerifyCouponCode')({
-					object: obj,
-					callback,
-				})
-			)
-		} else {
-			this.setState({ loading: false, })
-			this.refs.toast.show('Please fill in coupon code', TOAST_DURATION)
+			});
 		}
+		
+		const obj = new VerifyCouponCodeObj(coupon);
+		
+		dispatch(
+			createAction('members/loadVerifyCouponCode')({
+				object: obj,
+				callback,
+			})
+		);
 	}
+
 	closePopUp = () => {
 		this.setState({
 			showRedeemVoucher: false
 		})
 	}
-	onChangeCoupon = (text) => {
-		this.setState({
-			coupon: text
-		})
-	}
-	onOK = () => {
-		this.setState({
-			showRedeemVoucher: false
-		})
-
-	}
+	
 	onRedeemVoucherPressed = () => {
 		const { currentMember } = this.props
-		const { navigate } = this.props.navigation
+
 		if (currentMember !== null) {
 			this.setState({
 				showRedeemVoucher: true
@@ -509,8 +518,8 @@ export default class Profile extends React.Component {
 				inputPlaceholder={'Enter voucher code'}
 				OkText={'Ok'}
 				onPressOk={this.onRedeemCouponCode}
-				onBackgroundPress={this.closePopUp}
-				onChangeText={text => this.onChangeCoupon(text)} />
+				onBackgroundPress={() => this.setState({showRedeemVoucher: false})}
+				onChangeText={coupon => this.setState({coupon})} />
 		)
 	}
 
@@ -554,6 +563,7 @@ export default class Profile extends React.Component {
 		var next_level_name
 		var isLogin = true;
 		var membership_progress
+	
 
 		var vouchers_count;
 		if (currentMember != null) {
@@ -754,7 +764,7 @@ export default class Profile extends React.Component {
 						<Text
 							style={styles.welcomeSomebodyText}>Welcome {display_name}</Text>
 						<Text
-							style={styles.companySloganText}>Redefine Coffee. Chocolate. Juice.</Text>
+							style={styles.companySloganText}>{this.state.appSlogan}</Text>
 					</View>
 				</View>
 				{/* <TouchableOpacity
@@ -792,13 +802,17 @@ export default class Profile extends React.Component {
 
 				<View
 					style={styles.menuView}>
-					<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} />
-					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} />
-					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} />
-					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} />
+					<ProfileMenu onPress={this.onOrderButtonPressed} text={'Order History'} icon={require("./../../assets/images/Icon_Profile-OrderHistory.png")} />
+					<ProfileMenu onPress={this.onRedeemVoucherPressed} text={'Redeem Voucher'} icon={require("./../../assets/images/voucher.png")}/>
+					<ProfileMenu onPress={this.onMembershipInfoPressed} text={'Membership Rewards'} icon={require("./../../assets/images/rewards.png")}/>
+					<ProfileMenu onPress={this.onProfileButtonPress} text={'My Profile'} icon={require("./../../assets/images/myprofile.png")}/>
 					{/* <ProfileMenu onPress={this.onAddressPress} text={'My Address'} /> */}
+					<View style={styles.graySeparator}></View>
 					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
 					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
+					<ProfileMenu onPress={this.onFeedbackPressed} text={'Version'} />
+					<ProfileMenu onPress={this.onFeedbackPressed} text={'About'} />
+
 				</View>
 				{this.renderRedeemVoucher()}
 
@@ -820,9 +834,15 @@ const styles = StyleSheet.create({
 		top: 15 * alpha
 	},
 	cancelImage: {
-		width: 15 * alpha,
-		height: 15 * alpha,
+		height: '100%',
+		width: '100%',
 		tintColor: LIGHT_GREY
+	},
+	graySeparator: {
+		// width: 15 * alpha,
+		height: 15 * alpha,
+		flex:1,
+		backgroundColor: "rgb(244, 246,245)"
 	},
 	titleText: {
 		color: '#696969',
