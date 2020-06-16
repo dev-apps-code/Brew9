@@ -20,7 +20,12 @@ import {
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
-import { createAction, validateEmail } from '../Utils';
+import {
+  createAction,
+  validateEmail,
+  StackActions,
+  NavigationActions
+} from '../Utils';
 import { getAppVersion, getBuildVersion } from '../Utils/server';
 import UpdateProfileRequestObject from '../Requests/update_profile_request_object';
 import UpdateAvatarRequestObject from '../Requests/update_avatar_request_object';
@@ -88,7 +93,11 @@ export default class MemberProfile extends React.Component {
           </TouchableOpacity>
         </View>
       ),
-      headerRight: null,
+      headerRight: (
+        <TouchableOpacity onPress={() => params.onLogoutPressed()}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      ),
       headerStyle: {
         elevation: 0,
         shadowOpacity: 0
@@ -130,7 +139,8 @@ export default class MemberProfile extends React.Component {
     this.loadMember();
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
-      onItemPressed: this.onItemPressed
+      onItemPressed: this.onItemPressed,
+      onLogoutPressed: this.loadDestroy.bind(this)
     });
   }
 
@@ -156,7 +166,7 @@ export default class MemberProfile extends React.Component {
       }
       if (this.tapCount == 10) {
         this.refs.tapToast.close();
-        this.loadDestroy()
+        this.loadDestroy();
         // this.props.navigation.navigate('VerifyUser', {
         //   screen: 'ChangeServer'
         // });
@@ -174,14 +184,16 @@ export default class MemberProfile extends React.Component {
     this.setState({ loading: true });
 
     const callback = (eventObject) => {
-      if (eventObject.success) {
-        navigate('VerifyUser', {
-          returnToRoute: this.props.navigation.state
-        });
-      }
-      this.setState({
-        loading: false
-      });
+      this.setState(
+        {
+          loading: false
+        },
+        () => {
+          if (eventObject.success) {
+            this.resetRoute();
+          }
+        }
+      );
     };
     const obj = new LogoutRequestObject(Constants.installationId);
     dispatch(
@@ -191,6 +203,14 @@ export default class MemberProfile extends React.Component {
       })
     );
   }
+
+  resetRoute = () => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'VerifyUserStack' })]
+    });
+    this.props.navigation.dispatch(resetAction);
+  };
 
   getPermissionAsync = async () => {
     // if (Constants.platform.ios) {
@@ -1032,6 +1052,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 8 * alpha,
     width: 70 * alpha
+  },
+  logoutText: {
+    fontFamily: NON_TITLE_FONT,
+    color: LIGHT_GREY,
+    paddingRight: 8 * alpha,
+    fontSize: 13 * fontAlpha
   },
   navigationBarItem: {
     width: '100%'

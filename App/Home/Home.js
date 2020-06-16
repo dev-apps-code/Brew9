@@ -396,13 +396,13 @@ export default class Home extends React.Component {
     );
     if (currentMember != null) {
       obj.setUrlId(currentMember.id);
+      dispatch(
+        createAction('members/loadStorePushToken')({
+          object: obj,
+          callback
+        })
+      );
     }
-    dispatch(
-      createAction('members/loadStorePushToken')({
-        object: obj,
-        callback
-      })
-    );
   };
 
   loadShops() {
@@ -1420,7 +1420,7 @@ export default class Home extends React.Component {
         </View>
       );
     });
-    
+
     const variants = selected_product.variants.map((item, key) => {
       let selected_variants = selected_product.selected_variants;
       let required_variant = item.required;

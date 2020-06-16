@@ -1,4 +1,4 @@
-export { NavigationActions } from 'react-navigation'
+export { StackActions, NavigationActions } from 'react-navigation'
 
 export { default as Storage } from './storage'
 

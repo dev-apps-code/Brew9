@@ -200,19 +200,18 @@ export default class VerifyUser extends React.Component {
         loading: false
       });
       if (eventObject.success) {
+        const { navigation } = this.props;
         var obj = eventObject.result;
         if (obj.name == '' || obj.name == null) {
-          const { navigate } = this.props.navigation;
-          navigate('Register');
+          navigation.navigate('Register');
         } else {
-          const { navigation } = this.props;
           if (
             navigation.getParam('returnToRoute') != undefined &&
             navigation.getParam('returnToRoute') != null
           ) {
             navigation.goBack();
           } else {
-            this.props.navigation.navigate('TabGroupOne');
+            navigation.navigate('TabGroupOne');
           }
         }
       } else {
@@ -249,7 +248,7 @@ export default class VerifyUser extends React.Component {
 
       if (this.tapCount >= 5 && this.tapCount < 10) {
         let count = this.tapCount;
-        let tap = count < 9 ? 'taps': 'tap';
+        let tap = count < 9 ? 'taps' : 'tap';
         let toastText = `You are ${10 - count} ${tap} away to change server.`;
         this.refs.tapToast.show(toastText, DURATION.FOREVER);
       }

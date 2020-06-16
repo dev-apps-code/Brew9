@@ -9,9 +9,10 @@ import {
   View,
   AsyncStorage
 } from 'react-native';
-import { SERVERS, PROTOCOLS } from '../Constants/server_list';
+// import { SERVERS, PROTOCOLS } from '../Constants/server_list';
+import * as SERVERS from '../Constants/servers.json';
 import Modal from 'react-native-modal';
-import { Storage } from '../Utils';
+import { StackActions, NavigationActions } from '../Utils';
 import { loadServer } from '../Utils/server';
 
 const FAILED_ERROR_MESSAGE =
@@ -34,9 +35,10 @@ class ChangeServer extends React.Component {
 
   _changeServer = async (server, protocol) => {
     this.setState({ loading: true, cancelled: false, hasFailed: false });
-    console.log('loading');
+
     let hasFailed = false;
     let server_string = `${protocol}${server}/admin/login`;
+
     this.timeout(5000, fetch(server_string))
       .then((response) => {
         if (response.status == 200) {
@@ -60,14 +62,28 @@ class ChangeServer extends React.Component {
       .finally(() => {
         this.setState({ hasFailed });
         if (!hasFailed) {
-          this.setState({ loading: false, hasFailed: false, cancelled: false });
+          this.setState(
+            { loading: false, hasFailed: false, cancelled: false },
+            () => {
+              this.redirect();
+            }
+          );
         }
       });
   };
 
+  redirect() {
+    console.log('---redirecting---');
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'VerifyUserStack' })]
+    });
+    this.props.navigation.dispatch(resetAction);
+  }
+
   _renderServerList() {
-    const items = SERVERS.map((server, serverIndex) =>
-      PROTOCOLS.map((protocol, protocolIndex) => {
+    const items = SERVERS.servers.map((server, serverIndex) =>
+      SERVERS.protocols.map((protocol, protocolIndex) => {
         let serverText = `${protocol}${server}`;
         return (
           <TouchableOpacity
