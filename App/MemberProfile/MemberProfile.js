@@ -60,6 +60,7 @@ import moment from 'moment';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9Modal from '../Components/Brew9Modal';
 import LogoutRequestObject from '../Requests/logout_request_object';
+import { DEVELOP_MODE } from '../Common/config';
 
 @connect(({ members }) => ({
   members: members.profile
@@ -93,11 +94,11 @@ export default class MemberProfile extends React.Component {
           </TouchableOpacity>
         </View>
       ),
-      headerRight: (
+      headerRight: DEVELOP_MODE ? (
         <TouchableOpacity onPress={() => params.onLogoutPressed()}>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
-      ),
+      ) : null,
       headerStyle: {
         elevation: 0,
         shadowOpacity: 0
