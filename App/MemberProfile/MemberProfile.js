@@ -61,6 +61,7 @@ import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9Modal from '../Components/Brew9Modal';
 import LogoutRequestObject from '../Requests/logout_request_object';
 import { DEVELOP_MODE } from '../Common/config';
+import { logout } from '../Utils/route_helper';
 
 @connect(({ members }) => ({
   members: members.profile
@@ -206,11 +207,7 @@ export default class MemberProfile extends React.Component {
   }
 
   resetRoute = () => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'VerifyUserStack' })]
-    });
-    this.props.navigation.dispatch(resetAction);
+    logout(this.props);
   };
 
   getPermissionAsync = async () => {

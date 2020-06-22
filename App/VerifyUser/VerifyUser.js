@@ -30,6 +30,7 @@ import {
   NON_TITLE_FONT,
   TOAST_DURATION
 } from '../Common/common_style';
+import { resetTo } from '../Utils/route_helper';
 
 @connect(({ members }) => ({
   members: members.profile,
@@ -205,14 +206,15 @@ export default class VerifyUser extends React.Component {
         if (obj.name == '' || obj.name == null) {
           navigation.navigate('Register');
         } else {
-          if (
-            navigation.getParam('returnToRoute') != undefined &&
-            navigation.getParam('returnToRoute') != null
-          ) {
-            navigation.goBack();
-          } else {
-            navigation.navigate('TabGroupOne');
-          }
+          // if (
+          //   navigation.getParam('returnToRoute') != undefined &&
+          //   navigation.getParam('returnToRoute') != null
+          // ) {
+          //   navigation.goBack();
+          // } else {
+          //   navigation.navigate('TabGroupOne');
+          // }
+          resetTo(this.props, 'TabGroupOne');
         }
       } else {
         this.refs.toast.show(eventObject.message, TOAST_DURATION);
