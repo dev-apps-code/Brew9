@@ -245,11 +245,10 @@ const styles = StyleSheet.create({
     top: Constants.statusBarHeight,
   },
   productcell: {
-    backgroundColor: "white",
     width: "100%",
     flex: 1,
     flexDirection: "row",
-    paddingVertical: 10 * alpha,
+    paddingVertical: 5 * alpha,
   },
   productimageImage: {
     backgroundColor: "transparent",
@@ -264,7 +263,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 113 * alpha,
     marginRight: 10 * alpha,
-    marginBottom: 20 * alpha,
   },
   detailBlurImage: {
     backgroundColor: "transparent",
@@ -348,7 +346,6 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through'
   },
   priceText: {
-    backgroundColor: "transparent",
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
     fontSize: 20 * fontAlpha,
