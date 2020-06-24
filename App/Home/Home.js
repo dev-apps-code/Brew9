@@ -135,52 +135,59 @@ export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      visible: false,
-      isCartToggle: false,
-      page: 1,
-      data: [],
-      product_category: [],
-      products: [],
-      loading: true,
-      isRefreshing: false,
-      selected_category: 0,
-      menu_banners: [],
-      product_view_height: 0 * alpha,
-      modalVisible: false,
-      selected_index: null,
-      select_quantity: 1,
-      delivery: 0,
-      modalGalleryVisible: true,
-      selected_promotion: '',
-      isPromoToggle: false,
-      ignoreVersion: false,
-      appState: AppState.currentState,
-      image_isHorizontal: false,
-      image_check: false,
-      image_isLong: false,
-      app_url: '',
-      location: null,
-      distance: '-',
-      member_distance: 1000,
-      first_promo_popup: false,
-      popUpVisible: false,
-      scroll_Index: null,
-      refresh_products: true,
-      monitorLocation: null
-    };
+    this.state = this._getState();
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
     this.toogleCart = this.toogleCart.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
+    this.initializeOneSignal();
+  }
+
+  _getState = () => ({
+    visible: false,
+    isCartToggle: false,
+    page: 1,
+    data: [],
+    product_category: [],
+    products: [],
+    loading: true,
+    isRefreshing: false,
+    selected_category: 0,
+    menu_banners: [],
+    product_view_height: 0 * alpha,
+    modalVisible: false,
+    selected_index: null,
+    select_quantity: 1,
+    delivery: 0,
+    modalGalleryVisible: true,
+    selected_promotion: '',
+    isPromoToggle: false,
+    ignoreVersion: false,
+    appState: AppState.currentState,
+    image_isHorizontal: false,
+    image_check: false,
+    image_isLong: false,
+    app_url: '',
+    location: null,
+    distance: '-',
+    member_distance: 1000,
+    first_promo_popup: false,
+    popUpVisible: false,
+    scroll_Index: null,
+    refresh_products: true,
+    monitorLocation: null
+  });
+
+  initializeOneSignal = () => {
+    // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
     OneSignal.init('1e028dc3-e7ee-45a1-a537-a04d698ada1d', {
       kOSSettingsKeyAutoPrompt: true
-    }); // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+    });
 
-    OneSignal.addEventListener('received', this.onReceived);
-    OneSignal.addEventListener('opened', this.onOpened.bind(this));
-    OneSignal.addEventListener('ids', this.onIds.bind(this));
-  }
+    OneSignal.addEventListener('received', this._onReceived.bind(this));
+    OneSignal.addEventListener('opened', this._onOpened.bind(this));
+    OneSignal.addEventListener('ids', this._onIds.bind(this));
+  };
 
   onQrScanPressed = () => {
     const { navigation } = this.props;
@@ -243,29 +250,32 @@ export default class Home extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.location !== this.props.location) {
-      if (prevProps.location != null) {
-        this.loadShops();
+    if (prevProps.isFocused !== this.props.isFocused) {
+      if (prevProps.location !== this.props.location) {
+        if (prevProps.location != null) {
+          this.loadShops();
+        }
+        this.computeDistance();
       }
-      this.computeDistance();
-    }
-    if (prevProps.currentMember !== this.props.currentMember) {
-      this.loadShops();
-      this.computeDistance();
-    }
-    if (prevProps.cart !== this.props.cart) {
-      this.check_promotion_trigger();
-    }
-    if (prevProps.promotions !== this.props.promotions) {
-      this.updateCartHeight();
-    }
-    if (prevProps.toggle_update_count !== this.props.toggle_update_count) {
-      setTimeout(
-        function () {
-          this.toogleCart(true, true);
-        }.bind(this),
-        50
-      );
+      if (prevProps.currentMember !== this.props.currentMember) {
+        console.log('currentMember Changed???');
+        this.loadShops();
+        this.computeDistance();
+      }
+      if (prevProps.cart !== this.props.cart) {
+        this.check_promotion_trigger();
+      }
+      if (prevProps.promotions !== this.props.promotions) {
+        this.updateCartHeight();
+      }
+      if (prevProps.toggle_update_count !== this.props.toggle_update_count) {
+        setTimeout(
+          function () {
+            this.toogleCart(true, true);
+          }.bind(this),
+          50
+        );
+      }
     }
   }
 
@@ -310,27 +320,32 @@ export default class Home extends React.Component {
     });
     this.getLocationAndLoadShops();
 
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.loadShops();
+    });
+
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
 
   componentWillUnmount() {
     this.removeNavigationListener();
+    this.focusListener.remove();
     AppState.removeEventListener('change', this._handleAppStateChange);
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
-    OneSignal.removeEventListener('received', this.onReceived);
-    OneSignal.removeEventListener('opened', this.onOpened);
-    OneSignal.removeEventListener('ids', this.onIds);
+    OneSignal.removeEventListener('received', this._onReceived);
+    OneSignal.removeEventListener('opened', this._onOpened);
+    OneSignal.removeEventListener('ids', this._onIds);
   }
 
-  onReceived(notification) {
+  _onReceived(notification) {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event('Push Notification', 'Received', notification.payload.body)
     );
   }
 
-  onOpened(openResult) {
+  _onOpened(openResult) {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
@@ -341,20 +356,9 @@ export default class Home extends React.Component {
     );
   }
 
-  onIds(device) {
+  _onIds(device) {
     this.loadStorePushToken(device.userId);
   }
-
-  // onBackPress() {
-  // 	const { dispatch, navigation } = this.props;
-  // 	const activeRoute = navigation.state.routeName == "Home" ? true : false;
-  // 	if (activeRoute) {
-  // 		this.handleBackPress()
-  // 		return false;
-  // 	}
-  // 	dispatch(NavigationActions.back());
-  // 	return true;
-  // }
 
   _handleAppStateChange = (nextAppState) => {
     if (
@@ -396,13 +400,13 @@ export default class Home extends React.Component {
     );
     if (currentMember != null) {
       obj.setUrlId(currentMember.id);
+      dispatch(
+        createAction('members/loadStorePushToken')({
+          object: obj,
+          callback
+        })
+      );
     }
-    dispatch(
-      createAction('members/loadStorePushToken')({
-        object: obj,
-        callback
-      })
-    );
   };
 
   loadShops() {
@@ -1419,7 +1423,7 @@ export default class Home extends React.Component {
         </View>
       );
     });
-    
+
     const variants = selected_product.variants.map((item, key) => {
       let selected_variants = selected_product.selected_variants;
       let required_variant = item.required;

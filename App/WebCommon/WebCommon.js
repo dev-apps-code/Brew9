@@ -1,19 +1,8 @@
-//
-//  WebCommon
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
-import { View, StyleSheet, TouchableOpacity, Image, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { WebView } from 'react-native-webview';
-import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
-import { loadServer } from '../Utils/server';
-import { changeServerIndex } from '../Utils/storage';
-import {KSERVERURLLIST} from '../Utils/server'
+import { TITLE_FONT } from '../Common/common_style';
 
 export default class WebCommon extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -62,34 +51,16 @@ export default class WebCommon extends React.Component {
       onItemPressed: this.onItemPressed
     });
   }
-
-  lastTap = null;
-  handleDoubleTap = async () => {
-    const now = Date.now();
-    const DOUBLE_PRESS_DELAY = 300;
-    if (this.lastTap && now - this.lastTap < DOUBLE_PRESS_DELAY) {
-      await changeServerIndex(KSERVERURLLIST.length);
-      await loadServer();
-      // this.onBackPressed()
-      this.props.navigation.state.params.onGoBack();
-      this.props.navigation.goBack();
-    } else {
-      this.lastTap = now;
-    }
-  };
-
   onBackPressed = () => {
     this.props.navigation.goBack();
   };
 
   render() {
     return (
-      <TouchableWithoutFeedback onPress={() => this.handleDoubleTap()}>
-        <WebView
-          useWebKit={true}
-          source={{ uri: this.props.navigation.getParam('web_url', '') }}
-        />
-      </TouchableWithoutFeedback>
+      <WebView
+        useWebKit={true}
+        source={{ uri: this.props.navigation.getParam('web_url', '') }}
+      />
     );
   }
 }

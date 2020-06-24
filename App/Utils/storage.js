@@ -7,7 +7,7 @@ export async function setServerIndex() {
 }
 
 export async function getServerIndex() {
-  return await AsyncStorage.getItem('serverIndex');
+  return await AsyncStorage.getItem('serverIndex') || 0;
 }
 
 export async function changeServerIndex(value) {
