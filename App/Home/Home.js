@@ -625,8 +625,8 @@ export default class Home extends React.Component {
           msg = delivery_disabled_response?.text || msg;
         }
         this.refs.toast.show(
-          // <View style={{justifyContent:'center'}}><Text style={{color:'white', fontFamily: NON_TITLE_FONT,textAlign:'center'}}>{msg}</Text></View>,
-          msg,
+          <View style={{justifyContent:'center'}}><Text style={{color:'white', fontFamily: NON_TITLE_FONT,textAlign:'center'}}>{msg}</Text></View>,
+
           TOAST_DURATION
         );
       });
