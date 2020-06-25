@@ -622,7 +622,7 @@ export default class Home extends React.Component {
         }
         this.refs.toast.show(
           <View style={{ justifyContent: 'center' }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>{msg}</Text>
+            <Text style={{ color: 'white', textAlign: 'center', fontFamily: TITLE_FONT }}>{msg}</Text>
           </View>,
           TOAST_DURATION
         );
