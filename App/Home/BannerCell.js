@@ -28,16 +28,16 @@ export default class BannerCell extends React.Component {
 
     }
 
-    onBannerCellPress = () => {
-        const analytics = new Analytics(ANALYTICS_ID)
-        analytics.event(new Event('Banner', getMemberIdForApi(this.props.currentMember), `${this.props.bannerDescription}`))
-        this.props.onPressItem(this.props.item, this.props.index)
-    }
+    // onBannerCellPress = () => {
+    //     const analytics = new Analytics(ANALYTICS_ID)
+    //     analytics.event(new Event('Banner', getMemberIdForApi(this.props.currentMember), `${this.props.bannerDescription}`))
+    //     // this.props.onPressItem(this.props.item, this.props.index)
+    // }
 
     render() {
 
         return <TouchableWithoutFeedback
-            onPress={this.onBannerCellPress}>
+            onPress={this.props.onPressItem}>
             <View
                 navigation={this.props.navigation}
                 style={styles.bannercell}>

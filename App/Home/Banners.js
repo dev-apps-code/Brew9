@@ -26,7 +26,7 @@ export default class Banners extends React.PureComponent {
                                     bannerImage={item.image}
                                     bannerDescription={item.description}
                                     detailImage={item.banner_detail_image}
-                                    onPressItem={onBannerPressed}
+                                    onPressItem={()=>onBannerPressed(item)}
                                 />
                             ))
                         }

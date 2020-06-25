@@ -453,6 +453,9 @@ export default class Home extends React.Component {
   loadStoreProducts() {
     const { dispatch, company_id } = this.props;
     const { menu_banners } = this.state;
+    console.log("----------------------")
+    console.log(menu_banners)
+    console.log("----------------------")
 
     const callback = (eventObject) => {
       if (eventObject.success) {
@@ -582,17 +585,17 @@ export default class Home extends React.Component {
     }
   }
 
-  onBannerPressed = (item, index) => {
-    // const { navigate } = this.props.navigation
-    const analytics = new Analytics(ANALYTICS_ID);
-    analytics.event(new Event('Home', 'Click', 'Featured Promo'));
-    if (
-      item.banner_detail_image != undefined &&
-      item.banner_detail_image != ''
-    ) {
+  onBannerPressed = (item) => {
+    console.log("banner")
+    console.log(item)
+
+    if (item.banner_detail_image != undefined && item.banner_detail_image != '') {
+      // let should_show = this.shouldShowFeatured(this.props.shop)
+      // if (should_show == true) {
       this.setState(
         {
-          selected_promotion: item.banner_detail_image
+          selected_promotion: item.image,
+          // first_promo_popup: true
         },
         function () {
           this.setState({
@@ -601,7 +604,28 @@ export default class Home extends React.Component {
           this.calculateImageDimension(item.banner_detail_image);
         }
       );
+      // }
     }
+
+    // const { navigate } = this.props.navigation
+    // const analytics = new Analytics(ANALYTICS_ID);
+    // analytics.event(new Event('Home', 'Click', 'Featured Promo'));
+    // if (
+    //   item.banner_detail_image != undefined &&
+    //   item.banner_detail_image != ''
+    // ) {
+    //   this.setState(
+    //     {
+    //       selected_promotion: item.banner_detail_image
+    //     },
+    //     function () {
+    //       this.setState({
+    //         isPromoToggle: true
+    //       });
+    //       this.calculateImageDimension(item.banner_detail_image);
+    //     }
+    //   );
+    // }
   };
 
   _toggleDelivery = (value) => {
@@ -1295,6 +1319,9 @@ export default class Home extends React.Component {
       // }
     }
   }
+
+  
+  
 
   get_product(index) {
     if (index) {
@@ -2016,7 +2043,8 @@ export default class Home extends React.Component {
 
   shouldShowFeatured(shop) {
     const { currentMember } = this.props;
-
+    //jira
+    // this.onFeaturedPromotionPressed(shop.featured_promotion);
     if (shop != null) {
       AsyncStorage.getItem('featured', (err, result) => {
         if (shop.featured_promotion != null) {
@@ -2057,7 +2085,6 @@ export default class Home extends React.Component {
 
   renderFeaturedPromo(shop, cart) {
     let style = undefined;
-
     if (shop !== null) {
       if (shop.can_order == false) {
         if (cart.length > 0) {
