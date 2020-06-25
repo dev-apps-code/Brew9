@@ -15,11 +15,17 @@ import {
   TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
-import { createAction, validateEmail } from '../Utils';
+import {
+  createAction,
+  validateEmail,
+  StackActions,
+  NavigationActions
+} from '../Utils';
 import { getAppVersion, getBuildVersion } from '../Utils/server';
 import UpdateProfileRequestObject from '../Requests/update_profile_request_object';
 import UpdateAvatarRequestObject from '../Requests/update_avatar_request_object';
@@ -54,6 +60,8 @@ import moment from 'moment';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9Modal from '../Components/Brew9Modal';
 import LogoutRequestObject from '../Requests/logout_request_object';
+import { DEVELOP_MODE } from '../Common/config';
+import { logout } from '../Utils/route_helper';
 
 @connect(({ members }) => ({
   members: members.profile
@@ -87,7 +95,11 @@ export default class MemberProfile extends React.Component {
           </TouchableOpacity>
         </View>
       ),
-      headerRight: null,
+      headerRight: DEVELOP_MODE ? (
+        <TouchableOpacity onPress={() => params.onLogoutPressed()}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      ) : null,
       headerStyle: {
         elevation: 0,
         shadowOpacity: 0
@@ -129,18 +141,42 @@ export default class MemberProfile extends React.Component {
     this.loadMember();
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
-      onItemPressed: this.onItemPressed
+      onItemPressed: this.onItemPressed,
+      onLogoutPressed: this.loadDestroy.bind(this)
     });
   }
 
   lastTap = null;
-  handleDoubleTap = () => {
+  tapCount = 1;
+  /**
+   * Tap 10 times within 15 seconds
+   */
+  handleChangeServerTap = async () => {
     const now = Date.now();
-    const DOUBLE_PRESS_DELAY = 300;
-    if (this.lastTap && now - this.lastTap < DOUBLE_PRESS_DELAY) {
-      this.loadDestroy();
+    const PRESS_DELAY = 15000;
+
+    if (this.lastTap && now - this.lastTap < PRESS_DELAY) {
+      // await changeServerIndex(KSERVERURLLIST.length);
+      this.tapCount++;
+      console.log('tapped %s times', this.tapCount);
+
+      if (this.tapCount >= 5 && this.tapCount < 10) {
+        let count = this.tapCount;
+        let tap = count < 9 ? 'taps' : 'tap';
+        let toastText = `You are ${10 - count} ${tap} away to change server.`;
+        this.refs.tapToast.show(toastText, DURATION.FOREVER);
+      }
+      if (this.tapCount == 10) {
+        this.refs.tapToast.close();
+        this.loadDestroy();
+        // this.props.navigation.navigate('VerifyUser', {
+        //   screen: 'ChangeServer'
+        // });
+        this.tapCount = 1;
+      }
     } else {
       this.lastTap = now;
+      this.tapCount = 1;
     }
   };
 
@@ -150,14 +186,16 @@ export default class MemberProfile extends React.Component {
     this.setState({ loading: true });
 
     const callback = (eventObject) => {
-      if (eventObject.success) {
-        navigate('VerifyUser', {
-          returnToRoute: this.props.navigation.state
-        });
-      }
-      this.setState({
-        loading: false
-      });
+      this.setState(
+        {
+          loading: false
+        },
+        () => {
+          if (eventObject.success) {
+            this.resetRoute();
+          }
+        }
+      );
     };
     const obj = new LogoutRequestObject(Constants.installationId);
     dispatch(
@@ -167,6 +205,10 @@ export default class MemberProfile extends React.Component {
       })
     );
   }
+
+  resetRoute = () => {
+    logout(this.props);
+  };
 
   getPermissionAsync = async () => {
     // if (Constants.platform.ios) {
@@ -614,377 +656,390 @@ export default class MemberProfile extends React.Component {
         style={{ flex: 1 }}
         enabled
       >
-        <View style={styles.memberProfileView}>
-          <View style={styles.profileView}>
-            <View style={styles.profilepicView}>
-              <View pointerEvents="box-none">
-                <View style={styles.avatarImageContainer}>
-                  {image.uri != null ? (
-                    <ExpoImage style={styles.avatarImage} {...{ uri, uri }} />
-                  ) : (
-                    <Image
-                      source={require('./../../assets/images/user.png')}
-                      style={styles.avatarImage}
-                    />
+        <SafeAreaView style={styles.memberProfileView}>
+          <View style={styles.memberProfileView}>
+            <View style={styles.profileView}>
+              <View style={styles.profilepicView}>
+                <View pointerEvents="box-none">
+                  <View style={styles.avatarImageContainer}>
+                    {image.uri != null ? (
+                      <ExpoImage style={styles.avatarImage} {...{ uri, uri }} />
+                    ) : (
+                      <Image
+                        source={require('./../../assets/images/user.png')}
+                        style={styles.avatarImage}
+                      />
+                    )}
+                  </View>
+                  <TouchableOpacity
+                    onPress={this._pickImage}
+                    style={styles.imagebuttonButton}
+                  ></TouchableOpacity>
+                  {image.uri == null && (
+                    <Text style={styles.avatarUploadText}>Upload Photo</Text>
                   )}
                 </View>
-                <TouchableOpacity
-                  onPress={this._pickImage}
-                  style={styles.imagebuttonButton}
-                ></TouchableOpacity>
-                {image.uri == null && (
-                  <Text style={styles.avatarUploadText}>Upload Photo</Text>
-                )}
+                <Text style={styles.nameText}>{members.nickname}</Text>
               </View>
-              <Text style={styles.nameText}>{members.nickname}</Text>
             </View>
-          </View>
-          <View style={styles.personalInfoView}>
-            <View style={styles.nicknameView}>
-              {/* <Image
+            <View style={styles.personalInfoView}>
+              <View style={styles.nicknameView}>
+                {/* <Image
                 source={require('./../../assets/images/line-17.png')}
                 style={styles.seperatorImage}
               /> */}
-              <View style={styles.seperatorView} />
+                <View style={styles.seperatorView} />
 
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: 'absolute',
-                  left: 0 * alpha,
-                  top: 0 * alpha,
-                  bottom: 0 * alpha,
-                  justifyContent: 'center'
-                }}
-              >
                 <View
                   pointerEvents="box-none"
                   style={{
-                    width: 315 * alpha,
-                    height: 16 * alpha,
-                    marginLeft: 22 * alpha,
-                    flexDirection: 'row',
-                    alignItems: 'center'
+                    position: 'absolute',
+                    left: 0 * alpha,
+                    top: 0 * alpha,
+                    bottom: 0 * alpha,
+                    justifyContent: 'center'
                   }}
                 >
-                  <Text style={styles.nicknameText}>Nickname</Text>
-                  <TextInput
-                    autoCorrect={false}
-                    placeholder="Nickname"
-                    style={styles.usernameTextInput}
-                    returnKeyType={'done'}
-                    placeholderTextColor={LIGHT_GREY}
-                    onChangeText={(nickname) => this.setState({ nickname })}
-                    defaultValue={nickname}
-                  />
-                </View>
-              </View>
-            </View>
-            <View style={styles.emailView}>
-              {/* <Image
-                source={require('./../../assets/images/line-17.png')}
-                style={styles.seperatorImage}
-              /> */}
-              <View style={styles.seperatorView} />
-
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: 'absolute',
-                  left: 0 * alpha,
-                  top: 0 * alpha,
-                  bottom: 0 * alpha,
-                  justifyContent: 'center'
-                }}
-              >
-                <View
-                  pointerEvents="box-none"
-                  style={{
-                    width: 315 * alpha,
-                    height: 16 * alpha,
-                    marginLeft: 22 * alpha,
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={styles.emailText}>Email</Text>
-                  <TextInput
-                    autoCorrect={false}
-                    placeholder="Email (optional)"
-                    style={styles.emailTextInput}
-                    returnKeyType={'done'}
-                    placeholderTextColor={LIGHT_GREY}
-                    onChangeText={(email) => this.setState({ email })}
-                    defaultValue={email}
-                  />
-                </View>
-              </View>
-            </View>
-            <View style={styles.phoneNumberView}>
-              <View style={styles.seperatorView} />
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: 'absolute',
-                  left: 0 * alpha,
-                  right: 0 * alpha,
-                  top: 0 * alpha,
-                  bottom: 0 * alpha,
-                  justifyContent: 'center'
-                }}
-              >
-                <View
-                  pointerEvents="box-none"
-                  style={{
-                    height: 25 * alpha,
-                    marginLeft: 22 * alpha,
-                    marginRight: 22 * alpha,
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={styles.phoneNumberText}>Phone Number</Text>
-                  <Text style={styles.textInputTextInput}>
-                    {member_phone_number}
-                  </Text>
                   <View
+                    pointerEvents="box-none"
                     style={{
-                      flex: 1
+                      width: 315 * alpha,
+                      height: 16 * alpha,
+                      marginLeft: 22 * alpha,
+                      flexDirection: 'row',
+                      alignItems: 'center'
                     }}
-                  />
-                  <TouchableOpacity
-                    onPress={this.onUpdatePressed}
-                    style={styles.updateButton}
                   >
-                    <Text style={styles.updateButtonText}>update</Text>
-                  </TouchableOpacity>
+                    <Text style={styles.nicknameText}>Nickname</Text>
+                    <TextInput
+                      autoCorrect={false}
+                      placeholder="Nickname"
+                      style={styles.usernameTextInput}
+                      returnKeyType={'done'}
+                      placeholderTextColor={LIGHT_GREY}
+                      onChangeText={(nickname) => this.setState({ nickname })}
+                      defaultValue={nickname}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.genderView}>
-              {/* <Image
+              <View style={styles.emailView}>
+                {/* <Image
+                source={require('./../../assets/images/line-17.png')}
+                style={styles.seperatorImage}
+              /> */}
+                <View style={styles.seperatorView} />
+
+                <View
+                  pointerEvents="box-none"
+                  style={{
+                    position: 'absolute',
+                    left: 0 * alpha,
+                    top: 0 * alpha,
+                    bottom: 0 * alpha,
+                    justifyContent: 'center'
+                  }}
+                >
+                  <View
+                    pointerEvents="box-none"
+                    style={{
+                      width: 315 * alpha,
+                      height: 16 * alpha,
+                      marginLeft: 22 * alpha,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Text style={styles.emailText}>Email</Text>
+                    <TextInput
+                      autoCorrect={false}
+                      placeholder="Email (optional)"
+                      style={styles.emailTextInput}
+                      returnKeyType={'done'}
+                      placeholderTextColor={LIGHT_GREY}
+                      onChangeText={(email) => this.setState({ email })}
+                      defaultValue={email}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={styles.phoneNumberView}>
+                <View style={styles.seperatorView} />
+                <View
+                  pointerEvents="box-none"
+                  style={{
+                    position: 'absolute',
+                    left: 0 * alpha,
+                    right: 0 * alpha,
+                    top: 0 * alpha,
+                    bottom: 0 * alpha,
+                    justifyContent: 'center'
+                  }}
+                >
+                  <View
+                    pointerEvents="box-none"
+                    style={{
+                      height: 25 * alpha,
+                      marginLeft: 22 * alpha,
+                      marginRight: 22 * alpha,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Text style={styles.phoneNumberText}>Phone Number</Text>
+                    <Text style={styles.textInputTextInput}>
+                      {member_phone_number}
+                    </Text>
+                    <View
+                      style={{
+                        flex: 1
+                      }}
+                    />
+                    <TouchableOpacity
+                      onPress={this.onUpdatePressed}
+                      style={styles.updateButton}
+                    >
+                      <Text style={styles.updateButtonText}>update</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.genderView}>
+                {/* <Image
                 source={require('./../../assets/images/line-3-copy.png')}
                 style={styles.seperatorTwoImage}
               /> */}
-              <View style={styles.seperatorView} />
+                <View style={styles.seperatorView} />
 
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: 'absolute',
-                  left: 0 * alpha,
-                  right: 0 * alpha,
-                  top: 0 * alpha,
-                  bottom: 0 * alpha,
-                  justifyContent: 'center'
-                }}
-              >
                 <View
                   pointerEvents="box-none"
                   style={{
-                    height: 16 * alpha,
-                    marginLeft: 22 * alpha,
-                    marginRight: 86 * alpha,
-                    flexDirection: 'row',
-                    alignItems: 'center'
+                    position: 'absolute',
+                    left: 0 * alpha,
+                    right: 0 * alpha,
+                    top: 0 * alpha,
+                    bottom: 0 * alpha,
+                    justifyContent: 'center'
                   }}
                 >
-                  <Text style={styles.genderText}>Gender</Text>
-                  <View style={styles.selectedradioView}>
-                    <RadioForm formHorizontal={true} animation={true}>
-                      {this.state.gender_options.map((obj, i) => {
-                        var onPress = (value, index) => {
-                          this.setState({
-                            gender: value,
-                            genderIndex: index
-                          });
-                        };
-                        return (
-                          <RadioButton labelHorizontal={true} key={i}>
-                            {/*  You can set RadioButtonLabel before RadioButtonInput */}
-                            <RadioButtonInput
-                              obj={obj}
-                              index={i}
-                              isSelected={this.state.gender === i}
-                              onPress={onPress}
-                              buttonInnerColor={PRIMARY_COLOR}
-                              buttonOuterColor={
-                                this.state.genderIndex === i
-                                  ? '#00B2E3'
-                                  : PRIMARY_COLOR
-                              }
-                              selectedButtonColor={'#00B2E3'}
-                              buttonSize={5 * alpha}
-                              buttonStyle={{
-                                backgroundColor: 'rgb(200, 200, 200)',
-                                borderWidth: 0,
-                                marginRight: 5 * alpha,
-                                marginTop: 2 * alpha
-                              }}
-                            />
-                            <RadioButtonLabel
-                              obj={obj}
-                              index={i}
-                              onPress={onPress}
-                              labelStyle={{
-                                color: 'rgb(135, 135, 135)',
-                                fontSize: 13 * fontAlpha,
-                                marginRight: 10 * alpha,
-                                fontFamily: NON_TITLE_FONT
-                              }}
-                              labelWrapStyle={{}}
-                            />
-                          </RadioButton>
-                        );
-                      })}
-                    </RadioForm>
+                  <View
+                    pointerEvents="box-none"
+                    style={{
+                      height: 16 * alpha,
+                      marginLeft: 22 * alpha,
+                      marginRight: 86 * alpha,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Text style={styles.genderText}>Gender</Text>
+                    <View style={styles.selectedradioView}>
+                      <RadioForm formHorizontal={true} animation={true}>
+                        {this.state.gender_options.map((obj, i) => {
+                          var onPress = (value, index) => {
+                            this.setState({
+                              gender: value,
+                              genderIndex: index
+                            });
+                          };
+                          return (
+                            <RadioButton labelHorizontal={true} key={i}>
+                              {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                              <RadioButtonInput
+                                obj={obj}
+                                index={i}
+                                isSelected={this.state.gender === i}
+                                onPress={onPress}
+                                buttonInnerColor={PRIMARY_COLOR}
+                                buttonOuterColor={
+                                  this.state.genderIndex === i
+                                    ? '#00B2E3'
+                                    : PRIMARY_COLOR
+                                }
+                                selectedButtonColor={'#00B2E3'}
+                                buttonSize={5 * alpha}
+                                buttonStyle={{
+                                  backgroundColor: 'rgb(200, 200, 200)',
+                                  borderWidth: 0,
+                                  marginRight: 5 * alpha,
+                                  marginTop: 2 * alpha
+                                }}
+                              />
+                              <RadioButtonLabel
+                                obj={obj}
+                                index={i}
+                                onPress={onPress}
+                                labelStyle={{
+                                  color: 'rgb(135, 135, 135)',
+                                  fontSize: 13 * fontAlpha,
+                                  marginRight: 10 * alpha,
+                                  fontFamily: NON_TITLE_FONT
+                                }}
+                                labelWrapStyle={{}}
+                              />
+                            </RadioButton>
+                          );
+                        })}
+                      </RadioForm>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.birthdayView}>
+                <View style={styles.seperatorView} />
+                <Text style={styles.birthdayText}>Birthday</Text>
+                <DatePicker
+                  date={this.state.dob}
+                  mode="date"
+                  placeholder="Birthday"
+                  format="DD-MM-YYYY"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  showIcon={false}
+                  maxDate={'31-12-' + maxYear}
+                  style={styles.birthdayDatePicker}
+                  disabled={this.state.member_have_dob}
+                  customStyles={{
+                    placeholderText: {
+                      fontFamily: NON_TITLE_FONT,
+                      fontSize: 13 * fontAlpha,
+                      color: LIGHT_GREY
+                    },
+
+                    dateText: {
+                      fontFamily: NON_TITLE_FONT,
+                      fontSize: 13 * fontAlpha,
+                      color: 'rgb(135, 135, 135)'
+                    },
+                    dateInput: {
+                      height: 18 * alpha,
+                      borderWidth: 0,
+                      position: 'absolute',
+                      top: 0,
+                      left: 61 * alpha
+                    },
+                    disabled: {
+                      backgroundColor: 'transparent'
+                    }
+                  }}
+                  onDateChange={(dob) => {
+                    this.onChangeBirthdate(dob);
+                  }}
+                />
+                {/*<TextInput*/}
+                {/*	autoCorrect={false}*/}
+                {/*	placeholder="1973-11-10"*/}
+                {/*	style={styles.birthdayTextInput}*/}
+                {/*	defaultValue={"1973-11-10"}*/}
+                {/*/>*/}
+              </View>
+              <View style={styles.phoneNumberView}>
+                {/* <View style={styles.seperatorView} /> */}
+                <View
+                  pointerEvents="box-none"
+                  style={{
+                    position: 'absolute',
+                    left: 0 * alpha,
+                    right: 0 * alpha,
+                    top: 0 * alpha,
+                    bottom: 0 * alpha,
+                    justifyContent: 'center'
+                  }}
+                >
+                  <View
+                    pointerEvents="box-none"
+                    style={{
+                      height: 25 * alpha,
+                      marginLeft: 22 * alpha,
+                      marginRight: 22 * alpha,
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Text style={styles.phoneNumberText}>Delivery Address</Text>
+                    <TouchableOpacity
+                      onPress={this.onChangeAddress}
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Text
+                        ellipsizeMode="tail"
+                        numberOfLines={20}
+                        style={[
+                          styles.textInputTextInput,
+                          {
+                            paddingRight: 10,
+                            color: defaultAddress
+                              ? 'rgb(135, 135, 135)'
+                              : LIGHT_GREY
+                          }
+                        ]}
+                      >
+                        {defaultAddress}
+                      </Text>
+                      <Image
+                        source={require('./../../assets/images/next.png')}
+                        style={[styles.menuRowArrowImage]}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
             </View>
-            <View style={styles.birthdayView}>
-              <View style={styles.seperatorView} />
-              <Text style={styles.birthdayText}>Birthday</Text>
-              <DatePicker
-                date={this.state.dob}
-                mode="date"
-                placeholder="Birthday"
-                format="DD-MM-YYYY"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                showIcon={false}
-                maxDate={'31-12-' + maxYear}
-                style={styles.birthdayDatePicker}
-                disabled={this.state.member_have_dob}
-                customStyles={{
-                  placeholderText: {
-                    fontFamily: NON_TITLE_FONT,
-                    fontSize: 13 * fontAlpha,
-                    color: LIGHT_GREY
-                  },
+            <TouchableOpacity
+              onPress={() => this.onSavePressed()}
+              style={styles.saveButton}
+            >
+              <Text style={styles.saveButtonText}>SAVE</Text>
+            </TouchableOpacity>
 
-                  dateText: {
-                    fontFamily: NON_TITLE_FONT,
-                    fontSize: 13 * fontAlpha,
-                    color: 'rgb(135, 135, 135)'
-                  },
-                  dateInput: {
-                    height: 18 * alpha,
-                    borderWidth: 0,
-                    position: 'absolute',
-                    top: 0,
-                    left: 61 * alpha
-                  },
-                  disabled: {
-                    backgroundColor: 'transparent'
-                  }
-                }}
-                onDateChange={(dob) => {
-                  this.onChangeBirthdate(dob);
-                }}
-              />
-              {/*<TextInput*/}
-              {/*	autoCorrect={false}*/}
-              {/*	placeholder="1973-11-10"*/}
-              {/*	style={styles.birthdayTextInput}*/}
-              {/*	defaultValue={"1973-11-10"}*/}
-              {/*/>*/}
-            </View>
-            <View style={styles.phoneNumberView}>
-              {/* <View style={styles.seperatorView} /> */}
-              <View
-                pointerEvents="box-none"
-                style={{
-                  position: 'absolute',
-                  left: 0 * alpha,
-                  right: 0 * alpha,
-                  top: 0 * alpha,
-                  bottom: 0 * alpha,
-                  justifyContent: 'center'
-                }}
-              >
-                <View
-                  pointerEvents="box-none"
-                  style={{
-                    height: 25 * alpha,
-                    marginLeft: 22 * alpha,
-                    marginRight: 22 * alpha,
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={styles.phoneNumberText}>Delivery Address</Text>
-                  <TouchableOpacity
-                    onPress={this.onChangeAddress}
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text
-                      ellipsizeMode="tail"
-                      numberOfLines={20}
-                      style={[
-                        styles.textInputTextInput,
-                        {
-                          paddingRight: 10,
-                          color: defaultAddress
-                            ? 'rgb(135, 135, 135)'
-                            : LIGHT_GREY
-                        }
-                      ]}
-                    >
-                      {defaultAddress}
-                    </Text>
-                    <Image
-                      source={require('./../../assets/images/next.png')}
-                      style={[styles.menuRowArrowImage]}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
+            <Modal
+              isVisible={this.state.modalVisible}
+              coverScreen={false}
+              avoidKeyboard={true}
+            >
+              {this.renderModalContent()}
+            </Modal>
+            <Brew9Modal
+              visible={this.state.birthdayAlert}
+              cancelable={true}
+              title={'Birthday alert '}
+              description={
+                'Once you enter your birthday date, you can not update it again. Please make sure your birthday is correct!'
+              }
+              okayButtonAction={() => {
+                this.setState({ birthdayAlert: false });
+              }}
+              cancelButtonAction={() =>
+                this.setState({ birthdayAlert: false, dob: '' })
+              }
+            />
           </View>
-          <TouchableOpacity
-            onPress={() => this.onSavePressed()}
-            style={styles.saveButton}
-          >
-            <Text style={styles.saveButtonText}>SAVE</Text>
-          </TouchableOpacity>
-
-          <Modal
-            isVisible={this.state.modalVisible}
-            coverScreen={false}
-            avoidKeyboard={true}
-          >
-            {this.renderModalContent()}
-          </Modal>
-          <Brew9Modal
-            visible={this.state.birthdayAlert}
-            cancelable={true}
-            title={'Birthday alert '}
-            description={
-              'Once you enter your birthday date, you can not update it again. Please make sure your birthday is correct!'
-            }
-            okayButtonAction={() => {
-              this.setState({ birthdayAlert: false });
-            }}
-            cancelButtonAction={() =>
-              this.setState({ birthdayAlert: false, dob: '' })
-            }
+          <Toast
+            ref="toast"
+            style={{ bottom: windowHeight / 2 - 40 }}
+            textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
           />
-        </View>
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
-        <HudLoading isLoading={this.state.loading} />
-        <Text onPress={() => this.handleDoubleTap()} style={styles.versionText}>
-          Version {getAppVersion()} (Build {getBuildVersion()})
-        </Text>
+
+          <Toast
+            ref="tapToast"
+            textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
+            style={{ bottom: windowHeight / 2 - 40 }}
+            position="bottom"
+            defaultCloseDelay={0}
+          />
+          <HudLoading isLoading={this.state.loading} />
+          <Text
+            onPress={() => this.handleChangeServerTap()}
+            style={styles.versionText}
+          >
+            Version {getAppVersion()} (Build {getBuildVersion()})
+          </Text>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     );
   }
@@ -995,6 +1050,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 8 * alpha,
     width: 70 * alpha
+  },
+  logoutText: {
+    fontFamily: NON_TITLE_FONT,
+    color: LIGHT_GREY,
+    paddingRight: 8 * alpha,
+    fontSize: 13 * fontAlpha
   },
   navigationBarItem: {
     width: '100%'
