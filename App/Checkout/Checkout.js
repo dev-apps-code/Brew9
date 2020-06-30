@@ -36,6 +36,7 @@ import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
+import CurveSeparator from '../Components/CurveSeparator';
 @connect(({ members, shops, orders }) => ({
   company_id: members.company_id,
   currentMember: members.profile,
@@ -2045,15 +2046,17 @@ export default class Checkout extends React.Component {
   };
 
   _renderSeparator = () => {
-    return (
-      <View style={styles.receiptSectionSeperator}>
-        <Image
-          source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curveSeparator}
-        />
-        <View style={styles.sectionSeperatorView} />
-      </View>
-    );
+    // return (
+    //   <View style={styles.receiptSectionSeperator}>
+    //     <Image
+    //       source={require('./../../assets/images/curve_in_background.png')}
+    //       style={styles.curveSeparator}
+    //     />
+    //     <View style={styles.sectionSeperatorView} />
+    //   </View>
+    // );
+
+    return <CurveSeparator />;
   };
 
   renderCheckoutReceipt() {
@@ -4120,27 +4123,5 @@ const styles = StyleSheet.create({
     width: 15 * alpha,
     height: 15 * alpha,
     resizeMode: 'contain'
-  },
-  receiptSectionSeperator: {
-    flex: 1,
-    backgroundColor: DEFAULT_GREY_BACKGROUND,
-    alignContent: 'center',
-    justifyContent: 'center'
-  },
-
-  curveSeparator: {
-    tintColor: 'rgb(245,245,245)',
-    height: 14 * alpha,
-    resizeMode: 'stretch',
-    width: '100%',
-    backgroundColor: 'transparent'
-  },
-
-  sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
-    position: 'absolute',
-    alignSelf: 'center',
-    width: 300 * alpha,
-    height: 1 * alpha
   }
 });
