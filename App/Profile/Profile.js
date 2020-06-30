@@ -471,6 +471,18 @@ export default class Profile extends React.Component {
 		})
 	}
 
+	onVersionPressed = () => {
+		const { navigate } = this.props.navigation
+		const { company_id } = this.props
+		const analytics = new Analytics(ANALYTICS_ID)
+		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), 'Version'))
+
+		navigate("WebCommon", {
+			title: 'Version',
+			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+		})
+	}
+
 	onFeedbackPressed = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), 'Feedback'))
@@ -810,8 +822,8 @@ export default class Profile extends React.Component {
 					<View style={styles.graySeparator}></View>
 					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
 					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
-					<ProfileMenu onPress={this.onFeedbackPressed} text={'Version'} />
-					<ProfileMenu onPress={this.onFeedbackPressed} text={'About'} />
+					<ProfileMenu onPress={this.onVersionPressed} text={'Version'} />
+					<ProfileMenu onPress={this.onAboutButtonPressed} text={'About'} />
 
 				</View>
 				{this.renderRedeemVoucher()}
