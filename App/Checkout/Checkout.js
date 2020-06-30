@@ -1914,7 +1914,7 @@ export default class Checkout extends React.Component {
     if (promotions_item && promotions_item.length > 0) {
       return (
         <View>
-          {this._renderSeparator()}
+          <CurveSeparator />
           <View
             style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}
           >
@@ -2045,20 +2045,6 @@ export default class Checkout extends React.Component {
     );
   };
 
-  _renderSeparator = () => {
-    // return (
-    //   <View style={styles.receiptSectionSeperator}>
-    //     <Image
-    //       source={require('./../../assets/images/curve_in_background.png')}
-    //       style={styles.curveSeparator}
-    //     />
-    //     <View style={styles.sectionSeperatorView} />
-    //   </View>
-    // );
-
-    return <CurveSeparator />;
-  };
-
   renderCheckoutReceipt() {
     const {
       vouchers_to_use,
@@ -2150,24 +2136,22 @@ export default class Checkout extends React.Component {
                   </View>
                 )}
               </View>
-              {this._renderSeparator()}
 
+              <CurveSeparator />
               {this.renderOrderItems(cart, promotions)}
-
               {this.renderPromotions(promotions)}
-              {this._renderSeparator()}
-
+              <CurveSeparator />
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
               {this.renderPickupTime()}
-              {this._renderSeparator()}
+              <CurveSeparator />
 
               {delivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
                   : this.renderDeliveryAddress(false)
                 : undefined}
-              {delivery && this._renderSeparator()}
+              {delivery && <CurveSeparator />}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
                   <Text style={styles.totallabelText}>TOTAL</Text>
