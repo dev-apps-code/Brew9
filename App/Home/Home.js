@@ -586,12 +586,10 @@ export default class Home extends React.Component {
   }
 
   onBannerPressed = (item) => {
-    console.log("banner")
-    console.log(item)
-
+    // const analytics = new Analytics(ANALYTICS_ID);
+    // analytics.event(new Event('Home', 'Click', 'Banner'));
+    alert("pressed")
     if (item.banner_detail_image != undefined && item.banner_detail_image != '') {
-      // let should_show = this.shouldShowFeatured(this.props.shop)
-      // if (should_show == true) {
       this.setState(
         {
           selected_promotion: item.image,
@@ -604,28 +602,8 @@ export default class Home extends React.Component {
           this.calculateImageDimension(item.banner_detail_image);
         }
       );
-      // }
     }
 
-    // const { navigate } = this.props.navigation
-    // const analytics = new Analytics(ANALYTICS_ID);
-    // analytics.event(new Event('Home', 'Click', 'Featured Promo'));
-    // if (
-    //   item.banner_detail_image != undefined &&
-    //   item.banner_detail_image != ''
-    // ) {
-    //   this.setState(
-    //     {
-    //       selected_promotion: item.banner_detail_image
-    //     },
-    //     function () {
-    //       this.setState({
-    //         isPromoToggle: true
-    //       });
-    //       this.calculateImageDimension(item.banner_detail_image);
-    //     }
-    //   );
-    // }
   };
 
   _toggleDelivery = (value) => {
