@@ -587,16 +587,9 @@ export default class Home extends React.Component {
       item.banner_detail_image != undefined &&
       item.banner_detail_image != ''
     ) {
-      this.setState(
-        {
-          selected_promotion: item.image,
-          isPromoToggle: true
-        },
-        () => {
-          const analytics = new Analytics(ANALYTICS_ID);
-          analytics.event(new Event('Home', 'Click', 'Featured Promo'));
-        }
-      );
+      const selected_promotion = item.image;
+      const isPromoToggle = true;
+      this.setState({ selected_promotion, isPromoToggle });
     }
   };
 
