@@ -734,7 +734,7 @@ export default class Checkout extends React.Component {
         voucherTotalDiscount: discount_cart_total - voucherDeductedTotal
       },
       function () {
-        if (selected_payment == 'credit_card' && f_price <= 0) {
+        if (selected_payment == 'credit_card' && voucherDeductedTotal <= 0) {
           this.setState({ selected_payment: '' });
         }
         // this.check_promotion_trigger();
