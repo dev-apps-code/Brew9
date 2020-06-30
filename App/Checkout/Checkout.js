@@ -1849,7 +1849,14 @@ export default class Checkout extends React.Component {
     });
 
     return (
-      <View style={styles.drinksViewWrapper}>
+      <View
+        style={[
+          styles.drinksViewWrapper,
+          this.props.delivery && {
+            paddingTop: 20
+          }
+        ]}
+      >
         <View style={styles.orderitemsView}>{order_items}</View>
       </View>
     );
@@ -2137,7 +2144,7 @@ export default class Checkout extends React.Component {
                 )}
               </View>
 
-              <CurveSeparator />
+              {!delivery && <CurveSeparator />}
               {this.renderOrderItems(cart, promotions)}
               {this.renderPromotions(promotions)}
               <CurveSeparator />
