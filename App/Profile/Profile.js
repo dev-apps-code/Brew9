@@ -479,7 +479,7 @@ export default class Profile extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'Version',
-			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+			web_url: KURL_INFO + '?page=version&id=' + company_id
 		})
 	}
 
