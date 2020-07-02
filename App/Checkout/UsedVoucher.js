@@ -30,13 +30,13 @@ export default class UsedVoucher extends React.Component {
 		navigate("VoucherDetail", { item: this.props.item, addVoucherAction: this.props.navigation.getParam("addVoucherAction", null) })
 	}
 
-	onTermsPressed = () => {
+	onTermsPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Terms & Condition',
-			web_url: KURL_INFO + '?page=voucher_terms&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=voucher_terms&id=' + company_id,
 		})
 	}
 

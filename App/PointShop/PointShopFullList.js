@@ -100,12 +100,12 @@ export default class PointShopFullList extends React.Component {
 
     }
 
-    onRulesPressed = () => {
+    onRulesPressed = async() => {
         const { navigate } = this.props.navigation
         const { company_id } = this.props
 		navigate("WebCommon", {
 			title: 'Point Rules',
-			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=point_rules&id=' + company_id,
 		})
     }
 

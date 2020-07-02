@@ -68,13 +68,13 @@ export default class VoucherDetail extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	onHowToUsePressed = () => {
+	onHowToUsePressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'How To Use',
-			web_url: KURL_INFO + '?page=voucher_uses&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=voucher_uses&id=' + company_id,
 		})
 	}
 
