@@ -215,7 +215,7 @@ export default class Profile extends React.Component {
 		}
 	}
 
-	onMembershipInfoPressed = () => {
+	onMembershipInfoPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
@@ -224,7 +224,7 @@ export default class Profile extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'Membership Rewards',
-			web_url: KURL_INFO + '?page=membership_info&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=membership_info&id=' + company_id,
 		})
 		// navigate("WebCommon", {
 		// 	title: 'Membership Info',
@@ -364,14 +364,14 @@ export default class Profile extends React.Component {
 		}
 	}
 
-	onLevelInfoPressed = () => {
+	onLevelInfoPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { members, company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "Level Info"))
 		navigate("WebCommon", {
 			title: 'Level Info',
-			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=level_info&id=' + company_id,
 		})
 	}
 
@@ -459,7 +459,7 @@ export default class Profile extends React.Component {
 		navigate("About")
 	}
 
-	onFaqPressed = () => {
+	onFaqPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
@@ -467,19 +467,18 @@ export default class Profile extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'FAQs',
-			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=faqs&id=' + company_id,
 		})
 	}
 
-	onVersionPressed = () => {
+	onVersionPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), 'Version'))
-
 		navigate("WebCommon", {
 			title: 'Version',
-			web_url: KURL_INFO + '?page=version&id=' + company_id
+			web_url: await KURL_INFO() + '?page=version&id=' + company_id
 		})
 	}
 

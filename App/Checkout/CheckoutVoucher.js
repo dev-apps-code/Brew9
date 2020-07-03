@@ -198,7 +198,7 @@ export default class CheckoutVoucher extends React.Component {
         navigate("RedeemPromotion")
     }
 
-    onHowToUsePressed = () => {
+    onHowToUsePressed = async() => {
         const { navigate } = this.props.navigation
         const { company_id, currentMember } = this.props
         const analytics = new Analytics(ANALYTICS_ID)
@@ -206,7 +206,7 @@ export default class CheckoutVoucher extends React.Component {
 
         navigate("WebCommon", {
             title: 'How To Use',
-            web_url: KURL_INFO + '?page=voucher_uses&id=' + company_id,
+            web_url: await KURL_INFO() + '?page=voucher_uses&id=' + company_id,
         })
     }
 

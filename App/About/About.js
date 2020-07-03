@@ -64,7 +64,7 @@ export default class MemberWallet extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	onFaqPressed = () => {
+	onFaqPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id, members } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
@@ -72,7 +72,7 @@ export default class MemberWallet extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'FAQs',
-			web_url: KURL_INFO + '?page=faqs&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=faqs&id=' + company_id,
 		})
 	}
 

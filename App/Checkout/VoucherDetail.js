@@ -67,13 +67,13 @@ export default class VoucherDetail extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	onTermsPressed = () => {
+	onTermsPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Terms & Condition',
-			web_url: KURL_INFO + '?page=voucher_terms&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=voucher_terms&id=' + company_id,
 		})
 	}
 

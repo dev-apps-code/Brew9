@@ -60,13 +60,13 @@ export default class MemberCenter extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	onMemberServicePressed = () => {
+	onMemberServicePressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Member Services',
-			web_url: KURL_INFO + '?page=member_services&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=member_services&id=' + company_id,
 		})
 	}
 
@@ -76,13 +76,13 @@ export default class MemberCenter extends React.Component {
 		navigate("VIPPurchase")
 	}
 
-	onUpgradePressed = () => {
+	onUpgradePressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Brew9',
-			web_url: KURL_INFO + '?page=level_info&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=level_info&id=' + company_id,
 		})
 	}
 
@@ -98,13 +98,13 @@ export default class MemberCenter extends React.Component {
 		navigate("MemberWallet")
 	}
 
-	onOtherLevelBenefitsPressed = () => {
+	onOtherLevelBenefitsPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 
 		navigate("WebCommon", {
 			title: 'Member Services',
-			web_url: KURL_INFO + '?page=level_benefits&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=level_benefits&id=' + company_id,
 		})
 	}
 

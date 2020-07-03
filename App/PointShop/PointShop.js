@@ -71,7 +71,7 @@ export default class PointShop extends React.Component {
 		this.props.navigation.goBack()
 	}
 
-	onPointRulePressed = () => {
+	onPointRulePressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
@@ -79,7 +79,7 @@ export default class PointShop extends React.Component {
 
 		navigate("WebCommon", {
 			title: 'Point Rules',
-			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=point_rules&id=' + company_id,
 		})
 	}
 
@@ -135,14 +135,14 @@ export default class PointShop extends React.Component {
 		navigate("PointShopHistory")
 	}
 
-	onRulesPressed = () => {
+	onRulesPressed = async() => {
 		const { navigate } = this.props.navigation
 		const { company_id } = this.props
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Redemption Shop', getMemberIdForApi(this.props.members), 'Point Rules'))
 		navigate("WebCommon", {
 			title: 'Point Rules',
-			web_url: KURL_INFO + '?page=point_rules&id=' + company_id,
+			web_url: await KURL_INFO() + '?page=point_rules&id=' + company_id,
 		})
 	}
 
