@@ -36,6 +36,7 @@ import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
+import CurveSeparator from '../Components/CurveSeparator';
 @connect(({ members, shops, orders }) => ({
   company_id: members.company_id,
   currentMember: members.profile,
@@ -1848,7 +1849,14 @@ export default class Checkout extends React.Component {
     });
 
     return (
-      <View style={styles.drinksViewWrapper}>
+      <View
+        style={[
+          styles.drinksViewWrapper,
+          this.props.delivery && {
+            paddingTop: 20
+          }
+        ]}
+      >
         <View style={styles.orderitemsView}>{order_items}</View>
       </View>
     );
@@ -1913,7 +1921,7 @@ export default class Checkout extends React.Component {
     if (promotions_item && promotions_item.length > 0) {
       return (
         <View>
-          {this._renderSeparator()}
+          <CurveSeparator />
           <View
             style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}
           >
@@ -2044,18 +2052,6 @@ export default class Checkout extends React.Component {
     );
   };
 
-  _renderSeparator = () => {
-    return (
-      <View style={styles.receiptSectionSeperator}>
-        <Image
-          source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curveSeparator}
-        />
-        <View style={styles.sectionSeperatorView} />
-      </View>
-    );
-  };
-
   renderCheckoutReceipt() {
     const {
       vouchers_to_use,
@@ -2147,24 +2143,22 @@ export default class Checkout extends React.Component {
                   </View>
                 )}
               </View>
-              {this._renderSeparator()}
 
+              {!delivery && <CurveSeparator />}
               {this.renderOrderItems(cart, promotions)}
-
               {this.renderPromotions(promotions)}
-              {this._renderSeparator()}
-
+              <CurveSeparator />
               {this.renderVoucherSection(vouchers_to_use)}
               {this.renderPaymentSection()}
               {this.renderPickupTime()}
-              {this._renderSeparator()}
+              <CurveSeparator />
 
               {delivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
                   : this.renderDeliveryAddress(false)
                 : undefined}
-              {delivery && this._renderSeparator()}
+              {delivery && <CurveSeparator />}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
                   <Text style={styles.totallabelText}>TOTAL</Text>
@@ -4120,27 +4114,5 @@ const styles = StyleSheet.create({
     width: 15 * alpha,
     height: 15 * alpha,
     resizeMode: 'contain'
-  },
-  receiptSectionSeperator: {
-    flex: 1,
-    backgroundColor: DEFAULT_GREY_BACKGROUND,
-    alignContent: 'center',
-    justifyContent: 'center'
-  },
-
-  curveSeparator: {
-    tintColor: 'rgb(245,245,245)',
-    height: 14 * alpha,
-    resizeMode: 'stretch',
-    width: '100%',
-    backgroundColor: 'transparent'
-  },
-
-  sectionSeperatorView: {
-    backgroundColor: 'rgb(234, 234, 234)',
-    position: 'absolute',
-    alignSelf: 'center',
-    width: 300 * alpha,
-    height: 1 * alpha
   }
 });
