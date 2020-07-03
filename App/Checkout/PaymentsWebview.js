@@ -97,8 +97,8 @@ export default class PaymentsWebview extends React.Component {
   }
 
   async _getPaymentURL() {
-    let payment_url = await KPAYMENTYURL();
-    this.setState({payment_url});
+    const payment_url = await KPAYMENTYURL();
+    this.setState({ payment_url });
   }
 
   onBackPressed = () => {
@@ -110,18 +110,31 @@ export default class PaymentsWebview extends React.Component {
   };
 
   render() {
-    const { name, amount, order_id, type, session_id, payment_url } = this.state;
+    const {
+      name,
+      amount,
+      order_id,
+      type,
+      session_id,
+      payment_url
+    } = this.state;
+
+    console.log('payment url ', payment_url);
     return (
       <View style={styles.mainView}>
-        <WebView
-          useWebKit={true}
-          javaScriptEnable={true}
-          onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-          style={styles.webviewWebView}
-          source={{
-            uri: `${payment_url}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}`
-          }}
-        />
+        {payment_url !== null ? (
+          <WebView
+            useWebKit={true}
+            javaScriptEnable={true}
+            onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+            style={styles.webviewWebView}
+            source={{
+              uri: `${payment_url}?name=${name}&amount=${amount}&order_id=${order_id}&type=${type}&session_id=${session_id}`
+            }}
+          />
+        ) : (
+          <ActivityIndicator size="large" />
+        )}
         <Toast
           ref="toast"
           style={{ bottom: windowHeight / 2 - 40 }}
