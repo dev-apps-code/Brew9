@@ -103,13 +103,16 @@ export default class Profile extends React.Component {
 
 	loadappSlogan () {
 		const {selectedShop} = this.props
-			var appSlogan = _.find(
-			selectedShop.response_message,
-			function (obj) {
-			  return obj.key === 'App Slogan';
-			}
-		);
-		console.log(appSlogan)
+		var appSlogan = ''
+		if (selectedShop != undefined) {
+			 appSlogan = _.find(
+				selectedShop.response_message,
+				function (obj) {
+				  return obj.key === 'App Slogan';
+				}
+			);
+		}
+			
 		this.setState({
 			appSlogan: appSlogan != undefined ? appSlogan.text :  "Redefine Coffee. Chocolate. Juice."
 		})
