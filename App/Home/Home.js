@@ -583,13 +583,29 @@ export default class Home extends React.Component {
   }
 
   onBannerPressed = (item, index) => {
-    if (
-      item.banner_detail_image != undefined &&
-      item.banner_detail_image != ''
-    ) {
-      const selected_promotion = item.image;
-      const isPromoToggle = true;
-      this.setState({ selected_promotion, isPromoToggle });
+    const productId = item?.promo_product_id || null;
+
+    if (productId) { // Banner linked to a product
+      const { products } = this.state;
+
+      products.forEach((item, index) => {
+        if (item.id === productId) {
+          if (index < products.length) {
+            this.flatListRef.scrollToIndex({ animated: true, index });
+          }
+
+          this.onCellPress(null, index);
+          return;
+        }
+      });
+    } else { // Banner just a promo image
+      const { banner_detail_image } = item;
+
+      if (banner_detail_image) {
+        const selected_promotion = item.image;
+        const isPromoToggle = true;
+        this.setState({ selected_promotion, isPromoToggle });
+      }
     }
   };
 
@@ -614,7 +630,17 @@ export default class Home extends React.Component {
           msg = delivery_disabled_response?.text || msg;
         }
         this.refs.toast.show(
-          <View style={{justifyContent:'center'}}><Text style={{color:'white', fontFamily: NON_TITLE_FONT,textAlign:'center'}}>{msg}</Text></View>,
+          <View style={{ justifyContent: 'center' }}>
+            <Text
+              style={{
+                color: 'white',
+                fontFamily: NON_TITLE_FONT,
+                textAlign: 'center'
+              }}
+            >
+              {msg}
+            </Text>
+          </View>,
 
           TOAST_DURATION
         );
