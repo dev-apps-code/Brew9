@@ -583,24 +583,29 @@ export default class Home extends React.Component {
   }
 
   onBannerPressed = (item, index) => {
-    // const { navigate } = this.props.navigation
-    const analytics = new Analytics(ANALYTICS_ID);
-    analytics.event(new Event('Home', 'Click', 'Featured Promo'));
-    if (
-      item.banner_detail_image != undefined &&
-      item.banner_detail_image != ''
-    ) {
-      this.setState(
-        {
-          selected_promotion: item.banner_detail_image
-        },
-        function () {
-          this.setState({
-            isPromoToggle: true
-          });
-          this.calculateImageDimension(item.banner_detail_image);
+    const productId = item?.promo_product_id || null;
+
+    if (productId) { // Banner linked to a product
+      const { products } = this.state;
+
+      products.forEach((item, index) => {
+        if (item.id === productId) {
+          if (index < products.length) {
+            this.flatListRef.scrollToIndex({ animated: true, index });
+          }
+
+          this.onCellPress(null, index);
+          return;
         }
-      );
+      });
+    } else { // Banner just a promo image
+      const { banner_detail_image } = item;
+
+      if (banner_detail_image) {
+        const selected_promotion = item.image;
+        const isPromoToggle = true;
+        this.setState({ selected_promotion, isPromoToggle });
+      }
     }
   };
 
@@ -625,7 +630,17 @@ export default class Home extends React.Component {
           msg = delivery_disabled_response?.text || msg;
         }
         this.refs.toast.show(
-          <View style={{justifyContent:'center'}}><Text style={{color:'white', fontFamily: NON_TITLE_FONT,textAlign:'center'}}>{msg}</Text></View>,
+          <View style={{ justifyContent: 'center' }}>
+            <Text
+              style={{
+                color: 'white',
+                fontFamily: NON_TITLE_FONT,
+                textAlign: 'center'
+              }}
+            >
+              {msg}
+            </Text>
+          </View>,
 
           TOAST_DURATION
         );
@@ -1958,7 +1973,11 @@ export default class Home extends React.Component {
         <Toast
           ref="toast"
           style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{color:'white', fontFamily: NON_TITLE_FONT, textAlign:'center'}}
+          textStyle={{
+            color: 'white',
+            fontFamily: NON_TITLE_FONT,
+            textAlign: 'center'
+          }}
         />
         <Brew9Modal
           visible={this.state.visible}
@@ -2016,7 +2035,8 @@ export default class Home extends React.Component {
 
   shouldShowFeatured(shop) {
     const { currentMember } = this.props;
-
+    //jira
+    // this.onFeaturedPromotionPressed(shop.featured_promotion);
     if (shop != null) {
       AsyncStorage.getItem('featured', (err, result) => {
         if (shop.featured_promotion != null) {
@@ -2057,7 +2077,6 @@ export default class Home extends React.Component {
 
   renderFeaturedPromo(shop, cart) {
     let style = undefined;
-
     if (shop !== null) {
       if (shop.can_order == false) {
         if (cart.length > 0) {
