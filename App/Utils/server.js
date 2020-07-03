@@ -19,7 +19,7 @@ const URL = async () => {
 
 export const KSERVERURL = async () => (await URL()) + 'api';
 export const KURL_INFO = async () => (await URL()) + 'info';
-export const KPAYMENTYURL = async () => (await URL()) + 'payment/baiduri';
+export const KPAYMENTYURL = async () => (await URL()) + 'payments/baiduri';
 
 export var KURL_TERMS_OF_SERVICE = '';
 export var KURL_PRIVACY_POLICY = '';
