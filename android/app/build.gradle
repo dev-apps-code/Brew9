@@ -35,8 +35,8 @@ android {
     applicationId 'com.brew9.brew9android'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 15
-    versionName '1.2.3'
+    versionCode 16
+    versionName '1.2.4'
     ndk {
       // We use different `abiFilters` for distributing
       // to be able to bundle old, incompatible SDKs.
