@@ -198,9 +198,8 @@ export default class VerifyUser extends React.Component {
     const { dispatch } = this.props;
     this.setState({ loading: true });
     const callback = (eventObject) => {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
+
       if (eventObject.success) {
         const { navigation } = this.props;
         var obj = eventObject.result;
@@ -215,7 +214,7 @@ export default class VerifyUser extends React.Component {
           // } else {
           //   navigation.navigate('TabGroupOne');
           // }
-          resetTo(this.props, 'TabGroupOne');
+          resetTo(this.props, 'FirstScreen');
         }
       } else {
         this.refs.toast.show(eventObject.message, TOAST_DURATION);
