@@ -31,6 +31,7 @@ import {
   TOAST_DURATION
 } from '../Common/common_style';
 import { resetTo } from '../Utils/route_helper';
+import { DEVELOP_MODE } from '../Common/config';
 
 @connect(({ members }) => ({
   members: members.profile,
@@ -240,28 +241,30 @@ export default class VerifyUser extends React.Component {
    * Tap 10 times within 15 seconds
    */
   handleChangeServerTap = async () => {
-    const now = Date.now();
-    const PRESS_DELAY = 15000;
+    if (DEVELOP_MODE) {
+      const now = Date.now();
+      const PRESS_DELAY = 15000;
 
-    if (this.lastTap && now - this.lastTap < PRESS_DELAY) {
-      // await changeServerIndex(KSERVERURLLIST.length);
-      this.tapCount++;
-      console.log('tapped %s times', this.tapCount);
+      if (this.lastTap && now - this.lastTap < PRESS_DELAY) {
+        // await changeServerIndex(KSERVERURLLIST.length);
+        this.tapCount++;
+        console.log('tapped %s times', this.tapCount);
 
-      if (this.tapCount >= 5 && this.tapCount < 10) {
-        let count = this.tapCount;
-        let tap = count < 9 ? 'taps' : 'tap';
-        let toastText = `You are ${10 - count} ${tap} away to change server.`;
-        this.refs.tapToast.show(toastText, DURATION.FOREVER);
-      }
-      if (this.tapCount == 10) {
-        this.refs.tapToast.close();
-        this.props.navigation.push('ChangeServer');
+        if (this.tapCount >= 5 && this.tapCount < 10) {
+          let count = this.tapCount;
+          let tap = count < 9 ? 'taps' : 'tap';
+          let toastText = `You are ${10 - count} ${tap} away to change server.`;
+          this.refs.tapToast.show(toastText, DURATION.FOREVER);
+        }
+        if (this.tapCount == 10) {
+          this.refs.tapToast.close();
+          this.props.navigation.push('ChangeServer');
+          this.tapCount = 1;
+        }
+      } else {
+        this.lastTap = now;
         this.tapCount = 1;
       }
-    } else {
-      this.lastTap = now;
-      this.tapCount = 1;
     }
   };
 
