@@ -1,11 +1,3 @@
-//
-//  Profile
-//  Brew9
-//
-//  Created by .
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated, AppState, Modal, TouchableWithoutFeedback, TextInput, Platform } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
@@ -93,7 +85,7 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadappSlogan()
+		this.loadAppSlogan()
 		this.loadProfile()
 		this.loopShimmer()
 		this.timer = setInterval(() => this.loopShimmer(), 3000)
@@ -101,18 +93,14 @@ export default class Profile extends React.Component {
 		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
-	loadappSlogan () {
-		const {selectedShop} = this.props
-			var appSlogan = _.find(
-			selectedShop.response_message,
-			function (obj) {
-			  return obj.key === 'App Slogan';
-			}
-		);
-		console.log(appSlogan)
-		this.setState({
-			appSlogan: appSlogan != undefined ? appSlogan.text :  "Redefine Coffee. Chocolate. Juice."
-		})
+	loadAppSlogan () {
+    const responses = new Map();
+    this.props.selectedShop?.response_message?.map((i) => {
+      responses.set(i.key, i.text);
+    });
+
+		const appSlogan = responses.get('App Slogan') || "Redefine Coffee. Chocolate. Juice.";
+		this.setState({ appSlogan });
 	}
 
 	componentWillUnmount() {
