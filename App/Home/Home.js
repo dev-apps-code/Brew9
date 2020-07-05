@@ -313,7 +313,10 @@ export default class Home extends React.Component {
     this.setState({ isPromoToggle: false });
   }
 
+  unmounted = false;
+
   componentDidMount() {
+    this.unmounted = false;
     Keyboard.dismiss();
     this.props.navigation.setParams({
       onQrScanPressed: this.onQrScanPressed
@@ -329,6 +332,8 @@ export default class Home extends React.Component {
   }
 
   componentWillUnmount() {
+    this.unmounted = true; // test variable
+
     this.removeNavigationListener();
     this.focusListener.remove();
     AppState.removeEventListener('change', this._handleAppStateChange);
@@ -410,17 +415,14 @@ export default class Home extends React.Component {
   };
 
   loadShops() {
-    const { dispatch, company_id, location } = this.props;
-    const { first_promo_popup } = this.state;
+    if (!this.unmounted) {
+      const { dispatch, company_id, location } = this.props;
+      const { first_promo_popup } = this.state;
 
-    const callback = (eventObject) => {
-      // this.setState({ loading: false })
-      if (eventObject.success) {
-        this.setState(
-          {
-            menu_banners: eventObject.result.menu_banners
-          },
-          function () {
+      const callback = (eventObject) => {
+        if (eventObject.success) {
+          const { menu_banners } = eventObject.result;
+          this.setState({ menu_banners }, () => {
             this.check_promotion_trigger();
 
             const { refresh_products } = this.state;
@@ -432,22 +434,22 @@ export default class Home extends React.Component {
                 this.shouldShowFeatured(this.props.shop);
               }
             }
-          }
-        );
-      }
-    };
+          });
+        }
+      };
 
-    var latitude = location != null ? location.coords.latitude : null;
-    var longitude = location != null ? location.coords.longitude : null;
+      var latitude = location != null ? location.coords.latitude : null;
+      var longitude = location != null ? location.coords.longitude : null;
 
-    const obj = new NearestShopRequestObject(latitude, longitude);
-    obj.setUrlId(company_id);
-    dispatch(
-      createAction('shops/loadShops')({
-        object: obj,
-        callback
-      })
-    );
+      const obj = new NearestShopRequestObject(latitude, longitude);
+      obj.setUrlId(company_id);
+      dispatch(
+        createAction('shops/loadShops')({
+          object: obj,
+          callback
+        })
+      );
+    }
   }
 
   loadStoreProducts() {
@@ -585,7 +587,8 @@ export default class Home extends React.Component {
   onBannerPressed = (item, index) => {
     const productId = item?.promo_product_id || null;
 
-    if (productId) { // Banner linked to a product
+    if (productId) {
+      // Banner linked to a product
       const { products } = this.state;
 
       products.forEach((item, index) => {
@@ -598,7 +601,8 @@ export default class Home extends React.Component {
           return;
         }
       });
-    } else { // Banner just a promo image
+    } else {
+      // Banner just a promo image
       const { banner_detail_image } = item;
 
       if (banner_detail_image) {
