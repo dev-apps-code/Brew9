@@ -138,7 +138,7 @@ export default class Home extends React.Component {
     this.state = this._getState();
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
-    this.toogleCart = this.toogleCart.bind(this);
+    this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
     this.initializeOneSignal();
   }
@@ -271,7 +271,7 @@ export default class Home extends React.Component {
       if (prevProps.toggle_update_count !== this.props.toggle_update_count) {
         setTimeout(
           function () {
-            this.toogleCart(true, true);
+            this.toggleCartView(true, true);
           }.bind(this),
           50
         );
@@ -741,7 +741,7 @@ export default class Home extends React.Component {
     return finalheight;
   }
 
-  toogleCart = (isUpdate, toggleOn) => {
+  toggleCartView = (isUpdate, toggleOn) => {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'View Cart'));
 
@@ -890,7 +890,7 @@ export default class Home extends React.Component {
 
   onCellPress = (item, index) => {
     if (this.state.isCartToggle) {
-      this.toogleCart(false, true);
+      this.toggleCartView(false, true);
     }
     this.setState({ modalVisible: true, selected_index: index });
   };
@@ -1258,6 +1258,7 @@ export default class Home extends React.Component {
 
     if (cart.length > 0) {
       dispatch(createAction('orders/resetCart')());
+      this.toggleCartView(false, false);
     }
 
     for (var index in this.state.products) {
@@ -2178,7 +2179,7 @@ export default class Home extends React.Component {
                 <View style={styles.shopppingCartView}>
                   <TouchableOpacity
                     onPress={() =>
-                      this.toogleCart(false, !this.state.isCartToggle)
+                      this.toggleCartView(false, !this.state.isCartToggle)
                     }
                     style={styles.shopppingCartButton}
                   >
