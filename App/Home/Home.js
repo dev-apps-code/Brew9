@@ -609,7 +609,7 @@ export default class Home extends React.Component {
     } else {
       // Banner just a promo image
       const { banner_detail_image } = item;
-      console.log('item pressed ', item);
+      
       if (banner_detail_image) {
         const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
