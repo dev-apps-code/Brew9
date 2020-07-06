@@ -441,6 +441,11 @@ export default class Home extends React.Component {
       var latitude = location != null ? location.coords.latitude : null;
       var longitude = location != null ? location.coords.longitude : null;
 
+      /**
+       * Notice:
+       * Feature to load nearest shop is temporarily disabled. We load shop
+       * despite location of the user.
+       */
       const obj = new NearestShopRequestObject(latitude, longitude);
       obj.setUrlId(company_id);
       dispatch(
