@@ -614,9 +614,8 @@ export default class Home extends React.Component {
         const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
 
-        this.setState({ isPromoToggle, selected_promotion }, () => {
-          this.calculateImageDimension(selected_promotion);
-        });
+        this.calculateImageDimension(selected_promotion);
+        this.setState({ isPromoToggle, selected_promotion });
       }
     }
   };
@@ -2494,7 +2493,7 @@ const styles = StyleSheet.create({
   },
   bannerImage: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flex: 1
   },
   bannerShortImage: {
