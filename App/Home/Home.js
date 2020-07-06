@@ -609,11 +609,14 @@ export default class Home extends React.Component {
     } else {
       // Banner just a promo image
       const { banner_detail_image } = item;
-
+      console.log('item pressed ', item);
       if (banner_detail_image) {
-        const selected_promotion = item.image;
+        const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
-        this.setState({ selected_promotion, isPromoToggle });
+
+        this.setState({ isPromoToggle, selected_promotion }, () => {
+          this.calculateImageDimension(selected_promotion);
+        });
       }
     }
   };
@@ -2046,7 +2049,7 @@ export default class Home extends React.Component {
     const { currentMember } = this.props;
     //jira
     // this.onFeaturedPromotionPressed(shop.featured_promotion);
-    if (shop != null) {
+    if (shop) {
       AsyncStorage.getItem('featured', (err, result) => {
         if (shop.featured_promotion != null) {
           if (result == null || result != shop.featured_promotion.id) {
@@ -2241,7 +2244,9 @@ export default class Home extends React.Component {
       image_isLong,
       selected_promotion
     } = this.state;
-    if (selected_promotion) {
+    if (selected_promotion && isPromoToggle) {
+      console.log('is long ', image_isLong);
+      console.log('image_horizontal ', image_isHorizontal);
       return (
         <Modal
           visible={isPromoToggle}
