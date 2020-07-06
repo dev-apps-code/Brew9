@@ -195,9 +195,7 @@ export default class Home extends React.Component {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'ScanQr'));
 
-    if (currentMember != null) {
-      navigation.navigate('ScanQr');
-    } else {
+    if (currentMember == null) {
       this.refs.toast.show(
         'You need to login before you can topup',
         TOAST_DURATION,
@@ -208,7 +206,10 @@ export default class Home extends React.Component {
           });
         }
       );
+      return;
     }
+
+    navigation.navigate('ScanQr');
   };
 
   getLocationAndLoadShops = async () => {

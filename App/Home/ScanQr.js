@@ -48,7 +48,7 @@ export default class ScanQr extends React.Component {
       headerLeft: (
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
-            onPress={params.onBackPressed ? params.onBackPressed : () => null}
+            onPress={() => navigation.goBack()}
             style={styles.navigationBarItem}
           >
             <Image
@@ -68,20 +68,17 @@ export default class ScanQr extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-      hasCameraPermission: null,
-      scanned: false
-    };
-    this.loadScanStatus = this.loadScanStatus.bind(this);
+    this.state = this._getState();
   }
 
-  async componentDidMount() {
-    this.getPermissionsAsync();
-    this.props.navigation.setParams({
-      onBackPressed: this.onBackPressed
-    });
+  _getState = () => ({
+    loading: false,
+    hasCameraPermission: null,
+    scanned: false
+  });
 
+  componentDidMount() {
+    this.getPermissionsAsync();
     this.loadQrCodeScan('tup_b959498a-a383-4a47-bd03-51511f655320');
   }
 
@@ -93,8 +90,9 @@ export default class ScanQr extends React.Component {
 
   loadScanStatus(qr_code) {
     const { dispatch, currentMember } = this.props;
-
+    console.log('called ');
     const callback = (eventObject) => {
+      console.log('eventObject ', eventObject);
       if (eventObject.success) {
         if (eventObject?.message) {
           this.refs.toast.show(eventObject.message, 1500, () => {
@@ -109,6 +107,7 @@ export default class ScanQr extends React.Component {
         }
         this.setState({ loading: false });
       } else {
+        console.log('failed');
         setTimeout(
           function () {
             this.loadScanStatus(qr_code);
@@ -132,6 +131,7 @@ export default class ScanQr extends React.Component {
 
     this.setState({ loading: true });
     const callback = (eventObject) => {
+      console.log('eventObject ', eventObject);
       if (eventObject.success) {
         setTimeout(
           function () {
@@ -143,6 +143,8 @@ export default class ScanQr extends React.Component {
         this.setState({ loading: false });
         if (eventObject?.message) {
           this.refs.toast.show(eventObject.message, TOAST_DURATION);
+        } else {
+          this.refs.toast.show('QR failed.', TOAST_DURATION);
         }
       }
     };
@@ -158,13 +160,8 @@ export default class ScanQr extends React.Component {
 
   getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
-  };
-
-  componentDidUpdate() {}
-
-  onBackPressed = () => {
-    this.props.navigation.goBack();
+    const hasCameraPermission = status === 'granted';
+    this.setState({ hasCameraPermission });
   };
 
   render() {
