@@ -609,7 +609,7 @@ export default class Home extends React.Component {
     } else {
       // Banner just a promo image
       const { banner_detail_image } = item;
-      
+
       if (banner_detail_image) {
         const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
@@ -2245,8 +2245,6 @@ export default class Home extends React.Component {
       selected_promotion
     } = this.state;
     if (selected_promotion && isPromoToggle) {
-      console.log('is long ', image_isLong);
-      console.log('image_horizontal ', image_isHorizontal);
       return (
         <Modal
           visible={isPromoToggle}
