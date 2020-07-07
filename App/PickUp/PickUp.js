@@ -274,9 +274,9 @@ export default class PickUp extends React.Component {
       } else {
         if (responses.size > 0) {
           if (item.paid == true) {
-            paid_response = responses.get('Not Collected Order');
+            paid_order_message = responses.get('Not Collected Order');
           } else {
-            unpaid_response = responses.get('Pending Payment (Remarks)');
+            unpaid_order_message = responses.get('Pending Payment (Remarks)');
           }
         }
 
