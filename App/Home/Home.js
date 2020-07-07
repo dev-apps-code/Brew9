@@ -138,7 +138,7 @@ export default class Home extends React.Component {
     this.state = this._getState();
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
-    this.toogleCart = this.toogleCart.bind(this);
+    this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
     this.initializeOneSignal();
   }
@@ -272,7 +272,7 @@ export default class Home extends React.Component {
       if (prevProps.toggle_update_count !== this.props.toggle_update_count) {
         setTimeout(
           function () {
-            this.toogleCart(true, true);
+            this.toggleCartView(true, true);
           }.bind(this),
           50
         );
@@ -612,9 +612,11 @@ export default class Home extends React.Component {
       const { banner_detail_image } = item;
 
       if (banner_detail_image) {
-        const selected_promotion = item.image;
+        const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
-        this.setState({ selected_promotion, isPromoToggle });
+
+        this.calculateImageDimension(selected_promotion);
+        this.setState({ isPromoToggle, selected_promotion });
       }
     }
   };
@@ -742,7 +744,7 @@ export default class Home extends React.Component {
     return finalheight;
   }
 
-  toogleCart = (isUpdate, toggleOn) => {
+  toggleCartView = (isUpdate, toggleOn) => {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'View Cart'));
 
@@ -891,7 +893,7 @@ export default class Home extends React.Component {
 
   onCellPress = (item, index) => {
     if (this.state.isCartToggle) {
-      this.toogleCart(false, true);
+      this.toggleCartView(false, true);
     }
     this.setState({ modalVisible: true, selected_index: index });
   };
@@ -1259,6 +1261,7 @@ export default class Home extends React.Component {
 
     if (cart.length > 0) {
       dispatch(createAction('orders/resetCart')());
+      this.toggleCartView(false, false);
     }
 
     for (var index in this.state.products) {
@@ -2047,7 +2050,7 @@ export default class Home extends React.Component {
     const { currentMember } = this.props;
     //jira
     // this.onFeaturedPromotionPressed(shop.featured_promotion);
-    if (shop != null) {
+    if (shop) {
       AsyncStorage.getItem('featured', (err, result) => {
         if (shop.featured_promotion != null) {
           if (result == null || result != shop.featured_promotion.id) {
@@ -2179,7 +2182,7 @@ export default class Home extends React.Component {
                 <View style={styles.shopppingCartView}>
                   <TouchableOpacity
                     onPress={() =>
-                      this.toogleCart(false, !this.state.isCartToggle)
+                      this.toggleCartView(false, !this.state.isCartToggle)
                     }
                     style={styles.shopppingCartButton}
                   >
@@ -2242,7 +2245,7 @@ export default class Home extends React.Component {
       image_isLong,
       selected_promotion
     } = this.state;
-    if (selected_promotion) {
+    if (selected_promotion && isPromoToggle) {
       return (
         <Modal
           visible={isPromoToggle}
@@ -2492,7 +2495,7 @@ const styles = StyleSheet.create({
   },
   bannerImage: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flex: 1
   },
   bannerShortImage: {
