@@ -138,8 +138,6 @@ export default class ScanQr extends React.Component {
         this.setState({ loading: false });
         if (eventObject?.message) {
           this.refs.toast.show(eventObject.message, TOAST_DURATION);
-        } else {
-          this.refs.toast.show('QR failed.', TOAST_DURATION);
         }
       }
     };
