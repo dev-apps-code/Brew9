@@ -79,20 +79,17 @@ export default class ScanQr extends React.Component {
 
   componentDidMount() {
     this.getPermissionsAsync();
-    this.loadQrCodeScan('tup_b959498a-a383-4a47-bd03-51511f655320');
+    // this.loadQrCodeScan('tup_b959498a-a383-4a47-bd03-51511f655320');
   }
 
-  onSuccessfulScan = () => {
-    const { navigate } = this.props.navigation;
-    this.props.navigation.goBack();
-    navigate('Profile');
-  };
+  onSuccessfulScan() {
+    const message = 'Successfully topped up.';
+    this.props.navigate('Profile', { message });
+  }
 
   loadScanStatus(qr_code) {
     const { dispatch, currentMember } = this.props;
-    console.log('called ');
     const callback = (eventObject) => {
-      console.log('eventObject ', eventObject);
       if (eventObject.success) {
         if (eventObject?.message) {
           this.refs.toast.show(eventObject.message, 1500, () => {
@@ -107,7 +104,6 @@ export default class ScanQr extends React.Component {
         }
         this.setState({ loading: false });
       } else {
-        console.log('failed');
         setTimeout(
           function () {
             this.loadScanStatus(qr_code);
@@ -131,7 +127,6 @@ export default class ScanQr extends React.Component {
 
     this.setState({ loading: true });
     const callback = (eventObject) => {
-      console.log('eventObject ', eventObject);
       if (eventObject.success) {
         setTimeout(
           function () {
@@ -158,11 +153,11 @@ export default class ScanQr extends React.Component {
     );
   }
 
-  getPermissionsAsync = async () => {
+  async getPermissionsAsync() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     const hasCameraPermission = status === 'granted';
     this.setState({ hasCameraPermission });
-  };
+  }
 
   render() {
     const { hasCameraPermission, scanned, currentMember } = this.state;
