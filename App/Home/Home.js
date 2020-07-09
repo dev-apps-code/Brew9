@@ -53,6 +53,9 @@ import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
 import AnimationLoading from '../Components/AnimationLoading';
+import Brew9Toast from '../Components/Brew9Toast';
+
+
 @connect(({ members, shops, config, orders }) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -329,6 +332,13 @@ export default class Home extends React.Component {
 
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+
+ 
+    this.refs.toast.show('test message', TOAST_DURATION, this.onToastClose)
+  }
+
+  onToastClose = () => {
+    alert("closed")
   }
 
   componentWillUnmount() {
@@ -1982,7 +1992,7 @@ export default class Home extends React.Component {
         ) : null}
 
         {this.renderGallery()}
-        <Toast
+        {/* <Toast
           ref="toast"
           style={{ bottom: windowHeight / 2 - 40 }}
           textStyle={{
@@ -1990,7 +2000,10 @@ export default class Home extends React.Component {
             fontFamily: NON_TITLE_FONT,
             textAlign: 'center'
           }}
-        />
+        /> */}
+
+        <Brew9Toast ref="toast" onClose={this.onToastClose}/>
+        
         <Brew9Modal
           visible={this.state.visible}
           cancelable={true}
