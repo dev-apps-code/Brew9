@@ -13,7 +13,7 @@ const SERVERS = [
   'dev10.brew9.co/',
 ];
 
-const DEFAULT_SERVER = 'dev.brew9.co/';
+const DEFAULT_SERVER = 'app.brew9.co/';
 
 const PROTOCOLS = ['https://'];
 
