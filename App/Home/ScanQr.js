@@ -19,6 +19,7 @@ import { createAction, dispatch } from '../Utils/index'
 import HudLoading from "../Components/HudLoading"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, shops }) => ({
 	currentMember: members.profile,
@@ -181,7 +182,7 @@ export default class ScanQr extends React.Component {
             {scanned && (
                 <Button title={'Tap to Scan Again'} onPress={() => this.setState({ scanned: false })} />
             )}
-            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+            <Brew9Toast ref="toast" />
             <HudLoading isLoading={this.state.loading}/>
             </View>
         )

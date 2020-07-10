@@ -62,6 +62,7 @@ import Brew9Modal from '../Components/Brew9Modal';
 import LogoutRequestObject from '../Requests/logout_request_object';
 import { DEVELOP_MODE } from '../Common/config';
 import { logout } from '../Utils/route_helper';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
   members: members.profile
@@ -1019,16 +1020,11 @@ export default class MemberProfile extends React.Component {
               }
             />
           </View>
-          <Toast
-            ref="toast"
-            style={{ bottom: windowHeight / 2 - 40 }}
-            textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-          />
-
+          <Brew9Toast ref="toast" />
           <Toast
             ref="tapToast"
+            // style={{ bottom: windowHeight / 2 - 40 }}
             textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-            style={{ bottom: windowHeight / 2 - 40 }}
             position="bottom"
             defaultCloseDelay={0}
           />

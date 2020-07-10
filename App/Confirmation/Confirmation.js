@@ -18,6 +18,7 @@ import CountDown from 'react-native-countdown-component'
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
     members: members.profile,
@@ -78,7 +79,7 @@ export default class Confirmation extends React.Component {
             if (eventObject.success) {
                 this.props.navigation.navigate("Home")
             }else{
-                this.refs.toast.show(eventObject.message);
+                this.refs.toast.show(eventObject.message, DURATION);
             }
             this.setState({
                 loading: false,
@@ -100,7 +101,7 @@ export default class Confirmation extends React.Component {
             if (eventObject.success) {
                 
             }else{
-                this.refs.toast.show(eventObject.message);
+                this.refs.toast.show(eventObject.message, DURATION);
             }
             this.setState({
                 loading: false,
@@ -177,7 +178,7 @@ export default class Confirmation extends React.Component {
                     style={styles.reSendButtonText}>Re-send</Text>
             </TouchableOpacity>
             }
-            <Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+             <Brew9Toast ref="toast" />
 			<HudLoading isLoading={this.state.loading}/>
          
         </View>

@@ -7,7 +7,7 @@ import {
   LIGHT_GREY
 } from '../Common/size';
 import { View, Text, StyleSheet } from 'react-native';
-import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
+import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
 import Toast from 'react-native-easy-toast';
 
 class Brew9Toast extends Component {
@@ -16,9 +16,12 @@ class Brew9Toast extends Component {
         <View style={styles.toastContainer}>
           <Text style={styles.toastText}>{message}</Text>
         </View>,
-        duration,
+        duration != undefined ? duration : TOAST_DURATION,
         () => {
-            onClose()
+            // onClose()
+            onClose != undefined
+            ? onClose()
+            : null
         }
       );
   }

@@ -50,6 +50,7 @@ import RadioForm, {
   RadioButtonLabel
 } from 'react-native-simple-radio-button';
 import SwitchSelector from 'react-native-switch-selector';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
@@ -795,11 +796,8 @@ export default class AddShippingAddress extends React.Component {
         </TouchableOpacity>
         {this.toogleDeliveryArea()}
 
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
+        <Brew9Toast ref="toast" />
+
       </View>
     );
   }
