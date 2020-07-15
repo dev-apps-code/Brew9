@@ -231,8 +231,6 @@ export default class Home extends React.Component {
       const { monitorLocation } = this.state;
 
       if (monitorLocation == null) {
-        this.setState({ monitorLocation: mLocation });
-
         const mLocation = Location.watchPositionAsync(
           {
             distanceInterval: 1000,
@@ -243,7 +241,10 @@ export default class Home extends React.Component {
           },
           (error) => console.log(error)
         );
+      this.setState({ monitorLocation: mLocation });
+
       }
+
     } catch (error) {
       // Error retrieving data
     }
