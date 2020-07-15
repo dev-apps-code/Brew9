@@ -153,7 +153,7 @@ export default class ValidVoucher extends React.Component {
 						</View>
 						<Text
 							numberOfLines={2}
-							style={styles.descriptionText}>{this.props.description}sssssssssssssssssssssssssssssssssssssssssssssss</Text>
+							style={styles.descriptionText}>{this.props.description}</Text>
 						<Image
 							source={require("./../../assets/images/line-16-copy-5.png")}
 							style={styles.lineImage} />
