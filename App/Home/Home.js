@@ -906,10 +906,9 @@ export default class Home extends React.Component {
       var product_index = this.state.products.findIndex(
         (element) => element.id == item.id && element.clazz == 'product'
       );
+      
       var item = this.state.products[product_index];
-
       var selected_cart = cart[index];
-
       var cartItem = {
         clazz: item.clazz,
         id: item.id,
@@ -931,7 +930,7 @@ export default class Home extends React.Component {
           cartItem.quantity = 1;
         }
 
-        this.state.products[product_index] = item;
+        // this.state.products[product_index] = item;
 
         if (index >= 0) {
           cart[index] = cartItem;
@@ -956,9 +955,13 @@ export default class Home extends React.Component {
           item.quantity = null;
           cartItem.quantity = null;
           item.total_quantity = 0;
+
+          if (cart.length == 1) {
+            this.onClearPress();
+          }
         }
 
-        this.state.products[product_index] = item;
+        // this.state.products[product_index] = item;
 
         if (index >= 0) {
           cart[index] = cartItem;
@@ -998,7 +1001,7 @@ export default class Home extends React.Component {
           cartItem.quantity = 1;
         }
 
-        this.state.products[index] = item;
+        // this.state.products[index] = item;
 
         if (cart_index >= 0) {
           cart[cart_index] = cartItem;
@@ -1221,27 +1224,17 @@ export default class Home extends React.Component {
       parseInt(product.total_quantity) + parseInt(this.state.select_quantity);
 
     if (search_cart) {
-      search_cart.quantity =
-        parseInt(search_cart.quantity) + parseInt(this.state.select_quantity);
-      this.setState({ select_quantity: 1 });
-      dispatch(
-        createAction('orders/updateCart')({
-          cart: cart
-        })
-      );
+      const { quantity } = search_cart;
+      const { select_quantity } = this.state;
+      search_cart.quantity = parseInt(quantity) + parseInt(select_quantity);
+      dispatch(createAction('orders/updateCart')({ cart }));
     } else {
-      dispatch(
-        createAction('orders/updateCart')({
-          cart: cart.concat(cartItem)
-        })
-      );
-      this.setState({
-        products: this.state.products,
-        select_quantity: 1
-      });
+      cart = cart.concat(cartItem);
+      dispatch(createAction('orders/updateCart')({ cart }));
     }
 
     this.setState({
+      select_quantity: 1,
       modalVisible: false
     });
   };
@@ -1256,12 +1249,12 @@ export default class Home extends React.Component {
   };
 
   onClearPress = () => {
-    const { dispatch, cart } = this.props;
+    const { dispatch } = this.props;
+    const promotionText = '';
 
-    if (cart.length > 0) {
-      dispatch(createAction('orders/resetCart')());
-      this.toggleCartView(false, false);
-    }
+    dispatch(createAction('orders/resetCart')());
+    dispatch(createAction('orders/updatePromotionText')({ promotionText }));
+    this.toggleCartView(false, false);
 
     for (var index in this.state.products) {
       this.state.products[index].quantity = null;
