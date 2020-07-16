@@ -207,7 +207,6 @@ export default class VoucherDetail extends React.Component {
                 top: 0 * alpha,
                 bottom: 0 * alpha,
                 justifyContent: 'center',
-                backgroundColor: 'pink'
               }}
             >
               <View style={styles.cellcontentView}>
@@ -468,7 +467,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginRight: 60 * alpha,
+    marginRight: 65 * alpha,
     backgroundColor: 'transparent',
     alignSelf: 'flex-start'
   },

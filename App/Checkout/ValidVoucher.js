@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginRight: 70 * alpha,
+		marginRight: 65 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 	},
