@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App/PickUp/PickUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/PickUp/PickUp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +34,12 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="42" />
@@ -125,10 +131,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup" timestamp="1594120507492">
+    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup" timestamp="1594976124119">
       <screen x="0" y="23" width="1680" height="947" />
     </state>
-    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup/0.23.1680.947@0.23.1680.947" timestamp="1594120507492" />
+    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup/0.23.1680.947@0.23.1680.947" timestamp="1594976124119" />
     <state x="497" y="226" width="670" height="676" key="search.everywhere.popup/0.23.1680.952@0.23.1680.952" timestamp="1593046383243" />
   </component>
   <component name="masterDetails">
