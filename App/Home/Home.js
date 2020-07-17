@@ -1233,6 +1233,7 @@ export default class Home extends React.Component {
       dispatch(createAction('orders/updateCart')({ cart }));
     }
 
+    this.check_promotion_trigger();
     this.setState({
       select_quantity: 1,
       modalVisible: false
