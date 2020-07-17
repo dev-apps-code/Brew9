@@ -6,10 +6,15 @@ import {
   DEFAULT_SERVER,
   DEFAULT_PROTOCOL
 } from '../Constants/server_list';
+import { DEVELOP_MODE } from '../Common/config';
 
 const URL = async () => {
-  let server =
-    (await AsyncStorage.getItem('selected_server_url')) || DEFAULT_SERVER;
+  let server = DEFAULT_SERVER;
+  if (DEVELOP_MODE) {
+    let selectedServerUrl = await AsyncStorage.getItem('selected_server_url');
+    server = selectedServerUrl || DEFAULT_SERVER;
+  }
+
   console.log('server ', server);
   let protocol =
     (await AsyncStorage.getItem('selected_server_protocol')) ||
