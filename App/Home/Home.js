@@ -250,6 +250,13 @@ export default class Home extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    const { shop } = this.props;
+    if (shop != null && shop.all_promotions != null) {
+      console.log('Trigger on Update');
+      if (prevProps.cart !== this.props.cart) {
+        this.check_promotion_trigger();
+      }
+    }
     if (prevProps.isFocused !== this.props.isFocused) {
       if (prevProps.location !== this.props.location) {
         if (prevProps.location != null) {
@@ -906,7 +913,7 @@ export default class Home extends React.Component {
       var product_index = this.state.products.findIndex(
         (element) => element.id == item.id && element.clazz == 'product'
       );
-      
+
       var item = this.state.products[product_index];
       var selected_cart = cart[index];
       var cartItem = {
