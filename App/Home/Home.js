@@ -2031,7 +2031,7 @@ export default class Home extends React.Component {
         );
       }
 
-      if (shop.can_order == false && shop.alert_message != null) {
+      else if (shop.can_order == false && shop.alert_message != null) {
         const template = shop.alert_message;
         this.renderBottom = true;
         return (
@@ -2039,6 +2039,10 @@ export default class Home extends React.Component {
             <Text style={styles.alertViewText}>{template}</Text>
           </View>
         );
+      }
+
+      else{
+        this.renderBottom = false;
       }
     }
 
@@ -3402,7 +3406,7 @@ const styles = StyleSheet.create({
   },
   businessHourText: {
     backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
+    // color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
