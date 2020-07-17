@@ -152,6 +152,7 @@ export default class ValidVoucher extends React.Component {
 							{this.renderPrice()}
 						</View>
 						<Text
+							numberOfLines={2}
 							style={styles.descriptionText}>{this.props.description}</Text>
 						<Image
 							source={require("./../../assets/images/line-16-copy-5.png")}
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
 		fontStyle: "normal",
 		fontWeight: "normal",
 		textAlign: "left",
-		marginRight: 40 * alpha,
+		marginRight: 65 * alpha,
 		backgroundColor: "transparent",
 		alignSelf: "flex-start",
 	},
