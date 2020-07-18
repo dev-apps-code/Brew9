@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export function headerStyle(params) {
+export function headerStyle(navigation) {
+    const { params = {} } = navigation.state;
   return {
     headerTitle: (
       <Text
@@ -54,7 +55,7 @@ export function headerStyle(params) {
     headerLeft: (
       <View style={styles.headerLeftContainer}>
         <TouchableOpacity
-          onPress={params.onBackPressed ? params.onBackPressed : () => null}
+          onPress={()=>navigation.goBack()}
           style={styles.navigationBarItem}
         >
           <Image
