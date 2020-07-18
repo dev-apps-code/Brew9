@@ -2,8 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88f003c1-5fcc-4328-8813-c6b6cda67109" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Profile/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/App/Profile/Profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/assets/shell-app-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/assets/shell-app-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/assets/shell-app.bundle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/assets/shell-app.bundle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/host/exp/exponent/generated/AppConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/host/exp/exponent/generated/AppConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/brew9.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/brew9.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/brew9/Supporting/EXBuildConstants.json" beforeDir="false" afterPath="$PROJECT_DIR$/ios/brew9/Supporting/EXBuildConstants.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/brew9/Supporting/EXBuildConstants.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/brew9/Supporting/EXBuildConstants.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/brew9/Supporting/EXBuildConstants.plist.bak" beforeDir="false" afterPath="$PROJECT_DIR$/ios/brew9/Supporting/EXBuildConstants.plist.bak" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/brew9/Supporting/shell-app-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/ios/brew9/Supporting/shell-app-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/brew9/Supporting/shell-app.bundle" beforeDir="false" afterPath="$PROJECT_DIR$/ios/brew9/Supporting/shell-app.bundle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +58,14 @@
     <option name="width" value="1544" />
     <option name="height" value="800" />
   </component>
+  <component name="ProjectId" id="1eoDohl6uBj0SFDFls14gd7hv0f" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -124,17 +142,24 @@
       <workItem from="1570578230333" duration="921000" />
       <workItem from="1571882333755" duration="165000" />
       <workItem from="1576048396320" duration="5000" />
+      <workItem from="1594979234510" duration="2699000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup" timestamp="1594976124119">
+    <state x="532" y="246" width="669" height="488" key="find.popup" timestamp="1594984536095">
       <screen x="0" y="23" width="1680" height="947" />
     </state>
-    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup/0.23.1680.947@0.23.1680.947" timestamp="1594976124119" />
+    <state x="532" y="245" width="600" height="486" key="find.popup/0.23.1680.944@0.23.1680.944" timestamp="1594979855676" />
+    <state x="532" y="246" width="669" height="488" key="find.popup/0.23.1680.947@0.23.1680.947" timestamp="1594984536095" />
+    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup" timestamp="1594984522941">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="497" y="224" width="670" height="671" key="search.everywhere.popup/0.23.1680.944@0.23.1680.944" timestamp="1594979862697" />
+    <state x="497" y="225" width="670" height="673" key="search.everywhere.popup/0.23.1680.947@0.23.1680.947" timestamp="1594984522941" />
     <state x="497" y="226" width="670" height="676" key="search.everywhere.popup/0.23.1680.952@0.23.1680.952" timestamp="1593046383243" />
   </component>
   <component name="masterDetails">

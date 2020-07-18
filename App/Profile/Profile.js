@@ -481,8 +481,12 @@ export default class Profile extends React.Component {
 	onFeedbackPressed = () => {
 		const analytics = new Analytics(ANALYTICS_ID)
 		analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), 'Feedback'))
+		var os_string = Platform.OS;
+		if (Platform.OS === 'ios') {
+			os_string = 'iOS'
+		}
 
-		Linking.openURL('mailto:feedback@brew9.co?subject=Brew9 app feedback' + ' (' + Platform.OS + '-' + getAppVersion() + ')')
+		Linking.openURL('mailto:feedback@brew9.co?subject=Brew9 app feedback' + ' (' + os_string + '-' + getAppVersion() + ')')
 	}
 
 	onAddressPress = () => {
