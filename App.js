@@ -32,9 +32,9 @@ import MembershipInfo from './App/MembershipInfo/MembershipInfo';
 import PickUp from './App/PickUp/PickUp';
 import MemberProfile from './App/MemberProfile/MemberProfile';
 import Home from './App/Home/Home';
-import SelectShop from './App/SelectShop/SelectShop';
 import Favourite from './App/SelectShop/Favourite';
 import Outlet from './App/SelectShop/Outlet';
+import { headerStyle } from './App/Components/brew9NavigationHeader';
 
 
 
@@ -124,55 +124,13 @@ const selectShopTabs = createMaterialTopTabNavigator(
     },
   },
   {
-    initialRouteName: 'Outlet'
+    initialRouteName: 'Outlet',
   },
-  {
-    tabBarPosition: 'bottom',
-    swipeEnabled: false,
-    gesturesEnabled: false,
-    animationEnabled: true,
-    tabBarOptions: {
-      allowFontScaling: false,
-      lazy: false,
-      showIcon: true,
-      activeTintColor: TABBAR_ACTIVE_TINT,
-      inactiveTintColor: TABBAR_INACTIVE_TINT,
-      indicatorStyle: {
-        backgroundColor: 'transparent'
-      },
-      style: {
-        backgroundColor: 'rgb(224, 224, 224)'
-      }
-    },
-    defaultNavigationOptions: ({ navigation }) => {
-      // const { routeName } = navigation.state;
-
-      // switch (routeName) {
-      //   case 'PushOrder':
-      //     return Home.tabBarItemOptions(navigation, store);
-      //   case 'PushPickup':
-      //     return PickUp.tabBarItemOptions(navigation, store);
-      //   case 'PushInbox':
-      //     return Notification.tabBarItemOptions(navigation, store);
-      //   case 'PushMission':
-      //     return MissionCenter.tabBarItemOptions(navigation, store);
-      //   case 'PushProfile':
-      //     return Profile.tabBarItemOptions(navigation, store);
-      // }
-    }
-  }
 );
 
 selectShopTabs.navigationOptions = ({ navigation }) => {
-  let tabBarVisible = false;
-  // for (let i = 0; i < navigation.state.routes.length; i++) {
-  //   if (navigation.state.routes[i].routeName != 'Home') {
-  //     tabBarVisible = false;
-  //   }
-  // }
-  return {
-    tabBarVisible
-  };
+  const { params = {} } = navigation.state;
+  return headerStyle(params)
 
 };
 
@@ -184,12 +142,6 @@ const PushOrder = createStackNavigator(
     },
     selectShopTabs: {
       screen: selectShopTabs,
-      navigationOptions: {
-        gesturesEnabled: false,
-      }
-    },
-    Favourite:{
-      screen: Favourite
     },
     PaymentsWebview: {
       screen: PaymentsWebview

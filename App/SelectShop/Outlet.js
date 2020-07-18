@@ -73,7 +73,25 @@ import {
     }
   }
   
-
+  Outlet.navigationOptions = {
+    tabBarOptions: {
+      activeTintColor: 'skyblue',
+      inactiveTintColor: 'black',
+      style: {
+        backgroundColor: 'white'
+      },
+      tabStyle: {
+        height: alpha * 5,
+        marginBottom: alpha * 4
+      },
+      labelStyle: {},
+      indicatorStyle: {
+        backgroundColor: 'skyblue',
+        width: '10%',
+        left: '20%'
+      }
+    }
+  };
   
   const styles = StyleSheet.create({
     mainView: {
