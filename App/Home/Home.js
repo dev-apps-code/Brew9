@@ -324,6 +324,12 @@ export default class Home extends React.Component {
   unmounted = false;
 
   componentDidMount() {
+    
+    //toast notification
+    this.refs.toast.show("Please select an outlet that is near you", TOAST_DURATION, () => {
+      this.props.navigation.navigate('SelectShop');
+    });
+
     this.unmounted = false;
     Keyboard.dismiss();
     this.props.navigation.setParams({

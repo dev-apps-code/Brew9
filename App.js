@@ -32,6 +32,8 @@ import MembershipInfo from './App/MembershipInfo/MembershipInfo';
 import PickUp from './App/PickUp/PickUp';
 import MemberProfile from './App/MemberProfile/MemberProfile';
 import Home from './App/Home/Home';
+import SelectShop from './App/SelectShop/SelectShop';
+
 import VIPPurchase from './App/VIPPurchase/VIPPurchase';
 import PointHistory from './App/PointHistory/PointHistory';
 import Transaction from './App/Transaction/Transaction';
@@ -113,6 +115,9 @@ const PushOrder = createStackNavigator(
   {
     Home: {
       screen: Home
+    },
+    SelectShop: {
+      screen: SelectShop
     },
     PaymentsWebview: {
       screen: PaymentsWebview
