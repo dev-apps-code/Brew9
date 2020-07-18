@@ -9,7 +9,7 @@ import * as Font from 'expo-font';
 import { DangerZone, AppLoading } from 'expo';
 import React from 'react';
 import * as Sentry from 'sentry-expo';
-import { createBottomTabNavigator, NavigationActions } from 'react-navigation';
+import { createBottomTabNavigator, NavigationActions, createMaterialTopTabNavigator } from 'react-navigation';
 import Constants from 'expo-constants';
 import {
   createStackNavigator,
@@ -33,6 +33,10 @@ import PickUp from './App/PickUp/PickUp';
 import MemberProfile from './App/MemberProfile/MemberProfile';
 import Home from './App/Home/Home';
 import SelectShop from './App/SelectShop/SelectShop';
+import Favourite from './App/SelectShop/Favourite';
+import Outlet from './App/SelectShop/Outlet';
+
+
 
 import VIPPurchase from './App/VIPPurchase/VIPPurchase';
 import PointHistory from './App/PointHistory/PointHistory';
@@ -110,14 +114,82 @@ const VerifyUserStack = createStackNavigator(
     header: 'none'
   }
 );
+const selectShopTabs = createMaterialTopTabNavigator(
+  {
+    Favourite: {
+      screen: Favourite
+    },
+    Outlet: {
+      screen: Outlet
+    },
+  },
+  {
+    initialRouteName: 'Outlet'
+  },
+  {
+    tabBarPosition: 'bottom',
+    swipeEnabled: false,
+    gesturesEnabled: false,
+    animationEnabled: true,
+    tabBarOptions: {
+      allowFontScaling: false,
+      lazy: false,
+      showIcon: true,
+      activeTintColor: TABBAR_ACTIVE_TINT,
+      inactiveTintColor: TABBAR_INACTIVE_TINT,
+      indicatorStyle: {
+        backgroundColor: 'transparent'
+      },
+      style: {
+        backgroundColor: 'rgb(224, 224, 224)'
+      }
+    },
+    defaultNavigationOptions: ({ navigation }) => {
+      // const { routeName } = navigation.state;
+
+      // switch (routeName) {
+      //   case 'PushOrder':
+      //     return Home.tabBarItemOptions(navigation, store);
+      //   case 'PushPickup':
+      //     return PickUp.tabBarItemOptions(navigation, store);
+      //   case 'PushInbox':
+      //     return Notification.tabBarItemOptions(navigation, store);
+      //   case 'PushMission':
+      //     return MissionCenter.tabBarItemOptions(navigation, store);
+      //   case 'PushProfile':
+      //     return Profile.tabBarItemOptions(navigation, store);
+      // }
+    }
+  }
+);
+
+selectShopTabs.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = false;
+  // for (let i = 0; i < navigation.state.routes.length; i++) {
+  //   if (navigation.state.routes[i].routeName != 'Home') {
+  //     tabBarVisible = false;
+  //   }
+  // }
+  return {
+    tabBarVisible
+  };
+
+};
+
 
 const PushOrder = createStackNavigator(
   {
     Home: {
       screen: Home
     },
-    SelectShop: {
-      screen: SelectShop
+    selectShopTabs: {
+      screen: selectShopTabs,
+      navigationOptions: {
+        gesturesEnabled: false,
+      }
+    },
+    Favourite:{
+      screen: Favourite
     },
     PaymentsWebview: {
       screen: PaymentsWebview
@@ -550,6 +622,7 @@ const TabGroupOne = createBottomTabNavigator(
     }
   }
 );
+
 
 const AuthenticationStack = createStackNavigator(
   {
