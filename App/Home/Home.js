@@ -135,11 +135,14 @@ export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = this._getState();
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+
     this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
+    this._onShopNamePressed = this._onShopNamePressed.bind(this);
+
+    this.state = this._getState();
     this.initializeOneSignal();
   }
 
@@ -211,6 +214,10 @@ export default class Home extends React.Component {
     }
   };
 
+  _onShopNamePressed = () => {
+    this.props.navigation.navigate('SelectShop');
+  };
+
   getLocationAndLoadShops = async () => {
     const { dispatch } = this.props;
     try {
@@ -241,10 +248,8 @@ export default class Home extends React.Component {
           },
           (error) => console.log(error)
         );
-      this.setState({ monitorLocation: mLocation });
-
+        this.setState({ monitorLocation: mLocation });
       }
-
     } catch (error) {
       // Error retrieving data
     }
@@ -324,11 +329,14 @@ export default class Home extends React.Component {
   unmounted = false;
 
   componentDidMount() {
-    
     //toast notification
-    this.refs.toast.show("Please select an outlet that is near you", 1, () => {
-      this.props.navigation.navigate('selectShopTabs');
-    });
+    this.refs.toast.show(
+      'Please select an outlet that is near you',
+      1000,
+      () => {
+        this.props.navigation.navigate('SelectShop');
+      }
+    );
 
     this.unmounted = false;
     Keyboard.dismiss();
@@ -1409,6 +1417,7 @@ export default class Home extends React.Component {
   dismissProduct() {
     this.setState({ modalVisible: false });
   }
+
   getVariantPrice = (price) => {
     let sen = (price + '').split('.');
     if (sen[1] == 0) {
@@ -1730,9 +1739,11 @@ export default class Home extends React.Component {
               {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
 							style={styles.branchButton}> */}
-              <Text style={styles.branchButtonText}>
-                {shop ? shop.name : ''}
-              </Text>
+              <TouchableOpacity onPress={this._onShopNamePressed}>
+                <Text style={styles.branchButtonText}>
+                  {shop ? shop.name : ''}
+                </Text>
+              </TouchableOpacity>
               {/* <Image
 							source={require("./../../assets/images/group-22.png")}
 							style={styles.branchButtonImage}/> */}
@@ -2037,9 +2048,7 @@ export default class Home extends React.Component {
             <Text style={styles.alertViewText}>{shop.alert_message}</Text>
           </View>
         );
-      }
-
-      else if (shop.can_order == false && shop.alert_message != null) {
+      } else if (shop.can_order == false && shop.alert_message != null) {
         const template = shop.alert_message;
         this.renderBottom = true;
         return (
@@ -2047,9 +2056,7 @@ export default class Home extends React.Component {
             <Text style={styles.alertViewText}>{template}</Text>
           </View>
         );
-      }
-
-      else{
+      } else {
         this.renderBottom = false;
       }
     }

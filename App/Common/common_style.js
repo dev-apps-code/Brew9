@@ -8,6 +8,7 @@ export const LIGHT_GREY = 'rgb(130, 130, 130)';
 export const LIGHT_BLUE = 'rgb(181, 219, 229)';
 export const LIGHT_BLUE_BACKGROUND = 'rgb(218, 247, 255)';
 export const DEFAULT_GREY_BACKGROUND = 'rgb(228, 228, 228)';
+export const LIGHT_GREY_BACKGROUND = 'rgb(243, 243, 243)';
 export const TINT_COLOR = 'rgb(0, 194, 236)';
 export const RED = 'rgb(239, 81, 81)';
 export const DISABLED_COLOR = 'rgb(191, 191, 191)';
@@ -16,6 +17,7 @@ export const TABBAR_INACTIVE_TINT_CROWN = 'rgb(135, 135, 135)';
 export const TABBAR_ACTIVE_TINT = 'black';
 export const BUTTONBOTTOMPADDING = Platform.OS === 'ios' ? 40 * alpha : 0;
 export const TOAST_DURATION = 3000;
+export const DEFAULT_BORDER_RADIUS = 6 * alpha;
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: 'blue',

@@ -17,7 +17,9 @@ import {
   PRIMARY_COLOR,
   TOAST_DURATION,
   LIGHT_GREY,
-  LIGHT_BLUE
+  LIGHT_BLUE,
+  DEFAULT_BORDER_RADIUS,
+  TINT_COLOR
 } from '../Common/common_style';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
 
@@ -30,70 +32,52 @@ export default class ShopDetails extends Component {
     };
   }
 
-  componentDidMount() {}
-
-  renderItems(list, test, horizontal, size) {
-    const items = list.map((value, value_key) => {
-      return (
-        <Item
-          test={test}
-          key={value_key}
-          type={value.type}
-          name={value.name}
-          image={value.image}
-          horizontal={horizontal}
-          size={size}
-        />
-      );
-    });
-    return items;
-  }
-
   render() {
     let { details } = this.props;
-    console.log(details);
     return (
       <View style={styles.shopDetailView}>
-        <View style={styles.view_1}>
-          <View style={styles.view_3}>
-            <Text style={styles.text_2}>{details.name}</Text>
+        <View style={styles.detailsView}>
+          <View style={styles.detailView}>
+            <Text style={styles.shopName}>{details.name}</Text>
             <View style={styles.openView}>
-              <Text style={styles.text_1}>
-                {details.open ? 'Open' : 'Close'}
+              <Text style={styles.openText}>
+                {details.open ? 'Open' : 'Closed'}
               </Text>
             </View>
           </View>
-          <View style={styles.view_3}>
-            <Text style={styles.text_3}>Delivery | 3.5 km 26 mins</Text>
+          <View style={styles.detailView}>
+            <Text style={styles.serviceInfoDetails}>
+              Delivery | 3.5 km 26 mins
+            </Text>
           </View>
-          <View style={styles.view_4}>
+          <View style={styles.detailTextContainer}>
             <Image
               source={require('./../../assets/images/location.png')}
-              style={styles.pinImage}
+              style={styles.image}
             />
-            <Text numberOfLines={2} style={styles.text_4}>
+            <Text numberOfLines={2} style={styles.detailText}>
               complete long random address here, test purpose static only, 2
               lines maxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             </Text>
           </View>
-          <View style={styles.view_4}>
+          <View style={styles.detailTextContainer}>
             <Image
               source={require('./../../assets/images/location.png')}
-              style={styles.pinImage}
+              style={styles.image}
             />
-            <Text numberOfLines={2} style={styles.text_4}>
+            <Text numberOfLines={2} style={styles.detailText}>
               10:00 - 22:30
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.view_2}>
-            <View style={styles.button_1}>
-                <Text style={styles.text_5}>Order Now</Text>
-            </View>
-            <Image
-              source={require('./../../assets/images/star.png')}
-              style={styles.favoriteImage}
-            />
+        <TouchableOpacity style={styles.orderNowView}>
+          <View style={styles.orderButton}>
+            <Text style={styles.orderNowText}>Order Now</Text>
+          </View>
+          {/* <Image
+            source={require('./../../assets/images/star.png')}
+            style={styles.favoriteImage}
+          /> */}
         </TouchableOpacity>
       </View>
     );
@@ -103,11 +87,12 @@ export default class ShopDetails extends Component {
 const styles = StyleSheet.create({
   shopDetailView: {
     height: alpha * 130,
-    width: '100%',
     backgroundColor: 'white',
     marginBottom: alpha * 10,
     flexDirection: 'row',
-    padding: alpha * 10
+    justifyContent: 'space-evenly',
+    padding: alpha * 10,
+    borderRadius: DEFAULT_BORDER_RADIUS
   },
   openView: {
     height: alpha * 15,
@@ -117,74 +102,79 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  view_1: {
-    // borderWidth: 2,
-    // borderColor: 'yellow',
-    flex: 4
+  detailsView: {
+    flex: 4,
+    flexWrap: 'wrap'
   },
-  view_2: {
-    // borderWidth: 2,
-    // borderColor: 'yellow',
+  orderNowView: {
     flex: 2,
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  view_3: {
-    flexDirection: 'row',
+  detailView: {
+    flexDirection: 'row'
   },
-  view_4: {
+  detailTextContainer: {
     flexDirection: 'row',
+    paddingRight: 10,
     height: alpha * 30,
-    alignItems:'center',
-    width: alpha * 200
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
-  button_1: {
+  orderButton: {
     width: '100%',
-    height: alpha  * 40,
+    height: alpha * 40,
     borderLeftWidth: 1,
     borderLeftColor: 'rgb(240,240,240)',
-    alignItems:"center",
-    justifyContent:'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   //text
-  text_1: {
+  openText: {
     marginRight: alpha * 5,
     fontSize: alpha * 9,
     color: 'skyblue'
   },
-  text_2: {
-    marginRight: alpha * 5,
-    fontSize: alpha * 12
+  shopName: {
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    marginRight: 5 * alpha
   },
-  text_3: {
-    fontSize: alpha * 9,
-    marginBottom: alpha * 10
+  serviceInfoDetails: {
+    fontSize: 10 * fontAlpha,
+    marginBottom: 10 * alpha
   },
-  text_4: {
-    fontSize: alpha * 10,
-    color: LIGHT_GREY
+  detailText: {
+    color: LIGHT_GREY,
+    flexWrap: 'wrap',
+    fontSize: 12 * fontAlpha,
+    fontFamily: NON_TITLE_FONT,
+    width: '80%'
   },
-  text_5 : {
-    fontSize: alpha * 12,
-    color: 'skyblue'
+  orderNowText: {
+    color: TINT_COLOR,
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontWeight: 'bold'
   },
 
   //image
-  pinImage: {
-    width: 9 * alpha,
-    height: 9 * alpha,
-    // tintColor: 'rgb(240,240,240)'
-    tintColor: 'skyblue',
-    marginRight: alpha * 5
+  image: {
+    width: 10 * alpha,
+    height: 10 * alpha,
+    tintColor: LIGHT_GREY,
+    marginRight: 10,
+    padding: 8 * alpha,
+    resizeMode: 'contain'
   },
   favoriteImage: {
     width: 9 * alpha,
     height: 9 * alpha,
-    // tintColor: 'rgb(240,240,240)'
-    tintColor: 'skyblue',
+    tintColor: TINT_COLOR,
     marginRight: alpha * 5,
-    position:'absolute',
-    right:0,
+    position: 'absolute',
+    right: 0,
     bottom: 0
-  },
+  }
 });
