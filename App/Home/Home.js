@@ -200,16 +200,14 @@ export default class Home extends React.Component {
     if (currentMember != null) {
       navigation.navigate('ScanQr');
     } else {
-      this.refs.toast.show(
-        'You need to login before you can topup',
-        TOAST_DURATION,
-        () => {
-          navigation.navigate('VerifyUser', {
-            returnToRoute: navigation.state,
-            check_promotion_trigger: () => this.check_promotion_trigger()
-          });
-        }
-      );
+      const message = 'You need to login before you can topup';
+      const callback = () => {
+        navigation.navigate('VerifyUser', {
+          returnToRoute: navigation.state,
+          check_promotion_trigger: () => this.check_promotion_trigger()
+        });
+      };
+      this.refs.toast.show(message, TOAST_DURATION, callback);
     }
   };
 
@@ -243,10 +241,8 @@ export default class Home extends React.Component {
           },
           (error) => console.log(error)
         );
-      this.setState({ monitorLocation: mLocation });
-
+        this.setState({ monitorLocation: mLocation });
       }
-
     } catch (error) {
       // Error retrieving data
     }
@@ -339,7 +335,6 @@ export default class Home extends React.Component {
 
     AppState.addEventListener('change', this._handleAppStateChange);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-
   }
 
   componentWillUnmount() {
@@ -475,9 +470,11 @@ export default class Home extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
-          this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+          const { message } = eventObject;
+          const callback = () => {
             Linking.openURL(eventObject.result.url);
-          });
+          };
+          this.refs.toast.show(message, TOAST_DURATION, callback);
         } else {
           this.setState(
             {
@@ -651,10 +648,7 @@ export default class Home extends React.Component {
 
           msg = delivery_disabled_response?.text || msg;
         }
-        this.refs.toast.show(
-          msg,
-          TOAST_DURATION
-        );
+        this.refs.toast.show(msg, TOAST_DURATION);
       });
       return;
     }
@@ -2016,9 +2010,7 @@ export default class Home extends React.Component {
             <Text style={styles.alertViewText}>{shop.alert_message}</Text>
           </View>
         );
-      }
-
-      else if (shop.can_order == false && shop.alert_message != null) {
+      } else if (shop.can_order == false && shop.alert_message != null) {
         const template = shop.alert_message;
         this.renderBottom = true;
         return (
@@ -2026,9 +2018,7 @@ export default class Home extends React.Component {
             <Text style={styles.alertViewText}>{template}</Text>
           </View>
         );
-      }
-
-      else{
+      } else {
         this.renderBottom = false;
       }
     }

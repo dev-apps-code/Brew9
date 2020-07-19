@@ -1000,10 +1000,7 @@ export default class Checkout extends React.Component {
                 insufficient = insufficient_response.text;
               }
             }
-            this.refs.toast.show(
-              insufficient,
-              TOAST_DURATION + 1000
-            );
+            this.refs.toast.show(insufficient, TOAST_DURATION + 1000);
 
             return;
           }
@@ -1019,10 +1016,8 @@ export default class Checkout extends React.Component {
             var pickup = Moment(pick_up_time, 'h:mm');
             var now = Moment(new Date(), 'HH:mm');
             if (pickup < now && pick_up_status == 'Pick Later') {
-              this.refs.toast.show(
-                'Pick up time is not available',
-                TOAST_DURATION
-              );
+              const message = 'Pick up time is not available';
+              this.refs.toast.show(message, TOAST_DURATION);
               return;
             }
             // else if (pickup < opening) {
@@ -1030,10 +1025,8 @@ export default class Checkout extends React.Component {
             // 	return
             // }
             else if (pickup > closing) {
-              this.refs.toast.show(
-                'We are closed at this time.',
-                TOAST_DURATION
-              );
+              const message = 'We are closed at this time.';
+              this.refs.toast.show(message, TOAST_DURATION);
               return;
             }
           }
@@ -2218,7 +2211,7 @@ export default class Checkout extends React.Component {
         {this.renderPaymentMethod()}
         {this.renderOrderForSelector()}
         <HudLoading isLoading={this.state.loading} />
-        <Brew9Toast ref="toast"/>
+        <Brew9Toast ref="toast" />
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}
