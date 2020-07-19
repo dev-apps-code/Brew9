@@ -1,37 +1,30 @@
 import React, { Component } from 'react';
-import {
-  alpha,
-  fontAlpha,
-  windowWidth,
-  windowHeight,
-  LIGHT_GREY
-} from '../Common/size';
 import { View, Text, StyleSheet } from 'react-native';
-import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
 import Toast from 'react-native-easy-toast';
+import { windowHeight } from '../Common/size';
+import { NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
 
 class Brew9Toast extends Component {
-  show(message, duration, onClose) {
-    this.refs.toast.show(
-        <View style={styles.toastContainer}>
-          <Text style={styles.toastText}>{message}</Text>
-        </View>,
-        duration != undefined ? duration : TOAST_DURATION,
-        () => {
-            // onClose()
-            onClose != undefined
-            ? onClose()
-            : null
-        }
-      );
-  }
+  renderMessage = (message) => (
+    <View style={styles.toastContainer}>
+      <Text style={styles.toastText}>{message}</Text>
+    </View>
+  );
+
+  show = (message, duration, callback) => {
+    if (typeof duration === 'undefined') {
+      duration = TOAST_DURATION;
+    }
+
+    if (typeof callback === 'undefined') {
+      callback = () => {};
+    }
+
+    this.refs.toast.show(this.renderMessage(message), duration, callback);
+  };
 
   render() {
-    return (
-      <Toast
-        ref="toast"
-      />
-    );
+    return <Toast ref="toast" />;
   }
 }
 
@@ -47,4 +40,5 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 });
+
 export default Brew9Toast;
