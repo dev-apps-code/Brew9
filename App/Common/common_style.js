@@ -17,6 +17,7 @@ export const TABBAR_INACTIVE_TINT_CROWN = 'rgb(135, 135, 135)';
 export const TABBAR_ACTIVE_TINT = 'black';
 export const BUTTONBOTTOMPADDING = Platform.OS === 'ios' ? 40 * alpha : 0;
 export const TOAST_DURATION = 3000;
+export const DEFAULT_BORDER_RADIUS = 6 * alpha;
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: 'blue',
