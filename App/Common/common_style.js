@@ -8,6 +8,7 @@ export const LIGHT_GREY = 'rgb(130, 130, 130)';
 export const LIGHT_BLUE = 'rgb(181, 219, 229)';
 export const LIGHT_BLUE_BACKGROUND = 'rgb(218, 247, 255)';
 export const DEFAULT_GREY_BACKGROUND = 'rgb(228, 228, 228)';
+export const LIGHT_GREY_BACKGROUND = 'rgb(243, 243, 243)';
 export const TINT_COLOR = 'rgb(0, 194, 236)';
 export const RED = 'rgb(239, 81, 81)';
 export const DISABLED_COLOR = 'rgb(191, 191, 191)';
