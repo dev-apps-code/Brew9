@@ -140,7 +140,7 @@ const PushOrder = createStackNavigator(
     Home: {
       screen: Home
     },
-    selectShopTabs: {
+    SelectShop: {
       screen: selectShopTabs,
     },
     PaymentsWebview: {
