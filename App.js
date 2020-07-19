@@ -115,12 +115,12 @@ const VerifyUserStack = createStackNavigator(
   }
 );
 const selectShopTabs = createMaterialTopTabNavigator(
-  {
-    Favourite: {
-      screen: Favourite
-    },
+  { 
     Outlet: {
       screen: Outlet
+    },
+    Favourite: {
+      screen: Favourite
     },
   },
   {

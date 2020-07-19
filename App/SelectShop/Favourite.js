@@ -41,6 +41,7 @@ import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
 import CurveSeparator from '../Components/CurveSeparator';
+import ShopList from '../Components/ShopList'
 @connect(({ members, shops, orders }) => ({
   company_id: members.company_id,
   currentMember: members.profile,
@@ -61,10 +62,72 @@ import CurveSeparator from '../Components/CurveSeparator';
 export default class Favourite extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showMap: true,
+      shopList: [
+        {
+          id: 3,
+          name: 'Bunny Good',
+          short_address: '404 Ward Street',
+          longitude: '114.89',
+          latitude: '4.8',
+          district: 'Brunei-Muara',
+          area: 'Area A',
+          proximity_meters: null,
+          open: true
+        },
+        {
+          id: 1,
+          name: 'ブルー九 Flagship Store',
+          short_address: 'The Walk, Beribi',
+          longitude: '114.897994',
+          latitude: '4.888659',
+          district: 'No district',
+          area: 'No area',
+          proximity_meters: null,
+          open: true
+        },
+        {
+          id: 1,
+          name: 'ブルー九 Flagship Store',
+          short_address: 'The Walk, Beribi',
+          longitude: '114.897994',
+          latitude: '4.888659',
+          district: 'No district',
+          area: 'No area',
+          proximity_meters: null,
+          open: true
+        },
+        {
+          id: 1,
+          name: 'ブルー九 Flagship Store',
+          short_address: 'The Walk, Beribi',
+          longitude: '114.897994',
+          latitude: '4.888659',
+          district: 'No district',
+          area: 'No area',
+          proximity_meters: null,
+          open: true
+        },
+        {
+          id: 1,
+          name: 'ブルー九 Flagship Store',
+          short_address: 'The Walk, Beribi',
+          longitude: '114.897994',
+          latitude: '4.888659',
+          district: 'No district',
+          area: 'No area',
+          proximity_meters: null,
+          open: true
+        }
+      ]
+    };
   }
-
   render() {
-    return <View style={styles.mainView}></View>;
+    return <View style={styles.mainView}>
+        <ShopList shopList={this.state.shopList} />
+
+    </View>;
   }
 }
 
@@ -91,7 +154,7 @@ Favourite.navigationOptions = {
 const styles = StyleSheet.create({
   mainView: {
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   headerLeftContainer: {},
   navigationBarItem: {},
