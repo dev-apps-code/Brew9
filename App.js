@@ -129,8 +129,8 @@ const selectShopTabs = createMaterialTopTabNavigator(
 );
 
 selectShopTabs.navigationOptions = ({ navigation }) => {
-  const { params = {} } = navigation.state;
-  return headerStyle(params)
+  
+  return headerStyle(navigation)
 
 };
 
