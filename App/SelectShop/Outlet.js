@@ -1,46 +1,17 @@
-import {
-  Animated,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  ScrollView,
-  Linking,
-  SafeAreaView
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
-
 import {
-  TITLE_FONT,
   NON_TITLE_FONT,
-  BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND,
-  PRIMARY_COLOR,
-  TOAST_DURATION,
-  LIGHT_GREY
+  LIGHT_GREY,
+  TINT_COLOR,
+  TABBAR_INACTIVE_TINT
 } from '../Common/common_style';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-@connect(({ members, shops, orders }) => ({
-  company_id: members.company_id,
-  currentMember: members.profile,
-  members: members,
-  selectedShop: shops.selectedShop,
-  cart_total_quantity: orders.cart_total_quantity,
-  promotion_trigger_count: orders.promotion_trigger_count,
-  cart: orders.cart,
-  cart_order_id: orders.cart_order_id,
-  promotions: orders.promotions,
-  promotion_ids: orders.promotion_ids,
-  cart_total: orders.cart_total,
-  discount_cart_total: orders.discount_cart_total,
-  location: members.location,
-  delivery: members.delivery,
-  shippingAddress: members.shippingAddress
-}))
+@connect(({ members, shops, orders }) => ({}))
 export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
@@ -170,21 +141,22 @@ export default class Outlet extends React.Component {
 
 Outlet.navigationOptions = {
   tabBarOptions: {
-    activeTintColor: 'skyblue',
-    inactiveTintColor: 'black',
+    activeTintColor: TINT_COLOR,
+    inactiveTintColor: TABBAR_INACTIVE_TINT,
     style: {
       backgroundColor: 'white'
     },
-    tabStyle: {
-      height: alpha * 5,
-      marginBottom: alpha * 4
+    tabStyle: {},
+    labelStyle: {
+      fontSize: 12 * fontAlpha,
+      fontFamily: NON_TITLE_FONT
     },
-    labelStyle: {},
     indicatorStyle: {
-      backgroundColor: 'skyblue',
+      backgroundColor: TINT_COLOR,
       width: '10%',
       left: '20%'
-    }
+    },
+    upperCaseLabel: false
   }
 };
 
