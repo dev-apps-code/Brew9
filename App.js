@@ -9,7 +9,7 @@ import * as Font from 'expo-font';
 import { DangerZone, AppLoading } from 'expo';
 import React from 'react';
 import * as Sentry from 'sentry-expo';
-import { createBottomTabNavigator, NavigationActions } from 'react-navigation';
+import { createBottomTabNavigator, NavigationActions, createMaterialTopTabNavigator } from 'react-navigation';
 import Constants from 'expo-constants';
 import {
   createStackNavigator,
@@ -32,6 +32,12 @@ import MembershipInfo from './App/MembershipInfo/MembershipInfo';
 import PickUp from './App/PickUp/PickUp';
 import MemberProfile from './App/MemberProfile/MemberProfile';
 import Home from './App/Home/Home';
+import Favourite from './App/SelectShop/Favourite';
+import Outlet from './App/SelectShop/Outlet';
+import { headerStyle } from './App/Components/brew9NavigationHeader';
+
+
+
 import VIPPurchase from './App/VIPPurchase/VIPPurchase';
 import PointHistory from './App/PointHistory/PointHistory';
 import Transaction from './App/Transaction/Transaction';
@@ -108,11 +114,34 @@ const VerifyUserStack = createStackNavigator(
     header: 'none'
   }
 );
+const selectShopTabs = createMaterialTopTabNavigator(
+  { 
+    Outlet: {
+      screen: Outlet
+    },
+    Favourite: {
+      screen: Favourite
+    },
+  },
+  {
+    initialRouteName: 'Outlet',
+  },
+);
+
+selectShopTabs.navigationOptions = ({ navigation }) => {
+  
+  return headerStyle(navigation)
+
+};
+
 
 const PushOrder = createStackNavigator(
   {
     Home: {
       screen: Home
+    },
+    selectShopTabs: {
+      screen: selectShopTabs,
     },
     PaymentsWebview: {
       screen: PaymentsWebview
@@ -545,6 +574,7 @@ const TabGroupOne = createBottomTabNavigator(
     }
   }
 );
+
 
 const AuthenticationStack = createStackNavigator(
   {
