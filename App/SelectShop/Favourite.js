@@ -3,9 +3,9 @@ import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import { connect } from 'react-redux';
 import {
-  NON_TITLE_FONT,
   TINT_COLOR,
-  TABBAR_INACTIVE_TINT
+  TABBAR_INACTIVE_TINT,
+  TITLE_FONT
 } from '../Common/common_style';
 import ShopList from '../Components/ShopList';
 @connect(({ members, shops, orders }) => ({}))
@@ -91,8 +91,8 @@ Favourite.navigationOptions = {
     },
     tabStyle: {},
     labelStyle: {
-      fontSize: 12 * fontAlpha,
-      fontFamily: NON_TITLE_FONT
+      fontSize: 14 * fontAlpha,
+      fontFamily: TITLE_FONT
     },
     indicatorStyle: {
       backgroundColor: TINT_COLOR,

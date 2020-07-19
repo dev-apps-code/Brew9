@@ -4,11 +4,11 @@ import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
 import {
-  NON_TITLE_FONT,
   DEFAULT_GREY_BACKGROUND,
   LIGHT_GREY,
   TINT_COLOR,
-  TABBAR_INACTIVE_TINT
+  TABBAR_INACTIVE_TINT,
+  TITLE_FONT
 } from '../Common/common_style';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 @connect(({ members, shops, orders }) => ({}))
@@ -148,8 +148,8 @@ Outlet.navigationOptions = {
     },
     tabStyle: {},
     labelStyle: {
-      fontSize: 12 * fontAlpha,
-      fontFamily: NON_TITLE_FONT
+      fontSize: 14 * fontAlpha,
+      fontFamily: TITLE_FONT
     },
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
