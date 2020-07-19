@@ -15,35 +15,44 @@ import {
   DEFAULT_GREY_BACKGROUND,
   PRIMARY_COLOR,
   TOAST_DURATION,
-  LIGHT_GREY
+  LIGHT_GREY,
+  LIGHT_GREY_BACKGROUND
 } from '../Common/common_style';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import ShopDetails from './ShopDetails';
+import { FlatList } from 'react-native-gesture-handler';
 
 export default class ShopList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      recentlyPlayed: [],
-      featuredArtist: []
-    };
+
+    this.renderItem = this.renderItem.bind(this);
+
+    this.state = this._getState();
   }
+
+  _getState = () => ({
+    recentlyPlayed: [],
+    featuredArtist: []
+  });
 
   componentDidMount() {}
 
-  renderShopDetails(shopList) {
-    const items = shopList.map((value, value_key) => {
-      return <ShopDetails key={value_key} details={value} />;
-    });
-    return items;
-  }
+  renderItem = ({ item, index }) => {
+    return <ShopDetails details={item} />;
+  };
 
   render() {
     let { shopList } = this.props;
     return (
       <View style={styles.mainView}>
         <View style={styles.shopDetailView}>
-          <ScrollView>{this.renderShopDetails(shopList)}</ScrollView>
+          <FlatList
+            data={shopList}
+            renderItem={this.renderItem}
+            showsVerticalScrollIndicator={false}
+            style={styles.shopItems}
+          />
         </View>
       </View>
     );
@@ -53,9 +62,10 @@ export default class ShopList extends Component {
 const styles = StyleSheet.create({
   mainView: {
     flex: 1,
-    backgroundColor: DEFAULT_GREY_BACKGROUND,
-    // borderWidth: 3,
-    // borderColor: 'yellow',
+    backgroundColor: LIGHT_GREY_BACKGROUND,
     padding: alpha * 10
+  },
+  shopItems: {
+    padding: 5
   }
 });
