@@ -1,28 +1,10 @@
 import React, { Component } from 'react';
 
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  Button
-} from 'react-native';
-import {
-  TITLE_FONT,
-  NON_TITLE_FONT,
-  BUTTONBOTTOMPADDING,
-  DEFAULT_GREY_BACKGROUND,
-  PRIMARY_COLOR,
-  TOAST_DURATION,
-  LIGHT_GREY,
-  LIGHT_GREY_BACKGROUND
-} from '../Common/common_style';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { StyleSheet, View } from 'react-native';
+import { LIGHT_GREY_BACKGROUND } from '../Common/common_style';
+import { alpha } from '../Common/size';
 import ShopDetails from './ShopDetails';
 import { FlatList } from 'react-native-gesture-handler';
-let n = 0;
 
 export default class ShopList extends Component {
   constructor(props) {
