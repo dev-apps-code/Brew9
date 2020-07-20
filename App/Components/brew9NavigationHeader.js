@@ -25,10 +25,7 @@ const styles = StyleSheet.create({
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
-  },
-  navigationBarItem: {
-    width: '100%'
+    width: 70 * alpha,
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
@@ -56,7 +53,6 @@ export function headerStyle(navigation) {
       <View style={styles.headerLeftContainer}>
         <TouchableOpacity
           onPress={()=>navigation.goBack()}
-          style={styles.navigationBarItem}
         >
           <Image
             source={require('./../../assets/images/back.png')}
@@ -68,7 +64,8 @@ export function headerStyle(navigation) {
     headerRight: null,
     headerStyle: {
       elevation: 0,
-      shadowOpacity: 0
+      shadowOpacity: 0,
+      // height: alpha * 
     }
   };
 }

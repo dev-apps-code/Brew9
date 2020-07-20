@@ -24,7 +24,8 @@ export default class Favourite extends React.Component {
           district: 'Brunei-Muara',
           area: 'Area A',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         },
         {
           id: 1,
@@ -35,7 +36,8 @@ export default class Favourite extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         },
         {
           id: 1,
@@ -46,7 +48,8 @@ export default class Favourite extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         },
         {
           id: 1,
@@ -57,7 +60,8 @@ export default class Favourite extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         },
         {
           id: 1,
@@ -68,15 +72,33 @@ export default class Favourite extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         }
       ]
     };
   }
+
+  onPressFavourite = (id) => {
+    //returns favorite ID
+
+    console.log(id);
+  };
+
+  onPressOrderNow = (id) => {
+    //returns favorite ID
+
+    console.log(id);
+  };
+
   render() {
     return (
       <View style={styles.mainView}>
-        <ShopList shopList={this.state.shopList} />
+        <ShopList
+          shopList={this.state.shopList}
+          onPressFavourite={this.onPressFavourite}
+          onPressOrderNow={this.onPressOrderNow}
+        />
       </View>
     );
   }
@@ -89,7 +111,6 @@ Favourite.navigationOptions = {
     style: {
       backgroundColor: 'white'
     },
-    tabStyle: {},
     labelStyle: {
       fontSize: 14 * fontAlpha,
       fontFamily: TITLE_FONT

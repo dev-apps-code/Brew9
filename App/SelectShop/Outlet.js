@@ -8,7 +8,8 @@ import {
   LIGHT_GREY,
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
-  TITLE_FONT
+  TITLE_FONT,
+  NON_TITLE_FONT
 } from '../Common/common_style';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 @connect(({ members, shops, orders }) => ({}))
@@ -27,7 +28,8 @@ export default class Outlet extends React.Component {
           district: 'Brunei-Muara',
           area: 'Area A',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         },
         {
           id: 1,
@@ -38,10 +40,11 @@ export default class Outlet extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: false
         },
         {
-          id: 1,
+          id: 2,
           name: 'ブルー九 Flagship Store',
           short_address: 'The Walk, Beribi',
           longitude: '114.897994',
@@ -49,10 +52,11 @@ export default class Outlet extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         },
         {
-          id: 1,
+          id: 5,
           name: 'ブルー九 Flagship Store',
           short_address: 'The Walk, Beribi',
           longitude: '114.897994',
@@ -60,10 +64,11 @@ export default class Outlet extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: false
         },
         {
-          id: 1,
+          id: 4,
           name: 'ブルー九 Flagship Store',
           short_address: 'The Walk, Beribi',
           longitude: '114.897994',
@@ -71,7 +76,8 @@ export default class Outlet extends React.Component {
           district: 'No district',
           area: 'No area',
           proximity_meters: null,
-          open: true
+          open: true,
+          favourite: true
         }
       ]
     };
@@ -82,6 +88,18 @@ export default class Outlet extends React.Component {
     this.setState({
       showMap: !this.state.showMap
     });
+  };
+
+  onPressFavourite = (id) => {
+    //returns favorite ID
+
+    console.log(id);
+  };
+
+  onPressOrderNow = (id) => {
+    //returns favorite ID
+
+    console.log(id);
   };
 
   componentDidMount() {}
@@ -98,10 +116,10 @@ export default class Outlet extends React.Component {
           </TouchableOpacity>
           <View style={styles.searchView}>
             <Image
-              source={require('./../../assets/images/next.png')}
+              source={require('./../../assets/images/search.png')}
               style={styles.searchImage}
             />
-            <Text style={styles.text_2}>Search</Text>
+            <Text style={styles.text_2}>search</Text>
           </View>
         </View>
         {this.state.showMap ? (
@@ -124,16 +142,17 @@ export default class Outlet extends React.Component {
           <Image
             source={
               this.state.showMap
-                ? require('./../../assets/images/bitmap-15.png')
-                : require('./../../assets/images/bitmap-14.png')
+                ? require('./../../assets/images/arrowUp.png')
+                : require('./../../assets/images/arrowDown.png')
             }
-            style={styles.searchImage}
+            style={styles.mapToggleImage}
           />
         </TouchableOpacity>
-        {/* <View style={styles.view_2}>
-
-        </View> */}
-        <ShopList shopList={this.state.shopList} />
+        <ShopList
+          shopList={this.state.shopList}
+          onPressFavourite={this.onPressFavourite}
+          onPressOrderNow={this.onPressOrderNow}
+        />
       </View>
     );
   }
@@ -146,7 +165,6 @@ Outlet.navigationOptions = {
     style: {
       backgroundColor: 'white'
     },
-    tabStyle: {},
     labelStyle: {
       fontSize: 14 * fontAlpha,
       fontFamily: TITLE_FONT
@@ -169,27 +187,22 @@ const styles = StyleSheet.create({
   },
   view_1: {
     flexDirection: 'row',
-    height: alpha * 40,
-    // borderColor: 'black',
-    // borderWidth: 1,
+    paddingVertical: alpha * 7,
+    paddingHorizontal: alpha * 10,
     justifyContent: 'space-between',
-    paddingVertical: alpha * 5,
     backgroundColor: 'white'
   },
   mapView: {
     height: alpha * 160
-    // width: '100%',
-    // borderWidth: 1,
-    // borderColor: 'black'
   },
   searchView: {
-    backgroundColor: 'rgb(240,240,240)',
-    width: alpha * 70,
-    marginRight: alpha * 10,
-    borderRadius: alpha * 15,
+    backgroundColor: '#F5F5F5',
+    borderRadius: alpha * 21,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    height: alpha * 33,
+    width: alpha * 80
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -207,23 +220,26 @@ const styles = StyleSheet.create({
   rightArrowImage: {
     width: 9 * alpha,
     height: 9 * alpha,
-    // tintColor: 'rgb(240,240,240)'
-    tintColor: LIGHT_GREY
+    tintColor: '#C5C5C5'
   },
 
   searchImage: {
-    width: 9 * alpha,
-    height: 9 * alpha,
-    tintColor: '#4E4D4D',
-    marginRight: alpha * 5
+    width: 12 * alpha,
+    height: 12 * alpha,
+    tintColor: '#868686',
+    marginRight: alpha * 6
+  },
+  mapToggleImage: {
+    width: 10 * alpha,
+    height: 5 * alpha,
+    tintColor: '#BDBDBD',
+    marginRight: alpha * 6
   },
 
   //button
   button_1: {
     flexDirection: 'row',
-    alignItems: 'center',
-    height: '100%',
-    marginLeft: alpha * 10
+    alignItems: 'center'
   },
 
   button_3: {
@@ -237,16 +253,20 @@ const styles = StyleSheet.create({
 
   //txt1
   text_1: {
-    marginRight: alpha * 5,
-    fontSize: alpha * 11
+    marginRight: alpha * 7,
+    fontSize: fontAlpha * 12,
+    fontFamily: TITLE_FONT,
+    color: '#363636'
   },
   text_2: {
-    color: '#4E4D4D',
-    fontSize: alpha * 11
+    color: '#868686',
+    fontSize: fontAlpha * 12,
+    fontFamily: TITLE_FONT
   },
   text_3: {
-    fontSize: alpha * 11,
-    color: '#4E4D4D',
-    marginRight: alpha * 5
+    fontSize: fontAlpha * 12,
+    color: '#BDBDBD',
+    marginRight: alpha * 4,
+    fontFamily: TITLE_FONT
   }
 });

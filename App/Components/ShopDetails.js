@@ -1,41 +1,46 @@
 import React, { Component } from 'react';
-
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  Image
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { connect } from 'react-redux';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
-  BUTTONBOTTOMPADDING,
-  DEFAULT_GREY_BACKGROUND,
-  PRIMARY_COLOR,
-  TOAST_DURATION,
   LIGHT_GREY,
-  LIGHT_BLUE,
   DEFAULT_BORDER_RADIUS,
   TINT_COLOR
 } from '../Common/common_style';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha } from '../Common/size';
 
+@connect(({ shops }) => ({
+  shop: shops.selectedShop
+}))
 export default class ShopDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      recentlyPlayed: [],
-      featuredArtist: []
-    };
   }
 
-  render() {
-    let { details } = this.props;
+  renderFavoriteButton = () => {
+    const { details, onPressFavourite } = this.props;
+    let likeImage = require('./../../assets/images/like.png');
+
+    if (details.favourite) {
+      likeImage = require('./../../assets/images/likeActive.png');
+    }
+
     return (
-      <View style={styles.shopDetailView}>
+      <TouchableOpacity
+        onPress={() => onPressFavourite(details.id)}
+        style={styles.favoriteButton}
+      >
+        <Image source={likeImage} style={styles.favoriteImage} />
+      </TouchableOpacity>
+    );
+  };
+
+  render() {
+    let { details, onPressFavourite, onPressOrderNow, shop } = this.props;
+    const itemStyle = shop.id == details.id ? styles.highlighted : {};
+    return (
+      <View style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
             <Text style={styles.shopName}>{details.name}</Text>
@@ -52,8 +57,8 @@ export default class ShopDetails extends Component {
           </View>
           <View style={styles.detailTextContainer}>
             <Image
-              source={require('./../../assets/images/location.png')}
-              style={styles.image}
+              source={require('./../../assets/images/Fill.png')}
+              style={styles.pinImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
               complete long random address here, test purpose static only, 2
@@ -62,29 +67,33 @@ export default class ShopDetails extends Component {
           </View>
           <View style={styles.detailTextContainer}>
             <Image
-              source={require('./../../assets/images/location.png')}
-              style={styles.image}
+              source={require('./../../assets/images/Group.png')}
+              style={styles.clockImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
               10:00 - 22:30
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.orderNowView}>
-          <View style={styles.orderButton}>
+        <View style={styles.orderNowView}>
+          <TouchableOpacity
+            onPress={() => onPressOrderNow(details.id)}
+            style={styles.orderButton}
+          >
             <Text style={styles.orderNowText}>Order Now</Text>
-          </View>
-          {/* <Image
-            source={require('./../../assets/images/star.png')}
-            style={styles.favoriteImage}
-          /> */}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+        {this.renderFavoriteButton()}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  highlighted: {
+    borderWidth: 1,
+    borderColor: '#00B2E3'
+  },
   shopDetailView: {
     height: alpha * 130,
     backgroundColor: 'white',
@@ -95,10 +104,10 @@ const styles = StyleSheet.create({
     borderRadius: DEFAULT_BORDER_RADIUS
   },
   openView: {
-    height: alpha * 15,
-    width: alpha * 40,
-    borderWidth: 2,
-    borderColor: 'skyblue',
+    height: alpha * 16,
+    width: alpha * 45,
+    borderWidth: 1,
+    borderColor: '#00B2E3',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -123,58 +132,69 @@ const styles = StyleSheet.create({
   },
   orderButton: {
     width: '100%',
-    height: alpha * 40,
+    height: alpha * 50,
     borderLeftWidth: 1,
-    borderLeftColor: 'rgb(240,240,240)',
+    borderLeftColor: '#E7E6E6',
     alignItems: 'center',
     justifyContent: 'center'
   },
+  favoriteButton: {
+    height: alpha * 15,
+    width: alpha * 15,
+    position: 'absolute',
+    right: alpha * 4,
+    bottom: alpha * 4
+  },
   //text
   openText: {
-    marginRight: alpha * 5,
-    fontSize: alpha * 9,
-    color: 'skyblue'
+    fontSize: fontAlpha * 9,
+    color: '#00B2E3',
+    fontFamily: NON_TITLE_FONT
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    marginRight: 5 * alpha
+    fontSize: 12 * fontAlpha,
+    marginRight: 10 * alpha
   },
   serviceInfoDetails: {
-    fontSize: 10 * fontAlpha,
-    marginBottom: 10 * alpha
+    fontSize: 9 * fontAlpha,
+    fontFamily: NON_TITLE_FONT,
+    marginBottom: 10 * alpha,
+    marginTop: 4 * alpha,
+    color: '#363636'
   },
   detailText: {
     color: LIGHT_GREY,
-    flexWrap: 'wrap',
-    fontSize: 12 * fontAlpha,
+    // flexWrap: 'wrap',
+    fontSize: 11 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     width: '80%'
   },
   orderNowText: {
     color: TINT_COLOR,
     fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontWeight: 'bold'
+    fontSize: 12 * fontAlpha
   },
 
   //image
-  image: {
-    width: 10 * alpha,
-    height: 10 * alpha,
+  pinImage: {
     tintColor: LIGHT_GREY,
-    marginRight: 10,
-    padding: 8 * alpha,
-    resizeMode: 'contain'
+    width: 8 * alpha,
+    height: 11 * alpha,
+    marginRight: alpha * 7
+  },
+  clockImage: {
+    tintColor: LIGHT_GREY,
+    width: 8 * alpha,
+    height: 8 * alpha,
+    marginRight: alpha * 8
   },
   favoriteImage: {
-    width: 9 * alpha,
-    height: 9 * alpha,
-    tintColor: TINT_COLOR,
-    marginRight: alpha * 5,
-    position: 'absolute',
-    right: 0,
-    bottom: 0
+    width: 13 * alpha,
+    height: 11 * alpha
+    // position: 'absolute',
+    // right: 0,
+    // bottom: 1
   }
 });
