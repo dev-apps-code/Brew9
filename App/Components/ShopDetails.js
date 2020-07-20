@@ -18,6 +18,24 @@ export default class ShopDetails extends Component {
     super(props);
   }
 
+  renderFavoriteButton = () => {
+    const { details, onPressFavourite } = this.props;
+    let likeImage = require('./../../assets/images/like.png');
+
+    if (details.favourite) {
+      likeImage = require('./../../assets/images/likeActive.png');
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => onPressFavourite(details.id)}
+        style={styles.favoriteButton}
+      >
+        <Image source={likeImage} style={styles.favoriteImage} />
+      </TouchableOpacity>
+    );
+  };
+
   render() {
     let { details, onPressFavourite, onPressOrderNow, shop } = this.props;
     const itemStyle = shop.id == details.id ? styles.highlighted : {};
@@ -65,26 +83,7 @@ export default class ShopDetails extends Component {
             <Text style={styles.orderNowText}>Order Now</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => onPressFavourite(details.id)}
-          style={styles.favoriteButton}
-        >
-          <Image
-            source={
-              details.favourite
-                ? require('./../../assets/images/likeActive.png')
-                : require('./../../assets/images/like.png')
-            }
-            style={
-              details.favourite
-                ? styles.favoriteImage
-                : {
-                    ...styles.favoriteImage,
-                    ...{ tintColor: '#868686' }
-                  }
-            }
-          />
-        </TouchableOpacity>
+        {this.renderFavoriteButton()}
       </View>
     );
   }
