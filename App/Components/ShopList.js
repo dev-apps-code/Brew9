@@ -6,7 +6,8 @@ import {
   View,
   Text,
   TextInput,
-  ScrollView
+  ScrollView,
+  Button
 } from 'react-native';
 import {
   TITLE_FONT,
@@ -21,6 +22,7 @@ import {
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import ShopDetails from './ShopDetails';
 import { FlatList } from 'react-native-gesture-handler';
+let n = 0;
 
 export default class ShopList extends Component {
   constructor(props) {
@@ -31,15 +33,20 @@ export default class ShopList extends Component {
     this.state = this._getState();
   }
 
-  _getState = () => ({
-    recentlyPlayed: [],
-    featuredArtist: []
-  });
+  _getState = () => ({});
 
   componentDidMount() {}
 
   renderItem = ({ item, index }) => {
-    return <ShopDetails details={item} />;
+    return (
+      <ShopDetails
+        details={item}
+        key={index}
+        onPressFavourite={this.props.onPressFavourite}
+        onPressOrderNow={this.props.onPressOrderNow}
+        index={index}
+      />
+    );
   };
 
   render() {
@@ -52,6 +59,7 @@ export default class ShopList extends Component {
             renderItem={this.renderItem}
             showsVerticalScrollIndicator={false}
             style={styles.shopItems}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </View>
@@ -66,6 +74,6 @@ const styles = StyleSheet.create({
     padding: alpha * 10
   },
   shopItems: {
-    padding: 5
+    padding: alpha * 5
   }
 });
