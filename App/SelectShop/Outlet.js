@@ -83,6 +83,16 @@ export default class Outlet extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      console.log('focused');
+    });
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
   toggleMap = () => {
     console.log(this.state.showMap);
     this.setState({
@@ -102,7 +112,6 @@ export default class Outlet extends React.Component {
     console.log(id);
   };
 
-  componentDidMount() {}
   render() {
     return (
       <View style={styles.mainView}>
