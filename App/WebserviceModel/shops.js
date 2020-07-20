@@ -15,6 +15,8 @@ export default {
   namespace: 'shops',
 
   state: {
+    allShops: [],
+    nearbyShops: [],
     selectedShop: null,
     currentOrder: null,
     popUp: false,
