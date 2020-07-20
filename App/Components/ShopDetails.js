@@ -1,47 +1,46 @@
 import React, { Component } from 'react';
-
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  Image
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { connect } from 'react-redux';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
-  BUTTONBOTTOMPADDING,
-  DEFAULT_GREY_BACKGROUND,
-  PRIMARY_COLOR,
-  TOAST_DURATION,
   LIGHT_GREY,
-  LIGHT_BLUE,
   DEFAULT_BORDER_RADIUS,
   TINT_COLOR
 } from '../Common/common_style';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha } from '../Common/size';
 
+@connect(({ shops }) => ({
+  shop: shops.selectedShop
+}))
 export default class ShopDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
-  render() {
-    let { details, onPressFavourite, onPressOrderNow, index } = this.props;
+  renderFavoriteButton = () => {
+    const { details, onPressFavourite } = this.props;
+    let likeImage = require('./../../assets/images/like.png');
+
+    if (details.favourite) {
+      likeImage = require('./../../assets/images/likeActive.png');
+    }
+
     return (
-      <View
-        style={
-          index == 0
-            ? {
-                ...styles.shopDetailView,
-                ...{ borderWidth: 1, borderColor: '#00B2E3' }
-              }
-            : styles.shopDetailView
-        }
+      <TouchableOpacity
+        onPress={() => onPressFavourite(details.id)}
+        style={styles.favoriteButton}
       >
+        <Image source={likeImage} style={styles.favoriteImage} />
+      </TouchableOpacity>
+    );
+  };
+
+  render() {
+    let { details, onPressFavourite, onPressOrderNow, shop } = this.props;
+    const itemStyle = shop.id == details.id ? styles.highlighted : {};
+    return (
+      <View style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
             <Text style={styles.shopName}>{details.name}</Text>
@@ -84,32 +83,17 @@ export default class ShopDetails extends Component {
             <Text style={styles.orderNowText}>Order Now</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => onPressFavourite(details.id)}
-          style={styles.favoriteButton}
-        >
-          <Image
-            source={
-              details.favourite
-                ? require('./../../assets/images/likeActive.png')
-                : require('./../../assets/images/like.png')
-            }
-            style={
-              details.favourite
-                ? styles.favoriteImage
-                : {
-                    ...styles.favoriteImage,
-                    ...{ tintColor: '#868686' }
-                  }
-            }
-          />
-        </TouchableOpacity>
+        {this.renderFavoriteButton()}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  highlighted: {
+    borderWidth: 1,
+    borderColor: '#00B2E3'
+  },
   shopDetailView: {
     height: alpha * 130,
     backgroundColor: 'white',

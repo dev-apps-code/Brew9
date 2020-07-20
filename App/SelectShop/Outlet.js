@@ -44,7 +44,7 @@ export default class Outlet extends React.Component {
           favourite: false
         },
         {
-          id: 1,
+          id: 2,
           name: 'ブルー九 Flagship Store',
           short_address: 'The Walk, Beribi',
           longitude: '114.897994',
@@ -56,7 +56,7 @@ export default class Outlet extends React.Component {
           favourite: true
         },
         {
-          id: 1,
+          id: 5,
           name: 'ブルー九 Flagship Store',
           short_address: 'The Walk, Beribi',
           longitude: '114.897994',
@@ -68,7 +68,7 @@ export default class Outlet extends React.Component {
           favourite: false
         },
         {
-          id: 1,
+          id: 4,
           name: 'ブルー九 Flagship Store',
           short_address: 'The Walk, Beribi',
           longitude: '114.897994',
@@ -173,10 +173,6 @@ Outlet.navigationOptions = {
     inactiveTintColor: TABBAR_INACTIVE_TINT,
     style: {
       backgroundColor: 'white'
-    },
-    tabStyle: {
-      height: alpha * 5,
-      marginBottom: alpha * 6
     },
     labelStyle: {
       fontSize: 14 * fontAlpha,
