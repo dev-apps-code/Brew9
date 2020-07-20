@@ -165,10 +165,6 @@ Outlet.navigationOptions = {
     style: {
       backgroundColor: 'white'
     },
-    tabStyle: {
-      height: alpha * 5,
-      marginBottom: alpha * 6
-    },
     labelStyle: {
       fontSize: 14 * fontAlpha,
       fontFamily: TITLE_FONT

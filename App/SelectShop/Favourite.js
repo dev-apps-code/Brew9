@@ -90,7 +90,7 @@ export default class Favourite extends React.Component {
 
     console.log(id);
   };
-  
+
   render() {
     return (
       <View style={styles.mainView}>
@@ -110,10 +110,6 @@ Favourite.navigationOptions = {
     inactiveTintColor: TABBAR_INACTIVE_TINT,
     style: {
       backgroundColor: 'white'
-    },
-    tabStyle: {
-      height: alpha * 5,
-      marginBottom: alpha * 4
     },
     labelStyle: {
       fontSize: 14 * fontAlpha,
