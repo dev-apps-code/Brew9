@@ -4,10 +4,10 @@ import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
 import {
-  DEFAULT_GREY_BACKGROUND,
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
-  TITLE_FONT
+  TITLE_FONT,
+  LIGHT_GREY_BACKGROUND
 } from '../Common/common_style';
 import MapView from 'react-native-maps';
 import { createAction } from '../Utils';
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   mainView: {
     height: '100%',
     width: '100%',
-    backgroundColor: DEFAULT_GREY_BACKGROUND
+    backgroundColor: LIGHT_GREY_BACKGROUND
   },
   view_1: {
     flexDirection: 'row',
