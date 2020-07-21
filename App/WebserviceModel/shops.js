@@ -78,9 +78,22 @@ export default {
     *loadShops({ payload }, { call, put, select }) {
       try {
         const { object, callback } = payload;
+        console.log('payload ', payload);
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
         console.log('object ', object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setSelectedShop')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *selectShop({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
         const eventObject = new EventObject(json);
         if (eventObject.success == true) {
           yield put(createAction('setSelectedShop')(eventObject.result));

@@ -16,6 +16,7 @@ import {
   FavoriteShopsRequestObject,
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
+import SelectShopRequestObject from '../Requests/select_shop_request_object';
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
@@ -107,9 +108,21 @@ export default class Outlet extends React.Component {
   };
 
   onPressOrderNow = (id) => {
-    //returns favorite ID
+    const object = new SelectShopRequestObject();
+    object.setUrlId(this.props.companyId);
+    object.setShopId(id);
 
-    console.log(id);
+    const callback = this.onPressOrderNowCallback.bind(this);
+    const params = { object, callback };
+    const action = createAction('shops/selectShop')(params);
+
+    this.props.dispatch(action);
+  };
+
+  onPressOrderNowCallback = (eventObject) => {
+    if (eventObject.success) {
+      this.props.navigation.goBack();
+    }
   };
 
   render() {
