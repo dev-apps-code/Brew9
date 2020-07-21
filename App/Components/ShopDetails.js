@@ -82,6 +82,14 @@ export default class ShopDetails extends Component {
           >
             <Text style={styles.orderNowText}>Order Now</Text>
           </TouchableOpacity>
+          <View style={styles.accessView}>
+            <TouchableOpacity onPress={() => this.onPressCall(details.id)} style={styles.accessButton}>
+              <Image source={require('./../../assets/images/call.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onPressDirection(details.id)} style={styles.accessButton}>
+              <Image source={require('./../../assets/images/direction.png')} />
+            </TouchableOpacity>
+          </View>
         </View>
         {this.renderFavoriteButton()}
       </View>
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
   orderNowView: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   detailView: {
     flexDirection: 'row'
@@ -132,11 +140,9 @@ const styles = StyleSheet.create({
   },
   orderButton: {
     width: '100%',
-    height: alpha * 50,
-    borderLeftWidth: 1,
-    borderLeftColor: '#E7E6E6',
+    height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   favoriteButton: {
     height: alpha * 15,
@@ -144,6 +150,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: alpha * 4,
     bottom: alpha * 4
+  },
+  accessButton: {
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  accessView: {
+    flexDirection: 'row',
+    paddingHorizontal: alpha * 20
   },
   //text
   openText: {
