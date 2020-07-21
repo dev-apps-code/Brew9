@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
@@ -6,12 +6,17 @@ import { createAction } from '../Utils/index';
 import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
-  TITLE_FONT
+  TITLE_FONT,
+  DEFAULT_GREY_BACKGROUND,
+  LIGHT_GREY,
+  LIGHT_GREY_BACKGROUND,
+  NON_TITLE_FONT
 } from '../Common/common_style';
 import ShopList from '../Components/ShopList';
 import FavoriteShopsRequestObject from '../Requests/favorite_shops_request_object';
 
 @connect(({ members, shops, orders }) => ({
+  token: members.userAuthToken,
   favoriteShops: shops.favoriteShops
 }))
 export default class Favourite extends React.Component {
@@ -24,7 +29,8 @@ export default class Favourite extends React.Component {
 
   _getState = () => ({
     showMap: true,
-    refreshing: false
+    isNeedLoggined: false,
+    isLoading: false
   });
 
   componentDidMount() {
@@ -70,15 +76,22 @@ export default class Favourite extends React.Component {
   };
 
   render() {
+    const { favoriteShops, token } = this.props;
     return (
       <View style={styles.mainView}>
-        <ShopList
-          shops={this.props.favoriteShops}
-          onPressFavourite={this.onPressFavourite}
-          onPressOrderNow={this.onPressOrderNow}
-          onRefresh={() => this.loadFavoriteShops()}
-          refreshing={this.state.isLoading}
-        />
+        {token === '' ? (
+          <Text style={styles.needLoginText}>
+            Login to view your favourite shops.
+          </Text>
+        ) : (
+          <ShopList
+            shops={favoriteShops}
+            onPressFavourite={this.onPressFavourite}
+            onPressOrderNow={this.onPressOrderNow}
+            onRefresh={() => this.loadFavoriteShops()}
+            refreshing={this.state.isLoading}
+          />
+        )}
       </View>
     );
   }
@@ -107,7 +120,8 @@ Favourite.navigationOptions = {
 const styles = StyleSheet.create({
   mainView: {
     height: '100%',
-    width: '100%'
+    width: '100%',
+    backgroundColor: LIGHT_GREY_BACKGROUND
   },
   headerLeftContainer: {},
   navigationBarItem: {},
@@ -116,5 +130,11 @@ const styles = StyleSheet.create({
     height: 18 * alpha,
     tintColor: 'black',
     marginLeft: 12 * alpha
+  },
+  needLoginText: {
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    paddingVertical: 20,
+    textAlign: 'center'
   }
 });
