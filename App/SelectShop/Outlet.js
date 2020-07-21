@@ -12,7 +12,6 @@ import {
 import MapView from 'react-native-maps';
 import { createAction } from '../Utils';
 import AllShopsRequestObject from '../Requests/all_shops_request_object';
-import { kebabCase } from 'lodash';
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
