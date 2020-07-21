@@ -61,9 +61,7 @@ export default class Outlet extends React.Component {
   };
 
   updateShopsList = (eventObject) => {
-    if (eventObject.success) {
-      this.setState({ isLoading: false });
-    }
+    this.setState({ isLoading: false });
   };
 
   toggleMap = () => {
