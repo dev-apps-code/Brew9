@@ -258,7 +258,6 @@ export default class Home extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { shop } = this.props;
     if (shop != null && shop.all_promotions != null) {
-      console.log('Trigger on Update');
       if (prevProps.cart !== this.props.cart) {
         this.check_promotion_trigger();
       }
@@ -516,14 +515,20 @@ export default class Home extends React.Component {
   }
 
   onRefresh() {
-    this.setState({
-      isRefreshing: true,
-      data: [],
-      products: [],
-      refresh_products: true
-    });
-    console.log('--loadshops580--');
-    this.loadShops();
+    const callback = () => {
+      console.log('onRefresh');
+      this.loadShops();
+    };
+
+    this.setState(
+      {
+        isRefreshing: true,
+        data: [],
+        products: [],
+        refresh_products: true
+      },
+      callback
+    );
   }
 
   onCheckoutPressed = () => {
