@@ -28,6 +28,9 @@ export default {
         ...state
       };
     },
+    setAllShops(state, { payload }) {
+      return { ...state, allShops: payload };
+    },
     setSelectedShop(state, { payload }) {
       return { ...state, selectedShop: payload };
     },
@@ -54,11 +57,25 @@ export default {
     }
   },
   effects: {
+    *loadAllShops({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
+        console.log('object ', object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setAllShops')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
     *loadShops({ payload }, { call, put, select }) {
       try {
         const { object, callback } = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
+        console.log('object ', object);
         const eventObject = new EventObject(json);
         if (eventObject.success == true) {
           yield put(createAction('setSelectedShop')(eventObject.result));
