@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { StyleSheet, View, RefreshControl } from 'react-native';
 import { LIGHT_GREY_BACKGROUND } from '../Common/common_style';
 import { alpha } from '../Common/size';
@@ -42,7 +41,7 @@ export default class ShopList extends Component {
             renderItem={this.renderItem}
             showsVerticalScrollIndicator={false}
             style={styles.shopItems}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item,index) => `${index}-${item.id}`}
             refreshControl={
               <RefreshControl
                 colors={['#9Bd35A', '#689F38']}
@@ -50,6 +49,7 @@ export default class ShopList extends Component {
                 onRefresh={onRefresh}
               />
             }
+            paddingBottom={200}
           />
         </View>
       </View>
