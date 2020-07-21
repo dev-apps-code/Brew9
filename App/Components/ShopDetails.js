@@ -28,7 +28,7 @@ export default class ShopDetails extends Component {
 
     return (
       <TouchableOpacity
-        onPress={() => onPressFavourite(details.id)}
+        onPress={() => onPressFavourite(details.id, details.favourite)}
         style={styles.favoriteButton}
       >
         <Image source={likeImage} style={styles.favoriteImage} />
