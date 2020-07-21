@@ -5,7 +5,9 @@ import {
   missions,
   review,
   deliveryFee,
-  shopTown
+  shopTown,
+  favoriteShop,
+  unfavoriteShop
 } from '../Services/shops';
 import EventObject from './event_object';
 import { createAction } from '../Utils/index';
@@ -95,6 +97,26 @@ export default {
         if (eventObject.success == true) {
           yield put(createAction('setFavoriteShops')(eventObject.result));
         }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *loadMakeFavoriteShop({ payload }, { call, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(favoriteShop, authtoken, object);
+        const eventObject = new EventObject(json);
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *loadUnfavoriteShop({ payload }, { call, select }) {
+      try {
+        const { object, callback } = payload;
+        console.log('object ', object);
+
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(unfavoriteShop, authtoken, object);
+        const eventObject = new EventObject(json);
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
