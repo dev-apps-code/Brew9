@@ -12,72 +12,12 @@ import ShopList from '../Components/ShopList';
 export default class Favourite extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showMap: true,
-      shopList: [
-        {
-          id: 3,
-          name: 'Bunny Good',
-          short_address: '404 Ward Street',
-          longitude: '114.89',
-          latitude: '4.8',
-          district: 'Brunei-Muara',
-          area: 'Area A',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        },
-        {
-          id: 1,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        },
-        {
-          id: 1,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        },
-        {
-          id: 1,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        },
-        {
-          id: 1,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        }
-      ]
-    };
+    this.state = this._getState();
   }
+
+  _getState = () => ({
+    showMap: true
+  });
 
   onPressFavourite = (id) => {
     //returns favorite ID
@@ -95,7 +35,7 @@ export default class Favourite extends React.Component {
     return (
       <View style={styles.mainView}>
         <ShopList
-          shopList={this.state.shopList}
+          shopList={this.props.allShops}
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
         />
