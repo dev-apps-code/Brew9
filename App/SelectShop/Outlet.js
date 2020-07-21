@@ -5,96 +5,69 @@ import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
 import {
   DEFAULT_GREY_BACKGROUND,
-  LIGHT_GREY,
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
-  TITLE_FONT,
-  NON_TITLE_FONT
+  TITLE_FONT
 } from '../Common/common_style';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-@connect(({ members, shops, orders }) => ({}))
+import MapView from 'react-native-maps';
+import { createAction } from '../Utils';
+import AllShopsRequestObject from '../Requests/all_shops_request_object';
+import { kebabCase } from 'lodash';
+@connect(({ members, shops, orders }) => ({
+  allShops: shops.allShops,
+  companyId: members.company_id,
+  nearByShops: shops.nearByShops
+}))
 export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showMap: true,
-      shopList: [
-        {
-          id: 3,
-          name: 'Bunny Good',
-          short_address: '404 Ward Street',
-          longitude: '114.89',
-          latitude: '4.8',
-          district: 'Brunei-Muara',
-          area: 'Area A',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        },
-        {
-          id: 1,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: false
-        },
-        {
-          id: 2,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        },
-        {
-          id: 5,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: false
-        },
-        {
-          id: 4,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true
-        }
-      ]
-    };
+    this._didFocus = this._didFocus.bind(this);
+    this.updateShopsList = this.updateShopsList.bind(this);
+    this.state = this._getState();
   }
 
+  _getState = () => ({
+    showMap: true,
+    isLoading: true
+  });
+
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      console.log('focused');
-    });
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', this._didFocus);
   }
 
   componentWillUnmount() {
     this.focusListener.remove();
   }
 
+  _didFocus = async () => {
+    this.loadAllShops();
+  };
+
+  loadAllShops = (onFinishLoading) => {
+    console.log('loadAllShops');
+    this.setState({ isLoading: true });
+    const { companyId, dispatch } = this.props;
+
+    const object = new AllShopsRequestObject();
+    object.setUrlId(companyId);
+
+    let callback = this.updateShopsList.bind(this);
+    if (typeof onFinishLoading === 'function') {
+      callback = onFinishLoading;
+    }
+    const params = { object, callback };
+    const action = createAction('shops/loadAllShops')(params);
+    dispatch(action);
+  };
+
+  updateShopsList = (eventObject) => {
+    if (eventObject.success) {
+      this.setState({ isLoading: false });
+    }
+  };
+
   toggleMap = () => {
-    console.log(this.state.showMap);
     this.setState({
       showMap: !this.state.showMap
     });
@@ -158,9 +131,11 @@ export default class Outlet extends React.Component {
           />
         </TouchableOpacity>
         <ShopList
-          shopList={this.state.shopList}
+          shops={this.props.allShops}
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
+          onRefresh={() => this.loadAllShops()}
+          refreshing={this.state.isLoading}
         />
       </View>
     );
