@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import {
   TITLE_FONT,
@@ -35,6 +35,11 @@ export default class ShopDetails extends Component {
       </TouchableOpacity>
     );
   };
+
+  onPressCall (phoneNumber) {
+    Linking.openURL(`tel:${phoneNumber}`);
+
+  }
 
   render() {
     let { details, onPressFavourite, onPressOrderNow, shop } = this.props;
@@ -83,7 +88,7 @@ export default class ShopDetails extends Component {
             <Text style={styles.orderNowText}>Order Now</Text>
           </TouchableOpacity>
           <View style={styles.accessView}>
-            <TouchableOpacity onPress={() => this.onPressCall(details.id)} style={styles.accessButton}>
+            <TouchableOpacity onPress={() => this.onPressCall(details.phone_no)} style={styles.accessButton}>
               <Image source={require('./../../assets/images/call.png')} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.onPressDirection(details.id)} style={styles.accessButton}>

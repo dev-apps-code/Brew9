@@ -25,7 +25,9 @@ export default class Favourite extends React.Component {
           area: 'Area A',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         },
         {
           id: 1,
@@ -37,7 +39,9 @@ export default class Favourite extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         },
         {
           id: 1,
@@ -49,7 +53,9 @@ export default class Favourite extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         },
         {
           id: 1,
@@ -61,7 +67,9 @@ export default class Favourite extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         },
         {
           id: 1,
@@ -73,7 +81,9 @@ export default class Favourite extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         }
       ]
     };

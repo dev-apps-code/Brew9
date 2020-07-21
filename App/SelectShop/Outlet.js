@@ -29,7 +29,8 @@ export default class Outlet extends React.Component {
           area: 'Area A',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
         },
         {
           id: 1,
@@ -41,7 +42,9 @@ export default class Outlet extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: false
+          favourite: false,
+          phone_no: 123123
+
         },
         {
           id: 2,
@@ -53,7 +56,9 @@ export default class Outlet extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         },
         {
           id: 5,
@@ -65,7 +70,9 @@ export default class Outlet extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: false
+          favourite: false,
+          phone_no: 123123
+
         },
         {
           id: 4,
@@ -77,7 +84,9 @@ export default class Outlet extends React.Component {
           area: 'No area',
           proximity_meters: null,
           open: true,
-          favourite: true
+          favourite: true,
+          phone_no: 123123
+
         }
       ]
     };
