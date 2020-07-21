@@ -18,7 +18,7 @@ import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
 class Brew9SlideUp extends Component {
   render() {
-      let { visible } = this.props
+      let { visible, cancelButtonAction } = this.props
     return (
       <Modal.BottomModal
 
@@ -31,6 +31,7 @@ class Brew9SlideUp extends Component {
       >
         <ModalContent>
           <View style={styles.modalView}>
+            <Button title="close" onPress={cancelButtonAction}/>
 
           </View>
         </ModalContent>
