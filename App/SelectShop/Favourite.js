@@ -13,7 +13,7 @@ import {
   NON_TITLE_FONT
 } from '../Common/common_style';
 import ShopList from '../Components/ShopList';
-import FavoriteShopsRequestObject from '../Requests/favorite_shops_request_object';
+import { FavoriteShopsRequestObject } from '../Requests/favorite_shops_request_object';
 
 @connect(({ members, shops, orders }) => ({
   token: members.userAuthToken,
