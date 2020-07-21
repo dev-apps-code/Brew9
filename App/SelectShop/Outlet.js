@@ -1,22 +1,36 @@
-import { StyleSheet, View, TouchableOpacity, Image, Text, Platform } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  Platform,
+  Animated
+} from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
+
 import {
   DEFAULT_GREY_BACKGROUND,
   LIGHT_GREY,
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
-  NON_TITLE_FONT
+  NON_TITLE_FONT,
+  TAB_STYLE,
+  SLIDE_VIEW_HEIGHT
 } from '../Common/common_style';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import Brew9SlideUp from '../Components/Brew9SlideUp';
 @connect(({ members, shops, orders }) => ({}))
 export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedArea: 'Brunei',
+      showAreaView: false,
       showMap: true,
       shopList: [
         {
@@ -44,7 +58,6 @@ export default class Outlet extends React.Component {
           open: true,
           favourite: false,
           phone_no: 123123
-
         },
         {
           id: 2,
@@ -58,7 +71,6 @@ export default class Outlet extends React.Component {
           open: true,
           favourite: true,
           phone_no: 123123
-
         },
         {
           id: 5,
@@ -72,7 +84,6 @@ export default class Outlet extends React.Component {
           open: true,
           favourite: false,
           phone_no: 123123
-
         },
         {
           id: 4,
@@ -86,7 +97,6 @@ export default class Outlet extends React.Component {
           open: true,
           favourite: true,
           phone_no: 123123
-
         }
       ]
     };
@@ -100,24 +110,32 @@ export default class Outlet extends React.Component {
   };
 
   onPressFavourite = (id) => {
-    //returns favorite ID
-
     console.log(id);
   };
 
   onPressOrderNow = (id) => {
-    //returns favorite ID
-
     console.log(id);
   };
+
+  toggleAreaView = () => {
+    let { showAreaView } = this.state
+    this.setState({
+      showAreaView: !showAreaView
+    })
+  };
+
+
 
   componentDidMount() {}
   render() {
     return (
       <View style={styles.mainView}>
         <View style={styles.view_1}>
-          <TouchableOpacity style={styles.button_1}>
-            <Text style={styles.text_1}> Brunei </Text>
+          <TouchableOpacity
+            style={styles.button_1}
+            onPress={this.toggleAreaView}
+          >
+            <Text style={styles.text_1}> {this.state.selectedArea} </Text>
             <Image
               source={require('./../../assets/images/next.png')}
               style={styles.rightArrowImage}
@@ -162,6 +180,16 @@ export default class Outlet extends React.Component {
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
         />
+        <Brew9SlideUp
+          visible={this.state.showAreaView}
+          cancelable={true}
+          title={'Exit App '}
+          description={'exit the  application?'}
+          okayButtonAction={() => {
+            BackHandler.exitApp();
+          }}
+          cancelButtonAction={this.toggleAreaView}
+        />
       </View>
     );
   }
@@ -178,13 +206,7 @@ Outlet.navigationOptions = {
       fontSize: 14 * fontAlpha,
       fontFamily: TITLE_FONT
     },
-    tabStyle:
-      Platform.OS === 'android'
-        ? {
-            height: alpha * 5,
-            marginBottom: alpha * 4
-          }
-        : {},
+    tabStyle: TAB_STYLE,
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
       width: '10%',
@@ -284,5 +306,6 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
-  }
+  },
+
 });
