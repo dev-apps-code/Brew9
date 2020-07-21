@@ -87,14 +87,14 @@ export default class Outlet extends React.Component {
     if (!isFavorite) {
       object = new FavoriteShopsRequestObject(id);
       object.setUrlId(companyId);
-      
+
       params = { object, callback };
       action = createAction('shops/loadMakeFavoriteShop')(params);
       dispatch(action);
     } else {
       object = new DeleteFavoriteRequestObject(id);
       object.setUrlId(companyId);
-      
+
       params = { object, callback };
       action = createAction('shops/loadUnfavoriteShop')(params);
       dispatch(action);
@@ -102,22 +102,8 @@ export default class Outlet extends React.Component {
   };
 
   _onPressFavouriteCallback = (eventObject) => {
-    if (eventObject.success) {
-      this.loadAllShops();
-      this.loadFavoriteShops();
-    }
-  };
-
-  loadFavoriteShops = () => {
-    const { companyId, dispatch } = this.props;
-
-    const object = new FavoriteShopsRequestObject();
-    object.setUrlId(companyId);
-
-    const callback = this.updateShopsList;
-    const params = { object, callback };
-    const action = createAction('shops/loadFavoriteShops')(params);
-    dispatch(action);
+    this.setState({ isLoading: false });
+    this.loadAllShops();
   };
 
   onPressOrderNow = (id) => {
