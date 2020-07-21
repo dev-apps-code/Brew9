@@ -15,6 +15,7 @@ import {
   FavoriteShopsRequestObject,
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
+import SelectShopRequestObject from '../Requests/select_shop_request_object';
 
 @connect(({ members, shops, orders }) => ({
   token: members.userAuthToken,
@@ -89,9 +90,21 @@ export default class Favourite extends React.Component {
   };
 
   onPressOrderNow = (id) => {
-    //returns favorite ID
+    const object = new SelectShopRequestObject();
+    object.setUrlId(this.props.companyId);
+    object.setShopId(id);
 
-    console.log(id);
+    const callback = this.onPressOrderNowCallback.bind(this);
+    const params = { object, callback };
+    const action = createAction('shops/selectShop')(params);
+
+    this.props.dispatch(action);
+  };
+
+  onPressOrderNowCallback = (eventObject) => {
+    if (eventObject.success) {
+      this.props.navigation.navigate('Home');
+    }
   };
 
   render() {
