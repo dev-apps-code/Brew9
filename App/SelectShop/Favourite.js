@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
-  TITLE_FONT
+  TITLE_FONT,
+  TAB_STYLE
 } from '../Common/common_style';
 import ShopList from '../Components/ShopList';
 @connect(({ members, shops, orders }) => ({}))
@@ -130,13 +131,7 @@ Favourite.navigationOptions = {
       width: '10%',
       left: '20%'
     },
-    tabStyle:
-      Platform.OS === 'android'
-        ? {
-            height: alpha * 5,
-            marginBottom: alpha * 4
-          }
-        : {},
+    tabStyle: TAB_STYLE,
     upperCaseLabel: false
   }
 };

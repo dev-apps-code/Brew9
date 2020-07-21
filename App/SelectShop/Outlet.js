@@ -20,7 +20,6 @@ import {
   TITLE_FONT,
   NON_TITLE_FONT,
   TAB_STYLE,
-  SLIDE_VIEW_HEIGHT
 } from '../Common/common_style';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
