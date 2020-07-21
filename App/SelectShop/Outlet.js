@@ -12,6 +12,10 @@ import {
 import MapView from 'react-native-maps';
 import { createAction } from '../Utils';
 import AllShopsRequestObject from '../Requests/all_shops_request_object';
+import {
+  FavoriteShopsRequestObject,
+  DeleteFavoriteRequestObject
+} from '../Requests/favorite_shops_request_object';
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
@@ -70,10 +74,50 @@ export default class Outlet extends React.Component {
     });
   };
 
-  onPressFavourite = (id) => {
-    //returns favorite ID
+  onPressFavourite = (id, isFavorite) => {
+    this.setState({ isLoading: true });
+    const { companyId, dispatch } = this.props;
 
-    console.log(id);
+    let object = null;
+    let action = null;
+    let params = null;
+
+    const callback = this._onPressFavouriteCallback;
+
+    if (!isFavorite) {
+      object = new FavoriteShopsRequestObject(id);
+      object.setUrlId(companyId);
+      
+      params = { object, callback };
+      action = createAction('shops/loadMakeFavoriteShop')(params);
+      dispatch(action);
+    } else {
+      object = new DeleteFavoriteRequestObject(id);
+      object.setUrlId(companyId);
+      
+      params = { object, callback };
+      action = createAction('shops/loadUnfavoriteShop')(params);
+      dispatch(action);
+    }
+  };
+
+  _onPressFavouriteCallback = (eventObject) => {
+    if (eventObject.success) {
+      this.loadAllShops();
+      this.loadFavoriteShops();
+    }
+  };
+
+  loadFavoriteShops = () => {
+    const { companyId, dispatch } = this.props;
+
+    const object = new FavoriteShopsRequestObject();
+    object.setUrlId(companyId);
+
+    const callback = this.updateShopsList;
+    const params = { object, callback };
+    const action = createAction('shops/loadFavoriteShops')(params);
+    dispatch(action);
   };
 
   onPressOrderNow = (id) => {

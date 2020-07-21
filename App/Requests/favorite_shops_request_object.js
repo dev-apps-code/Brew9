@@ -1,12 +1,16 @@
-import BaseRequestObject from "./base_request_object";
+import BaseRequestObject from './base_request_object';
 
-class FavoriteShopsRequestObject extends BaseRequestObject {
-  constructor(latitude, longitude) {
+export class FavoriteShopsRequestObject extends BaseRequestObject {
+  constructor(shopId, latitude, longitude) {
     super();
 
-    if (typeof latitude !== "undefined" && typeof longitude !== "undefined") {
+    if (typeof latitude !== 'undefined' && typeof longitude !== 'undefined') {
       this.latitude = latitude;
       this.longitude = longitude;
+    }
+
+    if (typeof shopId !== 'undefined') {
+      this.id = shopId;
     }
   }
 
@@ -14,4 +18,14 @@ class FavoriteShopsRequestObject extends BaseRequestObject {
     return `companies/${this.url_id}/favorite_shops`;
   }
 }
-export default FavoriteShopsRequestObject;
+
+export class DeleteFavoriteRequestObject extends BaseRequestObject {
+  constructor(shopId) {
+    super();
+    this.shopId = shopId;
+  }
+
+  getUrlString() {
+    return `companies/${this.url_id}/favorite_shops/${this.shopId}`;
+  }
+}
