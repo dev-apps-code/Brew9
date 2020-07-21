@@ -1,23 +1,61 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
+import { createAction } from '../Utils/index';
 import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT
 } from '../Common/common_style';
 import ShopList from '../Components/ShopList';
-@connect(({ members, shops, orders }) => ({}))
+import FavoriteShopsRequestObject from '../Requests/favorite_shops_request_object';
+
+@connect(({ members, shops, orders }) => ({
+  favoriteShops: shops.favoriteShops
+}))
 export default class Favourite extends React.Component {
   constructor(props) {
     super(props);
+    this._didFocus = this._didFocus.bind(this);
+
     this.state = this._getState();
   }
 
   _getState = () => ({
-    showMap: true
+    showMap: true,
+    refreshing: false
   });
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', this._didFocus);
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
+  _didFocus = () => {
+    this.loadFavoriteShops();
+  };
+
+  loadFavoriteShops = () => {
+    this.setState({ isLoading: true });
+    const { companyId, dispatch } = this.props;
+
+    const object = new FavoriteShopsRequestObject();
+    object.setUrlId(companyId);
+
+    const callback = this.updateShopsList;
+    const params = { object, callback };
+    const action = createAction('shops/loadFavoriteShops')(params);
+    dispatch(action);
+  };
+
+  updateShopsList = (eventObject) => {
+    this.setState({ isLoading: false });
+  };
 
   onPressFavourite = (id) => {
     //returns favorite ID
@@ -35,9 +73,11 @@ export default class Favourite extends React.Component {
     return (
       <View style={styles.mainView}>
         <ShopList
-          shopList={this.props.allShops}
+          shops={this.props.favoriteShops}
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
+          onRefresh={() => this.loadFavoriteShops()}
+          refreshing={this.state.isLoading}
         />
       </View>
     );
