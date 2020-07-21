@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
 import { connect } from 'react-redux';
@@ -103,7 +103,7 @@ export default class Favourite extends React.Component {
     );
   }
 }
-
+Platform.OS === 'ios' ? 200 : 100;
 Favourite.navigationOptions = {
   tabBarOptions: {
     activeTintColor: TINT_COLOR,
@@ -120,6 +120,13 @@ Favourite.navigationOptions = {
       width: '10%',
       left: '20%'
     },
+    tabStyle:
+      Platform.OS === 'android'
+        ? {
+            height: alpha * 5,
+            marginBottom: alpha * 4
+          }
+        : {},
     upperCaseLabel: false
   }
 };

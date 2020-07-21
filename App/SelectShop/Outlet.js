@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Text, Platform } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
@@ -169,6 +169,13 @@ Outlet.navigationOptions = {
       fontSize: 14 * fontAlpha,
       fontFamily: TITLE_FONT
     },
+    tabStyle:
+      Platform.OS === 'android'
+        ? {
+            height: alpha * 5,
+            marginBottom: alpha * 4
+          }
+        : {},
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
       width: '10%',
