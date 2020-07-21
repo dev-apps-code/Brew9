@@ -17,6 +17,7 @@ export default {
   state: {
     allShops: [],
     nearbyShops: [],
+    favoriteShops: [],
     selectedShop: null,
     currentOrder: null,
     popUp: false,
@@ -33,6 +34,9 @@ export default {
     },
     setSelectedShop(state, { payload }) {
       return { ...state, selectedShop: payload };
+    },
+    setFavoriteShops(state, { payload }) {
+      return { ...state, favoriteShops: payload };
     },
     setCurrentOrder(state, { payload }) {
       const { order } = payload;
@@ -78,6 +82,18 @@ export default {
         const eventObject = new EventObject(json);
         if (eventObject.success == true) {
           yield put(createAction('setSelectedShop')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *loadFavoriteShops({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setFavoriteShops')(eventObject.result));
         }
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
