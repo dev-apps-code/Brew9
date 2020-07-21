@@ -7,13 +7,14 @@ import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
-  DEFAULT_GREY_BACKGROUND,
-  LIGHT_GREY,
   LIGHT_GREY_BACKGROUND,
   NON_TITLE_FONT
 } from '../Common/common_style';
 import ShopList from '../Components/ShopList';
-import { FavoriteShopsRequestObject } from '../Requests/favorite_shops_request_object';
+import {
+  FavoriteShopsRequestObject,
+  DeleteFavoriteRequestObject
+} from '../Requests/favorite_shops_request_object';
 
 @connect(({ members, shops, orders }) => ({
   token: members.userAuthToken,
@@ -53,7 +54,7 @@ export default class Favourite extends React.Component {
     const object = new FavoriteShopsRequestObject();
     object.setUrlId(companyId);
 
-    const callback = this.updateShopsList;
+    const callback = this.updateShopsList.bind(this);
     const params = { object, callback };
     const action = createAction('shops/loadFavoriteShops')(params);
     dispatch(action);
@@ -63,10 +64,28 @@ export default class Favourite extends React.Component {
     this.setState({ isLoading: false });
   };
 
-  onPressFavourite = (id) => {
-    //returns favorite ID
+  toggleMap = () => {
+    this.setState({
+      showMap: !this.state.showMap
+    });
+  };
 
-    console.log(id);
+  onPressFavourite = (id) => {
+    this.setState({ isLoading: true });
+    const { companyId, dispatch } = this.props;
+
+    const callback = this._onPressFavouriteCallback;
+    const object = new DeleteFavoriteRequestObject(id);
+    object.setUrlId(companyId);
+
+    const params = { object, callback };
+    const action = createAction('shops/loadUnfavoriteShop')(params);
+    dispatch(action);
+  };
+
+  _onPressFavouriteCallback = (eventObject) => {
+    this.setState({ isLoading: false });
+    this.loadFavoriteShops();
   };
 
   onPressOrderNow = (id) => {
