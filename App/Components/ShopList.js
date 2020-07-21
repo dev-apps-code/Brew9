@@ -37,11 +37,11 @@ export default class ShopList extends Component {
         <View style={styles.shopDetailView}>
           <FlatList
             data={shops}
-            extraData={shops}
+            extraData={this.props}
             renderItem={this.renderItem}
             showsVerticalScrollIndicator={false}
             style={styles.shopItems}
-            keyExtractor={(item,index) => `${index}-${item.id}`}
+            keyExtractor={(item, index) => `${index}-${item.id}`}
             refreshControl={
               <RefreshControl
                 colors={['#9Bd35A', '#689F38']}
