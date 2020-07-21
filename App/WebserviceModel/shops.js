@@ -62,7 +62,6 @@ export default {
         const { object, callback } = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
-        console.log('object ', object);
         const eventObject = new EventObject(json);
         if (eventObject.success == true) {
           yield put(createAction('setAllShops')(eventObject.result));
