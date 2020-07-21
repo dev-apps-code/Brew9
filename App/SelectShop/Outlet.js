@@ -10,13 +10,14 @@ import {
   LIGHT_GREY_BACKGROUND
 } from '../Common/common_style';
 import MapView from 'react-native-maps';
-import { createAction } from '../Utils';
+import { createAction, NavigationActions } from '../Utils';
 import AllShopsRequestObject from '../Requests/all_shops_request_object';
 import {
   FavoriteShopsRequestObject,
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
+
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
@@ -121,7 +122,7 @@ export default class Outlet extends React.Component {
 
   onPressOrderNowCallback = (eventObject) => {
     if (eventObject.success) {
-      this.props.navigation.goBack();
+      this.props.navigation.navigate('Home');
     }
   };
 
