@@ -1,22 +1,10 @@
-//
-//  SplashScreen
-//  Project
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
-  Image,
   Text,
   TextInput,
   StyleSheet,
   AppState,
   Linking,
-  Modal,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
   Platform
 } from 'react-native';
 if (Text.defaultProps == null) Text.defaultProps = {};
@@ -28,16 +16,8 @@ import { connect } from 'react-redux';
 import { createAction, Storage } from '../Utils';
 import CurrentStatusRequestObject from '../Requests/current_status_request_object';
 import { AsyncStorage } from 'react-native';
-import Brew9Modal from '../Components/Brew9Modal';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import {
-  TITLE_FONT,
-  NON_TITLE_FONT,
-  TABBAR_INACTIVE_TINT,
-  TABBAR_ACTIVE_TINT,
-  PRIMARY_COLOR,
-  LIGHT_BLUE
-} from '../Common/common_style';
+import Toast from 'react-native-easy-toast';
+import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import KochavaTracker from 'react-native-kochava-tracker';
 import { getMemberIdForApi } from '../Services/members_helper';
@@ -45,9 +25,8 @@ import { getAppVersion, getBuildVersion } from '../Utils/server';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
-import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object';
-import {getServerIndex, setServerIndex} from '../Utils/storage'
-import {loadServer} from '../Utils/server'
+import { getServerIndex, setServerIndex } from '../Utils/storage';
+import { loadServer } from '../Utils/server';
 
 @connect(({ members }) => ({
   members: members.profile,
@@ -77,7 +56,7 @@ export default class FirstScreen extends React.Component {
   async componentDidMount() {
     var serverIndex = await getServerIndex();
     if (isNaN(serverIndex) || serverIndex == null) {
-      console.log("serverIndex is NaN");
+      console.log('serverIndex is NaN');
       await setServerIndex();
     }
     console.log('Current server index: ', await getServerIndex());
@@ -92,14 +71,18 @@ export default class FirstScreen extends React.Component {
 
     dispatch(createAction('members/loadCurrentUserFromCache')({}));
     AppState.addEventListener('change', this._handleAppStateChange);
-    var configMapObject = {}
+    var configMapObject = {};
     if (__DEV__) {
-        configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
+      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
+        KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
     } else {
-        configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] = KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
+      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
+        KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
     }
-    configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] = "kobrew9-npv3ph2ns";
-    configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] = "kobrew9-82rqs2pdf";
+    configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] =
+      'kobrew9-npv3ph2ns';
+    configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] =
+      'kobrew9-82rqs2pdf';
     KochavaTracker.configure(configMapObject);
   }
 
@@ -114,7 +97,7 @@ export default class FirstScreen extends React.Component {
         {
           checked: true
         },
-        function() {
+        function () {
           this.loadCurrentStatus();
         }
       );
