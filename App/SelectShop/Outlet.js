@@ -158,7 +158,15 @@ export default class Outlet extends React.Component {
   };
 
   onAreaChosen = (area) => {
-    this.toggleAreaView()
+    if (area !== null) {
+      this.setState({
+        showAreaView: !this.state.showAreaView,
+        selectedArea: area
+      })
+    }
+    else {
+      this.toggleAreaView()
+    }
     //receive area here
     
   }
