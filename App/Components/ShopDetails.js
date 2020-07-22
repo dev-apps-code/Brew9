@@ -73,7 +73,7 @@ export default class ShopDetails extends Component {
               style={styles.pinImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
-              {details.short_address}
+              {details.short_address}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             </Text>
           </View>
           <View style={styles.detailTextContainer}>
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
     fontSize: 12 * fontAlpha,
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
+    marginTop: 2 * alpha
   },
   serviceInfoDetails: {
     fontSize: 9 * fontAlpha,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     // flexWrap: 'wrap',
     fontSize: 11 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
-    width: '80%'
+    width: '95%'
   },
   orderNowText: {
     color: TINT_COLOR,
@@ -206,9 +207,9 @@ const styles = StyleSheet.create({
   //image
   pinImage: {
     tintColor: LIGHT_GREY,
-    width: 8 * alpha,
-    height: 11 * alpha,
-    marginRight: alpha * 7
+    // width: 8 * alpha,
+    // height: 11 * alpha,
+    marginRight: alpha * 7,
   },
   clockImage: {
     tintColor: LIGHT_GREY,
