@@ -1,4 +1,11 @@
-import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Text
+} from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
@@ -62,7 +69,6 @@ export default class Outlet extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', this._didFocus);
-    this.toggleAreaView()
   }
 
   componentWillUnmount() {
@@ -162,14 +168,85 @@ export default class Outlet extends React.Component {
       this.setState({
         showAreaView: !this.state.showAreaView,
         selectedArea: area
-      })
-    }
-    else {
-      this.toggleAreaView()
+      });
+    } else {
+      this.toggleAreaView();
     }
     //receive area here
-    
-  }
+  };
+
+  searchFilter = (str) => {
+    arr = [
+      {
+          "id": 1,
+          "name": "ブルー九 Flagship Store",
+          "short_address": "The Walk, Beribi",
+          "longitude": "114.897994",
+          "latitude": "4.888659",
+          "phone_no": "242-6986",
+          "delivery_option": true,
+          "opening_hour": {
+              "start_time": "11:00",
+              "end_time": "23:00",
+              "order_start_time": "07:00",
+              "order_stop_time": "23:00"
+          },
+          "district": "Brunei-Muara",
+          "area": "Beribi",
+          "proximity_meters": 886,
+          "open": true,
+          "favourite": true,
+          "kilometer_distance": 14.7,
+          "minute_drive": 18
+      },
+      {
+        "id": 2,
+        "name": "ブルー九 Flagship Store",
+        "short_address": "davao",
+        "longitude": "114.897994",
+        "latitude": "4.888659",
+        "phone_no": "242-6986",
+        "delivery_option": true,
+        "opening_hour": {
+            "start_time": "11:00",
+            "end_time": "23:00",
+            "order_start_time": "07:00",
+            "order_stop_time": "23:00"
+        },
+        "district": "Brunei-Muara",
+        "area": "Beribi",
+        "proximity_meters": 886,
+        "open": true,
+        "favourite": true,
+        "kilometer_distance": 14.7,
+        "minute_drive": 18
+    }
+  ]
+    let re = new RegExp(str, 'i');
+    let r = [];
+
+    for (let k in arr) {
+        let flag = (
+            arr[k].short_address.match(re) || 
+            arr[k].district.match(re) || 
+            arr[k].area.match(re)
+        );
+
+        if (flag) {
+            r.push({ 
+                id: arr[k].id, 
+                address: arr[k].short_address + ' ' + arr[k].district + ' ' + arr[k].area,
+                area: arr[k].area
+
+            });
+        }
+
+       
+    }
+    console.log(r)
+    //r.area = area
+    // return r;
+}
 
   render() {
     return (
@@ -190,7 +267,17 @@ export default class Outlet extends React.Component {
               source={require('./../../assets/images/search.png')}
               style={styles.searchImage}
             />
-            <Text style={styles.text_2}>search</Text>
+            {/* <Text style={styles.text_2}>search</Text>
+             */}
+            <TouchableOpacity onPress={() => console.log('Pressed')}>
+              <TextInput
+                pointerEvents="none"
+                style={styles.searchInput}
+                placeholder="search"
+                onChangeText={(searchString) => this.searchFilter(searchString)}
+                underlineColorAndroid="transparent"
+              />
+            </TouchableOpacity>
           </View>
         </View>
         {this.state.showMap ? (
@@ -207,7 +294,7 @@ export default class Outlet extends React.Component {
           </View>
         ) : null}
         <TouchableOpacity style={styles.button_3} onPress={this.toggleMap}>
-          <Text style={styles.text_3}>
+          <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}
           </Text>
           <Image
@@ -285,9 +372,9 @@ const styles = StyleSheet.create({
     borderRadius: alpha * 21,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: alpha * 33,
-    width: alpha * 80
+    // justifyContent: 'center',
+    paddingHorizontal: alpha * 6,
+    height: alpha * 33
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -336,22 +423,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
 
-  //txt1
+  //txt
   text_1: {
     marginRight: alpha * 7,
     fontSize: fontAlpha * 12,
     fontFamily: TITLE_FONT,
     color: '#363636'
   },
+
   text_2: {
-    color: '#868686',
-    fontSize: fontAlpha * 12,
-    fontFamily: TITLE_FONT
-  },
-  text_3: {
     fontSize: fontAlpha * 12,
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
+  },
+  searchInput: {
+    width: alpha * 50
   }
 });
