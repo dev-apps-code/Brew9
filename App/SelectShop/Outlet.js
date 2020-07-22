@@ -38,12 +38,31 @@ export default class Outlet extends React.Component {
     isLoading: true,
     selectedArea: 'Brunei',
     showAreaView: false,
-    showMap: true
+    showMap: true,
+    list: [
+      {
+        district: 'Brunei-Muara',
+        areas: ['Beribi', 'Gadong']
+      },
+      {
+        district: 'davao',
+        areas: ['Beribi', 'Gadong']
+      },
+      {
+        district: 'cebu',
+        areas: ['Beribi', 'Gadong']
+      },
+      {
+        district: 'manila',
+        areas: ['Beribi', 'Gadong']
+      }
+    ]
   });
 
   componentDidMount() {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', this._didFocus);
+    this.toggleAreaView()
   }
 
   componentWillUnmount() {
@@ -138,6 +157,12 @@ export default class Outlet extends React.Component {
     }
   };
 
+  onAreaChosen = (area) => {
+    this.toggleAreaView()
+    //receive area here
+    
+  }
+
   render() {
     return (
       <View style={styles.mainView}>
@@ -194,6 +219,7 @@ export default class Outlet extends React.Component {
           refreshing={this.state.isLoading}
         />
         <Brew9SlideUp
+          locationList={this.state.list}
           visible={this.state.showAreaView}
           cancelable={true}
           title={'Exit App '}
@@ -201,7 +227,7 @@ export default class Outlet extends React.Component {
           okayButtonAction={() => {
             BackHandler.exitApp();
           }}
-          cancelButtonAction={this.toggleAreaView}
+          onAreaChosen={this.onAreaChosen}
         />
       </View>
     );
