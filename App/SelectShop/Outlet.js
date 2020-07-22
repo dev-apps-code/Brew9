@@ -48,7 +48,6 @@ export default class Outlet extends React.Component {
 
   componentWillUnmount() {
     this.focusListener.remove();
-    \;
   }
 
   _didFocus = async () => {
