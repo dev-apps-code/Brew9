@@ -28,7 +28,7 @@ export default class ShopDetails extends Component {
 
     return (
       <TouchableOpacity
-        onPress={() => onPressFavourite(details.id)}
+        onPress={() => onPressFavourite(details.id, details.favourite)}
         style={styles.favoriteButton}
       >
         <Image source={likeImage} style={styles.favoriteImage} />
@@ -42,8 +42,15 @@ export default class ShopDetails extends Component {
   }
 
   render() {
-    let { details, onPressFavourite, onPressOrderNow, shop } = this.props;
-    const itemStyle = shop.id == details.id ? styles.highlighted : {};
+    const { details, onPressOrderNow, shop } = this.props;
+    const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
+    const { start_time, end_time } = details.opening_hour;
+    let hoursText = null;
+
+    if (start_time && end_time) {
+      hoursText = `${start_time} - ${end_time}`;
+    }
+
     return (
       <View style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
@@ -66,8 +73,7 @@ export default class ShopDetails extends Component {
               style={styles.pinImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
-              complete long random address here, test purpose static only, 2
-              lines maxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              {details.short_address}
             </Text>
           </View>
           <View style={styles.detailTextContainer}>
@@ -76,7 +82,7 @@ export default class ShopDetails extends Component {
               style={styles.clockImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
-              10:00 - 22:30
+              {hoursText}
             </Text>
           </View>
         </View>

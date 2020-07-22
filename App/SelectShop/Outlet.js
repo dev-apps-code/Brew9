@@ -1,131 +1,144 @@
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  Platform,
-  Animated
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
 
 import {
-  DEFAULT_GREY_BACKGROUND,
-  LIGHT_GREY,
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
-  NON_TITLE_FONT,
   TAB_STYLE,
+  LIGHT_GREY_BACKGROUND
 } from '../Common/common_style';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import { createAction } from '../Utils';
+import AllShopsRequestObject from '../Requests/all_shops_request_object';
+import {
+  FavoriteShopsRequestObject,
+  DeleteFavoriteRequestObject
+} from '../Requests/favorite_shops_request_object';
+import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
-@connect(({ members, shops, orders }) => ({}))
+
+@connect(({ members, shops, orders }) => ({
+  allShops: shops.allShops,
+  companyId: members.company_id,
+  nearByShops: shops.nearByShops
+}))
 export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedArea: 'Brunei',
-      showAreaView: false,
-      showMap: true,
-      shopList: [
-        {
-          id: 3,
-          name: 'Bunny Good',
-          short_address: '404 Ward Street',
-          longitude: '114.89',
-          latitude: '4.8',
-          district: 'Brunei-Muara',
-          area: 'Area A',
-          proximity_meters: null,
-          open: true,
-          favourite: true,
-          phone_no: 123123
-        },
-        {
-          id: 1,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: false,
-          phone_no: 123123
-        },
-        {
-          id: 2,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true,
-          phone_no: 123123
-        },
-        {
-          id: 5,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: false,
-          phone_no: 123123
-        },
-        {
-          id: 4,
-          name: 'ブルー九 Flagship Store',
-          short_address: 'The Walk, Beribi',
-          longitude: '114.897994',
-          latitude: '4.888659',
-          district: 'No district',
-          area: 'No area',
-          proximity_meters: null,
-          open: true,
-          favourite: true,
-          phone_no: 123123
-        }
-      ]
-    };
+    this._didFocus = this._didFocus.bind(this);
+    this.updateShopsList = this.updateShopsList.bind(this);
+    this.state = this._getState();
   }
 
+  _getState = () => ({
+    isLoading: true,
+    selectedArea: 'Brunei',
+    showAreaView: false,
+    showMap: true
+  });
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', this._didFocus);
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+    \;
+  }
+
+  _didFocus = async () => {
+    this.loadAllShops();
+  };
+
+  loadAllShops = (onFinishLoading) => {
+    console.log('loadAllShops');
+    this.setState({ isLoading: true });
+    const { companyId, dispatch } = this.props;
+
+    const object = new AllShopsRequestObject();
+    object.setUrlId(companyId);
+
+    let callback = this.updateShopsList.bind(this);
+    if (typeof onFinishLoading === 'function') {
+      callback = onFinishLoading;
+    }
+    const params = { object, callback };
+    const action = createAction('shops/loadAllShops')(params);
+    dispatch(action);
+  };
+
+  updateShopsList = (eventObject) => {
+    this.setState({ isLoading: false });
+  };
+
   toggleMap = () => {
-    console.log(this.state.showMap);
     this.setState({
       showMap: !this.state.showMap
     });
   };
 
-  onPressFavourite = (id) => {
-    console.log(id);
+  toggleAreaView = () => {
+    let { showAreaView } = this.state;
+    this.setState({
+      showAreaView: !showAreaView
+    });
+  };
+
+  onPressFavourite = (id, isFavorite) => {
+    this.setState({ isLoading: true });
+    const { companyId, dispatch } = this.props;
+
+    let object = null;
+    let action = null;
+    let params = null;
+
+    const callback = this._onPressFavouriteCallback;
+
+    if (!isFavorite) {
+      object = new FavoriteShopsRequestObject(id);
+      object.setUrlId(companyId);
+
+      params = { object, callback };
+      action = createAction('shops/loadMakeFavoriteShop')(params);
+      dispatch(action);
+    } else {
+      object = new DeleteFavoriteRequestObject(id);
+      object.setUrlId(companyId);
+
+      params = { object, callback };
+      action = createAction('shops/loadUnfavoriteShop')(params);
+      dispatch(action);
+    }
+  };
+
+  _onPressFavouriteCallback = (eventObject) => {
+    this.setState({ isLoading: false });
+    this.loadAllShops();
   };
 
   onPressOrderNow = (id) => {
-    console.log(id);
+    const object = new SelectShopRequestObject();
+    object.setUrlId(this.props.companyId);
+    object.setShopId(id);
+
+    const callback = this.onPressOrderNowCallback.bind(this);
+    const params = { object, callback };
+    const action = createAction('shops/selectShop')(params);
+
+    this.props.dispatch(action);
   };
 
-  toggleAreaView = () => {
-    let { showAreaView } = this.state
-    this.setState({
-      showAreaView: !showAreaView
-    })
+  onPressOrderNowCallback = (eventObject) => {
+    if (eventObject.success) {
+      this.props.navigation.navigate('Home');
+    }
   };
 
-
-
-  componentDidMount() {}
   render() {
     return (
       <View style={styles.mainView}>
@@ -175,9 +188,11 @@ export default class Outlet extends React.Component {
           />
         </TouchableOpacity>
         <ShopList
-          shopList={this.state.shopList}
+          shops={this.props.allShops}
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
+          onRefresh={() => this.loadAllShops()}
+          refreshing={this.state.isLoading}
         />
         <Brew9SlideUp
           visible={this.state.showAreaView}
@@ -220,7 +235,7 @@ const styles = StyleSheet.create({
   mainView: {
     height: '100%',
     width: '100%',
-    backgroundColor: DEFAULT_GREY_BACKGROUND
+    backgroundColor: LIGHT_GREY_BACKGROUND
   },
   view_1: {
     flexDirection: 'row',
@@ -305,6 +320,5 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
-  },
-
+  }
 });
