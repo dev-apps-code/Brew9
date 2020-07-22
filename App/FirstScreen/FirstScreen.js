@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -11,21 +12,20 @@ if (Text.defaultProps == null) Text.defaultProps = {};
 Text.defaultProps.allowFontScaling = false;
 if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.allowFontScaling = false;
-import React from 'react';
 import { connect } from 'react-redux';
+import * as Permissions from 'expo-permissions';
+import { Analytics, Event, PageHit } from 'expo-analytics';
+import KochavaTracker from 'react-native-kochava-tracker';
 import { createAction, Storage } from '../Utils';
-import CurrentStatusRequestObject from '../Requests/current_status_request_object';
 import { AsyncStorage } from 'react-native';
 import Toast from 'react-native-easy-toast';
+import CurrentStatusRequestObject from '../Requests/current_status_request_object';
 import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
-import KochavaTracker from 'react-native-kochava-tracker';
 import { getMemberIdForApi } from '../Services/members_helper';
 import { getAppVersion, getBuildVersion } from '../Utils/server';
 import Brew9PopUp from '../Components/Brew9PopUp';
-import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
-import { getServerIndex, setServerIndex } from '../Utils/storage';
 import { loadServer } from '../Utils/server';
 
 @connect(({ members }) => ({
@@ -44,26 +44,24 @@ export default class FirstScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-      isSignedIn: false,
-      appState: AppState.currentState,
-      checked: false,
-      popUpVisible: false
-    };
+    this.state = this._getState();
   }
 
+  _getState = () => ({
+    appState: AppState.currentState,
+    checked: false,
+    loading: false,
+    isSignedIn: false,
+    isPermPopupVisible: false,
+    popUpVisible: false
+  });
+
   async componentDidMount() {
-    var serverIndex = await getServerIndex();
-    if (isNaN(serverIndex) || serverIndex == null) {
-      console.log('serverIndex is NaN');
-      await setServerIndex();
-    }
-    console.log('Current server index: ', await getServerIndex());
+    console.log('did mount');
     await loadServer();
     // console.log("done")
     let platform = Platform.OS;
-    const { dispatch } = this.props;
+    const { dispatch, navigation } = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event('FirstScreen', 'Launch', platform, getAppVersion())
@@ -71,22 +69,14 @@ export default class FirstScreen extends React.Component {
 
     dispatch(createAction('members/loadCurrentUserFromCache')({}));
     AppState.addEventListener('change', this._handleAppStateChange);
-    var configMapObject = {};
-    if (__DEV__) {
-      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
-        KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
-    } else {
-      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
-        KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
-    }
-    configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] =
-      'kobrew9-npv3ph2ns';
-    configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] =
-      'kobrew9-82rqs2pdf';
-    KochavaTracker.configure(configMapObject);
+
+    this.initializeKochavaTracker();
+
+    this.checkAppPermissions();
   }
 
   componentWillUnmount() {
+    this.focusListener.remove();
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
@@ -107,6 +97,32 @@ export default class FirstScreen extends React.Component {
     }
   }
 
+  checkAppPermissions = async () => {
+    await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    const storLocSettings = await AsyncStorage.getItem('permission_location');
+    const permLocSettings = await Permissions.askAsync(Permissions.LOCATION);
+
+    const params = {
+      isPermPopupVisible: true,
+      permPopupTitle: 'Location permissions required.',
+      permPopupDesc:
+        'To get full features of the app, you need to allow location permissions.',
+      permType: 'location',
+      permOkText: 'App Settings',
+      permCancelText: "Don't ask"
+    };
+
+    if (permLocSettings && permLocSettings.status !== 'granted') {
+      if (storLocSettings !== 'denied') {
+        this.setState(params);
+      }
+    }
+  };
+
+  checkNotificationsPermissions = async () => {
+    await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  };
+
   checkLoginStatus() {
     const { members, isReady, dispatch } = this.props;
     if (isReady) {
@@ -119,17 +135,38 @@ export default class FirstScreen extends React.Component {
       }
     }
   }
+
+  initializeKochavaTracker = () => {
+    var configMapObject = {};
+
+    if (__DEV__) {
+      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
+        KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
+    } else {
+      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
+        KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
+    }
+    configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] =
+      'kobrew9-npv3ph2ns';
+    configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] =
+      'kobrew9-82rqs2pdf';
+    KochavaTracker.configure(configMapObject);
+  };
+
   reset() {
     // console.log("back to first page");
     this.loadCurrentStatus();
   }
 
   _handleAppStateChange = (nextAppState) => {
+    console.log('appstatechange');
     const { members } = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
+      this.checkAppPermissions();
+
       if (members != null) {
         this.loadCurrentStatus();
       }
@@ -178,11 +215,13 @@ export default class FirstScreen extends React.Component {
       );
     });
   }
+
   onPressOk = () => {
     if (this.state.url != null && this.state.url != '') {
       Linking.openURL(this.state.url);
     }
   };
+
   renderForceUpdate = () => {
     let { popUpVisible, title, description } = this.state;
     return (
@@ -197,6 +236,48 @@ export default class FirstScreen extends React.Component {
     );
   };
 
+  _onPressDenyPermission = async () => {
+    const { permType } = this.state;
+
+    if (permType === 'location') {
+      await AsyncStorage.setItem('permission_location', 'denied');
+      this.setState({ isPermPopupVisible: false });
+    }
+  };
+
+  _onPressAllowPermission = async () => {
+    const { permType } = this.state;
+    const isPermPopupVisible = false;
+    const permPopupDesc = '';
+    const permPopupTitle = '';
+
+    if (permType === 'location') {
+      await AsyncStorage.setItem('permission_location', 'granted');
+      const response = await Permissions.askAsync(Permissions.LOCATION);
+
+      if (response.status === 'granted') {
+        await AsyncStorage.setItem('permission_location2', 'granted');
+      } else {
+        Linking.openURL('app-settings:brew9//');
+      }
+    }
+
+    this.setState({ isPermPopupVisible });
+  };
+
+  renderAskPermission = () => (
+    <Brew9PopUp
+      popUpVisible={this.state.isPermPopupVisible}
+      title={this.state.permPopupTitle}
+      description={this.state.permPopupDesc}
+      OkText={this.state.permOkText}
+      cancelText={this.state.permCancelText}
+      onPressOk={this._onPressAllowPermission}
+      onPressCancel={this._onPressDenyPermission}
+      onBackgroundPress={() => console.log('close')}
+    />
+  );
+
   render() {
     return (
       <View>
@@ -206,6 +287,7 @@ export default class FirstScreen extends React.Component {
                 }
             }} /> */}
         {this.renderForceUpdate()}
+        {this.renderAskPermission()}
         <Toast
           ref="toast"
           style={{ bottom: windowHeight / 2 - 40 }}
