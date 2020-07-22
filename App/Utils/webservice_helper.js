@@ -172,7 +172,10 @@ export function logResponse(description) {
 }
 
 export function _parseJSON(response) {
-  return response.text().then((text) => (text ? JSON.parse(text) : {}));
+  return response
+    .text()
+    .then((text) => (text ? JSON.parse(text) : {}))
+    .catch((error) => console.log('_parseJSON ERR ', error));
 }
 
 export default WebserviceHelper;

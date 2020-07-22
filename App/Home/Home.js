@@ -258,7 +258,6 @@ export default class Home extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { shop } = this.props;
     if (shop != null && shop.all_promotions != null) {
-      console.log('Trigger on Update');
       if (prevProps.cart !== this.props.cart) {
         this.check_promotion_trigger();
       }
@@ -329,15 +328,6 @@ export default class Home extends React.Component {
   unmounted = false;
 
   componentDidMount() {
-    //toast notification
-    this.refs.toast.show(
-      'Please select an outlet that is near you',
-      1000,
-      () => {
-        this.props.navigation.navigate('SelectShop');
-      }
-    );
-
     this.unmounted = false;
     Keyboard.dismiss();
     this.props.navigation.setParams({
@@ -437,45 +427,31 @@ export default class Home extends React.Component {
   };
 
   loadShops() {
-    if (!this.unmounted) {
-      const { dispatch, company_id, location } = this.props;
-      const { first_promo_popup } = this.state;
+    const { shop } = this.props;
 
-      const callback = (eventObject) => {
-        if (eventObject.success) {
-          const { menu_banners } = eventObject.result;
-          this.setState({ menu_banners }, () => {
-            this.check_promotion_trigger();
+    if (shop === null) {
+      const message = 'Please select an outlet that is near you.';
+      const callback = () => {
+        this.props.navigation.navigate('SelectShop');
+      };
 
-            const { refresh_products } = this.state;
-            if (refresh_products) {
-              this.loadStoreProducts();
+      this.refs.toast.show(message, 1000, callback);
+    } else {
+      const { menu_banners } = shop;
+      const { first_promo_popup, refresh_products } = this.state;
+      const callback = () => {
+        this.check_promotion_trigger();
 
-              console.log('--getlocation496--');
-              if (first_promo_popup == false) {
-                this.shouldShowFeatured(this.props.shop);
-              }
-            }
-          });
+        if (refresh_products) {
+          this.loadStoreProducts();
+
+          if (!first_promo_popup) {
+            this.shouldShowFeatured(shop);
+          }
         }
       };
 
-      var latitude = location != null ? location.coords.latitude : null;
-      var longitude = location != null ? location.coords.longitude : null;
-
-      /**
-       * Notice:
-       * Feature to load nearest shop is temporarily disabled. We load shop
-       * despite location of the user.
-       */
-      const obj = new NearestShopRequestObject(latitude, longitude);
-      obj.setUrlId(company_id);
-      dispatch(
-        createAction('shops/loadShops')({
-          object: obj,
-          callback
-        })
-      );
+      this.setState({ menu_banners }, callback);
     }
   }
 
@@ -539,14 +515,20 @@ export default class Home extends React.Component {
   }
 
   onRefresh() {
-    this.setState({
-      isRefreshing: true,
-      data: [],
-      products: [],
-      refresh_products: true
-    });
-    console.log('--loadshops580--');
-    this.loadShops();
+    const callback = () => {
+      console.log('onRefresh');
+      this.loadShops();
+    };
+
+    this.setState(
+      {
+        isRefreshing: true,
+        data: [],
+        products: [],
+        refresh_products: true
+      },
+      callback
+    );
   }
 
   onCheckoutPressed = () => {
