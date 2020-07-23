@@ -16,6 +16,7 @@ import {
   TINT_COLOR
 } from '../Common/common_style';
 import { alpha, fontAlpha } from '../Common/size';
+import openMap from 'react-native-open-maps';
 
 @connect(({ shops }) => ({
   shop: shops.selectedShop
@@ -45,6 +46,14 @@ export default class ShopDetails extends Component {
 
   onPressCall(phoneNumber) {
     Linking.openURL(`tel:${phoneNumber}`);
+  }
+
+  onPressDirection(lat,long) {
+    let latitude = lat ? parseFloat(lat) : 0.0;
+    let longitude = long ? parseFloat(long) : 0.0;
+    
+
+    openMap({ latitude: latitude, longitude: longitude });
   }
 
   render() {
@@ -107,7 +116,7 @@ export default class ShopDetails extends Component {
               <Image source={require('./../../assets/images/call.png')} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => this.onPressDirection(details.id)}
+              onPress={() => this.onPressDirection(details.latitude, details.longitude)}
               style={styles.accessButton}
             >
               <Image source={require('./../../assets/images/direction.png')} />
