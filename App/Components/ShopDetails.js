@@ -73,7 +73,7 @@ export default class ShopDetails extends Component {
               style={styles.pinImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
-              {details.short_address}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+              {details.short_address}
             </Text>
           </View>
           <View style={styles.detailTextContainer}>
