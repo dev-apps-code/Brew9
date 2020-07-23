@@ -162,7 +162,11 @@ export default class Outlet extends React.Component {
 
       });
     } else {
-      this.toggleAreaView();
+      this.setState({
+        showAreaView: !this.state.showAreaView,
+        displayShopList: [],
+        selectedArea: "Brunei"
+      })
     }
     //receive area here
   };
