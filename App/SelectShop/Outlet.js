@@ -288,6 +288,7 @@ export default class Outlet extends React.Component {
                 ? require('./../../assets/images/arrowUp.png')
                 : require('./../../assets/images/arrowDown.png')
             }
+            resizeMode='contain'
             style={styles.mapToggleImage}
           />
         </TouchableOpacity>
