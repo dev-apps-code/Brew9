@@ -26,7 +26,8 @@ class Brew9SlideUp extends Component {
   _getState = () => ({
     currentTab: 0,
     tabs: ['District', 'Town', 'All'],
-    chosenTown: ''
+    chosenTown: '',
+    chosenDistrict: null
   });
 
   renderTabs() {
@@ -35,7 +36,7 @@ class Brew9SlideUp extends Component {
     const tabSet = tabs.map((value, key) => {
       return (
         <Text
-          onPress = {key == 2 ? () => this.onPressAll() : null}
+          onPress={key == 2 ? () => this.onPressAll() : null}
           style={
             currentTab == key
               ? {
@@ -61,25 +62,26 @@ class Brew9SlideUp extends Component {
   onPressDistrict = (index) => {
     let { currentTab } = this.state;
     this.setState({
-      currentTab: currentTab + 1
+      currentTab: currentTab + 1,
+      chosenDistrict: index
     });
   };
 
   onPressTown = (item) => {
-    let {onAreaChosen} = this.props
+    let { onAreaChosen } = this.props;
     this.setState({
-      currentTab: 0,
+      currentTab: 0
     });
-    onAreaChosen(item)
+    onAreaChosen(item);
   };
 
   onPressAll = () => {
-    let {onAreaChosen} = this.props
+    let { onAreaChosen } = this.props;
     this.setState({
-      currentTab: 0,
+      currentTab: 0
     });
-    onAreaChosen(null)
-  }
+    onAreaChosen(null);
+  };
 
   renderDistrict = ({ item, index }) => {
     return (
@@ -89,7 +91,6 @@ class Brew9SlideUp extends Component {
     );
   };
 
-
   renderTown = ({ item, index }) => {
     return (
       <Text style={styles.nameText} onPress={() => this.onPressTown(item)}>
@@ -98,11 +99,45 @@ class Brew9SlideUp extends Component {
     );
   };
 
-  renderList = () => {
+  groupByDistrict() {
     let { locationList } = this.props;
-    let { currentTab } = this.state;
-    let data = currentTab == 0 ? locationList : currentTab == 1 ? locationList[currentTab].areas : null
-    let render = currentTab == 0 ? this.renderDistrict : currentTab == 1 ? this.renderTown : null
+    let tmp = [];
+
+    for (let k in locationList) {
+      let key = locationList[k].district;
+      if (!tmp[key]) tmp[key] = [];
+      if (tmp[key].indexOf(locationList[k].area) == -1)
+        tmp[key].push(locationList[k].area);
+    }
+
+    let r = Object.keys(tmp).map((key) => {
+      return { district: key, areas: tmp[key] };
+    });
+
+    // sort asc
+    r.sort((a, b) => {
+      return a.district < b.district ? -1 : 1;
+    });
+
+    return r;
+  }
+
+  renderList = () => {
+    let locationList = this.groupByDistrict();
+
+    let { currentTab, chosenDistrict } = this.state;
+    let data =
+      currentTab == 0
+        ? locationList
+        : currentTab == 1
+        ? locationList[chosenDistrict].areas
+        : null;
+    let render =
+      currentTab == 0
+        ? this.renderDistrict
+        : currentTab == 1
+        ? this.renderTown
+        : null;
     return (
       <FlatList
         data={data}
