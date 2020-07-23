@@ -93,7 +93,7 @@ export default class ShopDetails extends Component {
           </View>
           <View style={styles.detailTextContainer}>
             <Image
-              source={require('./../../assets/images/Group.png')}
+              source={require('./../../assets/images/clock.png')}
               style={styles.clockImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
@@ -234,8 +234,8 @@ const styles = StyleSheet.create({
   },
   clockImage: {
     tintColor: LIGHT_GREY,
-    width: 8 * alpha,
-    height: 8 * alpha,
+    width: 10 * alpha,
+    height: 10 * alpha,
     marginRight: alpha * 8
   },
   favoriteImage: {
