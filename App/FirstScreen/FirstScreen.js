@@ -57,26 +57,24 @@ export default class FirstScreen extends React.Component {
   });
 
   async componentDidMount() {
-    console.log('did mount');
     await loadServer();
-    // console.log("done")
-    let platform = Platform.OS;
-    const { dispatch, navigation } = this.props;
-    const analytics = new Analytics(ANALYTICS_ID);
-    analytics.event(
-      new Event('FirstScreen', 'Launch', platform, getAppVersion())
-    );
 
-    dispatch(createAction('members/loadCurrentUserFromCache')({}));
+    if (!__DEV__) {
+      const analytics = new Analytics(ANALYTICS_ID);
+      analytics.event(
+        new Event('FirstScreen', 'Launch', Platform.OS, getAppVersion())
+      );
+    }
+
+    // Handle app state changes in screen
     AppState.addEventListener('change', this._handleAppStateChange);
 
     this.initializeKochavaTracker();
-
+    this.props.dispatch(createAction('members/loadCurrentUserFromCache')({}));
     this.checkAppPermissions();
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
@@ -97,8 +95,9 @@ export default class FirstScreen extends React.Component {
     }
   }
 
-  checkAppPermissions = async () => {
+  async checkAppPermissions() {
     await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
     const storLocSettings = await AsyncStorage.getItem('permission_location');
     const permLocSettings = await Permissions.askAsync(Permissions.LOCATION);
 
@@ -112,16 +111,16 @@ export default class FirstScreen extends React.Component {
       permCancelText: "Don't ask"
     };
 
-    if (permLocSettings && permLocSettings.status !== 'granted') {
+    if (
+      Platform.OS === 'ios' &&
+      permLocSettings &&
+      permLocSettings.status !== 'granted'
+    ) {
       if (storLocSettings !== 'denied') {
         this.setState(params);
       }
     }
-  };
-
-  checkNotificationsPermissions = async () => {
-    await Permissions.askAsync(Permissions.NOTIFICATIONS);
-  };
+  }
 
   checkLoginStatus() {
     const { members, isReady, dispatch } = this.props;
@@ -136,36 +135,40 @@ export default class FirstScreen extends React.Component {
     }
   }
 
-  initializeKochavaTracker = () => {
-    var configMapObject = {};
+  initializeKochavaTracker() {
+    const {
+      PARAM_LOG_LEVEL_ENUM_KEY,
+      LOG_LEVEL_ENUM_TRACE_VALUE,
+      LOG_LEVEL_ENUM_INFO_VALUE,
+      PARAM_ANDROID_APP_GUID_STRING_KEY,
+      PARAM_IOS_APP_GUID_STRING_KEY
+    } = KochavaTracker;
 
-    if (__DEV__) {
-      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
-        KochavaTracker.LOG_LEVEL_ENUM_TRACE_VALUE;
-    } else {
-      configMapObject[KochavaTracker.PARAM_LOG_LEVEL_ENUM_KEY] =
-        KochavaTracker.LOG_LEVEL_ENUM_INFO_VALUE;
-    }
-    configMapObject[KochavaTracker.PARAM_ANDROID_APP_GUID_STRING_KEY] =
-      'kobrew9-npv3ph2ns';
-    configMapObject[KochavaTracker.PARAM_IOS_APP_GUID_STRING_KEY] =
-      'kobrew9-82rqs2pdf';
+    const configMapObject = {};
+
+    configMapObject[PARAM_LOG_LEVEL_ENUM_KEY] = __DEV__
+      ? LOG_LEVEL_ENUM_TRACE_VALUE
+      : LOG_LEVEL_ENUM_INFO_VALUE;
+    configMapObject[PARAM_ANDROID_APP_GUID_STRING_KEY] = 'kobrew9-npv3ph2ns';
+    configMapObject[PARAM_IOS_APP_GUID_STRING_KEY] = 'kobrew9-82rqs2pdf';
+
     KochavaTracker.configure(configMapObject);
-  };
+  }
 
   reset() {
     // console.log("back to first page");
     this.loadCurrentStatus();
   }
 
-  _handleAppStateChange = (nextAppState) => {
-    console.log('appstatechange');
+  _handleAppStateChange = async (nextAppState) => {
     const { members } = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      this.checkAppPermissions();
+      if (Platform.OS === 'ios') {
+        this.checkAppPermissions();
+      }
 
       if (members != null) {
         this.loadCurrentStatus();
@@ -281,11 +284,6 @@ export default class FirstScreen extends React.Component {
   render() {
     return (
       <View>
-        {/* <Brew9Modal visible={this.state.popUpVisible} cancelable={false} title={this.state.title} description={this.state.description} okayButtonAction={() => {
-                if (this.state.url != null && this.state.url != '') {
-                    Linking.openURL(this.state.url)
-                }
-            }} /> */}
         {this.renderForceUpdate()}
         {this.renderAskPermission()}
         <Toast
