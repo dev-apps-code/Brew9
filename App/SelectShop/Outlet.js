@@ -10,7 +10,6 @@ import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
-
 import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
@@ -27,17 +26,17 @@ import {
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
+import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
-  nearByShops: shops.nearByShops
+  nearbyShops: shops.nearbyShops,
+  location: members.location
 }))
 export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
-    this._didFocus = this._didFocus.bind(this);
-    this.updateShopsList = this.updateShopsList.bind(this);
     this.state = this._getState();
   }
 
@@ -79,22 +78,39 @@ export default class Outlet extends React.Component {
     this.loadAllShops();
   };
 
-  loadAllShops = (onFinishLoading) => {
-    console.log('loadAllShops');
+  loadAllShops() {
     this.setState({ isLoading: true });
-    const { companyId, dispatch } = this.props;
+    const { companyId, dispatch, location } = this.props;
 
-    const object = new AllShopsRequestObject();
-    object.setUrlId(companyId);
+    const latitude = location != null ? location.coords.latitude : null;
+    const longitude = location != null ? location.coords.longitude : null;
 
-    let callback = this.updateShopsList.bind(this);
-    if (typeof onFinishLoading === 'function') {
-      callback = onFinishLoading;
+    const allShopsObject = new AllShopsRequestObject();
+    allShopsObject.setUrlId(companyId);
+
+    const nearbyShopsObject = new NearestShopRequestObject(latitude, longitude);
+    nearbyShopsObject.setUrlId(companyId);
+
+    // load all shops always
+    dispatch(
+      createAction('shops/loadAllShops')({
+        object: allShopsObject,
+        callback: this.updateShopsList
+      })
+    );
+
+    if (latitude !== null && longitude !== null) {
+      this.setState({ isLoading: true });
+
+      // now load nearby shops
+      dispatch(
+        createAction('shops/loadNearbyShops')({
+          object: nearbyShopsObject,
+          callback: this.updateShopsList
+        })
+      );
     }
-    const params = { object, callback };
-    const action = createAction('shops/loadAllShops')(params);
-    dispatch(action);
-  };
+  }
 
   updateShopsList = (eventObject) => {
     this.setState({ isLoading: false });
@@ -150,7 +166,7 @@ export default class Outlet extends React.Component {
     object.setUrlId(this.props.companyId);
     object.setShopId(id);
 
-    const callback = this.onPressOrderNowCallback.bind(this);
+    const callback = this.onPressOrderNowCallback;
     const params = { object, callback };
     const action = createAction('shops/selectShop')(params);
 
@@ -178,75 +194,72 @@ export default class Outlet extends React.Component {
   searchFilter = (str) => {
     arr = [
       {
-          "id": 1,
-          "name": "ブルー九 Flagship Store",
-          "short_address": "The Walk, Beribi",
-          "longitude": "114.897994",
-          "latitude": "4.888659",
-          "phone_no": "242-6986",
-          "delivery_option": true,
-          "opening_hour": {
-              "start_time": "11:00",
-              "end_time": "23:00",
-              "order_start_time": "07:00",
-              "order_stop_time": "23:00"
-          },
-          "district": "Brunei-Muara",
-          "area": "Beribi",
-          "proximity_meters": 886,
-          "open": true,
-          "favourite": true,
-          "kilometer_distance": 14.7,
-          "minute_drive": 18
+        id: 1,
+        name: 'ブルー九 Flagship Store',
+        short_address: 'The Walk, Beribi',
+        longitude: '114.897994',
+        latitude: '4.888659',
+        phone_no: '242-6986',
+        delivery_option: true,
+        opening_hour: {
+          start_time: '11:00',
+          end_time: '23:00',
+          order_start_time: '07:00',
+          order_stop_time: '23:00'
+        },
+        district: 'Brunei-Muara',
+        area: 'Beribi',
+        proximity_meters: 886,
+        open: true,
+        favourite: true,
+        kilometer_distance: 14.7,
+        minute_drive: 18
       },
       {
-        "id": 2,
-        "name": "ブルー九 Flagship Store",
-        "short_address": "davao",
-        "longitude": "114.897994",
-        "latitude": "4.888659",
-        "phone_no": "242-6986",
-        "delivery_option": true,
-        "opening_hour": {
-            "start_time": "11:00",
-            "end_time": "23:00",
-            "order_start_time": "07:00",
-            "order_stop_time": "23:00"
+        id: 2,
+        name: 'ブルー九 Flagship Store',
+        short_address: 'davao',
+        longitude: '114.897994',
+        latitude: '4.888659',
+        phone_no: '242-6986',
+        delivery_option: true,
+        opening_hour: {
+          start_time: '11:00',
+          end_time: '23:00',
+          order_start_time: '07:00',
+          order_stop_time: '23:00'
         },
-        "district": "Brunei-Muara",
-        "area": "Beribi",
-        "proximity_meters": 886,
-        "open": true,
-        "favourite": true,
-        "kilometer_distance": 14.7,
-        "minute_drive": 18
-    }
-  ]
+        district: 'Brunei-Muara',
+        area: 'Beribi',
+        proximity_meters: 886,
+        open: true,
+        favourite: true,
+        kilometer_distance: 14.7,
+        minute_drive: 18
+      }
+    ];
     let re = new RegExp(str, 'i');
     let r = [];
 
     for (let k in arr) {
-        let flag = (
-            arr[k].short_address.match(re) || 
-            arr[k].district.match(re) || 
-            arr[k].area.match(re)
-        );
+      let flag =
+        arr[k].short_address.match(re) ||
+        arr[k].district.match(re) ||
+        arr[k].area.match(re);
 
-        if (flag) {
-            r.push({ 
-                id: arr[k].id, 
-                address: arr[k].short_address + ' ' + arr[k].district + ' ' + arr[k].area,
-                area: arr[k].area
-
-            });
-        }
-
-       
+      if (flag) {
+        r.push({
+          id: arr[k].id,
+          address:
+            arr[k].short_address + ' ' + arr[k].district + ' ' + arr[k].area,
+          area: arr[k].area
+        });
+      }
     }
-    console.log(r)
+    console.log(r);
     //r.area = area
     // return r;
-}
+  };
 
   render() {
     return (
@@ -307,7 +320,11 @@ export default class Outlet extends React.Component {
           />
         </TouchableOpacity>
         <ShopList
-          shops={this.props.allShops}
+          shops={
+            this.props.nearbyShops.length > 0
+              ? this.props.nearbyShops
+              : this.props.allShops
+          }
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
           onRefresh={() => this.loadAllShops()}
