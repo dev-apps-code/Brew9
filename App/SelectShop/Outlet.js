@@ -10,7 +10,6 @@ import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
-
 import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
@@ -27,18 +26,18 @@ import {
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
+import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import Brew9DropDown from '../Components/Brew9DropDown';
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
-  nearByShops: shops.nearByShops
+  nearbyShops: shops.nearbyShops,
+  location: members.location
 }))
 export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
-    this._didFocus = this._didFocus.bind(this);
-    this.updateShopsList = this.updateShopsList.bind(this);
     this.state = this._getState();
   }
 
@@ -64,22 +63,39 @@ export default class Outlet extends React.Component {
     this.loadAllShops();
   };
 
-  loadAllShops = (onFinishLoading) => {
-    console.log('loadAllShops');
+  loadAllShops() {
     this.setState({ isLoading: true });
-    const { companyId, dispatch } = this.props;
+    const { companyId, dispatch, location } = this.props;
 
-    const object = new AllShopsRequestObject();
-    object.setUrlId(companyId);
+    const latitude = location != null ? location.coords.latitude : null;
+    const longitude = location != null ? location.coords.longitude : null;
 
-    let callback = this.updateShopsList.bind(this);
-    if (typeof onFinishLoading === 'function') {
-      callback = onFinishLoading;
+    const allShopsObject = new AllShopsRequestObject();
+    allShopsObject.setUrlId(companyId);
+
+    const nearbyShopsObject = new NearestShopRequestObject(latitude, longitude);
+    nearbyShopsObject.setUrlId(companyId);
+
+    // load all shops always
+    dispatch(
+      createAction('shops/loadAllShops')({
+        object: allShopsObject,
+        callback: this.updateShopsList
+      })
+    );
+
+    if (latitude !== null && longitude !== null) {
+      this.setState({ isLoading: true });
+
+      // now load nearby shops
+      dispatch(
+        createAction('shops/loadNearbyShops')({
+          object: nearbyShopsObject,
+          callback: this.updateShopsList
+        })
+      );
     }
-    const params = { object, callback };
-    const action = createAction('shops/loadAllShops')(params);
-    dispatch(action);
-  };
+  }
 
   updateShopsList = (eventObject) => {
     this.setState({ isLoading: false });
@@ -135,7 +151,7 @@ export default class Outlet extends React.Component {
     object.setUrlId(this.props.companyId);
     object.setShopId(id);
 
-    const callback = this.onPressOrderNowCallback.bind(this);
+    const callback = this.onPressOrderNowCallback;
     const params = { object, callback };
     const action = createAction('shops/selectShop')(params);
 
@@ -225,8 +241,9 @@ export default class Outlet extends React.Component {
 
   render() {
     const { displayShopList } = this.state;
-    const { allShops } = this.props;
-    const shops = displayShopList.length > 0 ? displayShopList : allShops;
+    const { allShops, nearbyShops } = this.props;
+    let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
+    shops = displayShopList.length > 0 ? displayShopList : shops;
     return (
       <View style={styles.mainView}>
         <View style={styles.view_1}>
@@ -288,7 +305,7 @@ export default class Outlet extends React.Component {
                 ? require('./../../assets/images/arrowUp.png')
                 : require('./../../assets/images/arrowDown.png')
             }
-            resizeMode='contain'
+            resizeMode="contain"
             style={styles.mapToggleImage}
           />
         </TouchableOpacity>
