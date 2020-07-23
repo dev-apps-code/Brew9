@@ -18,7 +18,8 @@ import {
 import { alpha, fontAlpha } from '../Common/size';
 import openMap from 'react-native-open-maps';
 
-@connect(({ shops }) => ({
+@connect(({ members, shops }) => ({
+  currentUser: members.profile,
   shop: shops.selectedShop
 }))
 export default class ShopDetails extends Component {
@@ -27,21 +28,23 @@ export default class ShopDetails extends Component {
   }
 
   renderFavoriteButton = () => {
-    const { details, onPressFavourite } = this.props;
-    let likeImage = require('./../../assets/images/like.png');
+    const { currentUser, details, onPressFavourite } = this.props;
+    if (currentUser !== null) {
+      let likeImage = require('./../../assets/images/like.png');
 
-    if (details.favourite) {
-      likeImage = require('./../../assets/images/likeActive.png');
+      if (details.favourite) {
+        likeImage = require('./../../assets/images/likeActive.png');
+      }
+
+      return (
+        <TouchableOpacity
+          onPress={() => onPressFavourite(details.id, details.favourite)}
+          style={styles.favoriteButton}
+        >
+          <Image source={likeImage} style={styles.favoriteImage} />
+        </TouchableOpacity>
+      );
     }
-
-    return (
-      <TouchableOpacity
-        onPress={() => onPressFavourite(details.id, details.favourite)}
-        style={styles.favoriteButton}
-      >
-        <Image source={likeImage} style={styles.favoriteImage} />
-      </TouchableOpacity>
-    );
   };
 
   onPressCall(phoneNumber) {
