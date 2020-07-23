@@ -14,6 +14,7 @@ if (TextInput.defaultProps == null) TextInput.defaultProps = {};
 TextInput.defaultProps.allowFontScaling = false;
 import { connect } from 'react-redux';
 import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import KochavaTracker from 'react-native-kochava-tracker';
 import { createAction, Storage } from '../Utils';
@@ -119,6 +120,19 @@ export default class FirstScreen extends React.Component {
       if (storLocSettings !== 'denied') {
         this.setState(params);
       }
+    }
+
+    if (permLocSettings && permLocSettings.status === 'granted') {
+      Location.watchPositionAsync(
+        {
+          distanceInterval: 1000,
+          timeInterval: 10000
+        },
+        (newLocation) => {
+          this.props.dispatch(createAction('members/setLocation')(newLocation));
+        },
+        (error) => console.log(error)
+      );
     }
   }
 
