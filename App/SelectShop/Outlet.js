@@ -29,7 +29,6 @@ import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
 import Brew9DropDown from '../Components/Brew9DropDown';
 
-
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
   companyId: members.company_id,
@@ -151,85 +150,83 @@ export default class Outlet extends React.Component {
 
   onAreaChosen = (area) => {
     if (area !== null) {
-      let { allShops } = this.props
+      let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
-        return obj.area == area
+        return obj.area == area;
       });
       this.setState({
         showAreaView: !this.state.showAreaView,
         selectedArea: area,
         displayShopList: newArray
-
       });
     } else {
       this.setState({
         showAreaView: !this.state.showAreaView,
         displayShopList: [],
-        selectedArea: "Brunei"
-      })
+        selectedArea: 'Brunei'
+      });
     }
     //receive area here
   };
 
   searchFilter = (str) => {
-    if (str  == '') {
+    if (str == '') {
       this.setState({
         searchResults: []
-      })
+      });
       return;
     }
-    
 
-    let { allShops } = this.props
+    let { allShops } = this.props;
     let re = new RegExp(str, 'i');
     let r = [];
 
     for (let k in allShops) {
-        let flag = (
-          allShops[k].short_address.match(re) || 
-          allShops[k].district.match(re) || 
-          allShops[k].area.match(re)
-        );
+      let flag =
+        allShops[k].short_address.match(re) ||
+        allShops[k].district.match(re) ||
+        allShops[k].area.match(re);
 
-        if (flag) {
-            r.push({ 
-                id: allShops[k].id, 
-                address: allShops[k].short_address + ' ' + allShops[k].district + ' ' + allShops[k].area,
-                area: allShops[k].area
-
-            });
-        }
-
-       
+      if (flag) {
+        r.push({
+          id: allShops[k].id,
+          address:
+            allShops[k].short_address +
+            ' ' +
+            allShops[k].district +
+            ' ' +
+            allShops[k].area,
+          area: allShops[k].area
+        });
+      }
     }
     this.setState({
       searchResults: r
-    })
-}
+    });
+  };
 
-onPressResult = (item) => {
-  let { allShops } = this.props
-  console.log(item)
-  this.textInput.clear()
+  onPressResult = (item) => {
+    let { allShops } = this.props;
+    console.log(item);
+    this.textInput.clear();
 
-  var newArray = allShops.filter(function (obj) {
-    return obj.id == item.id
-  });
+    var newArray = allShops.filter(function (obj) {
+      return obj.id == item.id;
+    });
 
-  console.log("-----------")
-  console.log(newArray)
-  this.setState({
-    searchResults: [],
-    selectedArea: item.area,
-    displayShopList: newArray
-  })
-  
-}
+    console.log('-----------');
+    console.log(newArray);
+    this.setState({
+      searchResults: [],
+      selectedArea: item.area,
+      displayShopList: newArray
+    });
+  };
 
   render() {
-    const {displayShopList} = this.state;
-    const {allShops} = this.props;
-    const shops = displayShopList.length > 0 ? displayShopList: allShops;
+    const { displayShopList } = this.state;
+    const { allShops } = this.props;
+    const shops = displayShopList.length > 0 ? displayShopList : allShops;
     return (
       <View style={styles.mainView}>
         <View style={styles.view_1}>
@@ -253,7 +250,9 @@ onPressResult = (item) => {
             <TouchableOpacity onPress={() => console.log('Pressed')}>
               <TextInput
                 pointerEvents="none"
-                ref={input => { this.textInput = input }}
+                ref={(input) => {
+                  this.textInput = input;
+                }}
                 style={styles.searchInput}
                 placeholder="search"
                 onChangeText={(searchString) => this.searchFilter(searchString)}
@@ -275,7 +274,10 @@ onPressResult = (item) => {
             />
           </View>
         ) : null}
-        <Brew9DropDown results={this.state.searchResults} onPressResult= {this.onPressResult}/>
+        <Brew9DropDown
+          results={this.state.searchResults}
+          onPressResult={this.onPressResult}
+        />
         <TouchableOpacity style={styles.button_3} onPress={this.toggleMap}>
           <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}

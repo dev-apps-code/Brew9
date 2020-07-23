@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, Image, Linking } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  Linking
+} from 'react-native';
 import { connect } from 'react-redux';
 import {
   TITLE_FONT,
@@ -36,9 +43,8 @@ export default class ShopDetails extends Component {
     );
   };
 
-  onPressCall (phoneNumber) {
+  onPressCall(phoneNumber) {
     Linking.openURL(`tel:${phoneNumber}`);
-
   }
 
   render() {
@@ -94,10 +100,16 @@ export default class ShopDetails extends Component {
             <Text style={styles.orderNowText}>Order Now</Text>
           </TouchableOpacity>
           <View style={styles.accessView}>
-            <TouchableOpacity onPress={() => this.onPressCall(details.phone_no)} style={styles.accessButton}>
+            <TouchableOpacity
+              onPress={() => this.onPressCall(details.phone_no)}
+              style={styles.accessButton}
+            >
               <Image source={require('./../../assets/images/call.png')} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onPressDirection(details.id)} style={styles.accessButton}>
+            <TouchableOpacity
+              onPress={() => this.onPressDirection(details.id)}
+              style={styles.accessButton}
+            >
               <Image source={require('./../../assets/images/direction.png')} />
             </TouchableOpacity>
           </View>
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
   orderNowView: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   detailView: {
     flexDirection: 'row'
@@ -153,7 +165,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   favoriteButton: {
     height: alpha * 15,
@@ -163,9 +175,9 @@ const styles = StyleSheet.create({
     bottom: alpha * 4
   },
   accessButton: {
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center'
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   accessView: {
     flexDirection: 'row',
@@ -209,7 +221,7 @@ const styles = StyleSheet.create({
     tintColor: LIGHT_GREY,
     // width: 8 * alpha,
     // height: 11 * alpha,
-    marginRight: alpha * 7,
+    marginRight: alpha * 7
   },
   clockImage: {
     tintColor: LIGHT_GREY,

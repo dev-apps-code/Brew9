@@ -16,8 +16,12 @@ import {
   FlatList
 } from 'react-native';
 
-
-import { TITLE_FONT, NON_TITLE_FONT, TINT_COLOR, DEFAULT_BORDER_RADIUS } from '../Common/common_style';
+import {
+  TITLE_FONT,
+  NON_TITLE_FONT,
+  TINT_COLOR,
+  DEFAULT_BORDER_RADIUS
+} from '../Common/common_style';
 
 class Brew9DropDown extends Component {
   constructor(props) {
@@ -32,43 +36,45 @@ class Brew9DropDown extends Component {
   });
 
   renderItem = ({ item, index }) => {
-    let { onPressResult } = this.props
+    let { onPressResult } = this.props;
     return (
-      <Text style={styles.resultsText} onPress={()=>onPressResult(item)}>{item.address}</Text>
+      <Text style={styles.resultsText} onPress={() => onPressResult(item)}>
+        {item.address}
+      </Text>
     );
   };
 
   render() {
     let { results } = this.props;
     return (
-        <View style={ results.length > 0 ? styles.mainView : null}>
-            <FlatList
-            data={results}
-            renderItem={this.renderItem}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => `${index}-${item.id}`}
-          />
-        </View>
+      <View style={results.length > 0 ? styles.mainView : null}>
+        <FlatList
+          data={results}
+          renderItem={this.renderItem}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}-${item.id}`}
+        />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   mainView: {
-      width: alpha * 300,
+    width: alpha * 300,
     //   height: alpha * 20,
-      backgroundColor:'white',
-      position: 'absolute',
-      right: alpha * 10,
-      top: alpha * 40,
-      borderWidth:1,
-      borderColor: TINT_COLOR,
-      borderRadius: DEFAULT_BORDER_RADIUS
+    backgroundColor: 'white',
+    position: 'absolute',
+    right: alpha * 10,
+    top: alpha * 40,
+    borderWidth: 1,
+    borderColor: TINT_COLOR,
+    borderRadius: DEFAULT_BORDER_RADIUS
   },
 
   resultsText: {
-      fontSize: fontAlpha * 14,
-      fontFamily: NON_TITLE_FONT
+    fontSize: fontAlpha * 14,
+    fontFamily: NON_TITLE_FONT
   }
 });
 export default Brew9DropDown;
