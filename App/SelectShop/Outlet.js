@@ -1,22 +1,32 @@
-import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Text
+} from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
+
 import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
+  TAB_STYLE,
   LIGHT_GREY_BACKGROUND
 } from '../Common/common_style';
 import MapView from 'react-native-maps';
-import { createAction, NavigationActions } from '../Utils';
+import { createAction } from '../Utils';
 import AllShopsRequestObject from '../Requests/all_shops_request_object';
 import {
   FavoriteShopsRequestObject,
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
+import Brew9SlideUp from '../Components/Brew9SlideUp';
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
@@ -32,8 +42,28 @@ export default class Outlet extends React.Component {
   }
 
   _getState = () => ({
+    isLoading: true,
+    selectedArea: 'Brunei',
+    showAreaView: false,
     showMap: true,
-    isLoading: true
+    list: [
+      {
+        district: 'Brunei-Muara',
+        areas: ['Beribi', 'Gadong']
+      },
+      {
+        district: 'davao',
+        areas: ['Beribi', 'Gadong']
+      },
+      {
+        district: 'cebu',
+        areas: ['Beribi', 'Gadong']
+      },
+      {
+        district: 'manila',
+        areas: ['Beribi', 'Gadong']
+      }
+    ]
   });
 
   componentDidMount() {
@@ -73,6 +103,13 @@ export default class Outlet extends React.Component {
   toggleMap = () => {
     this.setState({
       showMap: !this.state.showMap
+    });
+  };
+
+  toggleAreaView = () => {
+    let { showAreaView } = this.state;
+    this.setState({
+      showAreaView: !showAreaView
     });
   };
 
@@ -126,12 +163,100 @@ export default class Outlet extends React.Component {
     }
   };
 
+  onAreaChosen = (area) => {
+    if (area !== null) {
+      this.setState({
+        showAreaView: !this.state.showAreaView,
+        selectedArea: area
+      });
+    } else {
+      this.toggleAreaView();
+    }
+    //receive area here
+  };
+
+  searchFilter = (str) => {
+    arr = [
+      {
+          "id": 1,
+          "name": "ブルー九 Flagship Store",
+          "short_address": "The Walk, Beribi",
+          "longitude": "114.897994",
+          "latitude": "4.888659",
+          "phone_no": "242-6986",
+          "delivery_option": true,
+          "opening_hour": {
+              "start_time": "11:00",
+              "end_time": "23:00",
+              "order_start_time": "07:00",
+              "order_stop_time": "23:00"
+          },
+          "district": "Brunei-Muara",
+          "area": "Beribi",
+          "proximity_meters": 886,
+          "open": true,
+          "favourite": true,
+          "kilometer_distance": 14.7,
+          "minute_drive": 18
+      },
+      {
+        "id": 2,
+        "name": "ブルー九 Flagship Store",
+        "short_address": "davao",
+        "longitude": "114.897994",
+        "latitude": "4.888659",
+        "phone_no": "242-6986",
+        "delivery_option": true,
+        "opening_hour": {
+            "start_time": "11:00",
+            "end_time": "23:00",
+            "order_start_time": "07:00",
+            "order_stop_time": "23:00"
+        },
+        "district": "Brunei-Muara",
+        "area": "Beribi",
+        "proximity_meters": 886,
+        "open": true,
+        "favourite": true,
+        "kilometer_distance": 14.7,
+        "minute_drive": 18
+    }
+  ]
+    let re = new RegExp(str, 'i');
+    let r = [];
+
+    for (let k in arr) {
+        let flag = (
+            arr[k].short_address.match(re) || 
+            arr[k].district.match(re) || 
+            arr[k].area.match(re)
+        );
+
+        if (flag) {
+            r.push({ 
+                id: arr[k].id, 
+                address: arr[k].short_address + ' ' + arr[k].district + ' ' + arr[k].area,
+                area: arr[k].area
+
+            });
+        }
+
+       
+    }
+    console.log(r)
+    //r.area = area
+    // return r;
+}
+
   render() {
     return (
       <View style={styles.mainView}>
         <View style={styles.view_1}>
-          <TouchableOpacity style={styles.button_1}>
-            <Text style={styles.text_1}> Brunei </Text>
+          <TouchableOpacity
+            style={styles.button_1}
+            onPress={this.toggleAreaView}
+          >
+            <Text style={styles.text_1}> {this.state.selectedArea} </Text>
             <Image
               source={require('./../../assets/images/next.png')}
               style={styles.rightArrowImage}
@@ -142,7 +267,17 @@ export default class Outlet extends React.Component {
               source={require('./../../assets/images/search.png')}
               style={styles.searchImage}
             />
-            <Text style={styles.text_2}>search</Text>
+            {/* <Text style={styles.text_2}>search</Text>
+             */}
+            <TouchableOpacity onPress={() => console.log('Pressed')}>
+              <TextInput
+                pointerEvents="none"
+                style={styles.searchInput}
+                placeholder="search"
+                onChangeText={(searchString) => this.searchFilter(searchString)}
+                underlineColorAndroid="transparent"
+              />
+            </TouchableOpacity>
           </View>
         </View>
         {this.state.showMap ? (
@@ -159,7 +294,7 @@ export default class Outlet extends React.Component {
           </View>
         ) : null}
         <TouchableOpacity style={styles.button_3} onPress={this.toggleMap}>
-          <Text style={styles.text_3}>
+          <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}
           </Text>
           <Image
@@ -178,6 +313,17 @@ export default class Outlet extends React.Component {
           onRefresh={() => this.loadAllShops()}
           refreshing={this.state.isLoading}
         />
+        <Brew9SlideUp
+          locationList={this.state.list}
+          visible={this.state.showAreaView}
+          cancelable={true}
+          title={'Exit App '}
+          description={'exit the  application?'}
+          okayButtonAction={() => {
+            BackHandler.exitApp();
+          }}
+          onAreaChosen={this.onAreaChosen}
+        />
       </View>
     );
   }
@@ -194,6 +340,7 @@ Outlet.navigationOptions = {
       fontSize: 14 * fontAlpha,
       fontFamily: TITLE_FONT
     },
+    tabStyle: TAB_STYLE,
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
       width: '10%',
@@ -225,9 +372,9 @@ const styles = StyleSheet.create({
     borderRadius: alpha * 21,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: alpha * 33,
-    width: alpha * 80
+    // justifyContent: 'center',
+    paddingHorizontal: alpha * 6,
+    height: alpha * 33
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -276,22 +423,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
 
-  //txt1
+  //txt
   text_1: {
     marginRight: alpha * 7,
     fontSize: fontAlpha * 12,
     fontFamily: TITLE_FONT,
     color: '#363636'
   },
+
   text_2: {
-    color: '#868686',
-    fontSize: fontAlpha * 12,
-    fontFamily: TITLE_FONT
-  },
-  text_3: {
     fontSize: fontAlpha * 12,
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
+  },
+  searchInput: {
+    width: alpha * 50
   }
 });

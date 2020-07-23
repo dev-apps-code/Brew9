@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import {
   TITLE_FONT,
@@ -36,6 +36,11 @@ export default class ShopDetails extends Component {
     );
   };
 
+  onPressCall (phoneNumber) {
+    Linking.openURL(`tel:${phoneNumber}`);
+
+  }
+
   render() {
     const { details, onPressOrderNow, shop } = this.props;
     const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
@@ -68,7 +73,7 @@ export default class ShopDetails extends Component {
               style={styles.pinImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
-              {details.short_address}
+              {details.short_address}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             </Text>
           </View>
           <View style={styles.detailTextContainer}>
@@ -88,6 +93,14 @@ export default class ShopDetails extends Component {
           >
             <Text style={styles.orderNowText}>Order Now</Text>
           </TouchableOpacity>
+          <View style={styles.accessView}>
+            <TouchableOpacity onPress={() => this.onPressCall(details.phone_no)} style={styles.accessButton}>
+              <Image source={require('./../../assets/images/call.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onPressDirection(details.id)} style={styles.accessButton}>
+              <Image source={require('./../../assets/images/direction.png')} />
+            </TouchableOpacity>
+          </View>
         </View>
         {this.renderFavoriteButton()}
       </View>
@@ -124,7 +137,7 @@ const styles = StyleSheet.create({
   orderNowView: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   detailView: {
     flexDirection: 'row'
@@ -138,11 +151,9 @@ const styles = StyleSheet.create({
   },
   orderButton: {
     width: '100%',
-    height: alpha * 50,
-    borderLeftWidth: 1,
-    borderLeftColor: '#E7E6E6',
+    height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   favoriteButton: {
     height: alpha * 15,
@@ -150,6 +161,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: alpha * 4,
     bottom: alpha * 4
+  },
+  accessButton: {
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  accessView: {
+    flexDirection: 'row',
+    paddingHorizontal: alpha * 20
   },
   //text
   openText: {
@@ -161,7 +181,8 @@ const styles = StyleSheet.create({
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
     fontSize: 12 * fontAlpha,
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
+    marginTop: 2 * alpha
   },
   serviceInfoDetails: {
     fontSize: 9 * fontAlpha,
@@ -175,7 +196,7 @@ const styles = StyleSheet.create({
     // flexWrap: 'wrap',
     fontSize: 11 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
-    width: '80%'
+    width: '95%'
   },
   orderNowText: {
     color: TINT_COLOR,
@@ -186,9 +207,9 @@ const styles = StyleSheet.create({
   //image
   pinImage: {
     tintColor: LIGHT_GREY,
-    width: 8 * alpha,
-    height: 11 * alpha,
-    marginRight: alpha * 7
+    // width: 8 * alpha,
+    // height: 11 * alpha,
+    marginRight: alpha * 7,
   },
   clockImage: {
     tintColor: LIGHT_GREY,

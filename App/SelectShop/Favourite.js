@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native';
 import React from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { alpha, fontAlpha } from '../Common/size';
 import { connect } from 'react-redux';
 import { createAction } from '../Utils/index';
@@ -7,6 +7,7 @@ import {
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
+  TAB_STYLE,
   LIGHT_GREY_BACKGROUND,
   NON_TITLE_FONT
 } from '../Common/common_style';
@@ -128,7 +129,7 @@ export default class Favourite extends React.Component {
     );
   }
 }
-
+Platform.OS === 'ios' ? 200 : 100;
 Favourite.navigationOptions = {
   tabBarOptions: {
     activeTintColor: TINT_COLOR,
@@ -145,6 +146,7 @@ Favourite.navigationOptions = {
       width: '10%',
       left: '20%'
     },
+    tabStyle: TAB_STYLE,
     upperCaseLabel: false
   }
 };

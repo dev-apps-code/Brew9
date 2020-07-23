@@ -1,4 +1,4 @@
-import { windowWidth, alpha } from './size';
+import { windowWidth, windowHeight, alpha } from './size';
 import { StyleSheet, Platform } from 'react-native';
 
 export const TITLE_FONT = 'ClanPro-News';
@@ -18,6 +18,13 @@ export const TABBAR_ACTIVE_TINT = 'black';
 export const BUTTONBOTTOMPADDING = Platform.OS === 'ios' ? 40 * alpha : 0;
 export const TOAST_DURATION = 3000;
 export const DEFAULT_BORDER_RADIUS = 6 * alpha;
+export const TAB_STYLE =
+  Platform.OS === 'android'
+    ? {
+        height: alpha * 5,
+        marginBottom: alpha * 4
+      }
+    : {};
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: 'blue',
