@@ -441,6 +441,7 @@ export default class Home extends React.Component {
       const { first_promo_popup, refresh_products } = this.state;
       const callback = () => {
         this.check_promotion_trigger();
+        this.computeDistance();
 
         if (refresh_products) {
           this.loadStoreProducts();
