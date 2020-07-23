@@ -160,7 +160,7 @@ export default class FirstScreen extends React.Component {
     this.loadCurrentStatus();
   }
 
-  _handleAppStateChange = async (nextAppState) => {
+  _handleAppStateChange = (nextAppState) => {
     const { members } = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
