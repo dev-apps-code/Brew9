@@ -93,7 +93,7 @@ export default class ShopDetails extends Component {
           </View>
           <View style={styles.detailTextContainer}>
             <Image
-              source={require('./../../assets/images/clock.png')}
+              source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
             />
             <Text numberOfLines={2} style={styles.detailText}>
