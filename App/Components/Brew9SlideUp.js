@@ -13,7 +13,9 @@ import {
   Image,
   ActivityIndicator,
   Button,
-  FlatList
+  FlatList,
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native';
 import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
 
@@ -158,7 +160,7 @@ class Brew9SlideUp extends Component {
             slideFrom: 'bottom'
           })
         }
-        onTouchOutside={()=> toggleAreaView()}
+        onTouchOutside={() => toggleAreaView()}
       >
         <ModalContent>
           <View style={styles.modalView}>
@@ -167,6 +169,12 @@ class Brew9SlideUp extends Component {
             {/* <Button style={{marginTop: alpha * 3}}title="test" onPress={this.test}></Button> */}
             {this.renderList()}
           </View>
+            <TouchableOpacity onPress={() => toggleAreaView()} style={styles.closeButton}>
+            <Image
+              source={require('./../../assets/images/cancel.png')}
+              style={styles.closeImage}
+            />
+            </TouchableOpacity>
         </ModalContent>
       </Modal.BottomModal>
     );
@@ -202,6 +210,17 @@ const styles = StyleSheet.create({
     fontSize: fontAlpha * 12,
     fontFamily: NON_TITLE_FONT,
     marginTop: alpha * 5
+  },
+  closeImage: {
+    // position: 'absolute',
+    // top: alpha * 5,
+    // right: alpha * 5,
+    tintColor: '#00B2E3'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: alpha * 5,
+    right: alpha * 5,
   }
 });
 export default Brew9SlideUp;
