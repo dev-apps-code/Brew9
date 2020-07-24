@@ -162,19 +162,22 @@ class Brew9SlideUp extends Component {
         }
         onTouchOutside={() => toggleAreaView()}
       >
-        <ModalContent>
+        <ModalContent style={styles.customStyle}>
           <View style={styles.modalView}>
             <Text style={styles.headerText}>Please Select</Text>
             <View style={styles.tabView}>{this.renderTabs()}</View>
             {/* <Button style={{marginTop: alpha * 3}}title="test" onPress={this.test}></Button> */}
-            {this.renderList()}
+            <View style={styles.placesView}>{this.renderList()}</View>
           </View>
-            <TouchableOpacity onPress={() => toggleAreaView()} style={styles.closeButton}>
+          <TouchableOpacity
+            onPress={() => toggleAreaView()}
+            style={styles.closeButton}
+          >
             <Image
               source={require('./../../assets/images/cancel.png')}
               style={styles.closeImage}
             />
-            </TouchableOpacity>
+          </TouchableOpacity>
         </ModalContent>
       </Modal.BottomModal>
     );
@@ -183,13 +186,22 @@ class Brew9SlideUp extends Component {
 
 const styles = StyleSheet.create({
   customStyle: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'white',
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingBottom: 0
   },
   modalView: {
     backgroundColor: 'white',
     width: '100%',
     height: alpha * 150,
     borderRadius: 0
+  },
+  placesView: {
+    width: '100%',
+    height: alpha * 150,
+    backgroundColor: '#F5F5F5',
+    padding: alpha * 10
   },
   headerText: {
     fontFamily: TITLE_FONT,
@@ -200,11 +212,12 @@ const styles = StyleSheet.create({
   tabView: {
     flexDirection: 'row',
     width: '60%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingLeft: alpha * 15
   },
   tabItemText: {
-    fontFamily: TITLE_FONT,
-    fontSize: fontAlpha * 14
+    fontFamily: NON_TITLE_FONT,
+    fontSize: fontAlpha * 14,
   },
   nameText: {
     fontSize: fontAlpha * 12,
@@ -220,7 +233,7 @@ const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
     top: alpha * 5,
-    right: alpha * 5,
+    right: alpha * 5
   }
 });
 export default Brew9SlideUp;
