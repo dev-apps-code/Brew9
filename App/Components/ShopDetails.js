@@ -52,8 +52,8 @@ export default class ShopDetails extends Component {
   }
 
   onPressDirection(lat, long) {
-    let latitude = lat ? parseFloat(lat) : 0.0;
-    let longitude = long ? parseFloat(long) : 0.0;
+    let latitude = lat ? parseFloat(lat) : 4.8886091;
+    let longitude = long ? parseFloat(long) : 114.8976136;
 
     openMap({ latitude: latitude, longitude: longitude });
   }
