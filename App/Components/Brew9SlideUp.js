@@ -149,7 +149,7 @@ class Brew9SlideUp extends Component {
   };
 
   render() {
-    let { visible, onAreaChosen } = this.props;
+    let { visible, onAreaChosen, toggleAreaView } = this.props;
     return (
       <Modal.BottomModal
         visible={visible}
@@ -158,6 +158,7 @@ class Brew9SlideUp extends Component {
             slideFrom: 'bottom'
           })
         }
+        onTouchOutside={()=> toggleAreaView()}
       >
         <ModalContent>
           <View style={styles.modalView}>
