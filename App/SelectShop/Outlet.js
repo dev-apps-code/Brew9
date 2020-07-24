@@ -326,6 +326,7 @@ export default class Outlet extends React.Component {
             BackHandler.exitApp();
           }}
           onAreaChosen={this.onAreaChosen}
+          toggleAreaView={this.toggleAreaView}
         />
       </View>
     );
