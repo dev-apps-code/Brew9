@@ -69,12 +69,14 @@ class Brew9SlideUp extends Component {
     });
   };
 
-  onPressTown = (item) => {
-    let { onAreaChosen } = this.props;
+  onPressTown = (area) => {
+    let { onAreaChosen, locationList } = this.props;
+    let {chosenDistrict} = this.state
+    let district = locationList[chosenDistrict].district
     this.setState({
       currentTab: 0
     });
-    onAreaChosen(item);
+    onAreaChosen(area, district);
   };
 
   onPressAll = () => {
