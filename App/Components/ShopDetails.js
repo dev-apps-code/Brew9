@@ -115,7 +115,7 @@ export default class ShopDetails extends Component {
             onPress={() => onPressOrderNow(details.id)}
             style={styles.orderButton}
           >
-            <Text style={styles.orderNowText}>View More</Text>
+            <Text style={styles.orderNowText}>{details.open ? 'Order Now' :  'View More'}</Text>
           </TouchableOpacity>
           <View style={styles.accessView}>
             <TouchableOpacity
