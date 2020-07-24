@@ -84,8 +84,7 @@ export default class ShopDetails extends Component {
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
             <Text style={styles.shopName}>{details.name}</Text>
-            {this.renderAvailablity(false)}
-            {/* {this.renderAvailablity(details.open)} */}
+            {this.renderAvailablity(details.open)}
           </View>
           <View style={styles.detailView}>
             <Text style={styles.serviceInfoDetails}>
@@ -116,7 +115,7 @@ export default class ShopDetails extends Component {
             onPress={() => onPressOrderNow(details.id)}
             style={styles.orderButton}
           >
-            <Text style={styles.orderNowText}>Order Now</Text>
+            <Text style={styles.orderNowText}>View More</Text>
           </TouchableOpacity>
           <View style={styles.accessView}>
             <TouchableOpacity
