@@ -1,13 +1,17 @@
 import {
-  TextInput,
-  StyleSheet,
-  View,
-  TouchableOpacity,
+  Animated,
+  Easing,
   Image,
-  Text
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha } from '../Common/size';
+import { alpha, fontAlpha, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
 import {
@@ -39,28 +43,48 @@ export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
     this.state = this._getState();
+    this.filterView = new Animated.Value(100);
+    this.searchWidth = new Animated.Value(alpha * 80);
   }
 
   _getState = () => ({
     isLoading: true,
+    displayShopList: [],
+    searchResults: [],
     selectedArea: 'Brunei',
     showAreaView: false,
-    showMap: true,
-    searchResults: [],
-    displayShopList: []
+    showMap: true
   });
 
   componentDidMount() {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', this._didFocus);
+    this.keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      this.keyboardWillShow
+    );
+    this.keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      this.keyboardWillHide
+    );
   }
 
   componentWillUnmount() {
     this.focusListener.remove();
+    this.keyboardWillHideListener.remove();
+    this.keyboardWillShowListener.remove();
   }
 
   _didFocus = async () => {
     this.loadAllShops();
+  };
+
+  keyboardWillHide = () => {
+    this.resetSearchField();
+  };
+
+  keyboardWillShow = () => {
+    this.setState({ showMap: false });
   };
 
   loadAllShops() {
@@ -221,6 +245,18 @@ export default class Outlet extends React.Component {
     });
   };
 
+  onFocusSearchField = () => {
+    Animated.spring(this.filterView, {
+      toValue: -100
+    }).start();
+
+    Animated.timing(this.searchWidth, {
+      toValue: windowWidth - 20,
+      duration: 200,
+      easing: Easing.linear
+    }).start();
+  };
+
   onPressResult = (item) => {
     let { allShops } = this.props;
     console.log(item);
@@ -239,6 +275,78 @@ export default class Outlet extends React.Component {
     });
   };
 
+  resetSearchField = () => {
+    Animated.spring(this.filterView, {
+      toValue: 100
+    }).start();
+
+    Animated.timing(this.searchWidth, {
+      toValue: alpha * 80,
+      duration: 500,
+      easing: Easing.linear
+    }).start();
+  };
+
+  renderFilterButton() {
+    return (
+      <Animated.View
+        style={{ left: this.filterView, justifyContent: 'center' }}
+      >
+        <TouchableOpacity style={styles.button_1} onPress={this.toggleAreaView}>
+          <Text style={styles.text_1}> {this.state.selectedArea} </Text>
+          <Image
+            source={require('./../../assets/images/next.png')}
+            style={styles.rightArrowImage}
+          />
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  }
+
+  renderMap() {
+    if (this.state.showMap) {
+      return (
+        <Animated.View style={styles.mapView}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.004,
+              longitudeDelta: 0.004
+            }}
+          />
+        </Animated.View>
+      );
+    }
+  }
+
+  renderSearchField() {
+    return (
+      <Animated.View
+        style={[styles.searchView, { width: this.searchWidth }]}
+        onPress={this.onPressSearchField}
+      >
+        <Image
+          source={require('./../../assets/images/search.png')}
+          style={styles.searchImage}
+        />
+        <View>
+          <TextInput
+            // pointerEvents="none"
+            ref={(input) => {
+              this.textInput = input;
+            }}
+            placeholder="search"
+            onFocus={this.onFocusSearchField}
+            onChangeText={this.searchFilter}
+            underlineColorAndroid="transparent"
+          />
+        </View>
+      </Animated.View>
+    );
+  }
+
   render() {
     const { displayShopList } = this.state;
     const { allShops, nearbyShops } = this.props;
@@ -246,51 +354,11 @@ export default class Outlet extends React.Component {
     shops = displayShopList.length > 0 ? displayShopList : shops;
     return (
       <View style={styles.mainView}>
-        <View style={styles.view_1}>
-          <TouchableOpacity
-            style={styles.button_1}
-            onPress={this.toggleAreaView}
-          >
-            <Text style={styles.text_1}> {this.state.selectedArea} </Text>
-            <Image
-              source={require('./../../assets/images/next.png')}
-              style={styles.rightArrowImage}
-            />
-          </TouchableOpacity>
-          <View style={styles.searchView}>
-            <Image
-              source={require('./../../assets/images/search.png')}
-              style={styles.searchImage}
-            />
-            {/* <Text style={styles.text_2}>search</Text>
-             */}
-            <TouchableOpacity onPress={() => console.log('Pressed')}>
-              <TextInput
-                pointerEvents="none"
-                ref={(input) => {
-                  this.textInput = input;
-                }}
-                style={styles.searchInput}
-                placeholder="search"
-                onChangeText={(searchString) => this.searchFilter(searchString)}
-                underlineColorAndroid="transparent"
-              />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.subHeaderView}>
+          {this.renderFilterButton()}
+          {this.renderSearchField()}
         </View>
-        {this.state.showMap ? (
-          <View style={styles.mapView}>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.004,
-                longitudeDelta: 0.004
-              }}
-            />
-          </View>
-        ) : null}
+        {this.renderMap()}
         <Brew9DropDown
           results={this.state.searchResults}
           onPressResult={this.onPressResult}
@@ -360,12 +428,17 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: LIGHT_GREY_BACKGROUND
   },
-  view_1: {
+  subHeaderView: {
     flexDirection: 'row',
     paddingVertical: alpha * 7,
     paddingHorizontal: alpha * 10,
     justifyContent: 'space-between',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    width: windowWidth + 100,
+    position: 'relative',
+    left: -100,
+    right: 0,
+    zIndex: 1
   },
   mapView: {
     height: alpha * 160
@@ -377,7 +450,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'center',
     paddingHorizontal: alpha * 6,
-    height: alpha * 33
+    height: alpha * 33,
+    // marginRight: 100,
+    position: 'relative',
+    right: 0
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -439,8 +515,5 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
-  },
-  searchInput: {
-    width: alpha * 50
   }
 });
