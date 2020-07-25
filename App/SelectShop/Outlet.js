@@ -7,7 +7,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View
 } from 'react-native';
 import React from 'react';
@@ -80,7 +79,7 @@ export default class Outlet extends React.Component {
   };
 
   keyboardWillHide = () => {
-    this.resetSearchField();
+    // this.resetSearchField();
   };
 
   keyboardWillShow = () => {
@@ -188,12 +187,12 @@ export default class Outlet extends React.Component {
     }
   };
 
-  onAreaChosen = (area,district) => {
+  onAreaChosen = (area, district) => {
     if (area !== null) {
-      console.log("=======")
-      console.log(area)
-      console.log(district)
-      let selectedArea = district + " > " + area
+      console.log('=======');
+      console.log(area);
+      console.log(district);
+      let selectedArea = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.area == area;
@@ -261,7 +260,7 @@ export default class Outlet extends React.Component {
     }).start();
   };
 
-  onPressResult = (item) => {
+  onPressSearchResult = (item) => {
     let { allShops } = this.props;
     console.log(item);
     this.textInput.clear();
@@ -327,15 +326,12 @@ export default class Outlet extends React.Component {
 
   renderSearchField() {
     return (
-      <Animated.View
-        style={[styles.searchView, { width: this.searchWidth }]}
-        onPress={this.onPressSearchField}
-      >
+      <Animated.View style={[styles.searchView, { width: this.searchWidth }]}>
         <Image
           source={require('./../../assets/images/search.png')}
           style={styles.searchImage}
         />
-        <View>
+        <View style={{ flex: 1 }}>
           <TextInput
             // pointerEvents="none"
             ref={(input) => {
