@@ -51,10 +51,9 @@ export default class ShopDetails extends Component {
     Linking.openURL(`tel:${phoneNumber}`);
   }
 
-  onPressDirection(lat,long) {
+  onPressDirection(lat, long) {
     let latitude = lat ? parseFloat(lat) : 0.0;
     let longitude = long ? parseFloat(long) : 0.0;
-    
 
     openMap({ latitude: latitude, longitude: longitude });
   }
@@ -62,9 +61,11 @@ export default class ShopDetails extends Component {
   render() {
     const { details, onPressOrderNow, shop } = this.props;
     const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
-    const { start_time, end_time } = details.opening_hour;
+    const { start_time, end_time } = details?.opening_hour || {
+      start_time: null,
+      end_time: null
+    };
     let hoursText = null;
-
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
@@ -119,7 +120,9 @@ export default class ShopDetails extends Component {
               <Image source={require('./../../assets/images/call.png')} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => this.onPressDirection(details.latitude, details.longitude)}
+              onPress={() =>
+                this.onPressDirection(details.latitude, details.longitude)
+              }
               style={styles.accessButton}
             >
               <Image source={require('./../../assets/images/direction.png')} />
