@@ -51,7 +51,7 @@ export default class Outlet extends React.Component {
     isLoading: true,
     displayShopList: [],
     searchResults: [],
-    selectedArea: 'Brunei',
+    selectedArea: 'All',
     showAreaView: false,
     showMap: true
   });
@@ -188,22 +188,26 @@ export default class Outlet extends React.Component {
     }
   };
 
-  onAreaChosen = (area) => {
+  onAreaChosen = (area,district) => {
     if (area !== null) {
+      console.log("=======")
+      console.log(area)
+      console.log(district)
+      let selectedArea = district + " > " + area
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.area == area;
       });
       this.setState({
         showAreaView: !this.state.showAreaView,
-        selectedArea: area,
+        selectedArea: selectedArea,
         displayShopList: newArray
       });
     } else {
       this.setState({
         showAreaView: !this.state.showAreaView,
         displayShopList: [],
-        selectedArea: 'Brunei'
+        selectedArea: 'All'
       });
     }
     //receive area here
@@ -394,6 +398,7 @@ export default class Outlet extends React.Component {
             BackHandler.exitApp();
           }}
           onAreaChosen={this.onAreaChosen}
+          toggleAreaView={this.toggleAreaView}
         />
       </View>
     );

@@ -1722,14 +1722,16 @@ export default class Home extends React.Component {
               {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
 							style={styles.branchButton}> */}
-              <TouchableOpacity onPress={this._onShopNamePressed}>
+              <TouchableOpacity onPress={this._onShopNamePressed} style={styles.selectShopButton}>
                 <Text style={styles.branchButtonText}>
                   {shop ? shop.name : ''}
                 </Text>
+                <Image
+                  source={require("./../../assets/images/next.png")}
+                  style={styles.rightArrowImage}
+                />
               </TouchableOpacity>
-              {/* <Image
-							source={require("./../../assets/images/group-22.png")}
-							style={styles.branchButtonImage}/> */}
+             
               {/* </TouchableOpacity> */}
             </View>
 
@@ -3460,5 +3462,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 10 * alpha,
     paddingRight: 10 * alpha
+  },
+  rightArrowImage: {
+    width: 9 * alpha,
+    height: 9 * alpha,
+    tintColor: '#C5C5C5',
+    marginLeft: alpha * 5
+  },
+  selectShopButton: {
+    flexDirection:'row',
+    alignItems:'center'
   }
 });

@@ -52,11 +52,22 @@ export default class ShopDetails extends Component {
   }
 
   onPressDirection(lat, long) {
-    let latitude = lat ? parseFloat(lat) : 0.0;
-    let longitude = long ? parseFloat(long) : 0.0;
+    let latitude = lat ? parseFloat(lat) : 4.8886091;
+    let longitude = long ? parseFloat(long) : 114.8976136;
 
     openMap({ latitude: latitude, longitude: longitude });
   }
+
+  renderAvailablity = (availability) => {
+    let color = availability ? '#00B2E3' : '#E0E0E0';
+    let viewStyle = {...styles.availabilityView, ...{borderColor: color}}
+    let textStyle = {...styles.availabilityText, ...{color: color}}
+    return (
+      <View style={viewStyle}>
+        <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
+      </View>
+    );
+  };
 
   render() {
     const { details, onPressOrderNow, shop } = this.props;
@@ -75,11 +86,7 @@ export default class ShopDetails extends Component {
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
             <Text style={styles.shopName}>{details.name}</Text>
-            <View style={styles.openView}>
-              <Text style={styles.openText}>
-                {details.open ? 'Open' : 'Closed'}
-              </Text>
-            </View>
+            {this.renderAvailablity(details.open)}
           </View>
           <View style={styles.detailView}>
             <Text style={styles.serviceInfoDetails}>
@@ -110,7 +117,7 @@ export default class ShopDetails extends Component {
             onPress={() => onPressOrderNow(details.id)}
             style={styles.orderButton}
           >
-            <Text style={styles.orderNowText}>Order Now</Text>
+            <Text style={styles.orderNowText}>{details.open ? 'Order Now' :  'View More'}</Text>
           </TouchableOpacity>
           <View style={styles.accessView}>
             <TouchableOpacity
@@ -149,13 +156,13 @@ const styles = StyleSheet.create({
     padding: alpha * 10,
     borderRadius: DEFAULT_BORDER_RADIUS
   },
-  openView: {
+  availabilityView: {
     height: alpha * 16,
     width: alpha * 45,
     borderWidth: 1,
-    borderColor: '#00B2E3',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderRadius: DEFAULT_BORDER_RADIUS
   },
   detailsView: {
     flex: 4,
@@ -199,7 +206,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: alpha * 20
   },
   //text
-  openText: {
+  availabilityText: {
     fontSize: fontAlpha * 9,
     color: '#00B2E3',
     fontFamily: NON_TITLE_FONT
