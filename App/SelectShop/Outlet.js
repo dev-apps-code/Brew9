@@ -18,7 +18,8 @@ import {
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
   TAB_STYLE,
-  LIGHT_GREY_BACKGROUND
+  LIGHT_GREY_BACKGROUND,
+  NON_TITLE_FONT
 } from '../Common/common_style';
 import MapView from 'react-native-maps';
 import { createAction } from '../Utils';
@@ -31,6 +32,12 @@ import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import Brew9DropDown from '../Components/Brew9DropDown';
+import { toLower } from 'lodash';
+
+const SEARCH_WIDTH = 80 * alpha;
+const CANCEL_WIDTH = 60 * alpha;
+const MAX_SEARCH_WIDTH = windowWidth - CANCEL_WIDTH - 20;
+const FILTER_FIELD_WIDTH = 100;
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
@@ -43,12 +50,13 @@ export default class Outlet extends React.Component {
     super(props);
     this.state = this._getState();
     this.filterView = new Animated.Value(100);
-    this.searchWidth = new Animated.Value(alpha * 80);
+    this.searchWidth = new Animated.Value(SEARCH_WIDTH);
   }
 
   _getState = () => ({
     isLoading: true,
     displayShopList: [],
+    isSearching: false,
     searchResults: [],
     selectedArea: 'All',
     showAreaView: false,
@@ -79,7 +87,7 @@ export default class Outlet extends React.Component {
   };
 
   keyboardWillHide = () => {
-    // this.resetSearchField();
+    // this.resetSearchFieldWidth();
   };
 
   keyboardWillShow = () => {
@@ -189,9 +197,6 @@ export default class Outlet extends React.Component {
 
   onAreaChosen = (area, district) => {
     if (area !== null) {
-      console.log('=======');
-      console.log(area);
-      console.log(district);
       let selectedArea = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
@@ -209,80 +214,40 @@ export default class Outlet extends React.Component {
         selectedArea: 'All'
       });
     }
-    //receive area here
   };
 
   searchFilter = (str) => {
-    if (str == '') {
-      this.setState({
-        searchResults: []
-      });
-      return;
-    }
+    const shops = this.props.allShops.filter(
+      ({ area, district, name, short_address }) =>
+        toLower(name).includes(str) ||
+        toLower(area).includes(str) ||
+        toLower(short_address).includes(str) ||
+        toLower(district).includes(str)
+    );
 
-    let { allShops } = this.props;
-    let re = new RegExp(str, 'i');
-    let r = [];
+    this.setState({ isSearching: true, searchResults: shops });
+  };
 
-    for (let k in allShops) {
-      let flag =
-        allShops[k].short_address.match(re) ||
-        allShops[k].district.match(re) ||
-        allShops[k].area.match(re);
-
-      if (flag) {
-        r.push({
-          id: allShops[k].id,
-          address:
-            allShops[k].short_address +
-            ' ' +
-            allShops[k].district +
-            ' ' +
-            allShops[k].area,
-          area: allShops[k].area
-        });
-      }
-    }
+  onPressCancel = () => {
+    Keyboard.dismiss();
+    this.refs.searchInput.clear();
+    this.resetSearchFieldWidth();
     this.setState({
-      searchResults: r
+      isSearching: false,
+      searchResults: []
     });
   };
 
   onFocusSearchField = () => {
-    Animated.spring(this.filterView, {
-      toValue: -100
-    }).start();
-
+    this.setState({ isSearching: true, showMap: false });
     Animated.timing(this.searchWidth, {
-      toValue: windowWidth - 20,
-      duration: 200,
+      toValue: MAX_SEARCH_WIDTH,
+      duration: 300,
       easing: Easing.linear
     }).start();
   };
 
-  onPressSearchResult = (item) => {
-    let { allShops } = this.props;
-    console.log(item);
-    this.textInput.clear();
-
-    var newArray = allShops.filter(function (obj) {
-      return obj.id == item.id;
-    });
-
-    console.log('-----------');
-    console.log(newArray);
-    this.setState({
-      searchResults: [],
-      selectedArea: item.area,
-      displayShopList: newArray
-    });
-  };
-
-  resetSearchField = () => {
-    Animated.spring(this.filterView, {
-      toValue: 100
-    }).start();
-
+  resetSearchFieldWidth = () => {
     Animated.timing(this.searchWidth, {
       toValue: alpha * 80,
       duration: 500,
@@ -291,12 +256,37 @@ export default class Outlet extends React.Component {
   };
 
   renderFilterButton() {
+    const maxRangeWidth = MAX_SEARCH_WIDTH - FILTER_FIELD_WIDTH;
+    const newLeft = this.searchWidth.interpolate({
+      inputRange: [
+        0,
+        maxRangeWidth * 0.25,
+        maxRangeWidth * 0.5,
+        maxRangeWidth * 0.75,
+        maxRangeWidth
+      ],
+      outputRange: [100, 100, 100, 100, -100]
+    });
+
+    Animated.timing(this.filterView, {
+      toValue: newLeft,
+      duration: 120,
+      easing: Easing.linear
+    }).start();
+
     return (
       <Animated.View
-        style={{ left: this.filterView, justifyContent: 'center' }}
+        style={{
+          left: this.filterView,
+          justifyContent: 'center'
+          // maxWidth: FILTER_FIELD_WIDTH
+        }}
       >
-        <TouchableOpacity style={styles.button_1} onPress={this.toggleAreaView}>
-          <Text style={styles.text_1}> {this.state.selectedArea} </Text>
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={this.toggleAreaView}
+        >
+          <Text style={styles.filterAreaText}>{this.state.selectedArea}</Text>
           <Image
             source={require('./../../assets/images/next.png')}
             style={styles.rightArrowImage}
@@ -325,33 +315,55 @@ export default class Outlet extends React.Component {
   }
 
   renderSearchField() {
+    const opacity = this.searchWidth.interpolate({
+      inputRange: [SEARCH_WIDTH, MAX_SEARCH_WIDTH],
+      outputRange: [0, 1]
+    });
+    const right = this.searchWidth.interpolate({
+      inputRange: [SEARCH_WIDTH, MAX_SEARCH_WIDTH],
+      outputRange: [0, CANCEL_WIDTH]
+    });
     return (
-      <Animated.View style={[styles.searchView, { width: this.searchWidth }]}>
-        <Image
-          source={require('./../../assets/images/search.png')}
-          style={styles.searchImage}
-        />
-        <View style={{ flex: 1 }}>
-          <TextInput
-            // pointerEvents="none"
-            ref={(input) => {
-              this.textInput = input;
-            }}
-            placeholder="search"
-            onFocus={this.onFocusSearchField}
-            onChangeText={this.searchFilter}
-            underlineColorAndroid="transparent"
+      <Animated.View
+        style={[styles.searchView, { width: this.searchWidth, right }]}
+      >
+        <View style={styles.searchField}>
+          <Image
+            source={require('./../../assets/images/search.png')}
+            style={styles.searchImage}
           />
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <TextInput
+              // pointerEvents="none"
+              ref="searchInput"
+              placeholder="Search"
+              onFocus={this.onFocusSearchField}
+              onChangeText={(text) => this.searchFilter(text)}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+            />
+          </View>
         </View>
+        <Animated.View style={[styles.cancelSearchContainer, { opacity }]}>
+          <TouchableOpacity
+            onPress={this.onPressCancel}
+            style={[styles.cancelSearchButton]}
+          >
+            <Animated.Text style={styles.cancelSearchText}>
+              Cancel
+            </Animated.Text>
+          </TouchableOpacity>
+        </Animated.View>
       </Animated.View>
     );
   }
 
   render() {
-    const { displayShopList } = this.state;
+    const { displayShopList, isSearching, searchResults } = this.state;
     const { allShops, nearbyShops } = this.props;
     let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
     shops = displayShopList.length > 0 ? displayShopList : shops;
+    shops = isSearching ? searchResults : shops;
     return (
       <View style={styles.mainView}>
         <View style={styles.subHeaderView}>
@@ -359,10 +371,10 @@ export default class Outlet extends React.Component {
           {this.renderSearchField()}
         </View>
         {this.renderMap()}
-        <Brew9DropDown
+        {/* <Brew9DropDown
           results={this.state.searchResults}
-          onPressResult={this.onPressResult}
-        />
+          onPressResult={this.onS}
+        /> */}
         <TouchableOpacity style={styles.button_3} onPress={this.toggleMap}>
           <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}
@@ -445,16 +457,46 @@ const styles = StyleSheet.create({
     height: alpha * 160
   },
   searchView: {
+    borderRadius: alpha * 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: alpha * 6,
+    height: alpha * 33,
+    position: 'relative',
+    right: 0
+  },
+  searchField: {
     backgroundColor: '#F5F5F5',
     borderRadius: alpha * 21,
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'center',
     paddingHorizontal: alpha * 6,
     height: alpha * 33,
-    // marginRight: 100,
-    position: 'relative',
+    position: 'absolute',
+    left: 0,
     right: 0
+  },
+  cancelSearchContainer: {
+    borderRadius: alpha * 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: alpha * 6,
+    height: alpha * 33,
+    width: CANCEL_WIDTH,
+    position: 'absolute',
+    right: -CANCEL_WIDTH
+  },
+  cancelSearchButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 6 * alpha,
+    justifyContent: 'center'
+  },
+  cancelSearchText: {
+    color: '#363636',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    textAlign: 'center'
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -462,7 +504,6 @@ const styles = StyleSheet.create({
   view_2: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row'
@@ -489,7 +530,7 @@ const styles = StyleSheet.create({
   },
 
   //button
-  button_1: {
+  filterButton: {
     flexDirection: 'row',
     alignItems: 'center'
   },
@@ -504,11 +545,12 @@ const styles = StyleSheet.create({
   },
 
   //txt
-  text_1: {
+  filterAreaText: {
     marginRight: alpha * 7,
     fontSize: fontAlpha * 12,
     fontFamily: TITLE_FONT,
-    color: '#363636'
+    color: '#363636',
+    flexWrap: 'wrap'
   },
 
   text_2: {
