@@ -197,18 +197,21 @@ export default class Home extends React.Component {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'ScanQr'));
 
-    if (currentMember != null) {
-      navigation.navigate('ScanQr');
-    } else {
-      const message = 'You need to login before you can topup';
-      const callback = () => {
-        navigation.navigate('VerifyUser', {
-          returnToRoute: navigation.state,
-          check_promotion_trigger: () => this.check_promotion_trigger()
-        });
-      };
-      this.refs.toast.show(message, TOAST_DURATION, callback);
+    if (currentMember == null) {
+      this.refs.toast.show(
+        'You need to login before you can topup',
+        TOAST_DURATION,
+        () => {
+          navigation.navigate('VerifyUser', {
+            returnToRoute: navigation.state,
+            check_promotion_trigger: () => this.check_promotion_trigger()
+          });
+        }
+      );
+      return;
     }
+
+    navigation.navigate('ScanQr');
   };
 
   getLocationAndLoadShops = async () => {
