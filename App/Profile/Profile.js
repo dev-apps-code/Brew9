@@ -2,7 +2,8 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, A
 import React from "react"
 import { alpha, fontAlpha, windowWidth, windowHeight } from "../Common/size";
 import { connect } from "react-redux";
-import { KURL_INFO, KURL_MEMBERSHIP_INFO, getAppVersion, getBuildVersion } from "../Utils/server";
+import { KURL_INFO, KURL_MEMBERSHIP_INFO } from "../Utils/server";
+import { getAppVersion, getBuildVersion } from "../Utils";
 import { createAction } from '../Utils'
 import ProfileRequestObject from '../Requests/profile_request_object'
 import VerifyCouponCodeObj from '../Requests/verify_coupon _code_request_object'
@@ -821,7 +822,7 @@ export default class Profile extends React.Component {
 					<View style={styles.graySeparator}></View>
 					<ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
 					<ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
-					{/*<ProfileMenu onPress={this.onVersionPressed} text={'Version'} />*/}
+					<ProfileMenu text={'Version'} subText={`Version ${getAppVersion()} (Build ${getBuildVersion()})`}/>
 					<ProfileMenu onPress={this.onAboutButtonPressed} text={'About Us'} />
 
 				</View>

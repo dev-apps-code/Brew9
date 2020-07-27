@@ -1,16 +1,15 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
-import { NON_TITLE_FONT } from '../Common/common_style';
+import { NON_TITLE_FONT, LIGHT_GREY } from '../Common/common_style';
 
 export default class ProfileMenu extends React.PureComponent {
   render() {
-    let { onPress, text, icon } = this.props;
-    console.log('icon address');
-    console.log(icon);
+    let { onPress, text, icon, subText } = this.props;
+
     return (
-      <TouchableOpacity onPress={onPress} style={styles.menuRowbuttonButton}>
-        <View style={styles.menuRowView}>
+      <View style={styles.menuRowbuttonButton}>
+        <TouchableOpacity onPress={onPress} style={styles.menuRowView}>
           <View
             pointerEvents="box-none"
             style={{
@@ -32,7 +31,7 @@ export default class ProfileMenu extends React.PureComponent {
                 alignItems: 'center'
               }}
             >
-              {icon ? <Image source={icon} style={styles.icomImage} /> : null}
+              {icon ? <Image source={icon} style={styles.iconImage} /> : null}
 
               <Text style={styles.menuRowLabelText}>{text}</Text>
               <View
@@ -40,10 +39,14 @@ export default class ProfileMenu extends React.PureComponent {
                   flex: 1
                 }}
               />
-              <Image
-                source={require('./../../assets/images/next.png')}
-                style={styles.menuRowArrowImage}
-              />
+              {subText ? (
+                <Text style={styles.subText}>{subText}</Text>
+              ) : (
+                <Image
+                  source={require('./../../assets/images/next.png')}
+                  style={styles.menuRowArrowImage}
+                />
+              )}
             </View>
           </View>
           <View
@@ -57,11 +60,10 @@ export default class ProfileMenu extends React.PureComponent {
             }}
           >
             <Text style={styles.menuRowDescriptionText}></Text>
-
-            <View style={styles.menuRowLineView} />
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+        <View style={styles.menuRowLineView} />
+      </View>
     );
   }
 }
@@ -93,8 +95,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent'
   },
-
-  icomImage: {
+  iconImage: {
     resizeMode: 'contain',
     width: 27 * alpha,
     height: 22 * alpha,
@@ -133,5 +134,10 @@ const styles = StyleSheet.create({
     width: 10 * alpha,
     tintColor: 'rgb(54, 54, 54)',
     resizeMode: 'contain'
+  },
+  subText: {
+    color: LIGHT_GREY,
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha
   }
 });
