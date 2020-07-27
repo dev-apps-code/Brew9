@@ -66,11 +66,6 @@ export default class OrderCell extends React.Component {
           >
             <View style={styles.orderheaderView}>
               <Text style={styles.shopBranchText}>{this.props.shop_name}</Text>
-              <View
-                style={{
-                  flex: 1
-                }}
-              />
               <TouchableOpacity
                 onPress={() => this.onCompletePressed(this.props.item)}
                 style={styles.completeButton}
@@ -170,7 +165,9 @@ const styles = StyleSheet.create({
     right: 0 * alpha,
     top: 0 * alpha,
     height: 50 * alpha,
+    zIndex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   shopBranchText: {
@@ -179,7 +176,6 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-
     textAlign: 'left',
     marginLeft: 20 * alpha
   },
@@ -189,27 +185,20 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left',
-    textTransform: 'capitalize',
-    position: 'absolute',
-    right: 10 * alpha + 10
+    textTransform: 'capitalize'
   },
   completeButton: {
-    backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    width: 71 * alpha,
-    // height: 13 * alpha,
-    marginRight: 15 * alpha,
-    position: 'relative'
+    height: '100%',
+    marginRight: 15 * alpha
   },
   completeButtonImage: {
     tintColor: 'rgb(149, 149, 149)',
     resizeMode: 'contain',
-    width: 10 * alpha,
-    position: 'absolute',
-    right: 0
+    width: 10 * alpha
   },
   orderitemsView: {
     backgroundColor: 'rgb(248, 248, 248)',
