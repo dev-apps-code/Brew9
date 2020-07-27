@@ -1,3 +1,7 @@
+import Constants from "expo-constants";
+import { BUILD_VERSION_ANDROID, BUILD_VERSION_IOS } from '../Common/config';
+import { Platform } from "react-native";
+
 export { StackActions, NavigationActions } from 'react-navigation';
 
 export { default as Storage } from './storage';
@@ -41,4 +45,15 @@ export function navigationAware(ScreenComponent, routeName) {
   }
 
   return connect(mapStateToProps)(NavigationAware);
+}
+
+export function getAppVersion() {
+  return Constants.manifest.version;
+}
+
+export function getBuildVersion() {
+  if (Platform.OS === 'android') {
+    return BUILD_VERSION_ANDROID;
+  }
+  return BUILD_VERSION_IOS;
 }

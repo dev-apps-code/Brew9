@@ -60,8 +60,8 @@ export default class ShopDetails extends Component {
 
   renderAvailablity = (availability) => {
     let color = availability ? '#00B2E3' : '#E0E0E0';
-    let viewStyle = {...styles.availabilityView, ...{borderColor: color}}
-    let textStyle = {...styles.availabilityText, ...{color: color}}
+    let viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
+    let textStyle = { ...styles.availabilityText, ...{ color: color } };
     return (
       <View style={viewStyle}>
         <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
@@ -82,15 +82,17 @@ export default class ShopDetails extends Component {
     return (
       <View style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
-          <View style={styles.detailView}>
-            <Text style={styles.shopName}>{details.name}</Text>
-            {this.renderAvailablity(details.open)}
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.serviceInfoDetails}>
-              Delivery | 3.5 km 26 mins
-            </Text>
-          </View>
+          <TouchableOpacity onPress={() => onPressOrderNow(details.id)}>
+            <View style={styles.detailView}>
+              <Text style={styles.shopName}>{details.name}</Text>
+              {this.renderAvailablity(details.open)}
+            </View>
+            <View style={styles.detailView}>
+              <Text style={styles.serviceInfoDetails}>
+                Delivery | 3.5 km 26 mins
+              </Text>
+            </View>
+          </TouchableOpacity>
           <View style={styles.detailTextContainer}>
             <Image
               source={require('./../../assets/images/Fill.png')}
@@ -115,7 +117,9 @@ export default class ShopDetails extends Component {
             onPress={() => onPressOrderNow(details.id)}
             style={styles.orderButton}
           >
-            <Text style={styles.orderNowText}>{details.open ? 'Order Now' :  'View More'}</Text>
+            <Text style={styles.orderNowText}>
+              {details.open ? 'Order Now' : 'View More'}
+            </Text>
           </TouchableOpacity>
           <View style={styles.accessView}>
             <TouchableOpacity
