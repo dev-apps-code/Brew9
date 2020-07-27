@@ -1,3 +1,5 @@
+import { DEVELOP_MODE } from "../Common/config";
+
 const SERVERS = [
   'app.brew9.co/',
   'dev.brew9.co/',
@@ -12,11 +14,10 @@ const SERVERS = [
   'dev9.brew9.co/',
   'dev10.brew9.co/',
 ];
-
-const DEFAULT_SERVER = 'dev.brew9.co/';
-
+const PRODUCTION_SERVER = 'app.brew9.co/'
+const DEVELOPMENT_SERVER = 'dev.brew9.co/';
+const DEFAULT_SERVER = DEVELOP_MODE ? DEVELOPMENT_SERVER: PRODUCTION_SERVER;
 const PROTOCOLS = ['https://'];
-
 const DEFAULT_PROTOCOL = 'https://';
 
 export { SERVERS, DEFAULT_SERVER, PROTOCOLS, DEFAULT_PROTOCOL };

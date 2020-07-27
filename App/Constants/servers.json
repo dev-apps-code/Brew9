@@ -16,6 +16,6 @@
   "protocols": [
     "https://"
   ],
-  "default_server": "dev.brew9.co/",
+  "default_server": "app.brew9.co/",
   "default_protocol": "https://"
 }
