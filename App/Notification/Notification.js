@@ -24,7 +24,7 @@ import NotificationsRequestObject from "../Requests/notifications_request_object
 import NotificationsCell from "./NotificationsCell";
 import NotificationBadgeIcon from "./NotificationBadgeIcon"
 import * as SecureStore from "expo-secure-store";
-import { TITLE_FONT, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR } from "../Common/common_style";
+import { TITLE_FONT, HEADER_NO_BACK, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR } from "../Common/common_style";
 import IconBadge from 'react-native-icon-badge';
 import { AsyncStorage } from 'react-native'
 import { getMemberIdForApi } from '../Services/members_helper'
@@ -42,17 +42,13 @@ export default class Notification extends React.Component {
     const { params = {} } = navigation.state;
     return {
       headerTitle: (
-        <Text style={styles.headerStyle}>
+        <Text style={HEADER_NO_BACK}>
           Notifications
         </Text>
       ),
       headerTintColor: 'black',
       headerLeft: null,
-      headerRight: null,
-      headerTitleStyle: {
-        textAlign: 'center',
-        flex: 1
-      }
+      headerRight: null
     };
   };
 
@@ -365,9 +361,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "transparent"
   },
-  headerStyle: {
-    marginLeft: 10 * alpha, 
-    flex: 1, 
-    fontFamily: TITLE_FONT 
-  }
 });

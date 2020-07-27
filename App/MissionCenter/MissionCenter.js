@@ -36,7 +36,8 @@ import {
   PRIMARY_COLOR,
   RED,
   LIGHT_BLUE_BACKGROUND,
-  TOAST_DURATION
+  TOAST_DURATION,
+  HEADER_NO_BACK
 } from '../Common/common_style';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
@@ -54,17 +55,13 @@ export default class MissionCenter extends React.Component {
     const { params = {} } = navigation.state;
     return {
       headerTitle: (
-        <Text style={styles.headerStyle}>
+        <Text style={HEADER_NO_BACK}>
           Rewards
         </Text>
       ),
       headerTintColor: 'black',
       headerLeft: null,
-      headerRight: null,
-      headerTitleStyle: {
-        textAlign: 'center',
-        flex: 1
-      }
+      headerRight: null
     };
   };
 

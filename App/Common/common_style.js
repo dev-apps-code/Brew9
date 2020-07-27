@@ -25,6 +25,7 @@ export const TAB_STYLE =
         marginBottom: alpha * 4
       }
     : {};
+
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: 'blue',
@@ -44,3 +45,8 @@ export const commonStyles = StyleSheet.create({
     backgroundColor: 'rgb(0, 178, 227)'
   }
 });
+
+export const HEADER_NO_BACK =
+  Platform.OS === 'android'
+    ? { marginLeft: alpha * 10, flex: 1, fontFamily: TITLE_FONT }
+    : { textAlign: 'center', flex: 1, fontFamily: TITLE_FONT };
