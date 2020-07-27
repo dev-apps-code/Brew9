@@ -1011,10 +1011,7 @@ export default class Profile extends React.Component {
             <View style={styles.graySeparator}></View>
             <ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
             <ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
-            <ProfileMenu
-              text={'Version'}
-              subText={`${getAppVersion()} (Build ${getBuildVersion()})`}
-            />
+            <ProfileMenu text={'Version'} subText={`${getAppVersion()}`} />
             <ProfileMenu
               onPress={this.onAboutButtonPressed}
               text={'About Us'}
