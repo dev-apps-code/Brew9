@@ -3,9 +3,13 @@ import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
 import { NON_TITLE_FONT, LIGHT_GREY } from '../Common/common_style';
 
+const MENU_HEIGHT = 40 * alpha;
+const ICON_WIDTH = 27 * alpha;
+const ICON_MARGIN_RIGHT = 10 * alpha;
+
 export default class ProfileMenu extends React.PureComponent {
   render() {
-    let { onPress, text, icon, subText } = this.props;
+    let { onPress, text, icon, separator, subText } = this.props;
 
     return (
       <View style={styles.menuRowbuttonButton}>
@@ -62,16 +66,31 @@ export default class ProfileMenu extends React.PureComponent {
             <Text style={styles.menuRowDescriptionText}></Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.menuRowLineView} />
+        {separator && (
+          <View
+            style={[
+              styles.menuRowLineView,
+              { marginLeft: icon ? ICON_WIDTH + ICON_MARGIN_RIGHT : 0 }
+            ]}
+          />
+        )}
       </View>
     );
   }
 }
 
+ProfileMenu.defaultProps = {
+  onPress: () => {},
+  text: null,
+  icon: null,
+  separator: true,
+  subText: null
+};
+
 const styles = StyleSheet.create({
   menuRowView: {
     backgroundColor: 'transparent',
-    height: 58 * alpha,
+    height: MENU_HEIGHT,
     marginRight: 1 * alpha,
     flexDirection: 'row',
     alignItems: 'center',
@@ -97,7 +116,7 @@ const styles = StyleSheet.create({
   },
   iconImage: {
     resizeMode: 'contain',
-    width: 27 * alpha,
+    width: ICON_WIDTH,
     height: 22 * alpha,
     marginRight: 10 * alpha
   },
@@ -126,7 +145,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     width: 375 * alpha,
-    top: 57 * alpha,
+    bottom: 0,
     height: 1 * alpha,
     left: 20 * alpha
   },
@@ -138,6 +157,6 @@ const styles = StyleSheet.create({
   subText: {
     color: LIGHT_GREY,
     fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha
+    fontSize: 13 * fontAlpha
   }
 });
