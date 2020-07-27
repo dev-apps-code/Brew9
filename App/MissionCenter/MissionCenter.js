@@ -54,22 +54,16 @@ export default class MissionCenter extends React.Component {
     const { params = {} } = navigation.state;
     return {
       headerTitle: (
-        <Text
-          style={{
-            textAlign: 'center',
-            alignSelf: 'center',
-            fontFamily: TITLE_FONT
-          }}
-        >
+        <Text style={styles.headerStyle}>
           Rewards
         </Text>
       ),
       headerTintColor: 'black',
-      headerLeft: <View style={styles.headerLeftContainer}></View>,
+      headerLeft: null,
       headerRight: null,
-      headerStyle: {
-        elevation: 0,
-        shadowOpacity: 0
+      headerTitleStyle: {
+        textAlign: 'center',
+        flex: 1
       }
     };
   };
@@ -470,5 +464,10 @@ const styles = StyleSheet.create({
   missionCenterView: {
     backgroundColor: 'rgb(243, 243, 243)',
     flex: 1
+  },
+  headerStyle: {
+    marginLeft: 10 * alpha, 
+    flex: 1, 
+    fontFamily: TITLE_FONT 
   }
 });

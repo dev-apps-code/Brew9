@@ -59,8 +59,8 @@ export default class PickUp extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
-        <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT }}>
-          Your Order
+        <Text style={styles.headerStyle}>
+          Your Orders
         </Text>
       ),
       headerTintColor: 'black',
@@ -2047,5 +2047,10 @@ const styles = StyleSheet.create({
     // fontFamily: NON_TITLE_FONT,
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT
+  },
+  headerStyle: {
+    marginLeft: 10 * alpha, 
+    flex: 1, 
+    fontFamily: TITLE_FONT 
   }
 });

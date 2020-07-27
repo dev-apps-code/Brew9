@@ -41,14 +41,18 @@ export default class Notification extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     return {
-      headerTitle: <Text style={{ textAlign: 'center', alignSelf: "center", fontFamily: TITLE_FONT }}>Notification</Text>,
-      headerTintColor: "black",
-      headerTitleStyle: {
-        textAlign: "center",
-        flex: 1
-      },
+      headerTitle: (
+        <Text style={styles.headerStyle}>
+          Notifications
+        </Text>
+      ),
+      headerTintColor: 'black',
+      headerLeft: null,
       headerRight: null,
-      headerLeft: null
+      headerTitleStyle: {
+        textAlign: 'center',
+        flex: 1
+      }
     };
   };
 
@@ -360,5 +364,10 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     textAlign: "center",
     backgroundColor: "transparent"
+  },
+  headerStyle: {
+    marginLeft: 10 * alpha, 
+    flex: 1, 
+    fontFamily: TITLE_FONT 
   }
 });
