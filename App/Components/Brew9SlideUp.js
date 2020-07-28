@@ -27,9 +27,10 @@ class Brew9SlideUp extends Component {
 
   _getState = () => ({
     currentTab: 0,
-    tabs: ['District', 'Town', 'All'],
-    chosenTown: '',
-    chosenDistrict: null
+    tabs: ['District', 'Area', 'All'],
+    chosenAreaIndex: null,
+    chosenDistrictArray: null,
+    data: null
   });
 
   renderTabs() {
@@ -61,22 +62,22 @@ class Brew9SlideUp extends Component {
     return tabSet;
   }
 
-  onPressDistrict = (index) => {
+  onPressDistrict = (item) => {
     let { currentTab } = this.state;
     this.setState({
       currentTab: currentTab + 1,
-      chosenDistrict: index
+      chosenDistrictArray: item
     });
   };
 
-  onPressTown = (area) => {
-    let { onAreaChosen, locationList } = this.props;
-    let {chosenDistrict} = this.state
-    let district = locationList[chosenDistrict].district
-    this.setState({
-      currentTab: 0
-    });
+  onPressTown = (item) => {
+    let { chosenDistrictArray } = this.state
+    let { onAreaChosen } = this.props
+    console.log(chosenDistrictArray)
+    let area = item
+    let district = chosenDistrictArray.district
     onAreaChosen(area, district);
+    this.onPressClose()
   };
 
   onPressAll = () => {
@@ -85,17 +86,18 @@ class Brew9SlideUp extends Component {
       currentTab: 0
     });
     onAreaChosen(null);
+    this.onPressClose()
   };
 
   renderDistrict = ({ item, index }) => {
     return (
-      <Text style={styles.nameText} onPress={() => this.onPressDistrict(index)}>
+      <Text style={styles.nameText} onPress={() => this.onPressDistrict(item)}>
         {item.district}
       </Text>
     );
   };
 
-  renderTown = ({ item, index }) => {
+  renderArea = ({ item, index }) => {
     return (
       <Text style={styles.nameText} onPress={() => this.onPressTown(item)}>
         {item}
@@ -127,21 +129,22 @@ class Brew9SlideUp extends Component {
   }
 
   renderList = () => {
-    let locationList = this.groupByDistrict();
+    let { currentTab, chosenDistrictArray } = this.state;
+    let data = []
+    let render = null
 
-    let { currentTab, chosenDistrict } = this.state;
-    let data =
-      currentTab == 0
-        ? locationList
-        : currentTab == 1
-        ? locationList[chosenDistrict].areas
-        : null;
-    let render =
-      currentTab == 0
-        ? this.renderDistrict
-        : currentTab == 1
-        ? this.renderTown
-        : null;
+    //current tab is district
+    if (currentTab == 0) {
+      data = this.groupByDistrict()
+      render = this.renderDistrict
+    }
+
+    if (currentTab == 1) {
+      data = chosenDistrictArray.areas
+      data.push('All')
+      render= this.renderArea
+
+    }
     return (
       <FlatList
         data={data}
@@ -151,6 +154,21 @@ class Brew9SlideUp extends Component {
       />
     );
   };
+
+  saveData = ( ) => {
+    let data = this.groupByDistrict()
+    this.setState({
+      data: data
+    })
+  }
+
+  onPressClose = () => {
+    let { toggleAreaView } = this.props
+    this.setState({
+      currentTab: 0
+    })
+    toggleAreaView()
+  }
 
   render() {
     let { visible, onAreaChosen, toggleAreaView } = this.props;
@@ -162,17 +180,16 @@ class Brew9SlideUp extends Component {
             slideFrom: 'bottom'
           })
         }
-        onTouchOutside={() => toggleAreaView()}
+        onTouchOutside={() => this.onPressClose()}
       >
         <ModalContent style={styles.customStyle}>
           <View style={styles.modalView}>
             <Text style={styles.headerText}>Please Select</Text>
             <View style={styles.tabView}>{this.renderTabs()}</View>
-            {/* <Button style={{marginTop: alpha * 3}}title="test" onPress={this.test}></Button> */}
             <View style={styles.placesView}>{this.renderList()}</View>
           </View>
           <TouchableOpacity
-            onPress={() => toggleAreaView()}
+            onPress={() => this.onPressClose()}
             style={styles.closeButton}
           >
             <Image

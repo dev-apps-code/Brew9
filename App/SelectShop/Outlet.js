@@ -198,22 +198,31 @@ export default class Outlet extends React.Component {
   };
 
   onAreaChosen = (area, district) => {
-    if (area !== null) {
+    if (area == 'All') {
+      let selectedArea = district + ' > ' + area;
+      let { allShops } = this.props;
+      var newArray = allShops.filter(function (obj) {
+        return obj.district == district;
+      });
+      this.setState({
+        selectedArea: selectedArea,
+        displayShopList: newArray
+      });
+    } else if (area == null) {
+      this.setState({
+        displayShopList: [],
+        selectedArea: 'All'
+      });
+    }
+    else {
       let selectedArea = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.area == area;
       });
       this.setState({
-        showAreaView: !this.state.showAreaView,
         selectedArea: selectedArea,
         displayShopList: newArray
-      });
-    } else {
-      this.setState({
-        showAreaView: !this.state.showAreaView,
-        displayShopList: [],
-        selectedArea: 'All'
       });
     }
   };
