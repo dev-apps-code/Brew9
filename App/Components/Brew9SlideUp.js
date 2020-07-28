@@ -77,6 +77,7 @@ class Brew9SlideUp extends Component {
     let area = item
     let district = chosenDistrictArray.district
     onAreaChosen(area, district);
+    this.onPressClose()
   };
 
   onPressAll = () => {
@@ -85,6 +86,7 @@ class Brew9SlideUp extends Component {
       currentTab: 0
     });
     onAreaChosen(null);
+    this.onPressClose()
   };
 
   renderDistrict = ({ item, index }) => {
