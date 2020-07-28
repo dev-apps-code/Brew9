@@ -13,7 +13,8 @@ import {
   NON_TITLE_FONT,
   LIGHT_GREY,
   DEFAULT_BORDER_RADIUS,
-  TINT_COLOR
+  TINT_COLOR,
+  DISABLED_COLOR
 } from '../Common/common_style';
 import { alpha, fontAlpha } from '../Common/size';
 import openMap from 'react-native-open-maps';
@@ -54,14 +55,16 @@ export default class ShopDetails extends Component {
   onPressDirection(lat, long) {
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
+    let location = latitude+","+longitude 
 
-    openMap({ latitude: latitude, longitude: longitude });
+    openMap({ query: location });
+
   }
 
   renderAvailablity = (availability) => {
-    let color = availability ? '#00B2E3' : '#E0E0E0';
-    let viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
-    let textStyle = { ...styles.availabilityText, ...{ color: color } };
+    const color = availability ? '#00B2E3' : DISABLED_COLOR;
+    const viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
+    const textStyle = { ...styles.availabilityText, ...{ color } };
     return (
       <View style={viewStyle}>
         <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
@@ -72,9 +75,11 @@ export default class ShopDetails extends Component {
   render() {
     const { details, onPressOrderNow, shop } = this.props;
     const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
-    const { start_time, end_time } = details.opening_hour;
+    const { start_time, end_time } = details?.opening_hour || {
+      start_time: null,
+      end_time: null
+    };
     let hoursText = null;
-
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
   availabilityText: {
     fontSize: fontAlpha * 9,
     color: '#00B2E3',
-    fontFamily: NON_TITLE_FONT
+    fontFamily: TITLE_FONT
   },
   shopName: {
     color: 'rgb(54, 54, 54)',

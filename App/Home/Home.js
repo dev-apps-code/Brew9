@@ -862,7 +862,6 @@ export default class Home extends React.Component {
             productTagColor={item.discount_tag_color}
             productTagText={item.discount_tag_text_color}
             recommended={item.recommended}
-            daily_limit={item.product_settings[0].daily_limit}
             productingredient={item.ingredients}
             producttotalquantity={item.total_quantity}
             onChangeQuantity={this.onChangeQuantityPress}
@@ -1921,20 +1920,10 @@ export default class Home extends React.Component {
                 description={shop.location}
               />
             </MapView>
-            {/* <View
-						style={styles.branchInfoView}> */}
-            {/* <Text
-							style={styles.branchInfoText}>Outlet Info</Text> */}
-            {/* { (shop != null && shop.image != null) && ( */}
-
-            {/* <Image
-							source={{ uri: shop.image.thumb.url }}
-							style={styles.shopImage} /> */}
-            {/* ) } */}
             <ScrollView
               contentContainerStyle={{
                 paddingHorizontal: 10 * alpha,
-                paddingBottom: 80 * alpha
+                flex:1
               }}
             >
               <Text style={styles.branchHeaderAddress}>Address </Text>
@@ -1947,11 +1936,11 @@ export default class Home extends React.Component {
               </Text>
               <Text style={styles.businessHeaderHourText}>Business Hours</Text>
               <Text style={styles.businessHourText}>
+                {console.log(shop.opening_closing_text)}
                 {shop ? shop.opening_closing_text : ''}
               </Text>
             </ScrollView>
           </View>
-          // </View>
         )}
 
         <Animated.View
@@ -3278,7 +3267,7 @@ const styles = StyleSheet.create({
     padding: 10 * alpha
   },
   showLocationView: {
-    backgroundColor: 'white',
+    backgroundColor:'white',
     width: '100%',
     height: '100%',
     position: 'absolute',
@@ -3416,12 +3405,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     // color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
+    height: '40%',
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
     alignSelf: 'stretch',
-    marginTop: 3 * alpha
+    marginTop: 3 * alpha,
+    // backgroundColor:'yellow'
   },
   featuredpromoButton: {
     backgroundColor: 'transparent',

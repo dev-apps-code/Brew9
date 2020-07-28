@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     //   height: alpha * 20,
     backgroundColor: 'white',
     position: 'absolute',
+    zIndex: 1,
     right: alpha * 10,
     top: alpha * 40,
     borderWidth: 1,
