@@ -1,13 +1,16 @@
 import {
-  TextInput,
-  StyleSheet,
-  View,
-  TouchableOpacity,
+  Animated,
+  Easing,
   Image,
-  Text
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha } from '../Common/size';
+import { alpha, fontAlpha, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import ShopList from '../Components/ShopList';
 import {
@@ -15,7 +18,8 @@ import {
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
   TAB_STYLE,
-  LIGHT_GREY_BACKGROUND
+  LIGHT_GREY_BACKGROUND,
+  NON_TITLE_FONT
 } from '../Common/common_style';
 import MapView from 'react-native-maps';
 import { createAction } from '../Utils';
@@ -28,6 +32,12 @@ import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import Brew9SlideUp from '../Components/Brew9SlideUp';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import Brew9DropDown from '../Components/Brew9DropDown';
+import { toLower } from 'lodash';
+
+const SEARCH_WIDTH = 80 * alpha;
+const CANCEL_WIDTH = 60 * alpha;
+const MAX_SEARCH_WIDTH = windowWidth - CANCEL_WIDTH - 20;
+const FILTER_FIELD_WIDTH = 100;
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
@@ -39,28 +49,49 @@ export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
     this.state = this._getState();
+    this.filterView = new Animated.Value(100);
+    this.searchWidth = new Animated.Value(SEARCH_WIDTH);
   }
 
   _getState = () => ({
     isLoading: true,
+    displayShopList: [],
+    isSearching: false,
+    searchResults: [],
     selectedArea: 'All',
     showAreaView: false,
-    showMap: true,
-    searchResults: [],
-    displayShopList: []
+    showMap: true
   });
 
   componentDidMount() {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener('didFocus', this._didFocus);
+    this.keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      this.keyboardWillShow
+    );
+    this.keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      this.keyboardWillHide
+    );
   }
 
   componentWillUnmount() {
     this.focusListener.remove();
+    this.keyboardWillHideListener.remove();
+    this.keyboardWillShowListener.remove();
   }
 
   _didFocus = async () => {
     this.loadAllShops();
+  };
+
+  keyboardWillHide = () => {
+    // this.resetSearchFieldWidth();
+  };
+
+  keyboardWillShow = () => {
+    this.setState({ showMap: false });
   };
 
   loadAllShops() {
@@ -164,12 +195,9 @@ export default class Outlet extends React.Component {
     }
   };
 
-  onAreaChosen = (area,district) => {
+  onAreaChosen = (area, district) => {
     if (area !== null) {
-      console.log("=======")
-      console.log(area)
-      console.log(district)
-      let selectedArea = district + " > " + area
+      let selectedArea = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.area == area;
@@ -186,119 +214,167 @@ export default class Outlet extends React.Component {
         selectedArea: 'All'
       });
     }
-    //receive area here
   };
 
   searchFilter = (str) => {
-    if (str == '') {
-      this.setState({
-        searchResults: []
-      });
-      return;
-    }
+    const shops = this.props.allShops.filter(
+      ({ area, district, name, short_address }) =>
+        toLower(name).includes(str) ||
+        toLower(area).includes(str) ||
+        toLower(short_address).includes(str) ||
+        toLower(district).includes(str)
+    );
 
-    let { allShops } = this.props;
-    let re = new RegExp(str, 'i');
-    let r = [];
+    this.setState({ isSearching: true, searchResults: shops });
+  };
 
-    for (let k in allShops) {
-      let flag =
-        allShops[k].short_address.match(re) ||
-        allShops[k].district.match(re) ||
-        allShops[k].area.match(re);
-
-      if (flag) {
-        r.push({
-          id: allShops[k].id,
-          address:
-            allShops[k].short_address +
-            ' ' +
-            allShops[k].district +
-            ' ' +
-            allShops[k].area,
-          area: allShops[k].area
-        });
-      }
-    }
+  onPressCancel = () => {
+    Keyboard.dismiss();
+    this.refs.searchInput.clear();
+    this.resetSearchFieldWidth();
     this.setState({
-      searchResults: r
+      isSearching: false,
+      searchResults: []
     });
   };
 
-  onPressResult = (item) => {
-    let { allShops } = this.props;
-    console.log(item);
-    this.textInput.clear();
-
-    var newArray = allShops.filter(function (obj) {
-      return obj.id == item.id;
-    });
-
-    console.log('-----------');
-    console.log(newArray);
-    this.setState({
-      searchResults: [],
-      selectedArea: item.area,
-      displayShopList: newArray
-    });
+  onFocusSearchField = () => {
+    this.setState({ isSearching: true, showMap: false });
+    Animated.timing(this.searchWidth, {
+      toValue: MAX_SEARCH_WIDTH,
+      duration: 300,
+      easing: Easing.linear
+    }).start();
   };
+
+  resetSearchFieldWidth = () => {
+    Animated.timing(this.searchWidth, {
+      toValue: alpha * 80,
+      duration: 500,
+      easing: Easing.linear
+    }).start();
+  };
+
+  renderFilterButton() {
+    const maxRangeWidth = MAX_SEARCH_WIDTH - FILTER_FIELD_WIDTH;
+    const newLeft = this.searchWidth.interpolate({
+      inputRange: [
+        0,
+        maxRangeWidth * 0.25,
+        maxRangeWidth * 0.5,
+        maxRangeWidth * 0.75,
+        maxRangeWidth
+      ],
+      outputRange: [100, 100, 100, 100, -100]
+    });
+
+    Animated.timing(this.filterView, {
+      toValue: newLeft,
+      duration: 120,
+      easing: Easing.linear
+    }).start();
+
+    return (
+      <Animated.View
+        style={{
+          left: this.filterView,
+          justifyContent: 'center'
+          // maxWidth: FILTER_FIELD_WIDTH
+        }}
+      >
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={this.toggleAreaView}
+        >
+          <Text style={styles.filterAreaText}>{this.state.selectedArea}</Text>
+          <Image
+            source={require('./../../assets/images/next.png')}
+            style={styles.rightArrowImage}
+          />
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  }
+
+  renderMap() {
+    if (this.state.showMap) {
+      return (
+        <Animated.View style={styles.mapView}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.004,
+              longitudeDelta: 0.004
+            }}
+          />
+        </Animated.View>
+      );
+    }
+  }
+
+  renderSearchField() {
+    const opacity = this.searchWidth.interpolate({
+      inputRange: [SEARCH_WIDTH, MAX_SEARCH_WIDTH],
+      outputRange: [0, 1]
+    });
+    const right = this.searchWidth.interpolate({
+      inputRange: [SEARCH_WIDTH, MAX_SEARCH_WIDTH],
+      outputRange: [0, CANCEL_WIDTH]
+    });
+    return (
+      <Animated.View
+        style={[styles.searchView, { width: this.searchWidth, right }]}
+      >
+        <View style={styles.searchField}>
+          <Image
+            source={require('./../../assets/images/search.png')}
+            style={styles.searchImage}
+          />
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <TextInput
+              // pointerEvents="none"
+              ref="searchInput"
+              placeholder="Search"
+              onFocus={this.onFocusSearchField}
+              onChangeText={(text) => this.searchFilter(text)}
+              underlineColorAndroid="transparent"
+              autoCapitalize="none"
+            />
+          </View>
+        </View>
+        <Animated.View style={[styles.cancelSearchContainer, { opacity }]}>
+          <TouchableOpacity
+            onPress={this.onPressCancel}
+            style={[styles.cancelSearchButton]}
+          >
+            <Animated.Text style={styles.cancelSearchText}>
+              Cancel
+            </Animated.Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </Animated.View>
+    );
+  }
 
   render() {
-    const { displayShopList } = this.state;
+    const { displayShopList, isSearching, searchResults } = this.state;
     const { allShops, nearbyShops } = this.props;
     let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
     shops = displayShopList.length > 0 ? displayShopList : shops;
+    shops = isSearching ? searchResults : shops;
     return (
       <View style={styles.mainView}>
-        <View style={styles.view_1}>
-          <TouchableOpacity
-            style={styles.button_1}
-            onPress={this.toggleAreaView}
-          >
-            <Text style={styles.text_1}> {this.state.selectedArea} </Text>
-            <Image
-              source={require('./../../assets/images/next.png')}
-              style={styles.rightArrowImage}
-            />
-          </TouchableOpacity>
-          <View style={styles.searchView}>
-            <Image
-              source={require('./../../assets/images/search.png')}
-              style={styles.searchImage}
-            />
-            {/* <Text style={styles.text_2}>search</Text>
-             */}
-            <TouchableOpacity onPress={() => console.log('Pressed')}>
-              <TextInput
-                pointerEvents="none"
-                ref={(input) => {
-                  this.textInput = input;
-                }}
-                style={styles.searchInput}
-                placeholder="search"
-                onChangeText={(searchString) => this.searchFilter(searchString)}
-                underlineColorAndroid="transparent"
-              />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.subHeaderView}>
+          {this.renderFilterButton()}
+          {this.renderSearchField()}
         </View>
-        {this.state.showMap ? (
-          <View style={styles.mapView}>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.004,
-                longitudeDelta: 0.004
-              }}
-            />
-          </View>
-        ) : null}
-        <Brew9DropDown
+        {this.renderMap()}
+        {/* <Brew9DropDown
           results={this.state.searchResults}
-          onPressResult={this.onPressResult}
-        />
+          onPressResult={this.onS}
+        /> */}
         <TouchableOpacity style={styles.button_3} onPress={this.toggleMap}>
           <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}
@@ -365,24 +441,62 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: LIGHT_GREY_BACKGROUND
   },
-  view_1: {
+  subHeaderView: {
     flexDirection: 'row',
     paddingVertical: alpha * 7,
     paddingHorizontal: alpha * 10,
     justifyContent: 'space-between',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    width: windowWidth + 100,
+    position: 'relative',
+    left: -100,
+    right: 0,
+    zIndex: 1
   },
   mapView: {
     height: alpha * 160
   },
   searchView: {
+    borderRadius: alpha * 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: alpha * 6,
+    height: alpha * 33,
+    position: 'relative',
+    right: 0
+  },
+  searchField: {
     backgroundColor: '#F5F5F5',
     borderRadius: alpha * 21,
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'center',
     paddingHorizontal: alpha * 6,
-    height: alpha * 33
+    height: alpha * 33,
+    position: 'absolute',
+    left: 0,
+    right: 0
+  },
+  cancelSearchContainer: {
+    borderRadius: alpha * 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: alpha * 6,
+    height: alpha * 33,
+    width: CANCEL_WIDTH,
+    position: 'absolute',
+    right: -CANCEL_WIDTH
+  },
+  cancelSearchButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 6 * alpha,
+    justifyContent: 'center'
+  },
+  cancelSearchText: {
+    color: '#363636',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    textAlign: 'center'
   },
   map: {
     ...StyleSheet.absoluteFillObject
@@ -390,7 +504,6 @@ const styles = StyleSheet.create({
   view_2: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'red',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row'
@@ -417,7 +530,7 @@ const styles = StyleSheet.create({
   },
 
   //button
-  button_1: {
+  filterButton: {
     flexDirection: 'row',
     alignItems: 'center'
   },
@@ -432,11 +545,12 @@ const styles = StyleSheet.create({
   },
 
   //txt
-  text_1: {
+  filterAreaText: {
     marginRight: alpha * 7,
     fontSize: fontAlpha * 12,
     fontFamily: TITLE_FONT,
-    color: '#363636'
+    color: '#363636',
+    flexWrap: 'wrap'
   },
 
   text_2: {
@@ -444,8 +558,5 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
-  },
-  searchInput: {
-    width: alpha * 50
   }
 });
