@@ -73,9 +73,11 @@ export default class ShopDetails extends Component {
   render() {
     const { details, onPressOrderNow, shop } = this.props;
     const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
-    const { start_time, end_time } = details.opening_hour;
+    const { start_time, end_time } = details?.opening_hour || {
+      start_time: null,
+      end_time: null
+    };
     let hoursText = null;
-
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
