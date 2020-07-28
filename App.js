@@ -9,7 +9,11 @@ import * as Font from 'expo-font';
 import { DangerZone, AppLoading } from 'expo';
 import React from 'react';
 import * as Sentry from 'sentry-expo';
-import { createBottomTabNavigator, NavigationActions, createMaterialTopTabNavigator } from 'react-navigation';
+import {
+  createBottomTabNavigator,
+  NavigationActions,
+  createMaterialTopTabNavigator
+} from 'react-navigation';
 import Constants from 'expo-constants';
 import {
   createStackNavigator,
@@ -35,8 +39,6 @@ import Home from './App/Home/Home';
 import Favourite from './App/SelectShop/Favourite';
 import Outlet from './App/SelectShop/Outlet';
 import { headerStyle } from './App/Components/brew9NavigationHeader';
-
-
 
 import VIPPurchase from './App/VIPPurchase/VIPPurchase';
 import PointHistory from './App/PointHistory/PointHistory';
@@ -115,25 +117,22 @@ const VerifyUserStack = createStackNavigator(
   }
 );
 const selectShopTabs = createMaterialTopTabNavigator(
-  { 
+  {
     Outlet: {
       screen: Outlet
     },
     Favourite: {
       screen: Favourite
-    },
+    }
   },
   {
-    initialRouteName: 'Outlet',
-  },
+    initialRouteName: 'Outlet'
+  }
 );
 
 selectShopTabs.navigationOptions = ({ navigation }) => {
-  
-  return headerStyle(navigation)
-
+  return headerStyle(navigation);
 };
-
 
 const PushOrder = createStackNavigator(
   {
@@ -141,7 +140,7 @@ const PushOrder = createStackNavigator(
       screen: Home
     },
     SelectShop: {
-      screen: selectShopTabs,
+      screen: selectShopTabs
     },
     PaymentsWebview: {
       screen: PaymentsWebview
@@ -238,6 +237,9 @@ const PushPickup = createStackNavigator(
     },
     OrderHistory: {
       screen: OrderHistory
+    },
+    OrderReceipt: {
+      screen: OrderReceipt
     },
     EditOrder: {
       screen: EditOrder
@@ -574,7 +576,6 @@ const TabGroupOne = createBottomTabNavigator(
     }
   }
 );
-
 
 const AuthenticationStack = createStackNavigator(
   {

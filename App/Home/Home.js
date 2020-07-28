@@ -198,9 +198,7 @@ export default class Home extends React.Component {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'ScanQr'));
 
-    if (currentMember != null) {
-      navigation.navigate('ScanQr');
-    } else {
+    if (currentMember == null) {
       this.refs.toast.show(
         'You need to login before you can topup',
         TOAST_DURATION,
@@ -211,10 +209,14 @@ export default class Home extends React.Component {
           });
         }
       );
+      return;
     }
+
+    navigation.navigate('ScanQr');
   };
 
   _onShopNamePressed = () => {
+    this.setState({ refresh_products: true });
     this.props.navigation.navigate('SelectShop');
   };
 
@@ -457,9 +459,12 @@ export default class Home extends React.Component {
   }
 
   loadStoreProducts() {
-    const { dispatch, company_id } = this.props;
+    const {
+      dispatch,
+      shop: { id }
+    } = this.props;
     const { menu_banners } = this.state;
-
+    this.setState({ products: [] });
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
@@ -506,7 +511,7 @@ export default class Home extends React.Component {
     };
 
     const obj = new ProductRequestObject();
-    obj.setUrlId(company_id);
+    obj.setUrlId(id);
     dispatch(
       createAction('products/loadStoreProducts')({
         object: obj,
@@ -1722,16 +1727,19 @@ export default class Home extends React.Component {
               {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
 							style={styles.branchButton}> */}
-              <TouchableOpacity onPress={this._onShopNamePressed} style={styles.selectShopButton}>
+              <TouchableOpacity
+                onPress={this._onShopNamePressed}
+                style={styles.selectShopButton}
+              >
                 <Text style={styles.branchButtonText}>
                   {shop ? shop.name : ''}
                 </Text>
                 <Image
-                  source={require("./../../assets/images/next.png")}
+                  source={require('./../../assets/images/next.png')}
                   style={styles.rightArrowImage}
                 />
               </TouchableOpacity>
-             
+
               {/* </TouchableOpacity> */}
             </View>
 
@@ -3470,7 +3478,7 @@ const styles = StyleSheet.create({
     marginLeft: alpha * 5
   },
   selectShopButton: {
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });

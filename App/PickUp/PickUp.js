@@ -34,7 +34,7 @@ import {
   TABBAR_ACTIVE_TINT,
   PRIMARY_COLOR,
   LIGHT_BLUE,
-  DEFAULT_GREY_BACKGROUND
+  HEADER_NO_BACK
 } from '../Common/common_style';
 import Moment from 'moment';
 import NotificationsRequestObject from '../Requests/notifications_request_object';
@@ -59,17 +59,13 @@ export default class PickUp extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (
-        <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT }}>
+        <Text style={HEADER_NO_BACK}>
           Your Order
         </Text>
       ),
       headerTintColor: 'black',
       headerLeft: null,
-      headerRight: null,
-      headerTitleStyle: {
-        textAlign: 'center',
-        flex: 1
-      }
+      headerRight: null
     };
   };
 
