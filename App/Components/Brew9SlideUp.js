@@ -134,7 +134,7 @@ class Brew9SlideUp extends Component {
       currentTab == 0
         ? locationList
         : currentTab == 1
-        ? locationList[chosenDistrict].areas
+        ? [locationList[chosenDistrict].areas, 'All']
         : null;
     let render =
       currentTab == 0
