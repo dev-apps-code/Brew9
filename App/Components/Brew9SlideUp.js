@@ -27,7 +27,7 @@ class Brew9SlideUp extends Component {
 
   _getState = () => ({
     currentTab: 0,
-    tabs: ['District', 'Town', 'All'],
+    tabs: ['District', 'Area', 'All'],
     chosenAreaIndex: null,
     chosenDistrictArray: null,
     data: null
