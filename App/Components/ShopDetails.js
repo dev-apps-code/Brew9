@@ -13,7 +13,8 @@ import {
   NON_TITLE_FONT,
   LIGHT_GREY,
   DEFAULT_BORDER_RADIUS,
-  TINT_COLOR
+  TINT_COLOR,
+  DISABLED_COLOR
 } from '../Common/common_style';
 import { alpha, fontAlpha } from '../Common/size';
 import openMap from 'react-native-open-maps';
@@ -59,9 +60,9 @@ export default class ShopDetails extends Component {
   }
 
   renderAvailablity = (availability) => {
-    let color = availability ? '#00B2E3' : '#E0E0E0';
-    let viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
-    let textStyle = { ...styles.availabilityText, ...{ color: color } };
+    const color = availability ? '#00B2E3' : DISABLED_COLOR;
+    const viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
+    const textStyle = { ...styles.availabilityText, ...{ color } };
     return (
       <View style={viewStyle}>
         <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
   availabilityText: {
     fontSize: fontAlpha * 9,
     color: '#00B2E3',
-    fontFamily: NON_TITLE_FONT
+    fontFamily: TITLE_FONT
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
