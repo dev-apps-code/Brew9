@@ -19,7 +19,9 @@ import {
   TITLE_FONT,
   TAB_STYLE,
   LIGHT_GREY_BACKGROUND,
-  NON_TITLE_FONT
+  NON_TITLE_FONT,
+  TEXT_COLOR,
+  DISABLED_COLOR
 } from '../Common/common_style';
 import MapView from 'react-native-maps';
 import { createAction } from '../Utils';
@@ -339,6 +341,7 @@ export default class Outlet extends React.Component {
               placeholder="Search"
               onFocus={this.onFocusSearchField}
               onChangeText={(text) => this.searchFilter(text)}
+              placeholderTextColor={DISABLED_COLOR}
               underlineColorAndroid="transparent"
               autoCapitalize="none"
             />
