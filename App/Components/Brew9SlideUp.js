@@ -33,15 +33,6 @@ class Brew9SlideUp extends Component {
     data: null
   });
 
-  componentDidMount() {
-    let { locationList } = this.props
-    this.setState({
-      data: locationList
-    })
-    console.log("HERE")
-    console.log(this.props.locationList)
-  }
-
   renderTabs() {
     let { tabs, currentTab } = this.state;
 
@@ -79,19 +70,12 @@ class Brew9SlideUp extends Component {
     });
   };
 
-  onPressTown = (area) => {
-    let { onAreaChosen, locationList } = this.props;
-    let {chosenDistrictArray} = this.state
-    let district = locationList[chosenDistrictArray].district
-    this.setState({
-      currentTab: 0,
-      chosenDistrictArray: null,
-      chosenAreaIndex: null
-    });
-    console.log('before')
-    console.log(district)
-    console.log(area)
-
+  onPressTown = (item) => {
+    let { chosenDistrictArray } = this.state
+    let { onAreaChosen } = this.props
+    console.log(chosenDistrictArray)
+    let area = item
+    let district = chosenDistrictArray.district
     onAreaChosen(area, district);
   };
 
@@ -104,8 +88,6 @@ class Brew9SlideUp extends Component {
   };
 
   renderDistrict = ({ item, index }) => {
-    console.log('render')
-    console.log(item)
     return (
       <Text style={styles.nameText} onPress={() => this.onPressDistrict(item)}>
         {item.district}
