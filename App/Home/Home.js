@@ -862,7 +862,6 @@ export default class Home extends React.Component {
             productTagColor={item.discount_tag_color}
             productTagText={item.discount_tag_text_color}
             recommended={item.recommended}
-            daily_limit={item.product_settings[0].daily_limit}
             productingredient={item.ingredients}
             producttotalquantity={item.total_quantity}
             onChangeQuantity={this.onChangeQuantityPress}
