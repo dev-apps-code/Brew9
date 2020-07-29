@@ -59,7 +59,9 @@ export default class Outlet extends React.Component {
     displayShopList: [],
     isSearching: false,
     searchResults: [],
-    selectedArea: 'All',
+    selectedArea: null,
+    selectedAreaText: 'All',
+    selectedDistrict: null,
     showAreaView: false,
     showMap: true
   });
@@ -198,28 +200,34 @@ export default class Outlet extends React.Component {
 
   onAreaChosen = (area, district) => {
     if (area == 'All') {
-      let selectedArea = district + ' > ' + area;
+      let selectedAreaText = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.district == district;
       });
       this.setState({
-        selectedArea: selectedArea,
+        selectedDistrict: district,
+        selectedArea: area,
+        selectedAreaText,
         displayShopList: newArray
       });
     } else if (area == null) {
       this.setState({
         displayShopList: [],
-        selectedArea: 'All'
+        selectedDistrict: null,
+        selectedArea: null,
+        selectedAreaText: 'All'
       });
     } else {
-      let selectedArea = district + ' > ' + area;
+      let selectedAreaText = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.area == area;
       });
       this.setState({
-        selectedArea: selectedArea,
+        selectedArea: area,
+        selectedAreaText,
+        selectedDistrict: district,
         displayShopList: newArray
       });
     }
@@ -295,7 +303,9 @@ export default class Outlet extends React.Component {
           style={styles.filterButton}
           onPress={this.toggleAreaView}
         >
-          <Text style={styles.filterAreaText}>{this.state.selectedArea}</Text>
+          <Text style={styles.filterAreaText}>
+            {this.state.selectedAreaText}
+          </Text>
           <Image
             source={require('./../../assets/images/next.png')}
             style={styles.rightArrowImage}
@@ -415,6 +425,8 @@ export default class Outlet extends React.Component {
           okayButtonAction={() => {
             BackHandler.exitApp();
           }}
+          selectedArea={this.state.selectedArea}
+          selectedDistrict={this.state.selectedDistrict}
           onAreaChosen={this.onAreaChosen}
           toggleAreaView={this.toggleAreaView}
         />
