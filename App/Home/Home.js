@@ -429,10 +429,20 @@ export default class Home extends React.Component {
   };
 
   loadShops() {
-    const { shop } = this.props;
+    const { shop, location } = this.props;
 
     if (shop === null) {
-      const message = 'Please select an outlet that is near you.';
+      let message = 'Please select an outlet that is near you.';
+
+      const latitude = location != null ? location.coords.latitude : null;
+      const longitude = location != null ? location.coords.longitude : null;
+
+      if (latitude === null || longitude === null ) {
+        message = 'Could not detect your location.\nPlease select store.';
+      }
+
+      this.refs.toast.show(message, 3000);
+
       const callback = () => {
         this.props.navigation.navigate('SelectShop');
       };
@@ -1923,7 +1933,7 @@ export default class Home extends React.Component {
             <ScrollView
               contentContainerStyle={{
                 paddingHorizontal: 10 * alpha,
-                flex:1
+                flex: 1
               }}
             >
               <Text style={styles.branchHeaderAddress}>Address </Text>
@@ -3267,7 +3277,7 @@ const styles = StyleSheet.create({
     padding: 10 * alpha
   },
   showLocationView: {
-    backgroundColor:'white',
+    backgroundColor: 'white',
     width: '100%',
     height: '100%',
     position: 'absolute',
@@ -3411,7 +3421,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     alignSelf: 'stretch',
-    marginTop: 3 * alpha,
+    marginTop: 3 * alpha
     // backgroundColor:'yellow'
   },
   featuredpromoButton: {
