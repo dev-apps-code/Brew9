@@ -31,9 +31,8 @@ import {
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
-import Brew9SlideUp from '../Components/Brew9SlideUp';
+import FilterView from './FilterShops';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
-import Brew9DropDown from '../Components/Brew9DropDown';
 import { toLower } from 'lodash';
 
 const SEARCH_WIDTH = 80 * alpha;
@@ -62,7 +61,9 @@ export default class Outlet extends React.Component {
     displayShopList: [],
     isSearching: false,
     searchResults: [],
-    selectedArea: 'All',
+    selectedArea: null,
+    selectedAreaText: 'All',
+    selectedDistrict: null,
     showAreaView: false,
     showMap: true
   });
@@ -201,28 +202,34 @@ export default class Outlet extends React.Component {
 
   onAreaChosen = (area, district) => {
     if (area == 'All') {
-      let selectedArea = district + ' > ' + area;
+      let selectedAreaText = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.district == district;
       });
       this.setState({
-        selectedArea: selectedArea,
+        selectedDistrict: district,
+        selectedArea: area,
+        selectedAreaText,
         displayShopList: newArray
       });
     } else if (area == null) {
       this.setState({
         displayShopList: [],
-        selectedArea: 'All'
+        selectedDistrict: null,
+        selectedArea: null,
+        selectedAreaText: 'All'
       });
     } else {
-      let selectedArea = district + ' > ' + area;
+      let selectedAreaText = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
         return obj.area == area;
       });
       this.setState({
-        selectedArea: selectedArea,
+        selectedArea: area,
+        selectedAreaText,
+        selectedDistrict: district,
         displayShopList: newArray
       });
     }
@@ -299,7 +306,9 @@ export default class Outlet extends React.Component {
           style={styles.filterButton}
           onPress={this.toggleAreaView}
         >
-          <Text style={styles.filterAreaText}>{this.state.selectedArea}</Text>
+          <Text style={styles.filterAreaText}>
+            {this.state.selectedAreaText}
+          </Text>
           <Image
             source={require('./../../assets/images/next.png')}
             style={styles.rightArrowImage}
@@ -416,7 +425,7 @@ export default class Outlet extends React.Component {
           onRefresh={() => this.loadAllShops()}
           refreshing={this.state.isLoading}
         />
-        <Brew9SlideUp
+        <FilterView
           locationList={allShops}
           visible={this.state.showAreaView}
           cancelable={true}
@@ -425,6 +434,8 @@ export default class Outlet extends React.Component {
           okayButtonAction={() => {
             BackHandler.exitApp();
           }}
+          selectedArea={this.state.selectedArea}
+          selectedDistrict={this.state.selectedDistrict}
           onAreaChosen={this.onAreaChosen}
           toggleAreaView={this.toggleAreaView}
         />
