@@ -1904,7 +1904,7 @@ export default class Home extends React.Component {
             </View>
           </View>
         )}
-        {this.props.isToggleShopLocation && (
+        {isToggleShopLocation && (
           <View style={styles.showLocationView}>
             <MapView
               style={styles.mapImage}
@@ -1932,9 +1932,11 @@ export default class Home extends React.Component {
             </MapView>
             <ScrollView
               contentContainerStyle={{
-                paddingHorizontal: 10 * alpha,
-                flex: 1
+                paddingHorizontal: 15 * alpha,
+                paddingTop: 15 * alpha,
+                paddingBottom: 100 * alpha,
               }}
+              showsVerticalScrollIndicator={false}
             >
               <Text style={styles.branchHeaderAddress}>Address </Text>
               <Text style={styles.branchAddress}>
@@ -3415,7 +3417,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     // color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
-    height: '40%',
+    // height: '40%',
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
