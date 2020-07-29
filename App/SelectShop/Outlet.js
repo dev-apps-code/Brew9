@@ -31,9 +31,8 @@ import {
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
-import Brew9SlideUp from '../Components/Brew9SlideUp';
+import FilterView from '../Components/Brew9SlideUp';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
-import Brew9DropDown from '../Components/Brew9DropDown';
 import { toLower } from 'lodash';
 
 const SEARCH_WIDTH = 80 * alpha;
@@ -213,8 +212,7 @@ export default class Outlet extends React.Component {
         displayShopList: [],
         selectedArea: 'All'
       });
-    }
-    else {
+    } else {
       let selectedArea = district + ' > ' + area;
       let { allShops } = this.props;
       var newArray = allShops.filter(function (obj) {
@@ -408,7 +406,7 @@ export default class Outlet extends React.Component {
           onRefresh={() => this.loadAllShops()}
           refreshing={this.state.isLoading}
         />
-        <Brew9SlideUp
+        <FilterView
           locationList={allShops}
           visible={this.state.showAreaView}
           cancelable={true}
