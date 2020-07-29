@@ -31,7 +31,7 @@ import {
   DeleteFavoriteRequestObject
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
-import FilterView from '../Components/Brew9SlideUp';
+import FilterView from './FilterShops';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import { toLower } from 'lodash';
 
