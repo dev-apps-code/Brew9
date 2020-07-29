@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
-import { alpha, fontAlpha, windowWidth } from '../Common/size';
-import Modal, {
-  ModalContent,
-  ModalButton,
-  ModalFooter,
-  SlideAnimation
-} from 'react-native-modals';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  ActivityIndicator,
-  Button,
   FlatList,
-  TouchableHighlight,
   TouchableOpacity
 } from 'react-native';
+import Modal, { ModalContent, SlideAnimation } from 'react-native-modals';
 import { TITLE_FONT, NON_TITLE_FONT } from '../Common/common_style';
+import { alpha, fontAlpha } from '../Common/size';
+
+const TAB_FONT_SIZE = 16 * fontAlpha;
+const CONTENT_FONT_SIZE = 14 * fontAlpha;
 
 class Brew9SlideUp extends Component {
   constructor(props) {
@@ -38,24 +33,32 @@ class Brew9SlideUp extends Component {
 
     const tabSet = tabs.map((value, key) => {
       return (
-        <Text
-          onPress={key == 2 ? () => this.onPressAll() : null}
-          style={
-            currentTab == key
-              ? {
-                  ...styles.tabItemText,
-                  ...{
-                    borderBottomColor: '#00B2E3',
-                    borderBottomWidth: 1,
-                    color: '#00B2E3'
-                  }
-                }
-              : styles.tabItemText
-          }
+        <View
           key={key}
+          style={{ marginLeft: 10, width: 100, alignItems: 'center' }}
         >
-          {value}
-        </Text>
+          <Text
+            onPress={key == 2 ? () => this.onPressAll() : null}
+            style={[
+              styles.tabItemText,
+              currentTab == key && { color: '#00B2E3' }
+            ]}
+          >
+            {value}
+          </Text>
+
+          <View
+            style={
+              currentTab == key && {
+                borderBottomColor: '#00B2E3',
+                height: 1,
+                width: '50%',
+                borderBottomWidth: 1,
+                color: '#00B2E3'
+              }
+            }
+          />
+        </View>
       );
     });
 
@@ -71,13 +74,13 @@ class Brew9SlideUp extends Component {
   };
 
   onPressTown = (item) => {
-    let { chosenDistrictArray } = this.state
-    let { onAreaChosen } = this.props
-    console.log(chosenDistrictArray)
-    let area = item
-    let district = chosenDistrictArray.district
+    let { chosenDistrictArray } = this.state;
+    let { onAreaChosen } = this.props;
+    console.log(chosenDistrictArray);
+    let area = item;
+    let district = chosenDistrictArray.district;
     onAreaChosen(area, district);
-    this.onPressClose()
+    this.onPressClose();
   };
 
   onPressAll = () => {
@@ -86,7 +89,7 @@ class Brew9SlideUp extends Component {
       currentTab: 0
     });
     onAreaChosen(null);
-    this.onPressClose()
+    this.onPressClose();
   };
 
   renderDistrict = ({ item, index }) => {
@@ -130,21 +133,20 @@ class Brew9SlideUp extends Component {
 
   renderList = () => {
     let { currentTab, chosenDistrictArray } = this.state;
-    let data = []
-    let render = null
+    let data = [];
+    let render = null;
 
     //current tab is district
     if (currentTab == 0) {
-      data = this.groupByDistrict()
-      render = this.renderDistrict
+      data = this.groupByDistrict();
+      render = this.renderDistrict;
     }
 
     if (currentTab == 1) {
-      data = chosenDistrictArray.areas
-      data.push('All')
-      render= this.renderArea
-
+      data = ['All', ...chosenDistrictArray.areas];
+      render = this.renderArea;
     }
+
     return (
       <FlatList
         data={data}
@@ -155,26 +157,27 @@ class Brew9SlideUp extends Component {
     );
   };
 
-  saveData = ( ) => {
-    let data = this.groupByDistrict()
+  saveData = () => {
+    let data = this.groupByDistrict();
     this.setState({
       data: data
-    })
-  }
+    });
+  };
 
   onPressClose = () => {
-    let { toggleAreaView } = this.props
+    let { toggleAreaView } = this.props;
     this.setState({
       currentTab: 0
-    })
-    toggleAreaView()
-  }
+    });
+    toggleAreaView();
+  };
 
   render() {
     let { visible, onAreaChosen, toggleAreaView } = this.props;
     return (
       <Modal.BottomModal
         visible={visible}
+        rounded={false}
         modalAnimation={
           new SlideAnimation({
             slideFrom: 'bottom'
@@ -193,8 +196,8 @@ class Brew9SlideUp extends Component {
             style={styles.closeButton}
           >
             <Image
-              source={require('./../../assets/images/cancel.png')}
-              style={styles.closeImage}
+              source={require('./../../assets/images/x-3.png')}
+              style={styles.closeButtonImage}
             />
           </TouchableOpacity>
         </ModalContent>
@@ -208,19 +211,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingLeft: 0,
     paddingRight: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    borderRadius: 0
   },
   modalView: {
     backgroundColor: 'white',
     width: '100%',
-    height: alpha * 150,
+    height: alpha * 200,
     borderRadius: 0
   },
   placesView: {
     width: '100%',
     height: alpha * 150,
     backgroundColor: '#F5F5F5',
-    padding: alpha * 10
+    padding: alpha * 14,
+    paddingBottom: 50
   },
   headerText: {
     fontFamily: TITLE_FONT,
@@ -230,16 +235,17 @@ const styles = StyleSheet.create({
   },
   tabView: {
     flexDirection: 'row',
-    width: '60%',
-    justifyContent: 'space-between',
+    // width: '60%',
+    justifyContent: 'flex-start',
     paddingLeft: alpha * 15
   },
   tabItemText: {
     fontFamily: NON_TITLE_FONT,
-    fontSize: fontAlpha * 14,
+    fontSize: TAB_FONT_SIZE,
+    paddingBottom: 10
   },
   nameText: {
-    fontSize: fontAlpha * 12,
+    fontSize: CONTENT_FONT_SIZE,
     fontFamily: NON_TITLE_FONT,
     marginTop: alpha * 5
   },
@@ -250,9 +256,17 @@ const styles = StyleSheet.create({
     tintColor: '#00B2E3'
   },
   closeButton: {
+    backgroundColor: 'white',
+    borderRadius: 10.5 * alpha,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
     position: 'absolute',
-    top: alpha * 5,
-    right: alpha * 5
+    left: 12 * alpha,
+    width: 21 * alpha,
+    top: 19 * alpha,
+    height: 21 * alpha
   }
 });
 export default Brew9SlideUp;
