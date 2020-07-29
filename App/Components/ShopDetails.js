@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: DEFAULT_BORDER_RADIUS
+    borderRadius: 3 * alpha
   },
   detailsView: {
     flex: 4,

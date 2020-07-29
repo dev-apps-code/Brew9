@@ -14,7 +14,7 @@ import { alpha, fontAlpha } from '../Common/size';
 const TAB_FONT_SIZE = 16 * fontAlpha;
 const CONTENT_FONT_SIZE = 14 * fontAlpha;
 
-class Brew9SlideUp extends Component {
+class FilterShops extends Component {
   constructor(props) {
     super(props);
     this.state = this._getState();
@@ -92,19 +92,35 @@ class Brew9SlideUp extends Component {
     this.onPressClose();
   };
 
+  renderCheck = () => (
+    <Image
+      source={require('./../../assets/images/check.png')}
+      style={{ alignSelf: 'center' }}
+    />
+  );
+
   renderDistrict = ({ item, index }) => {
     return (
-      <Text style={styles.nameText} onPress={() => this.onPressDistrict(item)}>
-        {item.district}
-      </Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text
+          style={styles.nameText}
+          onPress={() => this.onPressDistrict(item)}
+        >
+          {item.district}
+        </Text>
+        {this.props.selectedDistrict == item.district && this.renderCheck()}
+      </View>
     );
   };
 
   renderArea = ({ item, index }) => {
     return (
-      <Text style={styles.nameText} onPress={() => this.onPressTown(item)}>
-        {item}
-      </Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={styles.nameText} onPress={() => this.onPressTown(item)}>
+          {item}
+        </Text>
+        {this.props.selectedArea == item && this.renderCheck()}
+      </View>
     );
   };
 
@@ -173,7 +189,7 @@ class Brew9SlideUp extends Component {
   };
 
   render() {
-    let { visible, onAreaChosen, toggleAreaView } = this.props;
+    let { visible } = this.props;
     return (
       <Modal.BottomModal
         visible={visible}
@@ -269,4 +285,5 @@ const styles = StyleSheet.create({
     height: 21 * alpha
   }
 });
-export default Brew9SlideUp;
+
+export default FilterShops;

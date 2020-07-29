@@ -429,10 +429,20 @@ export default class Home extends React.Component {
   };
 
   loadShops() {
-    const { shop } = this.props;
+    const { shop, location } = this.props;
 
     if (shop === null) {
-      const message = 'Please select an outlet that is near you.';
+      let message = 'Please select an outlet that is near you.';
+
+      const latitude = location != null ? location.coords.latitude : null;
+      const longitude = location != null ? location.coords.longitude : null;
+
+      if (latitude === null || longitude === null) {
+        message = 'Could not detect your location.\nPlease select store.';
+      }
+
+      this.refs.toast.show(message, 3000);
+
       const callback = () => {
         this.props.navigation.navigate('SelectShop');
       };
@@ -1894,7 +1904,7 @@ export default class Home extends React.Component {
             </View>
           </View>
         )}
-        {this.props.isToggleShopLocation && (
+        {isToggleShopLocation && (
           <View style={styles.showLocationView}>
             <MapView
               style={styles.mapImage}
@@ -1922,9 +1932,11 @@ export default class Home extends React.Component {
             </MapView>
             <ScrollView
               contentContainerStyle={{
-                paddingHorizontal: 10 * alpha,
-                flex:1
+                paddingHorizontal: 15 * alpha,
+                paddingTop: 15 * alpha,
+                paddingBottom: 100 * alpha
               }}
+              showsVerticalScrollIndicator={false}
             >
               <Text style={styles.branchHeaderAddress}>Address </Text>
               <Text style={styles.branchAddress}>
@@ -1936,9 +1948,9 @@ export default class Home extends React.Component {
               </Text>
               <Text style={styles.businessHeaderHourText}>Business Hours</Text>
               <Text style={styles.businessHourText}>
-                {console.log(shop.opening_closing_text)}
                 {shop ? shop.opening_closing_text : ''}
               </Text>
+              {/* <Text>{'\n\n\n\n\n\n\n'}</Text> */}
             </ScrollView>
           </View>
         )}
@@ -3267,7 +3279,7 @@ const styles = StyleSheet.create({
     padding: 10 * alpha
   },
   showLocationView: {
-    backgroundColor:'white',
+    backgroundColor: 'white',
     width: '100%',
     height: '100%',
     position: 'absolute',
@@ -3402,17 +3414,14 @@ const styles = StyleSheet.create({
     marginTop: 9 * alpha
   },
   businessHourText: {
-    backgroundColor: 'transparent',
-    // color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
-    height: '40%',
     fontSize: 13 * fontAlpha,
+    paddingVertical: 10 * alpha,
+    lineHeight: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
     alignSelf: 'stretch',
-    marginTop: 3 * alpha,
-    // backgroundColor:'yellow'
   },
   featuredpromoButton: {
     backgroundColor: 'transparent',
