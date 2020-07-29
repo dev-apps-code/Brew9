@@ -437,7 +437,7 @@ export default class Home extends React.Component {
       const latitude = location != null ? location.coords.latitude : null;
       const longitude = location != null ? location.coords.longitude : null;
 
-      if (latitude === null || longitude === null ) {
+      if (latitude === null || longitude === null) {
         message = 'Could not detect your location.\nPlease select store.';
       }
 
@@ -1934,7 +1934,7 @@ export default class Home extends React.Component {
               contentContainerStyle={{
                 paddingHorizontal: 15 * alpha,
                 paddingTop: 15 * alpha,
-                paddingBottom: 100 * alpha,
+                paddingBottom: 100 * alpha
               }}
               showsVerticalScrollIndicator={false}
             >
@@ -1948,9 +1948,9 @@ export default class Home extends React.Component {
               </Text>
               <Text style={styles.businessHeaderHourText}>Business Hours</Text>
               <Text style={styles.businessHourText}>
-                {console.log(shop.opening_closing_text)}
                 {shop ? shop.opening_closing_text : ''}
               </Text>
+              {/* <Text>{'\n\n\n\n\n\n\n'}</Text> */}
             </ScrollView>
           </View>
         )}
@@ -3414,17 +3414,14 @@ const styles = StyleSheet.create({
     marginTop: 9 * alpha
   },
   businessHourText: {
-    backgroundColor: 'transparent',
-    // color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
-    // height: '40%',
     fontSize: 13 * fontAlpha,
+    paddingVertical: 10 * alpha,
+    lineHeight: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
     alignSelf: 'stretch',
-    marginTop: 3 * alpha
-    // backgroundColor:'yellow'
   },
   featuredpromoButton: {
     backgroundColor: 'transparent',
