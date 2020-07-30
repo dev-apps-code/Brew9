@@ -39,6 +39,7 @@ const SEARCH_WIDTH = 80 * alpha;
 const CANCEL_WIDTH = 60 * alpha;
 const MAX_SEARCH_WIDTH = windowWidth - CANCEL_WIDTH - 20;
 const FILTER_FIELD_WIDTH = 100;
+const MAP_HEIGHT = 160 * alpha;
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
@@ -52,6 +53,7 @@ export default class Outlet extends React.Component {
     this.state = this._getState();
     this.filterView = new Animated.Value(100);
     this.searchWidth = new Animated.Value(SEARCH_WIDTH);
+    this.mapHeight = new Animated.Value(MAP_HEIGHT);
   }
 
   _getState = () => ({
@@ -256,12 +258,13 @@ export default class Outlet extends React.Component {
   };
 
   onFocusSearchField = () => {
-    this.setState({ isSearching: true, showMap: false });
-    Animated.timing(this.searchWidth, {
+    const animation = Animated.timing(this.searchWidth, {
       toValue: MAX_SEARCH_WIDTH,
       duration: 300,
       easing: Easing.linear
     }).start();
+    
+    this.setState({ isSearching: true }, animation);
   };
 
   resetSearchFieldWidth = () => {
@@ -316,21 +319,27 @@ export default class Outlet extends React.Component {
   }
 
   renderMap() {
-    if (this.state.showMap) {
-      return (
-        <Animated.View style={styles.mapView}>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.004,
-              longitudeDelta: 0.004
-            }}
-          />
-        </Animated.View>
-      );
-    }
+    // if (this.state.showMap) {
+    Animated.timing(this.mapHeight, {
+      toValue: MAP_HEIGHT * this.state.showMap,
+      duration: 200,
+      easing: Easing.linear
+    }).start();
+
+    return (
+      <Animated.View style={{ height: this.mapHeight }}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004
+          }}
+        />
+      </Animated.View>
+    );
+    // }
   }
 
   renderSearchField() {
