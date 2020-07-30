@@ -39,7 +39,6 @@ export default class ShopList extends Component {
             extraData={this.props}
             renderItem={this.renderItem}
             showsVerticalScrollIndicator={false}
-            style={styles.shopItems}
             keyExtractor={(item, index) => `${index}-${item.id}`}
             refreshing={refreshing}
             onRefresh={onRefresh}
@@ -56,8 +55,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: LIGHT_GREY_BACKGROUND,
     padding: alpha * 10
-  },
-  shopItems: {
-    padding: alpha * 5
   }
 });
