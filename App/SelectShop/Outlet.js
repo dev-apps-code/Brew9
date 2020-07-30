@@ -21,9 +21,10 @@ import {
   LIGHT_GREY_BACKGROUND,
   NON_TITLE_FONT,
   TEXT_COLOR,
-  DISABLED_COLOR
+  DISABLED_COLOR,
+  DEFAULT_BORDER_RADIUS
 } from '../Common/common_style';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { createAction } from '../Utils';
 import AllShopsRequestObject from '../Requests/all_shops_request_object';
 import {
@@ -194,11 +195,10 @@ export default class Outlet extends React.Component {
   };
 
   onPressShop = (data) => {
-
     this.setState({
       selectedShop: data
-    })
-  }
+    });
+  };
 
   onPressOrderNowCallback = (eventObject) => {
     if (eventObject.success) {
@@ -225,7 +225,7 @@ export default class Outlet extends React.Component {
         displayShopList: [],
         selectedDistrict: null,
         selectedArea: null,
-        selectedAreaText: 'All',
+        selectedAreaText: 'All'
       });
     } else {
       let selectedAreaText = district + ' > ' + area;
@@ -239,7 +239,6 @@ export default class Outlet extends React.Component {
         selectedDistrict: district,
         displayShopList: newArray,
         selectedShop: newArray[0]
-        
       });
     }
   };
@@ -327,24 +326,23 @@ export default class Outlet extends React.Component {
   }
 
   renderMap() {
-    let { selectedShop } = this.state
-    let { allShops } = this.props
-    let latitude, longitude, shopName = null
-    let recentShop = allShops[0]
+    let { selectedShop } = this.state;
+    let { allShops } = this.props;
+    let latitude,
+      longitude,
+      shopName = null;
+    let recentShop = allShops[0];
 
     if (selectedShop) {
-      latitude = parseFloat(selectedShop.latitude)
-      longitude = parseFloat(selectedShop.longitude)
-      shopName = selectedShop.name
-    }
-    else if (recentShop){
-      latitude = parseFloat(recentShop.latitude)
-      longitude = parseFloat(recentShop.longitude)
-      shopName = recentShop.name
-    }
-
-    else {
-      return null
+      latitude = parseFloat(selectedShop.latitude);
+      longitude = parseFloat(selectedShop.longitude);
+      shopName = selectedShop.name;
+    } else if (recentShop) {
+      latitude = parseFloat(recentShop.latitude);
+      longitude = parseFloat(recentShop.longitude);
+      shopName = recentShop.name;
+    } else {
+      return null;
     }
 
     if (this.state.showMap) {
@@ -364,14 +362,30 @@ export default class Outlet extends React.Component {
               this.marker.showCallout()
             }
           >
-            <MapView.Marker
+            {/* <MapView.Marker
               ref={(shopName) => (this.marker = shopName)}
               coordinate={{
                 latitude: latitude,
                 longitude: longitude
               }}
               title={shopName}
-            />
+            /> */}
+            <Marker
+              coordinate={{
+                latitude: latitude,
+                longitude: longitude
+              }}
+              style={{ alignItems: 'center' }}
+            >
+              <View style={styles.areaBubble}>
+                <Text style={styles.areaText}>{shopName}</Text>
+              </View>
+              <Image
+                source={require('./../../assets/images/location.png')}
+                style={styles.pinImage}
+                resizeMode="contain"
+              />
+            </Marker>
           </MapView>
         </Animated.View>
       );
@@ -424,7 +438,12 @@ export default class Outlet extends React.Component {
   }
 
   render() {
-    const { displayShopList, isSearching, searchResults, selectedShop} = this.state;
+    const {
+      displayShopList,
+      isSearching,
+      searchResults,
+      selectedShop
+    } = this.state;
     const { allShops, nearbyShops } = this.props;
     let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
     let selectedShopId = selectedShop ? selectedShop.id : 'default';
@@ -628,5 +647,22 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
     marginRight: alpha * 4,
     fontFamily: TITLE_FONT
+  },
+  areaBubble: {
+    backgroundColor: 'white',
+    borderRadius: DEFAULT_BORDER_RADIUS,
+    marginBottom: alpha * 2,
+    borderWidth: 1,
+    borderColor: '#00B2E3'
+  },
+  areaText: {
+    fontFamily: TITLE_FONT,
+    fontSize: fontAlpha * 14,
+    margin: alpha * 5
+  },
+  pinImage: {
+    width: 20 * alpha,
+    height: 20 * alpha,
+    tintColor: '#00B2E3'
   }
 });
