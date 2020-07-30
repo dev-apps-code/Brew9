@@ -103,8 +103,11 @@ export default class Outlet extends React.Component {
     this.setState({ isLoading: true });
     const { companyId, dispatch, location } = this.props;
 
-    const latitude = location != null ? location.coords.latitude : null;
-    const longitude = location != null ? location.coords.longitude : null;
+    // const latitude = location != null ? location.coords.latitude : null;
+    // const longitude = location != null ? location.coords.longitude : null;
+
+    const latitude = 8
+    const longitude = 112
 
     const allShopsObject = new AllShopsRequestObject();
     allShopsObject.setUrlId(companyId);
@@ -325,13 +328,13 @@ export default class Outlet extends React.Component {
     );
   }
 
-  renderMap() {
+  renderMap(shops) {
     let { selectedShop } = this.state;
     let { allShops } = this.props;
     let latitude,
       longitude,
       shopName = null;
-    let recentShop = allShops[0];
+    let recentShop = shops[0];
 
     if (selectedShop) {
       latitude = parseFloat(selectedShop.latitude);
@@ -455,7 +458,7 @@ export default class Outlet extends React.Component {
           {this.renderFilterButton()}
           {this.renderSearchField()}
         </View>
-        {this.renderMap()}
+        {this.renderMap(shops)}
         {/* <Brew9DropDown
           results={this.state.searchResults}
           onPressResult={this.onS}
