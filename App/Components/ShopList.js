@@ -25,6 +25,7 @@ export default class ShopList extends Component {
         key={index}
         onPressFavourite={this.props.onPressFavourite}
         onPressOrderNow={this.props.onPressOrderNow}
+        onPressShop={this.props.onPressShop}
       />
     );
   };

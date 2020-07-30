@@ -63,7 +63,8 @@ export default class Outlet extends React.Component {
     selectedAreaText: 'All',
     selectedDistrict: null,
     showAreaView: false,
-    showMap: true
+    showMap: true,
+    mapData: null
   });
 
   componentDidMount() {
@@ -192,6 +193,13 @@ export default class Outlet extends React.Component {
     this.props.dispatch(action);
   };
 
+  onPressShop = (data) => {
+
+    this.setState({
+      mapData: data
+    })
+  }
+
   onPressOrderNowCallback = (eventObject) => {
     if (eventObject.success) {
       this.props.navigation.navigate('Home');
@@ -316,17 +324,22 @@ export default class Outlet extends React.Component {
   }
 
   renderMap(recentShop) {
+    let { mapData } = this.state
     let latitude = parseFloat(recentShop.latitude);
     let longitude = parseFloat(recentShop.longitude);
     let shopName = recentShop.name
-    console.log('-------');
-    console.log(recentShop);
+
+    if (mapData != null) {
+      latitude = parseFloat(mapData.latitude)
+      longitude = parseFloat(mapData.longitude)
+      shopName = mapData.name
+    }
     if (this.state.showMap) {
       return (
         <Animated.View style={styles.mapView}>
           <MapView
             style={styles.map}
-            initialRegion={{
+            region={{
               latitude: latitude,
               longitude: longitude,
               latitudeDelta: 0.004,
@@ -434,6 +447,7 @@ export default class Outlet extends React.Component {
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
           onRefresh={() => this.loadAllShops()}
+          onPressShop={this.onPressShop}
           refreshing={this.state.isLoading}
         />
         <FilterView

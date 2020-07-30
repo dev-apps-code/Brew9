@@ -73,7 +73,7 @@ export default class ShopDetails extends Component {
   };
 
   render() {
-    const { details, onPressOrderNow, shop } = this.props;
+    const { details, onPressOrderNow, shop, onPressShop } = this.props;
     const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
     const { start_time, end_time } = details?.opening_hour || {
       start_time: null,
@@ -85,7 +85,7 @@ export default class ShopDetails extends Component {
     }
 
     return (
-      <View style={[styles.shopDetailView, itemStyle]}>
+      <TouchableOpacity onPress={()=> onPressShop(details)} style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
           <TouchableOpacity onPress={() => onPressOrderNow(details.id)}>
             <View style={styles.detailView}>
@@ -144,7 +144,7 @@ export default class ShopDetails extends Component {
           </View>
         </View>
         {this.renderFavoriteButton()}
-      </View>
+      </TouchableOpacity>
     );
   }
 }
