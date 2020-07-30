@@ -64,7 +64,7 @@ export default class Outlet extends React.Component {
     selectedDistrict: null,
     showAreaView: false,
     showMap: true,
-    mapData: null
+    selectedShop: null
   });
 
   componentDidMount() {
@@ -196,7 +196,7 @@ export default class Outlet extends React.Component {
   onPressShop = (data) => {
 
     this.setState({
-      mapData: data
+      selectedShop: data
     })
   }
 
@@ -323,17 +323,27 @@ export default class Outlet extends React.Component {
     );
   }
 
-  renderMap(recentShop) {
-    let { mapData } = this.state
-    let latitude = parseFloat(recentShop.latitude);
-    let longitude = parseFloat(recentShop.longitude);
-    let shopName = recentShop.name
+  renderMap() {
+    let { selectedShop } = this.state
+    let { allShops } = this.props
+    let latitude, longitude, shopName = null
+    let recentShop = allShops[0]
 
-    if (mapData != null) {
-      latitude = parseFloat(mapData.latitude)
-      longitude = parseFloat(mapData.longitude)
-      shopName = mapData.name
+    if (selectedShop) {
+      latitude = parseFloat(selectedShop.latitude)
+      longitude = parseFloat(selectedShop.longitude)
+      shopName = selectedShop.name
     }
+    else if (recentShop){
+      latitude = parseFloat(recentShop.latitude)
+      longitude = parseFloat(recentShop.longitude)
+      shopName = recentShop.name
+    }
+
+    else {
+      return null
+    }
+
     if (this.state.showMap) {
       return (
         <Animated.View style={styles.mapView}>
@@ -411,10 +421,10 @@ export default class Outlet extends React.Component {
   }
 
   render() {
-    const { displayShopList, isSearching, searchResults } = this.state;
+    const { displayShopList, isSearching, searchResults, selectedShop} = this.state;
     const { allShops, nearbyShops } = this.props;
     let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
-    let recentShop = allShops[0];
+    let selectedShopId = selectedShop ? selectedShop.id : 'default';
     shops = displayShopList.length > 0 ? displayShopList : shops;
     shops = isSearching ? searchResults : shops;
     return (
@@ -423,7 +433,7 @@ export default class Outlet extends React.Component {
           {this.renderFilterButton()}
           {this.renderSearchField()}
         </View>
-        {recentShop ? this.renderMap(recentShop) : null}
+        {this.renderMap()}
         {/* <Brew9DropDown
           results={this.state.searchResults}
           onPressResult={this.onS}
@@ -449,6 +459,7 @@ export default class Outlet extends React.Component {
           onRefresh={() => this.loadAllShops()}
           onPressShop={this.onPressShop}
           refreshing={this.state.isLoading}
+          selectedShopId={selectedShopId}
         />
         <FilterView
           locationList={allShops}

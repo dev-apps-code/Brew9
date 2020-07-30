@@ -18,6 +18,15 @@ export default class ShopList extends Component {
   });
 
   renderItem = ({ item, index }) => {
+    let { selectedShopId } = this.props;
+    // let hightLight = selectedShopId == item.id ? true : false
+    let hightLight =
+      selectedShopId == 'default' && index == 0
+        ? true
+        : selectedShopId == item.id
+        ? true
+        : false;
+
     return (
       <ShopDetails
         details={item}
@@ -26,6 +35,7 @@ export default class ShopList extends Component {
         onPressFavourite={this.props.onPressFavourite}
         onPressOrderNow={this.props.onPressOrderNow}
         onPressShop={this.props.onPressShop}
+        hightLight={hightLight}
       />
     );
   };

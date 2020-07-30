@@ -73,8 +73,8 @@ export default class ShopDetails extends Component {
   };
 
   render() {
-    const { details, onPressOrderNow, shop, onPressShop } = this.props;
-    const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
+    const { details, onPressOrderNow, hightLight, onPressShop } = this.props;
+    const itemStyle = hightLight ? styles.highlighted : {};
     const minutes = Math.round(details.minute_drive)
     const { start_time, end_time } = details?.opening_hour || {
       start_time: null,
