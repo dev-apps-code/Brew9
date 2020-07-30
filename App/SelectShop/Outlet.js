@@ -217,14 +217,15 @@ export default class Outlet extends React.Component {
         selectedDistrict: district,
         selectedArea: area,
         selectedAreaText,
-        displayShopList: newArray
+        displayShopList: newArray,
+        selectedShop: newArray[0]
       });
     } else if (area == null) {
       this.setState({
         displayShopList: [],
         selectedDistrict: null,
         selectedArea: null,
-        selectedAreaText: 'All'
+        selectedAreaText: 'All',
       });
     } else {
       let selectedAreaText = district + ' > ' + area;
@@ -236,7 +237,9 @@ export default class Outlet extends React.Component {
         selectedArea: area,
         selectedAreaText,
         selectedDistrict: district,
-        displayShopList: newArray
+        displayShopList: newArray,
+        selectedShop: newArray[0]
+        
       });
     }
   };
@@ -362,7 +365,7 @@ export default class Outlet extends React.Component {
             }
           >
             <MapView.Marker
-              ref={(marker) => (this.marker = marker)}
+              ref={(shopName) => (this.marker = shopName)}
               coordinate={{
                 latitude: latitude,
                 longitude: longitude
