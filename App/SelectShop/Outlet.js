@@ -103,11 +103,11 @@ export default class Outlet extends React.Component {
     this.setState({ isLoading: true });
     const { companyId, dispatch, location } = this.props;
 
-    // const latitude = location != null ? location.coords.latitude : null;
-    // const longitude = location != null ? location.coords.longitude : null;
+    const latitude = location != null ? location.coords.latitude : null;
+    const longitude = location != null ? location.coords.longitude : null;
 
-    const latitude = 8
-    const longitude = 112
+    // const latitude = 8
+    // const longitude = 112
 
     const allShopsObject = new AllShopsRequestObject();
     allShopsObject.setUrlId(companyId);
