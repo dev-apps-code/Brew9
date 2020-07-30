@@ -315,19 +315,38 @@ export default class Outlet extends React.Component {
     );
   }
 
-  renderMap() {
+  renderMap(recentShop) {
+    let latitude = parseFloat(recentShop.latitude);
+    let longitude = parseFloat(recentShop.longitude);
+    let shopName = recentShop.name
+    console.log('-------');
+    console.log(recentShop);
     if (this.state.showMap) {
       return (
         <Animated.View style={styles.mapView}>
           <MapView
             style={styles.map}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: latitude,
+              longitude: longitude,
               latitudeDelta: 0.004,
               longitudeDelta: 0.004
             }}
-          />
+            onMapReady={() =>
+              this.marker &&
+              this.marker.showCallout &&
+              this.marker.showCallout()
+            }
+          >
+            <MapView.Marker
+              ref={(marker) => (this.marker = marker)}
+              coordinate={{
+                latitude: latitude,
+                longitude: longitude
+              }}
+              title={shopName}
+            />
+          </MapView>
         </Animated.View>
       );
     }
@@ -382,6 +401,7 @@ export default class Outlet extends React.Component {
     const { displayShopList, isSearching, searchResults } = this.state;
     const { allShops, nearbyShops } = this.props;
     let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
+    let recentShop = allShops[0];
     shops = displayShopList.length > 0 ? displayShopList : shops;
     shops = isSearching ? searchResults : shops;
     return (
@@ -390,7 +410,7 @@ export default class Outlet extends React.Component {
           {this.renderFilterButton()}
           {this.renderSearchField()}
         </View>
-        {this.renderMap()}
+        {recentShop ? this.renderMap(recentShop) : null}
         {/* <Brew9DropDown
           results={this.state.searchResults}
           onPressResult={this.onS}
