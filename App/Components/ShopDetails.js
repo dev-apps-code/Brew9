@@ -75,6 +75,7 @@ export default class ShopDetails extends Component {
   render() {
     const { details, onPressOrderNow, shop, onPressShop } = this.props;
     const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
+    const minutes = Math.round(details.minute_drive)
     const { start_time, end_time } = details?.opening_hour || {
       start_time: null,
       end_time: null
@@ -94,7 +95,7 @@ export default class ShopDetails extends Component {
             </View>
             <View style={styles.detailView}>
               <Text style={styles.serviceInfoDetails}>
-                Delivery | 3.5 km 26 mins
+                {'Delivery | ' + details.kilometer_distance + ' km ' + minutes + ' mins'}
               </Text>
             </View>
           </TouchableOpacity>
