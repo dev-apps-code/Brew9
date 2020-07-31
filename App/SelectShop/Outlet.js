@@ -10,8 +10,12 @@ import {
   View
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowWidth } from '../Common/size';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 import { connect } from 'react-redux';
+import MapView, { Marker } from 'react-native-maps';
+import { toLower } from 'lodash';
+import { alpha, fontAlpha, windowWidth } from '../Common/size';
 import ShopList from '../Components/ShopList';
 import {
   TINT_COLOR,
@@ -24,7 +28,6 @@ import {
   DISABLED_COLOR,
   DEFAULT_BORDER_RADIUS
 } from '../Common/common_style';
-import MapView, { Marker } from 'react-native-maps';
 import { createAction } from '../Utils';
 import AllShopsRequestObject from '../Requests/all_shops_request_object';
 import {
@@ -34,7 +37,6 @@ import {
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
 import FilterView from './FilterShops';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
-import { toLower } from 'lodash';
 
 const SEARCH_WIDTH = 80 * alpha;
 const CANCEL_WIDTH = 60 * alpha;
@@ -68,7 +70,7 @@ export default class Outlet extends React.Component {
     selectedDistrict: null,
     showAreaView: false,
     showMap: true,
-    selectedShop: null,
+    selectedShop: null
   });
 
   componentDidMount() {
@@ -188,16 +190,42 @@ export default class Outlet extends React.Component {
     this.loadAllShops();
   };
 
-  onPressOrderNow = (id) => {
-    const object = new SelectShopRequestObject();
-    object.setUrlId(this.props.companyId);
-    object.setShopId(id);
+  getLiveLocation = async () => {
+    return Permissions.getAsync(Permissions.LOCATION)
+      .then(({ status }) => {
+        if (status === 'granted') {
+          return Location.watchPositionAsync({
+            distanceInterval: 1000,
+            timeInterval: 10000
+          }).then((location) => location.coords);
+        }
+        return { latitude: null, longitude: null };
+      })
+      .catch((err) => console.log('getLiveLocation Error: ', err));
+  };
 
-    const callback = this.onPressOrderNowCallback;
-    const params = { object, callback };
-    const action = createAction('shops/selectShop')(params);
+  onPressOrderNow = async (id) => {
+    const { latitude, longitude } = this.getLiveLocation();
+    if (latitude !== null && longitude !== null) {
+      const object = new SelectShopRequestObject(latitude, longitude);
 
-    this.props.dispatch(action);
+      object.setUrlId(this.props.companyId);
+      object.setShopId(id);
+
+      const callback = this.onPressOrderNowCallback;
+      const params = { object, callback };
+      const action = createAction('shops/selectShop')(params);
+      this.props.dispatch(action);
+    } else {
+      const object = new SelectShopRequestObject();
+      object.setUrlId(this.props.companyId);
+      object.setShopId(id);
+
+      const callback = this.onPressOrderNowCallback;
+      const params = { object, callback };
+      const action = createAction('shops/selectShop')(params);
+      this.props.dispatch(action);
+    }
   };
 
   onPressShop = (data) => {
@@ -332,14 +360,20 @@ export default class Outlet extends React.Component {
     );
   }
 
-  moveSelectionToTop(arr, id) {
-    for (var i=0; i < arr.length; i++) {
-      if (arr[i].id === id) {
-          var a = arr.splice(i,1);   // removes the item
-          arr.unshift(a[0]);         // adds it back to the beginning
+  moveSelectionToTop(shops) {
+    const list = [...shops];
+    const { selectedShop } = this.props;
+    if (selectedShop !== null) {
+      const { id } = selectedShop;
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          var a = list.splice(i, 1); // removes the item
+          list.unshift(a[0]); // adds it back to the beginning
           break;
+        }
       }
     }
+    return list;
   }
 
   renderMap(shops) {
@@ -454,27 +488,19 @@ export default class Outlet extends React.Component {
     );
   }
 
-  render() {
-    const {
-      displayShopList,
-      isSearching,
-      searchResults,
-      selectedShop
-    } = this.state;
+  getShopsList = () => {
     const { allShops, nearbyShops } = this.props;
-    let recent = this.props.selectedShop ? this.props.selectedShop.id : null
+    const { displayShopList, isSearching, searchResults } = this.state;
 
-    let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
-    let selectedShopId = selectedShop ? selectedShop.id : 'default';
-    shops = displayShopList.length > 0 ? displayShopList : shops;
-    shops = isSearching ? searchResults : shops;
-    recent && shops ? this.moveSelectionToTop(shops, recent) : shops
-    console.log(recent)
-    console.log('\n\n\n-----------')
-    console.log(shops)
+    if (isSearching) return searchResults;
+    if (displayShopList.length > 0) return displayShopList;
+    if (nearbyShops.length > 0) return nearbyShops;
+    return allShops;
+  };
 
-    console.log('-----------\n\n\n')
-  
+  render() {
+    const shops = this.moveSelectionToTop(this.getShopsList());
+
     return (
       <View style={styles.mainView}>
         <View style={styles.subHeaderView}>
@@ -507,7 +533,6 @@ export default class Outlet extends React.Component {
           onRefresh={() => this.loadAllShops()}
           onPressShop={this.onPressShop}
           refreshing={this.state.isLoading}
-          selectedShopId={selectedShopId}
         />
         <FilterView
           locationList={this.props.allShops}

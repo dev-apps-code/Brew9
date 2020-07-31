@@ -4,63 +4,6 @@ import { LIGHT_GREY_BACKGROUND } from '../Common/common_style';
 import { alpha } from '../Common/size';
 import ShopDetails from './ShopDetails';
 
-export default class ShopList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.renderItem = this.renderItem.bind(this);
-
-    this.state = this._getState();
-  }
-
-  _getState = () => ({
-    refreshing: false
-  });
-
-  renderItem = ({ item, index }) => {
-    let { selectedShopId } = this.props;
-    // let hightLight = selectedShopId == item.id ? true : false
-    let hightLight =
-      selectedShopId == 'default' && index == 0
-        ? true
-        : selectedShopId == item.id
-        ? true
-        : false;
-
-    return (
-      <ShopDetails
-        details={item}
-        index={index}
-        key={index}
-        onPressFavourite={this.props.onPressFavourite}
-        onPressOrderNow={this.props.onPressOrderNow}
-        onPressShop={this.props.onPressShop}
-        hightLight={hightLight}
-      />
-    );
-  };
-
-  render() {
-    let { shops, onRefresh, refreshing } = this.props;
-    return (
-      <View style={styles.mainView}>
-        <View style={styles.shopDetailView}>
-          <FlatList
-            data={shops}
-            extraData={this.props}
-            renderItem={this.renderItem}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => `${index}-${item.id}`}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            paddingBottom={200}
-          />
-        </View>
-      </View>
-    );
-  }
-}
-
 const styles = StyleSheet.create({
   mainView: {
     flex: 1,
@@ -68,3 +11,35 @@ const styles = StyleSheet.create({
     padding: alpha * 10
   }
 });
+
+const renderItem = (item, index, { onPressFavourite, onPressOrderNow }) => (
+  <ShopDetails
+    details={item}
+    index={index}
+    key={index}
+    onPressFavourite={onPressFavourite}
+    onPressOrderNow={onPressOrderNow}
+  />
+);
+
+const ShopList = (props) => {
+  const { shops, onRefresh, refreshing } = props;
+  return (
+    <View style={styles.mainView}>
+      <View style={styles.shopDetailView}>
+        <FlatList
+          data={shops}
+          extraData={props}
+          renderItem={({ item, index }) => renderItem(item, index, props)}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}-${item.id}`}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          paddingBottom={200}
+        />
+      </View>
+    </View>
+  );
+};
+
+export default ShopList;
