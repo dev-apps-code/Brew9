@@ -45,7 +45,8 @@ const FILTER_FIELD_WIDTH = 100;
   allShops: shops.allShops,
   companyId: members.company_id,
   nearbyShops: shops.nearbyShops,
-  location: members.location
+  location: members.location,
+  selectedShop: shops.selectedShop
 }))
 export default class Outlet extends React.Component {
   constructor(props) {
@@ -65,7 +66,7 @@ export default class Outlet extends React.Component {
     selectedDistrict: null,
     showAreaView: false,
     showMap: true,
-    selectedShop: null
+    selectedShop: null,
   });
 
   componentDidMount() {
@@ -328,6 +329,16 @@ export default class Outlet extends React.Component {
     );
   }
 
+  moveSelectionToTop(arr, id) {
+    for (var i=0; i < arr.length; i++) {
+      if (arr[i].id === id) {
+          var a = arr.splice(i,1);   // removes the item
+          arr.unshift(a[0]);         // adds it back to the beginning
+          break;
+      }
+    }
+  }
+
   renderMap(shops) {
     let { selectedShop } = this.state;
     let { allShops } = this.props;
@@ -448,10 +459,19 @@ export default class Outlet extends React.Component {
       selectedShop
     } = this.state;
     const { allShops, nearbyShops } = this.props;
+    let recent = this.props.selectedShop ? this.props.selectedShop.id : null
+
     let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
     let selectedShopId = selectedShop ? selectedShop.id : 'default';
     shops = displayShopList.length > 0 ? displayShopList : shops;
     shops = isSearching ? searchResults : shops;
+    recent && shops ? this.moveSelectionToTop(shops, recent) : shops
+    console.log(recent)
+    console.log('\n\n\n-----------')
+    console.log(shops)
+
+    console.log('-----------\n\n\n')
+  
     return (
       <View style={styles.mainView}>
         <View style={styles.subHeaderView}>
