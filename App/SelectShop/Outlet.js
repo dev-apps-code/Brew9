@@ -40,6 +40,7 @@ const SEARCH_WIDTH = 80 * alpha;
 const CANCEL_WIDTH = 60 * alpha;
 const MAX_SEARCH_WIDTH = windowWidth - CANCEL_WIDTH - 20;
 const FILTER_FIELD_WIDTH = 100;
+const MAP_HEIGHT = 160 * alpha;
 
 @connect(({ members, shops, orders }) => ({
   allShops: shops.allShops,
@@ -54,6 +55,7 @@ export default class Outlet extends React.Component {
     this.state = this._getState();
     this.filterView = new Animated.Value(100);
     this.searchWidth = new Animated.Value(SEARCH_WIDTH);
+    this.mapHeight = new Animated.Value(MAP_HEIGHT);
   }
 
   _getState = () => ({
@@ -270,12 +272,13 @@ export default class Outlet extends React.Component {
   };
 
   onFocusSearchField = () => {
-    this.setState({ isSearching: true, showMap: false });
-    Animated.timing(this.searchWidth, {
+    const animation = Animated.timing(this.searchWidth, {
       toValue: MAX_SEARCH_WIDTH,
       duration: 300,
       easing: Easing.linear
     }).start();
+
+    this.setState({ isSearching: true }, animation);
   };
 
   resetSearchFieldWidth = () => {
@@ -507,7 +510,7 @@ export default class Outlet extends React.Component {
           selectedShopId={selectedShopId}
         />
         <FilterView
-          locationList={allShops}
+          locationList={this.props.allShops}
           visible={this.state.showAreaView}
           cancelable={true}
           title={'Exit App '}
