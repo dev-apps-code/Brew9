@@ -104,15 +104,12 @@ export default class Outlet extends React.Component {
     this.setState({ showMap: false });
   };
 
-  loadAllShops() {
+  async loadAllShops() {
     this.setState({ isLoading: true });
     const { companyId, dispatch, location } = this.props;
 
     const latitude = location != null ? location.coords.latitude : null;
     const longitude = location != null ? location.coords.longitude : null;
-
-    // const latitude = 8
-    // const longitude = 112
 
     const allShopsObject = new AllShopsRequestObject();
     allShopsObject.setUrlId(companyId);
@@ -128,7 +125,8 @@ export default class Outlet extends React.Component {
       })
     );
 
-    if (latitude !== null && longitude !== null) {
+    const { status } = await Permissions.getAsync(Permissions.LOCATION);
+    if (latitude !== null && longitude !== null && status === 'granted') {
       this.setState({ isLoading: true });
 
       // now load nearby shops
@@ -138,6 +136,8 @@ export default class Outlet extends React.Component {
           callback: this.updateShopsList
         })
       );
+    } else {
+      dispatch(createAction('shops/clearNearbyShops')());
     }
   }
 
@@ -191,21 +191,26 @@ export default class Outlet extends React.Component {
   };
 
   getLiveLocation = async () => {
-    return Permissions.getAsync(Permissions.LOCATION)
-      .then(({ status }) => {
-        if (status === 'granted') {
-          return Location.watchPositionAsync({
-            distanceInterval: 1000,
-            timeInterval: 10000
-          }).then((location) => location.coords);
+    const { status } = await Permissions.getAsync(Permissions.LOCATION);
+
+    if (status === 'granted') {
+      Location.watchPositionAsync(
+        {
+          distanceInterval: 1000,
+          timeInterval: 10000
+        },
+        (location) => {
+          this.props.dispatch(createAction('members/setLocation')(location));
         }
-        return { latitude: null, longitude: null };
-      })
-      .catch((err) => console.log('getLiveLocation Error: ', err));
+      );
+    }
   };
 
   onPressOrderNow = async (id) => {
-    const { latitude, longitude } = this.getLiveLocation();
+    const { location } = this.props;
+    const latitude = location != null ? location.coords.latitude : null;
+    const longitude = location != null ? location.coords.longitude : null;
+
     if (latitude !== null && longitude !== null) {
       const object = new SelectShopRequestObject(latitude, longitude);
 

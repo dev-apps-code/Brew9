@@ -63,6 +63,9 @@ export default {
     setPopUp(state, { payload }) {
       const { popUp } = payload;
       return { ...state, popUp };
+    },
+    clearNearbyShops(state) {
+      return { ...state, nearbyShops: [] };
     }
   },
   effects: {
