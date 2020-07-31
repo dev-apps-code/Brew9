@@ -73,8 +73,9 @@ export default class ShopDetails extends Component {
   };
 
   render() {
-    const { details, onPressOrderNow, shop } = this.props;
-    const itemStyle = shop && shop.id == details.id ? styles.highlighted : {};
+    const { details, onPressOrderNow, hightLight, onPressShop } = this.props;
+    const itemStyle = hightLight ? styles.highlighted : {};
+    const minutes = Math.round(details.minute_drive)
     const { start_time, end_time } = details?.opening_hour || {
       start_time: null,
       end_time: null
@@ -85,7 +86,7 @@ export default class ShopDetails extends Component {
     }
 
     return (
-      <View style={[styles.shopDetailView, itemStyle]}>
+      <TouchableOpacity onPress={()=> onPressShop(details)} style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
           <TouchableOpacity onPress={() => onPressOrderNow(details.id)}>
             <View style={styles.detailView}>
@@ -94,7 +95,7 @@ export default class ShopDetails extends Component {
             </View>
             <View style={styles.detailView}>
               <Text style={styles.serviceInfoDetails}>
-                Delivery | 3.5 km 26 mins
+                {'Delivery | ' + details.kilometer_distance + ' km ' + minutes + ' mins'}
               </Text>
             </View>
           </TouchableOpacity>
@@ -144,7 +145,7 @@ export default class ShopDetails extends Component {
           </View>
         </View>
         {this.renderFavoriteButton()}
-      </View>
+      </TouchableOpacity>
     );
   }
 }

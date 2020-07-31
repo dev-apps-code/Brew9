@@ -18,6 +18,15 @@ export default class ShopList extends Component {
   });
 
   renderItem = ({ item, index }) => {
+    let { selectedShopId } = this.props;
+    // let hightLight = selectedShopId == item.id ? true : false
+    let hightLight =
+      selectedShopId == 'default' && index == 0
+        ? true
+        : selectedShopId == item.id
+        ? true
+        : false;
+
     return (
       <ShopDetails
         details={item}
@@ -25,6 +34,8 @@ export default class ShopList extends Component {
         key={index}
         onPressFavourite={this.props.onPressFavourite}
         onPressOrderNow={this.props.onPressOrderNow}
+        onPressShop={this.props.onPressShop}
+        hightLight={hightLight}
       />
     );
   };
@@ -39,7 +50,6 @@ export default class ShopList extends Component {
             extraData={this.props}
             renderItem={this.renderItem}
             showsVerticalScrollIndicator={false}
-            style={styles.shopItems}
             keyExtractor={(item, index) => `${index}-${item.id}`}
             refreshing={refreshing}
             onRefresh={onRefresh}
@@ -56,8 +66,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: LIGHT_GREY_BACKGROUND,
     padding: alpha * 10
-  },
-  shopItems: {
-    padding: alpha * 5
   }
 });
