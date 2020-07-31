@@ -1,18 +1,16 @@
-import BaseRequestObject from "./base_request_object";
+import BaseRequestObject from './base_request_object';
 
-class CurrentStatusRequestObject extends BaseRequestObject{
+class CurrentStatusRequestObject extends BaseRequestObject {
+  constructor(last_read) {
+    super();
+    this.last_read = last_read;
+  }
 
-    constructor(last_read){
-        super();
-        this.last_read = last_read
-    }
-    
-   getUrlString() {
-       return `members/${this.url_id}/current_status`
-   }
-
+  getUrlString() {
+    return `members/${this.url_id}/current_status`;
+  }
 }
-export default CurrentStatusRequestObject
+export default CurrentStatusRequestObject;
 
 /* ---- SERVICES ----- 
 
@@ -25,8 +23,6 @@ export function profile(authtoken,object) {
 
 
  -------------- */
-
-
 
 /* ---- MODEL ----- 
 
@@ -50,10 +46,6 @@ export function profile(authtoken,object) {
 
 
  -------------- */
-
-
-
-
 
 /* **** ---- VIEW FUNCTIONS START HERE ----- **** 
 
@@ -152,4 +144,3 @@ loadProfile(){
 }
 
  -------------- */
-
