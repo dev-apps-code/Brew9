@@ -195,8 +195,14 @@ export default class Outlet extends React.Component {
   };
 
   onPressOrderNowCallback = (eventObject) => {
+    const {
+      dispatch,
+      navigation: { navigate }
+    } = this.props;
+
     if (eventObject.success) {
-      this.props.navigation.navigate('Home');
+      dispatch(createAction('orders/resetCart')());
+      navigate('Home');
     }
   };
 
