@@ -263,7 +263,7 @@ export default class Outlet extends React.Component {
       duration: 300,
       easing: Easing.linear
     }).start();
-    
+
     this.setState({ isSearching: true }, animation);
   };
 
@@ -387,7 +387,7 @@ export default class Outlet extends React.Component {
     );
   }
 
-  getShopList = () => {
+  getShopsList = () => {
     const { allShops, nearbyShops } = this.props;
     const { displayShopList, isSearching, searchResults } = this.state;
 
@@ -395,10 +395,6 @@ export default class Outlet extends React.Component {
     if (displayShopList.length > 0) return displayShopList;
     if (nearbyShops.length > 0) return nearbyShops;
     return allShops;
-
-    // let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
-    // shops = displayShopList.length > 0 ? displayShopList : shops;
-    // shops = isSearching ? searchResults : shops;
   };
 
   render() {
