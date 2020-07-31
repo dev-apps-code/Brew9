@@ -469,11 +469,6 @@ export default class Outlet extends React.Component {
     shops = displayShopList.length > 0 ? displayShopList : shops;
     shops = isSearching ? searchResults : shops;
     recent && shops ? this.moveSelectionToTop(shops, recent) : shops
-    console.log(recent)
-    console.log('\n\n\n-----------')
-    console.log(shops)
-
-    console.log('-----------\n\n\n')
   
     return (
       <View style={styles.mainView}>
