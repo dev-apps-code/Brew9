@@ -67,7 +67,8 @@ import AnimationLoading from '../Components/AnimationLoading';
   toggle_update_count: orders.toggle_update_count,
   discount_cart_total: orders.discount_cart_total,
   clearCart: orders.clearCart,
-  currentPromoText: orders.currentPromoText
+  currentPromoText: orders.currentPromoText,
+  responses: config.responses
 }))
 export default class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -429,43 +430,50 @@ export default class Home extends React.Component {
   };
 
   loadShops() {
-    const { shop, location } = this.props;
+    const callback = () => {
+      const { shop, location, responses } = this.props;
 
-    if (shop === null) {
-      let message = 'Please select an outlet that is near you.';
+      if (shop === null) {
+        let message =
+          responses.get('Shop Selection') ||
+          'Please select an outlet that is near you.';
 
-      const latitude = location != null ? location.coords.latitude : null;
-      const longitude = location != null ? location.coords.longitude : null;
+        const latitude = location != null ? location.coords.latitude : null;
+        const longitude = location != null ? location.coords.longitude : null;
 
-      if (latitude === null || longitude === null) {
-        message = 'Could not detect your location.\nPlease select store.';
-      }
-
-      this.refs.toast.show(message, 3000);
-
-      const callback = () => {
-        this.props.navigation.navigate('SelectShop');
-      };
-
-      this.refs.toast.show(message, 1000, callback);
-    } else {
-      const { menu_banners } = shop;
-      const { first_promo_popup, refresh_products } = this.state;
-      const callback = () => {
-        this.check_promotion_trigger();
-        this.computeDistance();
-
-        if (refresh_products) {
-          this.loadStoreProducts();
-
-          if (!first_promo_popup) {
-            this.shouldShowFeatured(shop);
-          }
+        if (latitude === null || longitude === null) {
+          message =
+            responses.get('Location Not Available') ||
+            'Could not detect your location.\nPlease select store.';
         }
-      };
 
-      this.setState({ menu_banners }, callback);
-    }
+        this.refs.toast.show(message, 3000);
+
+        const callback = () => {
+          this.props.navigation.navigate('SelectShop');
+        };
+
+        this.refs.toast.show(message, 1000, callback);
+      } else {
+        const { menu_banners } = shop;
+        const { first_promo_popup, refresh_products } = this.state;
+        const callback = () => {
+          this.check_promotion_trigger();
+          this.computeDistance();
+
+          if (refresh_products) {
+            this.loadStoreProducts();
+
+            if (!first_promo_popup) {
+              this.shouldShowFeatured(shop);
+            }
+          }
+        };
+
+        this.setState({ menu_banners }, callback);
+      }
+    };
+    this.props.dispatch(createAction('config/loadConfig')({ callback }));
   }
 
   loadStoreProducts() {
@@ -3421,7 +3429,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    alignSelf: 'stretch',
+    alignSelf: 'stretch'
   },
   featuredpromoButton: {
     backgroundColor: 'transparent',
