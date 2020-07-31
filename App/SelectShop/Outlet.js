@@ -378,12 +378,23 @@ export default class Outlet extends React.Component {
     );
   }
 
-  render() {
-    const { displayShopList, isSearching, searchResults } = this.state;
+  getShopList = () => {
     const { allShops, nearbyShops } = this.props;
-    let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
-    shops = displayShopList.length > 0 ? displayShopList : shops;
-    shops = isSearching ? searchResults : shops;
+    const { displayShopList, isSearching, searchResults } = this.state;
+
+    if (isSearching) return searchResults;
+    if (displayShopList.length > 0) return displayShopList;
+    if (nearbyShops.length > 0) return nearbyShops;
+    return allShops;
+
+    // let shops = nearbyShops.length > 0 ? nearbyShops : allShops;
+    // shops = displayShopList.length > 0 ? displayShopList : shops;
+    // shops = isSearching ? searchResults : shops;
+  };
+
+  render() {
+    const shops = this.getShopsList();
+
     return (
       <View style={styles.mainView}>
         <View style={styles.subHeaderView}>
@@ -391,10 +402,6 @@ export default class Outlet extends React.Component {
           {this.renderSearchField()}
         </View>
         {this.renderMap()}
-        {/* <Brew9DropDown
-          results={this.state.searchResults}
-          onPressResult={this.onS}
-        /> */}
         <TouchableOpacity style={styles.button_3} onPress={this.toggleMap}>
           <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}
@@ -417,7 +424,7 @@ export default class Outlet extends React.Component {
           refreshing={this.state.isLoading}
         />
         <FilterView
-          locationList={allShops}
+          locationList={this.props.allShops}
           visible={this.state.showAreaView}
           cancelable={true}
           title={'Exit App '}
