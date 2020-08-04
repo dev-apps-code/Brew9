@@ -29,6 +29,7 @@ import {
   BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
+import ShippingDetail from './ShippingDetail';
 
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
@@ -449,57 +450,11 @@ export default class AddShippingAddress extends React.Component {
     edit,
     selected,
     onPress
-  ) => {
-    let current_value = value == '' ? false : true;
-    return (
-      <View>
-        <View style={styles.formDetail}>
-          <Text style={styles.title}>{title}</Text>
-          {!selected ? (
-            edit ? (
-              <TextInput
-                defaultValue={value}
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                placeholder={placeholder}
-                onChangeText={(text) => onChangeText(text)}
-                value={value}
-                style={styles.textInput}
-                editable={edit}
-              />
-            ) : (
-              <Text>{current_value}</Text>
-            )
-          ) : (
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-                marginRight: 10 * alpha,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onPress={onPress}
-            >
-              {current_value ? (
-                <Text style={[styles.textInput]}>{value}</Text>
-              ) : (
-                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {placeholder}
-                </Text>
-              )}
-              <Image
-                source={require('./../../assets/images/next.png')}
-                style={styles.menuRowArrowImage}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={styles.sectionSeperatorView2} />
-      </View>
-    );
-  };
+  ) => (
+    <ShippingDetail
+      {...{ title, value, placeholder, onChangeText, edit, selected, onPress }}
+    />
+  );
 
   renderAddressForm = () => {
     let { address, address_details } = this.state;
@@ -561,9 +516,9 @@ export default class AddShippingAddress extends React.Component {
       </View>
     );
   };
-  renderPlaces = (item) => {
-    let button_selected = item.selected ? PRIMARY_COLOR : 'lightgray';
-    let text_selected = item.selected ? 'white' : 'black';
+  renderPlaces = ({ item, index }) => {
+    const button_selected = item.selected ? PRIMARY_COLOR : 'lightgray';
+    const text_selected = item.selected ? 'white' : 'black';
     return (
       <TouchableOpacity
         style={[styles.tagButton, { backgroundColor: button_selected }]}
@@ -575,16 +530,16 @@ export default class AddShippingAddress extends React.Component {
       </TouchableOpacity>
     );
   };
-  renderTag = () => {
+  renderTags = () => {
     return (
       <View>
         <View style={[styles.formDetail]}>
           <Text style={styles.title}>{'Tag'}</Text>
           <View style={styles.placesWrapperView}>
             <FlatList
-              renderItem={({ item }) => this.renderPlaces(item)}
+              renderItem={this.renderPlaces}
               data={this.state.tag}
-              keyExtractor={(item, index) => item.name}
+              keyExtractor={(item, index) => `${item.name}`}
               numColumns={3}
             />
           </View>
@@ -680,7 +635,7 @@ export default class AddShippingAddress extends React.Component {
                 {this.state.populateTowns
                   ? this.state.town.map((item, key) => {
                       return (
-                        <View style={styles.itemView}>
+                        <View {...{ key }} style={styles.itemView}>
                           <TouchableOpacity
                             onPress={() => this.selectTown(key)}
                           >
@@ -731,13 +686,16 @@ export default class AddShippingAddress extends React.Component {
               (text) => this.onChangeName(text),
               true
             )}
+
             {this.renderFormDetail(
               'Receiver No.',
               contact_number,
               '8851234',
               (text) => this.onChangeContactNo(text),
-              true
+              true,
+              'number-pad'
             )}
+
             {this.renderFormDetail(
               'Area',
               current_area,
@@ -747,8 +705,10 @@ export default class AddShippingAddress extends React.Component {
               true,
               () => this.handleOpen()
             )}
+
             {this.renderAddressForm()}
-            {this.renderTag()}
+
+            {this.renderTags()}
 
             <View style={[styles.defaultAddressView]}>
               <Text style={[styles.title, { width: 100 * alpha }]}>
