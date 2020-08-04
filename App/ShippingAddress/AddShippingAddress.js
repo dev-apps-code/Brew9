@@ -160,6 +160,7 @@ export default class AddShippingAddress extends React.Component {
       useNativeDriver: true
     }).start();
   };
+
   handleClose = () => {
     Animated.timing(this.state.animation, {
       toValue: 0,
@@ -209,6 +210,7 @@ export default class AddShippingAddress extends React.Component {
   onChangeName = (fullname) => {
     this.setState({ fullname });
   };
+
   onChangeContactNo = (contact_number) => {
     this.setState({ contact_number });
   };
@@ -240,6 +242,7 @@ export default class AddShippingAddress extends React.Component {
       this.loadUpdateProfile(shippingAddress);
     }
   };
+
   loadUpdateProfile(formData) {
     const { dispatch, currentMember, navigation } = this.props;
     isInitialAddress = this.props.navigation.state.params.initialAddress;
@@ -281,6 +284,7 @@ export default class AddShippingAddress extends React.Component {
       );
     }
   }
+
   checkForm = () => {
     let {
       fullname,
@@ -321,6 +325,7 @@ export default class AddShippingAddress extends React.Component {
     this.loadTag();
     this.loadShopTown();
   }
+
   loadShopTown = () => {
     let { dispatch, selectedShop } = this.props;
     this.setState({ loading: true });
@@ -341,6 +346,7 @@ export default class AddShippingAddress extends React.Component {
       })
     );
   };
+
   defaultTown = () => {
     this.setState({
       populateTowns: true,
@@ -370,6 +376,7 @@ export default class AddShippingAddress extends React.Component {
       delivery_area: info.area
     });
   }
+
   returnAddress(info) {
     const latitude = this.props.location
       ? this.props.location.coords.latitude
@@ -392,9 +399,11 @@ export default class AddShippingAddress extends React.Component {
   onBackPressed = () => {
     this.props.navigation.goBack();
   };
+
   onChangeDefaultAddress = (value) => {
     this.setState({ primary: value });
   };
+
   onSelectShippingArea = () => {
     const { navigate } = this.props.navigation;
     navigate('ShippingArea', {
@@ -402,6 +411,7 @@ export default class AddShippingAddress extends React.Component {
       returnData: this.returnData.bind(this)
     });
   };
+
   onSelectAddress = () => {
     const { navigate } = this.props.navigation;
     let { address, address_details, delivery_area } = this.state;
@@ -416,6 +426,7 @@ export default class AddShippingAddress extends React.Component {
       this.refs.toast.show('Please select your area first', 500);
     }
   };
+
   onSelectTag = (item) => {
     const tag = this.state.tag;
     let selectedTag = tag.map((tag) => {
@@ -428,6 +439,7 @@ export default class AddShippingAddress extends React.Component {
     });
     this.setState({ tag: selectedTag, land_mark: item.name });
   };
+
   renderFormDetail = (
     title,
     value,
