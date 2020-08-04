@@ -1,11 +1,3 @@
-//
-//  MemberVoucher
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   Text,
@@ -15,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  AsyncStorage,
   Dimensions,
   Animated,
   SafeAreaView
@@ -27,28 +18,15 @@ import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
 import UpdateShippingAddressObjectRequest from '../Requests/update_shipping_address_request_object';
 import ShopTownRequestObject from '../Requests/shop_town_request_object';
-import CurrentStatusRequestObject from '../Requests/current_status_request_object';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import { KURL_INFO } from '../Utils/server';
+import Toast from 'react-native-easy-toast';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
-  DISABLED_COLOR,
-  commonStyles,
-  TOAST_DURATION,
   LIGHT_GREY,
   BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
-import { getMemberIdForApi } from '../Services/members_helper';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
 import SwitchSelector from 'react-native-switch-selector';
 
 @connect(({ members, shops }) => ({
@@ -169,7 +147,6 @@ export default class AddShippingAddress extends React.Component {
         chosenTown: 0,
         chosenArea: 0,
         isSaveDisabled: false
-
       };
     }
   }
@@ -239,7 +216,7 @@ export default class AddShippingAddress extends React.Component {
   onSavePressed = () => {
     this.setState({
       isSaveDisabled: true
-    })
+    });
     let formcheck = this.checkForm();
     let primary = this.state.primary == 1 ? true : false;
     if (formcheck) {
@@ -269,7 +246,7 @@ export default class AddShippingAddress extends React.Component {
     const callback = (eventObject) => {
       this.setState({
         isSaveDisabled: false
-      })
+      });
       if (eventObject.success) {
         isInitialAddress
           ? navigation.navigate('Checkout')
