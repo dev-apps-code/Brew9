@@ -449,10 +449,20 @@ export default class AddShippingAddress extends React.Component {
     onChangeText,
     edit,
     selected,
-    onPress
+    onPress,
+    keyboardType
   ) => (
     <ShippingDetail
-      {...{ title, value, placeholder, onChangeText, edit, selected, onPress }}
+      {...{
+        title,
+        value,
+        placeholder,
+        onChangeText,
+        edit,
+        selected,
+        onPress,
+        keyboardType
+      }}
     />
   );
 
@@ -693,6 +703,8 @@ export default class AddShippingAddress extends React.Component {
               '8851234',
               (text) => this.onChangeContactNo(text),
               true,
+              false,
+              () => {},
               'number-pad'
             )}
 

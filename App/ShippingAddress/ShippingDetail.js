@@ -70,6 +70,7 @@ const ShippingDetail = ({
   keyboardType
 }) => {
   const current_value = value == '' ? false : true;
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -86,7 +87,7 @@ const ShippingDetail = ({
               value={value}
               style={styles.textInput}
               editable={edit}
-              {...{ keyboardType }}
+              keyboardType={keyboardType}
             />
           ) : (
             <Text>{current_value}</Text>
