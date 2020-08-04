@@ -1,8 +1,11 @@
 import BaseRequestObject from './base_request_object';
 
 export default class SelectShopRequestObject extends BaseRequestObject {
-  constructor() {
+  constructor(latitude, longitude) {
     super();
+
+    this.latitude = latitude || null;
+    this.longitude = longitude || null;
   }
 
   setShopId(id) {

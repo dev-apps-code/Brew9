@@ -55,10 +55,9 @@ export default class ShopDetails extends Component {
   onPressDirection(lat, long) {
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
-    let location = latitude+","+longitude 
+    let location = latitude + ',' + longitude;
 
     openMap({ query: location });
-
   }
 
   renderAvailablity = (availability) => {
@@ -73,11 +72,9 @@ export default class ShopDetails extends Component {
   };
 
   render() {
-    const { details, onPressOrderNow, hightLight, onPressShop } = this.props;
-    const itemStyle = hightLight ? styles.highlighted : {};
-    const minutes = Math.round(details.minute_drive)
-    const distance = details.kilometer_distance ? details.kilometer_distance : '-'
-    const deliveryDetails = 'Delivery | ' + distance + ' km ' + minutes + ' mins'
+    const { details, onPressOrderNow, shop } = this.props;
+    const itemStyle = shop && shop.id === details.id ? styles.highlighted : {};
+    const minutes = Math.round(details.minute_drive);
     const { start_time, end_time } = details?.opening_hour || {
       start_time: null,
       end_time: null
@@ -88,7 +85,7 @@ export default class ShopDetails extends Component {
     }
 
     return (
-      <TouchableOpacity onPress={()=> onPressShop(details)} style={[styles.shopDetailView, itemStyle]}>
+      <View style={[styles.shopDetailView, itemStyle]}>
         <View style={styles.detailsView}>
           <TouchableOpacity onPress={() => onPressOrderNow(details.id)}>
             <View style={styles.detailView}>
@@ -97,7 +94,11 @@ export default class ShopDetails extends Component {
             </View>
             <View style={styles.detailView}>
               <Text style={styles.serviceInfoDetails}>
-                {deliveryDetails}
+                {'Delivery | ' +
+                  details.kilometer_distance +
+                  ' km ' +
+                  minutes +
+                  ' mins'}
               </Text>
             </View>
           </TouchableOpacity>
@@ -147,7 +148,7 @@ export default class ShopDetails extends Component {
           </View>
         </View>
         {this.renderFavoriteButton()}
-      </TouchableOpacity>
+      </View>
     );
   }
 }
