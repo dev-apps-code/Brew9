@@ -100,11 +100,12 @@ export async function postMultipartMethod(authtoken, object) {
   const urlString = `${url}/${object.getUrlString()}`;
   console.log('[POST MULTIPART]');
   console.log(urlString);
+  console.log(object.getFormData())
   return fetch(urlString, {
     method: 'POST',
     headers: {
       Accept: KCURRENT_API_VERSION_HEADER,
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       Version: Constants.nativeAppVersion,
       BuildVersion: Constants.nativeBuildVersion,
       Platform: Constants.platform,

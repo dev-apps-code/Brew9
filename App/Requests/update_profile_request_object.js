@@ -14,12 +14,20 @@ class UpdateProfileRequestObject extends BaseRequestObject {
   }
 
   getFormData() {
-    const data = JSON.stringify({
-      dob: this.dob,
-      nickname: this.nickname,
-      gender: this.gender,
-      email: this.email
-    });
+    const data = new FormData();
+    if (this.dob != null) {
+      data.append('dob', this.dob);
+    }
+    if (this.nickname != null) {
+      data.append('nickname', this.nickname);
+    }
+
+    if (this.gender != null) {
+      data.append('gender', this.gender);
+    }
+    if (this.email != null) {
+      data.append('email', this.email);
+    }
     return data;
   }
 }
