@@ -311,15 +311,16 @@ export default class Home extends React.Component {
   }
 
   setDistanceString(calculated_distance) {
+    const { shop } = this.props;
     var distance_string = '';
     var parseDistance = calculated_distance;
     if (parseDistance > 1000) {
-      distance_string = `${parseFloat(parseDistance / 1000).toFixed(1)}km`;
+      distance_string = `${parseFloat(parseDistance / 1000).toFixed(1)}`;
     } else {
-      distance_string = `${parseDistance}m`;
+      distance_string = `${parseDistance}`;
     }
     this.setState({
-      distance: distance_string,
+      distance: `${shop.kilometer_distance || distance_string}km`,
       member_distance: parseDistance / 1000
     });
   }
