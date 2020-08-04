@@ -12,13 +12,15 @@ import {
   SafeAreaView
 } from 'react-native';
 import React from 'react';
+import Toast from 'react-native-easy-toast';
+import SwitchSelector from 'react-native-switch-selector';
+import { connect } from 'react-redux';
+
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { createAction } from '../Utils';
-import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
 import UpdateShippingAddressObjectRequest from '../Requests/update_shipping_address_request_object';
 import ShopTownRequestObject from '../Requests/shop_town_request_object';
-import Toast from 'react-native-easy-toast';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -27,7 +29,6 @@ import {
   BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
-import SwitchSelector from 'react-native-switch-selector';
 
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
