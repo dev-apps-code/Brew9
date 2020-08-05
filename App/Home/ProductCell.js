@@ -294,7 +294,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
     flexDirection: 'row',
-    paddingVertical: 5 * alpha
+    paddingVertical: 5 * alpha,
+    backgroundColor: 'white'
   },
   productimageImage: {
     backgroundColor: 'transparent',
