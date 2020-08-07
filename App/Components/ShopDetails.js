@@ -86,6 +86,7 @@ export default class ShopDetails extends Component {
 
     return (
       <TouchableOpacity
+        activeOpacity={0.7}
         style={[styles.shopDetailView, itemStyle]}
         onPress={() => onPressOrderNow(details.id)}
       >
@@ -239,7 +240,6 @@ const styles = StyleSheet.create({
   },
   detailText: {
     color: LIGHT_GREY,
-    // flexWrap: 'wrap',
     fontSize: 11 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     width: '95%'
@@ -249,12 +249,8 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 12 * fontAlpha
   },
-
-  //image
   pinImage: {
     tintColor: LIGHT_GREY,
-    // width: 8 * alpha,
-    // height: 11 * alpha,
     marginRight: alpha * 7
   },
   clockImage: {
@@ -266,8 +262,5 @@ const styles = StyleSheet.create({
   favoriteImage: {
     width: 13 * alpha,
     height: 11 * alpha
-    // position: 'absolute',
-    // right: 0,
-    // bottom: 1
   }
 });
