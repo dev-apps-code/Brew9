@@ -188,16 +188,18 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 3 * alpha
+    borderRadius: 2 * alpha
   },
   detailsView: {
+    // backgroundColor: 'yellow',
     flex: 4,
     flexWrap: 'wrap'
   },
   orderNowView: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    // backgroundColor: 'red'
   },
   detailView: {
     flexDirection: 'row'
@@ -213,11 +215,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    // backgroundColor: 'blue'
   },
   favoriteButton: {
     height: alpha * 30,
-    width: alpha * 30,
+    width: alpha * 40,
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
@@ -232,23 +235,23 @@ const styles = StyleSheet.create({
   },
   accessView: {
     flexDirection: 'row',
-    paddingHorizontal: alpha * 20
+    paddingHorizontal: alpha * 10
   },
   //text
   availabilityText: {
-    fontSize: fontAlpha * 9,
+    fontSize: fontAlpha * 10,
     color: '#00B2E3',
     fontFamily: TITLE_FONT
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontSize: 13 * fontAlpha,
     marginRight: 10 * alpha,
     marginTop: 2 * alpha
   },
   serviceInfoDetails: {
-    fontSize: 9 * fontAlpha,
+    fontSize: 10 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     marginBottom: 10 * alpha,
     marginTop: 4 * alpha,
@@ -256,14 +259,14 @@ const styles = StyleSheet.create({
   },
   detailText: {
     color: LIGHT_GREY,
-    fontSize: 11 * fontAlpha,
+    fontSize: 12 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     width: '95%'
   },
   orderNowText: {
     color: TINT_COLOR,
     fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha
+    fontSize: 14 * fontAlpha
   },
   pinImage: {
     tintColor: LIGHT_GREY,
