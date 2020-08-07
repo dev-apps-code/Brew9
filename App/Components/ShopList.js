@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   mainView: {
     flex: 1,
     backgroundColor: LIGHT_GREY_BACKGROUND,
-    padding: alpha * 10
+    padding: alpha * 15
   }
 });
 

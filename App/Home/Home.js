@@ -1754,18 +1754,14 @@ export default class Home extends React.Component {
                 </Text>
                 <Image
                   source={require('./../../assets/images/next.png')}
-                  style={styles.rightArrowImage}
+                  style={[styles.rightArrowImage, { tintColor: PRIMARY_COLOR }]}
                 />
               </TouchableOpacity>
 
               {/* </TouchableOpacity> */}
             </View>
 
-            <View
-              style={{
-                flex: 1
-              }}
-            />
+            <View style={{ flex: 1 }} />
             <View style={styles.pickUpDeliveryView}>
               {shop && (
                 <SwitchSelector
@@ -1800,33 +1796,24 @@ export default class Home extends React.Component {
               flexDirection: 'row',
               alignItems: 'flex-start',
               justifyContent: 'space-between'
-              // backgroundColor: 'red'
             }}
           >
-            <Text style={styles.distance1kmText}>Distance {distance}</Text>
-            <View
-              style={{
-                // height: 14 * alpha,
-                // marginLeft: 10 * alpha,
-                // marginRight: 19 * alpha,
-                // marginTop: 7 * alpha,
-                flexDirection: 'row'
-                // alignItems: "flex-start",
-              }}
+            <Text
+              style={[
+                styles.distance1kmText,
+                { color: 'rgb(130, 130, 130)', marginTop: -7 }
+              ]}
             >
-              {/* <Text
-							style={styles.distance1kmText}>Distance {distance}</Text> */}
-              {/* <View
-							style={{
-								flex: 1,
-							}} /> */}
+              Change Location
+            </Text>
+            <View style={{ flexDirection: 'row' }}>
               <View style={styles.moreView}>
                 <TouchableOpacity
                   onPress={this.onMorePressed}
                   style={styles.moreButton}
                 >
                   <Text style={styles.distance1kmText}>
-                    {isToggleShopLocation ? 'Hide' : 'Location'}
+                    {isToggleShopLocation ? 'Hide' : 'Store Info'}
                   </Text>
                 </TouchableOpacity>
                 {isToggleShopLocation ? (
@@ -3424,6 +3411,7 @@ const styles = StyleSheet.create({
   },
   businessHourText: {
     fontFamily: NON_TITLE_FONT,
+    color: 'rgb(160, 160, 160)',
     fontSize: 13 * fontAlpha,
     paddingVertical: 10 * alpha,
     lineHeight: 14 * fontAlpha,

@@ -19,16 +19,17 @@ import {
 import { alpha, fontAlpha } from '../Common/size';
 import openMap from 'react-native-open-maps';
 
-@connect(({ members, shops }) => ({
+@connect(({ members, shops, config }) => ({
   currentUser: members.profile,
-  shop: shops.selectedShop
+  shop: shops.selectedShop,
+  responses: config.responses
 }))
 export default class ShopDetails extends Component {
   constructor(props) {
     super(props);
   }
 
-  renderFavoriteButton = () => {
+  renderFavoriteButton = (disabled) => {
     const { currentUser, details, onPressFavourite } = this.props;
     if (currentUser !== null) {
       let likeImage = require('./../../assets/images/like.png');
@@ -41,6 +42,7 @@ export default class ShopDetails extends Component {
         <TouchableOpacity
           onPress={() => onPressFavourite(details.id, details.favourite)}
           style={styles.favoriteButton}
+          {...{ disabled }}
         >
           <Image source={likeImage} style={styles.favoriteImage} />
         </TouchableOpacity>
@@ -61,14 +63,27 @@ export default class ShopDetails extends Component {
   }
 
   renderAvailablity = (availability) => {
-    const color = availability ? '#00B2E3' : DISABLED_COLOR;
-    const viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
-    const textStyle = { ...styles.availabilityText, ...{ color } };
+    const backgroundColor = availability ? '#00B2E3' : DISABLED_COLOR;
+    const viewStyle = {
+      ...styles.availabilityView,
+      ...{ backgroundColor, borderColor: backgroundColor }
+    };
+    const textStyle = {
+      ...styles.availabilityText,
+      ...{ color: 'white' }
+    };
     return (
       <View style={viewStyle}>
         <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
       </View>
     );
+  };
+
+  getStatusText = (status, isOpened) => {
+    if (status === 'in_operation') {
+      return isOpened ? 'Order Now' : 'View More';
+    }
+    return this.props.responses.get(status);
   };
 
   render() {
@@ -80,28 +95,36 @@ export default class ShopDetails extends Component {
       end_time: null
     };
     let hoursText = null;
+
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
 
+    const { status } = details;
+    const statusText = this.getStatusText(status, details.open);
+    const disabled = status !== 'in_operation';
+    const disabledStyle = disabled ? { opacity: 0.5 } : {};
     return (
-      <View style={[styles.shopDetailView, itemStyle]}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={[styles.shopDetailView, itemStyle, disabledStyle]}
+        onPress={() => onPressOrderNow(details.id)}
+        {...{ disabled }}
+      >
         <View style={styles.detailsView}>
-          <TouchableOpacity onPress={() => onPressOrderNow(details.id)}>
-            <View style={styles.detailView}>
-              <Text style={styles.shopName}>{details.name}</Text>
-              {this.renderAvailablity(details.open)}
-            </View>
-            <View style={styles.detailView}>
-              <Text style={styles.serviceInfoDetails}>
-                {'Delivery | ' +
-                  details.kilometer_distance +
-                  ' km ' +
-                  minutes +
-                  ' mins'}
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.detailView}>
+            <Text style={styles.shopName}>{details.name}</Text>
+            {this.renderAvailablity(details.open)}
+          </View>
+          <View style={styles.detailView}>
+            <Text style={styles.serviceInfoDetails}>
+              {'Delivery | ' +
+                details.kilometer_distance +
+                ' km ' +
+                minutes +
+                ' mins'}
+            </Text>
+          </View>
           <View style={styles.detailTextContainer}>
             <Image
               source={require('./../../assets/images/Fill.png')}
@@ -122,40 +145,39 @@ export default class ShopDetails extends Component {
           </View>
         </View>
         <View style={styles.orderNowView}>
-          <TouchableOpacity
-            onPress={() => onPressOrderNow(details.id)}
-            style={styles.orderButton}
-          >
-            <Text style={styles.orderNowText}>
-              {details.open ? 'Order Now' : 'View More'}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.orderButton}>
+            <Text style={styles.orderNowText}>{statusText}</Text>
+          </View>
           <View style={styles.accessView}>
             <TouchableOpacity
               onPress={() => this.onPressCall(details.phone_no)}
               style={styles.accessButton}
+              {...{ disabled }}
             >
-              <Image source={require('./../../assets/images/call.png')} />
+              <Image source={require('./../../assets/images/phone-icon.png')} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
                 this.onPressDirection(details.latitude, details.longitude)
               }
               style={styles.accessButton}
+              {...{ disabled }}
             >
-              <Image source={require('./../../assets/images/direction.png')} />
+              <Image
+                source={require('./../../assets/images/direction-icon-ss.png')}
+              />
             </TouchableOpacity>
           </View>
         </View>
-        {this.renderFavoriteButton()}
-      </View>
+        {this.renderFavoriteButton(disabled)}
+      </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
   highlighted: {
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#00B2E3'
   },
   shopDetailView: {
@@ -170,19 +192,21 @@ const styles = StyleSheet.create({
   availabilityView: {
     height: alpha * 16,
     width: alpha * 45,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 3 * alpha
+    borderRadius: 2 * alpha
   },
   detailsView: {
+    // backgroundColor: 'yellow',
     flex: 4,
     flexWrap: 'wrap'
   },
   orderNowView: {
     flex: 2,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    // backgroundColor: 'red'
   },
   detailView: {
     flexDirection: 'row'
@@ -198,14 +222,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    // backgroundColor: 'blue'
   },
   favoriteButton: {
-    height: alpha * 15,
-    width: alpha * 15,
+    height: alpha * 30,
+    width: alpha * 40,
     position: 'absolute',
-    right: alpha * 4,
-    bottom: alpha * 4
+    justifyContent: 'center',
+    alignItems: 'center',
+    right: 0,
+    bottom: 0,
+    zIndex: 1
   },
   accessButton: {
     flex: 1,
@@ -214,23 +242,23 @@ const styles = StyleSheet.create({
   },
   accessView: {
     flexDirection: 'row',
-    paddingHorizontal: alpha * 20
+    paddingHorizontal: alpha * 10
   },
   //text
   availabilityText: {
-    fontSize: fontAlpha * 9,
+    fontSize: fontAlpha * 10,
     color: '#00B2E3',
     fontFamily: TITLE_FONT
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontSize: 13 * fontAlpha,
     marginRight: 10 * alpha,
     marginTop: 2 * alpha
   },
   serviceInfoDetails: {
-    fontSize: 9 * fontAlpha,
+    fontSize: 10 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     marginBottom: 10 * alpha,
     marginTop: 4 * alpha,
@@ -238,22 +266,17 @@ const styles = StyleSheet.create({
   },
   detailText: {
     color: LIGHT_GREY,
-    // flexWrap: 'wrap',
-    fontSize: 11 * fontAlpha,
+    fontSize: 12 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     width: '95%'
   },
   orderNowText: {
     color: TINT_COLOR,
     fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha
+    fontSize: 14 * fontAlpha
   },
-
-  //image
   pinImage: {
     tintColor: LIGHT_GREY,
-    // width: 8 * alpha,
-    // height: 11 * alpha,
     marginRight: alpha * 7
   },
   clockImage: {
@@ -265,8 +288,5 @@ const styles = StyleSheet.create({
   favoriteImage: {
     width: 13 * alpha,
     height: 11 * alpha
-    // position: 'absolute',
-    // right: 0,
-    // bottom: 1
   }
 });
