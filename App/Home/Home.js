@@ -1826,7 +1826,7 @@ export default class Home extends React.Component {
                   style={styles.moreButton}
                 >
                   <Text style={styles.distance1kmText}>
-                    {isToggleShopLocation ? 'Hide' : 'Location'}
+                    {isToggleShopLocation ? 'Hide' : 'Shop Info'}
                   </Text>
                 </TouchableOpacity>
                 {isToggleShopLocation ? (
@@ -3424,6 +3424,7 @@ const styles = StyleSheet.create({
   },
   businessHourText: {
     fontFamily: NON_TITLE_FONT,
+    color: 'rgb(160, 160, 160)',
     fontSize: 13 * fontAlpha,
     paddingVertical: 10 * alpha,
     lineHeight: 14 * fontAlpha,
