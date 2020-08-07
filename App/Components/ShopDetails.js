@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     right: 0,
-    bottom: 0
+    bottom: 0,
+    zIndex: 1
   },
   accessButton: {
     flex: 1,
