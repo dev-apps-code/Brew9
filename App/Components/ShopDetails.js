@@ -143,12 +143,7 @@ export default class ShopDetails extends Component {
               onPress={() => this.onPressCall(details.phone_no)}
               style={styles.accessButton}
             >
-              <Image
-                source={require('./../../assets/images/call.png')}
-                style={{
-                  tintColor: DISABLED_COLOR
-                }}
-              />
+              <Image source={require('./../../assets/images/phone-icon.png')} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
@@ -157,10 +152,7 @@ export default class ShopDetails extends Component {
               style={styles.accessButton}
             >
               <Image
-                source={require('./../../assets/images/direction.png')}
-                style={{
-                  tintColor: DISABLED_COLOR
-                }}
+                source={require('./../../assets/images/direction-icon-ss.png')}
               />
             </TouchableOpacity>
           </View>
