@@ -19,9 +19,10 @@ import {
 import { alpha, fontAlpha } from '../Common/size';
 import openMap from 'react-native-open-maps';
 
-@connect(({ members, shops }) => ({
+@connect(({ members, shops, config }) => ({
   currentUser: members.profile,
-  shop: shops.selectedShop
+  shop: shops.selectedShop,
+  responses: config.responses
 }))
 export default class ShopDetails extends Component {
   constructor(props) {
@@ -89,6 +90,8 @@ export default class ShopDetails extends Component {
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
+    const { status } = details;
+    console.log('status ', status);
 
     return (
       <TouchableOpacity
@@ -132,7 +135,7 @@ export default class ShopDetails extends Component {
         <View style={styles.orderNowView}>
           <View style={styles.orderButton}>
             <Text style={styles.orderNowText}>
-              {details.open ? 'Order Now' : 'View More'}
+              {this.props.responses.get(details.status)}
             </Text>
           </View>
           <View style={styles.accessView}>
