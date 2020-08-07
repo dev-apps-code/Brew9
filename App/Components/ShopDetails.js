@@ -61,9 +61,15 @@ export default class ShopDetails extends Component {
   }
 
   renderAvailablity = (availability) => {
-    const color = availability ? '#00B2E3' : DISABLED_COLOR;
-    const viewStyle = { ...styles.availabilityView, ...{ borderColor: color } };
-    const textStyle = { ...styles.availabilityText, ...{ color } };
+    const backgroundColor = availability ? '#00B2E3' : DISABLED_COLOR;
+    const viewStyle = {
+      ...styles.availabilityView,
+      ...{ backgroundColor, borderColor: backgroundColor }
+    };
+    const textStyle = {
+      ...styles.availabilityText,
+      ...{ color: 'white' }
+    };
     return (
       <View style={viewStyle}>
         <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
@@ -134,7 +140,12 @@ export default class ShopDetails extends Component {
               onPress={() => this.onPressCall(details.phone_no)}
               style={styles.accessButton}
             >
-              <Image source={require('./../../assets/images/call.png')} />
+              <Image
+                source={require('./../../assets/images/call.png')}
+                style={{
+                  tintColor: DISABLED_COLOR
+                }}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
@@ -142,7 +153,12 @@ export default class ShopDetails extends Component {
               }
               style={styles.accessButton}
             >
-              <Image source={require('./../../assets/images/direction.png')} />
+              <Image
+                source={require('./../../assets/images/direction.png')}
+                style={{
+                  tintColor: DISABLED_COLOR
+                }}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -154,7 +170,7 @@ export default class ShopDetails extends Component {
 
 const styles = StyleSheet.create({
   highlighted: {
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#00B2E3'
   },
   shopDetailView: {
@@ -169,7 +185,7 @@ const styles = StyleSheet.create({
   availabilityView: {
     height: alpha * 16,
     width: alpha * 45,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 3 * alpha
