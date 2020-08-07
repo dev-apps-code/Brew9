@@ -85,23 +85,24 @@ export default class ShopDetails extends Component {
     }
 
     return (
-      <View style={[styles.shopDetailView, itemStyle]}>
+      <TouchableOpacity
+        style={[styles.shopDetailView, itemStyle]}
+        onPress={() => onPressOrderNow(details.id)}
+      >
         <View style={styles.detailsView}>
-          <TouchableOpacity onPress={() => onPressOrderNow(details.id)}>
-            <View style={styles.detailView}>
-              <Text style={styles.shopName}>{details.name}</Text>
-              {this.renderAvailablity(details.open)}
-            </View>
-            <View style={styles.detailView}>
-              <Text style={styles.serviceInfoDetails}>
-                {'Delivery | ' +
-                  details.kilometer_distance +
-                  ' km ' +
-                  minutes +
-                  ' mins'}
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.detailView}>
+            <Text style={styles.shopName}>{details.name}</Text>
+            {this.renderAvailablity(details.open)}
+          </View>
+          <View style={styles.detailView}>
+            <Text style={styles.serviceInfoDetails}>
+              {'Delivery | ' +
+                details.kilometer_distance +
+                ' km ' +
+                minutes +
+                ' mins'}
+            </Text>
+          </View>
           <View style={styles.detailTextContainer}>
             <Image
               source={require('./../../assets/images/Fill.png')}
@@ -122,14 +123,11 @@ export default class ShopDetails extends Component {
           </View>
         </View>
         <View style={styles.orderNowView}>
-          <TouchableOpacity
-            onPress={() => onPressOrderNow(details.id)}
-            style={styles.orderButton}
-          >
+          <View style={styles.orderButton}>
             <Text style={styles.orderNowText}>
               {details.open ? 'Order Now' : 'View More'}
             </Text>
-          </TouchableOpacity>
+          </View>
           <View style={styles.accessView}>
             <TouchableOpacity
               onPress={() => this.onPressCall(details.phone_no)}
@@ -148,7 +146,7 @@ export default class ShopDetails extends Component {
           </View>
         </View>
         {this.renderFavoriteButton()}
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -201,11 +199,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   favoriteButton: {
-    height: alpha * 15,
-    width: alpha * 15,
+    height: alpha * 30,
+    width: alpha * 30,
     position: 'absolute',
-    right: alpha * 4,
-    bottom: alpha * 4
+    justifyContent: 'center',
+    alignItems: 'center',
+    right: 0,
+    bottom: 0
   },
   accessButton: {
     flex: 1,
