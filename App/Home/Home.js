@@ -1754,18 +1754,14 @@ export default class Home extends React.Component {
                 </Text>
                 <Image
                   source={require('./../../assets/images/next.png')}
-                  style={styles.rightArrowImage}
+                  style={[styles.rightArrowImage, { tintColor: PRIMARY_COLOR }]}
                 />
               </TouchableOpacity>
 
               {/* </TouchableOpacity> */}
             </View>
 
-            <View
-              style={{
-                flex: 1
-              }}
-            />
+            <View style={{ flex: 1 }} />
             <View style={styles.pickUpDeliveryView}>
               {shop && (
                 <SwitchSelector
