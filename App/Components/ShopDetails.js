@@ -19,16 +19,17 @@ import {
 import { alpha, fontAlpha } from '../Common/size';
 import openMap from 'react-native-open-maps';
 
-@connect(({ members, shops }) => ({
+@connect(({ members, shops, config }) => ({
   currentUser: members.profile,
-  shop: shops.selectedShop
+  shop: shops.selectedShop,
+  responses: config.responses
 }))
 export default class ShopDetails extends Component {
   constructor(props) {
     super(props);
   }
 
-  renderFavoriteButton = () => {
+  renderFavoriteButton = (disabled) => {
     const { currentUser, details, onPressFavourite } = this.props;
     if (currentUser !== null) {
       let likeImage = require('./../../assets/images/like.png');
@@ -41,6 +42,7 @@ export default class ShopDetails extends Component {
         <TouchableOpacity
           onPress={() => onPressFavourite(details.id, details.favourite)}
           style={styles.favoriteButton}
+          {...{ disabled }}
         >
           <Image source={likeImage} style={styles.favoriteImage} />
         </TouchableOpacity>
@@ -77,6 +79,13 @@ export default class ShopDetails extends Component {
     );
   };
 
+  getStatusText = (status, isOpened) => {
+    if (status === 'in_operation') {
+      return isOpened ? 'Open' : 'Closed';
+    }
+    return this.props.responses.get(status);
+  };
+
   render() {
     const { details, onPressOrderNow, shop } = this.props;
     const itemStyle = shop && shop.id === details.id ? styles.highlighted : {};
@@ -86,15 +95,21 @@ export default class ShopDetails extends Component {
       end_time: null
     };
     let hoursText = null;
+
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
 
+    const { status } = details;
+    const statusText = this.getStatusText(status, details.open);
+    const disabled = status !== 'in_operation';
+    const disabledStyle = disabled ? { opacity: 0.5 } : {};
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        style={[styles.shopDetailView, itemStyle]}
+        style={[styles.shopDetailView, itemStyle, disabledStyle]}
         onPress={() => onPressOrderNow(details.id)}
+        {...{ disabled }}
       >
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
@@ -131,38 +146,30 @@ export default class ShopDetails extends Component {
         </View>
         <View style={styles.orderNowView}>
           <View style={styles.orderButton}>
-            <Text style={styles.orderNowText}>
-              {details.open ? 'Order Now' : 'View More'}
-            </Text>
+            <Text style={styles.orderNowText}>{statusText}</Text>
           </View>
           <View style={styles.accessView}>
             <TouchableOpacity
               onPress={() => this.onPressCall(details.phone_no)}
               style={styles.accessButton}
+              {...{ disabled }}
             >
-              <Image
-                source={require('./../../assets/images/call.png')}
-                style={{
-                  tintColor: DISABLED_COLOR
-                }}
-              />
+              <Image source={require('./../../assets/images/phone-icon.png')} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
                 this.onPressDirection(details.latitude, details.longitude)
               }
               style={styles.accessButton}
+              {...{ disabled }}
             >
               <Image
-                source={require('./../../assets/images/direction.png')}
-                style={{
-                  tintColor: DISABLED_COLOR
-                }}
+                source={require('./../../assets/images/direction-icon-ss.png')}
               />
             </TouchableOpacity>
           </View>
         </View>
-        {this.renderFavoriteButton()}
+        {this.renderFavoriteButton(disabled)}
       </TouchableOpacity>
     );
   }
