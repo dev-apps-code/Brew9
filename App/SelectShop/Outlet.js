@@ -714,7 +714,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: DEFAULT_BORDER_RADIUS,
     marginBottom: alpha * 2,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#00B2E3'
   },
   areaText: {
