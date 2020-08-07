@@ -81,7 +81,7 @@ export default class ShopDetails extends Component {
 
   getStatusText = (status, isOpened) => {
     if (status === 'in_operation') {
-      return isOpened ? 'Open' : 'Closed';
+      return isOpened ? 'Order Now' : 'View More';
     }
     return this.props.responses.get(status);
   };
