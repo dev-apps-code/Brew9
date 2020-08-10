@@ -13,7 +13,7 @@ import React from 'react';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { toLower } from 'lodash';
 import { alpha, fontAlpha, windowWidth } from '../Common/size';
 import ShopList from '../Components/ShopList';
@@ -411,6 +411,7 @@ export default class Outlet extends React.Component {
       return (
         <Animated.View style={styles.mapView}>
           <MapView
+            provider={PROVIDER_GOOGLE}
             style={styles.map}
             region={{
               latitude: latitude,
@@ -714,7 +715,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: DEFAULT_BORDER_RADIUS,
     marginBottom: alpha * 2,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
     borderColor: '#00B2E3'
   },
   areaText: {
