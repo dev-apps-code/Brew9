@@ -5,7 +5,8 @@ import {
   View,
   Text,
   Image,
-  Linking
+  Linking,
+  Platform
 } from 'react-native';
 import { connect } from 'react-redux';
 import {
@@ -58,8 +59,15 @@ export default class ShopDetails extends Component {
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
+    const url = Platform.select({
+      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+    })
 
-    openMap({ query: location });
+
+    Linking.openURL(url);
+   
+
   }
 
   renderAvailablity = (availability) => {
