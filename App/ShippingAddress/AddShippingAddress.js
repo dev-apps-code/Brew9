@@ -1,11 +1,3 @@
-//
-//  MemberVoucher
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   Text,
@@ -15,41 +7,29 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  AsyncStorage,
   Dimensions,
   Animated,
   SafeAreaView
 } from 'react-native';
 import React from 'react';
+import Toast from 'react-native-easy-toast';
+import SwitchSelector from 'react-native-switch-selector';
+import { connect } from 'react-redux';
+
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { createAction } from '../Utils';
-import { connect } from 'react-redux';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
 import UpdateShippingAddressObjectRequest from '../Requests/update_shipping_address_request_object';
 import ShopTownRequestObject from '../Requests/shop_town_request_object';
-import CurrentStatusRequestObject from '../Requests/current_status_request_object';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import { KURL_INFO } from '../Utils/server';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
-  DISABLED_COLOR,
-  commonStyles,
-  TOAST_DURATION,
   LIGHT_GREY,
   BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
-import { getMemberIdForApi } from '../Services/members_helper';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
-import SwitchSelector from 'react-native-switch-selector';
+import ShippingDetail from './ShippingDetail';
 
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
@@ -169,7 +149,6 @@ export default class AddShippingAddress extends React.Component {
         chosenTown: 0,
         chosenArea: 0,
         isSaveDisabled: false
-
       };
     }
   }
@@ -183,6 +162,7 @@ export default class AddShippingAddress extends React.Component {
       useNativeDriver: true
     }).start();
   };
+
   handleClose = () => {
     Animated.timing(this.state.animation, {
       toValue: 0,
@@ -232,6 +212,7 @@ export default class AddShippingAddress extends React.Component {
   onChangeName = (fullname) => {
     this.setState({ fullname });
   };
+
   onChangeContactNo = (contact_number) => {
     this.setState({ contact_number });
   };
@@ -239,7 +220,7 @@ export default class AddShippingAddress extends React.Component {
   onSavePressed = () => {
     this.setState({
       isSaveDisabled: true
-    })
+    });
     let formcheck = this.checkForm();
     let primary = this.state.primary == 1 ? true : false;
     if (formcheck) {
@@ -263,13 +244,14 @@ export default class AddShippingAddress extends React.Component {
       this.loadUpdateProfile(shippingAddress);
     }
   };
+
   loadUpdateProfile(formData) {
     const { dispatch, currentMember, navigation } = this.props;
     isInitialAddress = this.props.navigation.state.params.initialAddress;
     const callback = (eventObject) => {
       this.setState({
         isSaveDisabled: false
-      })
+      });
       if (eventObject.success) {
         isInitialAddress
           ? navigation.navigate('Checkout')
@@ -304,6 +286,7 @@ export default class AddShippingAddress extends React.Component {
       );
     }
   }
+
   checkForm = () => {
     let {
       fullname,
@@ -344,6 +327,7 @@ export default class AddShippingAddress extends React.Component {
     this.loadTag();
     this.loadShopTown();
   }
+
   loadShopTown = () => {
     let { dispatch, selectedShop } = this.props;
     this.setState({ loading: true });
@@ -364,6 +348,7 @@ export default class AddShippingAddress extends React.Component {
       })
     );
   };
+
   defaultTown = () => {
     this.setState({
       populateTowns: true,
@@ -393,6 +378,7 @@ export default class AddShippingAddress extends React.Component {
       delivery_area: info.area
     });
   }
+
   returnAddress(info) {
     const latitude = this.props.location
       ? this.props.location.coords.latitude
@@ -415,9 +401,11 @@ export default class AddShippingAddress extends React.Component {
   onBackPressed = () => {
     this.props.navigation.goBack();
   };
+
   onChangeDefaultAddress = (value) => {
     this.setState({ primary: value });
   };
+
   onSelectShippingArea = () => {
     const { navigate } = this.props.navigation;
     navigate('ShippingArea', {
@@ -425,6 +413,7 @@ export default class AddShippingAddress extends React.Component {
       returnData: this.returnData.bind(this)
     });
   };
+
   onSelectAddress = () => {
     const { navigate } = this.props.navigation;
     let { address, address_details, delivery_area } = this.state;
@@ -439,6 +428,7 @@ export default class AddShippingAddress extends React.Component {
       this.refs.toast.show('Please select your area first', 500);
     }
   };
+
   onSelectTag = (item) => {
     const tag = this.state.tag;
     let selectedTag = tag.map((tag) => {
@@ -451,6 +441,7 @@ export default class AddShippingAddress extends React.Component {
     });
     this.setState({ tag: selectedTag, land_mark: item.name });
   };
+
   renderFormDetail = (
     title,
     value,
@@ -458,58 +449,22 @@ export default class AddShippingAddress extends React.Component {
     onChangeText,
     edit,
     selected,
-    onPress
-  ) => {
-    let current_value = value == '' ? false : true;
-    return (
-      <View>
-        <View style={styles.formDetail}>
-          <Text style={styles.title}>{title}</Text>
-          {!selected ? (
-            edit ? (
-              <TextInput
-                defaultValue={value}
-                keyboardType="default"
-                clearButtonMode="always"
-                autoCorrect={false}
-                placeholder={placeholder}
-                onChangeText={(text) => onChangeText(text)}
-                value={value}
-                style={styles.textInput}
-                editable={edit}
-              />
-            ) : (
-              <Text>{current_value}</Text>
-            )
-          ) : (
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-                marginRight: 10 * alpha,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onPress={onPress}
-            >
-              {current_value ? (
-                <Text style={[styles.textInput]}>{value}</Text>
-              ) : (
-                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
-                  {placeholder}
-                </Text>
-              )}
-              <Image
-                source={require('./../../assets/images/next.png')}
-                style={styles.menuRowArrowImage}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={styles.sectionSeperatorView2} />
-      </View>
-    );
-  };
+    onPress,
+    keyboardType
+  ) => (
+    <ShippingDetail
+      {...{
+        title,
+        value,
+        placeholder,
+        onChangeText,
+        edit,
+        selected,
+        onPress,
+        keyboardType
+      }}
+    />
+  );
 
   renderAddressForm = () => {
     let { address, address_details } = this.state;
@@ -571,9 +526,9 @@ export default class AddShippingAddress extends React.Component {
       </View>
     );
   };
-  renderPlaces = (item) => {
-    let button_selected = item.selected ? PRIMARY_COLOR : 'lightgray';
-    let text_selected = item.selected ? 'white' : 'black';
+  renderPlaces = ({ item, index }) => {
+    const button_selected = item.selected ? PRIMARY_COLOR : 'lightgray';
+    const text_selected = item.selected ? 'white' : 'black';
     return (
       <TouchableOpacity
         style={[styles.tagButton, { backgroundColor: button_selected }]}
@@ -585,16 +540,16 @@ export default class AddShippingAddress extends React.Component {
       </TouchableOpacity>
     );
   };
-  renderTag = () => {
+  renderTags = () => {
     return (
       <View>
         <View style={[styles.formDetail]}>
           <Text style={styles.title}>{'Tag'}</Text>
           <View style={styles.placesWrapperView}>
             <FlatList
-              renderItem={({ item }) => this.renderPlaces(item)}
+              renderItem={this.renderPlaces}
               data={this.state.tag}
-              keyExtractor={(item, index) => item.name}
+              keyExtractor={(item, index) => `${item.name}`}
               numColumns={3}
             />
           </View>
@@ -690,7 +645,7 @@ export default class AddShippingAddress extends React.Component {
                 {this.state.populateTowns
                   ? this.state.town.map((item, key) => {
                       return (
-                        <View style={styles.itemView}>
+                        <View {...{ key }} style={styles.itemView}>
                           <TouchableOpacity
                             onPress={() => this.selectTown(key)}
                           >
@@ -741,13 +696,18 @@ export default class AddShippingAddress extends React.Component {
               (text) => this.onChangeName(text),
               true
             )}
+
             {this.renderFormDetail(
               'Receiver No.',
               contact_number,
               '8851234',
               (text) => this.onChangeContactNo(text),
-              true
+              true,
+              false,
+              () => {},
+              'number-pad'
             )}
+
             {this.renderFormDetail(
               'Area',
               current_area,
@@ -757,8 +717,10 @@ export default class AddShippingAddress extends React.Component {
               true,
               () => this.handleOpen()
             )}
+
             {this.renderAddressForm()}
-            {this.renderTag()}
+
+            {this.renderTags()}
 
             <View style={[styles.defaultAddressView]}>
               <Text style={[styles.title, { width: 100 * alpha }]}>
