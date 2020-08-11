@@ -613,7 +613,7 @@ export default class PickUp extends React.Component {
                 </View>
                 <View style={styles.directionView}>
                   <TouchableOpacity
-                    onPress={() => this.onPressDirection(item.shop)}
+                    onPress={() => this.onPressDirection()}
                     style={styles.directionIconButton}
                   >
                     <Image
@@ -811,10 +811,11 @@ export default class PickUp extends React.Component {
   };
 
 
-  onPressDirection(shop) {
-    console.log(shop)
-    let lat = shop.latitude
-    let long = shop.longitude
+  onPressDirection() {
+    let {selectedShop} = this.props
+
+    let lat = selectedShop.latitude
+    let long = selectedShop.longitude
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
