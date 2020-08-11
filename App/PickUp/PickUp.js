@@ -17,7 +17,8 @@ import {
   RefreshControl,
   AppState,
   Modal,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Platform
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowWidth, windowHeight } from '../Common/size';
@@ -612,8 +613,7 @@ export default class PickUp extends React.Component {
                 </View>
                 <View style={styles.directionView}>
                   <TouchableOpacity
-                    // onPress={() => this.onDirectionPressed(item.shop)}
-                    onPress={() => this.onLocationButtonPressed()}
+                    onPress={() => this.onPressDirection(item.shop)}
                     style={styles.directionIconButton}
                   >
                     <Image
@@ -810,29 +810,24 @@ export default class PickUp extends React.Component {
     navigate('Home');
   };
 
-  onDirectionPressed(shop) {
-    let latitudes = shop.latitude
-      ? shop.latitude
-      : this.props.selectedShop.latitude;
-    let longitudes = shop.latitude
-      ? shop.longitude
-      : this.props.selectedShop.longitude;
-    let latitude = latitudes ? parseFloat(latitudes) : 0.0;
-    let longitude = longitudes ? parseFloat(longitudes) : 0.0;
-    openMap({
-      latitude: latitude,
-      longitude: longitude,
-      zoom: 18,
-      query: shop.name
-    });
-  }
-  onLocationButtonPressed = () => {
-    const { navigate } = this.props.navigation;
 
-    navigate('DirectionMap', {
-      shop: this.props.selectedShop
-    });
-  };
+  onPressDirection(shop) {
+    console.log(shop)
+    let lat = shop.latitude
+    let long = shop.longitude
+    let latitude = lat ? parseFloat(lat) : 4.8886091;
+    let longitude = long ? parseFloat(long) : 114.8976136;
+    let location = latitude + ',' + longitude;
+    const url = Platform.select({
+      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+    })
+
+
+    Linking.openURL(url);
+   
+
+  }
 
   closePopUp = () => {
     const { dispatch } = this.props;
