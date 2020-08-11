@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingRight: 10,
     marginBottom: alpha * 3,
-    marginTop: alpha * 6,
+    marginTop: alpha * 3,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
