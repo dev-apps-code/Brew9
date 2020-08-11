@@ -18,7 +18,6 @@ import {
   DISABLED_COLOR
 } from '../Common/common_style';
 import { alpha, fontAlpha } from '../Common/size';
-import openMap from 'react-native-open-maps';
 
 @connect(({ members, shops, config }) => ({
   currentUser: members.profile,
@@ -45,7 +44,7 @@ export default class ShopDetails extends Component {
           style={styles.favoriteButton}
           {...{ disabled }}
         >
-          <Image source={likeImage} style={styles.favoriteImage} />
+          <Image resizeMode="contain" source={likeImage} />
         </TouchableOpacity>
       );
     }
@@ -60,14 +59,13 @@ export default class ShopDetails extends Component {
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
     const url = Platform.select({
-      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      ios:
+        'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
+        location,
       android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
-    })
-
+    });
 
     Linking.openURL(url);
-   
-
   }
 
   renderAvailablity = (availability) => {
@@ -142,7 +140,7 @@ export default class ShopDetails extends Component {
               {details.short_address}
             </Text>
           </View>
-          <View style={styles.detailTextContainer}>
+          <View style={[styles.detailTextContainer, { marginTop: 0 }]}>
             <Image
               source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
@@ -211,9 +209,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   orderNowView: {
-    flex: 2,
+    flex: 1.5,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
     // backgroundColor: 'red'
   },
   detailView: {
@@ -222,15 +220,17 @@ const styles = StyleSheet.create({
   detailTextContainer: {
     flexDirection: 'row',
     paddingRight: 10,
-    height: alpha * 30,
+    marginBottom: alpha * 3,
+    marginTop: alpha * 6,
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    marginBottom: alpha * 5
   },
   orderButton: {
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
     // backgroundColor: 'blue'
   },
   favoriteButton: {
@@ -292,9 +292,5 @@ const styles = StyleSheet.create({
     width: 10 * alpha,
     height: 10 * alpha,
     marginRight: alpha * 8
-  },
-  favoriteImage: {
-    width: 13 * alpha,
-    height: 11 * alpha
   }
 });

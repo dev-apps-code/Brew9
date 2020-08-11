@@ -581,11 +581,13 @@ Outlet.navigationOptions = {
     activeTintColor: TINT_COLOR,
     inactiveTintColor: TABBAR_INACTIVE_TINT,
     style: {
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      padding: 0
     },
     labelStyle: {
-      fontSize: 14 * fontAlpha,
-      fontFamily: TITLE_FONT
+      fontSize: 16 * fontAlpha,
+      fontFamily: TITLE_FONT,
+      margin:0
     },
     tabStyle: TAB_STYLE,
     indicatorStyle: {
