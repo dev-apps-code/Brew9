@@ -12,11 +12,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const renderItem = (item, index, { onPressFavourite, onPressOrderNow }) => (
+const renderItem = (item, index, { onPressFavourite, onPressOrderNow, locationPermissionStatus }) => (
   <ShopDetails
     details={item}
     index={index}
     key={index}
+    locationPermission={locationPermissionStatus}
     onPressFavourite={onPressFavourite}
     onPressOrderNow={onPressOrderNow}
   />

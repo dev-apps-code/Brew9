@@ -102,14 +102,15 @@ export default class FirstScreen extends React.Component {
     const storLocSettings = await AsyncStorage.getItem('permission_location');
     const permLocSettings = await Permissions.askAsync(Permissions.LOCATION);
 
+
     const params = {
       isPermPopupVisible: true,
       permPopupTitle: 'Location permissions required.',
       permPopupDesc:
         'To get full features of the app, you need to allow location permissions.',
       permType: 'location',
-      permOkText: 'App Settings',
-      permCancelText: "Don't ask"
+      permOkText: 'Ok',
+      permCancelText: "Next Time"
     };
 
     if (

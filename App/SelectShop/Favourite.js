@@ -18,9 +18,10 @@ import {
 } from '../Requests/favorite_shops_request_object';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
 
-@connect(({ members, shops, orders }) => ({
+@connect(({ members, shops, orders, config }) => ({
   token: members.userAuthToken,
-  favoriteShops: shops.favoriteShops
+  favoriteShops: shops.favoriteShops,
+  responses: config.responses
 }))
 export default class Favourite extends React.Component {
   constructor(props) {
@@ -109,12 +110,13 @@ export default class Favourite extends React.Component {
   };
 
   render() {
-    const { favoriteShops, token } = this.props;
+    const { favoriteShops, token, responses } = this.props;
+    let needLoginText = responses.get('Favourite Login Required') || 'Login to view your favourite shops.';
     return (
       <View style={styles.mainView}>
         {token === '' ? (
           <Text style={styles.needLoginText}>
-            Login to view your favourite shops.
+            {needLoginText}
           </Text>
         ) : (
           <ShopList
@@ -135,13 +137,18 @@ Favourite.navigationOptions = {
     activeTintColor: TINT_COLOR,
     inactiveTintColor: TABBAR_INACTIVE_TINT,
     style: {
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      padding: 0,
+      height: 30 * alpha,
     },
     labelStyle: {
-      fontSize: 16 * fontAlpha,
+      fontSize: 17 * fontAlpha,
       fontFamily: TITLE_FONT,
-      margin:0
-
+      paddingTop: 3 * alpha,
+      height: 20 * alpha,
+      justifyContent: 'center',
+      alignItems: 'center',
+      // backgroundColor: 'yellow'
     },
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
