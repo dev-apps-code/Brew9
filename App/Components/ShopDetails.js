@@ -45,7 +45,7 @@ export default class ShopDetails extends Component {
           style={styles.favoriteButton}
           {...{ disabled }}
         >
-          <Image source={likeImage} style={styles.favoriteImage} />
+          <Image source={likeImage}/>
         </TouchableOpacity>
       );
     }
@@ -142,7 +142,7 @@ export default class ShopDetails extends Component {
               {details.short_address}
             </Text>
           </View>
-          <View style={styles.detailTextContainer}>
+          <View style={{...styles.detailTextContainer,...{alignItems: 'center'}}}>
             <Image
               source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   orderNowView: {
-    flex: 2,
+    flex: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: 'red'
@@ -222,9 +222,10 @@ const styles = StyleSheet.create({
   detailTextContainer: {
     flexDirection: 'row',
     paddingRight: 10,
-    height: alpha * 30,
-    alignItems: 'center',
-    justifyContent: 'flex-start'
+    marginBottom: alpha * 3,
+    marginTop: alpha * 6,
+    justifyContent: 'flex-start',
+    marginBottom: alpha * 5
   },
   orderButton: {
     width: '100%',
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     right: 0,
     bottom: 0,
-    zIndex: 1
+    zIndex: 1,
   },
   accessButton: {
     flex: 1,
@@ -293,8 +294,4 @@ const styles = StyleSheet.create({
     height: 10 * alpha,
     marginRight: alpha * 8
   },
-  favoriteImage: {
-    width: 13 * alpha,
-    height: 11 * alpha
-  }
 });

@@ -25,7 +25,9 @@ export const TAB_STYLE =
         height: alpha * 5,
         marginBottom: alpha * 4
       }
-    : {};
+    : {
+      height: 29,
+    };
 
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {

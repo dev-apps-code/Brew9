@@ -65,6 +65,7 @@ export function headerStyle(navigation) {
     headerStyle: {
       elevation: 0,
       shadowOpacity: 0,
+      borderBottomWidth: 0,
       // height: alpha * 
     }
   };

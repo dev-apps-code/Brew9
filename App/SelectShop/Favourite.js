@@ -138,8 +138,10 @@ Favourite.navigationOptions = {
       backgroundColor: 'white'
     },
     labelStyle: {
-      fontSize: 14 * fontAlpha,
-      fontFamily: TITLE_FONT
+      fontSize: 16 * fontAlpha,
+      fontFamily: TITLE_FONT,
+      margin:0
+
     },
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
