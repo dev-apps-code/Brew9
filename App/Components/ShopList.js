@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { LIGHT_GREY_BACKGROUND } from '../Common/common_style';
 import { alpha } from '../Common/size';
 import ShopDetails from './ShopDetails';
@@ -23,10 +23,19 @@ const renderItem = (item, index, { onPressFavourite, onPressOrderNow }) => (
 );
 
 const ShopList = (props) => {
-  const { shops, onRefresh, refreshing } = props;
+  const { shops, onRefresh, refreshing, hasSearched } = props;
   return (
     <View style={styles.mainView}>
       <View style={styles.shopDetailView}>
+        {hasSearched && shops.length === 0 && (
+          <Text
+            style={{
+              color: 'rgb(54, 54, 54)'
+            }}
+          >
+            No results found.
+          </Text>
+        )}
         <FlatList
           data={shops}
           extraData={props}

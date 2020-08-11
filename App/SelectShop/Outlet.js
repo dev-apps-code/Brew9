@@ -70,7 +70,8 @@ export default class Outlet extends React.Component {
     selectedDistrict: null,
     showAreaView: false,
     showMap: true,
-    selectedShop: null
+    selectedShop: null,
+    hasSearched: false
   });
 
   componentDidMount() {
@@ -297,7 +298,11 @@ export default class Outlet extends React.Component {
         toLower(district).includes(str)
     );
 
-    this.setState({ isSearching: true, searchResults: shops });
+    this.setState({
+      isSearching: true,
+      hasSearched: true,
+      searchResults: shops
+    });
   };
 
   onPressCancel = () => {
@@ -306,6 +311,7 @@ export default class Outlet extends React.Component {
     this.resetSearchFieldWidth();
     this.setState({
       isSearching: false,
+      hasSearched: false,
       searchResults: []
     });
   };
@@ -317,7 +323,7 @@ export default class Outlet extends React.Component {
       easing: Easing.linear
     }).start();
 
-    this.setState({ isSearching: true }, animation);
+    this.setState({ isSearching: true, hasSearched: false }, animation);
   };
 
   resetSearchFieldWidth = () => {
@@ -502,9 +508,14 @@ export default class Outlet extends React.Component {
 
   getShopsList = () => {
     const { allShops, nearbyShops } = this.props;
-    const { displayShopList, isSearching, searchResults } = this.state;
+    const {
+      displayShopList,
+      isSearching,
+      hasSearched,
+      searchResults
+    } = this.state;
 
-    if (isSearching) return searchResults;
+    if (isSearching && hasSearched) return searchResults;
     if (displayShopList.length > 0) return displayShopList;
     if (nearbyShops.length > 0) return nearbyShops;
     return allShops;
@@ -512,7 +523,7 @@ export default class Outlet extends React.Component {
 
   render() {
     const shops = this.moveSelectionToTop(this.getShopsList());
-
+    const { isSearching, hasSearched } = this.state;
     return (
       <View style={styles.mainView}>
         <View style={styles.subHeaderView}>
@@ -539,7 +550,7 @@ export default class Outlet extends React.Component {
           />
         </TouchableOpacity>
         <ShopList
-          shops={shops}
+          {...{ shops, isSearching, hasSearched }}
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
           onRefresh={() => this.loadAllShops()}

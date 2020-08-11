@@ -34,7 +34,8 @@ import {
   TABBAR_ACTIVE_TINT,
   PRIMARY_COLOR,
   LIGHT_BLUE,
-  HEADER_NO_BACK
+  HEADER_NO_BACK,
+  DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
 import Moment from 'moment';
 import NotificationsRequestObject from '../Requests/notifications_request_object';
@@ -45,6 +46,7 @@ import _ from 'lodash';
 import { getMemberIdForApi } from '../Services/members_helper';
 import AnimationLoading from '../Components/AnimationLoading';
 import HudLoading from '../Components/HudLoading';
+import CurveSeparator from '../Components/CurveSeparator';
 @connect(({ members, shops, config }) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -58,11 +60,7 @@ import HudLoading from '../Components/HudLoading';
 export default class PickUp extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: (
-        <Text style={HEADER_NO_BACK}>
-          Your Order
-        </Text>
-      ),
+      headerTitle: <Text style={HEADER_NO_BACK}>Your Order</Text>,
       headerTintColor: 'black',
       headerLeft: null,
       headerRight: null
@@ -209,17 +207,7 @@ export default class PickUp extends React.Component {
     }
   }
 
-  renderSeparator = () => {
-    return (
-      <View style={styles.receiptSectionSeperator}>
-        <Image
-          source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curveSeparator}
-        />
-        <View style={styles.sectionSeperatorView} />
-      </View>
-    );
-  };
+  renderSeparator = () => <CurveSeparator />;
 
   renderQueueView(current_order) {
     // create key value map for response messages
@@ -1100,7 +1088,7 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   pickUpMainView: {
-    backgroundColor: 'rgb(239, 239, 239)',
+    backgroundColor: DEFAULT_GREY_BACKGROUND,
     flex: 1
   },
   orderView: {
@@ -1221,7 +1209,8 @@ const styles = StyleSheet.create({
   },
 
   pickUpQueueView: {
-    backgroundColor: 'rgb(239, 239, 239)',
+    // backgroundColor: 'rgb(239, 239, 239)',
+    // backgroundColor: DEFAULT_GREY_BACKGROUND,
     flex: 1
   },
   customerServiceButton: {
@@ -1537,7 +1526,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    marginTop: 2 * alpha,
     marginBottom: 10 * alpha
   },
   branchDirectionView: {
