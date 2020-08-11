@@ -33,7 +33,8 @@ import _ from 'lodash';
 import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import MapView from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
   TITLE_FONT,
@@ -43,7 +44,8 @@ import {
   PRIMARY_COLOR,
   RED,
   LIGHT_BLUE_BACKGROUND,
-  TOAST_DURATION
+  TOAST_DURATION,
+  DEFAULT_BORDER_RADIUS
 } from '../Common/common_style';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
@@ -1903,6 +1905,7 @@ export default class Home extends React.Component {
         {isToggleShopLocation && (
           <View style={styles.showLocationView}>
             <MapView
+              provider={PROVIDER_GOOGLE}
               style={styles.mapImage}
               initialRegion={{
                 latitude: shop ? parseFloat(shop.latitude) : 0.0,
@@ -1916,7 +1919,7 @@ export default class Home extends React.Component {
                 this.marker.showCallout()
               }
             >
-              <MapView.Marker
+              {/* <MapView.Marker
                 ref={(marker) => (this.marker = marker)}
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
@@ -1924,7 +1927,23 @@ export default class Home extends React.Component {
                 }}
                 title="Brew9"
                 description={shop.location}
-              />
+              /> */}
+              <Marker
+                coordinate={{
+                  latitude: shop ? parseFloat(shop.latitude) : 0.0,
+                  longitude: shop ? parseFloat(shop.longitude) : 0.0
+                }}
+                style={{ alignItems: 'center' }}
+              >
+                <View style={styles.areaBubble}>
+                  <Text style={styles.areaText}>{shop.name}</Text>
+                </View>
+                <Image
+                  source={require('./../../assets/images/location.png')}
+                  style={styles.pinImage}
+                  resizeMode="contain"
+                />
+              </Marker>
             </MapView>
             <ScrollView
               contentContainerStyle={{
@@ -3477,5 +3496,22 @@ const styles = StyleSheet.create({
   selectShopButton: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  areaBubble: {
+    backgroundColor: 'white',
+    borderRadius: DEFAULT_BORDER_RADIUS,
+    marginBottom: alpha * 2,
+    borderWidth: 1,
+    borderColor: '#00B2E3'
+  },
+  areaText: {
+    fontFamily: TITLE_FONT,
+    fontSize: fontAlpha * 14,
+    margin: alpha * 5
+  },
+  pinImage: {
+    width: 20 * alpha,
+    height: 20 * alpha,
+    tintColor: '#00B2E3'
   }
 });

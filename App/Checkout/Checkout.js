@@ -7,7 +7,8 @@ import {
   Text,
   ScrollView,
   Linking,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
@@ -317,13 +318,31 @@ export default class Checkout extends React.Component {
 
   onBranchButtonPressed = () => {};
 
-  onLocationButtonPressed = () => {
-    const { navigate } = this.props.navigation;
+  // onLocationButtonPressed = () => {
+  //   const { navigate } = this.props.navigation;
 
-    navigate('DirectionMap', {
-      shop: this.props.selectedShop
-    });
-  };
+  //   navigate('DirectionMap', {
+  //     shop: this.props.selectedShop
+  //   });
+  // };
+
+  onPressDirection(shop) {
+    console.log(shop)
+    let lat = shop.latitude
+    let long = shop.longitude
+    let latitude = lat ? parseFloat(lat) : 4.8886091;
+    let longitude = long ? parseFloat(long) : 114.8976136;
+    let location = latitude + ',' + longitude;
+    const url = Platform.select({
+      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+    })
+
+
+    Linking.openURL(url);
+   
+
+  }
 
   onDeliveryButtonPressed = () => {
     this.setState({
@@ -1085,12 +1104,7 @@ export default class Checkout extends React.Component {
     });
   };
 
-  onDirectionPressed(shop) {
-    let latitude = shop ? parseFloat(shop.latitude) : 0.0;
-    let longitude = shop ? parseFloat(shop.longitude) : 0.0;
 
-    openMap({ latitude: latitude, longitude: longitude, zoom: 18 });
-  }
 
   onCallPressed = (phone_no) => {
     Linking.openURL(`tel:${phone_no}`);
@@ -2124,8 +2138,8 @@ export default class Checkout extends React.Component {
                     </View>
                     <View style={styles.directionView}>
                       <TouchableOpacity
-                        // onPress={() => this.onDirectionPressed(selectedShop)}
-                        onPress={() => this.onLocationButtonPressed()}
+                        onPress={() => this.onPressDirection(selectedShop)}
+                        // onPress={() => this.onLocationButtonPressed()}
                         style={styles.directionIconButton}
                       >
                         <Image
