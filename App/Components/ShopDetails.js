@@ -45,7 +45,11 @@ export default class ShopDetails extends Component {
           style={styles.favoriteButton}
           {...{ disabled }}
         >
-          <Image source={likeImage}/>
+          <Image 
+          resizeMode="contain"
+          source={likeImage}
+          />
+          
         </TouchableOpacity>
       );
     }
