@@ -7,11 +7,13 @@ export default class CurveSeparator extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
+        {/* <Image
           source={require('./../../assets/images/curve_in_background.png')}
           style={styles.separatorImage}
-        />
+        /> */}
         <View style={styles.line} />
+        <View style={styles.left} />
+        <View style={styles.right} />
       </View>
     );
   }
@@ -22,9 +24,11 @@ const TINT_COLOR = 'rgb(245, 245, 245)';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative',
+    height: 14 * alpha,
     alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor: DEFAULT_GREY_BACKGROUND
+    backgroundColor: 'rgb(245, 245, 245)'
   },
   separatorImage: {
     tintColor: TINT_COLOR,
@@ -37,6 +41,22 @@ const styles = StyleSheet.create({
     backgroundColor: DEFAULT_GREY_BACKGROUND,
     height: 1 * alpha,
     position: 'absolute',
-    width: 300 * alpha,
+    width: 300 * alpha
+  },
+  left: {
+    width: 14 * alpha,
+    height: 14 * alpha,
+    backgroundColor: DEFAULT_GREY_BACKGROUND,
+    position: 'absolute',
+    left: -7 * alpha,
+    borderRadius: 7 * alpha
+  },
+  right: {
+    width: 14 * alpha,
+    height: 14 * alpha,
+    backgroundColor: DEFAULT_GREY_BACKGROUND,
+    position: 'absolute',
+    right: -7 * alpha,
+    borderRadius: 7 * alpha
   }
 });
