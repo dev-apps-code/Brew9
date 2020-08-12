@@ -1748,6 +1748,7 @@ export default class Home extends React.Component {
                 {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
 							style={styles.branchButton}> */}
+
                 <TouchableOpacity
                   onPress={this._onShopNamePressed}
                   style={styles.selectShopButton}
@@ -1804,14 +1805,18 @@ export default class Home extends React.Component {
                 justifyContent: 'space-between'
               }}
             >
+              <TouchableOpacity
+                  onPress={this._onShopNamePressed}
+              >
               <Text
                 style={[
                   styles.distance1kmText,
-                  { color: 'rgb(130, 130, 130)', marginTop: -7 }
+                  { color: 'rgb(130, 130, 130)', marginTop: -10 }
                 ]}
               >
                 Change Location
               </Text>
+              </TouchableOpacity>
               <View style={{ flexDirection: 'row' }}>
                 <View style={styles.moreView}>
                   <TouchableOpacity

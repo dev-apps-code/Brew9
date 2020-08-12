@@ -71,7 +71,8 @@ export default class Outlet extends React.Component {
     showAreaView: false,
     showMap: true,
     selectedShop: null,
-    hasSearched: false
+    hasSearched: false,
+    locationPermissionStatus: false,
   });
 
   componentDidMount() {
@@ -128,7 +129,7 @@ export default class Outlet extends React.Component {
 
     const { status } = await Permissions.getAsync(Permissions.LOCATION);
     if (latitude !== null && longitude !== null && status === 'granted') {
-      this.setState({ isLoading: true });
+      this.setState({ isLoading: true, locationPermissionStatus: true });
 
       // now load nearby shops
       dispatch(
@@ -138,6 +139,7 @@ export default class Outlet extends React.Component {
         })
       );
     } else {
+      this.setState({ locationPermissionStatus: false });
       dispatch(createAction('shops/clearNearbyShops')());
     }
   }
@@ -489,6 +491,7 @@ export default class Outlet extends React.Component {
               placeholderTextColor={DISABLED_COLOR}
               underlineColorAndroid="transparent"
               autoCapitalize="none"
+              style={styles.searchFieldInput}
             />
           </View>
         </View>
@@ -523,7 +526,7 @@ export default class Outlet extends React.Component {
 
   render() {
     const shops = this.moveSelectionToTop(this.getShopsList());
-    const { isSearching, hasSearched } = this.state;
+    const { isSearching, hasSearched, locationPermissionStatus } = this.state;
     return (
       <View style={styles.mainView}>
         <View style={styles.subHeaderView}>
@@ -550,7 +553,7 @@ export default class Outlet extends React.Component {
           />
         </TouchableOpacity>
         <ShopList
-          {...{ shops, isSearching, hasSearched }}
+          {...{ shops, isSearching, hasSearched, locationPermissionStatus }}
           onPressFavourite={this.onPressFavourite}
           onPressOrderNow={this.onPressOrderNow}
           onRefresh={() => this.loadAllShops()}
@@ -582,12 +585,17 @@ Outlet.navigationOptions = {
     inactiveTintColor: TABBAR_INACTIVE_TINT,
     style: {
       backgroundColor: 'white',
-      padding: 0
+      padding: 0,
+      height: 30 * alpha,
     },
     labelStyle: {
-      fontSize: 16 * fontAlpha,
+      fontSize: 17 * fontAlpha,
       fontFamily: TITLE_FONT,
-      margin:0
+      paddingTop: 3 * alpha,
+      height: 20 * alpha,
+      justifyContent: 'center',
+      alignItems: 'center',
+      // backgroundColor: 'yellow'
     },
     tabStyle: TAB_STYLE,
     indicatorStyle: {
@@ -626,7 +634,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: alpha * 6,
-    height: alpha * 33,
+    height: alpha * 28,
     position: 'relative',
     right: 0
   },
@@ -635,11 +643,15 @@ const styles = StyleSheet.create({
     borderRadius: alpha * 21,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: alpha * 6,
-    height: alpha * 33,
+    paddingHorizontal: alpha * 8,
+    height: alpha * 28,
     position: 'absolute',
     left: 0,
     right: 0
+  },
+  searchFieldInput: {
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
   },
   cancelSearchContainer: {
     borderRadius: alpha * 21,
@@ -712,7 +724,7 @@ const styles = StyleSheet.create({
   //txt
   filterAreaText: {
     marginRight: alpha * 7,
-    fontSize: fontAlpha * 12,
+    fontSize: fontAlpha * 13,
     fontFamily: TITLE_FONT,
     color: '#363636',
     flexWrap: 'wrap'

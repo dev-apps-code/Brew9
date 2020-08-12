@@ -15,7 +15,7 @@ const URL = async () => {
     server = selectedServerUrl || DEFAULT_SERVER;
   }
 
-  console.log('server ', server);
+  // console.log('server ', server);
   let protocol =
     (await AsyncStorage.getItem('selected_server_protocol')) ||
     DEFAULT_PROTOCOL;
@@ -88,7 +88,7 @@ async function initialize_server() {
 export async function loadServer() {
   await initialize_server();
   const url = await KURL_INFO();
-  console.log('url ', url);
+  // console.log('url ', url);
   KURL_TERMS_OF_SERVICE = `${url}?page=terms_conditions&id=f1`;
   KURL_PRIVACY_POLICY = `${url}?page=privacy&id=1`;
   KURL_EULA = `${url}?page=eula&id=1`;

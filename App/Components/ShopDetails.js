@@ -68,11 +68,11 @@ export default class ShopDetails extends Component {
     Linking.openURL(url);
   }
 
-  renderAvailablity = (availability) => {
-    const backgroundColor = availability ? '#00B2E3' : DISABLED_COLOR;
+  renderAvailablity = (availability, status) => {
+    const backgroundColor = availability && status === 'in_operation' ? '#00B2E3' : DISABLED_COLOR;
     const viewStyle = {
       ...styles.availabilityView,
-      ...{ backgroundColor, borderColor: backgroundColor }
+      ...{ backgroundColor, borderColor: backgroundColor, marginTop: 10 * alpha }
     };
     const textStyle = {
       ...styles.availabilityText,
@@ -80,20 +80,22 @@ export default class ShopDetails extends Component {
     };
     return (
       <View style={viewStyle}>
-        <Text style={textStyle}>{availability ? 'Open' : 'Closed'}</Text>
+        <Text style={textStyle}>{availability && status === 'in_operation' ? 'Open' : 'Closed'}</Text>
       </View>
     );
   };
 
   getStatusText = (status, isOpened) => {
     if (status === 'in_operation') {
-      return isOpened ? 'Order Now' : 'View More';
+      let orderNowText = this.props.responses.get('Order Now Button') || 'Order Now'
+      let viewMoreText = this.props.responses.get('View More Button') || 'View More'
+      return isOpened ? orderNowText : viewMoreText;
     }
     return this.props.responses.get(status);
   };
 
   render() {
-    const { details, onPressOrderNow, shop } = this.props;
+    const { details, onPressOrderNow, shop, locationPermission } = this.props;
     const itemStyle = shop && shop.id === details.id ? styles.highlighted : {};
     const minutes = Math.round(details.minute_drive);
     const { start_time, end_time } = details?.opening_hour || {
@@ -101,6 +103,12 @@ export default class ShopDetails extends Component {
       end_time: null
     };
     let hoursText = null;
+    let serviceInfoText = "";
+    serviceInfoText += details.delivery_option == true ? "Delivery" : "No Delivery"
+    serviceInfoText += locationPermission == true ? " | " + details.kilometer_distance + ' km ' + minutes : ""
+    if (locationPermission == true) {
+      serviceInfoText += minutes != null && minutes > 0 ? " mins" : " min"
+    }
 
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
@@ -120,15 +128,11 @@ export default class ShopDetails extends Component {
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
             <Text style={styles.shopName}>{details.name}</Text>
-            {this.renderAvailablity(details.open)}
+            {this.renderAvailablity(details.open, status)}
           </View>
           <View style={styles.detailView}>
             <Text style={styles.serviceInfoDetails}>
-              {'Delivery | ' +
-                details.kilometer_distance +
-                ' km ' +
-                minutes +
-                ' mins'}
+              {serviceInfoText}
             </Text>
           </View>
           <View style={styles.detailTextContainer}>
@@ -140,7 +144,7 @@ export default class ShopDetails extends Component {
               {details.short_address}
             </Text>
           </View>
-          <View style={[styles.detailTextContainer, { marginTop: 0 }]}>
+          <View style={[styles.detailTextContainer, { marginTop: 0, marginBottom: 10 * alpha }]}>
             <Image
               source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
@@ -187,12 +191,14 @@ const styles = StyleSheet.create({
     borderColor: '#00B2E3'
   },
   shopDetailView: {
-    height: alpha * 130,
+    height: alpha * 115,
     backgroundColor: 'white',
     marginBottom: alpha * 10,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    padding: alpha * 10,
+    // paddingTop: alpha * 10,
+    paddingLeft: alpha * 10,
+    paddingRight: alpha * 10,
     borderRadius: DEFAULT_BORDER_RADIUS
   },
   availabilityView: {
@@ -209,10 +215,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   orderNowView: {
+    // backgroundColor: 'red',
     flex: 1.5,
     alignItems: 'center',
-    justifyContent: 'center'
-    // backgroundColor: 'red'
+    justifyContent: 'center',
+    // paddingBottom: 10 * alpha,
   },
   detailView: {
     flexDirection: 'row'
@@ -221,17 +228,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingRight: 10,
     marginBottom: alpha * 3,
-    marginTop: alpha * 6,
+    marginTop: alpha * 3,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: alpha * 5
   },
   orderButton: {
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center'
-    // backgroundColor: 'blue'
+    justifyContent: 'center',
   },
   favoriteButton: {
     height: alpha * 30,
@@ -261,12 +266,12 @@ const styles = StyleSheet.create({
   shopName: {
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
+    fontSize: 14 * fontAlpha,
     marginRight: 10 * alpha,
-    marginTop: 2 * alpha
+    marginTop: 12 * alpha
   },
   serviceInfoDetails: {
-    fontSize: 10 * fontAlpha,
+    fontSize: 12 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     marginBottom: 10 * alpha,
     marginTop: 4 * alpha,

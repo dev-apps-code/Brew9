@@ -327,7 +327,7 @@ export default class Checkout extends React.Component {
   // };
 
   onPressDirection(shop) {
-    console.log(shop)
+    // console.log(shop)
     let lat = shop.latitude
     let long = shop.longitude
     let latitude = lat ? parseFloat(lat) : 4.8886091;
