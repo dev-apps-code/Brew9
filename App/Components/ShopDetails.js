@@ -104,15 +104,12 @@ export default class ShopDetails extends Component {
     };
     let hoursText = null;
     let serviceInfoText = "";
-    if (details.delivery_option == true) {
-      serviceInfoText += "Delivery"
-    } else {
-      serviceInfoText += "No Delivery"
-    }
+    serviceInfoText += details.delivery_option == true ? "Delivery" : "No Delivery"
+    serviceInfoText += locationPermission == true ? " | " + details.kilometer_distance + ' km ' + minutes : ""
     if (locationPermission == true) {
-      serviceInfoText += " | " + details.kilometer_distance + ' km ' + minutes + ' mins'
+      serviceInfoText += minutes != null && minutes > 0 ? " mins" : " min"
     }
-    console.log("Shop Detail", shop)
+
     if (start_time && end_time) {
       hoursText = `${start_time} - ${end_time}`;
     }
