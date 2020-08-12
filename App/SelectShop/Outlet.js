@@ -650,7 +650,8 @@ const styles = StyleSheet.create({
     right: 0
   },
   searchFieldInput: {
-    fontFamily: NON_TITLE_FONT
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
   },
   cancelSearchContainer: {
     borderRadius: alpha * 21,

@@ -72,7 +72,7 @@ export default class ShopDetails extends Component {
     const backgroundColor = availability && status === 'in_operation' ? '#00B2E3' : DISABLED_COLOR;
     const viewStyle = {
       ...styles.availabilityView,
-      ...{ backgroundColor, borderColor: backgroundColor }
+      ...{ backgroundColor, borderColor: backgroundColor, marginTop: 10 * alpha }
     };
     const textStyle = {
       ...styles.availabilityText,
@@ -106,12 +106,11 @@ export default class ShopDetails extends Component {
     let serviceInfoText = "";
     if (details.delivery_option == true) {
       serviceInfoText += "Delivery"
-    }
-    if (details.delivery_option == true && locationPermission == true) {
-      serviceInfoText += " | "
+    } else {
+      serviceInfoText += "No Delivery"
     }
     if (locationPermission == true) {
-      serviceInfoText += details.kilometer_distance + ' km ' + minutes + ' mins'
+      serviceInfoText += " | " + details.kilometer_distance + ' km ' + minutes + ' mins'
     }
     console.log("Shop Detail", shop)
     if (start_time && end_time) {
@@ -148,7 +147,7 @@ export default class ShopDetails extends Component {
               {details.short_address}
             </Text>
           </View>
-          <View style={[styles.detailTextContainer, { marginTop: 0 }]}>
+          <View style={[styles.detailTextContainer, { marginTop: 0, marginBottom: 10 * alpha }]}>
             <Image
               source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
@@ -195,12 +194,12 @@ const styles = StyleSheet.create({
     borderColor: '#00B2E3'
   },
   shopDetailView: {
-    height: alpha * 110,
+    height: alpha * 115,
     backgroundColor: 'white',
     marginBottom: alpha * 10,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingTop: alpha * 10,
+    // paddingTop: alpha * 10,
     paddingLeft: alpha * 10,
     paddingRight: alpha * 10,
     borderRadius: DEFAULT_BORDER_RADIUS
@@ -219,10 +218,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   orderNowView: {
+    // backgroundColor: 'red',
     flex: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 10 * alpha,
+    // paddingBottom: 10 * alpha,
   },
   detailView: {
     flexDirection: 'row'
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     marginRight: 10 * alpha,
-    marginTop: 2 * alpha
+    marginTop: 12 * alpha
   },
   serviceInfoDetails: {
     fontSize: 12 * fontAlpha,
