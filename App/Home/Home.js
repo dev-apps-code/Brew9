@@ -1732,107 +1732,112 @@ export default class Home extends React.Component {
 
     return (
       <View style={styles.page1View}>
-        <View style={styles.topsectionView}>
-          <View
-            pointerEvents="box-none"
-            style={{
-              height: 31 * alpha,
-              marginLeft: 10 * alpha,
-              marginRight: 10 * alpha,
-              marginTop: 8 * alpha,
-              flexDirection: 'row'
-            }}
-          >
-            <View style={styles.branchView}>
-              {/* <TouchableOpacity
+        {shop !== null && (
+          <View style={styles.topsectionView}>
+            <View
+              pointerEvents="box-none"
+              style={{
+                height: 31 * alpha,
+                marginLeft: 10 * alpha,
+                marginRight: 10 * alpha,
+                marginTop: 8 * alpha,
+                flexDirection: 'row'
+              }}
+            >
+              <View style={styles.branchView}>
+                {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
 							style={styles.branchButton}> */}
-              <TouchableOpacity
-                onPress={this._onShopNamePressed}
-                style={styles.selectShopButton}
-              >
-                <Text style={styles.branchButtonText}>
-                  {shop ? shop.name : ''}
-                </Text>
-                <Image
-                  source={require('./../../assets/images/next.png')}
-                  style={[styles.rightArrowImage, { tintColor: PRIMARY_COLOR }]}
-                />
-              </TouchableOpacity>
-
-              {/* </TouchableOpacity> */}
-            </View>
-
-            <View style={{ flex: 1 }} />
-            <View style={styles.pickUpDeliveryView}>
-              {shop && (
-                <SwitchSelector
-                  ref="toggle"
-                  options={[
-                    { label: 'Pick Up', value: 0 },
-                    { label: 'Delivery', value: 1 }
-                  ]}
-                  initial={this.state.delivery}
-                  value={this.state.delivery}
-                  textColor={'#4E4D4D'}
-                  selectedColor={'#FFFFFF'}
-                  buttonColor={'#2A2929'}
-                  borderColor={'#979797'}
-                  backgroundColor={'rgb(240,240,240)'}
-                  style={styles.pickUpDeliveryViewTemp}
-                  textStyle={styles.optionText}
-                  fontSize={10 * alpha}
-                  height={32 * alpha}
-                  onPress={(value) => this._toggleDelivery(value)}
-                />
-              )}
-            </View>
-          </View>
-          <View
-            pointerEvents="box-none"
-            style={{
-              height: 14 * alpha,
-              marginLeft: 10 * alpha,
-              marginRight: 19 * alpha,
-              marginTop: 7 * alpha,
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              justifyContent: 'space-between'
-            }}
-          >
-            <Text
-              style={[
-                styles.distance1kmText,
-                { color: 'rgb(130, 130, 130)', marginTop: -7 }
-              ]}
-            >
-              Change Location
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={styles.moreView}>
                 <TouchableOpacity
-                  onPress={this.onMorePressed}
-                  style={styles.moreButton}
+                  onPress={this._onShopNamePressed}
+                  style={styles.selectShopButton}
                 >
-                  <Text style={styles.distance1kmText}>
-                    {isToggleShopLocation ? 'Hide' : 'Store Info'}
+                  <Text style={styles.branchButtonText}>
+                    {shop ? shop.name : ''}
                   </Text>
-                </TouchableOpacity>
-                {isToggleShopLocation ? (
                   <Image
-                    source={require('./../../assets/images/bitmap-15.png')}
-                    style={styles.bitmapImage}
+                    source={require('./../../assets/images/next.png')}
+                    style={[
+                      styles.rightArrowImage,
+                      { tintColor: PRIMARY_COLOR }
+                    ]}
                   />
-                ) : (
-                  <Image
-                    source={require('./../../assets/images/bitmap-14.png')}
-                    style={styles.bitmapImage}
+                </TouchableOpacity>
+
+                {/* </TouchableOpacity> */}
+              </View>
+
+              <View style={{ flex: 1 }} />
+              <View style={styles.pickUpDeliveryView}>
+                {shop && (
+                  <SwitchSelector
+                    ref="toggle"
+                    options={[
+                      { label: 'Pick Up', value: 0 },
+                      { label: 'Delivery', value: 1 }
+                    ]}
+                    initial={this.state.delivery}
+                    value={this.state.delivery}
+                    textColor={'#4E4D4D'}
+                    selectedColor={'#FFFFFF'}
+                    buttonColor={'#2A2929'}
+                    borderColor={'#979797'}
+                    backgroundColor={'rgb(240,240,240)'}
+                    style={styles.pickUpDeliveryViewTemp}
+                    textStyle={styles.optionText}
+                    fontSize={10 * alpha}
+                    height={32 * alpha}
+                    onPress={(value) => this._toggleDelivery(value)}
                   />
                 )}
               </View>
             </View>
+            <View
+              pointerEvents="box-none"
+              style={{
+                height: 14 * alpha,
+                marginLeft: 10 * alpha,
+                marginRight: 19 * alpha,
+                marginTop: 7 * alpha,
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Text
+                style={[
+                  styles.distance1kmText,
+                  { color: 'rgb(130, 130, 130)', marginTop: -7 }
+                ]}
+              >
+                Change Location
+              </Text>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.moreView}>
+                  <TouchableOpacity
+                    onPress={this.onMorePressed}
+                    style={styles.moreButton}
+                  >
+                    <Text style={styles.distance1kmText}>
+                      {isToggleShopLocation ? 'Hide' : 'Store Info'}
+                    </Text>
+                  </TouchableOpacity>
+                  {isToggleShopLocation ? (
+                    <Image
+                      source={require('./../../assets/images/bitmap-15.png')}
+                      style={styles.bitmapImage}
+                    />
+                  ) : (
+                    <Image
+                      source={require('./../../assets/images/bitmap-14.png')}
+                      style={styles.bitmapImage}
+                    />
+                  )}
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
+        )}
         {this.renderPromotionTopBar()}
         {this.state.loading ? (
           <AnimationLoading />
