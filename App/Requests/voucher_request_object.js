@@ -22,7 +22,7 @@ class VoucherRequestObject extends BaseRequestObject {
   }
 
   getUrlString() {
-    return `members/${this.url_id}/vouchers/${this.shop_id}`;
+    return `members/${this.url_id}/vouchers`;
   }
 }
 export default VoucherRequestObject;

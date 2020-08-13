@@ -134,7 +134,7 @@ export default class CheckoutVoucher extends React.Component {
   }
 
   loadUsedVoucher(page_no) {
-    const { dispatch, currentMember } = this.props;
+    const { dispatch, currentMember, selectedShop } = this.props;
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState(
