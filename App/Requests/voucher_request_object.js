@@ -1,26 +1,28 @@
-import BaseRequestObject from "./base_request_object";
+import BaseRequestObject from './base_request_object';
 
-class VoucherRequestObject extends BaseRequestObject{
+class VoucherRequestObject extends BaseRequestObject {
+  constructor() {
+    super();
+  }
 
-    constructor(){
-        super();
-    }
+  setUrlId(url_id) {
+    this.url_id = url_id;
+  }
 
-    setUrlId(url_id){
-        this.url_id = url_id
-    }
+  setPage(page) {
+    this.page_no = page;
+  }
 
-    setPage(page) {
-        this.page_no = page
-    }
+  setStatus(status) {
+    this.status = status;
+  }
 
-    setStatus(status) {
-        this.status = status
-    }
+  setShopId(shop_id) {
+    this.shop_id = shop_id;
+  }
 
-    getUrlString() {
-        return `members/${this.url_id}/vouchers`
-    }
-
+  getUrlString() {
+    return `members/${this.url_id}/vouchers/${this.shop_id}`;
+  }
 }
-export default VoucherRequestObject
+export default VoucherRequestObject;
