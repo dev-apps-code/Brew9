@@ -322,6 +322,7 @@ export default class CheckoutVoucher extends React.Component {
           description={item.voucher.description}
           used_date={item.used_date}
           expiry_date={item.expiry_date}
+          item={item}
         />
       );
     }
