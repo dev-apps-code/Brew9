@@ -1,19 +1,10 @@
-//
-//  MemberVoucher
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   Image,
-  TouchableOpacity,
-  ActivityIndicator
+  TouchableOpacity
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha } from '../Common/size';
@@ -100,7 +91,7 @@ export default class MemberVoucher extends React.Component {
   }
 
   loadValidVoucher(page_no) {
-    const { dispatch, members } = this.props;
+    const { dispatch, members, selectedShop } = this.props;
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState(
@@ -134,7 +125,7 @@ export default class MemberVoucher extends React.Component {
   }
 
   loadUsedVoucher(page_no) {
-    const { dispatch, members } = this.props;
+    const { dispatch, members, selectedShop } = this.props;
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState(
@@ -168,7 +159,7 @@ export default class MemberVoucher extends React.Component {
   }
 
   loadExpiredVoucher(page_no) {
-    const { dispatch, members } = this.props;
+    const { dispatch, members, selectedShop } = this.props;
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState(
