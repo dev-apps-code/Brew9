@@ -769,7 +769,7 @@ export default class Profile extends React.Component {
             <View style={styles.membersectionView}>
               <View style={styles.topbackgroundView}>
                 <Image
-                  source={require('./../../assets/images/profile_top_banner.png')}
+                  source={require('./../../assets/images/B9_APP_Profile.png')}
                   style={styles.group133Image}
                 />
               </View>
