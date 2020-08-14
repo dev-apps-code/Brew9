@@ -69,26 +69,28 @@ export default class ShopDetails extends Component {
   }
 
   renderAvailablity = (availability, status) => {
-    const backgroundColor = availability && status === 'in_operation' ? '#00B2E3' : DISABLED_COLOR;
-    const viewStyle = {
-      ...styles.availabilityView,
-      ...{ backgroundColor, borderColor: backgroundColor, marginTop: 10 * alpha }
-    };
-    const textStyle = {
-      ...styles.availabilityText,
-      ...{ color: 'white' }
-    };
+    const backgroundColor =
+      availability && status === 'in_operation' ? '#00B2E3' : DISABLED_COLOR;
+    const viewStyle = [
+      styles.availabilityView,
+      { backgroundColor, borderColor: backgroundColor, marginTop: 10 * alpha }
+    ];
+    const textStyle = [styles.availabilityText, { color: 'white' }];
     return (
       <View style={viewStyle}>
-        <Text style={textStyle}>{availability && status === 'in_operation' ? 'Open' : 'Closed'}</Text>
+        <Text style={textStyle}>
+          {availability && status === 'in_operation' ? 'Open' : 'Closed'}
+        </Text>
       </View>
     );
   };
 
   getStatusText = (status, isOpened) => {
     if (status === 'in_operation') {
-      let orderNowText = this.props.responses.get('Order Now Button') || 'Order Now'
-      let viewMoreText = this.props.responses.get('View More Button') || 'View More'
+      let orderNowText =
+        this.props.responses.get('Order Now Button') || 'Order Now';
+      let viewMoreText =
+        this.props.responses.get('View More Button') || 'View More';
       return isOpened ? orderNowText : viewMoreText;
     }
     return this.props.responses.get(status);
@@ -103,11 +105,15 @@ export default class ShopDetails extends Component {
       end_time: null
     };
     let hoursText = null;
-    let serviceInfoText = "";
-    serviceInfoText += details.delivery_option == true ? "Delivery" : "No Delivery"
-    serviceInfoText += locationPermission == true ? " | " + details.kilometer_distance + ' km ' + minutes : ""
+    let serviceInfoText = '';
+    serviceInfoText +=
+      details.delivery_option == true ? 'Delivery' : 'No Delivery';
+    serviceInfoText +=
+      locationPermission == true
+        ? ' | ' + details.kilometer_distance + ' km ' + minutes
+        : '';
     if (locationPermission == true) {
-      serviceInfoText += minutes != null && minutes > 0 ? " mins" : " min"
+      serviceInfoText += minutes != null && minutes > 0 ? ' mins' : ' min';
     }
 
     if (start_time && end_time) {
@@ -131,9 +137,7 @@ export default class ShopDetails extends Component {
             {this.renderAvailablity(details.open, status)}
           </View>
           <View style={styles.detailView}>
-            <Text style={styles.serviceInfoDetails}>
-              {serviceInfoText}
-            </Text>
+            <Text style={styles.serviceInfoDetails}>{serviceInfoText}</Text>
           </View>
           <View style={styles.detailTextContainer}>
             <Image
@@ -144,7 +148,12 @@ export default class ShopDetails extends Component {
               {details.short_address}
             </Text>
           </View>
-          <View style={[styles.detailTextContainer, { marginTop: 0, marginBottom: 10 * alpha }]}>
+          <View
+            style={[
+              styles.detailTextContainer,
+              { marginTop: 0, marginBottom: 10 * alpha }
+            ]}
+          >
             <Image
               source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
@@ -218,11 +227,12 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     flex: 1.5,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
     // paddingBottom: 10 * alpha,
   },
   detailView: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   detailTextContainer: {
     flexDirection: 'row',
@@ -230,13 +240,13 @@ const styles = StyleSheet.create({
     marginBottom: alpha * 3,
     marginTop: alpha * 3,
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   orderButton: {
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   favoriteButton: {
     height: alpha * 30,

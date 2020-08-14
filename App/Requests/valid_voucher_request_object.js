@@ -1,27 +1,30 @@
-import BaseRequestObject from "./base_request_object";
+import BaseRequestObject from './base_request_object';
 
-class ValidVouchersRequestObject extends BaseRequestObject{
-    
-    constructor(shop_id,order_items, promotions, order_id){
-        super();
-        this.shop_id = shop_id
-        this.order_items = order_items
-        this.promotions = promotions
-        this.order_id = order_id
-    }
+class ValidVouchersRequestObject extends BaseRequestObject {
+  constructor(shop_id, order_items, promotions, order_id) {
+    super();
+    this.shop_id = shop_id;
+    this.order_items = order_items;
+    this.promotions = promotions;
+    this.order_id = order_id;
+  }
 
+  getUrlString() {
+    return `members/${this.url_id}/valid_vouchers`;
+  }
 
-   getUrlString() {
-       return `members/${this.url_id}/valid_vouchers`
-   }
+  getFormData() {
+    var string = JSON.stringify({
+      order_items: this.order_items,
+      promotions: this.promotions,
+      order_id: this.order_id,
+      shop_id: this.shop_id
+    });
 
-   getFormData(){
-    var string =  JSON.stringify({'order_items': this.order_items, 'promotions': this.promotions, 'order_id': this.order_id});
-
-    return string
-   }
+    return string;
+  }
 }
-export default ValidVouchersRequestObject
+export default ValidVouchersRequestObject;
 
 /* ---- SERVICES ----- 
 
@@ -34,8 +37,6 @@ export function validVouchers(authtoken,object) {
 
 
  -------------- */
-
-
 
 /* ---- MODEL ----- 
 
@@ -59,10 +60,6 @@ export function validVouchers(authtoken,object) {
 
 
  -------------- */
-
-
-
-
 
 /* **** ---- VIEW FUNCTIONS START HERE ----- **** 
 
@@ -132,4 +129,3 @@ loadValidVouchers(){
 }
 
  -------------- */
-

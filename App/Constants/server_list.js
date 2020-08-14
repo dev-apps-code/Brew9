@@ -15,7 +15,7 @@ const SERVERS = [
   'dev10.brew9.co/'
 ];
 const PRODUCTION_SERVER = 'app.brew9.co/';
-const DEVELOPMENT_SERVER = 'dev.brew9.co/';
+const DEVELOPMENT_SERVER = 'dev7.brew9.co/';
 const DEFAULT_SERVER = DEVELOP_MODE ? DEVELOPMENT_SERVER : PRODUCTION_SERVER;
 const PROTOCOLS = ['https://'];
 const DEFAULT_PROTOCOL = 'https://';
