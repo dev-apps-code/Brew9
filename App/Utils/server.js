@@ -32,8 +32,8 @@ export var KURL_EULA = '';
 export var KURL_MEMBERSHIP_INFO = '';
 
 export var KCURRENT_API_VERSION_HEADER = 'application/dc.v7 gzip';
-export var APPBUILDVERSIONIOS = '30';
-export var APPBUILDVERSIONANDROID = '30';
+export var APPBUILDVERSIONIOS = '31';
+export var APPBUILDVERSIONANDROID = '31';
 
 export const KTIMEOUT = 3 * 1000;
 
