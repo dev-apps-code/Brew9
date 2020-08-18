@@ -20,6 +20,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import Brew9PopUp from "../Components/Brew9PopUp"
 import _ from 'lodash';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, config, shops }) => ({
 	selectedTab: config.selectedTab,
@@ -828,7 +829,7 @@ export default class Profile extends React.Component {
 				{this.renderRedeemVoucher()}
 
 			</ScrollView>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<Brew9Toast ref="toast" />
 			{/* {this.state.loading ? <HudLoading isLoading={this.state.loading} /> : undefined} */}
 
 		</View>

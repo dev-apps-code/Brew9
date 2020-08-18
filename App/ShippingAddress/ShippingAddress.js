@@ -42,6 +42,7 @@ import Moment from 'moment';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
 import { getMemberIdForApi } from '../Services/members_helper';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
   currentMember: members.profile,
@@ -174,8 +175,7 @@ export default class ShippingAddress extends React.Component {
   };
   loadUpdateProfile(formData, address_id) {
     const { dispatch, currentMember, navigation } = this.props;
-    const callback = (eventObject) => {
-    };
+    const callback = (eventObject) => {};
 
     const obj = new UpdateShippingAddressObjectRequest(
       formData,
@@ -314,11 +314,7 @@ export default class ShippingAddress extends React.Component {
             this.renderEmpty()
           )}
 
-          <Toast
-            ref="toast"
-            style={{ bottom: windowHeight / 2 - 40 }}
-            textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-          />
+          <Brew9Toast ref="toast" />
         </View>
       );
     }

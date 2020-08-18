@@ -16,7 +16,7 @@ import MakeOrderReviewObj from "../Requests/make_order_review_request_object"
 import { createAction, Storage } from "../Utils"
 import { connect } from "react-redux";
 import Toast, { DURATION } from 'react-native-easy-toast'
-
+import Brew9Toast from '../Components/Brew9Toast';
 
 
 @connect(({ shops }) => ({
@@ -409,7 +409,8 @@ export default class OrderReview extends React.Component {
 				onPress={showComment ? this.onSubmitReview : console.log('undefined')}>
 				<Text style={styles.submitText}>SUBMIT</Text>
 			</TouchableOpacity>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<Brew9Toast ref="toast" />
+
 		</View>
 	}
 }
