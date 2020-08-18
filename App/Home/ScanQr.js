@@ -9,15 +9,18 @@ import {
 import React from 'react';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import QrCodeScanRequestObject from '../Requests/qr_code_scan_request_object'
-import ScanStatusRequestObject from '../Requests/scan_status_request_object.js'
+import Toast from 'react-native-easy-toast';
+import QrCodeScanRequestObject from '../Requests/qr_code_scan_request_object';
+import ScanStatusRequestObject from '../Requests/scan_status_request_object.js';
 
-import { connect } from 'react-redux'
-import { createAction, dispatch } from '../Utils/index'
-import HudLoading from "../Components/HudLoading"
-import Toast, {DURATION} from 'react-native-easy-toast'
-import { TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
-import Brew9Toast from '../Components/Brew9Toast';
+import { connect } from 'react-redux';
+import { createAction } from '../Utils/index';
+import HudLoading from '../Components/HudLoading';
+import {
+  TITLE_FONT,
+  NON_TITLE_FONT,
+  TOAST_DURATION
+} from '../Common/common_style';
 import { alpha, fontAlpha, windowHeight } from '../Common/size';
 
 @connect(({ members, shops }) => ({
@@ -166,7 +169,6 @@ export default class ScanQr extends React.Component {
         </View>
       );
     }
-
     if (hasCameraPermission === false) {
       return (
         <View style={styles.qrView}>
@@ -174,7 +176,6 @@ export default class ScanQr extends React.Component {
         </View>
       );
     }
-
     if (currentMember === null) {
       return (
         <View style={styles.qrView}>
@@ -184,7 +185,6 @@ export default class ScanQr extends React.Component {
         </View>
       );
     }
-
     return (
       <View
         style={{
