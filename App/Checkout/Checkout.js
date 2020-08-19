@@ -4169,7 +4169,7 @@ const styles = StyleSheet.create({
   paymentOptionsListView: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   sectionRowView: {
@@ -4184,23 +4184,26 @@ const styles = StyleSheet.create({
   paymentWalletIcon: {
     height: alpha * 25,
     width: alpha * 25,
-    tintColor: 'rgb(186, 183, 183)'
+    tintColor: 'rgb(186, 183, 183)',
+    marginRight: alpha * 10
   },
   paymentCardIcon: {
     height: alpha * 23,
     width: alpha * 23,
-    tintColor: 'rgb(186, 183, 183)'
+    tintColor: 'rgb(186, 183, 183)',
+    marginRight: alpha * 10
   },
   paymentCashIcon: {
     height: alpha * 19,
     width: alpha * 19,
-    tintColor: 'rgb(186, 183, 183)'
+    tintColor: 'rgb(186, 183, 183)',
+    marginRight: alpha * 10
   },
 
   paymentOptionText: {
     fontSize: fontAlpha * 14,
     fontFamily: NON_TITLE_FONT,
-    color: '#363636'
+    color: '#363636',
   },
 
   selectBox: {
@@ -4210,7 +4213,9 @@ const styles = StyleSheet.create({
     borderColor: '#BAB7B7',
     borderStyle: 'solid',
     width: 16 * alpha,
-    height: 16 * alpha
+    height: 16 * alpha,
+    position:'absolute',
+    right: alpha * 10
   },
 
   creditsText: {
