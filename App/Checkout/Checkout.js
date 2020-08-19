@@ -2014,6 +2014,20 @@ export default class Checkout extends React.Component {
         <View style={styles.selectBox} />
       );
 
+    let cardSelectBox =
+      selected_payment == 'credit_card' ? (
+        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+      ) : (
+        <View style={styles.selectBox} />
+      );
+
+    let counterSelectBox =
+      selected_payment == 'counter' ? (
+        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+      ) : (
+        <View style={styles.selectBox} />
+      );
+
     return (
       <View style={styles.paymentOptionsView}>
         <TouchableOpacity
@@ -2030,7 +2044,33 @@ export default class Checkout extends React.Component {
           </View>
           {walletSelectBox}
         </TouchableOpacity>
-        <View style={styles.paymentOptionsListView}></View>
+        <TouchableOpacity
+          onPress={() => this.onCreditButtonPressed()}
+          style={styles.paymentOptionsListView}
+        >
+          <Image
+            source={require('./../../assets/images/credit_card.png')}
+            style={styles.paymentIcons}
+          />
+          <Text style={styles.paymentOptionText}>Credit Card</Text>
+          <Image
+            source={require('./../../assets/images/cc.png')}
+            style={styles.cc}
+          />
+          <Image
+            source={require('./../../assets/images/visa.png')}
+            style={styles.visa}
+          />
+          <Image
+            source={require('./../../assets/images/union.png')}
+            style={styles.union}
+          />
+          <Image
+            source={require('./../../assets/images/dc.png')}
+            style={styles.dc}
+          />
+          {cardSelectBox}
+        </TouchableOpacity>
         <View style={styles.paymentOptionsListView}></View>
       </View>
     );
@@ -4097,8 +4137,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   paymentOptionsView: {
-    // borderColor: 'red',
-    borderWidth: 1,
     height: alpha * 120,
     flex: 1,
     paddingHorizontal: alpha * 17
@@ -4106,9 +4144,7 @@ const styles = StyleSheet.create({
   paymentOptionsListView: {
     flex: 1,
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: 'red',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   sectionRowView: {
@@ -4145,5 +4181,23 @@ const styles = StyleSheet.create({
     fontSize: fontAlpha * 14,
     fontFamily: NON_TITLE_FONT,
     color: '#ED6E69'
+  },
+  
+  cc: {
+    height: alpha * 23,
+    width: alpha * 35
+  },
+  visa: {
+    height: alpha * 32,
+    width: alpha * 32
+  },
+  union: {
+    height: alpha * 25,
+    width: alpha * 25
+  },
+  dc: {
+    height: alpha * 25,
+    width: alpha * 25
   }
+
 });
