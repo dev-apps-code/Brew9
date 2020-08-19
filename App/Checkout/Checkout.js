@@ -1600,14 +1600,7 @@ export default class Checkout extends React.Component {
         >
           <View
             pointerEvents="box-none"
-            style={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              backgroundColor: 'transparent',
-              flex: 1,
-              flexDirection: 'row',
-              height: alpha * 30
-            }}
+            style={styles.sectionRowView}
           >
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
@@ -1657,14 +1650,7 @@ export default class Checkout extends React.Component {
           style={styles.voucherButton}
         >
           <View
-            style={{
-              backgroundColor: 'transparent',
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              height: alpha * 30
-            }}
+            style={styles.sectionRowView}
           >
             <View
               style={{
@@ -1679,30 +1665,6 @@ export default class Checkout extends React.Component {
                 ]}
               />
               <Text style={[styles.productNameText]}>Payment</Text>
-            </View>
-            {/* <View style={styles.spacer} /> */}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Text style={[styles.productVoucherText]}>
-                {this.state.selected_payment == ''
-                  ? 'Please select'
-                  : this.state.selected_payment == 'credits'
-                  ? `Wallet ${this.props.members.currency}${credits}`
-                  : this.state.selected_payment == 'counter'
-                  ? delivery
-                    ? 'Cash On Delivery'
-                    : 'Pay In Store'
-                  : 'Credit Card'}
-              </Text>
-              <Image
-                source={require('./../../assets/images/next.png')}
-                style={[styles.menuRowArrowImage]}
-              />
             </View>
           </View>
         </TouchableOpacity>
@@ -1730,14 +1692,7 @@ export default class Checkout extends React.Component {
         >
           <View
             pointerEvents="box-none"
-            style={{
-              justifyContent: 'space-between',
-              backgroundColor: 'transparent',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: alpha * 30
-            }}
+            style={styles.sectionRowView}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View
@@ -4131,5 +4086,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: alpha * 90,
     flex:1
+  },
+
+  sectionRowView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: alpha * 30
   }
 });
