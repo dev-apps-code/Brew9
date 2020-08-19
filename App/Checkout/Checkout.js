@@ -2028,6 +2028,21 @@ export default class Checkout extends React.Component {
         <View style={styles.selectBox} />
       );
 
+    let walletIconStyle =
+      selected_payment == 'credits'
+        ? [styles.paymentWalletIcon, { tintColor: PRIMARY_COLOR }]
+        : styles.paymentWalletIcon;
+
+    let cardIconStyle =
+      selected_payment == 'credit_card'
+        ? [styles.paymentCardIcon, { tintColor: PRIMARY_COLOR }]
+        : styles.paymentCardIcon;
+
+    let cashIconStyle =
+      selected_payment == 'counter'
+        ? [styles.paymentCashIcon, { tintColor: PRIMARY_COLOR }]
+        : styles.paymentCashIcon;
+
     return (
       <View style={styles.paymentOptionsView}>
         <TouchableOpacity
@@ -2036,7 +2051,7 @@ export default class Checkout extends React.Component {
         >
           <Image
             source={require('./../../assets/images/wallet_center.png')}
-            style={styles.paymentWalletIcon}
+            style={walletIconStyle}
           />
           <View>
             <Text style={styles.paymentOptionText}>Wallet</Text>
@@ -2050,7 +2065,7 @@ export default class Checkout extends React.Component {
         >
           <Image
             source={require('./../../assets/images/credit_card.png')}
-            style={styles.paymentCardIcon}
+            style={cardIconStyle}
           />
           <Text style={styles.paymentOptionText}>Credit Card</Text>
           <Image
@@ -2072,12 +2087,12 @@ export default class Checkout extends React.Component {
           {cardSelectBox}
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => this.onWalletButtonPressed()}
+          onPress={() => this.onCounterButtonPressed()}
           style={styles.paymentOptionsListView}
         >
           <Image
             source={require('./../../assets/images/cash.png')}
-            style={styles.paymentCashIcon}
+            style={cashIconStyle}
           />
           <Text style={styles.paymentOptionText}>{cashPayment}</Text>
           {counterSelectBox}
@@ -4168,15 +4183,18 @@ const styles = StyleSheet.create({
 
   paymentWalletIcon: {
     height: alpha * 25,
-    width: alpha * 25
+    width: alpha * 25,
+    tintColor: 'rgb(186, 183, 183)'
   },
   paymentCardIcon: {
     height: alpha * 23,
-    width: alpha * 23
+    width: alpha * 23,
+    tintColor: 'rgb(186, 183, 183)'
   },
   paymentCashIcon: {
     height: alpha * 19,
-    width: alpha * 19
+    width: alpha * 19,
+    tintColor: 'rgb(186, 183, 183)'
   },
 
   paymentOptionText: {
