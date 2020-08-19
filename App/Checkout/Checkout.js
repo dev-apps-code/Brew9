@@ -328,20 +328,19 @@ export default class Checkout extends React.Component {
 
   onPressDirection(shop) {
     // console.log(shop)
-    let lat = shop.latitude
-    let long = shop.longitude
+    let lat = shop.latitude;
+    let long = shop.longitude;
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
     const url = Platform.select({
-      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      ios:
+        'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
+        location,
       android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
-    })
-
+    });
 
     Linking.openURL(url);
-   
-
   }
 
   onDeliveryButtonPressed = () => {
@@ -1104,8 +1103,6 @@ export default class Checkout extends React.Component {
     });
   };
 
-
-
   onCallPressed = (phone_no) => {
     Linking.openURL(`tel:${phone_no}`);
   };
@@ -1588,57 +1585,54 @@ export default class Checkout extends React.Component {
       if (o.is_valid == true) return o;
     }).length;
     return (
-      <View style={styles.drinksViewWrapper}>
-        <View style={styles.orderitemsView}>
-          <TouchableOpacity
-            onPress={
-              this.state.valid_vouchers != null &&
-              this.state.valid_vouchers.length > 0
-                ? () => this.onVoucherButtonPressed()
-                : () => null
-            }
-            style={styles.voucherButton}
-          >
-            <View style={styles.drinksView}>
+      <View style={styles.sectionView}>
+        <TouchableOpacity
+          onPress={
+            this.state.valid_vouchers != null &&
+            this.state.valid_vouchers.length > 0
+              ? () => this.onVoucherButtonPressed()
+              : () => null
+          }
+          style={styles.voucherButton}
+        >
+          <View style={styles.drinksView}>
+            <View
+              pointerEvents="box-none"
+              style={{
+                justifyContent: 'space-between',
+                backgroundColor: 'transparent',
+                flex: 1,
+                flexDirection: 'row'
+              }}
+            ></View>
+              <Text style={styles.productNameText}>Brew9 Vouchers</Text>
+              <View style={styles.spacer} />
               <View
-                pointerEvents="box-none"
                 style={{
-                  justifyContent: 'space-between',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row'
+                  flexDirection: 'row',
+                  alignItems: 'center'
                 }}
               >
-                <Text style={styles.productNameText}>Brew9 Vouchers</Text>
-                <View style={styles.spacer} />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
+                <Text
+                  style={
+                    this.state.valid_vouchers != null &&
+                    this.state.valid_vouchers.length > 0
+                      ? styles.productVoucherText
+                      : styles.productVoucherDisableText
+                  }
                 >
-                  <Text
-                    style={
-                      this.state.valid_vouchers != null &&
-                      this.state.valid_vouchers.length > 0
-                        ? styles.productVoucherText
-                        : styles.productVoucherDisableText
-                    }
-                  >
-                    {this.state.valid_vouchers != null
-                      ? valid_voucher_counts
-                      : '-'}{' '}
-                    usable
-                  </Text>
-                  <Image
-                    source={require('./../../assets/images/next.png')}
-                    style={styles.menuRowArrowImage}
-                  />
-                </View>
+                  {this.state.valid_vouchers != null
+                    ? valid_voucher_counts
+                    : '-'}{' '}
+                  usable
+                </Text>
+                <Image
+                  source={require('./../../assets/images/next.png')}
+                  style={styles.menuRowArrowImage}
+                />
               </View>
-            </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
         <View style={styles.orderitemsView}>{voucher_items}</View>
       </View>
     );
@@ -1654,7 +1648,7 @@ export default class Checkout extends React.Component {
         : 0;
 
     return (
-      <View style={styles.drinksViewWrapper}>
+      <View style={styles.sectionView}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
             // onPress={() => this.showDateTimePicker()}
@@ -1731,7 +1725,7 @@ export default class Checkout extends React.Component {
     var pick_up = delivery ? 'Delivery Time' : 'Pick Up Time';
     var formatted_time = this._getFormattedSchedule();
     return (
-      <View style={styles.drinksViewWrapper}>
+      <View style={styles.sectionView}>
         <View style={styles.orderitemsView}>
           <TouchableOpacity
             onPress={() => this.changeTimeSchedule()}
@@ -1865,7 +1859,7 @@ export default class Checkout extends React.Component {
     return (
       <View
         style={[
-          styles.drinksViewWrapper,
+          styles.sectionView,
           this.props.delivery && {
             paddingTop: 20
           }
@@ -1936,9 +1930,7 @@ export default class Checkout extends React.Component {
       return (
         <View>
           <CurveSeparator />
-          <View
-            style={[styles.drinksViewWrapper, { paddingBottom: 10 * alpha }]}
-          >
+          <View style={[styles.sectionView, { paddingBottom: 10 * alpha }]}>
             <View style={styles.orderitemsView}>{promotions_item}</View>
           </View>
         </View>
@@ -2163,8 +2155,10 @@ export default class Checkout extends React.Component {
               {this.renderPromotions(promotions)}
               <CurveSeparator />
               {this.renderVoucherSection(vouchers_to_use)}
-              {this.renderPaymentSection()}
+              <CurveSeparator />
               {this.renderPickupTime()}
+              <CurveSeparator />
+              {this.renderPaymentSection()}
               <CurveSeparator />
 
               {delivery
@@ -3549,10 +3543,10 @@ const styles = StyleSheet.create({
     marginBottom: 13
   },
   orderitemsView: {
-    backgroundColor: 'transparent',
-    marginLeft: 24 * alpha,
-    marginRight: 24 * alpha,
-    flex: 1
+    // backgroundColor: 'green',
+    // marginLeft: 24 * alpha,
+    // marginRight: 24 * alpha,
+    // flex: 1
   },
   itemView: {
     backgroundColor: 'transparent',
@@ -3658,9 +3652,12 @@ const styles = StyleSheet.create({
     textAlign: 'left'
   },
 
-  drinksViewWrapper: {
+  sectionView: {
     backgroundColor: 'rgb(245,245,245)',
-    flex: 1
+    flex: 1,
+    paddingHorizontal: 24 * alpha,
+    borderWidth: 1,
+    borderColor: 'red'
   },
   drinksView: {
     backgroundColor: 'transparent',
