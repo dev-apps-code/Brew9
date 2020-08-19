@@ -952,20 +952,20 @@ export default class Checkout extends React.Component {
     this.setState({
       selected_payment: 'credits'
     });
-    this.tooglePayment();
+    // this.tooglePayment();
   };
 
   onCreditButtonPressed = () => {
     this.setState({
       selected_payment: 'credit_card'
     });
-    this.tooglePayment();
+    // this.tooglePayment();
   };
   onCounterButtonPressed = () => {
     this.setState({
       selected_payment: 'counter'
     });
-    this.tooglePayment();
+    // this.tooglePayment();
   };
 
   clearCart = () => {
@@ -1598,10 +1598,7 @@ export default class Checkout extends React.Component {
           }
           style={styles.voucherButton}
         >
-          <View
-            pointerEvents="box-none"
-            style={styles.sectionRowView}
-          >
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
             <View
@@ -1649,9 +1646,7 @@ export default class Checkout extends React.Component {
           onPress={() => this.onPaymentButtonPressed()}
           style={styles.voucherButton}
         >
-          <View
-            style={styles.sectionRowView}
-          >
+          <View style={styles.sectionRowView}>
             <View
               style={{
                 flexDirection: 'row',
@@ -1690,10 +1685,7 @@ export default class Checkout extends React.Component {
           onPress={() => this.changeTimeSchedule()}
           style={styles.voucherButton}
         >
-          <View
-            pointerEvents="box-none"
-            style={styles.sectionRowView}
-          >
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View
                 style={
@@ -2006,8 +1998,40 @@ export default class Checkout extends React.Component {
   };
 
   renderPaymentOptions = () => {
+    const { currentMember, delivery } = this.props;
+    const { final_price, selected_payment } = this.state;
+    let cashPayment = delivery ? 'Cash On Delivery' : 'Pay In Store';
+    let credits =
+      currentMember != undefined
+        ? parseFloat(currentMember.credits).toFixed(2)
+        : 0;
+    var no_payment_needed = final_price <= 0 ? true : false;
+
+    let walletSelectBox =
+      selected_payment == 'credits' ? (
+        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+      ) : (
+        <View style={styles.selectBox} />
+      );
+
     return (
       <View style={styles.paymentOptionsView}>
+        <TouchableOpacity
+          onPress={() => this.onWalletButtonPressed()}
+          style={styles.paymentOptionsListView}
+        >
+          <Image
+            source={require('./../../assets/images/wallet_center.png')}
+            style={styles.paymentIcons}
+          />
+          <View>
+            <Text style={styles.paymentOptionText}>Wallet</Text>
+            <Text style={styles.creditsText}>${credits}</Text>
+          </View>
+          {walletSelectBox}
+        </TouchableOpacity>
+        <View style={styles.paymentOptionsListView}></View>
+        <View style={styles.paymentOptionsListView}></View>
       </View>
     );
   };
@@ -3106,7 +3130,7 @@ const styles = StyleSheet.create({
     marginRight: 28 * alpha
   },
   selectView: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'red',
     borderRadius: 9 * alpha,
     borderWidth: 1 * alpha,
     borderColor: 'rgb(186, 183, 183)',
@@ -3902,15 +3926,6 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left'
   },
-  selectView: {
-    backgroundColor: 'transparent',
-    borderRadius: 9 * alpha,
-    borderWidth: 1 * alpha,
-    borderColor: 'rgb(186, 183, 183)',
-    borderStyle: 'solid',
-    width: 18 * alpha,
-    height: 18 * alpha
-  },
   walleticonView: {
     backgroundColor: 'transparent',
     width: 26 * alpha,
@@ -4082,10 +4097,18 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   paymentOptionsView: {
-    borderColor:'red',
+    // borderColor: 'red',
     borderWidth: 1,
-    height: alpha * 90,
-    flex:1
+    height: alpha * 120,
+    flex: 1,
+    paddingHorizontal: alpha * 17
+  },
+  paymentOptionsListView: {
+    flex: 1,
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: 'red',
+    alignItems: 'center'
   },
 
   sectionRowView: {
@@ -4094,6 +4117,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: alpha * 30
+    height: alpha * 40
+  },
+
+  paymentIcons: {
+    height: alpha * 25,
+    width: alpha * 25
+  },
+
+  paymentOptionText: {
+    fontSize: fontAlpha * 14,
+    fontFamily: NON_TITLE_FONT,
+    color: '#363636'
+  },
+
+  selectBox: {
+    backgroundColor: 'transparent',
+    borderRadius: 9 * alpha,
+    borderWidth: 1 * alpha,
+    borderColor: '#BAB7B7',
+    borderStyle: 'solid',
+    width: 16 * alpha,
+    height: 16 * alpha
+  },
+
+  creditsText: {
+    fontSize: fontAlpha * 14,
+    fontFamily: NON_TITLE_FONT,
+    color: '#ED6E69'
   }
 });
