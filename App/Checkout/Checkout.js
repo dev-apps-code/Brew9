@@ -328,20 +328,19 @@ export default class Checkout extends React.Component {
 
   onPressDirection(shop) {
     // console.log(shop)
-    let lat = shop.latitude
-    let long = shop.longitude
+    let lat = shop.latitude;
+    let long = shop.longitude;
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
     const url = Platform.select({
-      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      ios:
+        'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
+        location,
       android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
-    })
-
+    });
 
     Linking.openURL(url);
-   
-
   }
 
   onDeliveryButtonPressed = () => {
@@ -1104,8 +1103,6 @@ export default class Checkout extends React.Component {
     });
   };
 
-
-
   onCallPressed = (phone_no) => {
     Linking.openURL(`tel:${phone_no}`);
   };
@@ -1222,7 +1219,10 @@ export default class Checkout extends React.Component {
               right: 0 * alpha
             }}
           />
-          <View pointerEvents="box-none" style={{ height: 150 * alpha }}>
+          <View
+            pointerEvents="box-none"
+            style={{ height: 150 * alpha, backgroundColor: 'yellow' }}
+          >
             <View style={styles.brew9walletView}>
               <TouchableOpacity
                 onPress={() => this.onWalletButtonPressed()}
@@ -1589,54 +1589,52 @@ export default class Checkout extends React.Component {
     }).length;
     return (
       <View style={styles.sectionView}>
-          <TouchableOpacity
-            onPress={
-              this.state.valid_vouchers != null &&
-              this.state.valid_vouchers.length > 0
-                ? () => this.onVoucherButtonPressed()
-                : () => null
-            }
-            style={styles.voucherButton}
+        <TouchableOpacity
+          onPress={
+            this.state.valid_vouchers != null &&
+            this.state.valid_vouchers.length > 0
+              ? () => this.onVoucherButtonPressed()
+              : () => null
+          }
+          style={styles.voucherButton}
+        >
+          <View
+            pointerEvents="box-none"
+            style={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row',
+              height: alpha * 30
+            }}
           >
-              <View
-                pointerEvents="box-none"
-                style={{
-                  justifyContent: 'space-between',
-                  alignItems:'center',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row',
-                  height: alpha * 30
-                }}
+            <Text style={styles.productNameText}>Brew9 Vouchers</Text>
+            <View style={styles.spacer} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <Text
+                style={
+                  this.state.valid_vouchers != null &&
+                  this.state.valid_vouchers.length > 0
+                    ? styles.productVoucherText
+                    : styles.productVoucherDisableText
+                }
               >
-                <Text style={styles.productNameText}>Brew9 Vouchers</Text>
-                <View style={styles.spacer} />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text
-                    style={
-                      this.state.valid_vouchers != null &&
-                      this.state.valid_vouchers.length > 0
-                        ? styles.productVoucherText
-                        : styles.productVoucherDisableText
-                    }
-                  >
-                    {this.state.valid_vouchers != null
-                      ? valid_voucher_counts
-                      : '-'}{' '}
-                    usable
-                  </Text>
-                  <Image
-                    source={require('./../../assets/images/next.png')}
-                    style={styles.menuRowArrowImage}
-                  />
-                </View>
-              </View>
-          </TouchableOpacity>
+                {this.state.valid_vouchers != null ? valid_voucher_counts : '-'}{' '}
+                usable
+              </Text>
+              <Image
+                source={require('./../../assets/images/next.png')}
+                style={styles.menuRowArrowImage}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
         <View style={styles.orderitemsView}>{voucher_items}</View>
       </View>
     );
@@ -1653,63 +1651,61 @@ export default class Checkout extends React.Component {
 
     return (
       <View style={styles.sectionView}>
-          <TouchableOpacity
-            // onPress={() => this.showDateTimePicker()}
-            onPress={() => this.onPaymentButtonPressed()}
-            style={styles.voucherButton}
+        <TouchableOpacity
+          // onPress={() => this.showDateTimePicker()}
+          onPress={() => this.onPaymentButtonPressed()}
+          style={styles.voucherButton}
+        >
+          <View
+            style={{
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              height: alpha * 30
+            }}
           >
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
               <View
-                style={{
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems:'center',
-                  height: alpha * 30
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                  <View
-                    style={[
-                      selected_payment != ''
-                        ? styles.greenCircle
-                        : styles.redCircle
-                    ]}
-                  />
-                  <Text style={[styles.productNameText]}>Payment</Text>
-                </View>
-                {/* <View style={styles.spacer} /> */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={[styles.productVoucherText]}>
-                    {this.state.selected_payment == ''
-                      ? 'Please select'
-                      : this.state.selected_payment == 'credits'
-                      ? `Wallet ${this.props.members.currency}${credits}`
-                      : this.state.selected_payment == 'counter'
-                      ? delivery
-                        ? 'Cash On Delivery'
-                        : 'Pay In Store'
-                      : 'Credit Card'}
-                  </Text>
-                  <Image
-                    source={require('./../../assets/images/next.png')}
-                    style={[styles.menuRowArrowImage]}
-                  />
-                </View>
-              </View>
-          </TouchableOpacity>
+                style={[
+                  selected_payment != '' ? styles.greenCircle : styles.redCircle
+                ]}
+              />
+              <Text style={[styles.productNameText]}>Payment</Text>
+            </View>
+            {/* <View style={styles.spacer} /> */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={[styles.productVoucherText]}>
+                {this.state.selected_payment == ''
+                  ? 'Please select'
+                  : this.state.selected_payment == 'credits'
+                  ? `Wallet ${this.props.members.currency}${credits}`
+                  : this.state.selected_payment == 'counter'
+                  ? delivery
+                    ? 'Cash On Delivery'
+                    : 'Pay In Store'
+                  : 'Credit Card'}
+              </Text>
+              <Image
+                source={require('./../../assets/images/next.png')}
+                style={[styles.menuRowArrowImage]}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -1728,47 +1724,45 @@ export default class Checkout extends React.Component {
     var formatted_time = this._getFormattedSchedule();
     return (
       <View style={styles.sectionView}>
-          <TouchableOpacity
-            onPress={() => this.changeTimeSchedule()}
-            style={styles.voucherButton}
+        <TouchableOpacity
+          onPress={() => this.changeTimeSchedule()}
+          style={styles.voucherButton}
+        >
+          <View
+            pointerEvents="box-none"
+            style={{
+              justifyContent: 'space-between',
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: alpha * 30
+            }}
           >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View
-                pointerEvents="box-none"
-                style={{
-                  justifyContent: 'space-between',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  height: alpha * 30
-                }}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View
-                    style={
-                      pick_up_status != null
-                        ? styles.greenCircle
-                        : styles.redCircle
-                    }
-                  />
-                  <Text style={styles.productNameText}>{pick_up}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={styles.productVoucherText}>
-                    {pick_up_time != null ? formatted_time : 'Please select'}
-                  </Text>
-                  <Image
-                    source={require('./../../assets/images/next.png')}
-                    style={styles.menuRowArrowImage}
-                  />
-                </View>
-              </View>
-          </TouchableOpacity>
+                style={
+                  pick_up_status != null ? styles.greenCircle : styles.redCircle
+                }
+              />
+              <Text style={styles.productNameText}>{pick_up}</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={styles.productVoucherText}>
+                {pick_up_time != null ? formatted_time : 'Please select'}
+              </Text>
+              <Image
+                source={require('./../../assets/images/next.png')}
+                style={styles.menuRowArrowImage}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -1928,9 +1922,7 @@ export default class Checkout extends React.Component {
       return (
         <View>
           <CurveSeparator />
-          <View
-            style={[styles.sectionView, { paddingBottom: 10 * alpha }]}
-          >
+          <View style={[styles.sectionView, { paddingBottom: 10 * alpha }]}>
             <View style={styles.orderitemsView}>{promotions_item}</View>
           </View>
         </View>
@@ -2058,6 +2050,13 @@ export default class Checkout extends React.Component {
     );
   };
 
+  renderPaymentOptions = () => {
+    return (
+      <View style={styles.paymentOptionsView}>
+      </View>
+    );
+  };
+
   renderCheckoutReceipt() {
     const {
       vouchers_to_use,
@@ -2159,6 +2158,8 @@ export default class Checkout extends React.Component {
               {this.renderPickupTime()}
               <CurveSeparator />
               {this.renderPaymentSection()}
+              {this.renderPaymentOptions()}
+
               <CurveSeparator />
 
               {delivery
@@ -2936,11 +2937,12 @@ const styles = StyleSheet.create({
     textAlign: 'left'
   },
   totalPayNowView: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF',
     position: 'absolute',
     left: 0 * alpha,
     right: 0 * alpha,
-    bottom: BUTTONBOTTOMPADDING,
+    // bottom: BUTTONBOTTOMPADDING,
+    bottom: 0,
     height: 47 * alpha,
     flexDirection: 'row',
     alignItems: 'center'
@@ -3074,7 +3076,7 @@ const styles = StyleSheet.create({
     top: 19 * alpha
   },
   brew9walletView: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'red',
     position: 'absolute',
     left: 0 * alpha,
     right: 0 * alpha,
@@ -3655,7 +3657,7 @@ const styles = StyleSheet.create({
   sectionView: {
     backgroundColor: 'rgb(245,245,245)',
     flex: 1,
-    paddingHorizontal: 24 * alpha,
+    paddingHorizontal: 24 * alpha
   },
   drinksView: {
     backgroundColor: 'transparent',
@@ -4123,5 +4125,11 @@ const styles = StyleSheet.create({
     width: 15 * alpha,
     height: 15 * alpha,
     resizeMode: 'contain'
+  },
+  paymentOptionsView: {
+    borderColor:'red',
+    borderWidth: 1,
+    height: alpha * 90,
+    flex:1
   }
 });
