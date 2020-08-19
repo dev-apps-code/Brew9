@@ -2036,7 +2036,7 @@ export default class Checkout extends React.Component {
         >
           <Image
             source={require('./../../assets/images/wallet_center.png')}
-            style={styles.paymentIcons}
+            style={styles.paymentWalletIcon}
           />
           <View>
             <Text style={styles.paymentOptionText}>Wallet</Text>
@@ -2050,7 +2050,7 @@ export default class Checkout extends React.Component {
         >
           <Image
             source={require('./../../assets/images/credit_card.png')}
-            style={styles.paymentIcons}
+            style={styles.paymentCardIcon}
           />
           <Text style={styles.paymentOptionText}>Credit Card</Text>
           <Image
@@ -2071,7 +2071,17 @@ export default class Checkout extends React.Component {
           />
           {cardSelectBox}
         </TouchableOpacity>
-        <View style={styles.paymentOptionsListView}></View>
+        <TouchableOpacity
+          onPress={() => this.onWalletButtonPressed()}
+          style={styles.paymentOptionsListView}
+        >
+          <Image
+            source={require('./../../assets/images/cash.png')}
+            style={styles.paymentCashIcon}
+          />
+          <Text style={styles.paymentOptionText}>{cashPayment}</Text>
+          {counterSelectBox}
+        </TouchableOpacity>
       </View>
     );
   };
@@ -4144,7 +4154,7 @@ const styles = StyleSheet.create({
   paymentOptionsListView: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   sectionRowView: {
@@ -4156,9 +4166,17 @@ const styles = StyleSheet.create({
     height: alpha * 40
   },
 
-  paymentIcons: {
+  paymentWalletIcon: {
     height: alpha * 25,
     width: alpha * 25
+  },
+  paymentCardIcon: {
+    height: alpha * 23,
+    width: alpha * 23
+  },
+  paymentCashIcon: {
+    height: alpha * 19,
+    width: alpha * 19
   },
 
   paymentOptionText: {
@@ -4182,7 +4200,7 @@ const styles = StyleSheet.create({
     fontFamily: NON_TITLE_FONT,
     color: '#ED6E69'
   },
-  
+
   cc: {
     height: alpha * 23,
     width: alpha * 35
@@ -4199,5 +4217,4 @@ const styles = StyleSheet.create({
     height: alpha * 25,
     width: alpha * 25
   }
-
 });
