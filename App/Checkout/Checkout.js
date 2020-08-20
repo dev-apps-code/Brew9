@@ -1183,8 +1183,6 @@ export default class Checkout extends React.Component {
     }
   };
 
-  
-
   getCheapestProduct(items) {
     var cheapestPrice = Infinity;
     var cheapestProduct = null;
@@ -2231,9 +2229,6 @@ const styles = StyleSheet.create({
     textAlign: 'left'
   },
 
-
-  
-
   orderReceiptView: {
     backgroundColor: DEFAULT_GREY_BACKGROUND,
     flex: 1
@@ -2242,7 +2237,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flex: 1
   },
-  
+
   orderCartView: {
     alignSelf: 'stretch',
     marginLeft: 18 * alpha,
@@ -2686,7 +2681,6 @@ const styles = StyleSheet.create({
     height: 2 * alpha
   },
 
-
   menuRowArrowImage: {
     width: 10 * alpha,
     height: 10 * alpha,
@@ -2714,9 +2708,6 @@ const styles = StyleSheet.create({
     paddingRight: 5 * alpha
   },
 
-  
- 
- 
   redCircle: {
     backgroundColor: 'red',
     width: 10 * alpha,
@@ -2749,7 +2740,7 @@ const styles = StyleSheet.create({
   paymentOptionsListView: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   sectionRowView: {
@@ -2783,7 +2774,7 @@ const styles = StyleSheet.create({
   paymentOptionText: {
     fontSize: fontAlpha * 14,
     fontFamily: NON_TITLE_FONT,
-    color: '#363636',
+    color: '#363636'
   },
 
   selectBox: {
@@ -2794,7 +2785,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     width: 16 * alpha,
     height: 16 * alpha,
-    position:'absolute',
+    position: 'absolute',
     right: alpha * 10
   },
 
@@ -2805,19 +2796,23 @@ const styles = StyleSheet.create({
   },
 
   cc: {
-    height: alpha * 23,
-    width: alpha * 35
+    height: alpha * 16,
+    width: alpha * 27,
+    marginLeft: alpha * 9
   },
   visa: {
-    height: alpha * 32,
-    width: alpha * 32
+    height: alpha * 9,
+    width: alpha * 27,
+    marginLeft: alpha * 7
   },
   union: {
-    height: alpha * 25,
-    width: alpha * 25
+    height: alpha * 27,
+    width: alpha * 27,
+    marginLeft: alpha * 7
   },
   dc: {
-    height: alpha * 25,
-    width: alpha * 25
+    height: alpha * 30,
+    width: alpha * 25,
+    marginLeft: alpha * 7
   }
 });
