@@ -9,7 +9,7 @@
 import { Text, Image, View, TouchableWithoutFeedback, StyleSheet } from "react-native"
 import React from "react"
 import { alpha, fontAlpha, windowWidth } from "../Common/size";
-import { TITLE_FONT } from "../Common/common_style";
+import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from "../Common/config"
 import { getMemberIdForApi } from '../Services/members_helper'
@@ -51,6 +51,9 @@ export default class TopUpCard extends React.Component {
 				<Image
 					source={{ uri: this.props.image }}
 					style={styles.cardImage} />
+					<View style={styles.tag}>
+						<Text style={styles.tagText}>Top up $20 & get $8 extra</Text>
+					</View>
 				{/* <View
 						style={styles.infoView}>
 						<View
@@ -158,4 +161,20 @@ const styles = StyleSheet.create({
 		width: 17 * alpha,
 		height: 17 * alpha,
 	},
+
+	tag: {
+		borderRadius: alpha * 10,
+		backgroundColor:'#ED6E69',
+		position: 'absolute',
+		bottom: alpha * 4,
+		right: 1,
+		paddingHorizontal: alpha * 7,
+		paddingVertical: alpha * 2
+	},
+	
+	tagText: {
+		fontFamily: NON_TITLE_FONT,
+		fontSize: 10 * fontAlpha,
+		color:"#FFFFFF"
+	}
 })
