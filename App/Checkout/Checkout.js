@@ -135,7 +135,8 @@ export default class Checkout extends React.Component {
       promotionDiscountValue: {
         value: 0,
         type: null
-      }
+      },
+      enablePaynow: false
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -181,6 +182,15 @@ export default class Checkout extends React.Component {
       );
     }
   }
+
+  setPayNowStatus = () => {
+    let { pick_up_status, selected_payment } = this.state;
+    if (pick_up_status != null && selected_payment != null) {
+      this.setState({
+        enablePaynow: true
+      });
+    }
+  };
 
   /**
    * Formatted price text
@@ -298,7 +308,8 @@ export default class Checkout extends React.Component {
 
     var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
 
-    this.setState({ pick_up_time, pick_up_status, range });
+    this.setState({ pick_up_time, pick_up_status, range }, ()=> this.setPayNowStatus());
+    
     this._toggleTimeSelector();
   };
 
@@ -952,20 +963,20 @@ export default class Checkout extends React.Component {
     this.setState({
       selected_payment: 'credits'
     });
-    // this.tooglePayment();
+    this.setPayNowStatus();
   };
 
   onCreditButtonPressed = () => {
     this.setState({
       selected_payment: 'credit_card'
     });
-    // this.tooglePayment();
+    this.setPayNowStatus();
   };
   onCounterButtonPressed = () => {
     this.setState({
       selected_payment: 'counter'
     });
-    // this.tooglePayment();
+    this.setPayNowStatus();
   };
 
   clearCart = () => {
@@ -1921,7 +1932,11 @@ export default class Checkout extends React.Component {
   }
 
   renderPayNow(final_price) {
-    let { deliveryFee } = this.state;
+    let { deliveryFee, enablePaynow } = this.state;
+    let style = enablePaynow
+      ? [styles.payNowButton, { backgroundColor: 'rgb(0, 178, 227)' }]
+      : [styles.payNowButton, { backgroundColor: '#BDBDBD' }];
+
     let final_price_delivery =
       parseFloat(final_price) + parseFloat(deliveryFee);
     return (
@@ -1933,7 +1948,8 @@ export default class Checkout extends React.Component {
         </View>
         <TouchableOpacity
           onPress={() => this.onPayNowPressed()}
-          style={styles.payNowButton}
+          style={style}
+          disabled={!enablePaynow}
         >
           <Text style={styles.payNowButtonText}>
             {this.state.selected_payment == 'counter' ? 'Order Now' : 'Pay Now'}
