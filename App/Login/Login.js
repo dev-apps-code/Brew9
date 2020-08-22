@@ -18,6 +18,7 @@ import {createAction, Storage} from "../Utils"
 import Toast, {DURATION} from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import {TITLE_FONT, NON_TITLE_FONT, TOAST_DURATION} from "../Common/common_style";
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
 	members: members.profile,
@@ -297,7 +298,7 @@ export default class Login extends React.Component {
 						</View>
 				</TouchableOpacity>
 			</View>
-			<Toast ref="toast" style={{bottom: (windowHeight / 2) - 40}} textStyle={{fontFamily: TITLE_FONT, color: "#ffffff"}}/>
+			<Brew9Toast ref="toast" />
 			<HudLoading isLoading={this.state.loading}/>
 		</View>
 	}

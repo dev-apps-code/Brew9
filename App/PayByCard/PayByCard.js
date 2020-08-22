@@ -16,6 +16,7 @@ import HudLoading from "../Components/HudLoading.js"
 import { createAction, Storage } from "../Utils"
 import PaymentSessionRequestObject from '../Requests/payment_session_request_object.js'
 import UpdatePaymentSessionRequestObject from '../Requests/update_payment_session_request_object'
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -201,7 +202,7 @@ export default class PayByCard extends React.Component {
 						style={styles.payNowButtonText}>Pay Now</Text>
 				</TouchableOpacity>
 			</View>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<Brew9Toast ref="toast" />
 			<HudLoading isLoading={this.state.loading} />
 		</View>
 	}

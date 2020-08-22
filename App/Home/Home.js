@@ -55,6 +55,8 @@ import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
 import AnimationLoading from '../Components/AnimationLoading';
+import Brew9Toast from '../Components/Brew9Toast';
+
 @connect(({ members, shops, config, orders }) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -489,9 +491,11 @@ export default class Home extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
-          this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
+          const { message } = eventObject;
+          const callback = () => {
             Linking.openURL(eventObject.result.url);
-          });
+          };
+          this.refs.toast.show(message, TOAST_DURATION, callback);
         } else {
           this.setState(
             {
@@ -671,21 +675,7 @@ export default class Home extends React.Component {
 
           msg = delivery_disabled_response?.text || msg;
         }
-        this.refs.toast.show(
-          <View style={{ justifyContent: 'center' }}>
-            <Text
-              style={{
-                color: 'white',
-                fontFamily: NON_TITLE_FONT,
-                textAlign: 'center'
-              }}
-            >
-              {msg}
-            </Text>
-          </View>,
-
-          TOAST_DURATION
-        );
+        this.refs.toast.show(msg, TOAST_DURATION);
       });
       return;
     }
@@ -2020,15 +2010,8 @@ export default class Home extends React.Component {
         ) : null}
 
         {this.renderGallery()}
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{
-            color: 'white',
-            fontFamily: NON_TITLE_FONT,
-            textAlign: 'center'
-          }}
-        />
+        <Brew9Toast ref="toast" />
+
         <Brew9Modal
           visible={this.state.visible}
           cancelable={true}

@@ -6,7 +6,6 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  TextInput,
   Dimensions,
   Animated,
   SafeAreaView
@@ -30,6 +29,8 @@ import {
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
 import ShippingDetail from './ShippingDetail';
+import SwitchSelector from 'react-native-switch-selector';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, shops }) => ({
   currentMember: members.profile,
@@ -757,11 +758,7 @@ export default class AddShippingAddress extends React.Component {
         </TouchableOpacity>
         {this.toogleDeliveryArea()}
 
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
+        <Brew9Toast ref="toast" />
       </View>
     );
   }
