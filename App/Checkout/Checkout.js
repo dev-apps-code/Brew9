@@ -1701,7 +1701,12 @@ export default class Checkout extends React.Component {
             style={walletIconStyle}
           />
           <View>
-            <Text style={styles.paymentOptionText}>Wallet</Text>
+            <View style={styles.walletTextContainer}>
+              <Text style={styles.paymentOptionText}>Wallet</Text>
+              <View style={styles.tag}>
+                <Text style={styles.tagText}>Top up $10 & get $5 extra</Text>
+              </View>
+            </View>
             <Text style={styles.creditsText}>${credits}</Text>
           </View>
           {walletSelectBox}
@@ -2778,5 +2783,20 @@ const styles = StyleSheet.create({
     height: alpha * 30,
     width: alpha * 25,
     marginLeft: alpha * 7
+  },
+  walletTextContainer: {
+    flexDirection: 'row'
+  },
+  tag: {
+    borderRadius: alpha * 10,
+    backgroundColor: '#ED6E69',
+    paddingHorizontal: alpha * 7,
+    paddingVertical: alpha * 2,
+    marginLeft: 10
+  },
+  tagText: {
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    color: '#FFFFFF'
   }
 });
