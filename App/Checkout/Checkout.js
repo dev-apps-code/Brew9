@@ -1292,11 +1292,7 @@ export default class Checkout extends React.Component {
 
     return (
       <View style={styles.sectionView}>
-        <TouchableOpacity
-          // onPress={() => this.showDateTimePicker()}
-          onPress={() => this.onPaymentButtonPressed()}
-          style={styles.voucherButton}
-        >
+        <View style={styles.voucherButton}>
           <View style={styles.sectionRowView}>
             <View
               style={{
@@ -1313,7 +1309,7 @@ export default class Checkout extends React.Component {
               <Text style={[styles.productNameText]}>Payment</Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   }
