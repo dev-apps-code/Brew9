@@ -23,6 +23,7 @@ import {
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, shops, config, orders }) => ({
   location: members.location,
@@ -390,6 +391,7 @@ export default class MapShippingAddress extends React.Component {
   );
 
   render() {
+    <Brew9Toast ref="toast" />
     if (
       (this.state.address && this.state.address.length > 0) ||
       this.state.isAddAddressMode

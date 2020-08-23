@@ -20,6 +20,7 @@ import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
 import _ from 'lodash';
+import Brew9Toast from '../Components/Brew9Toast';
 
 import {
   TITLE_FONT,
@@ -854,14 +855,7 @@ export default class Checkout extends React.Component {
           });
         }
       } else {
-        this.refs.toast.show(
-          <View style={{ justifyContent: 'center' }}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>
-              {eventObject.message}
-            </Text>
-          </View>,
-          TOAST_DURATION
-        );
+        this.refs.toast.show(eventObject.message, TOAST_DURATION);
 
         if (Array.isArray(eventObject.result)) {
           if (eventObject.result.length > 0) {
@@ -987,17 +981,7 @@ export default class Checkout extends React.Component {
                 insufficient = insufficient_response.text;
               }
             }
-            this.refs.toast.show(
-              <View style={{ justifyContent: 'center' }}>
-                <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {insufficient}
-                </Text>
-              </View>,
-              TOAST_DURATION + 1000
-              // () => {
-              // 	navigate("MemberWallet")
-              // }
-            );
+            this.refs.toast.show(insufficient, TOAST_DURATION + 1000);
 
             return;
           }
@@ -1013,10 +997,8 @@ export default class Checkout extends React.Component {
             var pickup = Moment(pick_up_time, 'h:mm');
             var now = Moment(new Date(), 'HH:mm');
             if (pickup < now && pick_up_status == 'Pick Later') {
-              this.refs.toast.show(
-                'Pick up time is not available',
-                TOAST_DURATION
-              );
+              const message = 'Pick up time is not available';
+              this.refs.toast.show(message, TOAST_DURATION);
               return;
             }
             // else if (pickup < opening) {
@@ -1024,10 +1006,8 @@ export default class Checkout extends React.Component {
             // 	return
             // }
             else if (pickup > closing) {
-              this.refs.toast.show(
-                'We are closed at this time.',
-                TOAST_DURATION
-              );
+              const message = 'We are closed at this time.';
+              this.refs.toast.show(message, TOAST_DURATION);
               return;
             }
           }
@@ -1316,7 +1296,7 @@ export default class Checkout extends React.Component {
 
   changeTimeSchedule = () => {
     if (!this.refs.timepicker.hasSchedule()) {
-      this.refs.toast.show('No time slots available.');
+      this.refs.toast.show('No time slots available.', TOAST_DURATION);
     }
     this._toggleTimeSelector();
   };
@@ -1940,11 +1920,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderOrderForSelector()}
         <HudLoading isLoading={this.state.loading} />
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
+        <Brew9Toast ref="toast" />
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}

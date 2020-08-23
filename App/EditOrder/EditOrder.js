@@ -40,6 +40,7 @@ import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
 import openMap from 'react-native-open-maps';
 import { getMemberIdForApi } from '../Services/members_helper';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, shops, orders }) => ({
   currentMember: members.profile,
@@ -1899,11 +1900,7 @@ export default class EditOrder extends React.Component {
         {this.renderPaymentMethod()}
         {this.renderPickupTimeScroll()}
         <HudLoading isLoading={this.state.loading} />
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
+        <Brew9Toast ref="toast" />
       </View>
     );
   }

@@ -26,6 +26,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import HudLoading from "../Components/HudLoading"
 import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
 import { getMemberIdForApi } from '../Services/members_helper'
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
 	members: members.profile
@@ -84,7 +85,7 @@ export default class Register extends React.Component {
 			if (eventObject.success) {
 
 			} else {
-				this.refs.toast.show(eventObject.message);
+				this.refs.toast.show(eventObject.message, DURATION);
 			}
 			this.setState({
 				loading: false,
@@ -102,14 +103,14 @@ export default class Register extends React.Component {
 
 	checkForm = () => {
 		if (this.state.gender === -1) {
-			this.refs.toast.show("Please select your gender")
+			this.refs.toast.show("Please select your gender", DURATION)
 			return false
 		} else if (!this.state.nickname) {
-			this.refs.toast.show("Please select a nickname")
+			this.refs.toast.show("Please select a nickname", DURATION)
 			return false
 		}
 		else if (!this.state.dob) {
-			this.refs.toast.show("Please select enter your Birthday")
+			this.refs.toast.show("Please select enter your Birthday", DURATION)
 			return false
 		}
 		else {
@@ -427,7 +428,7 @@ export default class Register extends React.Component {
 						style={styles.navigationBarItemIcon} />
 				</TouchableOpacity>
 			</View>
-			<Toast ref="toast" style={{ bottom: (windowHeight / 2) - 40 }} textStyle={{ fontFamily: TITLE_FONT, color: "#ffffff" }} />
+			<Brew9Toast ref="toast" />
 			<HudLoading isLoading={this.state.loading} />
 		</KeyboardAvoidingView>
 

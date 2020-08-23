@@ -32,6 +32,7 @@ import {
 } from '../Common/common_style';
 import { resetTo } from '../Utils/route_helper';
 import { DEVELOP_MODE } from '../Common/config';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members }) => ({
   members: members.profile,
@@ -82,7 +83,7 @@ export default class VerifyUser extends React.Component {
     let link = r[1];
     // console.log(link)
     this.refs.toast.show(
-      link + ' - api version 2 - build no ' + APPBUILDVERSIONANDROID
+      link + ' - api version 2 - build no ' + APPBUILDVERSIONANDROID, TOAST_DURATION
     );
     this.props.navigation.state.params.onGoBack();
     this.props.navigation.goBack();
@@ -457,11 +458,7 @@ export default class VerifyUser extends React.Component {
           </Hyperlink>
         </View>
         <HudLoading isLoading={this.state.loading} />
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
+        <Brew9Toast ref="toast" />
         <Toast
           ref="tapToast"
           // style={{ bottom: windowHeight / 2 - 40 }}

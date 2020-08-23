@@ -45,6 +45,8 @@ import MissionBadgeIcon from './MissionBadgeIcon';
 import { getMemberIdForApi } from '../Services/members_helper';
 import AnimationLoading from '../Components/AnimationLoading';
 import HudLoading from '../Components/HudLoading';
+import Brew9Toast from '../Components/Brew9Toast';
+
 @connect(({ members }) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -420,11 +422,7 @@ export default class MissionCenter extends React.Component {
         {this.state.isRefreshing && (
           <HudLoading isLoading={this.state.isRefreshing} />
         )}
-        <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-        />
+         <Brew9Toast ref="toast" />
       </View>
     );
   }

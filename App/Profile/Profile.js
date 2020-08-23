@@ -46,6 +46,7 @@ import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import _ from 'lodash';
+import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, config, shops }) => ({
   selectedTab: config.selectedTab,
