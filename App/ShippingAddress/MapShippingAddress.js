@@ -27,7 +27,8 @@ import Brew9Toast from '../Components/Brew9Toast';
 
 @connect(({ members, shops, config, orders }) => ({
   location: members.location,
-  selectedShop: shops.selectedShop
+  selectedShop: shops.selectedShop,
+  responses: config.responses
 }))
 export default class MapShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -96,20 +97,9 @@ export default class MapShippingAddress extends React.Component {
   };
 
   placeHolderText = () => {
-    var placeholder = 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
-
-    if (this.props.selectedShop.response_message != undefined) {
-      placeholder_response = _.find(
-        this.props.selectedShop.response_message,
-        function (obj) {
-          return obj.key === 'Address Search Placeholder';
-        }
-      );
-      if (placeholder_response != undefined) {
-        placeholder = placeholder_response.text;
-      }
-    }
-    return placeholder;
+    let {responses} = this.props
+    var msg = responses.get('Address Search Placeholder') || 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
+    return msg;
   };
 
   renderForm = (title, placeholder, text, onChangeText, description) => {

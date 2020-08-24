@@ -39,7 +39,7 @@ import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
 import CurveSeparator from '../Components/CurveSeparator';
-@connect(({ members, shops, orders }) => ({
+@connect(({ members, shops, orders, config }) => ({
   company_id: members.company_id,
   currentMember: members.profile,
   members: members,
@@ -54,7 +54,8 @@ import CurveSeparator from '../Components/CurveSeparator';
   discount_cart_total: orders.discount_cart_total,
   location: members.location,
   delivery: members.delivery,
-  shippingAddress: members.shippingAddress
+  shippingAddress: members.shippingAddress,
+  responses: config.responses
 }))
 export default class Checkout extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -967,21 +968,8 @@ export default class Checkout extends React.Component {
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
           ) {
-            var insufficient =
-              'Oops, insufficient credit.\nPlease select other payment option.';
-
-            if (selectedShop.response_message != undefined) {
-              insufficient_response = _.find(
-                selectedShop.response_message,
-                function (obj) {
-                  return obj.key === 'Popup - Insufficient credit';
-                }
-              );
-              if (insufficient_response != undefined) {
-                insufficient = insufficient_response.text;
-              }
-            }
-            this.refs.toast.show(insufficient, TOAST_DURATION + 1000);
+            var msg = this.props.responses.get('Popup - Insufficient credit') || 'Oops, insufficient credit.\nPlease select other payment option.';
+            this.refs.toast.show(msg, TOAST_DURATION + 1000);
 
             return;
           }
