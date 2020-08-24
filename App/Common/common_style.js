@@ -1,4 +1,4 @@
-import { windowWidth, alpha } from './size';
+import { windowWidth, windowHeight, alpha } from './size';
 import { StyleSheet, Platform } from 'react-native';
 
 export const TITLE_FONT = 'ClanPro-News';
@@ -8,6 +8,7 @@ export const LIGHT_GREY = 'rgb(130, 130, 130)';
 export const LIGHT_BLUE = 'rgb(181, 219, 229)';
 export const LIGHT_BLUE_BACKGROUND = 'rgb(218, 247, 255)';
 export const DEFAULT_GREY_BACKGROUND = 'rgb(228, 228, 228)';
+export const LIGHT_GREY_BACKGROUND = 'rgb(243, 243, 243)';
 export const TINT_COLOR = 'rgb(0, 194, 236)';
 export const RED = 'rgb(239, 81, 81)';
 export const DISABLED_COLOR = 'rgb(191, 191, 191)';
@@ -16,6 +17,18 @@ export const TABBAR_INACTIVE_TINT_CROWN = 'rgb(135, 135, 135)';
 export const TABBAR_ACTIVE_TINT = 'black';
 export const BUTTONBOTTOMPADDING = Platform.OS === 'ios' ? 40 * alpha : 0;
 export const TOAST_DURATION = 3000;
+export const DEFAULT_BORDER_RADIUS = 6 * alpha;
+export const TEXT_COLOR = '#F5F5F5';
+export const TAB_STYLE =
+  Platform.OS === 'android'
+    ? {
+        height: alpha * 5,
+        marginBottom: alpha * 4
+      }
+    : {
+      height: 29,
+    };
+
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: 'blue',
@@ -35,3 +48,8 @@ export const commonStyles = StyleSheet.create({
     backgroundColor: 'rgb(0, 178, 227)'
   }
 });
+
+export const HEADER_NO_BACK =
+  Platform.OS === 'android'
+    ? { marginLeft: alpha * 10, flex: 1, fontFamily: TITLE_FONT }
+    : { textAlign: 'center', flex: 1, fontFamily: TITLE_FONT };

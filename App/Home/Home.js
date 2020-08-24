@@ -33,7 +33,8 @@ import _ from 'lodash';
 import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import MapView from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
   TITLE_FONT,
@@ -43,7 +44,8 @@ import {
   PRIMARY_COLOR,
   RED,
   LIGHT_BLUE_BACKGROUND,
-  TOAST_DURATION
+  TOAST_DURATION,
+  DEFAULT_BORDER_RADIUS
 } from '../Common/common_style';
 import { Analytics, Event, PageHit } from 'expo-analytics';
 import { ANALYTICS_ID } from '../Common/config';
@@ -69,7 +71,8 @@ import Brew9Toast from '../Components/Brew9Toast';
   toggle_update_count: orders.toggle_update_count,
   discount_cart_total: orders.discount_cart_total,
   clearCart: orders.clearCart,
-  currentPromoText: orders.currentPromoText
+  currentPromoText: orders.currentPromoText,
+  responses: config.responses
 }))
 export default class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -137,11 +140,14 @@ export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = this._getState();
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+
     this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
+    this._onShopNamePressed = this._onShopNamePressed.bind(this);
+
+    this.state = this._getState();
     this.initializeOneSignal();
   }
 
@@ -214,6 +220,11 @@ export default class Home extends React.Component {
     navigation.navigate('ScanQr');
   };
 
+  _onShopNamePressed = () => {
+    this.setState({ refresh_products: true });
+    this.props.navigation.navigate('SelectShop');
+  };
+
   getLocationAndLoadShops = async () => {
     const { dispatch } = this.props;
     try {
@@ -254,7 +265,6 @@ export default class Home extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { shop } = this.props;
     if (shop != null && shop.all_promotions != null) {
-      console.log('Trigger on Update');
       if (prevProps.cart !== this.props.cart) {
         this.check_promotion_trigger();
       }
@@ -305,15 +315,16 @@ export default class Home extends React.Component {
   }
 
   setDistanceString(calculated_distance) {
+    const { shop } = this.props;
     var distance_string = '';
     var parseDistance = calculated_distance;
     if (parseDistance > 1000) {
-      distance_string = `${parseFloat(parseDistance / 1000).toFixed(1)}km`;
+      distance_string = `${parseFloat(parseDistance / 1000).toFixed(1)}`;
     } else {
-      distance_string = `${parseDistance}m`;
+      distance_string = `${parseDistance}`;
     }
     this.setState({
-      distance: distance_string,
+      distance: `${shop.kilometer_distance || distance_string}km`,
       member_distance: parseDistance / 1000
     });
   }
@@ -424,52 +435,59 @@ export default class Home extends React.Component {
   };
 
   loadShops() {
-    if (!this.unmounted) {
-      const { dispatch, company_id, location } = this.props;
-      const { first_promo_popup } = this.state;
+    const callback = () => {
+      const { shop, location, responses } = this.props;
 
-      const callback = (eventObject) => {
-        if (eventObject.success) {
-          const { menu_banners } = eventObject.result;
-          this.setState({ menu_banners }, () => {
-            this.check_promotion_trigger();
+      if (shop === null) {
+        let message =
+          responses.get('Shop Selection') ||
+          'Please select an outlet that is near you.';
 
-            const { refresh_products } = this.state;
-            if (refresh_products) {
-              this.loadStoreProducts();
+        const latitude = location != null ? location.coords.latitude : null;
+        const longitude = location != null ? location.coords.longitude : null;
 
-              console.log('--getlocation496--');
-              if (first_promo_popup == false) {
-                this.shouldShowFeatured(this.props.shop);
-              }
-            }
-          });
+        if (latitude === null || longitude === null) {
+          message =
+            responses.get('Location Not Available') ||
+            'Could not detect your location.\nPlease select store.';
         }
-      };
 
-      var latitude = location != null ? location.coords.latitude : null;
-      var longitude = location != null ? location.coords.longitude : null;
+        this.refs.toast.show(message, 3000);
 
-      /**
-       * Notice:
-       * Feature to load nearest shop is temporarily disabled. We load shop
-       * despite location of the user.
-       */
-      const obj = new NearestShopRequestObject(latitude, longitude);
-      obj.setUrlId(company_id);
-      dispatch(
-        createAction('shops/loadShops')({
-          object: obj,
-          callback
-        })
-      );
-    }
+        const callback = () => {
+          this.props.navigation.navigate('SelectShop');
+        };
+
+        this.refs.toast.show(message, 1000, callback);
+      } else {
+        const { menu_banners } = shop;
+        const { first_promo_popup, refresh_products } = this.state;
+        const callback = () => {
+          this.check_promotion_trigger();
+          this.computeDistance();
+
+          if (refresh_products) {
+            this.loadStoreProducts();
+
+            if (!first_promo_popup) {
+              this.shouldShowFeatured(shop);
+            }
+          }
+        };
+
+        this.setState({ menu_banners }, callback);
+      }
+    };
+    this.props.dispatch(createAction('config/loadConfig')({ callback }));
   }
 
   loadStoreProducts() {
-    const { dispatch, company_id } = this.props;
+    const {
+      dispatch,
+      shop: { id }
+    } = this.props;
     const { menu_banners } = this.state;
-
+    this.setState({ products: [] });
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
@@ -518,7 +536,7 @@ export default class Home extends React.Component {
     };
 
     const obj = new ProductRequestObject();
-    obj.setUrlId(company_id);
+    obj.setUrlId(id);
     dispatch(
       createAction('products/loadStoreProducts')({
         object: obj,
@@ -528,14 +546,20 @@ export default class Home extends React.Component {
   }
 
   onRefresh() {
-    this.setState({
-      isRefreshing: true,
-      data: [],
-      products: [],
-      refresh_products: true
-    });
-    console.log('--loadshops580--');
-    this.loadShops();
+    const callback = () => {
+      console.log('onRefresh');
+      this.loadShops();
+    };
+
+    this.setState(
+      {
+        isRefreshing: true,
+        data: [],
+        products: [],
+        refresh_products: true
+      },
+      callback
+    );
   }
 
   onCheckoutPressed = () => {
@@ -849,7 +873,6 @@ export default class Home extends React.Component {
             productTagColor={item.discount_tag_color}
             productTagText={item.discount_tag_text_color}
             recommended={item.recommended}
-            daily_limit={item.product_settings[0].daily_limit}
             productingredient={item.ingredients}
             producttotalquantity={item.total_quantity}
             onChangeQuantity={this.onChangeQuantityPress}
@@ -1392,6 +1415,7 @@ export default class Home extends React.Component {
   dismissProduct() {
     this.setState({ modalVisible: false });
   }
+
   getVariantPrice = (price) => {
     let sen = (price + '').split('.');
     if (sen[1] == 0) {
@@ -1698,113 +1722,117 @@ export default class Home extends React.Component {
 
     return (
       <View style={styles.page1View}>
-        <View style={styles.topsectionView}>
-          <View
-            pointerEvents="box-none"
-            style={{
-              height: 31 * alpha,
-              marginLeft: 10 * alpha,
-              marginRight: 10 * alpha,
-              marginTop: 8 * alpha,
-              flexDirection: 'row'
-            }}
-          >
-            <View style={styles.branchView}>
-              {/* <TouchableOpacity
-							onPress={this.onBranchPressed}
-							style={styles.branchButton}> */}
-              <Text style={styles.branchButtonText}>
-                {shop ? shop.name : ''}
-              </Text>
-              {/* <Image
-							source={require("./../../assets/images/group-22.png")}
-							style={styles.branchButtonImage}/> */}
-              {/* </TouchableOpacity> */}
-            </View>
-
+        {shop !== null && (
+          <View style={styles.topsectionView}>
             <View
+              pointerEvents="box-none"
               style={{
-                flex: 1
-              }}
-            />
-            <View style={styles.pickUpDeliveryView}>
-              {shop && (
-                <SwitchSelector
-                  ref="toggle"
-                  options={[
-                    { label: 'Pick Up', value: 0 },
-                    { label: 'Delivery', value: 1 }
-                  ]}
-                  initial={this.state.delivery}
-                  value={this.state.delivery}
-                  textColor={'#4E4D4D'}
-                  selectedColor={'#FFFFFF'}
-                  buttonColor={'#2A2929'}
-                  borderColor={'#979797'}
-                  backgroundColor={'rgb(240,240,240)'}
-                  style={styles.pickUpDeliveryViewTemp}
-                  textStyle={styles.optionText}
-                  fontSize={10 * alpha}
-                  height={32 * alpha}
-                  onPress={(value) => this._toggleDelivery(value)}
-                />
-              )}
-            </View>
-          </View>
-          <View
-            pointerEvents="box-none"
-            style={{
-              height: 14 * alpha,
-              marginLeft: 10 * alpha,
-              marginRight: 19 * alpha,
-              marginTop: 7 * alpha,
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              justifyContent: 'space-between'
-              // backgroundColor: 'red'
-            }}
-          >
-            <Text style={styles.distance1kmText}>Distance {distance}</Text>
-            <View
-              style={{
-                // height: 14 * alpha,
-                // marginLeft: 10 * alpha,
-                // marginRight: 19 * alpha,
-                // marginTop: 7 * alpha,
+                height: 31 * alpha,
+                marginLeft: 10 * alpha,
+                marginRight: 10 * alpha,
+                marginTop: 8 * alpha,
                 flexDirection: 'row'
-                // alignItems: "flex-start",
               }}
             >
-              {/* <Text
-							style={styles.distance1kmText}>Distance {distance}</Text> */}
-              {/* <View
-							style={{
-								flex: 1,
-							}} /> */}
-              <View style={styles.moreView}>
+              <View style={styles.branchView}>
+                {/* <TouchableOpacity
+							onPress={this.onBranchPressed}
+							style={styles.branchButton}> */}
+
                 <TouchableOpacity
-                  onPress={this.onMorePressed}
-                  style={styles.moreButton}
+                  onPress={this._onShopNamePressed}
+                  style={styles.selectShopButton}
                 >
-                  <Text style={styles.distance1kmText}>
-                    {isToggleShopLocation ? 'Hide' : 'Location'}
+                  <Text style={styles.branchButtonText}>
+                    {shop ? shop.name : ''}
                   </Text>
-                </TouchableOpacity>
-                {isToggleShopLocation ? (
                   <Image
-                    source={require('./../../assets/images/bitmap-15.png')}
-                    style={styles.bitmapImage}
+                    source={require('./../../assets/images/next.png')}
+                    style={[
+                      styles.rightArrowImage,
+                      { tintColor: PRIMARY_COLOR }
+                    ]}
                   />
-                ) : (
-                  <Image
-                    source={require('./../../assets/images/bitmap-14.png')}
-                    style={styles.bitmapImage}
+                </TouchableOpacity>
+
+                {/* </TouchableOpacity> */}
+              </View>
+
+              <View style={{ flex: 1 }} />
+              <View style={styles.pickUpDeliveryView}>
+                {shop && (
+                  <SwitchSelector
+                    ref="toggle"
+                    options={[
+                      { label: 'Pick Up', value: 0 },
+                      { label: 'Delivery', value: 1 }
+                    ]}
+                    initial={this.state.delivery}
+                    value={this.state.delivery}
+                    textColor={'#4E4D4D'}
+                    selectedColor={'#FFFFFF'}
+                    buttonColor={'#2A2929'}
+                    borderColor={'#979797'}
+                    backgroundColor={'rgb(240,240,240)'}
+                    style={styles.pickUpDeliveryViewTemp}
+                    textStyle={styles.optionText}
+                    fontSize={10 * alpha}
+                    height={32 * alpha}
+                    onPress={(value) => this._toggleDelivery(value)}
                   />
                 )}
               </View>
             </View>
+            <View
+              pointerEvents="box-none"
+              style={{
+                height: 14 * alpha,
+                marginLeft: 10 * alpha,
+                marginRight: 19 * alpha,
+                marginTop: 7 * alpha,
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between'
+              }}
+            >
+              <TouchableOpacity
+                  onPress={this._onShopNamePressed}
+              >
+              <Text
+                style={[
+                  styles.distance1kmText,
+                  { color: 'rgb(130, 130, 130)', marginTop: -10 }
+                ]}
+              >
+                Change Location
+              </Text>
+              </TouchableOpacity>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.moreView}>
+                  <TouchableOpacity
+                    onPress={this.onMorePressed}
+                    style={styles.moreButton}
+                  >
+                    <Text style={styles.distance1kmText}>
+                      {isToggleShopLocation ? 'Hide' : 'Store Info'}
+                    </Text>
+                  </TouchableOpacity>
+                  {isToggleShopLocation ? (
+                    <Image
+                      source={require('./../../assets/images/bitmap-15.png')}
+                      style={styles.bitmapImage}
+                    />
+                  ) : (
+                    <Image
+                      source={require('./../../assets/images/bitmap-14.png')}
+                      style={styles.bitmapImage}
+                    />
+                  )}
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
+        )}
         {this.renderPromotionTopBar()}
         {this.state.loading ? (
           <AnimationLoading />
@@ -1874,9 +1902,10 @@ export default class Home extends React.Component {
             </View>
           </View>
         )}
-        {this.props.isToggleShopLocation && (
+        {isToggleShopLocation && (
           <View style={styles.showLocationView}>
             <MapView
+              provider={PROVIDER_GOOGLE}
               style={styles.mapImage}
               initialRegion={{
                 latitude: shop ? parseFloat(shop.latitude) : 0.0,
@@ -1890,7 +1919,7 @@ export default class Home extends React.Component {
                 this.marker.showCallout()
               }
             >
-              <MapView.Marker
+              {/* <MapView.Marker
                 ref={(marker) => (this.marker = marker)}
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
@@ -1898,23 +1927,31 @@ export default class Home extends React.Component {
                 }}
                 title="Brew9"
                 description={shop.location}
-              />
+              /> */}
+              <Marker
+                coordinate={{
+                  latitude: shop ? parseFloat(shop.latitude) : 0.0,
+                  longitude: shop ? parseFloat(shop.longitude) : 0.0
+                }}
+                style={{ alignItems: 'center' }}
+              >
+                <View style={styles.areaBubble}>
+                  <Text style={styles.areaText}>{shop.name}</Text>
+                </View>
+                <Image
+                  source={require('./../../assets/images/location.png')}
+                  style={styles.pinImage}
+                  resizeMode="contain"
+                />
+              </Marker>
             </MapView>
-            {/* <View
-						style={styles.branchInfoView}> */}
-            {/* <Text
-							style={styles.branchInfoText}>Outlet Info</Text> */}
-            {/* { (shop != null && shop.image != null) && ( */}
-
-            {/* <Image
-							source={{ uri: shop.image.thumb.url }}
-							style={styles.shopImage} /> */}
-            {/* ) } */}
             <ScrollView
               contentContainerStyle={{
-                paddingHorizontal: 10 * alpha,
-                paddingBottom: 80 * alpha
+                paddingHorizontal: 15 * alpha,
+                paddingTop: 15 * alpha,
+                paddingBottom: 100 * alpha
               }}
+              showsVerticalScrollIndicator={false}
             >
               <Text style={styles.branchHeaderAddress}>Address </Text>
               <Text style={styles.branchAddress}>
@@ -1928,9 +1965,9 @@ export default class Home extends React.Component {
               <Text style={styles.businessHourText}>
                 {shop ? shop.opening_closing_text : ''}
               </Text>
+              {/* <Text>{'\n\n\n\n\n\n\n'}</Text> */}
             </ScrollView>
           </View>
-          // </View>
         )}
 
         <Animated.View
@@ -2456,7 +2493,7 @@ const styles = StyleSheet.create({
     height: 30 * alpha
   },
   productlistFlatList: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     width: '100%',
     height: '100%'
   },
@@ -3385,15 +3422,15 @@ const styles = StyleSheet.create({
     marginTop: 9 * alpha
   },
   businessHourText: {
-    backgroundColor: 'transparent',
-    // color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
+    color: 'rgb(160, 160, 160)',
     fontSize: 13 * fontAlpha,
+    paddingVertical: 10 * alpha,
+    lineHeight: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    alignSelf: 'stretch',
-    marginTop: 3 * alpha
+    alignSelf: 'stretch'
   },
   featuredpromoButton: {
     backgroundColor: 'transparent',
@@ -3442,5 +3479,32 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 10 * alpha,
     paddingRight: 10 * alpha
+  },
+  rightArrowImage: {
+    width: 9 * alpha,
+    height: 9 * alpha,
+    tintColor: '#C5C5C5',
+    marginLeft: alpha * 5
+  },
+  selectShopButton: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  areaBubble: {
+    backgroundColor: 'white',
+    borderRadius: DEFAULT_BORDER_RADIUS,
+    marginBottom: alpha * 2,
+    borderWidth: 1,
+    borderColor: '#00B2E3'
+  },
+  areaText: {
+    fontFamily: TITLE_FONT,
+    fontSize: fontAlpha * 14,
+    margin: alpha * 5
+  },
+  pinImage: {
+    width: 20 * alpha,
+    height: 20 * alpha,
+    tintColor: '#00B2E3'
   }
 });

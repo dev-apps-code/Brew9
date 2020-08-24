@@ -1,39 +1,37 @@
-import BaseRequestObject from "./base_request_object";
+import BaseRequestObject from './base_request_object';
 
-class UpdateProfileRequestObject extends BaseRequestObject{
+class UpdateProfileRequestObject extends BaseRequestObject {
+  constructor(dob, nickname, gender, email) {
+    super();
+    this.dob = dob;
+    this.nickname = nickname;
+    this.gender = gender;
+    this.email = email;
+  }
 
-    constructor(dob, nickname, gender, email){
-        super();
-        this.dob = dob
-        this.nickname = nickname
-        this.gender = gender
-        this.email = email
+  getUrlString() {
+    return `members/${this.url_id}/update_profile`;
+  }
+
+  getFormData() {
+    const data = new FormData();
+    if (this.dob != null) {
+      data.append('dob', this.dob);
+    }
+    if (this.nickname != null) {
+      data.append('nickname', this.nickname);
     }
 
-   getUrlString() {
-       return `members/${this.url_id}/update_profile`
-   }
-
-   getFormData(){
-    
-        const data = new FormData()
-        if (this.dob != null) {
-            data.append('dob',this.dob)
-        }
-        if (this.nickname != null) {
-            data.append('nickname',this.nickname)
-        }
-
-        if (this.gender!=null){
-            data.append('gender', this.gender)
-        }
-        if (this.email!=null){
-            data.append('email', this.email)
-        }
-        return data
-   }
+    if (this.gender != null) {
+      data.append('gender', this.gender);
+    }
+    if (this.email != null) {
+      data.append('email', this.email);
+    }
+    return data;
+  }
 }
-export default UpdateProfileRequestObject
+export default UpdateProfileRequestObject;
 
 /* ---- SERVICES ----- 
 
@@ -46,8 +44,6 @@ export function updateProfile(authtoken,object) {
 
 
  -------------- */
-
-
 
 /* ---- MODEL ----- 
 
@@ -71,10 +67,6 @@ export function updateProfile(authtoken,object) {
 
 
  -------------- */
-
-
-
-
 
 /* **** ---- VIEW FUNCTIONS START HERE ----- **** 
 
@@ -173,4 +165,3 @@ loadUpdateProfile(){
 }
 
  -------------- */
-

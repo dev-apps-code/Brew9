@@ -247,10 +247,17 @@ public class AppConstants {
       
       
       
+      
+      
+      
+      
+      
+      
+      
       // ADD EMBEDDED RESPONSES HERE
       // START EMBEDDED RESPONSES
       embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@jasonfoo/brew9", "assets://shell-app-manifest.json", "application/json"));
-      embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40jasonfoo%2Fbrew9%2F1.2.5%2Fd33e1dcf7c2d4bb642dd766acd68466c-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+      embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40jasonfoo%2Fbrew9%2F2.0.0%2F21cf058758c2aa6d295370375dd49773-34.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
       // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }

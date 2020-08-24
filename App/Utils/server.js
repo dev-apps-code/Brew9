@@ -15,7 +15,7 @@ const URL = async () => {
     server = selectedServerUrl || DEFAULT_SERVER;
   }
 
-  console.log('server ', server);
+  // console.log('server ', server);
   let protocol =
     (await AsyncStorage.getItem('selected_server_protocol')) ||
     DEFAULT_PROTOCOL;
@@ -31,9 +31,9 @@ export var KURL_PRIVACY_POLICY = '';
 export var KURL_EULA = '';
 export var KURL_MEMBERSHIP_INFO = '';
 
-export var KCURRENT_API_VERSION_HEADER = 'application/dc.v6 gzip';
-export var APPBUILDVERSIONIOS = '29';
-export var APPBUILDVERSIONANDROID = '29';
+export var KCURRENT_API_VERSION_HEADER = 'application/dc.v7 gzip';
+export var APPBUILDVERSIONIOS = '31';
+export var APPBUILDVERSIONANDROID = '31';
 
 export const KTIMEOUT = 3 * 1000;
 
@@ -88,7 +88,7 @@ async function initialize_server() {
 export async function loadServer() {
   await initialize_server();
   const url = await KURL_INFO();
-  console.log('url ', url);
+  // console.log('url ', url);
   KURL_TERMS_OF_SERVICE = `${url}?page=terms_conditions&id=f1`;
   KURL_PRIVACY_POLICY = `${url}?page=privacy&id=1`;
   KURL_EULA = `${url}?page=eula&id=1`;

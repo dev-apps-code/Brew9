@@ -9,7 +9,7 @@ class NearestShopRequestObject extends BaseRequestObject{
     }
 
    getUrlString() {
-       return `companies/${this.url_id}/shops`
+       return `companies/${this.url_id}/shops/all`
    }
 }
 export default NearestShopRequestObject

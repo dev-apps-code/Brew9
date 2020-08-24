@@ -5,7 +5,9 @@ import {
   missions,
   review,
   deliveryFee,
-  shopTown
+  shopTown,
+  favoriteShop,
+  unfavoriteShop
 } from '../Services/shops';
 import EventObject from './event_object';
 import { createAction } from '../Utils/index';
@@ -15,6 +17,9 @@ export default {
   namespace: 'shops',
 
   state: {
+    allShops: [],
+    nearbyShops: [],
+    favoriteShops: [],
     selectedShop: null,
     currentOrder: null,
     popUp: false,
@@ -26,8 +31,17 @@ export default {
         ...state
       };
     },
+    setAllShops(state, { payload }) {
+      return { ...state, allShops: payload };
+    },
+    setNearbyShops(state, { payload }) {
+      return { ...state, nearbyShops: payload };
+    },
     setSelectedShop(state, { payload }) {
       return { ...state, selectedShop: payload };
+    },
+    setFavoriteShops(state, { payload }) {
+      return { ...state, favoriteShops: payload };
     },
     setCurrentOrder(state, { payload }) {
       const { order } = payload;
@@ -49,9 +63,24 @@ export default {
     setPopUp(state, { payload }) {
       const { popUp } = payload;
       return { ...state, popUp };
+    },
+    clearNearbyShops(state) {
+      return { ...state, nearbyShops: [] };
     }
   },
   effects: {
+    *loadAllShops({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setAllShops')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
     *loadShops({ payload }, { call, put, select }) {
       try {
         const { object, callback } = payload;
@@ -60,6 +89,61 @@ export default {
         const eventObject = new EventObject(json);
         if (eventObject.success == true) {
           yield put(createAction('setSelectedShop')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *selectShop({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setSelectedShop')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *loadFavoriteShops({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setFavoriteShops')(eventObject.result));
+        }
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *loadMakeFavoriteShop({ payload }, { call, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(favoriteShop, authtoken, object);
+        const eventObject = new EventObject(json);
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+    *loadUnfavoriteShop({ payload }, { call, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(unfavoriteShop, authtoken, object);
+        const eventObject = new EventObject(json);
+        typeof callback === 'function' && callback(eventObject);
+      } catch (err) {}
+    },
+
+    *loadNearbyShops({ payload }, { call, put, select }) {
+      try {
+        const { object, callback } = payload;
+        const authtoken = yield select((state) => state.members.userAuthToken);
+        const json = yield call(shops, authtoken, object);
+        const eventObject = new EventObject(json);
+        if (eventObject.success == true) {
+          yield put(createAction('setNearbyShops')(eventObject.result));
         }
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}

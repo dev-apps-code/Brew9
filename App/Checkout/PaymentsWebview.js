@@ -119,7 +119,7 @@ export default class PaymentsWebview extends React.Component {
       payment_url
     } = this.state;
 
-    console.log('payment url ', payment_url);
+    // console.log('payment url ', payment_url);
     return (
       <View style={styles.mainView}>
         {payment_url !== null ? (

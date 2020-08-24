@@ -154,11 +154,13 @@ const styles = StyleSheet.create({
   titleText: {
     paddingBottom: 5,
     textAlign: 'center',
+    fontSize: 13 * alpha,
     fontFamily: TITLE_FONT
   },
   descriptionText: {
     color: 'rgb(135, 135, 135)',
     fontFamily: TITLE_FONT,
+    fontSize: 12 * alpha,
     textAlign: 'center',
     flex:1
   },

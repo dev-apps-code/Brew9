@@ -17,7 +17,8 @@ import {
   RefreshControl,
   AppState,
   Modal,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Platform
 } from 'react-native';
 import React from 'react';
 import { alpha, fontAlpha, windowWidth, windowHeight } from '../Common/size';
@@ -34,6 +35,7 @@ import {
   TABBAR_ACTIVE_TINT,
   PRIMARY_COLOR,
   LIGHT_BLUE,
+  HEADER_NO_BACK,
   DEFAULT_GREY_BACKGROUND
 } from '../Common/common_style';
 import Moment from 'moment';
@@ -45,6 +47,7 @@ import _ from 'lodash';
 import { getMemberIdForApi } from '../Services/members_helper';
 import AnimationLoading from '../Components/AnimationLoading';
 import HudLoading from '../Components/HudLoading';
+import CurveSeparator from '../Components/CurveSeparator';
 @connect(({ members, shops, config }) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -58,18 +61,10 @@ import HudLoading from '../Components/HudLoading';
 export default class PickUp extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: (
-        <Text style={{ textAlign: 'center', flex: 1, fontFamily: TITLE_FONT }}>
-          Your Order
-        </Text>
-      ),
+      headerTitle: <Text style={HEADER_NO_BACK}>Your Order</Text>,
       headerTintColor: 'black',
       headerLeft: null,
-      headerRight: null,
-      headerTitleStyle: {
-        textAlign: 'center',
-        flex: 1
-      }
+      headerRight: null
     };
   };
 
@@ -213,17 +208,7 @@ export default class PickUp extends React.Component {
     }
   }
 
-  renderSeparator = () => {
-    return (
-      <View style={styles.receiptSectionSeperator}>
-        <Image
-          source={require('./../../assets/images/curve_in_background.png')}
-          style={styles.curveSeparator}
-        />
-        <View style={styles.sectionSeperatorView} />
-      </View>
-    );
-  };
+  renderSeparator = () => <CurveSeparator />;
 
   renderQueueView(current_order) {
     // create key value map for response messages
@@ -628,8 +613,7 @@ export default class PickUp extends React.Component {
                 </View>
                 <View style={styles.directionView}>
                   <TouchableOpacity
-                    // onPress={() => this.onDirectionPressed(item.shop)}
-                    onPress={() => this.onLocationButtonPressed()}
+                    onPress={() => this.onPressDirection()}
                     style={styles.directionIconButton}
                   >
                     <Image
@@ -826,29 +810,25 @@ export default class PickUp extends React.Component {
     navigate('Home');
   };
 
-  onDirectionPressed(shop) {
-    let latitudes = shop.latitude
-      ? shop.latitude
-      : this.props.selectedShop.latitude;
-    let longitudes = shop.latitude
-      ? shop.longitude
-      : this.props.selectedShop.longitude;
-    let latitude = latitudes ? parseFloat(latitudes) : 0.0;
-    let longitude = longitudes ? parseFloat(longitudes) : 0.0;
-    openMap({
-      latitude: latitude,
-      longitude: longitude,
-      zoom: 18,
-      query: shop.name
-    });
-  }
-  onLocationButtonPressed = () => {
-    const { navigate } = this.props.navigation;
 
-    navigate('DirectionMap', {
-      shop: this.props.selectedShop
-    });
-  };
+  onPressDirection() {
+    let {selectedShop} = this.props
+
+    let lat = selectedShop.latitude
+    let long = selectedShop.longitude
+    let latitude = lat ? parseFloat(lat) : 4.8886091;
+    let longitude = long ? parseFloat(long) : 114.8976136;
+    let location = latitude + ',' + longitude;
+    const url = Platform.select({
+      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+    })
+
+
+    Linking.openURL(url);
+   
+
+  }
 
   closePopUp = () => {
     const { dispatch } = this.props;
@@ -1104,7 +1084,7 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   pickUpMainView: {
-    backgroundColor: 'rgb(239, 239, 239)',
+    backgroundColor: DEFAULT_GREY_BACKGROUND,
     flex: 1
   },
   orderView: {
@@ -1225,7 +1205,8 @@ const styles = StyleSheet.create({
   },
 
   pickUpQueueView: {
-    backgroundColor: 'rgb(239, 239, 239)',
+    // backgroundColor: 'rgb(239, 239, 239)',
+    // backgroundColor: DEFAULT_GREY_BACKGROUND,
     flex: 1
   },
   customerServiceButton: {
@@ -1541,7 +1522,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    marginTop: 2 * alpha,
     marginBottom: 10 * alpha
   },
   branchDirectionView: {
