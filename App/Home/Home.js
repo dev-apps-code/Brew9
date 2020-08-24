@@ -665,16 +665,8 @@ export default class Home extends React.Component {
       this.setState({ delivery: 0 }, () => {
         this.refs.toggle.toggleItem(0, false);
 
-        var msg =
-          'Our delivery is too busy at the moment.Please try again in 30 mins.';
-        if (shop.response_message != undefined) {
-          delivery_disabled_response = _.find(
-            shop.response_message,
-            (obj) => obj.key === 'Delivery Disabled'
-          );
+        var msg = this.props.responses.get('Delivery Disabled') || 'Our delivery is too busy at the moment.Please try again in 30 mins.';
 
-          msg = delivery_disabled_response?.text || msg;
-        }
         this.refs.toast.show(msg, TOAST_DURATION);
       });
       return;
