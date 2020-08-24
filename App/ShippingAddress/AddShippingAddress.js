@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import React from 'react';
 import Toast from 'react-native-easy-toast';
-import SwitchSelector from 'react-native-switch-selector';
 import { connect } from 'react-redux';
 
 import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
