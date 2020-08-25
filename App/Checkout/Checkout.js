@@ -39,7 +39,7 @@ import { getMemberIdForApi } from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
 import CurveSeparator from '../Components/CurveSeparator';
-@connect(({ members, shops, orders }) => ({
+@connect(({ members, shops, orders, config }) => ({
   company_id: members.company_id,
   currentMember: members.profile,
   members: members,
@@ -54,7 +54,8 @@ import CurveSeparator from '../Components/CurveSeparator';
   discount_cart_total: orders.discount_cart_total,
   location: members.location,
   delivery: members.delivery,
-  shippingAddress: members.shippingAddress
+  shippingAddress: members.shippingAddress,
+  responses: config.responses
 }))
 export default class Checkout extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -96,7 +97,7 @@ export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     _.throttle(
-      this.onPayNowPressed.bind(this),
+      this.checkout.bind(this),
       500 // no new clicks within 500ms time window
     );
     const { discount_cart_total, currentMember, cart_total } = props;
@@ -137,7 +138,8 @@ export default class Checkout extends React.Component {
         value: 0,
         type: null
       },
-      enablePaynow: false
+      enablePaynow: false,
+      isConfirmCheckout: false
     };
     const xy = { x: 0, y: windowHeight };
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -769,40 +771,6 @@ export default class Checkout extends React.Component {
     );
   }
 
-  // removeItemFromCart(products,description) {
-
-  // 	////console.log("remove", products)
-  // 	let cart = [...this.state.cart]
-
-  // 	let newCart = [];
-  // 	let product_ids = products.map(item => item.id);
-
-  // 	let cart_total = 0
-  // 	let cart_total_quantity = 0
-  // 	for (x of cart) {
-  // 		if (!product_ids.includes(x.id)){
-  // 			newCart.push(x)
-  // 			cart_total_quantity = cart_total_quantity + cartItem.quantity
-  // 			cart_total = (parseFloat(cart_total) + parseFloat(x.price)).toFixed(2)
-  // 		}
-  // 	}
-
-  // 	let removed_item_name = `${description} \n\n`
-
-  // 	for (var index in products) {
-  // 		let product = products[index];
-  // 		removed_item_name = removed_item_name.concat(product.name)
-  // 		if (index > 0) {
-  // 			removed_item_name = removed_item_name.concat("\n")
-  // 		}
-  // 	}
-
-  // 	this.refs.toast.show(removed_item_name, TOAST_DURATION)
-  // 	if (newCart.length == 0){
-  // 		this.props.navigation.goBack()
-  // 	}
-  // }
-
   loadMakeOrder() {
     const {
       cart,
@@ -822,10 +790,14 @@ export default class Checkout extends React.Component {
       pick_up_time,
       selected_address
     } = this.state;
+
     let address_id = selected_address == null ? null : selected_address.id;
-    this.setState({ loading: true });
+
+    this.setState({ loading: true, isConfirmCheckout: false });
+
     const callback = (eventObject) => {
       this.setState({ loading: false });
+
       if (eventObject.success) {
         if (selected_payment == 'credits') {
           setTimeout(
@@ -935,6 +907,31 @@ export default class Checkout extends React.Component {
     });
   };
 
+  checkout = () => {
+    this.setState({ isConfirmCheckout: true });
+  };
+
+  renderConfirmPopup = () => {
+    let { isConfirmCheckout } = this.state;
+    const { responses, selectedShop } = this.props;
+    const r = responses;
+    const fallbackText = 'Are you sure you want to order from this location?';
+    const confirmText = r.get('Checkout Confirm') || fallbackText;
+    const description = `${confirmText} ${selectedShop.name}`;
+    const title = r.get('Checkout Confirm Title') || 'Confirm Checkout';
+    const OkText = r.get('Checkout Confirm Button') || 'Confirm';
+    const cancelText = r.get('Checkout Cancel Button') || 'Cancel';
+    const popUpVisible = isConfirmCheckout;
+    return (
+      <Brew9PopUp
+        onPressOk={this.onPayNowPressed}
+        onBackgroundPress={() => {}}
+        onPressCancel={() => this.setState({ isConfirmCheckout: false })}
+        {...{ popUpVisible, title, description, OkText, cancelText }}
+      />
+    );
+  };
+
   onPayNowPressed = () => {
     const { navigate } = this.props.navigation;
     const {
@@ -946,14 +943,16 @@ export default class Checkout extends React.Component {
     } = this.state;
     const { currentMember, selectedShop, delivery } = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
-
-    analytics.event(
-      new Event('Checkout', getMemberIdForApi(currentMember), 'Pay Now')
+    const event = new Event(
+      'Checkout',
+      getMemberIdForApi(currentMember),
+      'Pay Now'
     );
+
+    analytics.event(event);
+
     if (currentMember != undefined) {
       if (delivery && !selected_address) {
-        // ////console.log('what');
-        // this.setState({ visible: true });
         this.addShippingAddress();
         return;
       } else {
@@ -1012,11 +1011,7 @@ export default class Checkout extends React.Component {
             }
           }
         }
-        // if (delivery) {
-        //   this.addressConfirmation();
-        // } else {
-        //   this.loadMakeOrder();
-        // }
+
         this.loadMakeOrder();
 
         return;
@@ -1880,7 +1875,7 @@ export default class Checkout extends React.Component {
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => this.onPayNowPressed()}
+          onPress={() => this.checkout()}
           style={style}
           disabled={!enablePaynow}
         >
@@ -1913,7 +1908,6 @@ export default class Checkout extends React.Component {
             {this.renderCheckoutReceipt()}
           </View>
         </ScrollView>
-
         {(isPaymentToggle == true || isPickupToogle == true) && (
           <View style={styles.checkoutViewOverlay} />
         )}
@@ -1932,6 +1926,7 @@ export default class Checkout extends React.Component {
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
         />
+        {this.renderConfirmPopup()}
         {selected_address && (
           <Brew9PopUp
             popUpVisible={this.state.addressConfirmation}
