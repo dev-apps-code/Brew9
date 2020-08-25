@@ -99,21 +99,14 @@ export default class ShopDetails extends Component {
   };
 
   render() {
-    const {
-      details,
-      onPressOrderNow,
-      shop,
-      locationPermission,
-      responses,
-      shopResponses
-    } = this.props;
-
+    const { details, onPressOrderNow, shop, locationPermission } = this.props;
     const itemStyle = shop && shop.id === details.id ? styles.highlighted : {};
     const minutes = Math.round(details.minute_drive);
     const { start_time, end_time } = details?.opening_hour || {
       start_time: null,
       end_time: null
     };
+
     let hoursText = null;
     const deliveryAvailable = getResponseMsg({
       props: this.props,
