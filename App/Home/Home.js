@@ -16,6 +16,7 @@ import {
   Keyboard,
   BackHandler
 } from 'react-native';
+import RNExitApp from 'react-native-kill-app';
 import Brew9Modal from '../Components/Brew9Modal';
 import Modal from 'react-native-modal';
 import PushRequestObject from '../Requests/push_request_object';
@@ -2010,7 +2011,7 @@ export default class Home extends React.Component {
           title={'Exit App '}
           description={'exit the  application?'}
           okayButtonAction={() => {
-            BackHandler.exitApp();
+            RNExitApp.exitApp();
           }}
           cancelButtonAction={() => this.setState({ visible: false })}
         />
