@@ -9,7 +9,7 @@ export default {
     isToggleShopLocation: false,
     selectedTab: 'home',
     responses: new Map(),
-    shopResponses: []
+    shopResponses: new Map()
   },
 
   reducers: {
