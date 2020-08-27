@@ -18,11 +18,13 @@ import {
   DISABLED_COLOR
 } from '../Common/common_style';
 import { alpha, fontAlpha } from '../Common/size';
+import { getResponseMsg } from '../Utils/responses';
 
 @connect(({ members, shops, config }) => ({
   currentUser: members.profile,
   shop: shops.selectedShop,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses
 }))
 export default class ShopDetails extends Component {
   constructor(props) {
@@ -104,10 +106,24 @@ export default class ShopDetails extends Component {
       start_time: null,
       end_time: null
     };
+
     let hoursText = null;
+    const deliveryAvailable = getResponseMsg({
+      props: this.props,
+      shopId: details.id,
+      key: 'delivery_available',
+      defaultText: 'Delivery'
+    });
+    const deliveryUnavailable = getResponseMsg({
+      props: this.props,
+      shopId: details.id,
+      key: 'delivery_unavailable',
+      defaultText: 'No Delivery'
+    });
+
     let serviceInfoText = '';
     serviceInfoText +=
-      details.delivery_option == true ? 'Delivery' : 'No Delivery';
+      details.delivery_option == true ? deliveryAvailable : deliveryUnavailable;
     serviceInfoText +=
       locationPermission == true
         ? ' | ' + details.kilometer_distance + ' km ' + minutes

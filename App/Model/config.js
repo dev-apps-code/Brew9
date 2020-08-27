@@ -8,7 +8,8 @@ export default {
   state: {
     isToggleShopLocation: false,
     selectedTab: 'home',
-    responses: []
+    responses: new Map(),
+    shopResponses: new Map()
   },
 
   reducers: {
@@ -23,8 +24,20 @@ export default {
     },
     saveResponses(state, { payload }) {
       const responses = new Map();
-      payload.response_messages.map((i) => responses.set(i.key, i.text));
-      return { ...state, responses };
+      const overrides = new Map();
+      const shopMessages = new Map();
+
+      payload.response_messages.map((r) => {
+        responses.set(r.key, r.text);
+
+        if (r.overrides && r.overrides.length > 0) {
+          r.overrides.map((i) => {
+            shopMessages.set(r.key, i.text);
+            overrides.set(i.shop_id, shopMessages);
+          });
+        }
+      });
+      return { ...state, responses, shopResponses: overrides };
     }
   },
   effects: {
