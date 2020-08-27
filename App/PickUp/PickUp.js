@@ -28,6 +28,7 @@ import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_
 import ProfileRequestObject from '../Requests/profile_request_object';
 import { createAction } from '../Utils/index';
 import openMap from 'react-native-open-maps';
+import { getResponseMsg } from '../Utils/responses';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -56,7 +57,9 @@ import CurveSeparator from '../Components/CurveSeparator';
   selectedTab: config.selectedTab,
   popUp: shops.popUp,
   currentOrder: shops.currentOrder,
-  orders: shops.orders
+  orders: shops.orders,
+  responses: config.responses,
+  shopResponses: config.shopResponses
 }))
 export default class PickUp extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -212,10 +215,12 @@ export default class PickUp extends React.Component {
 
   renderQueueView(current_order) {
     // create key value map for response messages
-    const responses = new Map();
-    this.props.selectedShop?.response_message?.map((i) => {
-      responses.set(i.key, i.text);
-    });
+    // const responses = new Map();
+    // this.props.selectedShop?.response_message?.map((i) => {
+    //   responses.set(i.key, i.text);
+    // });
+
+    const { selectedShop } = this.props;
 
     const queues = current_order.map((item, key) => {
       let claim_day = item.pickup_status == 'Tomorrow' ? 'TOMORROW' : '';
@@ -242,28 +247,45 @@ export default class PickUp extends React.Component {
       let calculate_cart_total = cart_total;
 
       // Suggesting this must be added to a default values
-      let paid_order_message =
-        'Order must be collected within 30 minutes of collection time. ' +
-        'Otherwise it will be canceled and non-refundable';
-
-      let unpaid_order_message =
-        'Your order will be processed upon receiving payment.';
+      let paid_order_message = '';
+      let unpaid_order_message = '';
 
       let remarks = '';
       if (item.delivery_method) {
-        let default_remark =
-          'Your order is now in process and will be delivered to ' +
-          'you estimated 30 minutes.';
+        //old response
+        // let default_remark =
+        //   'Your order is now in process and will be delivered to ' +
+        //   'you estimated 30 minutes.';
 
-        remarks = responses.get('Delivery Remark') || default_remark;
+        // remarks = responses.get('Delivery Remark') || default_remark;
+        remarks = getResponseMsg({
+          props: this.props,
+          shopId: selectedShop.id,
+          key: 'Delivery Remark',
+          defaultText:
+            'Your order is now in process and will be delivered to you estimated 30 minutes.'
+        });
       } else {
-        if (responses.size > 0) {
           if (item.paid == true) {
-            paid_order_message = responses.get('Not Collected Order');
+            //old response
+            // paid_order_message = responses.get('Not Collected Order');
+            paid_order_message = getResponseMsg({
+              props: this.props,
+              shopId: selectedShop.id,
+              key: 'Not Collected Order',
+              defaultText:
+                'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable'
+            });
           } else {
-            unpaid_order_message = responses.get('Pending Payment (Remarks)');
+            //old response
+            // unpaid_order_message = responses.get('Pending Payment (Remarks)');
+            unpaid_order_message = getResponseMsg({
+              props: this.props,
+              shopId: selectedShop.id,
+              key: 'Pending Payment (Remarks)',
+              defaultText: 'Your order will be processed upon receiving payment.'
+            });
           }
-        }
 
         remarks = item.paid ? paid_order_message : unpaid_order_message;
       }
@@ -810,24 +832,22 @@ export default class PickUp extends React.Component {
     navigate('Home');
   };
 
-
   onPressDirection() {
-    let {selectedShop} = this.props
+    let { selectedShop } = this.props;
 
-    let lat = selectedShop.latitude
-    let long = selectedShop.longitude
+    let lat = selectedShop.latitude;
+    let long = selectedShop.longitude;
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
     const url = Platform.select({
-      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      ios:
+        'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
+        location,
       android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
-    })
-
+    });
 
     Linking.openURL(url);
-   
-
   }
 
   closePopUp = () => {
