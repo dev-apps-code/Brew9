@@ -24,6 +24,7 @@ import VerifyCouponCodeObj from '../Requests/verify_coupon _code_request_object'
 import LogoutRequestObject from '../Requests/logout_request_object';
 import NotificationsRequestObject from '../Requests/notifications_request_object';
 import Constants from 'expo-constants';
+import { getResponseMsg } from '../Utils/responses';
 import {
   LIGHT_GREY,
   TITLE_FONT,
@@ -55,7 +56,10 @@ import Brew9Toast from '../Components/Brew9Toast';
   currentMember: members.profile,
   free_membership: members.free_membership,
   premium_membership: members.premium_membership,
-  selectedShop: shops.selectedShop
+  selectedShop: shops.selectedShop,
+  responses: config.responses,
+  shopResponses: config.shopResponses
+
 }))
 export default class Profile extends React.Component {
   timer = null;
@@ -123,13 +127,21 @@ export default class Profile extends React.Component {
   }
 
   loadAppSlogan() {
-    const responses = new Map();
-    this.props.selectedShop?.response_message?.map((i) => {
-      responses.set(i.key, i.text);
-    });
+    const {selectedShop} = this.props
+    //old response
+    // const responses = new Map();
+    // this.props.selectedShop?.response_message?.map((i) => {
+    //   responses.set(i.key, i.text);
+    // });
 
-    const appSlogan =
-      responses.get('App Slogan') || 'Redefine Coffee. Chocolate. Juice.';
+    // const appSlogan =
+    //   responses.get('App Slogan') || 'Redefine Coffee. Chocolate. Juice.';
+    const appSlogan = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'App Slogan',
+      defaultText: 'Redefine Coffee. Chocolate. Juice.'
+    });
     this.setState({ appSlogan });
   }
 
