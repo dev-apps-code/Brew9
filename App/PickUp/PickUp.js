@@ -56,7 +56,9 @@ import CurveSeparator from '../Components/CurveSeparator';
   selectedTab: config.selectedTab,
   popUp: shops.popUp,
   currentOrder: shops.currentOrder,
-  orders: shops.orders
+  orders: shops.orders,
+  responses: config.responses
+
 }))
 export default class PickUp extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -211,11 +213,8 @@ export default class PickUp extends React.Component {
   renderSeparator = () => <CurveSeparator />;
 
   renderQueueView(current_order) {
-    // create key value map for response messages
-    const responses = new Map();
-    this.props.selectedShop?.response_message?.map((i) => {
-      responses.set(i.key, i.text);
-    });
+
+    let {responses} = this.props
 
     const queues = current_order.map((item, key) => {
       let claim_day = item.pickup_status == 'Tomorrow' ? 'TOMORROW' : '';
@@ -257,13 +256,11 @@ export default class PickUp extends React.Component {
 
         remarks = responses.get('Delivery Remark') || default_remark;
       } else {
-        if (responses.size > 0) {
           if (item.paid == true) {
             paid_order_message = responses.get('Not Collected Order');
           } else {
             unpaid_order_message = responses.get('Pending Payment (Remarks)');
           }
-        }
 
         remarks = item.paid ? paid_order_message : unpaid_order_message;
       }

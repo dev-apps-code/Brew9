@@ -35,7 +35,7 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-
+import RNExitApp from 'react-native-exit-app';
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
   TITLE_FONT,
@@ -657,6 +657,7 @@ export default class Home extends React.Component {
   };
 
   _toggleDelivery = (value) => {
+    console.log(this.props.responses)
     const { dispatch, shop } = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
@@ -2009,7 +2010,7 @@ export default class Home extends React.Component {
           visible={this.state.visible}
           cancelable={true}
           title={'Exit App '}
-          description={'exit the  application?'}
+          description={'Exit the application?'}
           okayButtonAction={() => {
             RNExitApp.exitApp();
           }}
@@ -2786,7 +2787,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flex: 1,
     marginTop: 5 * alpha,
-    maxHeight: 250 * alpha
+    maxHeight: 320 * alpha
   },
   productView: {
     backgroundColor: 'transparent',

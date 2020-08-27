@@ -966,21 +966,8 @@ export default class Checkout extends React.Component {
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
           ) {
-            var insufficient =
-              'Oops, insufficient credit.\nPlease select other payment option.';
-
-            if (selectedShop.response_message != undefined) {
-              insufficient_response = _.find(
-                selectedShop.response_message,
-                function (obj) {
-                  return obj.key === 'Popup - Insufficient credit';
-                }
-              );
-              if (insufficient_response != undefined) {
-                insufficient = insufficient_response.text;
-              }
-            }
-            this.refs.toast.show(insufficient, TOAST_DURATION + 1000);
+            var msg = this.props.responses.get('Popup - Insufficient credit') || 'Oops, insufficient credit.\nPlease select other payment option.';
+            this.refs.toast.show(msg, TOAST_DURATION + 1000);
 
             return;
           }
