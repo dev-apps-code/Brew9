@@ -21,6 +21,9 @@ import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
 import _ from 'lodash';
 import Brew9Toast from '../Components/Brew9Toast';
+import { getResponseMsg } from '../Utils/responses';
+
+
 
 import {
   TITLE_FONT,
@@ -55,7 +58,8 @@ import CurveSeparator from '../Components/CurveSeparator';
   location: members.location,
   delivery: members.delivery,
   shippingAddress: members.shippingAddress,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses
 }))
 export default class Checkout extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -913,14 +917,45 @@ export default class Checkout extends React.Component {
 
   renderConfirmPopup = () => {
     let { isConfirmCheckout } = this.state;
-    const { responses, selectedShop } = this.props;
-    const r = responses;
-    const fallbackText = 'Are you sure you want to order from this location?';
-    const confirmText = r.get('Checkout Confirm') || fallbackText;
+    const { selectedShop } = this.props;
+    
+    //old response
+    // const fallbackText = 'Are you sure you want to order from this location?';
+    // const confirmText = r.get('Checkout Confirm') || fallbackText;
+    // const title = r.get('Checkout Confirm Title') || 'Confirm Checkout';
+    // const OkText = r.get('Checkout Confirm Button') || 'Confirm';
+    // const cancelText = r.get('Checkout Cancel Button') || 'Cancel';
+
+    const confirmText = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Checkout Confirm',
+      defaultText: 'Are you sure you want to order from this location?'
+    });
+
     const description = `${confirmText} ${selectedShop.name}`;
-    const title = r.get('Checkout Confirm Title') || 'Confirm Checkout';
-    const OkText = r.get('Checkout Confirm Button') || 'Confirm';
-    const cancelText = r.get('Checkout Cancel Button') || 'Cancel';
+
+    const title = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Checkout Confirm Title',
+      defaultText: 'Confirm Checkout'
+    });
+
+    const OkText = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'heckout Confirm Button',
+      defaultText: 'Confirm'
+    });
+
+    const cancelText = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Checkout Cancel Button',
+      defaultText: 'Cancel'
+    });
+
     const popUpVisible = isConfirmCheckout;
     return (
       <Brew9PopUp
