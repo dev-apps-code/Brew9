@@ -6,9 +6,7 @@ import { NON_TITLE_FONT, TOAST_DURATION } from '../Common/common_style';
 
 class Brew9Toast extends Component {
   renderMessage = (message) => (
-    <View style={styles.toastContainer}>
       <Text style={styles.toastText}>{message}</Text>
-    </View>
   );
 
   show = (message, duration, callback) => {
@@ -24,7 +22,7 @@ class Brew9Toast extends Component {
   };
 
   render() {
-    return <Toast ref="toast" />;
+    return <Toast ref="toast" style={styles.toastContainer}/>;
   }
 }
 
@@ -32,7 +30,6 @@ const styles = StyleSheet.create({
   toastContainer: {
     bottom: windowHeight / 2 - 40,
     justifyContent: 'center',
-    backgroundColor: 'black'
   },
   toastText: {
     fontFamily: NON_TITLE_FONT,
