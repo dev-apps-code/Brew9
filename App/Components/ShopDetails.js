@@ -88,14 +88,37 @@ export default class ShopDetails extends Component {
   };
 
   getStatusText = (status, isOpened) => {
+    const {details} = this.props
     if (status === 'in_operation') {
-      let orderNowText =
-        this.props.responses.get('Order Now Button') || 'Order Now';
-      let viewMoreText =
-        this.props.responses.get('View More Button') || 'View More';
+      // old response
+      // let orderNowText =
+      //   this.props.responses.get('Order Now Button') || 'Order Now';
+      // let viewMoreText =
+      //   this.props.responses.get('View More Button') || 'View More';
+
+        const orderNowText = getResponseMsg({
+          props: this.props,
+          shopId: details.id,
+          key: 'Order Now Button',
+          defaultText: 'Order Now'
+        });
+
+        const viewMoreText = getResponseMsg({
+          props: this.props,
+          shopId: details.id,
+          key: 'View More Button',
+          defaultText: 'View More'
+        });
       return isOpened ? orderNowText : viewMoreText;
     }
-    return this.props.responses.get(status);
+    
+    const shopStatus = getResponseMsg({
+      props: this.props,
+      shopId: details.id,
+      key: 'status',
+      defaultText: ''
+    });
+    return shopStatus;
   };
 
   render() {
