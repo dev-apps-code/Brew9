@@ -1912,15 +1912,6 @@ export default class Home extends React.Component {
                 this.marker.showCallout()
               }
             >
-              {/* <MapView.Marker
-                ref={(marker) => (this.marker = marker)}
-                coordinate={{
-                  latitude: shop ? parseFloat(shop.latitude) : 0.0,
-                  longitude: shop ? parseFloat(shop.longitude) : 0.0
-                }}
-                title="Brew9"
-                description={shop.location}
-              /> */}
               <Marker
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,

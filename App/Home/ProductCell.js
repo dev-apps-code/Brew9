@@ -1,11 +1,3 @@
-//
-//  ProductCell
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   Text,
