@@ -645,7 +645,7 @@ export default class AddShippingAddress extends React.Component {
                 {this.state.populateTowns
                   ? this.state.town.map((item, key) => {
                       return (
-                        <View {...{ key }} style={styles.itemView}>
+                        <View {...{ key }} style={styles.itemView} key={key}>
                           <TouchableOpacity
                             onPress={() => this.selectTown(key)}
                           >
@@ -660,7 +660,7 @@ export default class AddShippingAddress extends React.Component {
                   ? this.state.town[this.state.chosenTown].areas.map(
                       (item, key) => {
                         return (
-                          <View style={styles.itemView}>
+                          <View style={styles.itemView} key={key}>
                             <TouchableOpacity
                               onPress={() => this.selectArea(key)}
                             >
