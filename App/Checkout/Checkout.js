@@ -968,6 +968,9 @@ export default class Checkout extends React.Component {
   };
 
   onPayNowPressed = () => {
+    this.setState({
+      isConfirmCheckout: false
+    })
     const { navigate } = this.props.navigation;
     const {
       selected_payment,
@@ -987,6 +990,7 @@ export default class Checkout extends React.Component {
     analytics.event(event);
 
     if (currentMember != undefined) {
+      console.log("1")
       if (delivery && !selected_address) {
         this.addShippingAddress();
         return;
@@ -997,25 +1001,20 @@ export default class Checkout extends React.Component {
         }
 
         if (selected_payment == 'credits') {
+      console.log("2")
+
           if (
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
           ) {
-            var insufficient =
-              'Oops, insufficient credit.\nPlease select other payment option.';
-
-            if (selectedShop.response_message != undefined) {
-              insufficient_response = _.find(
-                selectedShop.response_message,
-                function (obj) {
-                  return obj.key === 'Popup - Insufficient credit';
-                }
-              );
-              if (insufficient_response != undefined) {
-                insufficient = insufficient_response.text;
-              }
-            }
-            this.refs.toast.show(insufficient, TOAST_DURATION + 1000);
+            const insufficientText = getResponseMsg({
+              props: this.props,
+              shopId: selectedShop.id,
+              key: 'Popup - Insufficient credit',
+              defaultText: 'Oops, insufficient E-Wallet credit! Please select other payment option.'
+            });
+    
+            this.refs.toast.show(insufficientText, TOAST_DURATION + 1000);
 
             return;
           }
