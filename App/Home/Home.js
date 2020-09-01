@@ -1517,13 +1517,6 @@ export default class Home extends React.Component {
     return (
       <View style={styles.popOutView}>
         <View style={styles.topbuttonView}>
-          {/* <TouchableOpacity
-						onPress={this.onFavouritePressed}
-						style={styles.favouriteButton}>
-						<Image
-							source={require("./../../assets/images/group-9-11.png")}
-							style={styles.favouriteButtonImage}/>
-					</TouchableOpacity> */}
           <TouchableOpacity
             onPress={this.onClosePressed}
             style={styles.closeButton}
