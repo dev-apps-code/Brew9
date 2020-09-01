@@ -35,6 +35,7 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { getResponseMsg } from '../Utils/responses';
 
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
@@ -73,7 +74,8 @@ import Brew9Toast from '../Components/Brew9Toast';
   discount_cart_total: orders.discount_cart_total,
   clearCart: orders.clearCart,
   currentPromoText: orders.currentPromoText,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses
 }))
 export default class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -485,7 +487,7 @@ export default class Home extends React.Component {
   loadStoreProducts() {
     const {
       dispatch,
-      shop: { id }
+      shop: { id },
     } = this.props;
     const { menu_banners } = this.state;
     this.setState({ products: [] });
@@ -496,7 +498,13 @@ export default class Home extends React.Component {
           const callback = () => {
             Linking.openURL(eventObject.result.url);
           };
-          this.refs.toast.show(message, TOAST_DURATION, callback);
+          const updateText = getResponseMsg({
+            props: this.props,
+            shopId: id,
+            key: 'FORCE_UPDATE',
+            defaultText: 'We have added new exciting features. Please update to continue.'
+          });
+          this.refs.toast.show(updateText, TOAST_DURATION, callback);
         } else {
           this.setState(
             {
