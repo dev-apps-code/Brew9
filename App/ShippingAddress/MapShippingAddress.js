@@ -24,10 +24,13 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Brew9Toast from '../Components/Brew9Toast';
+import { getResponseMsg } from '../Utils/responses';
 
 @connect(({ members, shops, config, orders }) => ({
   location: members.location,
-  selectedShop: shops.selectedShop
+  selectedShop: shops.selectedShop,
+  responses: config.responses,
+  shopResponses: config.shopResponses
 }))
 export default class MapShippingAddress extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -96,20 +99,15 @@ export default class MapShippingAddress extends React.Component {
   };
 
   placeHolderText = () => {
-    var placeholder = 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
+    const {selectedShop} = this.props
+    const addressPlaceholder = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Address Search Placeholder',
+      defaultText: 'No.1, Simpang 127, Sungai Akar, Jalan Kebangsaan'
+    });
 
-    if (this.props.selectedShop.response_message != undefined) {
-      placeholder_response = _.find(
-        this.props.selectedShop.response_message,
-        function (obj) {
-          return obj.key === 'Address Search Placeholder';
-        }
-      );
-      if (placeholder_response != undefined) {
-        placeholder = placeholder_response.text;
-      }
-    }
-    return placeholder;
+    return addressPlaceholder;
   };
 
   renderForm = (title, placeholder, text, onChangeText, description) => {
