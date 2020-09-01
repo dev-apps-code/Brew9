@@ -35,7 +35,6 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import RNExitApp from 'react-native-exit-app';
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
   TITLE_FONT,
@@ -657,7 +656,7 @@ export default class Home extends React.Component {
   };
 
   _toggleDelivery = (value) => {
-    console.log(this.props.responses)
+    console.log(this.props.responses);
     const { dispatch, shop } = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
@@ -667,7 +666,9 @@ export default class Home extends React.Component {
       this.setState({ delivery: 0 }, () => {
         this.refs.toggle.toggleItem(0, false);
 
-        var msg = this.props.responses.get('Delivery Disabled') || 'Our delivery is too busy at the moment.Please try again in 30 mins.';
+        var msg =
+          this.props.responses.get('Delivery Disabled') ||
+          'Our delivery is too busy at the moment.Please try again in 30 mins.';
 
         this.refs.toast.show(msg, TOAST_DURATION);
       });
@@ -1789,17 +1790,15 @@ export default class Home extends React.Component {
                 justifyContent: 'space-between'
               }}
             >
-              <TouchableOpacity
-                  onPress={this._onShopNamePressed}
-              >
-              <Text
-                style={[
-                  styles.distance1kmText,
-                  { color: 'rgb(130, 130, 130)', marginTop: -10 }
-                ]}
-              >
-                Change Location
-              </Text>
+              <TouchableOpacity onPress={this._onShopNamePressed}>
+                <Text
+                  style={[
+                    styles.distance1kmText,
+                    { color: 'rgb(130, 130, 130)', marginTop: -10 }
+                  ]}
+                >
+                  Change Location
+                </Text>
               </TouchableOpacity>
               <View style={{ flexDirection: 'row' }}>
                 <View style={styles.moreView}>
