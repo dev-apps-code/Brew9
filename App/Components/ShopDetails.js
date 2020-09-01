@@ -116,7 +116,7 @@ export default class ShopDetails extends Component {
       props: this.props,
       shopId: details.id,
       key: 'status',
-      defaultText: ''
+      defaultText: 'Opening Soon'
     });
     return shopStatus;
   };
