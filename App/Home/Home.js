@@ -20,12 +20,12 @@ import RNExitApp from 'react-native-kill-app';
 import Brew9Modal from '../Components/Brew9Modal';
 import Modal from 'react-native-modal';
 import PushRequestObject from '../Requests/push_request_object';
-import { connect } from 'react-redux';
-import { createAction } from '../Utils/index';
+import {connect} from 'react-redux';
+import {createAction} from '../Utils/index';
 import ProductCell from './ProductCell';
 import CategoryCell from './CategoryCell';
 import CartCell from './CartCell';
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import ProductRequestObject from '../Requests/product_request_object';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import SwitchSelector from 'react-native-switch-selector';
@@ -34,9 +34,9 @@ import _ from 'lodash';
 import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { getResponseMsg } from '../Utils/responses';
-
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {getResponseMsg} from '../Utils/responses';
+import RNExitApp from 'react-native-exit-app';
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
   TITLE_FONT,
@@ -49,17 +49,17 @@ import {
   TOAST_DURATION,
   DEFAULT_BORDER_RADIUS
 } from '../Common/common_style';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
-import { getPreciseDistance } from 'geolib';
-import { AsyncStorage } from 'react-native';
+import {Analytics, Event, PageHit} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
+import {getPreciseDistance} from 'geolib';
+import {AsyncStorage} from 'react-native';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
 import AnimationLoading from '../Components/AnimationLoading';
 import Brew9Toast from '../Components/Brew9Toast';
 
-@connect(({ members, shops, config, orders }) => ({
+@connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
   company_id: members.company_id,
   location: members.location,
@@ -78,16 +78,15 @@ import Brew9Toast from '../Components/Brew9Toast';
   shopResponses: config.shopResponses
 }))
 export default class Home extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTintColor: 'black',
       headerLeft: (
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onLogoPressed ? params.onLogoPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/logo.png')}
               style={styles.navigationBarItemIcon}
@@ -101,8 +100,7 @@ export default class Home extends React.Component {
             onPress={
               params.onQrScanPressed ? params.onQrScanPressed : () => null
             }
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/scan_qr_button.png')}
               style={styles.navigationBarRightItemIcon}
@@ -116,12 +114,12 @@ export default class Home extends React.Component {
   static tabBarItemOptions = (navigation, store) => {
     return {
       tabBarLabel: 'Menu',
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         store.dispatch(createAction('config/setToggleShopLocation')(false));
         store.dispatch(createAction('config/setTab')('home'));
         defaultHandler();
       },
-      tabBarIcon: ({ iconTintColor, focused }) => {
+      tabBarIcon: ({iconTintColor, focused}) => {
         const image = focused
           ? require('./../../assets/images/order_selected_tab.png')
           : require('./../../assets/images/order_tab.png');
@@ -144,7 +142,7 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.renderBottom = false;
-    this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+    this.moveAnimation = new Animated.ValueXY({x: 0, y: windowHeight});
 
     this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
@@ -201,8 +199,8 @@ export default class Home extends React.Component {
   };
 
   onQrScanPressed = () => {
-    const { navigation } = this.props;
-    const { currentMember } = this.props;
+    const {navigation} = this.props;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'ScanQr'));
 
@@ -224,12 +222,12 @@ export default class Home extends React.Component {
   };
 
   _onShopNamePressed = () => {
-    this.setState({ refresh_products: true });
+    this.setState({refresh_products: true});
     this.props.navigation.navigate('SelectShop');
   };
 
   getLocationAndLoadShops = async () => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     try {
       const response = await Permissions.getAsync(Permissions.LOCATION);
       if (response.status === 'denied') {
@@ -237,7 +235,7 @@ export default class Home extends React.Component {
         return;
       }
       if (response.status !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        const {status} = await Permissions.askAsync(Permissions.LOCATION);
         // api will be called when by location if it is not denied
         if (status === 'denied') {
           this.loadShops();
@@ -245,7 +243,7 @@ export default class Home extends React.Component {
         }
       }
 
-      const { monitorLocation } = this.state;
+      const {monitorLocation} = this.state;
 
       if (monitorLocation == null) {
         const mLocation = Location.watchPositionAsync(
@@ -258,7 +256,7 @@ export default class Home extends React.Component {
           },
           (error) => console.log(error)
         );
-        this.setState({ monitorLocation: mLocation });
+        this.setState({monitorLocation: mLocation});
       }
     } catch (error) {
       // Error retrieving data
@@ -266,7 +264,7 @@ export default class Home extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { shop } = this.props;
+    const {shop} = this.props;
     if (shop != null && shop.all_promotions != null) {
       if (prevProps.cart !== this.props.cart) {
         this.check_promotion_trigger();
@@ -302,15 +300,15 @@ export default class Home extends React.Component {
   }
 
   computeDistance() {
-    const { location, shop } = this.props;
+    const {location, shop} = this.props;
     if (location != null && shop != null) {
       const prevLatInRad = location.coords.latitude;
       const prevLongInRad = location.coords.longitude;
       const latInRad = shop.latitude;
       const longInRad = shop.longitude;
       var pdis = getPreciseDistance(
-        { latitude: prevLatInRad, longitude: prevLongInRad },
-        { latitude: latInRad, longitude: longInRad }
+        {latitude: prevLatInRad, longitude: prevLongInRad},
+        {latitude: latInRad, longitude: longInRad}
       );
 
       this.setDistanceString(pdis);
@@ -318,7 +316,7 @@ export default class Home extends React.Component {
   }
 
   setDistanceString(calculated_distance) {
-    const { shop } = this.props;
+    const {shop} = this.props;
     var distance_string = '';
     var parseDistance = calculated_distance;
     if (parseDistance > 1000) {
@@ -333,7 +331,7 @@ export default class Home extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({ isPromoToggle: false });
+    this.setState({isPromoToggle: false});
   }
 
   unmounted = false;
@@ -394,7 +392,7 @@ export default class Home extends React.Component {
       nextAppState === 'active'
     ) {
       console.log('active');
-      this.setState({ refresh_products: true });
+      this.setState({refresh_products: true});
       this.getLocationAndLoadShops();
       console.log('--getlocation439--');
     }
@@ -405,20 +403,20 @@ export default class Home extends React.Component {
   };
 
   handleBackPress = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     if (!navigation.isFocused()) {
       // The screen is not focused, so don't do anything
       return false;
     } else {
       const activeRoute = navigation.state.routeName == 'Home' ? true : false;
       if (activeRoute) {
-        this.setState({ visible: true });
+        this.setState({visible: true});
       }
     }
   };
 
   loadStorePushToken = (token) => {
-    const { dispatch, currentMember } = this.props;
+    const {dispatch, currentMember} = this.props;
     const callback = (eventObject) => {};
     const obj = new PushRequestObject(
       Constants.installationId,
@@ -439,7 +437,7 @@ export default class Home extends React.Component {
 
   loadShops() {
     const callback = () => {
-      const { shop, location, responses } = this.props;
+      const {shop, location, responses} = this.props;
 
       if (shop === null) {
         let message =
@@ -463,8 +461,8 @@ export default class Home extends React.Component {
 
         this.refs.toast.show(message, 1000, callback);
       } else {
-        const { menu_banners } = shop;
-        const { first_promo_popup, refresh_products } = this.state;
+        const {menu_banners} = shop;
+        const {first_promo_popup, refresh_products} = this.state;
         const callback = () => {
           this.check_promotion_trigger();
           this.computeDistance();
@@ -478,23 +476,23 @@ export default class Home extends React.Component {
           }
         };
 
-        this.setState({ menu_banners }, callback);
+        this.setState({menu_banners}, callback);
       }
     };
-    this.props.dispatch(createAction('config/loadConfig')({ callback }));
+    this.props.dispatch(createAction('config/loadConfig')({callback}));
   }
 
   loadStoreProducts() {
     const {
       dispatch,
-      shop: { id },
+      shop: {id}
     } = this.props;
-    const { menu_banners } = this.state;
-    this.setState({ products: [] });
+    const {menu_banners} = this.state;
+    this.setState({products: []});
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
-          const { message } = eventObject;
+          const {message} = eventObject;
           const callback = () => {
             Linking.openURL(eventObject.result.url);
           };
@@ -502,7 +500,8 @@ export default class Home extends React.Component {
             props: this.props,
             shopId: id,
             key: 'FORCE_UPDATE',
-            defaultText: 'We have added new exciting features. Please update to continue.'
+            defaultText:
+              'We have added new exciting features. Please update to continue.'
           });
           this.refs.toast.show(updateText, TOAST_DURATION, callback);
         } else {
@@ -572,8 +571,8 @@ export default class Home extends React.Component {
   }
 
   onCheckoutPressed = () => {
-    const { member_distance, delivery } = this.state;
-    const { navigate } = this.props.navigation;
+    const {member_distance, delivery} = this.state;
+    const {navigate} = this.props.navigation;
     const {
       navigation,
       dispatch,
@@ -595,7 +594,7 @@ export default class Home extends React.Component {
         'willFocus',
         (payload) => {
           this.removeNavigationListener();
-          const { clearCart } = this.props;
+          const {clearCart} = this.props;
 
           if (clearCart == true) {
             console.log('--loadshops604--');
@@ -638,12 +637,12 @@ export default class Home extends React.Component {
 
     if (productId) {
       // Banner linked to a product
-      const { products } = this.state;
+      const {products} = this.state;
 
       products.forEach((item, index) => {
         if (item.id === productId) {
           if (index < products.length) {
-            this.flatListRef.scrollToIndex({ animated: true, index });
+            this.flatListRef.scrollToIndex({animated: true, index});
           }
 
           this.onCellPress(null, index);
@@ -652,29 +651,32 @@ export default class Home extends React.Component {
       });
     } else {
       // Banner just a promo image
-      const { banner_detail_image } = item;
+      const {banner_detail_image} = item;
 
       if (banner_detail_image) {
         const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
 
         this.calculateImageDimension(selected_promotion);
-        this.setState({ isPromoToggle, selected_promotion });
+        this.setState({isPromoToggle, selected_promotion});
       }
     }
   };
 
   _toggleDelivery = (value) => {
-    const { dispatch, shop } = this.props;
+    console.log(this.props.responses);
+    const {dispatch, shop} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
     let delivery = value == 1 ? true : false;
 
     if (delivery && shop.delivery_option == false) {
-      this.setState({ delivery: 0 }, () => {
+      this.setState({delivery: 0}, () => {
         this.refs.toggle.toggleItem(0, false);
 
-        var msg = this.props.responses.get('Delivery Disabled') || 'Our delivery is too busy at the moment.Please try again in 30 mins.';
+        var msg =
+          this.props.responses.get('Delivery Disabled') ||
+          'Our delivery is too busy at the moment.Please try again in 30 mins.';
 
         this.refs.toast.show(msg, TOAST_DURATION);
       });
@@ -691,7 +693,7 @@ export default class Home extends React.Component {
       scroll_Index: scroll_index
     });
     if (scroll_index < this.state.products.length) {
-      this.flatListRef.scrollToIndex({ animated: true, index: scroll_index });
+      this.flatListRef.scrollToIndex({animated: true, index: scroll_index});
     }
   };
 
@@ -731,12 +733,12 @@ export default class Home extends React.Component {
           break;
         }
       }
-      this.setState({ data });
+      this.setState({data});
     }
   };
 
   onMorePressed = () => {
-    const { isToggleShopLocation, dispatch } = this.props;
+    const {isToggleShopLocation, dispatch} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Location'));
     if (isToggleShopLocation) {
@@ -747,8 +749,8 @@ export default class Home extends React.Component {
   };
 
   getCartHeight() {
-    const { cart, promotions } = this.props;
-    const { product_view_height } = this.state;
+    const {cart, promotions} = this.props;
+    const {product_view_height} = this.state;
     var headerHeight = 31 * alpha;
     // var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
     var height = cart.length * 71 * alpha;
@@ -785,15 +787,15 @@ export default class Home extends React.Component {
       // }
     } else {
       if (!toggleOn) {
-        this.setState({ isCartToggle: false }, function () {
+        this.setState({isCartToggle: false}, function () {
           Animated.spring(this.moveAnimation, {
-            toValue: { x: 0, y: windowHeight }
+            toValue: {x: 0, y: windowHeight}
           }).start();
         });
       } else {
-        this.setState({ isCartToggle: true }, function () {
+        this.setState({isCartToggle: true}, function () {
           Animated.spring(this.moveAnimation, {
-            toValue: { x: 0, y: this.getCartHeight() }
+            toValue: {x: 0, y: this.getCartHeight()}
           }).start();
         });
       }
@@ -808,7 +810,7 @@ export default class Home extends React.Component {
     }
   }
 
-  renderPopOutCartFlatListCell = ({ item, index }) => {
+  renderPopOutCartFlatListCell = ({item, index}) => {
     if (item.clazz == 'product') {
       return (
         <CartCell
@@ -834,7 +836,7 @@ export default class Home extends React.Component {
     }
   };
 
-  renderCategorylistFlatListCell = ({ item, index }) => {
+  renderCategorylistFlatListCell = ({item, index}) => {
     return (
       <CategoryCell
         navigation={this.props.navigation}
@@ -850,7 +852,7 @@ export default class Home extends React.Component {
     );
   };
 
-  renderProductlistFlatListCell = ({ item, index }) => {
+  renderProductlistFlatListCell = ({item, index}) => {
     if (item) {
       if (item.clazz == 'product') {
         return (
@@ -915,11 +917,11 @@ export default class Home extends React.Component {
     if (this.state.isCartToggle) {
       this.toggleCartView(false, true);
     }
-    this.setState({ modalVisible: true, selected_index: index });
+    this.setState({modalVisible: true, selected_index: index});
   };
 
   onChangeQuantityPress = (item, index, operation, isCart) => {
-    const { cart_total, dispatch } = this.props;
+    const {cart_total, dispatch} = this.props;
 
     let cart = [...this.props.cart];
 
@@ -1086,13 +1088,7 @@ export default class Home extends React.Component {
   }
 
   check_promotion_trigger = () => {
-    const {
-      currentMember,
-      dispatch,
-      promotions,
-      cart_total,
-      shop
-    } = this.props;
+    const {currentMember, dispatch, promotions, cart_total, shop} = this.props;
 
     let newcart = [...this.props.cart];
     let finalCart = [];
@@ -1184,9 +1180,9 @@ export default class Home extends React.Component {
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function () {
+      this.setState({isCartToggle: false}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: windowHeight }
+          toValue: {x: 0, y: windowHeight}
         }).start();
       });
     } else {
@@ -1213,14 +1209,14 @@ export default class Home extends React.Component {
   updateCartHeight() {
     if (this.state.isCartToggle) {
       Animated.spring(this.moveAnimation, {
-        toValue: { x: 0, y: this.getCartHeight() }
+        toValue: {x: 0, y: this.getCartHeight()}
       }).start();
     }
   }
 
   onAddToCartPressed = (product) => {
     let cart = [...this.props.cart];
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     const clone_variants = _.cloneDeep(product.selected_variants);
     const search_cart_index = cart.findIndex(
       (element) =>
@@ -1245,13 +1241,13 @@ export default class Home extends React.Component {
       parseInt(product.total_quantity) + parseInt(this.state.select_quantity);
 
     if (search_cart) {
-      const { quantity } = search_cart;
-      const { select_quantity } = this.state;
+      const {quantity} = search_cart;
+      const {select_quantity} = this.state;
       search_cart.quantity = parseInt(quantity) + parseInt(select_quantity);
-      dispatch(createAction('orders/updateCart')({ cart }));
+      dispatch(createAction('orders/updateCart')({cart}));
     } else {
       cart = cart.concat(cartItem);
-      dispatch(createAction('orders/updateCart')({ cart }));
+      dispatch(createAction('orders/updateCart')({cart}));
     }
 
     this.check_promotion_trigger();
@@ -1271,11 +1267,11 @@ export default class Home extends React.Component {
   };
 
   onClearPress = () => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     const promotionText = '';
 
     dispatch(createAction('orders/resetCart')());
-    dispatch(createAction('orders/updatePromotionText')({ promotionText }));
+    dispatch(createAction('orders/updatePromotionText')({promotionText}));
     this.toggleCartView(false, false);
 
     for (var index in this.state.products) {
@@ -1285,7 +1281,7 @@ export default class Home extends React.Component {
   };
 
   calculateImageDimension(selected_promotion) {
-    const { image_check } = this.state;
+    const {image_check} = this.state;
     let image_width = 0;
     let image_height = 0;
     var image_long = false;
@@ -1318,7 +1314,7 @@ export default class Home extends React.Component {
   }
 
   onFeaturedPromotionPressed(item) {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (item.image.url != undefined && item.image.url != '') {
       // let should_show = this.shouldShowFeatured(this.props.shop)
       // if (should_show == true) {
@@ -1400,7 +1396,7 @@ export default class Home extends React.Component {
     let total = filtered.reduce((a, b) => +a + +b.price, 0);
     total = parseFloat(total);
 
-    let { discounted_price, price } = selected_product;
+    let {discounted_price, price} = selected_product;
     discounted_price = parseFloat(discounted_price);
     price = parseFloat(price);
 
@@ -1414,7 +1410,7 @@ export default class Home extends React.Component {
   };
 
   dismissProduct() {
-    this.setState({ modalVisible: false });
+    this.setState({modalVisible: false});
   }
 
   getVariantPrice = (price) => {
@@ -1452,15 +1448,13 @@ export default class Home extends React.Component {
               ? styles.ingredientHighlightView
               : styles.ingredientView
           }
-          key={key}
-        >
+          key={key}>
           <Text
             style={
               item.highlight
                 ? styles.ingredientHighlightText
                 : styles.ingredientText
-            }
-          >
+            }>
             {item.name}
           </Text>
         </View>
@@ -1492,8 +1486,7 @@ export default class Home extends React.Component {
                   }
                   style={
                     selected ? styles.selectedButton : styles.unselectedButton
-                  }
-                >
+                  }>
                   {value.recommended && (
                     <Image
                       source={require('./../../assets/images/star.png')}
@@ -1505,10 +1498,9 @@ export default class Home extends React.Component {
                       selected
                         ? styles.selectedButtonText
                         : styles.unselectedButtonText
-                    }
-                  >
+                    }>
                     {value.value}{' '}
-                    <Text style={{ color: selected ? 'white' : PRIMARY_COLOR }}>
+                    <Text style={{color: selected ? 'white' : PRIMARY_COLOR}}>
                       {value.price > 0 && `$${price}`}
                     </Text>
                   </Text>
@@ -1532,8 +1524,7 @@ export default class Home extends React.Component {
 					</TouchableOpacity> */}
           <TouchableOpacity
             onPress={this.onClosePressed}
-            style={styles.closeButton}
-          >
+            style={styles.closeButton}>
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
@@ -1557,8 +1548,7 @@ export default class Home extends React.Component {
                     marginLeft: 1 * alpha,
                     flexDirection: 'row',
                     flexWrap: 'wrap'
-                  }}
-                >
+                  }}>
                   {ingredients}
                 </View>
               )}
@@ -1583,8 +1573,7 @@ export default class Home extends React.Component {
                     // height: 32 * alpha,
                     flexDirection: 'row'
                     // alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text style={styles.priceText}>
                     $
                     {selected_product.calculated_price
@@ -1605,8 +1594,7 @@ export default class Home extends React.Component {
                         top: 0 * alpha,
                         bottom: 0 * alpha,
                         justifyContent: 'center'
-                      }}
-                    >
+                      }}>
                       <Text style={styles.quantityText}>{select_quantity}</Text>
                     </View>
                     <View
@@ -1619,8 +1607,7 @@ export default class Home extends React.Component {
                         height: 23 * alpha,
                         flexDirection: 'row',
                         alignItems: 'flex-start'
-                      }}
-                    >
+                      }}>
                       <TouchableOpacity
                         onPress={() => {
                           if (select_quantity > 1 && enabled == true)
@@ -1628,8 +1615,7 @@ export default class Home extends React.Component {
                               select_quantity: (select_quantity -= 1)
                             });
                         }}
-                        style={styles.removeButton}
-                      >
+                        style={styles.removeButton}>
                         <Image
                           source={require('./../../assets/images/button-4.png')}
                           style={styles.removeButtonImage}
@@ -1647,8 +1633,7 @@ export default class Home extends React.Component {
                               select_quantity: (select_quantity += 1)
                             });
                         }}
-                        style={styles.addButton}
-                      >
+                        style={styles.addButton}>
                         <Image
                           source={require('./../../assets/images/add-18.png')}
                           style={styles.addButtonImage}
@@ -1673,13 +1658,12 @@ export default class Home extends React.Component {
                   enabled
                     ? [styles.addToCartButton, styles.normal]
                     : [styles.addToCartButton, styles.disabled]
-                }
-              >
+                }>
                 <Text style={styles.addToCartButtonText}>Add to Cart</Text>
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={{ height: 10 * alpha }}></View>
+            <View style={{height: 10 * alpha}}></View>
           )}
         </View>
       </View>
@@ -1688,8 +1672,8 @@ export default class Home extends React.Component {
 
   render() {
     let selected_product = this.get_product(this.state.selected_index);
-    let { delivery, distance } = this.state;
-    let { isToggleShopLocation, cart, promotions, shop } = this.props;
+    let {delivery, distance} = this.state;
+    let {isToggleShopLocation, cart, promotions, shop} = this.props;
     let categoryBottomSpacer = undefined;
     let renderBottom = this.renderBottom;
     // let should_show = this.shouldShowFeatured(shop)
@@ -1733,8 +1717,7 @@ export default class Home extends React.Component {
                 marginRight: 10 * alpha,
                 marginTop: 8 * alpha,
                 flexDirection: 'row'
-              }}
-            >
+              }}>
               <View style={styles.branchView}>
                 {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
@@ -1742,31 +1725,27 @@ export default class Home extends React.Component {
 
                 <TouchableOpacity
                   onPress={this._onShopNamePressed}
-                  style={styles.selectShopButton}
-                >
+                  style={styles.selectShopButton}>
                   <Text style={styles.branchButtonText}>
                     {shop ? shop.name : ''}
                   </Text>
                   <Image
                     source={require('./../../assets/images/next.png')}
-                    style={[
-                      styles.rightArrowImage,
-                      { tintColor: PRIMARY_COLOR }
-                    ]}
+                    style={[styles.rightArrowImage, {tintColor: PRIMARY_COLOR}]}
                   />
                 </TouchableOpacity>
 
                 {/* </TouchableOpacity> */}
               </View>
 
-              <View style={{ flex: 1 }} />
+              <View style={{flex: 1}} />
               <View style={styles.pickUpDeliveryView}>
                 {shop && (
                   <SwitchSelector
                     ref="toggle"
                     options={[
-                      { label: 'Pick Up', value: 0 },
-                      { label: 'Delivery', value: 1 }
+                      {label: 'Pick Up', value: 0},
+                      {label: 'Delivery', value: 1}
                     ]}
                     initial={this.state.delivery}
                     value={this.state.delivery}
@@ -1794,26 +1773,21 @@ export default class Home extends React.Component {
                 flexDirection: 'row',
                 alignItems: 'flex-start',
                 justifyContent: 'space-between'
-              }}
-            >
-              <TouchableOpacity
-                  onPress={this._onShopNamePressed}
-              >
-              <Text
-                style={[
-                  styles.distance1kmText,
-                  { color: 'rgb(130, 130, 130)', marginTop: -10 }
-                ]}
-              >
-                Change Location
-              </Text>
+              }}>
+              <TouchableOpacity onPress={this._onShopNamePressed}>
+                <Text
+                  style={[
+                    styles.distance1kmText,
+                    {color: 'rgb(130, 130, 130)', marginTop: -10}
+                  ]}>
+                  Change Location
+                </Text>
               </TouchableOpacity>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{flexDirection: 'row'}}>
                 <View style={styles.moreView}>
                   <TouchableOpacity
                     onPress={this.onMorePressed}
-                    style={styles.moreButton}
-                  >
+                    style={styles.moreButton}>
                     <Text style={styles.distance1kmText}>
                       {isToggleShopLocation ? 'Hide' : 'Store Info'}
                     </Text>
@@ -1840,8 +1814,7 @@ export default class Home extends React.Component {
         ) : (
           <View
             style={styles.productsectionView}
-            onLayout={(event) => this.measureView(event)}
-          >
+            onLayout={(event) => this.measureView(event)}>
             <View style={[styles.categorylistFlatListViewWrapper]}>
               <FlatList
                 renderItem={this.renderCategorylistFlatListCell}
@@ -1863,8 +1836,7 @@ export default class Home extends React.Component {
                 !renderBottom
                   ? styles.productlistFlatListViewWrapper
                   : styles.productlistFlatListViewWrapperwithALert
-              }
-            >
+              }>
               {this.state.loading ? undefined : (
                 <FlatList
                   renderItem={this.renderProductlistFlatListCell}
@@ -1895,7 +1867,7 @@ export default class Home extends React.Component {
                   onRefresh={this.onRefresh.bind(this)}
                   onViewableItemsChanged={this.reachProductIndex}
                   onScrollBeginDrag={() => {
-                    this.setState({ scroll_Index: null });
+                    this.setState({scroll_Index: null});
                   }}
                   keyExtractor={(item, index) => index.toString()}
                 />
@@ -1918,8 +1890,7 @@ export default class Home extends React.Component {
                 this.marker &&
                 this.marker.showCallout &&
                 this.marker.showCallout()
-              }
-            >
+              }>
               {/* <MapView.Marker
                 ref={(marker) => (this.marker = marker)}
                 coordinate={{
@@ -1934,8 +1905,7 @@ export default class Home extends React.Component {
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
                   longitude: shop ? parseFloat(shop.longitude) : 0.0
                 }}
-                style={{ alignItems: 'center' }}
-              >
+                style={{alignItems: 'center'}}>
                 <View style={styles.areaBubble}>
                   <Text style={styles.areaText}>{shop.name}</Text>
                 </View>
@@ -1952,8 +1922,7 @@ export default class Home extends React.Component {
                 paddingTop: 15 * alpha,
                 paddingBottom: 100 * alpha
               }}
-              showsVerticalScrollIndicator={false}
-            >
+              showsVerticalScrollIndicator={false}>
               <Text style={styles.branchHeaderAddress}>Address </Text>
               <Text style={styles.branchAddress}>
                 {shop ? shop.address : ''}
@@ -1972,13 +1941,11 @@ export default class Home extends React.Component {
         )}
 
         <Animated.View
-          style={[styles.cartsummaryviewView, this.moveAnimation.getLayout()]}
-        >
+          style={[styles.cartsummaryviewView, this.moveAnimation.getLayout()]}>
           <View style={styles.clearAllView}>
             <TouchableOpacity
               onPress={this.onClearPress}
-              style={styles.clearButton}
-            >
+              style={styles.clearButton}>
               <Image
                 source={require('./../../assets/images/group-14-13.png')}
                 style={styles.clearButtonImage}
@@ -2004,8 +1971,7 @@ export default class Home extends React.Component {
           <Modal
             isVisible={this.state.modalVisible}
             onBackdropPress={() => this.dismissProduct()}
-            hideModalContentWhileAnimating={true}
-          >
+            hideModalContentWhileAnimating={true}>
             {this.renderModalContent(selected_product, shop)}
           </Modal>
         ) : null}
@@ -2017,11 +1983,11 @@ export default class Home extends React.Component {
           visible={this.state.visible}
           cancelable={true}
           title={'Exit App '}
-          description={'exit the  application?'}
+          description={'Exit the application?'}
           okayButtonAction={() => {
             RNExitApp.exitApp();
           }}
-          cancelButtonAction={() => this.setState({ visible: false })}
+          cancelButtonAction={() => this.setState({visible: false})}
         />
 
         <Brew9Modal
@@ -2033,7 +1999,7 @@ export default class Home extends React.Component {
             if (this.state.url != null && this.state.url != '') {
               Linking.openURL(this.state.url);
             } else {
-              this.setState({ popUpVisible: false });
+              this.setState({popUpVisible: false});
             }
           }}
         />
@@ -2068,7 +2034,7 @@ export default class Home extends React.Component {
   }
 
   shouldShowFeatured(shop) {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     //jira
     // this.onFeaturedPromotionPressed(shop.featured_promotion);
     if (shop) {
@@ -2139,10 +2105,9 @@ export default class Home extends React.Component {
           onPress={() =>
             this.onFeaturedPromotionPressed(shop.featured_promotion)
           }
-          style={[style, styles.featuredpromoButton]}
-        >
+          style={[style, styles.featuredpromoButton]}>
           <Image
-            source={{ uri: shop.featured_promotion.icon.url }}
+            source={{uri: shop.featured_promotion.icon.url}}
             style={styles.featuredpromoButtonImage}
           />
         </TouchableOpacity>
@@ -2154,7 +2119,7 @@ export default class Home extends React.Component {
   }
 
   renderPromotionTopBar() {
-    const { currentPromoText } = this.props;
+    const {currentPromoText} = this.props;
 
     if (currentPromoText.length > 0) {
       return (
@@ -2171,7 +2136,7 @@ export default class Home extends React.Component {
   }
 
   renderBottomBar(cart, shop) {
-    const { cart_total_quantity, cart_total } = this.props;
+    const {cart_total_quantity, cart_total} = this.props;
     if (cart.length > 0) {
       return (
         <View style={styles.cartView}>
@@ -2183,8 +2148,7 @@ export default class Home extends React.Component {
               top: 0 * alpha,
               bottom: 0 * alpha,
               justifyContent: 'center'
-            }}
-          >
+            }}>
             <View style={styles.totalAmountView}>
               <View style={styles.rectangleView} />
               <View
@@ -2198,15 +2162,13 @@ export default class Home extends React.Component {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between'
-                }}
-              >
+                }}>
                 <View style={styles.shopppingCartView}>
                   <TouchableOpacity
                     onPress={() =>
                       this.toggleCartView(false, !this.state.isCartToggle)
                     }
-                    style={styles.shopppingCartButton}
-                  >
+                    style={styles.shopppingCartButton}>
                     <View style={styles.group5View}>
                       <View
                         pointerEvents="box-none"
@@ -2214,8 +2176,7 @@ export default class Home extends React.Component {
                           width: 15 * alpha,
                           marginTop: 1 * alpha,
                           marginBottom: 4 * alpha
-                        }}
-                      >
+                        }}>
                         <Image
                           source={require('./../../assets/images/shopping-bag.png')}
                           style={styles.cartImage}
@@ -2248,8 +2209,7 @@ export default class Home extends React.Component {
           <View style={styles.checkoutButtonView}>
             <TouchableOpacity
               onPress={() => this.onCheckoutPressed()}
-              style={styles.checkoutButton}
-            >
+              style={styles.checkoutButton}>
               <Text style={styles.checkoutButtonText}>Checkout</Text>
             </TouchableOpacity>
           </View>
@@ -2270,13 +2230,12 @@ export default class Home extends React.Component {
       return (
         <Modal
           visible={isPromoToggle}
-          style={{ margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
-        >
+          style={{margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
           {/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
           <View style={styles.loading}>
             <ActivityIndicator size="large" color="white" />
           </View>
-          <ScrollView style={{ horizontal: true, flex: 1 }}>
+          <ScrollView style={{horizontal: true, flex: 1}}>
             <View
               style={
                 image_isHorizontal
@@ -2284,18 +2243,16 @@ export default class Home extends React.Component {
                   : !image_isHorizontal && !image_isLong
                   ? styles.bannerShortImage
                   : styles.bannerImage
-              }
-            >
+              }>
               <AutoHeightImage
-                source={{ uri: selected_promotion }}
+                source={{uri: selected_promotion}}
                 width={windowWidth}
               />
             </View>
           </ScrollView>
           <TouchableOpacity
             onPress={() => this.onClosePressed()}
-            style={styles.closeGalleryButton}
-          >
+            style={styles.closeGalleryButton}>
             <Text style={styles.closeGalleryButtonText}>X</Text>
           </TouchableOpacity>
         </Modal>
@@ -2794,7 +2751,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flex: 1,
     marginTop: 5 * alpha,
-    maxHeight: 250 * alpha
+    maxHeight: 320 * alpha
   },
   productView: {
     backgroundColor: 'transparent',

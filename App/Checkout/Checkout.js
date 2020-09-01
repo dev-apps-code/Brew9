@@ -11,19 +11,17 @@ import {
   Platform
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
-import { connect } from 'react-redux';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {alpha, fontAlpha, windowHeight} from '../Common/size';
+import {connect} from 'react-redux';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
-import { createAction, Storage } from '../Utils';
+import {createAction, Storage} from '../Utils';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
 import _ from 'lodash';
 import Brew9Toast from '../Components/Brew9Toast';
-import { getResponseMsg } from '../Utils/responses';
-
-
+import {getResponseMsg} from '../Utils/responses';
 
 import {
   TITLE_FONT,
@@ -35,14 +33,14 @@ import {
   LIGHT_GREY
 } from '../Common/common_style';
 import Moment from 'moment';
-import { Analytics, Event } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
+import {Analytics, Event} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
 import openMap from 'react-native-open-maps';
-import { getMemberIdForApi } from '../Services/members_helper';
+import {getMemberIdForApi} from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
 import CurveSeparator from '../Components/CurveSeparator';
-@connect(({ members, shops, orders, config }) => ({
+@connect(({members, shops, orders, config}) => ({
   company_id: members.company_id,
   currentMember: members.profile,
   members: members,
@@ -62,8 +60,8 @@ import CurveSeparator from '../Components/CurveSeparator';
   shopResponses: config.shopResponses
 }))
 export default class Checkout extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTitle: (
         <Text
@@ -71,8 +69,7 @@ export default class Checkout extends React.Component {
             textAlign: 'center',
             alignSelf: 'center',
             fontFamily: TITLE_FONT
-          }}
-        >
+          }}>
           Checkout
         </Text>
       ),
@@ -81,8 +78,7 @@ export default class Checkout extends React.Component {
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onBackPressed ? params.onBackPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/back.png')}
               style={styles.navigationBarItemIcon}
@@ -104,7 +100,7 @@ export default class Checkout extends React.Component {
       this.checkout.bind(this),
       500 // no new clicks within 500ms time window
     );
-    const { discount_cart_total, currentMember, cart_total } = props;
+    const {discount_cart_total, currentMember, cart_total} = props;
     this.state = {
       delivery_options: 'pickup',
       delivery_description: '',
@@ -145,7 +141,7 @@ export default class Checkout extends React.Component {
       enablePaynow: false,
       isConfirmCheckout: false
     };
-    const xy = { x: 0, y: windowHeight };
+    const xy = {x: 0, y: windowHeight};
     this.movePickAnimation = new Animated.ValueXY(xy);
     this.timeSelectorAnimation = new Animated.ValueXY(xy);
     this.moveAnimation = new Animated.ValueXY(xy);
@@ -157,7 +153,7 @@ export default class Checkout extends React.Component {
       onItemPressed: this.onItemPressed
     });
 
-    const { dispatch, delivery } = this.props;
+    const {dispatch, delivery} = this.props;
 
     this.setState(
       {
@@ -191,7 +187,7 @@ export default class Checkout extends React.Component {
   }
 
   setPayNowStatus = () => {
-    let { pick_up_status, selected_payment } = this.state;
+    let {pick_up_status, selected_payment} = this.state;
     if (pick_up_status != null && selected_payment != null) {
       this.setState({
         enablePaynow: true
@@ -212,7 +208,7 @@ export default class Checkout extends React.Component {
     // delivery fees are based on location so if recipient address is empty
     // no delivery fee is calculated
     if (this.state.selected_address === null) {
-      this.setState({ deliveryFee: 0.0, delivery_description: '' });
+      this.setState({deliveryFee: 0.0, delivery_description: ''});
       return;
     }
 
@@ -227,7 +223,7 @@ export default class Checkout extends React.Component {
       } else {
         // Reset values if in case request fails
         ////console.log('Something went wrong.');
-        this.setState({ deliveryFee: 0.0, delivery_description: '' });
+        this.setState({deliveryFee: 0.0, delivery_description: ''});
       }
     };
 
@@ -259,7 +255,7 @@ export default class Checkout extends React.Component {
       const callback = (eventObject) => {
         if (eventObject.success) {
           const valid_vouchers = eventObject.result;
-          this.setState({ valid_vouchers });
+          this.setState({valid_vouchers});
 
           var valid_voucher_counts = _.filter(valid_vouchers, function (o) {
             if (o.is_valid == true) return o;
@@ -277,7 +273,7 @@ export default class Checkout extends React.Component {
       };
 
       // Products with 'product' class are valid
-      filtered_cart = _.filter(cart, { clazz: 'product' });
+      filtered_cart = _.filter(cart, {clazz: 'product'});
 
       const obj = new ValidVouchersRequestObject(
         selectedShop.id,
@@ -298,10 +294,10 @@ export default class Checkout extends React.Component {
   }
 
   onBackPressed = () => {
-    const { navigation } = this.props;
-    const { routeName, key } = navigation.getParam('returnToRoute');
+    const {navigation} = this.props;
+    const {routeName, key} = navigation.getParam('returnToRoute');
 
-    navigation.navigate({ routeName, key });
+    navigation.navigate({routeName, key});
   };
 
   onConfirmOrderSchedule = (option, hour, min, range) => {
@@ -315,7 +311,7 @@ export default class Checkout extends React.Component {
 
     var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
 
-    this.setState({ pick_up_time, pick_up_status, range }, () =>
+    this.setState({pick_up_time, pick_up_status, range}, () =>
       this.setPayNowStatus()
     );
 
@@ -378,8 +374,8 @@ export default class Checkout extends React.Component {
   onAutoFillPressed = () => {};
 
   onVoucherButtonPressed = () => {
-    const { navigate } = this.props.navigation;
-    const { currentMember } = this.props;
+    const {navigate} = this.props.navigation;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event('Checkout', getMemberIdForApi(currentMember), 'Select Voucher')
@@ -392,9 +388,9 @@ export default class Checkout extends React.Component {
   };
 
   addShippingAddress = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
-    this.setState({ visible: false });
+    this.setState({visible: false});
     navigation.navigate('ShippingAddress', {
       selected_address: this.state.selected_address,
       returnToRoute: this.props.navigation.state
@@ -402,8 +398,8 @@ export default class Checkout extends React.Component {
   };
 
   addFirstShippingAddress = () => {
-    const { navigation } = this.props;
-    this.setState({ visible: false });
+    const {navigation} = this.props;
+    this.setState({visible: false});
     navigation.navigate('AddShippingAddress', {
       params: null,
       initialAddress: true
@@ -428,10 +424,10 @@ export default class Checkout extends React.Component {
   };
 
   addVoucherItemsToCart = (voucher_item) => {
-    const { vouchers_to_use } = this.state;
+    const {vouchers_to_use} = this.state;
     // ////console.log("\nSelected Voucher:")
     // ////console.log(voucher_item)
-    this.setState({ vouchers_to_use: [voucher_item] });
+    this.setState({vouchers_to_use: [voucher_item]});
     this.applyVoucher([voucher_item]);
   };
 
@@ -457,7 +453,7 @@ export default class Checkout extends React.Component {
       cart
     } = this.props;
 
-    let { sub_total_voucher, deliveryFee } = this.state;
+    let {sub_total_voucher, deliveryFee} = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
     let finalCart = [];
@@ -570,9 +566,9 @@ export default class Checkout extends React.Component {
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function () {
+      this.setState({isCartToggle: false}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: windowHeight }
+          toValue: {x: 0, y: windowHeight}
         }).start();
       });
     } else {
@@ -597,7 +593,7 @@ export default class Checkout extends React.Component {
   };
 
   filterProductsByVoucher(voucher, qty) {
-    const { cart, discount_cart_total } = this.props;
+    const {cart, discount_cart_total} = this.props;
     var targetQuantity = voucher.eligible_discount_quantity;
     var targetProductIDList = voucher.product_ids;
     var voucherID = voucher.id;
@@ -688,8 +684,8 @@ export default class Checkout extends React.Component {
   }
 
   applyVoucher(vouchers_to_use) {
-    const { discount_cart_total } = this.props;
-    const { selected_payment } = this.state;
+    const {discount_cart_total} = this.props;
+    const {selected_payment} = this.state;
     var voucherDeductedTotal = discount_cart_total;
 
     for (var index in vouchers_to_use) {
@@ -724,10 +720,10 @@ export default class Checkout extends React.Component {
     const final_price = voucherDeductedTotal;
     const voucherTotalDiscount = discount_cart_total - voucherDeductedTotal;
 
-    this.setState({ final_price, voucherTotalDiscount });
+    this.setState({final_price, voucherTotalDiscount});
 
     if (selected_payment == 'credit_card' && voucherDeductedTotal <= 0) {
-      this.setState({ selected_payment: '' });
+      this.setState({selected_payment: ''});
     }
   }
 
@@ -744,7 +740,7 @@ export default class Checkout extends React.Component {
   };
 
   removeItemFromCart(products, description) {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     let newcart = [...this.props.cart];
     let product_ids = products.map((item) => item.id);
     for (item of newcart) {
@@ -760,7 +756,7 @@ export default class Checkout extends React.Component {
   }
 
   onRemoveItem(item) {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     let new_cart = [...this.props.cart];
     const search_product_index = new_cart.findIndex(
       (element) => element.id == item.id
@@ -786,7 +782,7 @@ export default class Checkout extends React.Component {
       location,
       delivery
     } = this.props;
-    const { navigate } = this.props.navigation;
+    const {navigate} = this.props.navigation;
     const {
       vouchers_to_use,
       selected_payment,
@@ -797,10 +793,10 @@ export default class Checkout extends React.Component {
 
     let address_id = selected_address == null ? null : selected_address.id;
 
-    this.setState({ loading: true, isConfirmCheckout: false });
+    this.setState({loading: true, isConfirmCheckout: false});
 
     const callback = (eventObject) => {
-      this.setState({ loading: false });
+      this.setState({loading: false});
 
       if (eventObject.success) {
         if (selected_payment == 'credits') {
@@ -857,7 +853,7 @@ export default class Checkout extends React.Component {
       delivery_option = 1;
     }
 
-    filtered_cart = _.filter(cart, { clazz: 'product' });
+    filtered_cart = _.filter(cart, {clazz: 'product'});
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
     const obj = new MakeOrderRequestObj(
       filtered_cart,
@@ -902,9 +898,9 @@ export default class Checkout extends React.Component {
   };
 
   clearCart = () => {
-    const { navigation, dispatch } = this.props;
+    const {navigation, dispatch} = this.props;
     dispatch(createAction('orders/resetCart')({}));
-    const { routeName, key } = navigation.getParam('returnToRoute');
+    const {routeName, key} = navigation.getParam('returnToRoute');
     navigation.navigate({
       routeName,
       key
@@ -912,13 +908,13 @@ export default class Checkout extends React.Component {
   };
 
   checkout = () => {
-    this.setState({ isConfirmCheckout: true });
+    this.setState({isConfirmCheckout: true});
   };
 
   renderConfirmPopup = () => {
-    let { isConfirmCheckout } = this.state;
-    const { selectedShop } = this.props;
-    
+    let {isConfirmCheckout} = this.state;
+    const {selectedShop} = this.props;
+
     //old response
     // const fallbackText = 'Are you sure you want to order from this location?';
     // const confirmText = r.get('Checkout Confirm') || fallbackText;
@@ -961,8 +957,8 @@ export default class Checkout extends React.Component {
       <Brew9PopUp
         onPressOk={this.onPayNowPressed}
         onBackgroundPress={() => {}}
-        onPressCancel={() => this.setState({ isConfirmCheckout: false })}
-        {...{ popUpVisible, title, description, OkText, cancelText }}
+        onPressCancel={() => this.setState({isConfirmCheckout: false})}
+        {...{popUpVisible, title, description, OkText, cancelText}}
       />
     );
   };
@@ -970,8 +966,8 @@ export default class Checkout extends React.Component {
   onPayNowPressed = () => {
     this.setState({
       isConfirmCheckout: false
-    })
-    const { navigate } = this.props.navigation;
+    });
+    const {navigate} = this.props.navigation;
     const {
       selected_payment,
       pick_up_status,
@@ -979,7 +975,7 @@ export default class Checkout extends React.Component {
       pick_up_time,
       selected_address
     } = this.state;
-    const { currentMember, selectedShop, delivery } = this.props;
+    const {currentMember, selectedShop, delivery} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     const event = new Event(
       'Checkout',
@@ -990,7 +986,7 @@ export default class Checkout extends React.Component {
     analytics.event(event);
 
     if (currentMember != undefined) {
-      console.log("1")
+      console.log('1');
       if (delivery && !selected_address) {
         this.addShippingAddress();
         return;
@@ -1001,8 +997,6 @@ export default class Checkout extends React.Component {
         }
 
         if (selected_payment == 'credits') {
-      console.log("2")
-
           if (
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
@@ -1011,9 +1005,10 @@ export default class Checkout extends React.Component {
               props: this.props,
               shopId: selectedShop.id,
               key: 'Popup - Insufficient credit',
-              defaultText: 'Oops, insufficient E-Wallet credit! Please select other payment option.'
+              defaultText:
+                'Oops, insufficient E-Wallet credit! Please select other payment option.'
             });
-    
+
             this.refs.toast.show(insufficientText, TOAST_DURATION + 1000);
 
             return;
@@ -1033,12 +1028,8 @@ export default class Checkout extends React.Component {
               const message = 'Pick up time is not available';
               this.refs.toast.show(message, TOAST_DURATION);
               return;
-            }
-            // else if (pickup < opening) {
-            // 	this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
-            // 	return
-            // }
-            else if (pickup > closing) {
+            } else if (pickup > closing) {
+              // TODO please convert
               const message = 'We are closed at this time.';
               this.refs.toast.show(message, TOAST_DURATION);
               return;
@@ -1059,7 +1050,7 @@ export default class Checkout extends React.Component {
   };
 
   addressConfirmation = () => {
-    this.setState({ addressConfirmation: true });
+    this.setState({addressConfirmation: true});
   };
 
   measureView(event) {
@@ -1080,7 +1071,7 @@ export default class Checkout extends React.Component {
   };
 
   tooglePickup = () => {
-    const { isPickupToogle, pickup_view_height } = this.state;
+    const {isPickupToogle, pickup_view_height} = this.state;
 
     var product_checkout_height = pickup_view_height;
     var content = 247 * alpha;
@@ -1088,19 +1079,19 @@ export default class Checkout extends React.Component {
 
     if (isPickupToogle) {
       this.setState(
-        { isPickupToogle: false, isTimeSelectorToggled: false },
+        {isPickupToogle: false, isTimeSelectorToggled: false},
         function () {
           Animated.spring(this.movePickAnimation, {
-            toValue: { x: 0, y: windowHeight }
+            toValue: {x: 0, y: windowHeight}
           }).start();
         }
       );
     } else {
       this.setState(
-        { isPickupToogle: true, isTimeSelectorToggled: true },
+        {isPickupToogle: true, isTimeSelectorToggled: true},
         function () {
           Animated.spring(this.movePickAnimation, {
-            toValue: { x: 0, y: 52 * alpha }
+            toValue: {x: 0, y: 52 * alpha}
           }).start();
         }
       );
@@ -1108,43 +1099,40 @@ export default class Checkout extends React.Component {
   };
 
   _toggleTimeSelector = () => {
-    const { isTimeSelectorToggled } = this.state;
+    const {isTimeSelectorToggled} = this.state;
 
     const y = () => (isTimeSelectorToggled ? windowHeight : 52 * alpha);
 
-    this.setState(
-      { isTimeSelectorToggled: !isTimeSelectorToggled },
-      function () {
-        Animated.spring(this.timeSelectorAnimation, {
-          toValue: { x: 0, y: y() }
-        }).start();
-      }
-    );
+    this.setState({isTimeSelectorToggled: !isTimeSelectorToggled}, function () {
+      Animated.spring(this.timeSelectorAnimation, {
+        toValue: {x: 0, y: y()}
+      }).start();
+    });
   };
 
   tooglePayment = () => {
-    const { isPaymentToggle, payment_view_height } = this.state;
+    const {isPaymentToggle, payment_view_height} = this.state;
 
     var product_checkout_height = payment_view_height;
     var content = 247 * alpha;
 
     if (isPaymentToggle) {
-      this.setState({ isPaymentToggle: false }, function () {
+      this.setState({isPaymentToggle: false}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: windowHeight }
+          toValue: {x: 0, y: windowHeight}
         }).start();
       });
     } else {
-      this.setState({ isPaymentToggle: true }, function () {
+      this.setState({isPaymentToggle: true}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: 52 * alpha }
+          toValue: {x: 0, y: 52 * alpha}
         }).start();
       });
     }
   };
 
   pickUpNow = () => {
-    let { selectedShop } = this.props;
+    let {selectedShop} = this.props;
     var time_now = Moment(new Date(), 'h:mm');
     var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm');
@@ -1170,7 +1158,7 @@ export default class Checkout extends React.Component {
   }
 
   renderVoucherSection(vouchers) {
-    const { cart, discount_cart_total } = this.props;
+    const {cart, discount_cart_total} = this.props;
 
     const voucher_items = vouchers.map((item, key) => {
       var discount_value = null;
@@ -1197,8 +1185,7 @@ export default class Checkout extends React.Component {
               flex: 1,
               flexDirection: 'row',
               justifyContent: 'space-between'
-            }}
-          >
+            }}>
             <View style={styles.productDetailView}>
               <View style={styles.voucherDetailView}>
                 <Text style={styles.productNameText}>{voucherDisplayName}</Text>
@@ -1225,8 +1212,7 @@ export default class Checkout extends React.Component {
 
             <TouchableOpacity
               onPress={() => this.onCancelVoucher(item)}
-              style={styles.cancelVoucherButton}
-            >
+              style={styles.cancelVoucherButton}>
               <Image
                 source={require('./../../assets/images/cancel.png')}
                 style={styles.cancelImage}
@@ -1256,8 +1242,7 @@ export default class Checkout extends React.Component {
               ? () => this.onVoucherButtonPressed()
               : () => null
           }
-          style={styles.voucherButton}
-        >
+          style={styles.voucherButton}>
           <View pointerEvents="box-none" style={styles.sectionRowView}>
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
@@ -1265,16 +1250,14 @@ export default class Checkout extends React.Component {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center'
-              }}
-            >
+              }}>
               <Text
                 style={
                   this.state.valid_vouchers != null &&
                   this.state.valid_vouchers.length > 0
                     ? styles.productVoucherText
                     : styles.productVoucherDisableText
-                }
-              >
+                }>
                 {this.state.valid_vouchers != null ? valid_voucher_counts : '-'}{' '}
                 usable
               </Text>
@@ -1291,8 +1274,8 @@ export default class Checkout extends React.Component {
   }
 
   renderPaymentSection() {
-    const { currentMember, delivery } = this.props;
-    const { selected_payment } = this.state;
+    const {currentMember, delivery} = this.props;
+    const {selected_payment} = this.state;
 
     const credits =
       currentMember != undefined
@@ -1308,8 +1291,7 @@ export default class Checkout extends React.Component {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center'
-              }}
-            >
+              }}>
               <View
                 style={[
                   selected_payment != '' ? styles.greenCircle : styles.redCircle
@@ -1331,18 +1313,17 @@ export default class Checkout extends React.Component {
   };
 
   renderPickupTime() {
-    const { pick_up_status, pick_up_time } = this.state;
-    var { delivery } = this.props;
+    const {pick_up_status, pick_up_time} = this.state;
+    var {delivery} = this.props;
     var pick_up = delivery ? 'Delivery Time' : 'Pick Up Time';
     var formatted_time = this._getFormattedSchedule();
     return (
       <View style={styles.sectionView}>
         <TouchableOpacity
           onPress={() => this.changeTimeSchedule()}
-          style={styles.voucherButton}
-        >
+          style={styles.voucherButton}>
           <View pointerEvents="box-none" style={styles.sectionRowView}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={
                   pick_up_status != null ? styles.greenCircle : styles.redCircle
@@ -1354,8 +1335,7 @@ export default class Checkout extends React.Component {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center'
-              }}
-            >
+              }}>
               <Text style={styles.productVoucherText}>
                 {pick_up_time != null ? formatted_time : 'Please select'}
               </Text>
@@ -1403,16 +1383,14 @@ export default class Checkout extends React.Component {
               backgroundColor: 'transparent',
               flex: 1,
               flexDirection: 'row'
-            }}
-          >
+            }}>
             <View style={styles.productDetailView}>
               <Text
                 style={
                   item.cannot_order != undefined && item.cannot_order == true
                     ? styles.productNameDisabledText
                     : styles.productNameText
-                }
-              >
+                }>
                 {item.name}
               </Text>
               {variant_array.length > 0 ? (
@@ -1432,8 +1410,7 @@ export default class Checkout extends React.Component {
             {item.cannot_order != undefined && item.cannot_order == true && (
               <TouchableOpacity
                 onPress={() => this.onRemoveItem(item)}
-                style={styles.cancelVoucherButton}
-              >
+                style={styles.cancelVoucherButton}>
                 <Image
                   source={require('./../../assets/images/cancel.png')}
                   style={styles.cancelImage}
@@ -1458,8 +1435,7 @@ export default class Checkout extends React.Component {
           this.props.delivery && {
             paddingTop: 20
           }
-        ]}
-      >
+        ]}>
         <View style={styles.orderitemsView}>{order_items}</View>
       </View>
     );
@@ -1486,9 +1462,8 @@ export default class Checkout extends React.Component {
 
       return (
         <View
-          style={[styles.drinksView, { marginVertical: 0 * alpha }]}
-          key={key}
-        >
+          style={[styles.drinksView, {marginVertical: 0 * alpha}]}
+          key={key}>
           <View
             pointerEvents="box-none"
             style={{
@@ -1496,17 +1471,15 @@ export default class Checkout extends React.Component {
               backgroundColor: 'transparent',
               flex: 1,
               flexDirection: 'row'
-            }}
-          >
+            }}>
             <View style={styles.productDetailView}>
               <Text
                 style={[
                   item.cannot_order != undefined && item.cannot_order == true
                     ? styles.productNameDisabledText
                     : styles.productNameText,
-                  { marginBottom: 0 }
-                ]}
-              >
+                  {marginBottom: 0}
+                ]}>
                 {item.name}
               </Text>
             </View>
@@ -1525,7 +1498,7 @@ export default class Checkout extends React.Component {
       return (
         <View>
           <CurveSeparator />
-          <View style={[styles.sectionView, { paddingBottom: 10 * alpha }]}>
+          <View style={[styles.sectionView, {paddingBottom: 10 * alpha}]}>
             <View style={styles.orderitemsView}>{promotions_item}</View>
           </View>
         </View>
@@ -1534,7 +1507,7 @@ export default class Checkout extends React.Component {
   };
 
   renderDeliveryAddress = (address) => {
-    let { deliveryFee, final_price, delivery_description } = this.state;
+    let {deliveryFee, final_price, delivery_description} = this.state;
     let text = address ? 'Change' : 'Add';
     let non_negative_subTotal_price = parseFloat(
       Math.max(0, final_price)
@@ -1543,14 +1516,13 @@ export default class Checkout extends React.Component {
       <View style={styles.deliveryAddressView}>
         <View style={styles.voucherButton}>
           <View style={styles.drinksView}>
-            <View style={[styles.deliveryAddressDetail, { flex: 1 }]}>
+            <View style={[styles.deliveryAddressDetail, {flex: 1}]}>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   paddingBottom: 3 * alpha
-                }}
-              >
+                }}>
                 <Text style={[styles.productNameText]}>Delivery Address</Text>
                 <TouchableOpacity
                   onPress={() => this.addShippingAddress()}
@@ -1559,8 +1531,7 @@ export default class Checkout extends React.Component {
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center'
-                  }}
-                >
+                  }}>
                   <Text style={[styles.editAddressText]}>{text}</Text>
                   <Image
                     source={require('./../../assets/images/next.png')}
@@ -1596,8 +1567,7 @@ export default class Checkout extends React.Component {
               justifyContent: 'space-between',
               // paddingHorizontal: 10 * alpha,
               paddingBottom: 10 * alpha
-            }}
-          >
+            }}>
             <Text style={styles.productNameText}>Subtotal</Text>
             <Text style={styles.productVoucherText}>
               {`$${parseFloat(non_negative_subTotal_price).toFixed(2)}` ||
@@ -1609,9 +1579,8 @@ export default class Checkout extends React.Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between'
-              }}
-            >
-              <View style={{ flex: 1 }}>
+              }}>
+              <View style={{flex: 1}}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description != '' && (
                   <Text style={styles.deliveryNoted}>
@@ -1630,8 +1599,8 @@ export default class Checkout extends React.Component {
   };
 
   renderOrderForSelector = () => {
-    const { delivery, selectedShop } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
+    const {delivery, selectedShop} = this.props;
+    const {opening_hour, delivery_hour} = selectedShop;
     let today = [];
     let tomorrow = [];
     if (delivery) {
@@ -1654,8 +1623,8 @@ export default class Checkout extends React.Component {
   };
 
   renderPaymentOptions = () => {
-    const { currentMember, delivery } = this.props;
-    const { final_price, selected_payment } = this.state;
+    const {currentMember, delivery} = this.props;
+    const {final_price, selected_payment} = this.state;
     let cashPayment = delivery ? 'Cash On Delivery' : 'Pay In Store';
     let credits =
       currentMember != undefined
@@ -1665,46 +1634,45 @@ export default class Checkout extends React.Component {
 
     let walletSelectBox =
       selected_payment == 'credits' ? (
-        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
       ) : (
         <View style={styles.selectBox} />
       );
 
     let cardSelectBox =
       selected_payment == 'credit_card' ? (
-        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
       ) : (
         <View style={styles.selectBox} />
       );
 
     let counterSelectBox =
       selected_payment == 'counter' ? (
-        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
       ) : (
         <View style={styles.selectBox} />
       );
 
     let walletIconStyle =
       selected_payment == 'credits'
-        ? [styles.paymentWalletIcon, { tintColor: PRIMARY_COLOR }]
+        ? [styles.paymentWalletIcon, {tintColor: PRIMARY_COLOR}]
         : styles.paymentWalletIcon;
 
     let cardIconStyle =
       selected_payment == 'credit_card'
-        ? [styles.paymentCardIcon, { tintColor: PRIMARY_COLOR }]
+        ? [styles.paymentCardIcon, {tintColor: PRIMARY_COLOR}]
         : styles.paymentCardIcon;
 
     let cashIconStyle =
       selected_payment == 'counter'
-        ? [styles.paymentCashIcon, { tintColor: PRIMARY_COLOR }]
+        ? [styles.paymentCashIcon, {tintColor: PRIMARY_COLOR}]
         : styles.paymentCashIcon;
 
     return (
       <View style={styles.paymentOptionsView}>
         <TouchableOpacity
           onPress={() => this.onWalletButtonPressed()}
-          style={styles.paymentOptionsListView}
-        >
+          style={styles.paymentOptionsListView}>
           <Image
             source={require('./../../assets/images/wallet_center.png')}
             style={walletIconStyle}
@@ -1722,8 +1690,7 @@ export default class Checkout extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.onCreditButtonPressed()}
-          style={styles.paymentOptionsListView}
-        >
+          style={styles.paymentOptionsListView}>
           <Image
             source={require('./../../assets/images/credit_card.png')}
             style={cardIconStyle}
@@ -1749,8 +1716,7 @@ export default class Checkout extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.onCounterButtonPressed()}
-          style={styles.paymentOptionsListView}
-        >
+          style={styles.paymentOptionsListView}>
           <Image
             source={require('./../../assets/images/cash.png')}
             style={cashIconStyle}
@@ -1769,7 +1735,7 @@ export default class Checkout extends React.Component {
       selected_address,
       deliveryFee
     } = this.state;
-    let { selectedShop, cart, promotions, delivery } = this.props;
+    let {selectedShop, cart, promotions, delivery} = this.props;
     var final_price_delivery =
       parseFloat(final_price) + parseFloat(deliveryFee);
     let non_negative_final_price = parseFloat(
@@ -1792,8 +1758,7 @@ export default class Checkout extends React.Component {
               pointerEvents="box-none"
               style={{
                 flex: 1
-              }}
-            >
+              }}>
               <View style={styles.locationWrapperView}>
                 {!delivery && (
                   <View style={styles.locationView}>
@@ -1803,8 +1768,7 @@ export default class Checkout extends React.Component {
                       </Text>
                       <Text
                         numberOfLines={3}
-                        style={styles.shopBranchAddressText}
-                      >
+                        style={styles.shopBranchAddressText}>
                         {selectedShop.short_address}
                       </Text>
                     </View>
@@ -1818,8 +1782,7 @@ export default class Checkout extends React.Component {
                         onPress={() =>
                           this.onCallPressed(selectedShop.phone_no)
                         }
-                        style={styles.callIconButton}
-                      >
+                        style={styles.callIconButton}>
                         <Image
                           source={require('./../../assets/images/call-Icon.png')}
                           style={styles.callIconButtonImage}
@@ -1836,8 +1799,7 @@ export default class Checkout extends React.Component {
                       <TouchableOpacity
                         onPress={() => this.onPressDirection(selectedShop)}
                         // onPress={() => this.onLocationButtonPressed()}
-                        style={styles.directionIconButton}
-                      >
+                        style={styles.directionIconButton}>
                         <Image
                           source={require('./../../assets/images/direction-Icon.png')}
                           style={styles.directionIconButtonImage}
@@ -1894,10 +1856,10 @@ export default class Checkout extends React.Component {
   }
 
   renderPayNow(final_price) {
-    let { deliveryFee, enablePaynow } = this.state;
+    let {deliveryFee, enablePaynow} = this.state;
     let style = enablePaynow
-      ? [styles.payNowButton, { backgroundColor: 'rgb(0, 178, 227)' }]
-      : [styles.payNowButton, { backgroundColor: '#BDBDBD' }];
+      ? [styles.payNowButton, {backgroundColor: 'rgb(0, 178, 227)'}]
+      : [styles.payNowButton, {backgroundColor: '#BDBDBD'}];
 
     let final_price_delivery =
       parseFloat(final_price) + parseFloat(deliveryFee);
@@ -1911,8 +1873,7 @@ export default class Checkout extends React.Component {
         <TouchableOpacity
           onPress={() => this.checkout()}
           style={style}
-          disabled={!enablePaynow}
-        >
+          disabled={!enablePaynow}>
           <Text style={styles.payNowButtonText}>
             {this.state.selected_payment == 'counter' ? 'Order Now' : 'Pay Now'}
           </Text>
@@ -1928,7 +1889,7 @@ export default class Checkout extends React.Component {
       final_price,
       selected_address
     } = this.state;
-    let { cart_total, discount_cart_total } = this.props;
+    let {cart_total, discount_cart_total} = this.props;
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
       2
     );
@@ -1936,8 +1897,7 @@ export default class Checkout extends React.Component {
       <SafeAreaView style={styles.checkoutViewPadding}>
         <ScrollView
           style={styles.scrollviewScrollView}
-          onLayout={(event) => this.measureView(event)}
-        >
+          onLayout={(event) => this.measureView(event)}>
           <View style={styles.ordersummaryView}>
             {this.renderCheckoutReceipt()}
           </View>
@@ -1956,7 +1916,7 @@ export default class Checkout extends React.Component {
           OkText={'Add address'}
           cancelText={'Cancel'}
           onPressOk={this.addFirstShippingAddress}
-          onPressCancel={() => this.setState({ visible: false })}
+          onPressCancel={() => this.setState({visible: false})}
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
         />
@@ -1979,11 +1939,11 @@ export default class Checkout extends React.Component {
             OkText={'Confirm'}
             cancelText={'Cancel'}
             onPressOk={() =>
-              this.setState({ addressConfirmation: false }, () =>
+              this.setState({addressConfirmation: false}, () =>
                 this.loadMakeOrder()
               )
             }
-            onPressCancel={() => this.setState({ addressConfirmation: false })}
+            onPressCancel={() => this.setState({addressConfirmation: false})}
             onBackgroundPress={this.closePopUp}
             onChangeText={(text) => this.onChangeCoupon(text)}
           />
