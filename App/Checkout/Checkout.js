@@ -1659,6 +1659,11 @@ export default class Checkout extends React.Component {
         ? [styles.paymentCashIcon, { tintColor: PRIMARY_COLOR }]
         : styles.paymentCashIcon;
 
+    let creditStyle =
+      credits > 0
+        ? [styles.creditsText, { color: PRIMARY_COLOR }]
+        : console.log('was wawart');
+
     return (
       <View style={styles.paymentOptionsView}>
         <TouchableOpacity
@@ -1676,7 +1681,7 @@ export default class Checkout extends React.Component {
                 <Text style={styles.tagText}>Top up $10 & get $5 extra</Text>
               </View> */}
             </View>
-            <Text style={styles.creditsText}>${credits}</Text>
+            <Text style={creditStyle}>${credits}</Text>
           </View>
           {walletSelectBox}
         </TouchableOpacity>
@@ -1764,7 +1769,7 @@ export default class Checkout extends React.Component {
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
             <View pointerEvents="box-none" style={styles.whiteboxView}>
-                {this.renderShopImage()}   
+              {this.renderShopImage()}
             </View>
             <View
               pointerEvents="box-none"
@@ -2214,7 +2219,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 14 * alpha,
     borderTopLeftRadius: 14 * alpha,
     overflow: 'hidden',
-    alignItems:'center'
+    alignItems: 'center'
   },
   logoImage: {
     resizeMode: 'contain',
