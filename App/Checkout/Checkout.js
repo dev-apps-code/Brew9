@@ -1681,7 +1681,7 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/credit_card.png')}
             style={cardIconStyle}
           />
-          <Text style={styles.paymentOptionText}>Credit Card</Text>
+          <Text style={styles.paymentOptionText}>Debit Card</Text>
           <Image
             source={require('./../../assets/images/cc.png')}
             style={styles.cc}
@@ -1690,14 +1690,14 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/visa.png')}
             style={styles.visa}
           />
-          <Image
+          {/* <Image
             source={require('./../../assets/images/union.png')}
             style={styles.union}
           />
           <Image
             source={require('./../../assets/images/dc.png')}
             style={styles.dc}
-          />
+          /> */}
           {cardSelectBox}
         </TouchableOpacity>
         <TouchableOpacity
