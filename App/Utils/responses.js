@@ -3,7 +3,7 @@ export const getResponseMsg = ({props, shopId, key, defaultText}) => {
 
   const messages = shopResponses.get(shopId) || new Map();
 
-  return shopMessages.get(key) || responses.get(key) || defaultText;
+  return messages.get(key) || responses.get(key) || defaultText;
 };
 
 export default function ({shopResponses, responses}, shopId, key, text = '') {
