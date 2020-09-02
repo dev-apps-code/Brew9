@@ -1517,13 +1517,6 @@ export default class Home extends React.Component {
     return (
       <View style={styles.popOutView}>
         <View style={styles.topbuttonView}>
-          {/* <TouchableOpacity
-						onPress={this.onFavouritePressed}
-						style={styles.favouriteButton}>
-						<Image
-							source={require("./../../assets/images/group-9-11.png")}
-							style={styles.favouriteButtonImage}/>
-					</TouchableOpacity> */}
           <TouchableOpacity
             onPress={this.onClosePressed}
             style={styles.closeButton}
@@ -1531,7 +1524,7 @@ export default class Home extends React.Component {
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
-        <ImageCell image={selected_product.image} />
+        <ImageCell product={selected_product} image={selected_product.image} />
 
         <View pointerEvents="box-none">
           <ScrollView style={styles.contentScrollView}>
@@ -1912,15 +1905,6 @@ export default class Home extends React.Component {
                 this.marker.showCallout()
               }
             >
-              {/* <MapView.Marker
-                ref={(marker) => (this.marker = marker)}
-                coordinate={{
-                  latitude: shop ? parseFloat(shop.latitude) : 0.0,
-                  longitude: shop ? parseFloat(shop.longitude) : 0.0
-                }}
-                title="Brew9"
-                description={shop.location}
-              /> */}
               <Marker
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
