@@ -11,7 +11,7 @@ import {
   Platform
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
@@ -148,6 +148,11 @@ export default class Checkout extends React.Component {
   }
 
   componentDidMount() {
+    console.log('\n\n');
+    // console.log(this.props.selectedShop)
+    console.log(Object.keys(this.props.selectedShop));
+    console.log('\n\n');
+
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
       onItemPressed: this.onItemPressed
@@ -966,7 +971,9 @@ export default class Checkout extends React.Component {
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
           ) {
-            var msg = this.props.responses.get('Popup - Insufficient credit') || 'Oops, insufficient credit.\nPlease select other payment option.';
+            var msg =
+              this.props.responses.get('Popup - Insufficient credit') ||
+              'Oops, insufficient credit.\nPlease select other payment option.';
             this.refs.toast.show(msg, TOAST_DURATION + 1000);
 
             return;
@@ -1715,6 +1722,30 @@ export default class Checkout extends React.Component {
     );
   };
 
+  renderShopImage = () => {
+    let { selectedShop } = this.props;
+    let { url } = selectedShop.image;
+    let shopImage = url ? (
+      <View style={styles.completeOrderView}>
+        <Image
+          source={{ uri: url }}
+          resizeMode={'cover'}
+          style={styles.shopImage}
+        />
+      </View>
+    ) : (
+      <View style={styles.completeOrderView}>
+        <Image
+          source={require('./../../assets/images/group-3-20.png')}
+          style={styles.logoImage}
+        />
+        <Text style={styles.completedOrderText}>Order Information</Text>
+      </View>
+    );
+
+    return shopImage;
+  };
+
   renderCheckoutReceipt() {
     const {
       vouchers_to_use,
@@ -1733,13 +1764,7 @@ export default class Checkout extends React.Component {
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
             <View pointerEvents="box-none" style={styles.whiteboxView}>
-              <View style={styles.completeOrderView}>
-                <Image
-                  source={require('./../../assets/images/group-3-20.png')}
-                  style={styles.logoImage}
-                />
-                <Text style={styles.completedOrderText}>Order Information</Text>
-              </View>
+                {this.renderShopImage()}   
             </View>
             <View
               pointerEvents="box-none"
@@ -2178,14 +2203,18 @@ const styles = StyleSheet.create({
   whiteboxView: {
     backgroundColor: 'white',
     flex: 1,
+    width: '100%',
     alignItems: 'center',
     borderTopRightRadius: 14 * alpha,
     borderTopLeftRadius: 14 * alpha
   },
   completeOrderView: {
-    backgroundColor: 'transparent',
-    flex: 1,
-    alignItems: 'center'
+    height: alpha * 150,
+    width: '100%',
+    borderTopRightRadius: 14 * alpha,
+    borderTopLeftRadius: 14 * alpha,
+    overflow: 'hidden',
+    alignItems:'center'
   },
   logoImage: {
     resizeMode: 'contain',
@@ -2193,6 +2222,20 @@ const styles = StyleSheet.create({
     width: 30 * alpha,
     height: 60 * alpha,
     marginTop: 30 * alpha
+  },
+
+  shopImageContainer: {
+    height: alpha * 100,
+    width: windowWidth,
+    paddingLeft: 18 * alpha,
+    paddingRight: 18 * alpha,
+    borderWidth: 2,
+    borderColor: 'red'
+  },
+
+  shopImage: {
+    height: '100%',
+    width: '100%'
   },
   completedOrderText: {
     color: PRIMARY_COLOR,
