@@ -1665,9 +1665,9 @@ export default class Checkout extends React.Component {
           <View>
             <View style={styles.walletTextContainer}>
               <Text style={styles.paymentOptionText}>Wallet</Text>
-              <View style={styles.tag}>
+              {/* <View style={styles.tag}>
                 <Text style={styles.tagText}>Top up $10 & get $5 extra</Text>
-              </View>
+              </View> */}
             </View>
             <Text style={styles.creditsText}>${credits}</Text>
           </View>
