@@ -1524,7 +1524,7 @@ export default class Home extends React.Component {
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
-        <ImageCell image={selected_product.image} />
+        <ImageCell product={selected_product} image={selected_product.image} />
 
         <View pointerEvents="box-none">
           <ScrollView style={styles.contentScrollView}>
