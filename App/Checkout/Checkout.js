@@ -8,19 +8,20 @@ import {
   ScrollView,
   Linking,
   SafeAreaView,
-  Platform
+  Platform,
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
-import { connect } from 'react-redux';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
+import {connect} from 'react-redux';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
-import { createAction, Storage } from '../Utils';
+import {createAction, Storage} from '../Utils';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
 import _ from 'lodash';
 import Brew9Toast from '../Components/Brew9Toast';
+import {getResponseMsg} from '../Utils/responses';
 
 import {
   TITLE_FONT,
@@ -29,17 +30,17 @@ import {
   DEFAULT_GREY_BACKGROUND,
   PRIMARY_COLOR,
   TOAST_DURATION,
-  LIGHT_GREY
+  LIGHT_GREY,
 } from '../Common/common_style';
 import Moment from 'moment';
-import { Analytics, Event } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
+import {Analytics, Event} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
 import openMap from 'react-native-open-maps';
-import { getMemberIdForApi } from '../Services/members_helper';
+import {getMemberIdForApi} from '../Services/members_helper';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import OrderForSelector from '../Components/OrderForSelector';
 import CurveSeparator from '../Components/CurveSeparator';
-@connect(({ members, shops, orders, config }) => ({
+@connect(({members, shops, orders, config}) => ({
   company_id: members.company_id,
   currentMember: members.profile,
   members: members,
@@ -55,20 +56,20 @@ import CurveSeparator from '../Components/CurveSeparator';
   location: members.location,
   delivery: members.delivery,
   shippingAddress: members.shippingAddress,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses,
 }))
 export default class Checkout extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTitle: (
         <Text
           style={{
             textAlign: 'center',
             alignSelf: 'center',
-            fontFamily: TITLE_FONT
-          }}
-        >
+            fontFamily: TITLE_FONT,
+          }}>
           Checkout
         </Text>
       ),
@@ -77,8 +78,7 @@ export default class Checkout extends React.Component {
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onBackPressed ? params.onBackPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/back.png')}
               style={styles.navigationBarItemIcon}
@@ -89,8 +89,8 @@ export default class Checkout extends React.Component {
       headerRight: null,
       headerStyle: {
         elevation: 0,
-        shadowOpacity: 0
-      }
+        shadowOpacity: 0,
+      },
     };
   };
 
@@ -98,9 +98,9 @@ export default class Checkout extends React.Component {
     super(props);
     _.throttle(
       this.checkout.bind(this),
-      500 // no new clicks within 500ms time window
+      500, // no new clicks within 500ms time window
     );
-    const { discount_cart_total, currentMember, cart_total } = props;
+    const {discount_cart_total, currentMember, cart_total} = props;
     this.state = {
       delivery_options: 'pickup',
       delivery_description: '',
@@ -136,12 +136,12 @@ export default class Checkout extends React.Component {
       promotionTotalDiscount: 0,
       promotionDiscountValue: {
         value: 0,
-        type: null
+        type: null,
       },
       enablePaynow: false,
-      isConfirmCheckout: false
+      isConfirmCheckout: false,
     };
-    const xy = { x: 0, y: windowHeight };
+    const xy = {x: 0, y: windowHeight};
     this.movePickAnimation = new Animated.ValueXY(xy);
     this.timeSelectorAnimation = new Animated.ValueXY(xy);
     this.moveAnimation = new Animated.ValueXY(xy);
@@ -150,21 +150,21 @@ export default class Checkout extends React.Component {
   componentDidMount() {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
-      onItemPressed: this.onItemPressed
+      onItemPressed: this.onItemPressed,
     });
 
-    const { dispatch, delivery } = this.props;
+    const {dispatch, delivery} = this.props;
 
     this.setState(
       {
-        valid_vouchers: []
+        valid_vouchers: [],
       },
       function () {
         this.loadValidVouchers();
         {
           delivery && this.loadDeliveryFee();
         }
-      }
+      },
     );
     dispatch(createAction('orders/noClearCart')());
     this.check_promotion_trigger();
@@ -179,18 +179,18 @@ export default class Checkout extends React.Component {
     if (prevProps.currentMember !== this.props.currentMember) {
       this.setState(
         {
-          selected_address: this.props.currentMember.defaultAddress
+          selected_address: this.props.currentMember.defaultAddress,
         },
-        () => this.loadDeliveryFee()
+        () => this.loadDeliveryFee(),
       );
     }
   }
 
   setPayNowStatus = () => {
-    let { pick_up_status, selected_payment } = this.state;
+    let {pick_up_status, selected_payment} = this.state;
     if (pick_up_status != null && selected_payment != null) {
       this.setState({
-        enablePaynow: true
+        enablePaynow: true,
       });
     }
   };
@@ -208,7 +208,7 @@ export default class Checkout extends React.Component {
     // delivery fees are based on location so if recipient address is empty
     // no delivery fee is calculated
     if (this.state.selected_address === null) {
-      this.setState({ deliveryFee: 0.0, delivery_description: '' });
+      this.setState({deliveryFee: 0.0, delivery_description: ''});
       return;
     }
 
@@ -218,18 +218,18 @@ export default class Checkout extends React.Component {
         let description = response?.result?.delivery_fee_description || '';
         this.setState({
           deliveryFee: parseFloat(deliveryFee).toFixed(2),
-          delivery_description: description
+          delivery_description: description,
         });
       } else {
         // Reset values if in case request fails
         ////console.log('Something went wrong.');
-        this.setState({ deliveryFee: 0.0, delivery_description: '' });
+        this.setState({deliveryFee: 0.0, delivery_description: ''});
       }
     };
 
     const object = new DeliveryFeeRequestObject(
       this.props.cart_total,
-      this.state.selected_address.id
+      this.state.selected_address.id,
     );
 
     object.setUrlId(this.props.selectedShop.id);
@@ -237,8 +237,8 @@ export default class Checkout extends React.Component {
     this.props.dispatch(
       createAction('shops/loadDeliveryFee')({
         object,
-        callback
-      })
+        callback,
+      }),
     );
   };
 
@@ -249,13 +249,13 @@ export default class Checkout extends React.Component {
       selectedShop,
       cart,
       promotions,
-      cart_order_id
+      cart_order_id,
     } = this.props;
     if (currentMember != null) {
       const callback = (eventObject) => {
         if (eventObject.success) {
           const valid_vouchers = eventObject.result;
-          this.setState({ valid_vouchers });
+          this.setState({valid_vouchers});
 
           var valid_voucher_counts = _.filter(valid_vouchers, function (o) {
             if (o.is_valid == true) return o;
@@ -266,20 +266,20 @@ export default class Checkout extends React.Component {
             new Event(
               'Valid Voucher',
               getMemberIdForApi(currentMember),
-              valid_voucher_counts
-            )
+              valid_voucher_counts,
+            ),
           );
         }
       };
 
       // Products with 'product' class are valid
-      filtered_cart = _.filter(cart, { clazz: 'product' });
+      filtered_cart = _.filter(cart, {clazz: 'product'});
 
       const obj = new ValidVouchersRequestObject(
         selectedShop.id,
         filtered_cart,
         promotions,
-        cart_order_id
+        cart_order_id,
       );
 
       obj.setUrlId(currentMember.id);
@@ -287,17 +287,17 @@ export default class Checkout extends React.Component {
       dispatch(
         createAction('vouchers/loadVouchersForCart')({
           object: obj,
-          callback
-        })
+          callback,
+        }),
       );
     }
   }
 
   onBackPressed = () => {
-    const { navigation } = this.props;
-    const { routeName, key } = navigation.getParam('returnToRoute');
+    const {navigation} = this.props;
+    const {routeName, key} = navigation.getParam('returnToRoute');
 
-    navigation.navigate({ routeName, key });
+    navigation.navigate({routeName, key});
   };
 
   onConfirmOrderSchedule = (option, hour, min, range) => {
@@ -311,8 +311,8 @@ export default class Checkout extends React.Component {
 
     var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
 
-    this.setState({ pick_up_time, pick_up_status, range }, () =>
-      this.setPayNowStatus()
+    this.setState({pick_up_time, pick_up_status, range}, () =>
+      this.setPayNowStatus(),
     );
 
     this._toggleTimeSelector();
@@ -352,7 +352,7 @@ export default class Checkout extends React.Component {
       ios:
         'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
         location,
-      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location,
     });
 
     Linking.openURL(url);
@@ -360,71 +360,70 @@ export default class Checkout extends React.Component {
 
   onDeliveryButtonPressed = () => {
     this.setState({
-      delivery_options: 'delivery'
+      delivery_options: 'delivery',
     });
   };
 
   onPickUpButtonPressed = () => {
     this.setState({
-      delivery_options: 'pickup'
+      delivery_options: 'pickup',
     });
   };
 
   onAutoFillPressed = () => {};
 
   onVoucherButtonPressed = () => {
-    const { navigate } = this.props.navigation;
-    const { currentMember } = this.props;
+    const {navigate} = this.props.navigation;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-      new Event('Checkout', getMemberIdForApi(currentMember), 'Select Voucher')
+      new Event('Checkout', getMemberIdForApi(currentMember), 'Select Voucher'),
     );
     navigate('CheckoutVoucher', {
       valid_vouchers: this.state.valid_vouchers,
       cart: this.props.cart,
-      addVoucherAction: this.addVoucherItemsToCart
+      addVoucherAction: this.addVoucherItemsToCart,
     });
   };
 
   addShippingAddress = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
-    this.setState({ visible: false });
+    this.setState({visible: false});
     navigation.navigate('ShippingAddress', {
       selected_address: this.state.selected_address,
-      returnToRoute: this.props.navigation.state
+      returnToRoute: this.props.navigation.state,
     });
   };
 
   addFirstShippingAddress = () => {
-    const { navigation } = this.props;
-    this.setState({ visible: false });
+    const {navigation} = this.props;
+    this.setState({visible: false});
     navigation.navigate('AddShippingAddress', {
       params: null,
-      initialAddress: true
+      initialAddress: true,
     });
   };
 
   onCancelVoucher = (item) => {
     let new_voucher_list = [...this.state.vouchers_to_use];
     const search_voucher_index = new_voucher_list.findIndex(
-      (element) => element.id == item.id
+      (element) => element.id == item.id,
     );
 
     new_voucher_list.splice(search_voucher_index, 1);
     this.setState(
       {
-        vouchers_to_use: new_voucher_list
+        vouchers_to_use: new_voucher_list,
       },
       function () {
         this.applyVoucher(new_voucher_list);
-      }
+      },
     );
   };
 
   addVoucherItemsToCart = (voucher_item) => {
-    const { vouchers_to_use } = this.state;
-    this.setState({ vouchers_to_use: [voucher_item] });
+    this.setState({vouchers_to_use: [voucher_item]});
     this.applyVoucher([voucher_item]);
   };
 
@@ -447,10 +446,10 @@ export default class Checkout extends React.Component {
       cart_total,
       selectedShop,
       delivery,
-      cart
+      cart,
     } = this.props;
 
-    let { sub_total_voucher, deliveryFee } = this.state;
+    let {sub_total_voucher, deliveryFee} = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
     let finalCart = [];
@@ -489,17 +488,17 @@ export default class Checkout extends React.Component {
                 ) {
                   var promotionSettings = {
                     value: promotion.value,
-                    type: promotion.value_type
+                    type: promotion.value_type,
                   };
                   this.setState({
-                    promotionDiscountValue: promotionSettings
+                    promotionDiscountValue: promotionSettings,
                   });
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = this.roundOff(
-                    (final_cart_value * discount_value) / 100
+                    (final_cart_value * discount_value) / 100,
                   );
                   roundedPrice = this.roundOff(
-                    (final_cart_value * discount_value) / 100
+                    (final_cart_value * discount_value) / 100,
                   );
                   if (
                     promotion.maximum_discount_allow != null &&
@@ -514,10 +513,10 @@ export default class Checkout extends React.Component {
                 ) {
                   var promotionSettings = {
                     value: promotion.value,
-                    type: promotion.value_type
+                    type: promotion.value_type,
                   };
                   this.setState({
-                    promotionDiscountValue: promotionSettings
+                    promotionDiscountValue: promotionSettings,
                   });
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = promotion.value;
@@ -532,7 +531,7 @@ export default class Checkout extends React.Component {
                 description: '',
                 price: price,
                 type: promotion.reward_type,
-                roundedPrice: roundedPrice
+                roundedPrice: roundedPrice,
               };
 
               promotions_item.push(cartItem);
@@ -540,7 +539,7 @@ export default class Checkout extends React.Component {
               var display_text = promotion.display_text;
               final_promo_text = display_text.replace(
                 '$remaining',
-                `$${parseFloat(remaining).toFixed(2)}`
+                `$${parseFloat(remaining).toFixed(2)}`,
               );
 
               break;
@@ -550,15 +549,15 @@ export default class Checkout extends React.Component {
       }
       this.setState({
         final_price: final_cart_value,
-        promotionTotalDiscount: cart_total - final_cart_value
+        promotionTotalDiscount: cart_total - final_cart_value,
       });
     }
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function () {
+      this.setState({isCartToggle: false}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: windowHeight }
+          toValue: {x: 0, y: windowHeight},
         }).start();
       });
     } else {
@@ -566,24 +565,24 @@ export default class Checkout extends React.Component {
 
     dispatch(
       createAction('orders/updatePromotionText')({
-        promotionText: final_promo_text
-      })
+        promotionText: final_promo_text,
+      }),
     );
     dispatch(
       createAction('orders/updatePromotions')({
-        promotions: promotions_item
-      })
+        promotions: promotions_item,
+      }),
     );
 
     dispatch(
       createAction('orders/updateDiscountCartTotal')({
-        discount_cart_total: final_cart_value
-      })
+        discount_cart_total: final_cart_value,
+      }),
     );
   };
 
   filterProductsByVoucher(voucher, qty) {
-    const { cart, discount_cart_total } = this.props;
+    const {cart, discount_cart_total} = this.props;
     var targetQuantity = voucher.eligible_discount_quantity;
     var targetProductIDList = voucher.product_ids;
     var voucherID = voucher.id;
@@ -622,10 +621,10 @@ export default class Checkout extends React.Component {
             ) {
               var voucherDeductionPercentage = voucherDetails.discount_price;
               productPrice -= this.roundOff(
-                (productPrice * promotionSettings.value) / 100
+                (productPrice * promotionSettings.value) / 100,
               );
               var voucherDeductionValue = this.roundOff(
-                (productPrice * voucherDetails.discount_price) / 100.0
+                (productPrice * voucherDetails.discount_price) / 100.0,
               );
               voucherDiscountTotal =
                 voucherDiscountTotal +
@@ -641,7 +640,7 @@ export default class Checkout extends React.Component {
             ) {
               var voucherDeductionPercentage = voucherDetails.discount_price;
               var voucherDeductionValue = this.roundOff(
-                (productPrice * voucherDetails.discount_price) / 100.0
+                (productPrice * voucherDetails.discount_price) / 100.0,
               );
               voucherDiscountTotal =
                 voucherDiscountTotal +
@@ -656,8 +655,8 @@ export default class Checkout extends React.Component {
   }
 
   applyVoucher(vouchers_to_use) {
-    const { discount_cart_total } = this.props;
-    const { selected_payment } = this.state;
+    const {discount_cart_total} = this.props;
+    const {selected_payment} = this.state;
     var voucherDeductedTotal = discount_cart_total;
 
     for (var index in vouchers_to_use) {
@@ -674,14 +673,14 @@ export default class Checkout extends React.Component {
         ) {
           if (vouchers_to_use[index].product_ids.length != 0) {
             voucherDeductedTotal = this.filterProductsByVoucher(
-              vouchers_to_use[index]
+              vouchers_to_use[index],
             );
           } else if (voucher.discount_type.toLowerCase() == 'fixed') {
             voucherDeductedTotal =
               voucherDeductedTotal - voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
             var voucherConvertedToFix = this.roundOff(
-              (voucherDeductedTotal * voucher.discount_price) / 100.0
+              (voucherDeductedTotal * voucher.discount_price) / 100.0,
             );
             voucherDeductedTotal = voucherDeductedTotal - voucherConvertedToFix;
           }
@@ -692,10 +691,10 @@ export default class Checkout extends React.Component {
     const final_price = voucherDeductedTotal;
     const voucherTotalDiscount = discount_cart_total - voucherDeductedTotal;
 
-    this.setState({ final_price, voucherTotalDiscount });
+    this.setState({final_price, voucherTotalDiscount});
 
     if (selected_payment == 'credit_card' && voucherDeductedTotal <= 0) {
-      this.setState({ selected_payment: '' });
+      this.setState({selected_payment: ''});
     }
   }
 
@@ -705,14 +704,14 @@ export default class Checkout extends React.Component {
       new Event(
         'Checkout',
         getMemberIdForApi(this.props.currentMember),
-        'Select Payment'
-      )
+        'Select Payment',
+      ),
     );
     this.tooglePayment();
   };
 
   removeItemFromCart(products, description) {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     let newcart = [...this.props.cart];
     let product_ids = products.map((item) => item.id);
     for (item of newcart) {
@@ -722,24 +721,24 @@ export default class Checkout extends React.Component {
     }
     dispatch(
       createAction('orders/updateCart')({
-        cart: newcart
-      })
+        cart: newcart,
+      }),
     );
   }
 
   onRemoveItem(item) {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     let new_cart = [...this.props.cart];
     const search_product_index = new_cart.findIndex(
-      (element) => element.id == item.id
+      (element) => element.id == item.id,
     );
 
     new_cart.splice(search_product_index, 1);
 
     dispatch(
       createAction('orders/updateCart')({
-        cart: new_cart
-      })
+        cart: new_cart,
+      }),
     );
   }
 
@@ -752,23 +751,23 @@ export default class Checkout extends React.Component {
       cart_order_id,
       navigation,
       location,
-      delivery
+      delivery,
     } = this.props;
-    const { navigate } = this.props.navigation;
+    const {navigate} = this.props.navigation;
     const {
       vouchers_to_use,
       selected_payment,
       pick_up_status,
       pick_up_time,
-      selected_address
+      selected_address,
     } = this.state;
 
     let address_id = selected_address == null ? null : selected_address.id;
 
-    this.setState({ loading: true, isConfirmCheckout: false });
+    this.setState({loading: true, isConfirmCheckout: false});
 
     const callback = (eventObject) => {
-      this.setState({ loading: false });
+      this.setState({loading: false});
 
       if (eventObject.success) {
         if (selected_payment == 'credits') {
@@ -776,14 +775,14 @@ export default class Checkout extends React.Component {
             function () {
               this.clearCart();
             }.bind(this),
-            500
+            500,
           );
         } else if (selected_payment == 'counter') {
           setTimeout(
             function () {
               this.clearCart();
             }.bind(this),
-            500
+            500,
           );
         } else {
           const order = eventObject.result;
@@ -795,7 +794,7 @@ export default class Checkout extends React.Component {
             amount: order.total,
             type: 'order',
             returnToRoute: navigation.state,
-            clearCart: () => this.clearCart()
+            clearCart: () => this.clearCart(),
           });
         }
       } else {
@@ -825,7 +824,7 @@ export default class Checkout extends React.Component {
       delivery_option = 1;
     }
 
-    filtered_cart = _.filter(cart, { clazz: 'product' });
+    filtered_cart = _.filter(cart, {clazz: 'product'});
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
     const obj = new MakeOrderRequestObj(
       filtered_cart,
@@ -838,92 +837,114 @@ export default class Checkout extends React.Component {
       latitude,
       longitude,
       delivery_option,
-      address_id
+      address_id,
     );
     obj.setUrlId(selectedShop.id);
     dispatch(
       createAction('shops/loadMakeOrder')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   onWalletButtonPressed = () => {
     this.setState({
-      selected_payment: 'credits'
+      selected_payment: 'credits',
     });
     this.setPayNowStatus();
   };
 
   onCreditButtonPressed = () => {
     this.setState({
-      selected_payment: 'credit_card'
+      selected_payment: 'credit_card',
     });
     this.setPayNowStatus();
   };
   onCounterButtonPressed = () => {
     this.setState({
-      selected_payment: 'counter'
+      selected_payment: 'counter',
     });
     this.setPayNowStatus();
   };
 
   clearCart = () => {
-    const { navigation, dispatch } = this.props;
+    const {navigation, dispatch} = this.props;
     dispatch(createAction('orders/resetCart')({}));
-    const { routeName, key } = navigation.getParam('returnToRoute');
+    const {routeName, key} = navigation.getParam('returnToRoute');
     navigation.navigate({
       routeName,
-      key
+      key,
     });
   };
 
   checkout = () => {
-    this.setState({ isConfirmCheckout: true });
+    this.setState({isConfirmCheckout: true});
   };
 
   renderConfirmPopup = () => {
-    let { isConfirmCheckout } = this.state;
-    const { responses, selectedShop } = this.props;
-    const r = responses;
-    const fallbackText = 'Are you sure you want to order from this location?';
-    const confirmText = r.get('Checkout Confirm') || fallbackText;
+    const {selectedShop} = this.props;
+    const confirmText = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Checkout Confirm',
+      defaultText: 'Are you sure you want to order from this location?',
+    });
     const description = `${confirmText} ${selectedShop.name}`;
-    const title = r.get('Checkout Confirm Title') || 'Confirm Checkout';
-    const OkText = r.get('Checkout Confirm Button') || 'Confirm';
-    const cancelText = r.get('Checkout Cancel Button') || 'Cancel';
-    const popUpVisible = isConfirmCheckout;
+    const title = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Checkout Confirm Title',
+      defaultText: 'Confirm Checkout',
+    });
+    const OkText = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'heckout Confirm Button',
+      defaultText: 'Confirm',
+    });
+    const cancelText = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Checkout Cancel Button',
+      defaultText: 'Cancel',
+    });
+    const popUpVisible = this.state.isConfirmCheckout;
+
     return (
       <Brew9PopUp
         onPressOk={this.onPayNowPressed}
         onBackgroundPress={() => {}}
-        onPressCancel={() => this.setState({ isConfirmCheckout: false })}
-        {...{ popUpVisible, title, description, OkText, cancelText }}
+        onPressCancel={() => this.setState({isConfirmCheckout: false})}
+        {...{popUpVisible, title, description, OkText, cancelText}}
       />
     );
   };
 
   onPayNowPressed = () => {
-    const { navigate } = this.props.navigation;
+    this.setState({
+      isConfirmCheckout: false,
+    });
+    const {navigate} = this.props.navigation;
     const {
       selected_payment,
       pick_up_status,
       final_price,
       pick_up_time,
-      selected_address
+      selected_address,
     } = this.state;
-    const { currentMember, selectedShop, delivery } = this.props;
+    const {currentMember, selectedShop, delivery} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     const event = new Event(
       'Checkout',
       getMemberIdForApi(currentMember),
-      'Pay Now'
+      'Pay Now',
     );
 
     analytics.event(event);
 
     if (currentMember != undefined) {
+      console.log('1');
       if (delivery && !selected_address) {
         this.addShippingAddress();
         return;
@@ -938,10 +959,15 @@ export default class Checkout extends React.Component {
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
           ) {
-            var msg =
-              this.props.responses.get('Popup - Insufficient credit') ||
-              'Oops, insufficient credit.\nPlease select other payment option.';
-            this.refs.toast.show(msg, TOAST_DURATION + 1000);
+            const insufficientText = getResponseMsg({
+              props: this.props,
+              shopId: selectedShop.id,
+              key: 'Popup - Insufficient credit',
+              defaultText:
+                'Oops, insufficient E-Wallet credit! Please select other payment option.',
+            });
+
+            this.refs.toast.show(insufficientText, TOAST_DURATION + 1000);
 
             return;
           }
@@ -960,12 +986,8 @@ export default class Checkout extends React.Component {
               const message = 'Pick up time is not available';
               this.refs.toast.show(message, TOAST_DURATION);
               return;
-            }
-            // else if (pickup < opening) {
-            // 	this.refs.toast.show("Shop is not open at this time", TOAST_DURATION)
-            // 	return
-            // }
-            else if (pickup > closing) {
+            } else if (pickup > closing) {
+              // TODO please convert
               const message = 'We are closed at this time.';
               this.refs.toast.show(message, TOAST_DURATION);
               return;
@@ -979,26 +1001,26 @@ export default class Checkout extends React.Component {
       }
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
       return;
     }
   };
 
   addressConfirmation = () => {
-    this.setState({ addressConfirmation: true });
+    this.setState({addressConfirmation: true});
   };
 
   measureView(event) {
     this.setState({
-      payment_view_height: event.nativeEvent.layout.height
+      payment_view_height: event.nativeEvent.layout.height,
     });
   }
 
   onClosePressed = () => {
     this.setState({
       loginModalVisible: false,
-      registerModalVisible: false
+      registerModalVisible: false,
     });
   };
 
@@ -1007,7 +1029,7 @@ export default class Checkout extends React.Component {
   };
 
   tooglePickup = () => {
-    const { isPickupToogle, pickup_view_height } = this.state;
+    const {isPickupToogle, pickup_view_height} = this.state;
 
     var product_checkout_height = pickup_view_height;
     var content = 247 * alpha;
@@ -1015,63 +1037,60 @@ export default class Checkout extends React.Component {
 
     if (isPickupToogle) {
       this.setState(
-        { isPickupToogle: false, isTimeSelectorToggled: false },
+        {isPickupToogle: false, isTimeSelectorToggled: false},
         function () {
           Animated.spring(this.movePickAnimation, {
-            toValue: { x: 0, y: windowHeight }
+            toValue: {x: 0, y: windowHeight},
           }).start();
-        }
+        },
       );
     } else {
       this.setState(
-        { isPickupToogle: true, isTimeSelectorToggled: true },
+        {isPickupToogle: true, isTimeSelectorToggled: true},
         function () {
           Animated.spring(this.movePickAnimation, {
-            toValue: { x: 0, y: 52 * alpha }
+            toValue: {x: 0, y: 52 * alpha},
           }).start();
-        }
+        },
       );
     }
   };
 
   _toggleTimeSelector = () => {
-    const { isTimeSelectorToggled } = this.state;
+    const {isTimeSelectorToggled} = this.state;
 
     const y = () => (isTimeSelectorToggled ? windowHeight : 52 * alpha);
 
-    this.setState(
-      { isTimeSelectorToggled: !isTimeSelectorToggled },
-      function () {
-        Animated.spring(this.timeSelectorAnimation, {
-          toValue: { x: 0, y: y() }
-        }).start();
-      }
-    );
+    this.setState({isTimeSelectorToggled: !isTimeSelectorToggled}, function () {
+      Animated.spring(this.timeSelectorAnimation, {
+        toValue: {x: 0, y: y()},
+      }).start();
+    });
   };
 
   tooglePayment = () => {
-    const { isPaymentToggle, payment_view_height } = this.state;
+    const {isPaymentToggle, payment_view_height} = this.state;
 
     var product_checkout_height = payment_view_height;
     var content = 247 * alpha;
 
     if (isPaymentToggle) {
-      this.setState({ isPaymentToggle: false }, function () {
+      this.setState({isPaymentToggle: false}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: windowHeight }
+          toValue: {x: 0, y: windowHeight},
         }).start();
       });
     } else {
-      this.setState({ isPaymentToggle: true }, function () {
+      this.setState({isPaymentToggle: true}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: 52 * alpha }
+          toValue: {x: 0, y: 52 * alpha},
         }).start();
       });
     }
   };
 
   pickUpNow = () => {
-    let { selectedShop } = this.props;
+    let {selectedShop} = this.props;
     var time_now = Moment(new Date(), 'h:mm');
     var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
     var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm');
@@ -1097,7 +1116,7 @@ export default class Checkout extends React.Component {
   }
 
   renderVoucherSection(vouchers) {
-    const { cart, discount_cart_total } = this.props;
+    const {cart, discount_cart_total} = this.props;
 
     const voucher_items = vouchers.map((item, key) => {
       var discount_value = null;
@@ -1117,15 +1136,14 @@ export default class Checkout extends React.Component {
       return (
         <View style={[styles.drinksView]} key={key}>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
               flex: 1,
               flexDirection: 'row',
-              justifyContent: 'space-between'
-            }}
-          >
+              justifyContent: 'space-between',
+            }}>
             <View style={styles.productDetailView}>
               <View style={styles.voucherDetailView}>
                 <Text style={styles.productNameText}>{voucherDisplayName}</Text>
@@ -1146,14 +1164,13 @@ export default class Checkout extends React.Component {
                         style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
             {discount_value ? (
               <Text style={styles.voucherPriceText}>{`-$${parseFloat(
-                this.roundOff(this.state.voucherTotalDiscount)
+                this.roundOff(this.state.voucherTotalDiscount),
               ).toFixed(2)}`}</Text>
             ) : undefined}
 
             <TouchableOpacity
               onPress={() => this.onCancelVoucher(item)}
-              style={styles.cancelVoucherButton}
-            >
+              style={styles.cancelVoucherButton}>
               <Image
                 source={require('./../../assets/images/cancel.png')}
                 style={styles.cancelImage}
@@ -1170,7 +1187,7 @@ export default class Checkout extends React.Component {
     });
 
     var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (
-      o
+      o,
     ) {
       if (o.is_valid == true) return o;
     }).length;
@@ -1183,25 +1200,22 @@ export default class Checkout extends React.Component {
               ? () => this.onVoucherButtonPressed()
               : () => null
           }
-          style={styles.voucherButton}
-        >
-          <View pointerEvents="box-none" style={styles.sectionRowView}>
+          style={styles.voucherButton}>
+          <View pointerEvents='box-none' style={styles.sectionRowView}>
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
             <View
               style={{
                 flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
+                alignItems: 'center',
+              }}>
               <Text
                 style={
                   this.state.valid_vouchers != null &&
                   this.state.valid_vouchers.length > 0
                     ? styles.productVoucherText
                     : styles.productVoucherDisableText
-                }
-              >
+                }>
                 {this.state.valid_vouchers != null ? valid_voucher_counts : '-'}{' '}
                 usable
               </Text>
@@ -1218,8 +1232,8 @@ export default class Checkout extends React.Component {
   }
 
   renderPaymentSection() {
-    const { currentMember, delivery } = this.props;
-    const { selected_payment } = this.state;
+    const {currentMember, delivery} = this.props;
+    const {selected_payment} = this.state;
 
     const credits =
       currentMember != undefined
@@ -1234,12 +1248,13 @@ export default class Checkout extends React.Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
+                alignItems: 'center',
+              }}>
               <View
                 style={[
-                  selected_payment != '' ? styles.greenCircle : styles.redCircle
+                  selected_payment != ''
+                    ? styles.greenCircle
+                    : styles.redCircle,
                 ]}
               />
               <Text style={[styles.productNameText]}>Payment</Text>
@@ -1258,18 +1273,17 @@ export default class Checkout extends React.Component {
   };
 
   renderPickupTime() {
-    const { pick_up_status, pick_up_time } = this.state;
-    var { delivery } = this.props;
+    const {pick_up_status, pick_up_time} = this.state;
+    var {delivery} = this.props;
     var pick_up = delivery ? 'Delivery Time' : 'Pick Up Time';
     var formatted_time = this._getFormattedSchedule();
     return (
       <View style={styles.sectionView}>
         <TouchableOpacity
           onPress={() => this.changeTimeSchedule()}
-          style={styles.voucherButton}
-        >
-          <View pointerEvents="box-none" style={styles.sectionRowView}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          style={styles.voucherButton}>
+          <View pointerEvents='box-none' style={styles.sectionRowView}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={
                   pick_up_status != null ? styles.greenCircle : styles.redCircle
@@ -1280,9 +1294,8 @@ export default class Checkout extends React.Component {
             <View
               style={{
                 flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
+                alignItems: 'center',
+              }}>
               <Text style={styles.productVoucherText}>
                 {pick_up_time != null ? formatted_time : 'Please select'}
               </Text>
@@ -1324,22 +1337,20 @@ export default class Checkout extends React.Component {
       return (
         <View style={styles.drinksView} key={key}>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
               flex: 1,
-              flexDirection: 'row'
-            }}
-          >
+              flexDirection: 'row',
+            }}>
             <View style={styles.productDetailView}>
               <Text
                 style={
                   item.cannot_order != undefined && item.cannot_order == true
                     ? styles.productNameDisabledText
                     : styles.productNameText
-                }
-              >
+                }>
                 {item.name}
               </Text>
               {variant_array.length > 0 ? (
@@ -1359,8 +1370,7 @@ export default class Checkout extends React.Component {
             {item.cannot_order != undefined && item.cannot_order == true && (
               <TouchableOpacity
                 onPress={() => this.onRemoveItem(item)}
-                style={styles.cancelVoucherButton}
-              >
+                style={styles.cancelVoucherButton}>
                 <Image
                   source={require('./../../assets/images/cancel.png')}
                   style={styles.cancelImage}
@@ -1383,10 +1393,9 @@ export default class Checkout extends React.Component {
         style={[
           styles.sectionView,
           this.props.delivery && {
-            paddingTop: 20
-          }
-        ]}
-      >
+            paddingTop: 20,
+          },
+        ]}>
         <View style={styles.orderitemsView}>{order_items}</View>
       </View>
     );
@@ -1413,27 +1422,24 @@ export default class Checkout extends React.Component {
 
       return (
         <View
-          style={[styles.drinksView, { marginVertical: 0 * alpha }]}
-          key={key}
-        >
+          style={[styles.drinksView, {marginVertical: 0 * alpha}]}
+          key={key}>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
               flex: 1,
-              flexDirection: 'row'
-            }}
-          >
+              flexDirection: 'row',
+            }}>
             <View style={styles.productDetailView}>
               <Text
                 style={[
                   item.cannot_order != undefined && item.cannot_order == true
                     ? styles.productNameDisabledText
                     : styles.productNameText,
-                  { marginBottom: 0 }
-                ]}
-              >
+                  {marginBottom: 0},
+                ]}>
                 {item.name}
               </Text>
             </View>
@@ -1452,7 +1458,7 @@ export default class Checkout extends React.Component {
       return (
         <View>
           <CurveSeparator />
-          <View style={[styles.sectionView, { paddingBottom: 10 * alpha }]}>
+          <View style={[styles.sectionView, {paddingBottom: 10 * alpha}]}>
             <View style={styles.orderitemsView}>{promotions_item}</View>
           </View>
         </View>
@@ -1461,23 +1467,22 @@ export default class Checkout extends React.Component {
   };
 
   renderDeliveryAddress = (address) => {
-    let { deliveryFee, final_price, delivery_description } = this.state;
+    let {deliveryFee, final_price, delivery_description} = this.state;
     let text = address ? 'Change' : 'Add';
     let non_negative_subTotal_price = parseFloat(
-      Math.max(0, final_price)
+      Math.max(0, final_price),
     ).toFixed(2);
     return (
       <View style={styles.deliveryAddressView}>
         <View style={styles.voucherButton}>
           <View style={styles.drinksView}>
-            <View style={[styles.deliveryAddressDetail, { flex: 1 }]}>
+            <View style={[styles.deliveryAddressDetail, {flex: 1}]}>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  paddingBottom: 3 * alpha
-                }}
-              >
+                  paddingBottom: 3 * alpha,
+                }}>
                 <Text style={[styles.productNameText]}>Delivery Address</Text>
                 <TouchableOpacity
                   onPress={() => this.addShippingAddress()}
@@ -1485,9 +1490,8 @@ export default class Checkout extends React.Component {
                     flexDirection: 'row',
                     flex: 1,
                     justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
+                    alignItems: 'center',
+                  }}>
                   <Text style={[styles.editAddressText]}>{text}</Text>
                   <Image
                     source={require('./../../assets/images/next.png')}
@@ -1522,9 +1526,8 @@ export default class Checkout extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-between',
               // paddingHorizontal: 10 * alpha,
-              paddingBottom: 10 * alpha
-            }}
-          >
+              paddingBottom: 10 * alpha,
+            }}>
             <Text style={styles.productNameText}>Subtotal</Text>
             <Text style={styles.productVoucherText}>
               {`$${parseFloat(non_negative_subTotal_price).toFixed(2)}` ||
@@ -1535,10 +1538,9 @@ export default class Checkout extends React.Component {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}
-            >
-              <View style={{ flex: 1 }}>
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flex: 1}}>
                 <Text style={styles.productNameText}>Delivery fees</Text>
                 {delivery_description != '' && (
                   <Text style={styles.deliveryNoted}>
@@ -1557,8 +1559,8 @@ export default class Checkout extends React.Component {
   };
 
   renderOrderForSelector = () => {
-    const { delivery, selectedShop } = this.props;
-    const { opening_hour, delivery_hour } = selectedShop;
+    const {delivery, selectedShop} = this.props;
+    const {opening_hour, delivery_hour} = selectedShop;
     let today = [];
     let tomorrow = [];
     if (delivery) {
@@ -1569,7 +1571,7 @@ export default class Checkout extends React.Component {
     }
     return (
       <OrderForSelector
-        ref="timepicker"
+        ref='timepicker'
         delivery={this.props.delivery}
         today={today || []}
         tomorrow={tomorrow || []}
@@ -1581,8 +1583,8 @@ export default class Checkout extends React.Component {
   };
 
   renderPaymentOptions = () => {
-    const { currentMember, delivery } = this.props;
-    const { final_price, selected_payment } = this.state;
+    const {currentMember, delivery} = this.props;
+    const {final_price, selected_payment} = this.state;
     let cashPayment = delivery ? 'Cash On Delivery' : 'Pay In Store';
     let credits =
       currentMember != undefined
@@ -1592,51 +1594,50 @@ export default class Checkout extends React.Component {
 
     let walletSelectBox =
       selected_payment == 'credits' ? (
-        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
       ) : (
         <View style={styles.selectBox} />
       );
 
     let cardSelectBox =
       selected_payment == 'credit_card' ? (
-        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
       ) : (
         <View style={styles.selectBox} />
       );
 
     let counterSelectBox =
       selected_payment == 'counter' ? (
-        <View style={[styles.selectBox, { backgroundColor: '#00B2E3' }]} />
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
       ) : (
         <View style={styles.selectBox} />
       );
 
     let walletIconStyle =
       selected_payment == 'credits'
-        ? [styles.paymentWalletIcon, { tintColor: PRIMARY_COLOR }]
+        ? [styles.paymentWalletIcon, {tintColor: PRIMARY_COLOR}]
         : styles.paymentWalletIcon;
 
     let cardIconStyle =
       selected_payment == 'credit_card'
-        ? [styles.paymentCardIcon, { tintColor: PRIMARY_COLOR }]
+        ? [styles.paymentCardIcon, {tintColor: PRIMARY_COLOR}]
         : styles.paymentCardIcon;
 
     let cashIconStyle =
       selected_payment == 'counter'
-        ? [styles.paymentCashIcon, { tintColor: PRIMARY_COLOR }]
+        ? [styles.paymentCashIcon, {tintColor: PRIMARY_COLOR}]
         : styles.paymentCashIcon;
 
     let creditStyle =
       credits > 0
-        ? [styles.creditsText, { color: PRIMARY_COLOR }]
+        ? [styles.creditsText, {color: PRIMARY_COLOR}]
         : styles.creditsText;
 
     return (
       <View style={styles.paymentOptionsView}>
         <TouchableOpacity
           onPress={() => this.onWalletButtonPressed()}
-          style={styles.paymentOptionsListView}
-        >
+          style={styles.paymentOptionsListView}>
           <Image
             source={require('./../../assets/images/wallet_center.png')}
             style={walletIconStyle}
@@ -1654,8 +1655,7 @@ export default class Checkout extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.onCreditButtonPressed()}
-          style={styles.paymentOptionsListView}
-        >
+          style={styles.paymentOptionsListView}>
           <Image
             source={require('./../../assets/images/credit_card.png')}
             style={cardIconStyle}
@@ -1681,8 +1681,7 @@ export default class Checkout extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.onCounterButtonPressed()}
-          style={styles.paymentOptionsListView}
-        >
+          style={styles.paymentOptionsListView}>
           <Image
             source={require('./../../assets/images/cash.png')}
             style={cashIconStyle}
@@ -1695,12 +1694,12 @@ export default class Checkout extends React.Component {
   };
 
   renderShopImage = () => {
-    let { selectedShop } = this.props;
-    let { url } = selectedShop.image;
+    let {selectedShop} = this.props;
+    let {url} = selectedShop.image;
     let shopImage = url ? (
       <View style={styles.completeOrderView}>
         <Image
-          source={{ uri: url }}
+          source={{uri: url}}
           resizeMode={'cover'}
           style={styles.shopImage}
         />
@@ -1723,27 +1722,26 @@ export default class Checkout extends React.Component {
       vouchers_to_use,
       final_price,
       selected_address,
-      deliveryFee
+      deliveryFee,
     } = this.state;
-    let { selectedShop, cart, promotions, delivery } = this.props;
+    let {selectedShop, cart, promotions, delivery} = this.props;
     var final_price_delivery =
       parseFloat(final_price) + parseFloat(deliveryFee);
     let non_negative_final_price = parseFloat(
-      Math.max(0, final_price_delivery)
+      Math.max(0, final_price_delivery),
     ).toFixed(2);
     return (
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
-            <View pointerEvents="box-none" style={styles.whiteboxView}>
+            <View pointerEvents='box-none' style={styles.whiteboxView}>
               {this.renderShopImage()}
             </View>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
-                flex: 1
-              }}
-            >
+                flex: 1,
+              }}>
               <View style={styles.locationWrapperView}>
                 {!delivery && (
                   <View style={styles.locationView}>
@@ -1753,14 +1751,13 @@ export default class Checkout extends React.Component {
                       </Text>
                       <Text
                         numberOfLines={3}
-                        style={styles.shopBranchAddressText}
-                      >
+                        style={styles.shopBranchAddressText}>
                         {selectedShop.short_address}
                       </Text>
                     </View>
                     <View
                       style={{
-                        flex: 1
+                        flex: 1,
                       }}
                     />
                     <View style={styles.callView}>
@@ -1768,8 +1765,7 @@ export default class Checkout extends React.Component {
                         onPress={() =>
                           this.onCallPressed(selectedShop.phone_no)
                         }
-                        style={styles.callIconButton}
-                      >
+                        style={styles.callIconButton}>
                         <Image
                           source={require('./../../assets/images/call-Icon.png')}
                           style={styles.callIconButtonImage}
@@ -1777,7 +1773,7 @@ export default class Checkout extends React.Component {
                       </TouchableOpacity>
                       <View
                         style={{
-                          flex: 1
+                          flex: 1,
                         }}
                       />
                       <Text style={styles.callText}>Call</Text>
@@ -1786,8 +1782,7 @@ export default class Checkout extends React.Component {
                       <TouchableOpacity
                         onPress={() => this.onPressDirection(selectedShop)}
                         // onPress={() => this.onLocationButtonPressed()}
-                        style={styles.directionIconButton}
-                      >
+                        style={styles.directionIconButton}>
                         <Image
                           source={require('./../../assets/images/direction-Icon.png')}
                           style={styles.directionIconButtonImage}
@@ -1795,7 +1790,7 @@ export default class Checkout extends React.Component {
                       </TouchableOpacity>
                       <View
                         style={{
-                          flex: 1
+                          flex: 1,
                         }}
                       />
                       <Text style={styles.directionText}>Direction</Text>
@@ -1828,7 +1823,7 @@ export default class Checkout extends React.Component {
                   <Text style={styles.totallabelText}>TOTAL</Text>
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text style={styles.totalText}>
@@ -1844,10 +1839,10 @@ export default class Checkout extends React.Component {
   }
 
   renderPayNow(final_price) {
-    let { deliveryFee, enablePaynow } = this.state;
+    let {deliveryFee, enablePaynow} = this.state;
     let style = enablePaynow
-      ? [styles.payNowButton, { backgroundColor: 'rgb(0, 178, 227)' }]
-      : [styles.payNowButton, { backgroundColor: '#BDBDBD' }];
+      ? [styles.payNowButton, {backgroundColor: 'rgb(0, 178, 227)'}]
+      : [styles.payNowButton, {backgroundColor: '#BDBDBD'}];
 
     let final_price_delivery =
       parseFloat(final_price) + parseFloat(deliveryFee);
@@ -1861,8 +1856,7 @@ export default class Checkout extends React.Component {
         <TouchableOpacity
           onPress={() => this.checkout()}
           style={style}
-          disabled={!enablePaynow}
-        >
+          disabled={!enablePaynow}>
           <Text style={styles.payNowButtonText}>
             {this.state.selected_payment == 'counter' ? 'Order Now' : 'Pay Now'}
           </Text>
@@ -1876,18 +1870,17 @@ export default class Checkout extends React.Component {
       isPaymentToggle,
       isPickupToogle,
       final_price,
-      selected_address
+      selected_address,
     } = this.state;
-    let { cart_total, discount_cart_total } = this.props;
+    let {cart_total, discount_cart_total} = this.props;
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
-      2
+      2,
     );
     return (
       <SafeAreaView style={styles.checkoutViewPadding}>
         <ScrollView
           style={styles.scrollviewScrollView}
-          onLayout={(event) => this.measureView(event)}
-        >
+          onLayout={(event) => this.measureView(event)}>
           <View style={styles.ordersummaryView}>
             {this.renderCheckoutReceipt()}
           </View>
@@ -1898,7 +1891,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderOrderForSelector()}
         <HudLoading isLoading={this.state.loading} />
-        <Brew9Toast ref="toast" />
+        <Brew9Toast ref='toast' />
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}
@@ -1906,7 +1899,7 @@ export default class Checkout extends React.Component {
           OkText={'Add address'}
           cancelText={'Cancel'}
           onPressOk={this.addFirstShippingAddress}
-          onPressCancel={() => this.setState({ visible: false })}
+          onPressCancel={() => this.setState({visible: false})}
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
         />
@@ -1929,11 +1922,11 @@ export default class Checkout extends React.Component {
             OkText={'Confirm'}
             cancelText={'Cancel'}
             onPressOk={() =>
-              this.setState({ addressConfirmation: false }, () =>
-                this.loadMakeOrder()
+              this.setState({addressConfirmation: false}, () =>
+                this.loadMakeOrder(),
               )
             }
-            onPressCancel={() => this.setState({ addressConfirmation: false })}
+            onPressCancel={() => this.setState({addressConfirmation: false})}
             onBackgroundPress={this.closePopUp}
             onChangeText={(text) => this.onChangeCoupon(text)}
           />
@@ -1952,7 +1945,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    width: 191 * alpha
+    width: 191 * alpha,
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
@@ -1961,7 +1954,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'right',
-    marginBottom: 5 * alpha
+    marginBottom: 5 * alpha,
   },
   addressText: {
     color: 'rgb(146, 146, 146)',
@@ -1972,7 +1965,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     width: 191 * alpha,
     paddingLeft: 0,
-    paddingBottom: 5 * alpha
+    paddingBottom: 5 * alpha,
   },
   editAddressText: {
     color: 'rgb(50, 50, 50)',
@@ -1983,26 +1976,26 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     backgroundColor: 'transparent',
     width: 191 * alpha,
-    flex: 1
+    flex: 1,
     // marginBottom: 10 * alpha,
   },
   deliveryAddressView: {
     paddingHorizontal: 24 * alpha,
-    backgroundColor: 'rgb(245,245,245)'
+    backgroundColor: 'rgb(245,245,245)',
   },
 
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
+    width: 70 * alpha,
   },
   navigationBarItem: {
-    width: '100%'
+    width: '100%',
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
     height: 18 * alpha,
-    tintColor: 'black'
+    tintColor: 'black',
   },
   checkoutViewOverlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -2011,16 +2004,16 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     left: 0,
-    bottom: 0
+    bottom: 0,
   },
   checkoutViewPadding: {
     backgroundColor: DEFAULT_GREY_BACKGROUND,
     paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
-    flex: 1
+    flex: 1,
   },
   scrollviewScrollView: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
   },
   branchText: {
     color: 'rgb(54, 54, 54)',
@@ -2030,7 +2023,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
 
   tabImage: {
@@ -2038,17 +2031,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     alignSelf: 'flex-end',
     width: 17 * alpha,
-    height: 17 * alpha
+    height: 17 * alpha,
   },
   tabTwoImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     alignSelf: 'flex-end',
     width: 17 * alpha,
-    height: 17 * alpha
+    height: 17 * alpha,
   },
   pickupbuttonButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   pickupbuttonButton: {
     backgroundColor: 'transparent',
@@ -2057,14 +2050,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 168 * alpha,
-    height: 54 * alpha
+    height: 54 * alpha,
   },
   pickupbuttonButtonText: {
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   deliveryView: {
     backgroundColor: 'white',
@@ -2072,7 +2065,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(151, 151, 151)',
     borderStyle: 'solid',
     width: 168 * alpha,
-    height: 54 * alpha
+    height: 54 * alpha,
   },
   deliveryView_selected: {
     backgroundColor: 'white',
@@ -2080,18 +2073,18 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(0, 178, 227)',
     borderStyle: 'solid',
     width: 168 * alpha,
-    height: 54 * alpha
+    height: 54 * alpha,
   },
   deliveryImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 35 * alpha,
-    height: 23 * alpha
+    height: 23 * alpha,
   },
   ordersummaryView: {
     backgroundColor: 'white',
     flex: 1,
-    paddingTop: 0 * alpha
+    paddingTop: 0 * alpha,
   },
   voucherButton: {
     backgroundColor: 'transparent',
@@ -2099,7 +2092,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    flex: 1
+    flex: 1,
   },
   voucherButtonText: {
     color: 'white',
@@ -2107,14 +2100,14 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   paymentButton: {
     width: '100%',
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   paymentButtonText: {
     color: 'rgb(54, 54, 54)',
@@ -2123,7 +2116,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     marginLeft: 20 * alpha,
-    textAlign: 'left'
+    textAlign: 'left',
   },
   totalPayNowView: {
     backgroundColor: '#FFFFFF',
@@ -2134,7 +2127,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: 47 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   payNowButton: {
     backgroundColor: 'rgb(0, 178, 227)',
@@ -2143,23 +2136,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 114 * alpha,
-    height: 47 * alpha
+    height: 47 * alpha,
   },
   payNowButtonText: {
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
 
   orderReceiptView: {
     backgroundColor: DEFAULT_GREY_BACKGROUND,
-    flex: 1
+    flex: 1,
   },
   orderScrollView: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
   },
 
   orderCartView: {
@@ -2170,7 +2163,7 @@ const styles = StyleSheet.create({
     marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
     borderRadius: 14 * alpha,
     backgroundColor: 'rgb(245, 245, 245)',
-    flex: 1
+    flex: 1,
   },
   whiteboxView: {
     backgroundColor: 'white',
@@ -2178,7 +2171,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     borderTopRightRadius: 14 * alpha,
-    borderTopLeftRadius: 14 * alpha
+    borderTopLeftRadius: 14 * alpha,
   },
   completeOrderView: {
     height: alpha * 150,
@@ -2186,14 +2179,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 14 * alpha,
     borderTopLeftRadius: 14 * alpha,
     overflow: 'hidden',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logoImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 30 * alpha,
     height: 60 * alpha,
-    marginTop: 30 * alpha
+    marginTop: 30 * alpha,
   },
 
   shopImageContainer: {
@@ -2202,12 +2195,12 @@ const styles = StyleSheet.create({
     paddingLeft: 18 * alpha,
     paddingRight: 18 * alpha,
     borderWidth: 2,
-    borderColor: 'red'
+    borderColor: 'red',
   },
 
   shopImage: {
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   completedOrderText: {
     color: PRIMARY_COLOR,
@@ -2217,11 +2210,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     marginTop: 10 * alpha,
-    marginBottom: 30 * alpha
+    marginBottom: 30 * alpha,
   },
   locationWrapperView: {
     backgroundColor: 'rgb(245, 245, 245)',
-    flex: 1
+    flex: 1,
   },
   locationView: {
     backgroundColor: 'transparent',
@@ -2230,14 +2223,14 @@ const styles = StyleSheet.create({
     marginRight: 25 * alpha,
     marginTop: 18 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   branchView: {
     backgroundColor: 'transparent',
     alignSelf: 'flex-start',
     justifyContent: 'center',
     width: 182 * alpha,
-    height: 60 * alpha
+    height: 60 * alpha,
   },
   shopBranchText: {
     backgroundColor: 'transparent',
@@ -2246,7 +2239,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left',
-    marginRight: 12 * alpha
+    marginRight: 12 * alpha,
   },
   shopBranchAddressText: {
     color: 'rgb(146, 146, 146)',
@@ -2255,13 +2248,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    marginLeft: 1 * alpha
+    marginLeft: 1 * alpha,
   },
   callView: {
     backgroundColor: 'transparent',
     width: 35 * alpha,
     height: 55 * alpha,
-    marginRight: 8 * alpha
+    marginRight: 8 * alpha,
   },
   callIconButton: {
     backgroundColor: 'transparent',
@@ -2273,10 +2266,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    height: 35 * alpha
+    height: 35 * alpha,
   },
   callIconButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   callText: {
     backgroundColor: 'transparent',
@@ -2286,12 +2279,12 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'center',
     marginLeft: 6 * alpha,
-    marginRight: 7 * alpha
+    marginRight: 7 * alpha,
   },
   directionView: {
     backgroundColor: 'transparent',
     width: 50 * alpha,
-    height: 55 * alpha
+    height: 55 * alpha,
   },
   directionIconButton: {
     backgroundColor: 'transparent',
@@ -2305,10 +2298,10 @@ const styles = StyleSheet.create({
     padding: 0,
     height: 35 * alpha,
     marginLeft: 8 * alpha,
-    marginRight: 7 * alpha
+    marginRight: 7 * alpha,
   },
   directionIconButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   directionText: {
     color: 'rgb(163, 163, 163)',
@@ -2316,7 +2309,7 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   voucherView: {
     backgroundColor: 'transparent',
@@ -2325,7 +2318,7 @@ const styles = StyleSheet.create({
     marginRight: 25 * alpha,
     marginTop: 42 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   voucherDescriptionText: {
     color: 'rgb(54, 54, 54)',
@@ -2334,7 +2327,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   voucher2View: {
     backgroundColor: 'transparent',
@@ -2343,13 +2336,13 @@ const styles = StyleSheet.create({
     marginRight: 25 * alpha,
     marginTop: 17 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   totalViewWrapper: {
     backgroundColor: 'rgb(245,245,245)',
     flex: 1,
     borderBottomLeftRadius: 14 * alpha,
-    borderBottomRightRadius: 14 * alpha
+    borderBottomRightRadius: 14 * alpha,
   },
   totalView: {
     backgroundColor: 'transparent',
@@ -2359,7 +2352,7 @@ const styles = StyleSheet.create({
     marginTop: 10 * alpha,
     marginBottom: 18 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   totallabelText: {
     backgroundColor: 'transparent',
@@ -2368,7 +2361,7 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
 
-    textAlign: 'center'
+    textAlign: 'center',
   },
   totalText: {
     color: 'rgb(54, 54, 54)',
@@ -2376,14 +2369,14 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   lineThreeView: {
     backgroundColor: 'rgb(234, 234, 234)',
     height: 1 * alpha,
     marginLeft: 25 * alpha,
     marginRight: 24 * alpha,
-    marginTop: 14 * alpha
+    marginTop: 14 * alpha,
   },
   callrefundText: {
     backgroundColor: 'transparent',
@@ -2395,7 +2388,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginLeft: 26 * alpha,
     marginTop: 13 * alpha,
-    marginBottom: 13
+    marginBottom: 13,
   },
   orderitemsView: {
     // backgroundColor: 'green',
@@ -2407,7 +2400,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     height: 90 * alpha,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   nameText: {
     backgroundColor: 'transparent',
@@ -2415,7 +2408,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 15 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   descriptionText: {
     backgroundColor: 'transparent',
@@ -2424,7 +2417,7 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
 
-    textAlign: 'left'
+    textAlign: 'left',
   },
   quantityText: {
     backgroundColor: 'transparent',
@@ -2435,7 +2428,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'right',
     marginRight: 52 * alpha,
-    marginTop: 26 * alpha
+    marginTop: 26 * alpha,
   },
   priceText: {
     color: 'rgb(54, 54, 54)',
@@ -2444,14 +2437,14 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 26 * alpha
+    marginTop: 26 * alpha,
   },
   itemTwoView: {
     backgroundColor: 'transparent',
     height: 90 * alpha,
     marginRight: 1 * alpha,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
 
   item2View: {
@@ -2459,7 +2452,7 @@ const styles = StyleSheet.create({
     height: 46 * alpha,
     marginRight: 1 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   nameThreeText: {
     color: 'rgb(54, 54, 54)',
@@ -2468,7 +2461,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     width: 190 * alpha,
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   quantityThreeText: {
     backgroundColor: 'transparent',
@@ -2478,7 +2471,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    marginRight: 56 * alpha
+    marginRight: 56 * alpha,
   },
   priceThreeText: {
     backgroundColor: 'transparent',
@@ -2488,7 +2481,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    marginRight: 3 * alpha
+    marginRight: 3 * alpha,
   },
 
   voucherView: {
@@ -2496,31 +2489,31 @@ const styles = StyleSheet.create({
     height: 18 * alpha,
     marginBottom: 10 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   sectionView: {
     backgroundColor: 'rgb(245,245,245)',
     flex: 1,
-    paddingHorizontal: 24 * alpha
+    paddingHorizontal: 24 * alpha,
   },
   drinksView: {
     backgroundColor: 'transparent',
     flex: 1,
-    paddingTop: 10 * alpha
+    paddingTop: 10 * alpha,
   },
 
   productDetailView: {
     backgroundColor: 'transparent',
     flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   voucherDetailView: {
     backgroundColor: 'transparent',
     flex: 1,
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   productNameText: {
     backgroundColor: 'transparent',
@@ -2528,7 +2521,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
     // marginBottom: 5 * alpha
   },
   productNameDisabledText: {
@@ -2538,7 +2531,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left',
-    marginBottom: 5 * alpha
+    marginBottom: 5 * alpha,
   },
   productVariantText: {
     color: 'rgb(164, 164, 164)',
@@ -2549,7 +2542,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     width: 191 * alpha,
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   productQuantityText: {
     color: 'rgb(50, 50, 50)',
@@ -2560,7 +2553,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     backgroundColor: 'transparent',
     marginRight: 4 * alpha,
-    width: 25 * alpha
+    width: 25 * alpha,
   },
   voucherQuantityText: {
     color: 'rgb(50, 50, 50)',
@@ -2570,7 +2563,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    width: 50 * alpha
+    width: 50 * alpha,
   },
   productPriceText: {
     color: 'rgb(50, 50, 50)',
@@ -2580,7 +2573,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'right',
     backgroundColor: 'transparent',
-    width: 55 * alpha
+    width: 55 * alpha,
   },
   voucherPriceText: {
     color: 'rgb(50, 50, 50)',
@@ -2590,7 +2583,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'right',
     backgroundColor: 'transparent',
-    width: 55 * alpha
+    width: 55 * alpha,
   },
   productVoucherText: {
     color: 'rgb(50, 50, 50)',
@@ -2599,7 +2592,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   productVoucherDisableText: {
     color: 'rgb(163, 163, 163)',
@@ -2608,10 +2601,10 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   spacer: {
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   dottedLineImage: {
     backgroundColor: 'transparent',
@@ -2620,7 +2613,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: 291 * alpha,
-    height: 2 * alpha
+    height: 2 * alpha,
   },
 
   menuRowArrowImage: {
@@ -2629,7 +2622,7 @@ const styles = StyleSheet.create({
     marginLeft: 5 * alpha,
     // marginTop: 4 * alpha,
     tintColor: 'rgb(50, 50, 50)',
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
 
   voucherButtonView: {
@@ -2639,7 +2632,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // marginBottom: 5 * alpha,
-    marginLeft: 5 * alpha
+    marginLeft: 5 * alpha,
   },
   voucherButtonText: {
     color: 'white',
@@ -2647,7 +2640,7 @@ const styles = StyleSheet.create({
     fontSize: 10 * alpha,
     textAlign: 'center',
     paddingLeft: 5 * alpha,
-    paddingRight: 5 * alpha
+    paddingRight: 5 * alpha,
   },
 
   redCircle: {
@@ -2655,34 +2648,34 @@ const styles = StyleSheet.create({
     width: 10 * alpha,
     height: 10 * alpha,
     borderRadius: 5 * alpha,
-    marginRight: 5 * alpha
+    marginRight: 5 * alpha,
   },
   greenCircle: {
     backgroundColor: 'green',
     width: 10 * alpha,
     height: 10 * alpha,
     borderRadius: 5 * alpha,
-    marginRight: 5 * alpha
+    marginRight: 5 * alpha,
   },
   cancelVoucherButton: {
     width: 15 * alpha,
     height: 15 * alpha,
-    marginLeft: 5 * alpha
+    marginLeft: 5 * alpha,
   },
   cancelImage: {
     width: 15 * alpha,
     height: 15 * alpha,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   paymentOptionsView: {
     height: alpha * 120,
     flex: 1,
-    paddingHorizontal: alpha * 17
+    paddingHorizontal: alpha * 17,
   },
   paymentOptionsListView: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   sectionRowView: {
@@ -2691,32 +2684,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: alpha * 40
+    height: alpha * 40,
   },
 
   paymentWalletIcon: {
     height: alpha * 25,
     width: alpha * 25,
     tintColor: 'rgb(186, 183, 183)',
-    marginRight: alpha * 10
+    marginRight: alpha * 10,
   },
   paymentCardIcon: {
     height: alpha * 23,
     width: alpha * 23,
     tintColor: 'rgb(186, 183, 183)',
-    marginRight: alpha * 10
+    marginRight: alpha * 10,
   },
   paymentCashIcon: {
     height: alpha * 19,
     width: alpha * 19,
     tintColor: 'rgb(186, 183, 183)',
-    marginRight: alpha * 10
+    marginRight: alpha * 10,
   },
 
   paymentOptionText: {
     fontSize: fontAlpha * 14,
     fontFamily: NON_TITLE_FONT,
-    color: '#363636'
+    color: '#363636',
   },
 
   selectBox: {
@@ -2728,48 +2721,48 @@ const styles = StyleSheet.create({
     width: 16 * alpha,
     height: 16 * alpha,
     position: 'absolute',
-    right: alpha * 10
+    right: alpha * 10,
   },
 
   creditsText: {
     fontSize: fontAlpha * 14,
     fontFamily: NON_TITLE_FONT,
-    color: '#ED6E69'
+    color: '#ED6E69',
   },
 
   cc: {
     height: alpha * 16,
     width: alpha * 27,
-    marginLeft: alpha * 9
+    marginLeft: alpha * 9,
   },
   visa: {
     height: alpha * 9,
     width: alpha * 27,
-    marginLeft: alpha * 7
+    marginLeft: alpha * 7,
   },
   union: {
     height: alpha * 27,
     width: alpha * 27,
-    marginLeft: alpha * 7
+    marginLeft: alpha * 7,
   },
   dc: {
     height: alpha * 30,
     width: alpha * 25,
-    marginLeft: alpha * 7
+    marginLeft: alpha * 7,
   },
   walletTextContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   tag: {
     borderRadius: alpha * 10,
     backgroundColor: '#ED6E69',
     paddingHorizontal: alpha * 7,
     paddingVertical: alpha * 2,
-    marginLeft: 10
+    marginLeft: 10,
   },
   tagText: {
     fontFamily: NON_TITLE_FONT,
     fontSize: 10 * fontAlpha,
-    color: '#FFFFFF'
-  }
+    color: '#FFFFFF',
+  },
 });

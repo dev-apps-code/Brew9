@@ -11,19 +11,20 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TextInput,
-  Platform
+  Platform,
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowWidth, windowHeight } from '../Common/size';
-import { connect } from 'react-redux';
-import { KURL_INFO, KURL_MEMBERSHIP_INFO } from '../Utils/server';
-import { getAppVersion, getBuildVersion } from '../Utils';
-import { createAction } from '../Utils';
+import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
+import {connect} from 'react-redux';
+import {KURL_INFO, KURL_MEMBERSHIP_INFO} from '../Utils/server';
+import {getAppVersion, getBuildVersion} from '../Utils';
+import {createAction} from '../Utils';
 import ProfileRequestObject from '../Requests/profile_request_object';
 import VerifyCouponCodeObj from '../Requests/verify_coupon _code_request_object';
 import LogoutRequestObject from '../Requests/logout_request_object';
 import NotificationsRequestObject from '../Requests/notifications_request_object';
 import Constants from 'expo-constants';
+import {getResponseMsg} from '../Utils/responses';
 import {
   LIGHT_GREY,
   TITLE_FONT,
@@ -34,21 +35,21 @@ import {
   DISABLED_COLOR,
   LIGHT_BLUE,
   DEFAULT_GREY_BACKGROUND,
-  TOAST_DURATION
+  TOAST_DURATION,
 } from '../Common/common_style';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
+import {LinearGradient} from 'expo-linear-gradient';
+import {Analytics, Event, PageHit} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
 import ProfileMenu from './ProfileMenu';
 import ProfileRowMenu from './ProfileRowMenu';
-import { getMemberIdForApi } from '../Services/members_helper';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {getMemberIdForApi} from '../Services/members_helper';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import _ from 'lodash';
 import Brew9Toast from '../Components/Brew9Toast';
 
-@connect(({ members, config, shops }) => ({
+@connect(({members, config, shops}) => ({
   selectedTab: config.selectedTab,
   members: members,
   company_id: members.company_id,
@@ -56,31 +57,32 @@ import Brew9Toast from '../Components/Brew9Toast';
   free_membership: members.free_membership,
   premium_membership: members.premium_membership,
   selectedShop: shops.selectedShop,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses,
 }))
 export default class Profile extends React.Component {
   timer = null;
 
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       gesturesEnabled: false,
       swipeEnabled: false,
       header: null,
       headerLeft: null,
-      headerRight: null
+      headerRight: null,
     };
   };
 
   static tabBarItemOptions = (navigation, store) => {
     return {
       tabBarLabel: 'Profile',
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         store.dispatch(createAction('config/setToggleShopLocation')(false));
         store.dispatch(createAction('config/setTab')('profile'));
         defaultHandler();
       },
-      tabBarIcon: ({ iconTintColor, focused }) => {
+      tabBarIcon: ({iconTintColor, focused}) => {
         const image = focused
           ? require('./../../assets/images/profile_selected_tab.png')
           : require('./../../assets/images/profile_tab.png');
@@ -92,11 +94,11 @@ export default class Profile extends React.Component {
               resizeMode: 'contain',
               width: 30 * alpha,
               height: 30 * alpha,
-              tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT
+              tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT,
             }}
           />
         );
-      }
+      },
     };
   };
 
@@ -108,10 +110,10 @@ export default class Profile extends React.Component {
       timestamp: undefined,
       showRedeemVoucher: false,
       loading: false,
-      appSlogan: ''
+      appSlogan: '',
     };
     this.loadProfile = this.loadProfile.bind(this);
-    this.moveAnimation = new Animated.ValueXY({ x: 0, y: 0 });
+    this.moveAnimation = new Animated.ValueXY({x: 0, y: 0});
   }
 
   componentDidMount() {
@@ -124,11 +126,15 @@ export default class Profile extends React.Component {
   }
 
   loadAppSlogan() {
-    let {responses} = this.props
+    const {selectedShop} = this.props;
+    const appSlogan = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'App Slogan',
+      defaultText: 'Redefine Coffee. Chocolate. Juice.',
+    });
 
-    const appSlogan =
-      responses.get('App Slogan') || 'Redefine Coffee. Chocolate. Juice.';
-    this.setState({ appSlogan });
+    this.setState({appSlogan});
   }
 
   componentWillUnmount() {
@@ -137,7 +143,7 @@ export default class Profile extends React.Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
@@ -146,28 +152,28 @@ export default class Profile extends React.Component {
         this.loadProfile();
       }
     }
-    this.setState({ appState: nextAppState });
+    this.setState({appState: nextAppState});
   };
 
   loopShimmer() {
-    const { hasShimmered } = this.state;
+    const {hasShimmered} = this.state;
     if (hasShimmered == false) {
       Animated.timing(this.moveAnimation, {
-        toValue: { x: windowWidth - 40 * alpha, y: 0 },
-        duration: 700
+        toValue: {x: windowWidth - 40 * alpha, y: 0},
+        duration: 700,
       }).start();
-      this.setState({ hasShimmered: true });
+      this.setState({hasShimmered: true});
     } else {
       Animated.timing(this.moveAnimation, {
-        toValue: { x: 0, y: 0 },
-        duration: 700
+        toValue: {x: 0, y: 0},
+        duration: 700,
       }).start();
-      this.setState({ hasShimmered: false });
+      this.setState({hasShimmered: false});
     }
   }
 
   loadProfile() {
-    const { timestamp } = this.state;
+    const {timestamp} = this.state;
 
     if (timestamp != undefined) {
       const date = new Date();
@@ -176,12 +182,12 @@ export default class Profile extends React.Component {
         return false;
       }
     }
-    const { dispatch, currentMember } = this.props;
-    this.setState({ loading: true });
+    const {dispatch, currentMember} = this.props;
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState({
-          loading: false
+          loading: false,
         });
       }
     };
@@ -193,60 +199,60 @@ export default class Profile extends React.Component {
     dispatch(
       createAction('members/loadProfile')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   loadDestroy() {
-    const { dispatch } = this.props;
-    const { navigate } = this.props.navigation;
-    this.setState({ loading: true });
+    const {dispatch} = this.props;
+    const {navigate} = this.props.navigation;
+    this.setState({loading: true});
 
     const callback = (eventObject) => {
       if (eventObject.success) {
         navigate('VerifyUser', {
-          returnToRoute: this.props.navigation.state
+          returnToRoute: this.props.navigation.state,
         });
       }
       this.setState({
-        loading: false
+        loading: false,
       });
     };
     const obj = new LogoutRequestObject(Constants.installationId);
     dispatch(
       createAction('members/loadDestroy')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   onLevelPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (currentMember !== null && currentMember.premium_membership) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
 
       navigate('MemberProfile');
     }
   };
 
   onMembershipInfoPressed = async () => {
-    const { navigate } = this.props.navigation;
-    const { company_id } = this.props;
+    const {navigate} = this.props.navigation;
+    const {company_id} = this.props;
 
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Membership Info'
-      )
+        'Membership Info',
+      ),
     );
 
     navigate('WebCommon', {
       title: 'Membership Rewards',
-      web_url: (await KURL_INFO()) + '?page=membership_info&id=' + company_id
+      web_url: (await KURL_INFO()) + '?page=membership_info&id=' + company_id,
     });
     // navigate("WebCommon", {
     // 	title: 'Membership Info',
@@ -255,38 +261,38 @@ export default class Profile extends React.Component {
   };
 
   onMissionCenterPressed = () => {
-    const { currentMember } = this.props;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
-    const { navigation, dispatch } = this.props;
+    const {navigation, dispatch} = this.props;
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Mission Center'
-      )
+        'Mission Center',
+      ),
     );
     if (currentMember !== null) {
       this.navigationListener = navigation.addListener(
         'willFocus',
         (payload) => {
           this.removeNavigationListener();
-          const { state } = payload;
-          const { params } = state;
+          const {state} = payload;
+          const {params} = state;
 
           if (params != undefined && params.updated == true) {
             this.loadProfile();
           }
 
           // dispatch(createAction('members/loadCurrentUserFromCache')({}))
-        }
+        },
       );
       navigate('MissionCenter', {
-        returnToRoute: navigation.state
+        returnToRoute: navigation.state,
       });
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
     }
   };
@@ -299,180 +305,180 @@ export default class Profile extends React.Component {
   }
 
   onVIPPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
 
     if (currentMember.premium_membership) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
 
       navigate('MemberCenter');
     } else {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
 
       navigate('VIPPurchase');
     }
   };
 
   onRewardButtonPressed = () => {
-    const { currentMember } = this.props;
-    const { validVouchers } = this.state;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {validVouchers} = this.state;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Member Voucher'
-      )
+        'Member Voucher',
+      ),
     );
     if (currentMember !== null) {
-      navigate('MemberVoucher', { validVouchers: validVouchers });
+      navigate('MemberVoucher', {validVouchers: validVouchers});
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
     }
   };
 
   onPointButtonPressed = () => {
-    const { currentMember } = this.props;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Member Point'
-      )
+        'Member Point',
+      ),
     );
     if (currentMember !== null) {
       navigate('PointShop');
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
     }
   };
 
   onWalletButtonPressed = () => {
-    const { currentMember } = this.props;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Member Wallet'
-      )
+        'Member Wallet',
+      ),
     );
     if (currentMember !== null) {
       navigate('MemberWallet');
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
     }
   };
 
   onMemberButtonPressed = () => {
-    const { currentMember } = this.props;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Member Profile'
-      )
+        'Member Profile',
+      ),
     );
     if (currentMember !== null) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
       navigate('MemberProfile');
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
     }
   };
 
   onOrderButtonPressed = () => {
-    const { currentMember } = this.props;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Order History'
-      )
+        'Order History',
+      ),
     );
     navigate('OrderHistory');
   };
 
   onPersonalButtonPressed = () => {
-    const { currentMember } = this.props;
-    const { navigate } = this.props.navigation;
+    const {currentMember} = this.props;
+    const {navigate} = this.props.navigation;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Member Profile'
-      )
+        'Member Profile',
+      ),
     );
     if (currentMember !== null) {
       navigate('MemberProfile');
     } else {
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
     }
   };
 
   onLevelInfoPressed = async () => {
-    const { navigate } = this.props.navigation;
-    const { members, company_id } = this.props;
+    const {navigate} = this.props.navigation;
+    const {members, company_id} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Level Info'
-      )
+        'Level Info',
+      ),
     );
     navigate('WebCommon', {
       title: 'Level Info',
-      web_url: (await KURL_INFO()) + '?page=level_info&id=' + company_id
+      web_url: (await KURL_INFO()) + '?page=level_info&id=' + company_id,
     });
   };
 
   onQRButtonPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (currentMember !== null) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
 
       navigate('PayByWallet');
     }
   };
 
   onRedeemButtonPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (currentMember !== null) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
       navigate('RedeemPromotion');
     }
   };
   onRedeemCouponCode = () => {
-    this.setState({ loading: true, showRedeemVoucher: false });
+    this.setState({loading: true, showRedeemVoucher: false});
 
-    let { coupon, validVouchers } = this.state;
-    let { dispatch, navigation } = this.props;
+    let {coupon, validVouchers} = this.state;
+    let {dispatch, navigation} = this.props;
 
     const callback = (eventObject) => {
-      this.setState({ loading: false });
+      this.setState({loading: false});
       this.refs.toast.show(eventObject.message, TOAST_DURATION, () => {
         if (eventObject.success == true) {
           navigation.navigate('MemberVoucher', {
-            validVouchers: validVouchers
+            validVouchers: validVouchers,
           });
         }
       });
@@ -483,40 +489,40 @@ export default class Profile extends React.Component {
     dispatch(
       createAction('members/loadVerifyCouponCode')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   };
 
   closePopUp = () => {
     this.setState({
-      showRedeemVoucher: false
+      showRedeemVoucher: false,
     });
   };
 
   onRedeemVoucherPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
 
     if (currentMember !== null) {
       this.setState({
-        showRedeemVoucher: true
+        showRedeemVoucher: true,
       });
     }
   };
 
   onPointShopPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (currentMember !== null) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
 
       navigate('PointShop');
     }
   };
 
   onClubPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (currentMember !== null) {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
 
       navigate('MemberCenter');
     }
@@ -527,50 +533,50 @@ export default class Profile extends React.Component {
     // const analytics = new Analytics(ANALYTICS_ID)
     // analytics.event(new Event('Profile', getMemberIdForApi(this.props.currentMember), "About"))
     // navigate("About")
-    const { navigate } = this.props.navigation;
-    const { company_id } = this.props;
+    const {navigate} = this.props.navigation;
+    const {company_id} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'About Us'
-      )
+        'About Us',
+      ),
     );
     navigate('WebCommon', {
       title: 'About Us',
-      web_url: (await KURL_INFO()) + '?page=about_us&id=' + company_id
+      web_url: (await KURL_INFO()) + '?page=about_us&id=' + company_id,
     });
   };
 
   onFaqPressed = async () => {
-    const { navigate } = this.props.navigation;
-    const { company_id } = this.props;
+    const {navigate} = this.props.navigation;
+    const {company_id} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-      new Event('Profile', getMemberIdForApi(this.props.currentMember), 'FAQs')
+      new Event('Profile', getMemberIdForApi(this.props.currentMember), 'FAQs'),
     );
 
     navigate('WebCommon', {
       title: 'FAQs',
-      web_url: (await KURL_INFO()) + '?page=faqs&id=' + company_id
+      web_url: (await KURL_INFO()) + '?page=faqs&id=' + company_id,
     });
   };
 
   onVersionPressed = async () => {
-    const { navigate } = this.props.navigation;
-    const { company_id } = this.props;
+    const {navigate} = this.props.navigation;
+    const {company_id} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Version'
-      )
+        'Version',
+      ),
     );
     navigate('WebCommon', {
       title: 'Version',
-      web_url: (await KURL_INFO()) + '?page=version&id=' + company_id
+      web_url: (await KURL_INFO()) + '?page=version&id=' + company_id,
     });
   };
 
@@ -580,8 +586,8 @@ export default class Profile extends React.Component {
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Feedback'
-      )
+        'Feedback',
+      ),
     );
     var os_string = Platform.OS;
     if (Platform.OS === 'ios') {
@@ -594,42 +600,42 @@ export default class Profile extends React.Component {
         os_string +
         '-' +
         getAppVersion() +
-        ')'
+        ')',
     );
   };
 
   onAddressPress = () => {
-    const { navigation, currentMember } = this.props;
+    const {navigation, currentMember} = this.props;
     if (currentMember !== null) {
       navigation.navigate('ShippingAddress', {
-        returnToRoute: navigation.state
+        returnToRoute: navigation.state,
       });
     } else {
       navigation.navigate('VerifyUser', {
-        returnToRoute: navigation.state
+        returnToRoute: navigation.state,
       });
       return;
     }
   };
 
   onProfileButtonPress = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
         'Profile',
         getMemberIdForApi(this.props.currentMember),
-        'Member Profile'
-      )
+        'Member Profile',
+      ),
     );
     if (currentMember !== null) {
       // this.loadDestroy()
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
       navigate('MemberProfile');
     } else {
-      const { navigate } = this.props.navigation;
+      const {navigate} = this.props.navigation;
       navigate('VerifyUser', {
-        returnToRoute: this.props.navigation.state
+        returnToRoute: this.props.navigation.state,
       });
       return;
     }
@@ -644,8 +650,8 @@ export default class Profile extends React.Component {
         inputPlaceholder={'Enter voucher code'}
         OkText={'Ok'}
         onPressOk={this.onRedeemCouponCode}
-        onBackgroundPress={() => this.setState({ showRedeemVoucher: false })}
-        onChangeText={(coupon) => this.setState({ coupon })}
+        onBackgroundPress={() => this.setState({showRedeemVoucher: false})}
+        onChangeText={(coupon) => this.setState({coupon})}
       />
     );
   }
@@ -653,20 +659,16 @@ export default class Profile extends React.Component {
   renderProgressBar(progress) {
     progress_percent = progress * 100;
     return (
-      <View style={{ flexDirection: 'row', height: 10 * alpha, flex: 1 }}>
+      <View style={{flexDirection: 'row', height: 10 * alpha, flex: 1}}>
         <View
           style={{
             flex: 1,
             borderColor: '#000',
             borderWidth: 1 * alpha,
-            borderRadius: 5 * alpha
-          }}
-        >
+            borderRadius: 5 * alpha,
+          }}>
           <View
-            style={[
-              StyleSheet.absoluteFill,
-              { backgroundColor: 'transparent' }
-            ]}
+            style={[StyleSheet.absoluteFill, {backgroundColor: 'transparent'}]}
           />
           <LinearGradient
             colors={[LIGHT_BLUE, PRIMARY_COLOR]}
@@ -678,7 +680,7 @@ export default class Profile extends React.Component {
               top: 0,
               bottom: 0,
               borderRadius: 4 * alpha,
-              width: `${progress_percent}%`
+              width: `${progress_percent}%`,
             }}
           />
         </View>
@@ -687,8 +689,8 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    const { currentMember, members } = this.props;
-    const { hasShimmered } = this.state;
+    const {currentMember, members} = this.props;
+    const {hasShimmered} = this.state;
 
     var background_photo;
     var level_name;
@@ -706,7 +708,7 @@ export default class Profile extends React.Component {
         uri:
           currentMember.free_membership != null
             ? currentMember.free_membership.membership_level.image
-            : ''
+            : '',
       };
       level_name = currentMember.premium_membership
         ? currentMember.premium_membership.membership_level.name
@@ -720,7 +722,7 @@ export default class Profile extends React.Component {
       points = currentMember.points;
       avatar =
         currentMember.image != null
-          ? { uri: currentMember.image }
+          ? {uri: currentMember.image}
           : require('./../../assets/images/user.png');
       vouchers_count = currentMember.voucher_items_count;
       credits = parseFloat(currentMember.credits).toFixed(2);
@@ -739,7 +741,7 @@ export default class Profile extends React.Component {
         ? currentMember.premium_membership.membership_level.next_level_name
         : currentMember.free_membership.membership_level.next_level_name;
     } else {
-      background_photo = { uri: '' };
+      background_photo = {uri: ''};
       level_name = 'Level 1';
       display_name = '';
       points = 0;
@@ -760,11 +762,10 @@ export default class Profile extends React.Component {
       <View style={styles.profileView}>
         <ScrollView>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
-              height: 530 * alpha
-            }}
-          >
+              height: 530 * alpha,
+            }}>
             <View style={styles.membersectionView}>
               <View style={styles.topbackgroundView}>
                 <Image
@@ -774,48 +775,44 @@ export default class Profile extends React.Component {
               </View>
               <View style={styles.memberDetailView}>
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
                     right: 0 * alpha,
                     top: 10 * alpha,
-                    height: 200 * alpha
-                  }}
-                >
+                    height: 200 * alpha,
+                  }}>
                   <View style={styles.detailsView}>
                     <View style={styles.rectangleTwoView} />
                     <View style={styles.rectangleView} />
                   </View>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       position: 'absolute',
                       left: 15 * alpha,
                       right: 15 * alpha,
                       top: 0 * alpha,
-                      height: 187 * alpha
-                    }}
-                  >
+                      height: 187 * alpha,
+                    }}>
                     <View
-                      pointerEvents="box-none"
+                      pointerEvents='box-none'
                       style={{
                         height: 79 * alpha,
                         flexDirection: 'row',
-                        alignItems: 'flex-start'
-                      }}
-                    >
+                        alignItems: 'flex-start',
+                      }}>
                       <View style={styles.membershipinfoView}>
                         <View
-                          pointerEvents="box-none"
+                          pointerEvents='box-none'
                           style={{
                             width: 250 * alpha,
                             height: 23 * alpha,
                             marginLeft: 2 * alpha,
                             flexDirection: 'row',
-                            alignItems: 'center'
-                          }}
-                        >
+                            alignItems: 'center',
+                          }}>
                           <Text style={styles.membershiplabelText}>
                             {membership_name}
                           </Text>
@@ -828,8 +825,7 @@ export default class Profile extends React.Component {
                           )}
                           <TouchableOpacity
                             onPress={() => this.onLevelInfoPressed()}
-                            style={styles.levelInfoView}
-                          >
+                            style={styles.levelInfoView}>
                             <Image
                               source={require('./../../assets/images/exclaimation.png')}
                               style={styles.howToUseButtonImage}
@@ -838,17 +834,16 @@ export default class Profile extends React.Component {
                         </View>
                         <View style={[styles.expbarView]}>
                           <View
-                            pointerEvents="box-none"
+                            pointerEvents='box-none'
                             style={{
                               position: 'absolute',
                               left: 0,
                               right: 0,
                               top: 0,
-                              height: 24 * alpha
-                            }}
-                          >
+                              height: 24 * alpha,
+                            }}>
                             <View
-                              pointerEvents="box-none"
+                              pointerEvents='box-none'
                               style={{
                                 position: 'absolute',
                                 left: 0 * alpha,
@@ -856,15 +851,14 @@ export default class Profile extends React.Component {
                                 top: 0,
                                 height: 15 * alpha,
                                 flexDirection: 'row',
-                                alignItems: 'flex-start'
-                              }}
-                            >
+                                alignItems: 'flex-start',
+                              }}>
                               <Text style={styles.initiallevelText}>
                                 {level_name}
                               </Text>
                               <View
                                 style={{
-                                  flex: 1
+                                  flex: 1,
                                 }}
                               />
                               <Text style={styles.nextlevelText}>
@@ -873,7 +867,7 @@ export default class Profile extends React.Component {
                             </View>
                             <View style={styles.progressbarView}>
                               {this.renderProgressBar(
-                                membership_progress ? membership_progress : 0
+                                membership_progress ? membership_progress : 0,
                               )}
                             </View>
                           </View>
@@ -884,28 +878,26 @@ export default class Profile extends React.Component {
                       </View>
                       <View
                         style={{
-                          flex: 1
+                          flex: 1,
                         }}
                       />
-                      <View style={{ elevation: 2 * alpha }}>
+                      <View style={{elevation: 2 * alpha}}>
                         <TouchableOpacity
-                          onPress={() => this.onMemberButtonPressed()}
-                        >
+                          onPress={() => this.onMemberButtonPressed()}>
                           <Image source={avatar} style={styles.profileImage} />
                         </TouchableOpacity>
                       </View>
                     </View>
                     <View style={styles.dividerView} />
                     <View
-                      pointerEvents="box-none"
+                      pointerEvents='box-none'
                       style={{
                         height: 83 * alpha,
                         marginTop: 15 * alpha,
                         justifyContent: 'space-between',
                         flexDirection: 'row',
-                        alignItems: 'flex-start'
-                      }}
-                    >
+                        alignItems: 'flex-start',
+                      }}>
                       <ProfileRowMenu
                         onPress={this.onPointButtonPressed}
                         icon={require('./../../assets/images/point_center.png')}
@@ -933,16 +925,15 @@ export default class Profile extends React.Component {
               </View>
             </View>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 position: 'absolute',
                 left: 20 * alpha,
                 width: 290 * alpha,
                 top: 80 * alpha,
                 height: 250 * alpha,
-                alignItems: 'flex-start'
-              }}
-            >
+                alignItems: 'flex-start',
+              }}>
               <View style={styles.notificationView}></View>
               <Text style={styles.welcomeSomebodyText}>
                 Welcome {display_name}
@@ -1020,9 +1011,9 @@ export default class Profile extends React.Component {
           {this.renderRedeemVoucher()}
         </ScrollView>
         <Toast
-          ref="toast"
-          style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
+          ref='toast'
+          style={{bottom: windowHeight / 2 - 40}}
+          textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
         />
         {/* {this.state.loading ? <HudLoading isLoading={this.state.loading} /> : undefined} */}
       </View>
@@ -1036,23 +1027,23 @@ const styles = StyleSheet.create({
     width: 15 * alpha,
     height: 15 * alpha,
     right: 15 * alpha,
-    top: 15 * alpha
+    top: 15 * alpha,
   },
   cancelImage: {
     height: '100%',
     width: '100%',
-    tintColor: LIGHT_GREY
+    tintColor: LIGHT_GREY,
   },
   graySeparator: {
     // width: 15 * alpha,
     height: 15 * alpha,
     flex: 1,
-    backgroundColor: 'rgb(244, 246,245)'
+    backgroundColor: 'rgb(244, 246,245)',
   },
   titleText: {
     color: '#696969',
     fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha
+    fontSize: 16 * fontAlpha,
   },
   popUpInput1: {
     backgroundColor: '#f5f5f5',
@@ -1061,7 +1052,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5 * alpha,
     paddingVertical: 10 * alpha,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   popUpInput2: {
     backgroundColor: 'transparent',
@@ -1069,7 +1060,7 @@ const styles = StyleSheet.create({
     marginVertical: 20 * alpha,
     paddingHorizontal: 20 * alpha,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   couponCode: {
     backgroundColor: '#f5f5f5',
@@ -1082,7 +1073,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     // height: 40 * alpha,
     width: 200 * alpha,
-    flex: 1
+    flex: 1,
   },
   ok_button: {
     backgroundColor: PRIMARY_COLOR,
@@ -1091,7 +1082,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5 * alpha,
     paddingVertical: 10 * alpha,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   okButtonText: {
     color: 'white',
@@ -1099,12 +1090,12 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     borderRadius: 5 * alpha,
     fontStyle: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   popUpBackground: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   popUpContent: {
     backgroundColor: 'white',
@@ -1115,11 +1106,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 50 * alpha,
     // paddingHorizontal: 20 * alpha,
     justifyContent: 'space-between',
-    borderRadius: 5 * alpha
+    borderRadius: 5 * alpha,
   },
   profileView: {
     backgroundColor: 'white',
-    flex: 1
+    flex: 1,
   },
   topbackgroundView: {
     backgroundColor: 'transparent',
@@ -1127,7 +1118,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     top: 0 * alpha,
-    height: 353 * alpha
+    height: 353 * alpha,
   },
   fill1View: {
     backgroundColor: PRIMARY_COLOR,
@@ -1136,7 +1127,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     top: 0 * alpha,
-    height: 159 * alpha
+    height: 159 * alpha,
   },
   fill2Image: {
     resizeMode: 'cover',
@@ -1146,7 +1137,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 8 * alpha,
     top: 1 * alpha,
-    height: 159 * alpha
+    height: 159 * alpha,
   },
   group133Image: {
     resizeMode: 'cover',
@@ -1156,7 +1147,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     top: 0 * alpha,
-    height: 353 * alpha
+    height: 353 * alpha,
   },
   memberDetailView: {
     backgroundColor: 'transparent',
@@ -1164,7 +1155,7 @@ const styles = StyleSheet.create({
     left: 20 * alpha,
     right: 20 * alpha,
     top: 308 * alpha,
-    height: 199 * alpha
+    height: 199 * alpha,
   },
   detailsView: {
     backgroundColor: 'transparent',
@@ -1176,17 +1167,17 @@ const styles = StyleSheet.create({
     shadowRadius: 10 * alpha,
     shadowOpacity: 1,
     height: 182 * alpha,
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   rectangleTwoView: {
     backgroundColor: 'white',
     height: 27 * alpha,
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   rectangleView: {
     backgroundColor: 'white',
     elevation: 2 * alpha,
-    flex: 1
+    flex: 1,
   },
   membershipinfoView: {
     backgroundColor: 'transparent',
@@ -1194,7 +1185,7 @@ const styles = StyleSheet.create({
     height: 61 * alpha,
     marginTop: 28 * alpha,
     alignItems: 'flex-start',
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   membershiplabelText: {
     color: 'rgb(65, 28, 15)',
@@ -1203,7 +1194,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 2 * alpha
+    marginTop: 2 * alpha,
   },
   membershiplevelButton: {
     backgroundColor: 'transparent',
@@ -1215,7 +1206,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     height: 16 * alpha,
-    marginLeft: 6 * alpha
+    marginLeft: 6 * alpha,
   },
   membershiplevelText: {
     color: 'rgb(108, 108, 108)',
@@ -1223,7 +1214,7 @@ const styles = StyleSheet.create({
     fontSize: 10 * fontAlpha,
     textAlign: 'center',
     marginLeft: 10 * alpha,
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   membershipstatusButton: {
     backgroundColor: 'rgba(181, 181, 181, 0.28)',
@@ -1234,7 +1225,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 94 * alpha,
     height: 23 * alpha,
-    marginLeft: 6 * alpha
+    marginLeft: 6 * alpha,
   },
   membershipstatusButtonText: {
     color: 'rgb(108, 108, 108)',
@@ -1242,11 +1233,11 @@ const styles = StyleSheet.create({
     fontSize: 8 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   membershipstatusButtonImage: {
     resizeMode: 'contain',
-    marginLeft: 10 * alpha
+    marginLeft: 10 * alpha,
   },
   expbarView: {
     backgroundColor: 'transparent',
@@ -1254,7 +1245,7 @@ const styles = StyleSheet.create({
     height: 22 * alpha,
     marginTop: 6 * alpha,
     marginLeft: 2 * alpha,
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   initiallevelText: {
     color: LIGHT_GREY,
@@ -1264,7 +1255,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   nextlevelText: {
     color: LIGHT_GREY,
@@ -1274,7 +1265,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'right',
     backgroundColor: 'transparent',
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   progressbarView: {
     backgroundColor: 'transparent',
@@ -1283,13 +1274,13 @@ const styles = StyleSheet.create({
     right: 0 * alpha,
     top: 15 * alpha,
     height: 10 * alpha,
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   progresslineView: {
     backgroundColor: 'transparent',
     flex: 1,
     paddingTop: 0,
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   levelInfoButton: {
     width: 40 * alpha,
@@ -1298,7 +1289,7 @@ const styles = StyleSheet.create({
     right: -10 * alpha,
     position: 'absolute',
     top: 20 * alpha,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   levelInfoView: {
     // width: 40 * alpha,
@@ -1307,7 +1298,7 @@ const styles = StyleSheet.create({
     height: 16 * alpha,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   levelInfoText: {
     color: 'rgb(151, 151, 151)',
@@ -1315,27 +1306,27 @@ const styles = StyleSheet.create({
     fontSize: 10 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   group4Image: {
     resizeMode: 'cover',
     backgroundColor: 'transparent',
     width: null,
-    height: 10 * alpha
+    height: 10 * alpha,
   },
   group7Image: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 144 * alpha,
     height: 8 * alpha,
-    marginLeft: 2 * alpha
+    marginLeft: 2 * alpha,
   },
   levelInfo: {
     color: 'rgb(54, 54, 54)',
     fontFamily: NON_TITLE_FONT,
     position: 'absolute',
     fontSize: 10 * alpha,
-    top: 25 * alpha
+    top: 25 * alpha,
   },
   levelexpText: {
     color: PRIMARY_COLOR,
@@ -1347,14 +1338,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     position: 'absolute',
     alignSelf: 'center',
-    top: 0 * alpha
+    top: 0 * alpha,
   },
   profileImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 78 * alpha,
     height: 78 * alpha,
-    borderRadius: 39 * alpha
+    borderRadius: 39 * alpha,
   },
   dividerView: {
     backgroundColor: 'rgb(232, 232, 232)',
@@ -1362,7 +1353,7 @@ const styles = StyleSheet.create({
     marginLeft: 3 * alpha,
     marginRight: 3 * alpha,
     marginTop: 9 * alpha,
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
 
   pointiconImage: {
@@ -1370,7 +1361,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 49 * alpha,
-    height: 33 * alpha
+    height: 33 * alpha,
   },
   pointvalueText: {
     color: PRIMARY_COLOR,
@@ -1380,7 +1371,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 6 * alpha
+    marginTop: 6 * alpha,
   },
   pointText: {
     color: 'rgb(54, 54, 54)',
@@ -1390,27 +1381,27 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginLeft: 14 * alpha
+    marginLeft: 14 * alpha,
   },
   walletButtonView: {
     backgroundColor: 'transparent',
     width: (windowWidth - 60) / 3,
     height: 83 * alpha,
     alignItems: 'center',
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   walletView: {
     backgroundColor: 'transparent',
     width: (windowWidth - 60) / 3,
     height: 83 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   walletIconImage: {
     tintColor: LIGHT_GREY,
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 51 * alpha,
-    height: 33 * alpha
+    height: 33 * alpha,
   },
   walletcreditText: {
     color: PRIMARY_COLOR,
@@ -1420,7 +1411,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 6 * alpha
+    marginTop: 6 * alpha,
   },
   walletText: {
     color: 'rgb(54, 54, 54)',
@@ -1430,7 +1421,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginLeft: 14 * alpha
+    marginLeft: 14 * alpha,
   },
   pointButtonView: {
     alignSelf: 'center',
@@ -1438,13 +1429,13 @@ const styles = StyleSheet.create({
     width: (windowWidth - 60) / 3,
     height: 83 * alpha,
     alignItems: 'center',
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   pointView: {
     backgroundColor: 'transparent',
     width: (windowWidth - 60) / 3,
     height: 83 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rewardButtonView: {
     backgroundColor: 'transparent',
@@ -1452,21 +1443,21 @@ const styles = StyleSheet.create({
     width: (windowWidth - 60) / 3,
     height: 83 * alpha,
     alignItems: 'center',
-    elevation: 2 * alpha
+    elevation: 2 * alpha,
   },
   rewardView: {
     backgroundColor: 'transparent',
     alignSelf: 'center',
     width: (windowWidth - 60) / 3,
     height: 83 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rewardiconImage: {
     tintColor: LIGHT_GREY,
     backgroundColor: 'transparent',
     resizeMode: 'contain',
     width: 51 * alpha,
-    height: 33 * alpha
+    height: 33 * alpha,
   },
   rewardvalueText: {
     color: PRIMARY_COLOR,
@@ -1476,7 +1467,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 6 * alpha
+    marginTop: 6 * alpha,
   },
   rewardText: {
     color: 'rgb(54, 54, 54)',
@@ -1486,14 +1477,14 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginLeft: 14 * alpha
+    marginLeft: 14 * alpha,
   },
   notificationView: {
     alignSelf: 'center',
     width: 217 * alpha,
     height: 37 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   messageText: {
     color: 'rgb(69, 69, 69)',
@@ -1503,7 +1494,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginRight: 5 * alpha
+    marginRight: 5 * alpha,
   },
   welcomeSomebodyText: {
     backgroundColor: 'transparent',
@@ -1513,7 +1504,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 176 * alpha
+    marginTop: 176 * alpha,
   },
   companySloganText: {
     backgroundColor: 'transparent',
@@ -1523,14 +1514,14 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 3 * alpha
+    marginTop: 3 * alpha,
   },
 
   menuView: {
     backgroundColor: 'transparent',
     flex: 1,
     marginTop: 13 * alpha,
-    marginBottom: 13 * alpha
+    marginBottom: 13 * alpha,
   },
 
   missionlabelText: {
@@ -1540,7 +1531,7 @@ const styles = StyleSheet.create({
     fontSize: 20 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
 
   missioniconImage: {
@@ -1548,7 +1539,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 35 * alpha,
     height: 35 * alpha,
-    marginLeft: 20 * alpha
+    marginLeft: 20 * alpha,
   },
   missioncenterbuttonButtonText: {
     color: 'white',
@@ -1557,10 +1548,10 @@ const styles = StyleSheet.create({
     marginLeft: 10 * alpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   missioncenterbuttonButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   missioncenterbuttonButton: {
     // backgroundColor: "white",
@@ -1570,7 +1561,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    height: 67 * alpha
+    height: 67 * alpha,
     // marginTop: 177 * alpha,
   },
 
@@ -1581,7 +1572,7 @@ const styles = StyleSheet.create({
     height: 67 * alpha,
     left: 0 * alpha,
     right: 0 * alpha,
-    top: 0 * alpha
+    top: 0 * alpha,
   },
 
   missionCenterReflection: {
@@ -1590,7 +1581,7 @@ const styles = StyleSheet.create({
     height: 67 * alpha,
     left: 0 * alpha,
     right: 0 * alpha,
-    top: 0 * alpha
+    top: 0 * alpha,
   },
   missionCentreView: {
     backgroundColor: 'transparent',
@@ -1602,13 +1593,13 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     top: 0 * alpha,
-    bottom: 0
+    bottom: 0,
   },
   missionArrow: {
     width: 10 * alpha,
     marginRight: 10 * alpha,
     tintColor: 'white',
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
 
   infoArrow: {
@@ -1616,12 +1607,12 @@ const styles = StyleSheet.create({
     marginLeft: 5 * alpha,
     height: '100%',
     tintColor: 'rgb(54, 54, 54)',
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   howToUseButtonImage: {
     resizeMode: 'contain',
     tintColor: 'rgb(151, 151, 151)',
-    width: 12 * alpha
+    width: 12 * alpha,
     // marginRight: 3 * alpha,
-  }
+  },
 });

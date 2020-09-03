@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import _ from 'lodash';
 import {
   TITLE_FONT,
@@ -18,30 +18,31 @@ import {
   BUTTONBOTTOMPADDING,
   DEFAULT_GREY_BACKGROUND,
   TINT_COLOR,
-  LIGHT_GREY
+  LIGHT_GREY,
 } from '../Common/common_style';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { connect } from 'react-redux';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Brew9Toast from '../Components/Brew9Toast';
+import {getResponseMsg} from '../Utils/responses';
 
-@connect(({ members, shops, config, orders }) => ({
+@connect(({members, shops, config, orders}) => ({
   location: members.location,
   selectedShop: shops.selectedShop,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses,
 }))
 export default class MapShippingAddress extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTitle: (
         <Text
           style={{
             textAlign: 'center',
             alignSelf: 'center',
-            fontFamily: TITLE_FONT
-          }}
-        >
+            fontFamily: TITLE_FONT,
+          }}>
           Delivery Address
         </Text>
       ),
@@ -50,8 +51,7 @@ export default class MapShippingAddress extends React.Component {
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onBackPressed ? params.onBackPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/back.png')}
               style={styles.navigationBarItemIcon}
@@ -62,8 +62,8 @@ export default class MapShippingAddress extends React.Component {
       headerRight: null,
       headerStyle: {
         elevation: 0,
-        shadowOpacity: 0
-      }
+        shadowOpacity: 0,
+      },
     };
   };
 
@@ -77,19 +77,19 @@ export default class MapShippingAddress extends React.Component {
       address: '',
       address_details: '',
       isAddAddressMode: false,
-      address_temp: ''
+      address_temp: '',
     };
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     this.props.navigation.setParams({
-      onBackPressed: this.onBackPressed
+      onBackPressed: this.onBackPressed,
     });
 
     this.setState({
       address: navigation.state.params.addressInfo.address,
-      address_details: navigation.state.params.addressInfo.address_details
+      address_details: navigation.state.params.addressInfo.address_details,
     });
   }
   onBackPressed = () => {
@@ -97,21 +97,27 @@ export default class MapShippingAddress extends React.Component {
   };
 
   placeHolderText = () => {
-    let {responses} = this.props
-    var msg = responses.get('Address Search Placeholder') || 'No. 1, Simpang 540, Kg Sg Akar, Jln Kebangsaan.';
-    return msg;
+    const {selectedShop} = this.props;
+    const addressPlaceholder = getResponseMsg({
+      props: this.props,
+      shopId: selectedShop.id,
+      key: 'Address Search Placeholder',
+      defaultText: 'No.1, Simpang 127, Sungai Akar, Jalan Kebangsaan',
+    });
+
+    return addressPlaceholder;
   };
 
   renderForm = (title, placeholder, text, onChangeText, description) => {
     return (
-      <View style={{ height: 50 * alpha, marginBottom: 5 * alpha }}>
+      <View style={{height: 50 * alpha, marginBottom: 5 * alpha}}>
         <Text style={styles.title}>{title}</Text>
         {text ? (
           <Text style={styles.textInput}>{description}</Text>
         ) : (
           <TextInput
-            keyboardType="default"
-            clearButtonMode="always"
+            keyboardType='default'
+            clearButtonMode='always'
             autoCorrect={false}
             placeholder={placeholder}
             onChangeText={onChangeText}
@@ -125,18 +131,18 @@ export default class MapShippingAddress extends React.Component {
 
   onChangeAddress = (address) => {
     this.setState({
-      address
+      address,
     });
   };
 
   onChangeAddressDetail = (address_details) => {
     this.setState({
-      address_details
+      address_details,
     });
   };
 
   checkForm = () => {
-    let { address } = this.state;
+    let {address} = this.state;
     if (!address) {
       this.refs.toast.show('Please fill in your address', 500);
       return false;
@@ -160,15 +166,15 @@ export default class MapShippingAddress extends React.Component {
           city,
           state,
           country,
-          address_details: ''
+          address_details: '',
         },
-        () => console.log(this.state)
+        () => console.log(this.state),
       );
     }
   };
 
   onSavePressed = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     let {
       address_details,
       address,
@@ -178,7 +184,7 @@ export default class MapShippingAddress extends React.Component {
       country,
       latitude,
       longitude,
-      delivery_area
+      delivery_area,
     } = this.state;
     let formcheck = true;
     if (formcheck) {
@@ -191,7 +197,7 @@ export default class MapShippingAddress extends React.Component {
         country,
         latitude,
         longitude,
-        delivery_area
+        delivery_area,
       };
       console.log(shippingAddress);
       navigation.state.params.returnAddress(shippingAddress);
@@ -200,16 +206,15 @@ export default class MapShippingAddress extends React.Component {
   };
 
   renderAddressForm = () => {
-    let { address, address_details } = this.state;
+    let {address, address_details} = this.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={true}>
-        <View style={{ flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND }}>
+        <View style={{flex: 1, backgroundColor: DEFAULT_GREY_BACKGROUND}}>
           <TouchableOpacity
             style={styles.clearView}
             onPress={() => {
-              this.setState({ isAddAddressMode: false, address: '' });
-            }}
-          >
+              this.setState({isAddAddressMode: false, address: ''});
+            }}>
             <Text style={styles.clearText}>Clear</Text>
           </TouchableOpacity>
           <View style={styles.whiteContent}>
@@ -217,19 +222,18 @@ export default class MapShippingAddress extends React.Component {
               <View
                 style={{
                   flex: 1,
-                  justifyContent: 'flex-start'
-                }}
-              >
+                  justifyContent: 'flex-start',
+                }}>
                 <Text style={styles.title}>Address Line 1</Text>
                 <TextInput
-                  keyboardType="default"
-                  clearButtonMode="always"
+                  keyboardType='default'
+                  clearButtonMode='always'
                   placeholder={this.placeHolderText()}
                   autoCorrect={false}
                   value={address}
                   multiline={true}
                   onChangeText={(address) => {
-                    this.setState({ address });
+                    this.setState({address});
                   }}
                   style={styles.textInput}
                 />
@@ -241,18 +245,17 @@ export default class MapShippingAddress extends React.Component {
               <View
                 style={{
                   flex: 1,
-                  justifyContent: 'flex-start'
-                }}
-              >
+                  justifyContent: 'flex-start',
+                }}>
                 <Text style={styles.title}>Address Line 2</Text>
                 <TextInput
-                  keyboardType="default"
-                  clearButtonMode="always"
+                  keyboardType='default'
+                  clearButtonMode='always'
                   autoCorrect={false}
                   value={address_details}
                   placeholder={'Unit # / Floor / Block (Optional)'}
                   onChangeText={(address_details) => {
-                    this.setState({ address_details });
+                    this.setState({address_details});
                   }}
                   style={styles.textInput}
                 />
@@ -261,8 +264,7 @@ export default class MapShippingAddress extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => this.onSavePressed()}
-            style={styles.saveButton}
-          >
+            style={styles.saveButton}>
             <Text style={styles.saveButtonText}>SAVE</Text>
           </TouchableOpacity>
         </View>
@@ -273,16 +275,16 @@ export default class MapShippingAddress extends React.Component {
   renderSearchForm = () => (
     <GooglePlacesAutocomplete
       placeholder={this.placeHolderText()}
-      placeholderTextColor="rgb(200, 200, 200)"
+      placeholderTextColor='rgb(200, 200, 200)'
       minLength={2}
       autoFocus={true}
       enablePoweredByContainer={false}
       autoCorrect={false}
       currentLocation={false}
-      currentLocationLabel="  Use My Location"
+      currentLocationLabel='  Use My Location'
       returnKeyType={'search'}
       keyboardAppearance={'light'}
-      listViewDisplayed="auto"
+      listViewDisplayed='auto'
       fetchDetails={true}
       renderDescription={(row) =>
         row.description || row.formatted_address || row.name
@@ -292,8 +294,8 @@ export default class MapShippingAddress extends React.Component {
         // style: {},
         onBlur: () => {},
         onChangeText: (address_temp) => {
-          this.setState({ address_temp });
-        }
+          this.setState({address_temp});
+        },
       }}
       renderLeftButton={() => (
         <View
@@ -301,9 +303,8 @@ export default class MapShippingAddress extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 10 * alpha,
-            width: 22 * alpha
-          }}
-        >
+            width: 22 * alpha,
+          }}>
           <Image
             source={require('./../../assets/images/location.png')}
             style={styles.locationIcon}
@@ -316,15 +317,14 @@ export default class MapShippingAddress extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
             marginRight: 10 * alpha,
-            width: 22 * alpha
+            width: 22 * alpha,
           }}
           onPress={() =>
             this.setState({
               address: this.state.address_temp,
-              isAddAddressMode: true
+              isAddAddressMode: true,
             })
-          }
-        >
+          }>
           <Image
             source={require('./../../assets/images/add_address.png')}
             style={styles.addIcon}
@@ -338,18 +338,18 @@ export default class MapShippingAddress extends React.Component {
       getDefaultValue={() => ''}
       query={{
         key: 'AIzaSyDa5Vq60SYn3ZbOdcrBAunf7jJk2msB6_A',
-        components: 'country:bn'
+        components: 'country:bn',
       }}
       // suppressDefaultStyles={true}
       styles={{
-        container: { backgroundColor: DEFAULT_GREY_BACKGROUND, paddingTop: 10 },
+        container: {backgroundColor: DEFAULT_GREY_BACKGROUND, paddingTop: 10},
         textInputContainer: {
           marginHorizontal: 15 * alpha,
           backgroundColor: 'white',
           borderRadius: 5 * alpha,
           borderTopWidth: 0,
           borderBottomWidth: 0,
-          justifyContent: 'center'
+          justifyContent: 'center',
         },
         textInput: {
           padding: 0,
@@ -362,26 +362,26 @@ export default class MapShippingAddress extends React.Component {
           textAlign: 'left',
           paddingLeft: 0,
           paddingRight: 0,
-          flex: 1
+          flex: 1,
         },
         row: {
           backgroundColor: 'white',
-          marginHorizontal: 15 * alpha
+          marginHorizontal: 15 * alpha,
         },
         description: {
           fontFamily: NON_TITLE_FONT,
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
         },
         predefinedPlacesDescription: {
-          color: '#1faadb'
-        }
+          color: '#1faadb',
+        },
       }}
       debounce={200}
     />
   );
 
   render() {
-    <Brew9Toast ref="toast" />
+    <Brew9Toast ref='toast' />;
     if (
       (this.state.address && this.state.address.length > 0) ||
       this.state.isAddAddressMode
@@ -397,36 +397,36 @@ const styles = StyleSheet.create({
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
+    width: 70 * alpha,
   },
   navigationBarItem: {
-    width: '100%'
+    width: '100%',
   },
   navigationBarItemTitle: {
     color: 'black',
     fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha
+    fontSize: 16 * fontAlpha,
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
     height: 18 * alpha,
-    tintColor: 'black'
+    tintColor: 'black',
   },
   locationIcon: {
     width: 14 * alpha,
-    height: 20 * alpha
+    height: 20 * alpha,
   },
   addIcon: {
     width: 20 * alpha,
-    height: 20 * alpha
+    height: 20 * alpha,
   },
   container: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   map: {
     height: 300 * alpha,
-    width: '100%'
+    width: '100%',
   },
   title: {
     backgroundColor: 'transparent',
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     paddingBottom: 2 * alpha,
-    textAlign: 'left'
+    textAlign: 'left',
   },
   text: {
     backgroundColor: 'transparent',
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   textInput: {
     backgroundColor: 'transparent',
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    width: windowWidth - 60 * alpha
+    width: windowWidth - 60 * alpha,
   },
 
   saveButton: {
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     bottom: BUTTONBOTTOMPADDING + 20 * alpha,
     height: 47 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   saveButtonText: {
     color: 'white',
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    flex: 1
+    flex: 1,
   },
   headerTitle: {
     backgroundColor: 'transparent',
@@ -487,19 +487,19 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     paddingVertical: 15 * alpha,
-    paddingHorizontal: 15 * alpha
+    paddingHorizontal: 15 * alpha,
   },
   seperatorImage: {
     backgroundColor: 'transparent',
     resizeMode: 'cover',
     height: 3 * alpha,
     width: windowWidth - 40 * alpha,
-    tintColor: 'rgb(54, 54, 54)'
+    tintColor: 'rgb(54, 54, 54)',
   },
   clearText: {
     color: PRIMARY_COLOR,
     fontSize: 15 * fontAlpha,
-    fontFamily: TITLE_FONT
+    fontFamily: TITLE_FONT,
   },
   clearView: {
     // flex: 1,
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 20 * alpha,
     marginRight: 15 * alpha,
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   whiteContent: {
     marginHorizontal: 10 * alpha,
@@ -515,13 +515,13 @@ const styles = StyleSheet.create({
     borderRadius: 5 * alpha,
     backgroundColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   bodyContent: {
     paddingVertical: 10 * alpha,
     flexDirection: 'row',
     paddingHorizontal: 20 * alpha,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
     // alignItems: 'center'
     // flex: 1
   },
@@ -531,6 +531,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: windowWidth - 60 * alpha,
     height: 1 * alpha,
-    marginLeft: 10 * alpha
-  }
+    marginLeft: 10 * alpha,
+  },
 });

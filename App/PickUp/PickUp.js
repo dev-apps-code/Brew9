@@ -1,11 +1,3 @@
-//
-//  PickUp
-//  Brew9
-//
-//  Created by .
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   StyleSheet,
   View,
@@ -13,7 +5,6 @@ import {
   TouchableOpacity,
   Text,
   Linking,
-  ActivityIndicator,
   RefreshControl,
   AppState,
   Modal,
@@ -21,13 +12,14 @@ import {
   Platform
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowWidth, windowHeight } from '../Common/size';
-import { ScrollView } from 'react-native-gesture-handler';
-import { connect } from 'react-redux';
+import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
+import {ScrollView} from 'react-native-gesture-handler';
+import {connect} from 'react-redux';
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object';
 import ProfileRequestObject from '../Requests/profile_request_object';
-import { createAction } from '../Utils/index';
+import {createAction} from '../Utils/index';
 import openMap from 'react-native-open-maps';
+import {getResponseMsg} from '../Utils/responses';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -40,15 +32,15 @@ import {
 } from '../Common/common_style';
 import Moment from 'moment';
 import NotificationsRequestObject from '../Requests/notifications_request_object';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
+import {LinearGradient} from 'expo-linear-gradient';
+import {Analytics, Event, PageHit} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
 import _ from 'lodash';
-import { getMemberIdForApi } from '../Services/members_helper';
+import {getMemberIdForApi} from '../Services/members_helper';
 import AnimationLoading from '../Components/AnimationLoading';
 import HudLoading from '../Components/HudLoading';
 import CurveSeparator from '../Components/CurveSeparator';
-@connect(({ members, shops, config }) => ({
+@connect(({members, shops, config}) => ({
   currentMember: members.profile,
   company_id: members.company_id,
   location: members.location,
@@ -57,11 +49,11 @@ import CurveSeparator from '../Components/CurveSeparator';
   popUp: shops.popUp,
   currentOrder: shops.currentOrder,
   orders: shops.orders,
-  responses: config.responses
-
+  responses: config.responses,
+  shopResponses: config.shopResponses
 }))
 export default class PickUp extends React.Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({navigation}) => {
     return {
       headerTitle: <Text style={HEADER_NO_BACK}>Your Order</Text>,
       headerTintColor: 'black',
@@ -73,12 +65,12 @@ export default class PickUp extends React.Component {
   static tabBarItemOptions = (navigation, store) => {
     return {
       tabBarLabel: 'Order',
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         store.dispatch(createAction('config/setToggleShopLocation')(false));
         store.dispatch(createAction('config/setTab')('pickup'));
         defaultHandler();
       },
-      tabBarIcon: ({ iconTintColor, focused }) => {
+      tabBarIcon: ({iconTintColor, focused}) => {
         const image = focused
           ? require('./../../assets/images/pickup_selected_tab.png')
           : require('./../../assets/images/pickup_tab.png');
@@ -112,15 +104,15 @@ export default class PickUp extends React.Component {
 
   componentDidMount() {
     this.loadCurrentOrder();
-    const { currentMember } = this.props;
-    const { navigation } = this.props;
+    const {currentMember} = this.props;
+    const {navigation} = this.props;
     AppState.addEventListener('change', this._handleAppStateChange);
     this.navigationListener = navigation.addListener('willFocus', (payload) => {
       if (currentMember != null) {
         this.loadCurrentOrder();
       }
       if (this.props.popUp != this.state.showPopUp) {
-        this.setState({ showPopUp: this.props.popUp });
+        this.setState({showPopUp: this.props.popUp});
       }
     });
   }
@@ -131,13 +123,13 @@ export default class PickUp extends React.Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
     }
-    this.setState({ appState: nextAppState });
+    this.setState({appState: nextAppState});
   };
 
   removeNavigationListener() {
@@ -153,19 +145,19 @@ export default class PickUp extends React.Component {
     }
     if (this.props.selectedTab == 'pickup') {
       if (this.props.popUp != this.state.showPopUp) {
-        this.setState({ showPopUp: this.props.popUp });
+        this.setState({showPopUp: this.props.popUp});
       }
     }
   }
 
   onOrderHistoryPressed = () => {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event('My Order', getMemberIdForApi(currentMember), 'Order History')
     );
 
-    const { navigate } = this.props.navigation;
+    const {navigate} = this.props.navigation;
     navigate('OrderHistory');
   };
 
@@ -174,8 +166,8 @@ export default class PickUp extends React.Component {
   };
 
   onOrderPressed = () => {
-    const { navigate } = this.props.navigation;
-    const { currentMember } = this.props;
+    const {navigate} = this.props.navigation;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event('My Order', getMemberIdForApi(currentMember), 'Order')
@@ -185,12 +177,12 @@ export default class PickUp extends React.Component {
   };
 
   loadCurrentOrder() {
-    const { dispatch, currentMember } = this.props;
-    let { refreshing } = this.state;
+    const {dispatch, currentMember} = this.props;
+    let {refreshing} = this.state;
     if (currentMember != null) {
       refreshing
-        ? this.setState({ loading: false })
-        : this.setState({ loading: true });
+        ? this.setState({loading: false})
+        : this.setState({loading: true});
       const callback = (eventObject) => {
         if (eventObject.success) {
         }
@@ -213,8 +205,7 @@ export default class PickUp extends React.Component {
   renderSeparator = () => <CurveSeparator />;
 
   renderQueueView(current_order) {
-
-    let {responses} = this.props
+    const {responses, selectedShop} = this.props;
 
     const queues = current_order.map((item, key) => {
       let claim_day = item.pickup_status == 'Tomorrow' ? 'TOMORROW' : '';
@@ -231,7 +222,7 @@ export default class PickUp extends React.Component {
       let meridiem = _eta_time[1];
 
       // Set progress bar values
-      let progressValues = { pending: 0.33, processing: 0.66, ready: 1 };
+      let progressValues = {pending: 0.33, processing: 0.66, ready: 1};
       let progress = progressValues[item.status] || 0;
 
       let delivery_fee = item.delivery_fee ? item.delivery_fee : 0;
@@ -241,26 +232,45 @@ export default class PickUp extends React.Component {
       let calculate_cart_total = cart_total;
 
       // Suggesting this must be added to a default values
-      let paid_order_message =
-        'Order must be collected within 30 minutes of collection time. ' +
-        'Otherwise it will be canceled and non-refundable';
-
-      let unpaid_order_message =
-        'Your order will be processed upon receiving payment.';
+      let paid_order_message = '';
+      let unpaid_order_message = '';
 
       let remarks = '';
       if (item.delivery_method) {
-        let default_remark =
-          'Your order is now in process and will be delivered to ' +
-          'you estimated 30 minutes.';
+        //old response
+        // let default_remark =
+        //   'Your order is now in process and will be delivered to ' +
+        //   'you estimated 30 minutes.';
 
-        remarks = responses.get('Delivery Remark') || default_remark;
+        // remarks = responses.get('Delivery Remark') || default_remark;
+        remarks = getResponseMsg({
+          props: this.props,
+          shopId: selectedShop.id,
+          key: 'Delivery Remark',
+          defaultText:
+            'Your order is now in process and will be delivered to you estimated 30 minutes.'
+        });
       } else {
-          if (item.paid == true) {
-            paid_order_message = responses.get('Not Collected Order');
-          } else {
-            unpaid_order_message = responses.get('Pending Payment (Remarks)');
-          }
+        if (item.paid == true) {
+          //old response
+          // paid_order_message = responses.get('Not Collected Order');
+          paid_order_message = getResponseMsg({
+            props: this.props,
+            shopId: selectedShop.id,
+            key: 'Not Collected Order',
+            defaultText:
+              'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable'
+          });
+        } else {
+          //old response
+          // unpaid_order_message = responses.get('Pending Payment (Remarks)');
+          unpaid_order_message = getResponseMsg({
+            props: this.props,
+            shopId: selectedShop.id,
+            key: 'Pending Payment (Remarks)',
+            defaultText: 'Your order will be processed upon receiving payment.'
+          });
+        }
 
         remarks = item.paid ? paid_order_message : unpaid_order_message;
       }
@@ -283,11 +293,9 @@ export default class PickUp extends React.Component {
                 backgroundColor: 'transparent',
                 flex: 1,
                 flexDirection: 'row'
-              }}
-            >
+              }}>
               <View
-                style={[styles.productDetailView, { marginRight: 5 * alpha }]}
-              >
+                style={[styles.productDetailView, {marginRight: 5 * alpha}]}>
                 <Text style={styles.productNameText}>
                   {productItem.product_name}
                 </Text>
@@ -305,8 +313,7 @@ export default class PickUp extends React.Component {
                   flex: 0.4,
                   flexDirection: 'row',
                   justifyContent: 'space-between'
-                }}
-              >
+                }}>
                 <Text style={styles.productQuantityText}>
                   x{productItem.quantity}
                 </Text>
@@ -343,17 +350,16 @@ export default class PickUp extends React.Component {
         }
 
         return (
-          <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
+          <View style={[styles.drinksView, {marginTop: 0}]} key={key}>
             <View
               style={{
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
                 flex: 1,
                 flexDirection: 'row'
-              }}
-            >
+              }}>
               <View style={styles.productDetailView}>
-                <Text style={[styles.productNameText, { marginBottom: 0 }]}>
+                <Text style={[styles.productNameText, {marginBottom: 0}]}>
                   {item.cart_text}
                 </Text>
 
@@ -387,7 +393,7 @@ export default class PickUp extends React.Component {
         /* Queue no should only not show when item is pickup and not paid  */
 
         return (
-          <View style={[styles.drinksView, { marginTop: 0 }]} key={key}>
+          <View style={[styles.drinksView, {marginTop: 0}]} key={key}>
             <View
               pointerEvents="box-none"
               style={{
@@ -395,14 +401,13 @@ export default class PickUp extends React.Component {
                 backgroundColor: 'transparent',
                 flex: 1,
                 flexDirection: 'row'
-              }}
-            >
+              }}>
               <View style={styles.productDetailView}>
                 <Text style={styles.productNameText}>
                   {voucherItem.voucher.name}
                 </Text>
 
-                <View style={{ marginBottom: 10 * alpha }} />
+                <View style={{marginBottom: 10 * alpha}} />
               </View>
 
               <Text style={styles.productPriceText}>
@@ -431,9 +436,8 @@ export default class PickUp extends React.Component {
               marginLeft: 19 * alpha,
               flexDirection: 'row',
               alignItems: 'flex-start'
-            }}
-          ></View>
-          <View style={[styles.queueView, { marginTop: 15 * alpha }]}>
+            }}></View>
+          <View style={[styles.queueView, {marginTop: 15 * alpha}]}>
             <View
               style={[
                 styles.queueView,
@@ -441,16 +445,14 @@ export default class PickUp extends React.Component {
                   alignItems: 'center',
                   marginTop: item.paid == false ? 40 : 0 * alpha
                 }
-              ]}
-            >
+              ]}>
               <View
                 pointerEvents="box-none"
                 style={{
                   flex: 1,
                   marginTop: 19 * alpha,
                   flexDirection: 'row'
-                }}
-              >
+                }}>
                 <View style={styles.queueHeaderBlock}>
                   <Text style={styles.queueheaderText}>Order Number</Text>
                   <Text style={styles.queuenumberText}>{queue_no_remarks}</Text>
@@ -459,7 +461,7 @@ export default class PickUp extends React.Component {
                   <Text style={styles.pickupTimeheaderText}>
                     {pick_up_title}
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <Text style={styles.pickupTimeText}>
                       {estimated_time}
                       <Text style={styles.pickupTimeAMPMText}>{meridiem}</Text>
@@ -491,8 +493,7 @@ export default class PickUp extends React.Component {
                       item.status === 'pending'
                         ? styles.orderedSelectedText
                         : styles.orderedText
-                    }
-                  >
+                    }>
                     Ordered
                   </Text>
                 </View>
@@ -519,8 +520,7 @@ export default class PickUp extends React.Component {
                       item.status === 'processing'
                         ? styles.processingSelectedText
                         : styles.processingText
-                    }
-                  >
+                    }>
                     Preparing
                   </Text>
                 </View>
@@ -547,8 +547,7 @@ export default class PickUp extends React.Component {
                       item.status === 'ready'
                         ? styles.pickUpSelectedText
                         : styles.pickUpText
-                    }
-                  >
+                    }>
                     Order Ready
                   </Text>
                 </View>
@@ -558,8 +557,7 @@ export default class PickUp extends React.Component {
               </View>
               <TouchableOpacity
                 style={styles.refreshView}
-                onPress={this.onRefresh}
-              >
+                onPress={this.onRefresh}>
                 <Image
                   source={require('./../../assets/images/refresh-sharp.png')}
                   style={styles.refreshImage}
@@ -571,8 +569,7 @@ export default class PickUp extends React.Component {
                 style={styles.updateOrder}
                 onPress={() => {
                   this.onEditOrder(item.order_items, item);
-                }}
-              >
+                }}>
                 <Text style={styles.updateOrderText}>Pending Payment</Text>
               </TouchableOpacity>
             )}
@@ -594,8 +591,7 @@ export default class PickUp extends React.Component {
                 <View style={styles.callView}>
                   <TouchableOpacity
                     onPress={() => this.onCallPressed(item.shop.phone_no)}
-                    style={styles.callIconButton}
-                  >
+                    style={styles.callIconButton}>
                     <Image
                       source={require('./../../assets/images/call-Icon.png')}
                       style={styles.callIconButtonImage}
@@ -611,8 +607,7 @@ export default class PickUp extends React.Component {
                 <View style={styles.directionView}>
                   <TouchableOpacity
                     onPress={() => this.onPressDirection()}
-                    style={styles.directionIconButton}
-                  >
+                    style={styles.directionIconButton}>
                     <Image
                       source={require('./../../assets/images/direction-Icon.png')}
                       style={styles.directionIconButtonImage}
@@ -631,7 +626,7 @@ export default class PickUp extends React.Component {
 
             <View style={styles.drinksViewWrapper}>
               {order_items}
-              <View style={{ marginTop: 10 * alpha }}>{promotions}</View>
+              <View style={{marginTop: 10 * alpha}}>{promotions}</View>
               {voucher_items}
             </View>
             {this.renderSeparator()}
@@ -705,8 +700,7 @@ export default class PickUp extends React.Component {
                     marginHorizontal: 20 * alpha,
                     marginVertical: 11 * alpha,
                     alignItems: 'flex-start'
-                  }}
-                >
+                  }}>
                   <View
                     pointerEvents="box-none"
                     style={{
@@ -717,13 +711,12 @@ export default class PickUp extends React.Component {
                       marginRight: 4 * alpha,
                       flexDirection: 'row',
                       alignItems: 'flex-start'
-                    }}
-                  >
-                    <Text style={[styles.orderTime100717Text, { flex: 0.25 }]}>
+                    }}>
+                    <Text style={[styles.orderTime100717Text, {flex: 0.25}]}>
                       Order time{' '}
                     </Text>
                     <Text style={[styles.orderTime100717Text]}> : </Text>
-                    <Text style={[styles.orderTime100717Text, { flex: 1 }]}>
+                    <Text style={[styles.orderTime100717Text, {flex: 1}]}>
                       {item.payment_time}
                     </Text>
                   </View>
@@ -737,13 +730,12 @@ export default class PickUp extends React.Component {
                       marginRight: 4 * alpha,
                       flexDirection: 'row',
                       alignItems: 'flex-start'
-                    }}
-                  >
-                    <Text style={[styles.orderNo020028201Text, { flex: 0.25 }]}>
+                    }}>
+                    <Text style={[styles.orderNo020028201Text, {flex: 0.25}]}>
                       Receipt no.{' '}
                     </Text>
                     <Text style={[styles.orderNo020028201Text]}> : </Text>
-                    <Text style={[styles.orderNo020028201Text, { flex: 1 }]}>
+                    <Text style={[styles.orderNo020028201Text, {flex: 1}]}>
                       {item.receipt_no}
                     </Text>
                   </View>
@@ -757,13 +749,12 @@ export default class PickUp extends React.Component {
                       marginRight: 4 * alpha,
                       flexDirection: 'row',
                       alignItems: 'flex-start'
-                    }}
-                  >
-                    <Text style={[styles.remarkNoPackingText, { flex: 0.25 }]}>
+                    }}>
+                    <Text style={[styles.remarkNoPackingText, {flex: 0.25}]}>
                       Remarks{' '}
                     </Text>
                     <Text style={[styles.remarkNoPackingText]}> : </Text>
-                    <Text style={[styles.remarkNoPackingText, { flex: 1 }]}>
+                    <Text style={[styles.remarkNoPackingText, {flex: 1}]}>
                       {remarks}
                     </Text>
                   </View>
@@ -777,27 +768,26 @@ export default class PickUp extends React.Component {
 
     return (
       <ScrollView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this.onRefresh}
           />
-        }
-      >
+        }>
         {queues}
-        <View style={{ height: 60 * alpha }} />
+        <View style={{height: 60 * alpha}} />
       </ScrollView>
     );
   }
 
   onRefresh = () => {
-    this.setState({ refreshing: true }, () => this.loadCurrentOrder());
+    this.setState({refreshing: true}, () => this.loadCurrentOrder());
   };
 
   onEditOrder = (order_items, current_order) => {
-    const { navigate } = this.props.navigation;
-    const { dispatch } = this.props;
+    const {navigate} = this.props.navigation;
+    const {dispatch} = this.props;
     dispatch(
       createAction('orders/editCart')({
         order_items: order_items,
@@ -807,54 +797,48 @@ export default class PickUp extends React.Component {
     navigate('Home');
   };
 
-
   onPressDirection() {
-    let {selectedShop} = this.props
+    let {selectedShop} = this.props;
 
-    let lat = selectedShop.latitude
-    let long = selectedShop.longitude
+    let lat = selectedShop.latitude;
+    let long = selectedShop.longitude;
     let latitude = lat ? parseFloat(lat) : 4.8886091;
     let longitude = long ? parseFloat(long) : 114.8976136;
     let location = latitude + ',' + longitude;
     const url = Platform.select({
-      ios: 'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' + location,
+      ios:
+        'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
+        location,
       android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
-    })
-
+    });
 
     Linking.openURL(url);
-   
-
   }
 
   closePopUp = () => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     dispatch(
       createAction('shops/setPopUp')({
         popUp: false
       })
     );
 
-    this.setState({ showPopUp: false });
+    this.setState({showPopUp: false});
   };
 
   renderProgressBar(progress) {
     progress_percent = progress * 100;
     return (
-      <View style={{ flexDirection: 'row', height: 10 * alpha, flex: 1 }}>
+      <View style={{flexDirection: 'row', height: 10 * alpha, flex: 1}}>
         <View
           style={{
             flex: 1,
             borderColor: '#000',
             borderWidth: 1 * alpha,
             borderRadius: 5 * alpha
-          }}
-        >
+          }}>
           <View
-            style={[
-              StyleSheet.absoluteFill,
-              { backgroundColor: 'transparent' }
-            ]}
+            style={[StyleSheet.absoluteFill, {backgroundColor: 'transparent'}]}
           />
           <LinearGradient
             colors={[LIGHT_BLUE, PRIMARY_COLOR]}
@@ -887,8 +871,7 @@ export default class PickUp extends React.Component {
                 top: 0 * alpha,
                 bottom: 0 * alpha,
                 justifyContent: 'center'
-              }}
-            >
+              }}>
               <View style={styles.centerView}>
                 <Image
                   source={require('./../../assets/images/cup_icon.png')}
@@ -912,18 +895,15 @@ export default class PickUp extends React.Component {
                 height: 72 * alpha,
                 justifyContent: 'flex-end',
                 alignItems: 'center'
-              }}
-            >
+              }}>
               <TouchableOpacity
                 onPress={this.onOrderPressed}
-                style={styles.orderButton}
-              >
+                style={styles.orderButton}>
                 <Text style={styles.orderButtonText}>Order</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={this.onOrderHistoryPressed}
-                style={styles.orderHistoryButton}
-              >
+                style={styles.orderHistoryButton}>
                 <Text style={styles.orderHistoryButtonText}>Order History</Text>
                 <Image
                   source={require('./../../assets/images/next.png')}
@@ -938,7 +918,7 @@ export default class PickUp extends React.Component {
   }
 
   renderPointExpModal() {
-    const { currentOrder } = this.props;
+    const {currentOrder} = this.props;
 
     const total_points =
       currentOrder != null ? parseFloat(currentOrder.awarded_point) : 0;
@@ -949,13 +929,12 @@ export default class PickUp extends React.Component {
         animationType="slide"
         transparent={true}
         visible={this.state.showPopUp}
-        onRequestClose={() => this.closePopUp()}
-      >
+        onRequestClose={() => this.closePopUp()}>
         <TouchableWithoutFeedback onPress={() => this.closePopUp()}>
           <View style={[styles.popUpBackground]}>
             <View style={[styles.popUpContent]}>
               <Text style={styles.pointExpModalTitle}>You have receive</Text>
-              <View style={{ marginBottom: 10 }}>
+              <View style={{marginBottom: 10}}>
                 <View style={styles.popUpInput1}>
                   <Text>Points</Text>
                   <Text style={styles.pointExpModalPointText}>
@@ -969,8 +948,7 @@ export default class PickUp extends React.Component {
               </View>
               <TouchableOpacity
                 onPress={() => this.closePopUp()}
-                style={styles.popUpInput3}
-              >
+                style={styles.popUpInput3}>
                 <Text style={styles.orderButtonText}>OK</Text>
               </TouchableOpacity>
             </View>
@@ -981,7 +959,7 @@ export default class PickUp extends React.Component {
   }
 
   render() {
-    const { orders } = this.props;
+    const {orders} = this.props;
     // console.log('orders ', orders);
     return (
       <View style={styles.pickUpMainView}>

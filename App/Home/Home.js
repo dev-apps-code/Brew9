@@ -14,18 +14,18 @@ import {
   Linking,
   AppState,
   Keyboard,
-  BackHandler
+  BackHandler,
 } from 'react-native';
 import RNExitApp from 'react-native-kill-app';
 import Brew9Modal from '../Components/Brew9Modal';
 import Modal from 'react-native-modal';
 import PushRequestObject from '../Requests/push_request_object';
-import { connect } from 'react-redux';
-import { createAction } from '../Utils/index';
+import {connect} from 'react-redux';
+import {createAction} from '../Utils/index';
 import ProductCell from './ProductCell';
 import CategoryCell from './CategoryCell';
 import CartCell from './CartCell';
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import ProductRequestObject from '../Requests/product_request_object';
 import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import SwitchSelector from 'react-native-switch-selector';
@@ -34,7 +34,8 @@ import _ from 'lodash';
 import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {getResponseMsg} from '../Utils/responses';
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {
   TITLE_FONT,
@@ -45,19 +46,19 @@ import {
   RED,
   LIGHT_BLUE_BACKGROUND,
   TOAST_DURATION,
-  DEFAULT_BORDER_RADIUS
+  DEFAULT_BORDER_RADIUS,
 } from '../Common/common_style';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
-import { getPreciseDistance } from 'geolib';
-import { AsyncStorage } from 'react-native';
+import {Analytics, Event, PageHit} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
+import {getPreciseDistance} from 'geolib';
+import {AsyncStorage} from 'react-native';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
 import AnimationLoading from '../Components/AnimationLoading';
 import Brew9Toast from '../Components/Brew9Toast';
 
-@connect(({ members, shops, config, orders }) => ({
+@connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
   company_id: members.company_id,
   location: members.location,
@@ -72,19 +73,19 @@ import Brew9Toast from '../Components/Brew9Toast';
   discount_cart_total: orders.discount_cart_total,
   clearCart: orders.clearCart,
   currentPromoText: orders.currentPromoText,
-  responses: config.responses
+  responses: config.responses,
+  shopResponses: config.shopResponses,
 }))
 export default class Home extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTintColor: 'black',
       headerLeft: (
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onLogoPressed ? params.onLogoPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/logo.png')}
               style={styles.navigationBarItemIcon}
@@ -98,27 +99,26 @@ export default class Home extends React.Component {
             onPress={
               params.onQrScanPressed ? params.onQrScanPressed : () => null
             }
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/scan_qr_button.png')}
               style={styles.navigationBarRightItemIcon}
             />
           </TouchableOpacity>
         </View>
-      )
+      ),
     };
   };
 
   static tabBarItemOptions = (navigation, store) => {
     return {
       tabBarLabel: 'Menu',
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
+      tabBarOnPress: ({navigation, defaultHandler}) => {
         store.dispatch(createAction('config/setToggleShopLocation')(false));
         store.dispatch(createAction('config/setTab')('home'));
         defaultHandler();
       },
-      tabBarIcon: ({ iconTintColor, focused }) => {
+      tabBarIcon: ({iconTintColor, focused}) => {
         const image = focused
           ? require('./../../assets/images/order_selected_tab.png')
           : require('./../../assets/images/order_tab.png');
@@ -130,18 +130,18 @@ export default class Home extends React.Component {
               resizeMode: 'contain',
               width: 30,
               height: 30 * alpha,
-              tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT
+              tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT,
             }}
           />
         );
-      }
+      },
     };
   };
 
   constructor(props) {
     super(props);
     this.renderBottom = false;
-    this.moveAnimation = new Animated.ValueXY({ x: 0, y: windowHeight });
+    this.moveAnimation = new Animated.ValueXY({x: 0, y: windowHeight});
 
     this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
@@ -183,13 +183,13 @@ export default class Home extends React.Component {
     popUpVisible: false,
     scroll_Index: null,
     refresh_products: true,
-    monitorLocation: null
+    monitorLocation: null,
   });
 
   initializeOneSignal = () => {
     // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
     OneSignal.init('1e028dc3-e7ee-45a1-a537-a04d698ada1d', {
-      kOSSettingsKeyAutoPrompt: true
+      kOSSettingsKeyAutoPrompt: true,
     });
 
     OneSignal.addEventListener('received', this._onReceived.bind(this));
@@ -198,8 +198,8 @@ export default class Home extends React.Component {
   };
 
   onQrScanPressed = () => {
-    const { navigation } = this.props;
-    const { currentMember } = this.props;
+    const {navigation} = this.props;
+    const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'ScanQr'));
 
@@ -210,9 +210,9 @@ export default class Home extends React.Component {
         () => {
           navigation.navigate('VerifyUser', {
             returnToRoute: navigation.state,
-            check_promotion_trigger: () => this.check_promotion_trigger()
+            check_promotion_trigger: () => this.check_promotion_trigger(),
           });
-        }
+        },
       );
       return;
     }
@@ -221,12 +221,12 @@ export default class Home extends React.Component {
   };
 
   _onShopNamePressed = () => {
-    this.setState({ refresh_products: true });
+    this.setState({refresh_products: true});
     this.props.navigation.navigate('SelectShop');
   };
 
   getLocationAndLoadShops = async () => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     try {
       const response = await Permissions.getAsync(Permissions.LOCATION);
       if (response.status === 'denied') {
@@ -234,7 +234,7 @@ export default class Home extends React.Component {
         return;
       }
       if (response.status !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        const {status} = await Permissions.askAsync(Permissions.LOCATION);
         // api will be called when by location if it is not denied
         if (status === 'denied') {
           this.loadShops();
@@ -242,20 +242,20 @@ export default class Home extends React.Component {
         }
       }
 
-      const { monitorLocation } = this.state;
+      const {monitorLocation} = this.state;
 
       if (monitorLocation == null) {
         const mLocation = Location.watchPositionAsync(
           {
             distanceInterval: 1000,
-            timeInterval: 10000
+            timeInterval: 10000,
           },
           (newLocation) => {
             dispatch(createAction('members/setLocation')(newLocation));
           },
-          (error) => console.log(error)
+          (error) => console.log(error),
         );
-        this.setState({ monitorLocation: mLocation });
+        this.setState({monitorLocation: mLocation});
       }
     } catch (error) {
       // Error retrieving data
@@ -263,7 +263,7 @@ export default class Home extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { shop } = this.props;
+    const {shop} = this.props;
     if (shop != null && shop.all_promotions != null) {
       if (prevProps.cart !== this.props.cart) {
         this.check_promotion_trigger();
@@ -292,22 +292,22 @@ export default class Home extends React.Component {
           function () {
             this.toggleCartView(true, true);
           }.bind(this),
-          50
+          50,
         );
       }
     }
   }
 
   computeDistance() {
-    const { location, shop } = this.props;
+    const {location, shop} = this.props;
     if (location != null && shop != null) {
       const prevLatInRad = location.coords.latitude;
       const prevLongInRad = location.coords.longitude;
       const latInRad = shop.latitude;
       const longInRad = shop.longitude;
       var pdis = getPreciseDistance(
-        { latitude: prevLatInRad, longitude: prevLongInRad },
-        { latitude: latInRad, longitude: longInRad }
+        {latitude: prevLatInRad, longitude: prevLongInRad},
+        {latitude: latInRad, longitude: longInRad},
       );
 
       this.setDistanceString(pdis);
@@ -315,7 +315,7 @@ export default class Home extends React.Component {
   }
 
   setDistanceString(calculated_distance) {
-    const { shop } = this.props;
+    const {shop} = this.props;
     var distance_string = '';
     var parseDistance = calculated_distance;
     if (parseDistance > 1000) {
@@ -325,12 +325,12 @@ export default class Home extends React.Component {
     }
     this.setState({
       distance: `${shop.kilometer_distance || distance_string}km`,
-      member_distance: parseDistance / 1000
+      member_distance: parseDistance / 1000,
     });
   }
 
   componentWillMount() {
-    this.setState({ isPromoToggle: false });
+    this.setState({isPromoToggle: false});
   }
 
   unmounted = false;
@@ -339,7 +339,7 @@ export default class Home extends React.Component {
     this.unmounted = false;
     Keyboard.dismiss();
     this.props.navigation.setParams({
-      onQrScanPressed: this.onQrScanPressed
+      onQrScanPressed: this.onQrScanPressed,
     });
     this.getLocationAndLoadShops();
 
@@ -366,7 +366,7 @@ export default class Home extends React.Component {
   _onReceived(notification) {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-      new Event('Push Notification', 'Received', notification.payload.body)
+      new Event('Push Notification', 'Received', notification.payload.body),
     );
   }
 
@@ -376,8 +376,8 @@ export default class Home extends React.Component {
       new Event(
         'Push Notification',
         'Open',
-        openResult.notification.payload.body
-      )
+        openResult.notification.payload.body,
+      ),
     );
   }
 
@@ -391,52 +391,52 @@ export default class Home extends React.Component {
       nextAppState === 'active'
     ) {
       console.log('active');
-      this.setState({ refresh_products: true });
+      this.setState({refresh_products: true});
       this.getLocationAndLoadShops();
       console.log('--getlocation439--');
     }
     this.setState({
       appState: nextAppState,
-      visible: false
+      visible: false,
     });
   };
 
   handleBackPress = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     if (!navigation.isFocused()) {
       // The screen is not focused, so don't do anything
       return false;
     } else {
       const activeRoute = navigation.state.routeName == 'Home' ? true : false;
       if (activeRoute) {
-        this.setState({ visible: true });
+        this.setState({visible: true});
       }
     }
   };
 
   loadStorePushToken = (token) => {
-    const { dispatch, currentMember } = this.props;
+    const {dispatch, currentMember} = this.props;
     const callback = (eventObject) => {};
     const obj = new PushRequestObject(
       Constants.installationId,
       Constants.deviceName,
       token,
-      Platform.OS
+      Platform.OS,
     );
     if (currentMember != null) {
       obj.setUrlId(currentMember.id);
       dispatch(
         createAction('members/loadStorePushToken')({
           object: obj,
-          callback
-        })
+          callback,
+        }),
       );
     }
   };
 
   loadShops() {
     const callback = () => {
-      const { shop, location, responses } = this.props;
+      const {shop, location, responses} = this.props;
 
       if (shop === null) {
         let message =
@@ -460,8 +460,8 @@ export default class Home extends React.Component {
 
         this.refs.toast.show(message, 1000, callback);
       } else {
-        const { menu_banners } = shop;
-        const { first_promo_popup, refresh_products } = this.state;
+        const {menu_banners} = shop;
+        const {first_promo_popup, refresh_products} = this.state;
         const callback = () => {
           this.check_promotion_trigger();
           this.computeDistance();
@@ -475,34 +475,41 @@ export default class Home extends React.Component {
           }
         };
 
-        this.setState({ menu_banners }, callback);
+        this.setState({menu_banners}, callback);
       }
     };
-    this.props.dispatch(createAction('config/loadConfig')({ callback }));
+    this.props.dispatch(createAction('config/loadConfig')({callback}));
   }
 
   loadStoreProducts() {
     const {
       dispatch,
-      shop: { id }
+      shop: {id},
     } = this.props;
-    const { menu_banners } = this.state;
-    this.setState({ products: [] });
+    const {menu_banners} = this.state;
+    this.setState({products: []});
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
-          const { message } = eventObject;
+          const {message} = eventObject;
           const callback = () => {
             Linking.openURL(eventObject.result.url);
           };
-          this.refs.toast.show(message, TOAST_DURATION, callback);
+          const updateText = getResponseMsg({
+            props: this.props,
+            shopId: id,
+            key: 'FORCE_UPDATE',
+            defaultText:
+              'We have added new exciting features. Please update to continue.',
+          });
+          this.refs.toast.show(updateText, TOAST_DURATION, callback);
         } else {
           this.setState(
             {
               data: eventObject.result,
               total: eventObject.total,
               page: this.state.page + 1,
-              refresh_products: false
+              refresh_products: false,
             },
             function () {
               let data = [...this.state.data];
@@ -519,19 +526,19 @@ export default class Home extends React.Component {
               this.setState(
                 {
                   products: menu_banners.concat(items),
-                  data: data
+                  data: data,
                 },
                 function () {
                   this.check_promotion_trigger();
-                }
+                },
               );
-            }.bind(this)
+            }.bind(this),
           );
         }
       }
       this.setState({
         isRefreshing: false,
-        loading: false
+        loading: false,
       });
     };
 
@@ -540,8 +547,8 @@ export default class Home extends React.Component {
     dispatch(
       createAction('products/loadStoreProducts')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
@@ -556,22 +563,22 @@ export default class Home extends React.Component {
         isRefreshing: true,
         data: [],
         products: [],
-        refresh_products: true
+        refresh_products: true,
       },
-      callback
+      callback,
     );
   }
 
   onCheckoutPressed = () => {
-    const { member_distance, delivery } = this.state;
-    const { navigate } = this.props.navigation;
+    const {member_distance, delivery} = this.state;
+    const {navigate} = this.props.navigation;
     const {
       navigation,
       dispatch,
       currentMember,
       shop,
       cart,
-      promotions
+      promotions,
     } = this.props;
 
     if (currentMember != undefined) {
@@ -586,7 +593,7 @@ export default class Home extends React.Component {
         'willFocus',
         (payload) => {
           this.removeNavigationListener();
-          const { clearCart } = this.props;
+          const {clearCart} = this.props;
 
           if (clearCart == true) {
             console.log('--loadshops604--');
@@ -594,11 +601,11 @@ export default class Home extends React.Component {
             navigate('PickUp');
           } else {
           }
-        }
+        },
       );
 
       navigate('Checkout', {
-        returnToRoute: navigation.state
+        returnToRoute: navigation.state,
       });
       // }
     } else {
@@ -608,11 +615,11 @@ export default class Home extends React.Component {
           this.removeNavigationListener();
           this.loadShops();
           console.log('--loadshops633--');
-        }
+        },
       );
       navigate('VerifyUser', {
         returnToRoute: navigation.state,
-        check_promotion_trigger: () => this.check_promotion_trigger()
+        check_promotion_trigger: () => this.check_promotion_trigger(),
       });
     }
   };
@@ -629,12 +636,12 @@ export default class Home extends React.Component {
 
     if (productId) {
       // Banner linked to a product
-      const { products } = this.state;
+      const {products} = this.state;
 
       products.forEach((item, index) => {
         if (item.id === productId) {
           if (index < products.length) {
-            this.flatListRef.scrollToIndex({ animated: true, index });
+            this.flatListRef.scrollToIndex({animated: true, index});
           }
 
           this.onCellPress(null, index);
@@ -643,27 +650,27 @@ export default class Home extends React.Component {
       });
     } else {
       // Banner just a promo image
-      const { banner_detail_image } = item;
+      const {banner_detail_image} = item;
 
       if (banner_detail_image) {
         const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
 
         this.calculateImageDimension(selected_promotion);
-        this.setState({ isPromoToggle, selected_promotion });
+        this.setState({isPromoToggle, selected_promotion});
       }
     }
   };
 
   _toggleDelivery = (value) => {
     console.log(this.props.responses);
-    const { dispatch, shop } = this.props;
+    const {dispatch, shop} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
     let delivery = value == 1 ? true : false;
 
     if (delivery && shop.delivery_option == false) {
-      this.setState({ delivery: 0 }, () => {
+      this.setState({delivery: 0}, () => {
         this.refs.toggle.toggleItem(0, false);
 
         var msg =
@@ -682,10 +689,10 @@ export default class Home extends React.Component {
     this.setState({
       data,
       selected_category: selected_index,
-      scroll_Index: scroll_index
+      scroll_Index: scroll_index,
     });
     if (scroll_index < this.state.products.length) {
-      this.flatListRef.scrollToIndex({ animated: true, index: scroll_index });
+      this.flatListRef.scrollToIndex({animated: true, index: scroll_index});
     }
   };
 
@@ -725,12 +732,12 @@ export default class Home extends React.Component {
           break;
         }
       }
-      this.setState({ data });
+      this.setState({data});
     }
   };
 
   onMorePressed = () => {
-    const { isToggleShopLocation, dispatch } = this.props;
+    const {isToggleShopLocation, dispatch} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Location'));
     if (isToggleShopLocation) {
@@ -741,8 +748,8 @@ export default class Home extends React.Component {
   };
 
   getCartHeight() {
-    const { cart, promotions } = this.props;
-    const { product_view_height } = this.state;
+    const {cart, promotions} = this.props;
+    const {product_view_height} = this.state;
     var headerHeight = 31 * alpha;
     // var height = (cart.length * 71) * alpha + (promotions.length * 71) * alpha
     var height = cart.length * 71 * alpha;
@@ -779,15 +786,15 @@ export default class Home extends React.Component {
       // }
     } else {
       if (!toggleOn) {
-        this.setState({ isCartToggle: false }, function () {
+        this.setState({isCartToggle: false}, function () {
           Animated.spring(this.moveAnimation, {
-            toValue: { x: 0, y: windowHeight }
+            toValue: {x: 0, y: windowHeight},
           }).start();
         });
       } else {
-        this.setState({ isCartToggle: true }, function () {
+        this.setState({isCartToggle: true}, function () {
           Animated.spring(this.moveAnimation, {
-            toValue: { x: 0, y: this.getCartHeight() }
+            toValue: {x: 0, y: this.getCartHeight()},
           }).start();
         });
       }
@@ -797,12 +804,12 @@ export default class Home extends React.Component {
   measureView(event) {
     if (this.state.product_view_height == 0) {
       this.setState({
-        product_view_height: event.nativeEvent.layout.height
+        product_view_height: event.nativeEvent.layout.height,
       });
     }
   }
 
-  renderPopOutCartFlatListCell = ({ item, index }) => {
+  renderPopOutCartFlatListCell = ({item, index}) => {
     if (item.clazz == 'product') {
       return (
         <CartCell
@@ -828,7 +835,7 @@ export default class Home extends React.Component {
     }
   };
 
-  renderCategorylistFlatListCell = ({ item, index }) => {
+  renderCategorylistFlatListCell = ({item, index}) => {
     return (
       <CategoryCell
         navigation={this.props.navigation}
@@ -844,7 +851,7 @@ export default class Home extends React.Component {
     );
   };
 
-  renderProductlistFlatListCell = ({ item, index }) => {
+  renderProductlistFlatListCell = ({item, index}) => {
     if (item) {
       if (item.clazz == 'product') {
         return (
@@ -909,17 +916,17 @@ export default class Home extends React.Component {
     if (this.state.isCartToggle) {
       this.toggleCartView(false, true);
     }
-    this.setState({ modalVisible: true, selected_index: index });
+    this.setState({modalVisible: true, selected_index: index});
   };
 
   onChangeQuantityPress = (item, index, operation, isCart) => {
-    const { cart_total, dispatch } = this.props;
+    const {cart_total, dispatch} = this.props;
 
     let cart = [...this.props.cart];
 
     if (isCart) {
       var product_index = this.state.products.findIndex(
-        (element) => element.id == item.id && element.clazz == 'product'
+        (element) => element.id == item.id && element.clazz == 'product',
       );
 
       var item = this.state.products[product_index];
@@ -932,7 +939,7 @@ export default class Home extends React.Component {
         image: item.image,
         price: selected_cart.price,
         selected_variants: selected_cart.selected_variants,
-        quantity: selected_cart.quantity
+        quantity: selected_cart.quantity,
       };
 
       if (operation === 'add') {
@@ -951,14 +958,14 @@ export default class Home extends React.Component {
           cart[index] = cartItem;
           dispatch(
             createAction('orders/updateCart')({
-              cart
-            })
+              cart,
+            }),
           );
         } else {
           dispatch(
             createAction('orders/updateCart')({
-              cart: this.props.cart.concat(cartItem)
-            })
+              cart: this.props.cart.concat(cartItem),
+            }),
           );
         }
       } else {
@@ -988,8 +995,8 @@ export default class Home extends React.Component {
 
         dispatch(
           createAction('orders/updateCart')({
-            cart
-          })
+            cart,
+          }),
         );
       }
     } else {
@@ -1002,7 +1009,7 @@ export default class Home extends React.Component {
         description: item.description,
         image: item.image,
         price: item.price,
-        quantity: item.quantity
+        quantity: item.quantity,
       };
 
       var cart_index = cart.findIndex((element) => element.id == item.id);
@@ -1022,14 +1029,14 @@ export default class Home extends React.Component {
           cart[cart_index] = cartItem;
           dispatch(
             createAction('orders/updateCart')({
-              cart
-            })
+              cart,
+            }),
           );
         } else {
           dispatch(
             createAction('orders/updateCart')({
-              cart: this.props.cart.concat(cartItem)
-            })
+              cart: this.props.cart.concat(cartItem),
+            }),
           );
         }
       } else {
@@ -1055,8 +1062,8 @@ export default class Home extends React.Component {
         ).toFixed(2);
         dispatch(
           createAction('orders/updateCart')({
-            cart
-          })
+            cart,
+          }),
         );
       }
 
@@ -1080,13 +1087,7 @@ export default class Home extends React.Component {
   }
 
   check_promotion_trigger = () => {
-    const {
-      currentMember,
-      dispatch,
-      promotions,
-      cart_total,
-      shop
-    } = this.props;
+    const {currentMember, dispatch, promotions, cart_total, shop} = this.props;
 
     let newcart = [...this.props.cart];
     let finalCart = [];
@@ -1128,10 +1129,10 @@ export default class Home extends React.Component {
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = (cart_total * discount_value) / 100;
                   price = this.roundOff(
-                    (final_cart_value * discount_value) / 100
+                    (final_cart_value * discount_value) / 100,
                   );
                   roundedPrice = this.roundOff(
-                    (final_cart_value * discount_value) / 100
+                    (final_cart_value * discount_value) / 100,
                   );
 
                   if (
@@ -1158,7 +1159,7 @@ export default class Home extends React.Component {
                 description: '',
                 price: price,
                 type: promotion.reward_type,
-                roundedPrice: roundedPrice
+                roundedPrice: roundedPrice,
               };
 
               promotions_item.push(cartItem);
@@ -1166,7 +1167,7 @@ export default class Home extends React.Component {
               var display_text = promotion.display_text;
               final_promo_text = display_text.replace(
                 '$remaining',
-                `$${parseFloat(remaining).toFixed(2)}`
+                `$${parseFloat(remaining).toFixed(2)}`,
               );
 
               break;
@@ -1178,9 +1179,9 @@ export default class Home extends React.Component {
 
     if (this.props.cart.length == 0) {
       final_promo_text = '';
-      this.setState({ isCartToggle: false }, function () {
+      this.setState({isCartToggle: false}, function () {
         Animated.spring(this.moveAnimation, {
-          toValue: { x: 0, y: windowHeight }
+          toValue: {x: 0, y: windowHeight},
         }).start();
       });
     } else {
@@ -1188,38 +1189,38 @@ export default class Home extends React.Component {
 
     dispatch(
       createAction('orders/updatePromotionText')({
-        promotionText: final_promo_text
-      })
+        promotionText: final_promo_text,
+      }),
     );
     dispatch(
       createAction('orders/updatePromotions')({
-        promotions: promotions_item
-      })
+        promotions: promotions_item,
+      }),
     );
 
     dispatch(
       createAction('orders/updateDiscountCartTotal')({
-        discount_cart_total: final_cart_value
-      })
+        discount_cart_total: final_cart_value,
+      }),
     );
   };
 
   updateCartHeight() {
     if (this.state.isCartToggle) {
       Animated.spring(this.moveAnimation, {
-        toValue: { x: 0, y: this.getCartHeight() }
+        toValue: {x: 0, y: this.getCartHeight()},
       }).start();
     }
   }
 
   onAddToCartPressed = (product) => {
     let cart = [...this.props.cart];
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     const clone_variants = _.cloneDeep(product.selected_variants);
     const search_cart_index = cart.findIndex(
       (element) =>
         element.id == product.id &&
-        _.isEqual(product.selected_variants, element.selected_variants)
+        _.isEqual(product.selected_variants, element.selected_variants),
     );
 
     var search_cart = cart[search_cart_index];
@@ -1232,26 +1233,26 @@ export default class Home extends React.Component {
       image: product.image,
       price: product.calculated_price,
       quantity: this.state.select_quantity,
-      selected_variants: clone_variants
+      selected_variants: clone_variants,
     };
 
     product.total_quantity =
       parseInt(product.total_quantity) + parseInt(this.state.select_quantity);
 
     if (search_cart) {
-      const { quantity } = search_cart;
-      const { select_quantity } = this.state;
+      const {quantity} = search_cart;
+      const {select_quantity} = this.state;
       search_cart.quantity = parseInt(quantity) + parseInt(select_quantity);
-      dispatch(createAction('orders/updateCart')({ cart }));
+      dispatch(createAction('orders/updateCart')({cart}));
     } else {
       cart = cart.concat(cartItem);
-      dispatch(createAction('orders/updateCart')({ cart }));
+      dispatch(createAction('orders/updateCart')({cart}));
     }
 
     this.check_promotion_trigger();
     this.setState({
       select_quantity: 1,
-      modalVisible: false
+      modalVisible: false,
     });
   };
 
@@ -1260,16 +1261,16 @@ export default class Home extends React.Component {
       modalVisible: false,
       isPromoToggle: false,
       image_check: false,
-      select_quantity: 1
+      select_quantity: 1,
     });
   };
 
   onClearPress = () => {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     const promotionText = '';
 
     dispatch(createAction('orders/resetCart')());
-    dispatch(createAction('orders/updatePromotionText')({ promotionText }));
+    dispatch(createAction('orders/updatePromotionText')({promotionText}));
     this.toggleCartView(false, false);
 
     for (var index in this.state.products) {
@@ -1279,7 +1280,7 @@ export default class Home extends React.Component {
   };
 
   calculateImageDimension(selected_promotion) {
-    const { image_check } = this.state;
+    const {image_check} = this.state;
     let image_width = 0;
     let image_height = 0;
     var image_long = false;
@@ -1298,13 +1299,13 @@ export default class Home extends React.Component {
           this.setState({
             image_isHorizontal: true,
             image_check: true,
-            image_isLong: image_long
+            image_isLong: image_long,
           });
         } else {
           this.setState({
             image_isHorizontal: false,
             image_check: true,
-            image_isLong: image_long
+            image_isLong: image_long,
           });
         }
       });
@@ -1312,21 +1313,21 @@ export default class Home extends React.Component {
   }
 
   onFeaturedPromotionPressed(item) {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     if (item.image.url != undefined && item.image.url != '') {
       // let should_show = this.shouldShowFeatured(this.props.shop)
       // if (should_show == true) {
       this.setState(
         {
           selected_promotion: item.image.url,
-          first_promo_popup: true
+          first_promo_popup: true,
         },
         function () {
           this.setState({
-            isPromoToggle: true
+            isPromoToggle: true,
           });
           this.calculateImageDimension(item.image.url);
-        }
+        },
       );
       // }
     }
@@ -1380,7 +1381,7 @@ export default class Home extends React.Component {
     selected_variants,
     key,
     selected_value,
-    required
+    required,
   ) => {
     let selected_item = selected_value;
     if (!required && selected_variants[key] === selected_value) {
@@ -1394,7 +1395,7 @@ export default class Home extends React.Component {
     let total = filtered.reduce((a, b) => +a + +b.price, 0);
     total = parseFloat(total);
 
-    let { discounted_price, price } = selected_product;
+    let {discounted_price, price} = selected_product;
     discounted_price = parseFloat(discounted_price);
     price = parseFloat(price);
 
@@ -1403,12 +1404,12 @@ export default class Home extends React.Component {
     selected_product.calculated_price = _price + total;
 
     this.setState({
-      products: this.state.products
+      products: this.state.products,
     });
   };
 
   dismissProduct() {
-    this.setState({ modalVisible: false });
+    this.setState({modalVisible: false});
   }
 
   getVariantPrice = (price) => {
@@ -1446,15 +1447,13 @@ export default class Home extends React.Component {
               ? styles.ingredientHighlightView
               : styles.ingredientView
           }
-          key={key}
-        >
+          key={key}>
           <Text
             style={
               item.highlight
                 ? styles.ingredientHighlightText
                 : styles.ingredientText
-            }
-          >
+            }>
             {item.name}
           </Text>
         </View>
@@ -1481,13 +1480,12 @@ export default class Home extends React.Component {
                       selected_variants,
                       key,
                       value,
-                      required_variant
+                      required_variant,
                     )
                   }
                   style={
                     selected ? styles.selectedButton : styles.unselectedButton
-                  }
-                >
+                  }>
                   {value.recommended && (
                     <Image
                       source={require('./../../assets/images/star.png')}
@@ -1499,10 +1497,9 @@ export default class Home extends React.Component {
                       selected
                         ? styles.selectedButtonText
                         : styles.unselectedButtonText
-                    }
-                  >
+                    }>
                     {value.value}{' '}
-                    <Text style={{ color: selected ? 'white' : PRIMARY_COLOR }}>
+                    <Text style={{color: selected ? 'white' : PRIMARY_COLOR}}>
                       {value.price > 0 && `$${price}`}
                     </Text>
                   </Text>
@@ -1519,33 +1516,31 @@ export default class Home extends React.Component {
         <View style={styles.topbuttonView}>
           <TouchableOpacity
             onPress={this.onClosePressed}
-            style={styles.closeButton}
-          >
+            style={styles.closeButton}>
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
         <ImageCell product={selected_product} image={selected_product.image} />
 
-        <View pointerEvents="box-none">
+        <View pointerEvents='box-none'>
           <ScrollView style={styles.contentScrollView}>
             <View style={styles.productView}>
               <Text style={styles.nameText}>{selected_product.name}</Text>
               <View
                 style={{
-                  flex: 1
+                  flex: 1,
                 }}
               />
               {selected_product.ingredients && (
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     alignSelf: 'flex-start',
                     flex: 1,
                     marginLeft: 1 * alpha,
                     flexDirection: 'row',
-                    flexWrap: 'wrap'
-                  }}
-                >
+                    flexWrap: 'wrap',
+                  }}>
                   {ingredients}
                 </View>
               )}
@@ -1565,13 +1560,12 @@ export default class Home extends React.Component {
               <View style={styles.lineView} />
               <View style={styles.summaryView}>
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     // height: 32 * alpha,
-                    flexDirection: 'row'
+                    flexDirection: 'row',
                     // alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text style={styles.priceText}>
                     $
                     {selected_product.calculated_price
@@ -1580,24 +1574,23 @@ export default class Home extends React.Component {
                   </Text>
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <View style={styles.controlView}>
                     <View
-                      pointerEvents="box-none"
+                      pointerEvents='box-none'
                       style={{
                         position: 'absolute',
                         alignSelf: 'center',
                         top: 0 * alpha,
                         bottom: 0 * alpha,
-                        justifyContent: 'center'
-                      }}
-                    >
+                        justifyContent: 'center',
+                      }}>
                       <Text style={styles.quantityText}>{select_quantity}</Text>
                     </View>
                     <View
-                      pointerEvents="box-none"
+                      pointerEvents='box-none'
                       style={{
                         position: 'absolute',
                         left: 0 * alpha,
@@ -1605,18 +1598,16 @@ export default class Home extends React.Component {
                         top: 0 * alpha,
                         height: 23 * alpha,
                         flexDirection: 'row',
-                        alignItems: 'flex-start'
-                      }}
-                    >
+                        alignItems: 'flex-start',
+                      }}>
                       <TouchableOpacity
                         onPress={() => {
                           if (select_quantity > 1 && enabled == true)
                             this.setState({
-                              select_quantity: (select_quantity -= 1)
+                              select_quantity: (select_quantity -= 1),
                             });
                         }}
-                        style={styles.removeButton}
-                      >
+                        style={styles.removeButton}>
                         <Image
                           source={require('./../../assets/images/button-4.png')}
                           style={styles.removeButtonImage}
@@ -1624,18 +1615,17 @@ export default class Home extends React.Component {
                       </TouchableOpacity>
                       <View
                         style={{
-                          flex: 1
+                          flex: 1,
                         }}
                       />
                       <TouchableOpacity
                         onPress={() => {
                           if (select_quantity < order_limit && enabled == true)
                             this.setState({
-                              select_quantity: (select_quantity += 1)
+                              select_quantity: (select_quantity += 1),
                             });
                         }}
-                        style={styles.addButton}
-                      >
+                        style={styles.addButton}>
                         <Image
                           source={require('./../../assets/images/add-18.png')}
                           style={styles.addButtonImage}
@@ -1646,7 +1636,7 @@ export default class Home extends React.Component {
                 </View>
                 <View
                   style={{
-                    flex: 1
+                    flex: 1,
                   }}
                 />
                 <Text style={styles.optionsText}>
@@ -1660,13 +1650,12 @@ export default class Home extends React.Component {
                   enabled
                     ? [styles.addToCartButton, styles.normal]
                     : [styles.addToCartButton, styles.disabled]
-                }
-              >
+                }>
                 <Text style={styles.addToCartButtonText}>Add to Cart</Text>
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={{ height: 10 * alpha }}></View>
+            <View style={{height: 10 * alpha}}></View>
           )}
         </View>
       </View>
@@ -1675,8 +1664,8 @@ export default class Home extends React.Component {
 
   render() {
     let selected_product = this.get_product(this.state.selected_index);
-    let { delivery, distance } = this.state;
-    let { isToggleShopLocation, cart, promotions, shop } = this.props;
+    let {delivery, distance} = this.state;
+    let {isToggleShopLocation, cart, promotions, shop} = this.props;
     let categoryBottomSpacer = undefined;
     let renderBottom = this.renderBottom;
     // let should_show = this.shouldShowFeatured(shop)
@@ -1713,15 +1702,14 @@ export default class Home extends React.Component {
         {shop !== null && (
           <View style={styles.topsectionView}>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 height: 31 * alpha,
                 marginLeft: 10 * alpha,
                 marginRight: 10 * alpha,
                 marginTop: 8 * alpha,
-                flexDirection: 'row'
-              }}
-            >
+                flexDirection: 'row',
+              }}>
               <View style={styles.branchView}>
                 {/* <TouchableOpacity
 							onPress={this.onBranchPressed}
@@ -1729,31 +1717,27 @@ export default class Home extends React.Component {
 
                 <TouchableOpacity
                   onPress={this._onShopNamePressed}
-                  style={styles.selectShopButton}
-                >
+                  style={styles.selectShopButton}>
                   <Text style={styles.branchButtonText}>
                     {shop ? shop.name : ''}
                   </Text>
                   <Image
                     source={require('./../../assets/images/next.png')}
-                    style={[
-                      styles.rightArrowImage,
-                      { tintColor: PRIMARY_COLOR }
-                    ]}
+                    style={[styles.rightArrowImage, {tintColor: PRIMARY_COLOR}]}
                   />
                 </TouchableOpacity>
 
                 {/* </TouchableOpacity> */}
               </View>
 
-              <View style={{ flex: 1 }} />
+              <View style={{flex: 1}} />
               <View style={styles.pickUpDeliveryView}>
                 {shop && (
                   <SwitchSelector
-                    ref="toggle"
+                    ref='toggle'
                     options={[
-                      { label: 'Pick Up', value: 0 },
-                      { label: 'Delivery', value: 1 }
+                      {label: 'Pick Up', value: 0},
+                      {label: 'Delivery', value: 1},
                     ]}
                     initial={this.state.delivery}
                     value={this.state.delivery}
@@ -1772,7 +1756,7 @@ export default class Home extends React.Component {
               </View>
             </View>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 height: 14 * alpha,
                 marginLeft: 10 * alpha,
@@ -1780,25 +1764,22 @@ export default class Home extends React.Component {
                 marginTop: 7 * alpha,
                 flexDirection: 'row',
                 alignItems: 'flex-start',
-                justifyContent: 'space-between'
-              }}
-            >
+                justifyContent: 'space-between',
+              }}>
               <TouchableOpacity onPress={this._onShopNamePressed}>
                 <Text
                   style={[
                     styles.distance1kmText,
-                    { color: 'rgb(130, 130, 130)', marginTop: -10 }
-                  ]}
-                >
+                    {color: 'rgb(130, 130, 130)', marginTop: -10},
+                  ]}>
                   Change Location
                 </Text>
               </TouchableOpacity>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{flexDirection: 'row'}}>
                 <View style={styles.moreView}>
                   <TouchableOpacity
                     onPress={this.onMorePressed}
-                    style={styles.moreButton}
-                  >
+                    style={styles.moreButton}>
                     <Text style={styles.distance1kmText}>
                       {isToggleShopLocation ? 'Hide' : 'Store Info'}
                     </Text>
@@ -1825,8 +1806,7 @@ export default class Home extends React.Component {
         ) : (
           <View
             style={styles.productsectionView}
-            onLayout={(event) => this.measureView(event)}
-          >
+            onLayout={(event) => this.measureView(event)}>
             <View style={[styles.categorylistFlatListViewWrapper]}>
               <FlatList
                 renderItem={this.renderCategorylistFlatListCell}
@@ -1840,7 +1820,7 @@ export default class Home extends React.Component {
             </View>
             <View
               style={{
-                flex: 1
+                flex: 1,
               }}
             />
             <View
@@ -1848,8 +1828,7 @@ export default class Home extends React.Component {
                 !renderBottom
                   ? styles.productlistFlatListViewWrapper
                   : styles.productlistFlatListViewWrapperwithALert
-              }
-            >
+              }>
               {this.state.loading ? undefined : (
                 <FlatList
                   renderItem={this.renderProductlistFlatListCell}
@@ -1858,7 +1837,7 @@ export default class Home extends React.Component {
                   onScrollToIndexFailed={(error) => {
                     this.flatListRef.scrollToOffset({
                       offset: error.averageItemLength * error.index,
-                      animated: true
+                      animated: true,
                     });
                     setTimeout(() => {
                       if (
@@ -1867,7 +1846,7 @@ export default class Home extends React.Component {
                       ) {
                         this.flatListRef.scrollToIndex({
                           index: error.index,
-                          animated: true
+                          animated: true,
                         });
                       }
                     }, 5);
@@ -1880,7 +1859,7 @@ export default class Home extends React.Component {
                   onRefresh={this.onRefresh.bind(this)}
                   onViewableItemsChanged={this.reachProductIndex}
                   onScrollBeginDrag={() => {
-                    this.setState({ scroll_Index: null });
+                    this.setState({scroll_Index: null});
                   }}
                   keyExtractor={(item, index) => index.toString()}
                 />
@@ -1897,7 +1876,7 @@ export default class Home extends React.Component {
                 latitude: shop ? parseFloat(shop.latitude) : 0.0,
                 longitude: shop ? parseFloat(shop.longitude) : 0.0,
                 latitudeDelta: 0.004,
-                longitudeDelta: 0.004
+                longitudeDelta: 0.004,
               }}
               onMapReady={() =>
                 this.marker &&
@@ -1908,17 +1887,16 @@ export default class Home extends React.Component {
               <Marker
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
-                  longitude: shop ? parseFloat(shop.longitude) : 0.0
+                  longitude: shop ? parseFloat(shop.longitude) : 0.0,
                 }}
-                style={{ alignItems: 'center' }}
-              >
+                style={{alignItems: 'center'}}>
                 <View style={styles.areaBubble}>
                   <Text style={styles.areaText}>{shop.name}</Text>
                 </View>
                 <Image
                   source={require('./../../assets/images/location.png')}
                   style={styles.pinImage}
-                  resizeMode="contain"
+                  resizeMode='contain'
                 />
               </Marker>
             </MapView>
@@ -1926,10 +1904,9 @@ export default class Home extends React.Component {
               contentContainerStyle={{
                 paddingHorizontal: 15 * alpha,
                 paddingTop: 15 * alpha,
-                paddingBottom: 100 * alpha
+                paddingBottom: 100 * alpha,
               }}
-              showsVerticalScrollIndicator={false}
-            >
+              showsVerticalScrollIndicator={false}>
               <Text style={styles.branchHeaderAddress}>Address </Text>
               <Text style={styles.branchAddress}>
                 {shop ? shop.address : ''}
@@ -1948,13 +1925,11 @@ export default class Home extends React.Component {
         )}
 
         <Animated.View
-          style={[styles.cartsummaryviewView, this.moveAnimation.getLayout()]}
-        >
+          style={[styles.cartsummaryviewView, this.moveAnimation.getLayout()]}>
           <View style={styles.clearAllView}>
             <TouchableOpacity
               onPress={this.onClearPress}
-              style={styles.clearButton}
-            >
+              style={styles.clearButton}>
               <Image
                 source={require('./../../assets/images/group-14-13.png')}
                 style={styles.clearButtonImage}
@@ -1980,14 +1955,13 @@ export default class Home extends React.Component {
           <Modal
             isVisible={this.state.modalVisible}
             onBackdropPress={() => this.dismissProduct()}
-            hideModalContentWhileAnimating={true}
-          >
+            hideModalContentWhileAnimating={true}>
             {this.renderModalContent(selected_product, shop)}
           </Modal>
         ) : null}
 
         {this.renderGallery()}
-        <Brew9Toast ref="toast" />
+        <Brew9Toast ref='toast' />
 
         <Brew9Modal
           visible={this.state.visible}
@@ -1997,7 +1971,7 @@ export default class Home extends React.Component {
           okayButtonAction={() => {
             RNExitApp.exitApp();
           }}
-          cancelButtonAction={() => this.setState({ visible: false })}
+          cancelButtonAction={() => this.setState({visible: false})}
         />
 
         <Brew9Modal
@@ -2009,7 +1983,7 @@ export default class Home extends React.Component {
             if (this.state.url != null && this.state.url != '') {
               Linking.openURL(this.state.url);
             } else {
-              this.setState({ popUpVisible: false });
+              this.setState({popUpVisible: false});
             }
           }}
         />
@@ -2044,7 +2018,7 @@ export default class Home extends React.Component {
   }
 
   shouldShowFeatured(shop) {
-    const { currentMember } = this.props;
+    const {currentMember} = this.props;
     //jira
     // this.onFeaturedPromotionPressed(shop.featured_promotion);
     if (shop) {
@@ -2059,7 +2033,7 @@ export default class Home extends React.Component {
               ) {
                 AsyncStorage.setItem(
                   'featured',
-                  JSON.stringify(shop.featured_promotion.id)
+                  JSON.stringify(shop.featured_promotion.id),
                 );
                 this.onFeaturedPromotionPressed(shop.featured_promotion);
               } else if (
@@ -2068,14 +2042,14 @@ export default class Home extends React.Component {
               ) {
                 AsyncStorage.setItem(
                   'featured',
-                  JSON.stringify(shop.featured_promotion.id)
+                  JSON.stringify(shop.featured_promotion.id),
                 );
                 this.onFeaturedPromotionPressed(shop.featured_promotion);
               }
             } else {
               AsyncStorage.setItem(
                 'featured',
-                JSON.stringify(shop.featured_promotion.id)
+                JSON.stringify(shop.featured_promotion.id),
               );
               this.onFeaturedPromotionPressed(shop.featured_promotion);
             }
@@ -2115,10 +2089,9 @@ export default class Home extends React.Component {
           onPress={() =>
             this.onFeaturedPromotionPressed(shop.featured_promotion)
           }
-          style={[style, styles.featuredpromoButton]}
-        >
+          style={[style, styles.featuredpromoButton]}>
           <Image
-            source={{ uri: shop.featured_promotion.icon.url }}
+            source={{uri: shop.featured_promotion.icon.url}}
             style={styles.featuredpromoButtonImage}
           />
         </TouchableOpacity>
@@ -2130,7 +2103,7 @@ export default class Home extends React.Component {
   }
 
   renderPromotionTopBar() {
-    const { currentPromoText } = this.props;
+    const {currentPromoText} = this.props;
 
     if (currentPromoText.length > 0) {
       return (
@@ -2147,24 +2120,23 @@ export default class Home extends React.Component {
   }
 
   renderBottomBar(cart, shop) {
-    const { cart_total_quantity, cart_total } = this.props;
+    const {cart_total_quantity, cart_total} = this.props;
     if (cart.length > 0) {
       return (
         <View style={styles.cartView}>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               position: 'absolute',
               left: 0 * alpha,
               top: 0 * alpha,
               bottom: 0 * alpha,
-              justifyContent: 'center'
-            }}
-          >
+              justifyContent: 'center',
+            }}>
             <View style={styles.totalAmountView}>
               <View style={styles.rectangleView} />
               <View
-                pointerEvents="box-none"
+                pointerEvents='box-none'
                 style={{
                   position: 'absolute',
                   left: 28 * alpha,
@@ -2173,25 +2145,22 @@ export default class Home extends React.Component {
                   height: 45 * alpha,
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
+                  justifyContent: 'space-between',
+                }}>
                 <View style={styles.shopppingCartView}>
                   <TouchableOpacity
                     onPress={() =>
                       this.toggleCartView(false, !this.state.isCartToggle)
                     }
-                    style={styles.shopppingCartButton}
-                  >
+                    style={styles.shopppingCartButton}>
                     <View style={styles.group5View}>
                       <View
-                        pointerEvents="box-none"
+                        pointerEvents='box-none'
                         style={{
                           width: 15 * alpha,
                           marginTop: 1 * alpha,
-                          marginBottom: 4 * alpha
-                        }}
-                      >
+                          marginBottom: 4 * alpha,
+                        }}>
                         <Image
                           source={require('./../../assets/images/shopping-bag.png')}
                           style={styles.cartImage}
@@ -2199,7 +2168,7 @@ export default class Home extends React.Component {
                       </View>
                       <View
                         style={{
-                          flex: 1
+                          flex: 1,
                         }}
                       />
                       <Text style={styles.shoppingCartText}>Cart</Text>
@@ -2224,8 +2193,7 @@ export default class Home extends React.Component {
           <View style={styles.checkoutButtonView}>
             <TouchableOpacity
               onPress={() => this.onCheckoutPressed()}
-              style={styles.checkoutButton}
-            >
+              style={styles.checkoutButton}>
               <Text style={styles.checkoutButtonText}>Checkout</Text>
             </TouchableOpacity>
           </View>
@@ -2240,19 +2208,18 @@ export default class Home extends React.Component {
       image_isHorizontal,
       isPromoToggle,
       image_isLong,
-      selected_promotion
+      selected_promotion,
     } = this.state;
     if (selected_promotion && isPromoToggle) {
       return (
         <Modal
           visible={isPromoToggle}
-          style={{ margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
-        >
+          style={{margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
           {/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
           <View style={styles.loading}>
-            <ActivityIndicator size="large" color="white" />
+            <ActivityIndicator size='large' color='white' />
           </View>
-          <ScrollView style={{ horizontal: true, flex: 1 }}>
+          <ScrollView style={{horizontal: true, flex: 1}}>
             <View
               style={
                 image_isHorizontal
@@ -2260,18 +2227,16 @@ export default class Home extends React.Component {
                   : !image_isHorizontal && !image_isLong
                   ? styles.bannerShortImage
                   : styles.bannerImage
-              }
-            >
+              }>
               <AutoHeightImage
-                source={{ uri: selected_promotion }}
+                source={{uri: selected_promotion}}
                 width={windowWidth}
               />
             </View>
           </ScrollView>
           <TouchableOpacity
             onPress={() => this.onClosePressed()}
-            style={styles.closeGalleryButton}
-          >
+            style={styles.closeGalleryButton}>
             <Text style={styles.closeGalleryButtonText}>X</Text>
           </TouchableOpacity>
         </Modal>
@@ -2283,40 +2248,40 @@ export default class Home extends React.Component {
 const styles = StyleSheet.create({
   navigationBarItem: {},
   loadingIndicator: {
-    marginTop: 100 * alpha
+    marginTop: 100 * alpha,
   },
   loading: {
     position: 'absolute',
     width: '100%',
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   navigationBarItemIcon: {
-    tintColor: 'rgb(0, 194, 236)'
+    tintColor: 'rgb(0, 194, 236)',
   },
   navigationBarRightItemIcon: {
     resizeMode: 'contain',
-    tintColor: TABBAR_INACTIVE_TINT
+    tintColor: TABBAR_INACTIVE_TINT,
   },
   shopImage: {
     resizeMode: 'cover',
     width: windowWidth,
     aspectRatio: 2 / 1,
-    marginRight: 50
+    marginRight: 50,
     // height: 45 * alpha,
   },
   headerLeftContainer: {
     flexDirection: 'row',
-    marginLeft: 8 * alpha
+    marginLeft: 8 * alpha,
   },
   headerRightContainer: {
     flexDirection: 'row',
-    marginRight: 8 * alpha
+    marginRight: 8 * alpha,
   },
   page1View: {
     backgroundColor: 'rgb(243, 243, 243)',
-    flex: 1
+    flex: 1,
   },
   topsectionView: {
     backgroundColor: 'white',
@@ -2325,7 +2290,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1 * alpha,
     left: 0 * alpha,
     right: 0 * alpha,
-    height: 67 * alpha
+    height: 67 * alpha,
   },
   branchView: {
     backgroundColor: 'transparent',
@@ -2333,11 +2298,11 @@ const styles = StyleSheet.create({
     height: 19 * alpha,
     marginTop: 6 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   branchButtonImage: {
     resizeMode: 'contain',
-    marginLeft: 10 * alpha
+    marginLeft: 10 * alpha,
   },
   branchButton: {
     backgroundColor: 'transparent',
@@ -2347,7 +2312,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 190 * alpha,
     height: 19 * alpha,
-    marginTop: 6 * alpha
+    marginTop: 6 * alpha,
   },
   branchButtonText: {
     color: 'rgb(99, 97, 97)',
@@ -2355,12 +2320,12 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   pickUpDeliveryView: {
     borderRadius: 16 * alpha,
     width: 96 * alpha,
-    height: 32 * alpha
+    height: 32 * alpha,
   },
 
   pickUpDeliveryViewTemp: {
@@ -2369,7 +2334,7 @@ const styles = StyleSheet.create({
     left: 0,
     borderRadius: 16 * alpha,
     width: 96 * alpha,
-    height: 32 * alpha
+    height: 32 * alpha,
   },
 
   pickUpView: {
@@ -2377,11 +2342,11 @@ const styles = StyleSheet.create({
     borderRadius: 14.5 * alpha,
     width: 49 * alpha,
     height: 29 * alpha,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   optionText: {
     fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha
+    fontSize: 10 * fontAlpha,
   },
   pickUpText: {
     color: 'rgb(253, 253, 253)',
@@ -2392,7 +2357,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     marginLeft: 7 * alpha,
-    marginRight: 7 * alpha
+    marginRight: 7 * alpha,
   },
   deliveryText: {
     color: 'rgb(78, 77, 77)',
@@ -2401,7 +2366,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   distance1kmText: {
     backgroundColor: 'transparent',
@@ -2409,7 +2374,7 @@ const styles = StyleSheet.create({
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
-    fontWeight: 'normal'
+    fontWeight: 'normal',
     // textAlign: "left",
   },
   moreView: {
@@ -2418,7 +2383,7 @@ const styles = StyleSheet.create({
     height: 12 * alpha,
     marginTop: 1 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   moreButton: {
     backgroundColor: 'transparent',
@@ -2428,7 +2393,7 @@ const styles = StyleSheet.create({
     padding: 0,
     flex: 1,
     height: 12 * alpha,
-    marginRight: 2 * alpha
+    marginRight: 2 * alpha,
   },
   moreButtonText: {
     color: 'rgb(162, 162, 162)',
@@ -2436,51 +2401,51 @@ const styles = StyleSheet.create({
     fontSize: 10 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   moreButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
 
   productsectionView: {
     backgroundColor: 'transparent',
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   categorylistFlatList: {
     backgroundColor: 'transparent',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
 
   categorylistFlatListViewWrapper: {
-    width: 85 * alpha
+    width: 85 * alpha,
   },
   categoryListPosition1: {
-    height: 0 * alpha
+    height: 0 * alpha,
   },
   categoryListPosition2: {
-    height: 60 * alpha
+    height: 60 * alpha,
   },
   categoryListPosition3: {
-    height: 100 * alpha
+    height: 100 * alpha,
   },
   categoryListPosition4: {
-    height: 30 * alpha
+    height: 30 * alpha,
   },
   productlistFlatList: {
     backgroundColor: 'white',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   productlistFlatListViewWrapper: {
     width: 290 * alpha,
-    marginBottom: 1 * alpha
+    marginBottom: 1 * alpha,
   },
   productlistFlatListViewWrapperwithALert: {
     width: 290 * alpha,
-    marginBottom: 25 * alpha
+    marginBottom: 25 * alpha,
   },
   cartView: {
     backgroundColor: 'transparent',
@@ -2488,29 +2453,29 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     bottom: 0 * alpha,
-    height: 60 * alpha
+    height: 60 * alpha,
   },
   bannerImage: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    flex: 1
+    flex: 1,
   },
   bannerShortImage: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    height: windowHeight
+    height: windowHeight,
   },
   bannerContainImage: {
     backgroundColor: 'transparent',
     height: windowHeight,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   totalAmountView: {
     backgroundColor: 'transparent',
     width: 280 * alpha,
-    height: 70 * alpha
+    height: 70 * alpha,
   },
   rectangleView: {
     backgroundColor: 'rgb(231, 230, 230)',
@@ -2518,7 +2483,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     top: 20 * alpha,
-    height: 46 * alpha
+    height: 46 * alpha,
   },
   shopppingCartView: {
     backgroundColor: 'white',
@@ -2526,7 +2491,7 @@ const styles = StyleSheet.create({
     width: 90 * alpha,
     // aspectRatio: 1 / 2,
     height: 40 * alpha,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   shopppingCartButton: {
     backgroundColor: 'transparent',
@@ -2537,20 +2502,20 @@ const styles = StyleSheet.create({
     padding: 0,
     position: 'absolute',
     width: 90 * alpha,
-    height: 40 * alpha
+    height: 40 * alpha,
   },
   group5View: {
     backgroundColor: 'transparent',
     height: 26 * alpha,
     marginLeft: 12 * alpha,
     marginRight: 12 * alpha,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   line8View: {
     backgroundColor: 'rgb(85, 85, 85)',
     width: 9 * alpha,
-    height: 1 * alpha
+    height: 1 * alpha,
   },
   shoppingCartText: {
     color: 'rgb(57, 57, 57)',
@@ -2559,12 +2524,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 10 * alpha,
     backgroundColor: 'transparent',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   cartImage: {
     resizeMode: 'contain',
     width: 20 * alpha,
-    height: 20 * alpha
+    height: 20 * alpha,
   },
   totalpriceText: {
     color: 'rgb(54, 54, 54)',
@@ -2573,7 +2538,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 24 * alpha
+    marginTop: 24 * alpha,
     // fontWeight:'bold'
   },
   badgeView: {
@@ -2589,7 +2554,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   numberofitemText: {
     color: 'rgb(255, 251, 251)',
@@ -2597,7 +2562,7 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   checkoutButtonView: {
     backgroundColor: 'white',
@@ -2608,7 +2573,7 @@ const styles = StyleSheet.create({
     right: 0 * alpha,
     width: 95 * alpha,
     top: 15 * alpha,
-    height: 46 * alpha
+    height: 46 * alpha,
   },
   checkoutButton: {
     backgroundColor: 'rgb(0, 178, 227)',
@@ -2620,18 +2585,18 @@ const styles = StyleSheet.create({
     right: 0 * alpha,
     width: 95 * alpha,
     top: 0 * alpha,
-    height: 46 * alpha
+    height: 46 * alpha,
   },
   checkoutButtonText: {
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   checkoutButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   cartsummaryviewView: {
     backgroundColor: 'transparent',
@@ -2639,7 +2604,7 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     bottom: 25 * alpha,
-    flex: 1
+    flex: 1,
   },
   clearAllView: {
     backgroundColor: 'rgb(245, 245, 245)',
@@ -2647,7 +2612,7 @@ const styles = StyleSheet.create({
     marginLeft: 1 * alpha,
     marginRight: 1 * alpha,
     justifyContent: 'center',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   clearButtonText: {
     color: 'rgb(144, 141, 141)',
@@ -2655,7 +2620,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   clearButton: {
     backgroundColor: 'transparent',
@@ -2665,28 +2630,28 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 55 * alpha,
     height: 18 * alpha,
-    marginLeft: 15 * alpha
+    marginLeft: 15 * alpha,
   },
   clearButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   popOutCartFlatList: {
     backgroundColor: 'white',
     width: '100%',
     marginBottom: 33 * alpha,
-    flex: 1
+    flex: 1,
   },
   popOutCartFlatListViewWrapper: {
     backgroundColor: 'white',
-    flex: 1
+    flex: 1,
   },
   popOutView: {
     backgroundColor: 'white',
     borderRadius: 11 * alpha,
     position: 'absolute',
     width: '100%',
-    flex: 1
+    flex: 1,
   },
   topbuttonView: {
     backgroundColor: 'transparent',
@@ -2696,17 +2661,17 @@ const styles = StyleSheet.create({
     top: 14 * alpha,
     right: 14 * alpha,
     alignItems: 'flex-end',
-    zIndex: 999
+    zIndex: 999,
   },
   favouriteButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   favouriteButtonText: {
     color: 'black',
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   favouriteButton: {
     backgroundColor: 'rgb(191, 191, 191)',
@@ -2717,7 +2682,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 28 * alpha,
     height: 28 * alpha,
-    marginRight: 11 * alpha
+    marginRight: 11 * alpha,
   },
   closeButton: {
     backgroundColor: 'rgb(191, 191, 191)',
@@ -2727,11 +2692,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 25 * alpha,
-    height: 25 * alpha
+    height: 25 * alpha,
   },
   closeButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   closeButtonText: {
     color: 'white',
@@ -2739,7 +2704,7 @@ const styles = StyleSheet.create({
     fontSize: 18 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   closeGalleryButton: {
     backgroundColor: 'black',
@@ -2752,11 +2717,11 @@ const styles = StyleSheet.create({
     width: 40 * alpha,
     height: 40 * alpha,
     top: 30 * alpha,
-    right: 10 * alpha
+    right: 10 * alpha,
   },
   closeGalleryButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   closeGalleryButtonText: {
     color: 'white',
@@ -2764,20 +2729,20 @@ const styles = StyleSheet.create({
     fontSize: 18 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   contentScrollView: {
     backgroundColor: 'transparent',
     flex: 1,
     marginTop: 5 * alpha,
-    maxHeight: 320 * alpha
+    maxHeight: 320 * alpha,
   },
   productView: {
     backgroundColor: 'transparent',
     width: '100%',
     flex: 1,
     marginLeft: 19 * alpha,
-    marginTop: 20 * alpha
+    marginTop: 20 * alpha,
   },
   nameText: {
     color: 'rgb(54, 54, 54)',
@@ -2787,7 +2752,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    marginRight: 28 * alpha
+    marginRight: 28 * alpha,
   },
   descriptionHeaderText: {
     color: 'rgb(167, 167, 167)',
@@ -2798,7 +2763,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     marginRight: 28 * alpha,
-    marginTop: 10 * alpha
+    marginTop: 10 * alpha,
   },
   descriptionText: {
     color: 'rgb(130, 130, 130)',
@@ -2811,13 +2776,13 @@ const styles = StyleSheet.create({
     marginRight: 28 * alpha,
     marginTop: 5 * alpha,
     marginBottom: 5 * alpha,
-    lineHeight: 17 * alpha
+    lineHeight: 17 * alpha,
   },
   ingredientView: {
     backgroundColor: 'rgb(245, 245, 245)',
     justifyContent: 'center',
     marginRight: 5 * alpha,
-    marginTop: 3 * alpha
+    marginTop: 3 * alpha,
   },
   ingredientText: {
     backgroundColor: 'transparent',
@@ -2830,13 +2795,13 @@ const styles = StyleSheet.create({
     marginRight: 4 * alpha,
     marginLeft: 4 * alpha,
     marginTop: 4 * alpha,
-    marginBottom: 4 * alpha
+    marginBottom: 4 * alpha,
   },
   ingredientHighlightView: {
     backgroundColor: LIGHT_BLUE_BACKGROUND,
     justifyContent: 'center',
     marginRight: 5 * alpha,
-    marginTop: 3 * alpha
+    marginTop: 3 * alpha,
   },
   ingredientHighlightText: {
     backgroundColor: 'transparent',
@@ -2849,7 +2814,7 @@ const styles = StyleSheet.create({
     marginRight: 4 * alpha,
     marginLeft: 4 * alpha,
     marginTop: 4 * alpha,
-    marginBottom: 4 * alpha
+    marginBottom: 4 * alpha,
   },
 
   milkText: {
@@ -2861,7 +2826,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     marginLeft: 6 * alpha,
-    marginRight: 5 * alpha
+    marginRight: 5 * alpha,
   },
   optionsTwoView: {
     backgroundColor: 'transparent',
@@ -2869,7 +2834,7 @@ const styles = StyleSheet.create({
     marginBottom: 5 * alpha,
     alignItems: 'flex-start',
     borderRadius: 7.0,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   optiontitleTwoText: {
     color: 'rgb(141, 141, 141)',
@@ -2879,7 +2844,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    marginLeft: 20 * alpha
+    marginLeft: 20 * alpha,
   },
   optionchoiceView: {
     backgroundColor: 'transparent',
@@ -2888,7 +2853,7 @@ const styles = StyleSheet.create({
     marginRight: 20 * alpha,
     marginTop: 2 * alpha,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   unselectedButton: {
     backgroundColor: 'rgb(238, 238, 238)',
@@ -2899,12 +2864,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     marginBottom: 4 * alpha,
-    marginRight: 4 * alpha
+    marginRight: 4 * alpha,
   },
   recommendedStarImage: {
     resizeMode: 'contain',
     marginLeft: 4 * alpha,
-    marginRight: -4 * alpha
+    marginRight: -4 * alpha,
   },
   unselectedButtonText: {
     color: 'rgb(82, 80, 80)',
@@ -2916,7 +2881,7 @@ const styles = StyleSheet.create({
     marginRight: 4 * alpha,
     marginLeft: 4 * alpha,
     marginTop: 4 * alpha,
-    marginBottom: 4 * alpha
+    marginBottom: 4 * alpha,
   },
   selectedButton: {
     backgroundColor: 'rgb(0, 178, 227)',
@@ -2927,11 +2892,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     marginBottom: 4 * alpha,
-    marginRight: 4 * alpha
+    marginRight: 4 * alpha,
   },
   selectedButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   selectedButtonText: {
     color: 'white',
@@ -2943,7 +2908,7 @@ const styles = StyleSheet.create({
     marginRight: 4 * alpha,
     marginLeft: 4 * alpha,
     marginTop: 4 * alpha,
-    marginBottom: 4 * alpha
+    marginBottom: 4 * alpha,
   },
   optionsView: {
     backgroundColor: 'transparent',
@@ -2951,7 +2916,7 @@ const styles = StyleSheet.create({
     height: 87 * alpha,
     marginLeft: 20 * alpha,
     marginTop: 10 * alpha,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   optiontitleText: {
     color: 'rgb(141, 141, 141)',
@@ -2960,11 +2925,11 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   recommendedButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   recommendedButton: {
     backgroundColor: 'rgb(0, 178, 227)',
@@ -2975,7 +2940,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 85 * alpha,
-    height: 28 * alpha
+    height: 28 * alpha,
   },
   recommendedButtonText: {
     color: 'white',
@@ -2983,11 +2948,11 @@ const styles = StyleSheet.create({
     fontSize: 9 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   unavailableButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   unavailableButtonText: {
     color: 'rgb(201, 201, 201)',
@@ -2995,7 +2960,7 @@ const styles = StyleSheet.create({
     fontSize: 9 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   unavailableButton: {
     backgroundColor: 'rgba(238, 238, 238, 0.62)',
@@ -3006,7 +2971,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 67 * alpha,
     height: 28 * alpha,
-    marginLeft: 12 * alpha
+    marginLeft: 12 * alpha,
   },
   choiceThreeButton: {
     backgroundColor: 'rgb(238, 238, 238)',
@@ -3016,11 +2981,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 94 * alpha,
-    height: 28 * alpha
+    height: 28 * alpha,
   },
   choiceThreeButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   choiceThreeButtonText: {
     color: 'rgb(82, 80, 80)',
@@ -3028,7 +2993,7 @@ const styles = StyleSheet.create({
     fontSize: 9 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   choiceTwoButton: {
     backgroundColor: 'rgb(238, 238, 238)',
@@ -3039,11 +3004,11 @@ const styles = StyleSheet.create({
     padding: 0,
     marginRight: 10 * alpha,
     marginLeft: 10 * alpha,
-    height: 27 * alpha
+    height: 27 * alpha,
   },
   choiceTwoButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   choiceTwoButtonText: {
     color: 'rgb(82, 80, 80)',
@@ -3051,11 +3016,11 @@ const styles = StyleSheet.create({
     fontSize: 9 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   choiceButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   choiceButton: {
     backgroundColor: 'rgb(238, 238, 238)',
@@ -3066,7 +3031,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 66 * alpha,
     height: 27 * alpha,
-    marginLeft: 13 * alpha
+    marginLeft: 13 * alpha,
   },
   choiceButtonText: {
     color: 'rgb(82, 80, 80)',
@@ -3074,25 +3039,25 @@ const styles = StyleSheet.create({
     fontSize: 9 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   bottomView: {
     backgroundColor: 'transparent',
     // height: 113 * alpha,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   lineView: {
     backgroundColor: 'rgb(151, 151, 151)',
     opacity: 0.29,
     height: 1 * alpha,
-    marginBottom: 12 * alpha
+    marginBottom: 12 * alpha,
   },
   summaryView: {
     backgroundColor: 'transparent',
     // height: 37 * alpha,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    marginBottom: 12 * alpha
+    marginBottom: 12 * alpha,
   },
   priceText: {
     backgroundColor: 'transparent',
@@ -3102,12 +3067,12 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   controlView: {
     backgroundColor: 'transparent',
     width: 74 * alpha,
-    height: 23 * alpha
+    height: 23 * alpha,
   },
   quantityText: {
     backgroundColor: 'transparent',
@@ -3116,7 +3081,7 @@ const styles = StyleSheet.create({
     fontSize: 21 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   removeButton: {
     backgroundColor: 'transparent',
@@ -3125,17 +3090,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 23 * alpha,
-    height: 23 * alpha
+    height: 23 * alpha,
   },
   removeButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   removeButtonText: {
     color: 'black',
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   addButton: {
     backgroundColor: 'transparent',
@@ -3145,17 +3110,17 @@ const styles = StyleSheet.create({
     padding: 0,
     alignSelf: 'center',
     width: 23 * alpha,
-    height: 23 * alpha
+    height: 23 * alpha,
   },
   addButtonText: {
     color: 'black',
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   addButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   optionsText: {
     backgroundColor: 'transparent',
@@ -3167,13 +3132,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     alignSelf: 'flex-start',
     marginLeft: 1 * alpha,
-    marginTop: 1 * alpha
+    marginTop: 1 * alpha,
   },
   normal: {
-    backgroundColor: 'rgb(0, 178, 227)'
+    backgroundColor: 'rgb(0, 178, 227)',
   },
   disabled: {
-    backgroundColor: 'rgba(0, 178, 227, 0.3)'
+    backgroundColor: 'rgba(0, 178, 227, 0.3)',
   },
   addToCartButton: {
     borderRadius: 4 * alpha,
@@ -3184,11 +3149,11 @@ const styles = StyleSheet.create({
     height: 36 * alpha,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    marginBottom: 15 * alpha
+    marginBottom: 15 * alpha,
   },
   addToCartButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   addToCartButtonText: {
     color: 'white',
@@ -3196,21 +3161,21 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   productimageImage: {
     resizeMode: 'cover',
     backgroundColor: 'transparent',
     alignSelf: 'center',
     width: 150 * alpha,
-    height: 150 * alpha
+    height: 150 * alpha,
   },
   imageblockView: {
     backgroundColor: 'white',
     width: '100%',
     marginTop: 21 * alpha,
     height: 150 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   bottomAlertView: {
     position: 'absolute',
@@ -3218,19 +3183,19 @@ const styles = StyleSheet.create({
     right: 0 * alpha,
     bottom: 0 * alpha,
     flex: 1,
-    width: windowWidth
+    width: windowWidth,
   },
   alertViewCart: {
     backgroundColor: 'darkgray',
     marginBottom: 35 * alpha,
-    paddingBottom: 10 * alpha
+    paddingBottom: 10 * alpha,
     // position: "absolute",
     // left: 0 * alpha,
     // right: 0 * alpha,
     // bottom: 60 * alpha,
   },
   alertView: {
-    backgroundColor: 'darkgray'
+    backgroundColor: 'darkgray',
   },
   alertViewTitle: {
     color: 'white',
@@ -3240,7 +3205,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     paddingTop: 10 * alpha,
     paddingBottom: 5 * alpha,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   alertViewText: {
     color: 'white',
@@ -3252,16 +3217,16 @@ const styles = StyleSheet.create({
     paddingLeft: 7 * alpha,
     paddingRight: 7 * alpha,
     paddingBottom: 7 * alpha,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 10 * alpha
+    padding: 10 * alpha,
   },
   showLocationView: {
     backgroundColor: 'white',
@@ -3269,7 +3234,7 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     marginTop: 67 * alpha,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
     // flex: 1,
     // marginHorizontal:10
   },
@@ -3278,7 +3243,7 @@ const styles = StyleSheet.create({
     width: 322 * alpha,
     height: 105 * alpha,
     marginLeft: 14 * alpha,
-    marginTop: 7 * alpha
+    marginTop: 7 * alpha,
   },
   deliveryTwoText: {
     backgroundColor: 'transparent',
@@ -3287,7 +3252,7 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   freeWithRm40SpendText: {
     backgroundColor: 'transparent',
@@ -3297,7 +3262,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 9 * alpha
+    marginTop: 9 * alpha,
   },
   deliveredByBrew9Text: {
     backgroundColor: 'transparent',
@@ -3307,7 +3272,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 19 * alpha
+    marginTop: 19 * alpha,
   },
   deliverAreaAffectText: {
     backgroundColor: 'transparent',
@@ -3317,7 +3282,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   deliveryRm5ExtraText: {
     backgroundColor: 'transparent',
@@ -3326,7 +3291,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   branchInfoView: {
     backgroundColor: 'transparent',
@@ -3335,7 +3300,7 @@ const styles = StyleSheet.create({
     // height: 76 * alpha,
     // marginHorizontal: 10 * alpha,
     // marginTop: 15 * alpha,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   branchInfoText: {
     backgroundColor: 'transparent',
@@ -3345,7 +3310,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginLeft: 10 * alpha
+    marginLeft: 10 * alpha,
   },
   branchHeaderAddress: {
     backgroundColor: 'transparent',
@@ -3355,7 +3320,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 9 * alpha
+    marginTop: 9 * alpha,
   },
   branchAddress: {
     backgroundColor: 'transparent',
@@ -3365,7 +3330,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 3 * alpha
+    marginTop: 3 * alpha,
   },
   branchHeaderContact: {
     backgroundColor: 'transparent',
@@ -3375,7 +3340,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 9 * alpha
+    marginTop: 9 * alpha,
   },
   branchContact: {
     backgroundColor: 'transparent',
@@ -3385,7 +3350,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 3 * alpha
+    marginTop: 3 * alpha,
   },
   businessHeaderHourText: {
     backgroundColor: 'transparent',
@@ -3396,7 +3361,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     alignSelf: 'stretch',
-    marginTop: 9 * alpha
+    marginTop: 9 * alpha,
   },
   businessHourText: {
     fontFamily: NON_TITLE_FONT,
@@ -3407,7 +3372,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   featuredpromoButton: {
     backgroundColor: 'transparent',
@@ -3418,36 +3383,36 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 60 * alpha,
     height: 60 * alpha,
-    left: 10 * alpha
+    left: 10 * alpha,
   },
   featuredpromoButtonPosition1: {
-    bottom: 0 * alpha
+    bottom: 0 * alpha,
   },
   featuredpromoButtonPosition2: {
-    bottom: 40 * alpha
+    bottom: 40 * alpha,
   },
   featuredpromoButtonPosition3: {
-    bottom: 90 * alpha
+    bottom: 90 * alpha,
   },
   featuredpromoButtonImage: {
     resizeMode: 'contain',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   mapImage: {
     backgroundColor: 'transparent',
     height: 200 * alpha,
-    width: '100%'
+    width: '100%',
   },
   promotionTopBarView: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   promotionBarView: {
     width: '100%',
     height: 32 * alpha,
     backgroundColor: RED,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   promotionTopBarText: {
     fontFamily: TITLE_FONT,
@@ -3455,33 +3420,33 @@ const styles = StyleSheet.create({
     fontSize: 12 * alpha,
     alignSelf: 'center',
     paddingLeft: 10 * alpha,
-    paddingRight: 10 * alpha
+    paddingRight: 10 * alpha,
   },
   rightArrowImage: {
     width: 9 * alpha,
     height: 9 * alpha,
     tintColor: '#C5C5C5',
-    marginLeft: alpha * 5
+    marginLeft: alpha * 5,
   },
   selectShopButton: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   areaBubble: {
     backgroundColor: 'white',
     borderRadius: DEFAULT_BORDER_RADIUS,
     marginBottom: alpha * 2,
     borderWidth: 1,
-    borderColor: '#00B2E3'
+    borderColor: '#00B2E3',
   },
   areaText: {
     fontFamily: TITLE_FONT,
     fontSize: fontAlpha * 14,
-    margin: alpha * 5
+    margin: alpha * 5,
   },
   pinImage: {
     width: 20 * alpha,
     height: 20 * alpha,
-    tintColor: '#00B2E3'
-  }
+    tintColor: '#00B2E3',
+  },
 });

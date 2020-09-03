@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -6,25 +6,25 @@ import {
   Text,
   Image,
   Linking,
-  Platform
+  Platform,
 } from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
   LIGHT_GREY,
   DEFAULT_BORDER_RADIUS,
   TINT_COLOR,
-  DISABLED_COLOR
+  DISABLED_COLOR,
 } from '../Common/common_style';
-import { alpha, fontAlpha } from '../Common/size';
-import { getResponseMsg } from '../Utils/responses';
+import {alpha, fontAlpha} from '../Common/size';
+import {getResponseMsg} from '../Utils/responses';
 
-@connect(({ members, shops, config }) => ({
+@connect(({members, shops, config}) => ({
   currentUser: members.profile,
   shop: shops.selectedShop,
   responses: config.responses,
-  shopResponses: config.shopResponses
+  shopResponses: config.shopResponses,
 }))
 export default class ShopDetails extends Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class ShopDetails extends Component {
   }
 
   renderFavoriteButton = (disabled) => {
-    const { currentUser, details, onPressFavourite } = this.props;
+    const {currentUser, details, onPressFavourite} = this.props;
     if (currentUser !== null) {
       let likeImage = require('./../../assets/images/like.png');
 
@@ -44,9 +44,8 @@ export default class ShopDetails extends Component {
         <TouchableOpacity
           onPress={() => onPressFavourite(details.id, details.favourite)}
           style={styles.favoriteButton}
-          {...{ disabled }}
-        >
-          <Image resizeMode="contain" source={likeImage} />
+          {...{disabled}}>
+          <Image resizeMode='contain' source={likeImage} />
         </TouchableOpacity>
       );
     }
@@ -64,47 +63,86 @@ export default class ShopDetails extends Component {
       ios:
         'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
         location,
-      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location,
     });
 
     Linking.openURL(url);
   }
 
   renderAvailablity = (availability, status) => {
+    const {details} = this.props;
+
     const backgroundColor =
       availability && status === 'in_operation' ? '#00B2E3' : DISABLED_COLOR;
     const viewStyle = [
       styles.availabilityView,
-      { backgroundColor, borderColor: backgroundColor, marginTop: 10 * alpha }
+      {backgroundColor, borderColor: backgroundColor, marginTop: 10 * alpha},
     ];
-    const textStyle = [styles.availabilityText, { color: 'white' }];
+    const textStyle = [styles.availabilityText, {color: 'white'}];
+    const availablityText =
+      availability && status === 'in_operation'
+        ? getResponseMsg({
+            props: this.props,
+            shopId: details.id,
+            key: 'Shop Open',
+            defaultText: 'Open',
+          })
+        : getResponseMsg({
+            props: this.props,
+            shopId: details.id,
+            key: 'Shop Close',
+            defaultText: 'Closed',
+          });
     return (
       <View style={viewStyle}>
         <Text style={textStyle}>
-          {availability && status === 'in_operation' ? 'Open' : 'Closed'}
+          {availablityText}
         </Text>
       </View>
     );
   };
 
   getStatusText = (status, isOpened) => {
+    const {details} = this.props;
     if (status === 'in_operation') {
-      let orderNowText =
-        this.props.responses.get('Order Now Button') || 'Order Now';
-      let viewMoreText =
-        this.props.responses.get('View More Button') || 'View More';
+      // old response
+      // let orderNowText =
+      //   this.props.responses.get('Order Now Button') || 'Order Now';
+      // let viewMoreText =
+      //   this.props.responses.get('View More Button') || 'View More';
+
+      const orderNowText = getResponseMsg({
+        props: this.props,
+        shopId: details.id,
+        key: 'Order Now Button',
+        defaultText: 'Order Now',
+      });
+
+      const viewMoreText = getResponseMsg({
+        props: this.props,
+        shopId: details.id,
+        key: 'View More Button',
+        defaultText: 'View More',
+      });
       return isOpened ? orderNowText : viewMoreText;
     }
-    return this.props.responses.get(status);
+
+    const shopStatus = getResponseMsg({
+      props: this.props,
+      shopId: details.id,
+      key: 'status',
+      defaultText: 'Opening Soon',
+    });
+    return shopStatus;
   };
 
   render() {
-    const { details, onPressOrderNow, shop, locationPermission } = this.props;
+    const {details, onPressOrderNow, shop, locationPermission} = this.props;
     const itemStyle = shop && shop.id === details.id ? styles.highlighted : {};
     const minutes = Math.round(details.minute_drive);
-    const { start_time, end_time } = details?.opening_hour || {
+    const {start_time, end_time} = details?.opening_hour || {
       start_time: null,
-      end_time: null
+      end_time: null,
     };
 
     let hoursText = null;
@@ -112,13 +150,13 @@ export default class ShopDetails extends Component {
       props: this.props,
       shopId: details.id,
       key: 'delivery_available',
-      defaultText: 'Delivery'
+      defaultText: 'Delivery',
     });
     const deliveryUnavailable = getResponseMsg({
       props: this.props,
       shopId: details.id,
       key: 'delivery_unavailable',
-      defaultText: 'No Delivery'
+      defaultText: 'No Delivery',
     });
 
     let serviceInfoText = '';
@@ -136,17 +174,16 @@ export default class ShopDetails extends Component {
       hoursText = `${start_time} - ${end_time}`;
     }
 
-    const { status } = details;
+    const {status} = details;
     const statusText = this.getStatusText(status, details.open);
     const disabled = status !== 'in_operation';
-    const disabledStyle = disabled ? { opacity: 0.5 } : {};
+    const disabledStyle = disabled ? {opacity: 0.5} : {};
     return (
       <TouchableOpacity
         activeOpacity={0.7}
         style={[styles.shopDetailView, itemStyle, disabledStyle]}
         onPress={() => onPressOrderNow(details.id)}
-        {...{ disabled }}
-      >
+        {...{disabled}}>
         <View style={styles.detailsView}>
           <View style={styles.detailView}>
             <Text style={styles.shopName}>{details.name}</Text>
@@ -167,9 +204,8 @@ export default class ShopDetails extends Component {
           <View
             style={[
               styles.detailTextContainer,
-              { marginTop: 0, marginBottom: 10 * alpha }
-            ]}
-          >
+              {marginTop: 0, marginBottom: 10 * alpha},
+            ]}>
             <Image
               source={require('./../../assets/images/Group.png')}
               style={styles.clockImage}
@@ -187,8 +223,7 @@ export default class ShopDetails extends Component {
             <TouchableOpacity
               onPress={() => this.onPressCall(details.phone_no)}
               style={styles.accessButton}
-              {...{ disabled }}
-            >
+              {...{disabled}}>
               <Image source={require('./../../assets/images/phone-icon.png')} />
             </TouchableOpacity>
             <TouchableOpacity
@@ -196,8 +231,7 @@ export default class ShopDetails extends Component {
                 this.onPressDirection(details.latitude, details.longitude)
               }
               style={styles.accessButton}
-              {...{ disabled }}
-            >
+              {...{disabled}}>
               <Image
                 source={require('./../../assets/images/direction-icon-ss.png')}
               />
@@ -213,7 +247,7 @@ export default class ShopDetails extends Component {
 const styles = StyleSheet.create({
   highlighted: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#00B2E3'
+    borderColor: '#00B2E3',
   },
   shopDetailView: {
     height: alpha * 115,
@@ -224,7 +258,7 @@ const styles = StyleSheet.create({
     // paddingTop: alpha * 10,
     paddingLeft: alpha * 10,
     paddingRight: alpha * 10,
-    borderRadius: DEFAULT_BORDER_RADIUS
+    borderRadius: DEFAULT_BORDER_RADIUS,
   },
   availabilityView: {
     height: alpha * 16,
@@ -232,23 +266,23 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 2 * alpha
+    borderRadius: 2 * alpha,
   },
   detailsView: {
     // backgroundColor: 'yellow',
     flex: 4,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   orderNowView: {
     // backgroundColor: 'red',
     flex: 1.5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
     // paddingBottom: 10 * alpha,
   },
   detailView: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   detailTextContainer: {
     flexDirection: 'row',
@@ -256,13 +290,13 @@ const styles = StyleSheet.create({
     marginBottom: alpha * 3,
     marginTop: alpha * 3,
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   orderButton: {
     width: '100%',
     height: alpha * 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   favoriteButton: {
     height: alpha * 30,
@@ -272,56 +306,56 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     right: 0,
     bottom: 0,
-    zIndex: 1
+    zIndex: 1,
   },
   accessButton: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   accessView: {
     flexDirection: 'row',
-    paddingHorizontal: alpha * 10
+    paddingHorizontal: alpha * 10,
   },
   //text
   availabilityText: {
     fontSize: fontAlpha * 10,
     color: '#00B2E3',
-    fontFamily: TITLE_FONT
+    fontFamily: TITLE_FONT,
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     marginRight: 10 * alpha,
-    marginTop: 12 * alpha
+    marginTop: 12 * alpha,
   },
   serviceInfoDetails: {
     fontSize: 12 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
     marginBottom: 10 * alpha,
     marginTop: 4 * alpha,
-    color: '#363636'
+    color: '#363636',
   },
   detailText: {
     color: LIGHT_GREY,
     fontSize: 12 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
-    width: '95%'
+    width: '95%',
   },
   orderNowText: {
     color: TINT_COLOR,
     fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha
+    fontSize: 14 * fontAlpha,
   },
   pinImage: {
     tintColor: LIGHT_GREY,
-    marginRight: alpha * 7
+    marginRight: alpha * 7,
   },
   clockImage: {
     tintColor: LIGHT_GREY,
     width: 10 * alpha,
     height: 10 * alpha,
-    marginRight: alpha * 8
-  }
+    marginRight: alpha * 8,
+  },
 });
