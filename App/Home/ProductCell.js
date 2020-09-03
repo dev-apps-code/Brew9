@@ -21,7 +21,7 @@ import { ANALYTICS_ID } from '../Common/config';
 import Constants from 'expo-constants';
 import { Image as ExpoImage } from 'react-native-expo-image-cache';
 
-export default class ProductCell extends React.Component {
+export default class ProductCell extends React.PureComponent {
   constructor(props) {
     super(props);
   }
