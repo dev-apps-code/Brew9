@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import React from 'react';
-import {alpha, fontAlpha, windowHeight} from '../Common/size';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import {connect} from 'react-redux';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
