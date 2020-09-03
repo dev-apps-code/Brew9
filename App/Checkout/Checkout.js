@@ -1693,7 +1693,7 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/credit_card.png')}
             style={cardIconStyle}
           />
-          <Text style={styles.paymentOptionText}>Debit Card</Text>
+          <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
           <Image
             source={require('./../../assets/images/cc.png')}
             style={styles.cc}
