@@ -55,9 +55,9 @@ export default class TopUpCard extends React.Component {
       <TouchableWithoutFeedback onPress={this.onCardPress}>
         <View navigation={this.props.navigation} style={styles.cardcell}>
           <Image source={{ uri: this.props.image }} style={styles.cardImage} />
-          <View style={styles.tag}>
+          {/* <View style={styles.tag}>
             <Text style={styles.tagText}>Top up $20 & get $8 extra</Text>
-          </View>
+          </View> */}
         </View>
       </TouchableWithoutFeedback>
     );

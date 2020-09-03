@@ -11,7 +11,7 @@ import {
   Platform
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
+import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
 import { connect } from 'react-redux';
 import Toast, { DURATION } from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
@@ -343,7 +343,6 @@ export default class Checkout extends React.Component {
   // };
 
   onPressDirection(shop) {
-    // console.log(shop)
     let lat = shop.latitude;
     let long = shop.longitude;
     let latitude = lat ? parseFloat(lat) : 4.8886091;
@@ -425,8 +424,6 @@ export default class Checkout extends React.Component {
 
   addVoucherItemsToCart = (voucher_item) => {
     const { vouchers_to_use } = this.state;
-    // ////console.log("\nSelected Voucher:")
-    // ////console.log(voucher_item)
     this.setState({ vouchers_to_use: [voucher_item] });
     this.applyVoucher([voucher_item]);
   };
@@ -463,14 +460,7 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-    // var cartTotalQuantity = 0;
-    // cart.map((value, key) => {
-    //   cartTotalQuantity += value.quantity
 
-    // })
-
-    // ////console.log("quantity:")
-    // ////console.log(cartTotalQuantity)
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -603,30 +593,12 @@ export default class Checkout extends React.Component {
     var promotionSettings = this.state.promotionDiscountValue;
     var promotionValue = 0;
 
-    // if(promotionSettings.type == 'percent'){
-    //   promotionValue = promotionSettings.value/100
-    // }
-
-    ////console.log("VALUE")
-    ////console.log(promotionSettings)
-    ////console.log("Promotion Total Discount: ")
-    ////console.log(this.state.promotionTotalDiscount)
-    ////console.log("Voucher: ")
-    ////console.log(voucher)
-    //console.log("ELIGIBLE_QTY")
-    //console.log(targetQuantity)
-    //console.log("before")
-    //console.log(cart)
-
     cart.sort(function (a, b) {
       if (parseFloat(a.price) < parseFloat(b.price)) {
         return -1;
       }
       return 0;
     });
-
-    //console.log("after")
-    //console.log(cart)
 
     cart.map((value, key) => {
       var productID = value.id;
@@ -966,7 +938,9 @@ export default class Checkout extends React.Component {
             parseFloat(final_price) >
             parseFloat(currentMember.credits).toFixed(2)
           ) {
-            var msg = this.props.responses.get('Popup - Insufficient credit') || 'Oops, insufficient credit.\nPlease select other payment option.';
+            var msg =
+              this.props.responses.get('Popup - Insufficient credit') ||
+              'Oops, insufficient credit.\nPlease select other payment option.';
             this.refs.toast.show(msg, TOAST_DURATION + 1000);
 
             return;
@@ -1652,6 +1626,11 @@ export default class Checkout extends React.Component {
         ? [styles.paymentCashIcon, { tintColor: PRIMARY_COLOR }]
         : styles.paymentCashIcon;
 
+    let creditStyle =
+      credits > 0
+        ? [styles.creditsText, { color: PRIMARY_COLOR }]
+        : styles.creditsText;
+
     return (
       <View style={styles.paymentOptionsView}>
         <TouchableOpacity
@@ -1665,11 +1644,11 @@ export default class Checkout extends React.Component {
           <View>
             <View style={styles.walletTextContainer}>
               <Text style={styles.paymentOptionText}>Wallet</Text>
-              <View style={styles.tag}>
+              {/* <View style={styles.tag}>
                 <Text style={styles.tagText}>Top up $10 & get $5 extra</Text>
-              </View>
+              </View> */}
             </View>
-            <Text style={styles.creditsText}>${credits}</Text>
+            <Text style={creditStyle}>${credits}</Text>
           </View>
           {walletSelectBox}
         </TouchableOpacity>
@@ -1681,7 +1660,7 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/credit_card.png')}
             style={cardIconStyle}
           />
-          <Text style={styles.paymentOptionText}>Credit Card</Text>
+          <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
           <Image
             source={require('./../../assets/images/cc.png')}
             style={styles.cc}
@@ -1690,14 +1669,14 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/visa.png')}
             style={styles.visa}
           />
-          <Image
+          {/* <Image
             source={require('./../../assets/images/union.png')}
             style={styles.union}
           />
           <Image
             source={require('./../../assets/images/dc.png')}
             style={styles.dc}
-          />
+          /> */}
           {cardSelectBox}
         </TouchableOpacity>
         <TouchableOpacity
@@ -1713,6 +1692,30 @@ export default class Checkout extends React.Component {
         </TouchableOpacity>
       </View>
     );
+  };
+
+  renderShopImage = () => {
+    let { selectedShop } = this.props;
+    let { url } = selectedShop.image;
+    let shopImage = url ? (
+      <View style={styles.completeOrderView}>
+        <Image
+          source={{ uri: url }}
+          resizeMode={'cover'}
+          style={styles.shopImage}
+        />
+      </View>
+    ) : (
+      <View style={styles.completeOrderView}>
+        <Image
+          source={require('./../../assets/images/group-3-20.png')}
+          style={styles.logoImage}
+        />
+        <Text style={styles.completedOrderText}>Order Information</Text>
+      </View>
+    );
+
+    return shopImage;
   };
 
   renderCheckoutReceipt() {
@@ -1733,13 +1736,7 @@ export default class Checkout extends React.Component {
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
             <View pointerEvents="box-none" style={styles.whiteboxView}>
-              <View style={styles.completeOrderView}>
-                <Image
-                  source={require('./../../assets/images/group-3-20.png')}
-                  style={styles.logoImage}
-                />
-                <Text style={styles.completedOrderText}>Order Information</Text>
-              </View>
+              {this.renderShopImage()}
             </View>
             <View
               pointerEvents="box-none"
@@ -2178,13 +2175,17 @@ const styles = StyleSheet.create({
   whiteboxView: {
     backgroundColor: 'white',
     flex: 1,
+    width: '100%',
     alignItems: 'center',
     borderTopRightRadius: 14 * alpha,
     borderTopLeftRadius: 14 * alpha
   },
   completeOrderView: {
-    backgroundColor: 'transparent',
-    flex: 1,
+    height: alpha * 150,
+    width: '100%',
+    borderTopRightRadius: 14 * alpha,
+    borderTopLeftRadius: 14 * alpha,
+    overflow: 'hidden',
     alignItems: 'center'
   },
   logoImage: {
@@ -2193,6 +2194,20 @@ const styles = StyleSheet.create({
     width: 30 * alpha,
     height: 60 * alpha,
     marginTop: 30 * alpha
+  },
+
+  shopImageContainer: {
+    height: alpha * 100,
+    width: windowWidth,
+    paddingLeft: 18 * alpha,
+    paddingRight: 18 * alpha,
+    borderWidth: 2,
+    borderColor: 'red'
+  },
+
+  shopImage: {
+    height: '100%',
+    width: '100%'
   },
   completedOrderText: {
     color: PRIMARY_COLOR,
