@@ -148,11 +148,6 @@ export default class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    console.log('\n\n');
-    // console.log(this.props.selectedShop)
-    console.log(Object.keys(this.props.selectedShop));
-    console.log('\n\n');
-
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
       onItemPressed: this.onItemPressed
@@ -348,7 +343,6 @@ export default class Checkout extends React.Component {
   // };
 
   onPressDirection(shop) {
-    // console.log(shop)
     let lat = shop.latitude;
     let long = shop.longitude;
     let latitude = lat ? parseFloat(lat) : 4.8886091;
@@ -430,8 +424,6 @@ export default class Checkout extends React.Component {
 
   addVoucherItemsToCart = (voucher_item) => {
     const { vouchers_to_use } = this.state;
-    // ////console.log("\nSelected Voucher:")
-    // ////console.log(voucher_item)
     this.setState({ vouchers_to_use: [voucher_item] });
     this.applyVoucher([voucher_item]);
   };
@@ -468,14 +460,7 @@ export default class Checkout extends React.Component {
     var cart_total_voucher =
       sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
-    // var cartTotalQuantity = 0;
-    // cart.map((value, key) => {
-    //   cartTotalQuantity += value.quantity
 
-    // })
-
-    // ////console.log("quantity:")
-    // ////console.log(cartTotalQuantity)
     // reset cart promotions
     for (var index in newcart) {
       item = newcart[index];
@@ -608,30 +593,12 @@ export default class Checkout extends React.Component {
     var promotionSettings = this.state.promotionDiscountValue;
     var promotionValue = 0;
 
-    // if(promotionSettings.type == 'percent'){
-    //   promotionValue = promotionSettings.value/100
-    // }
-
-    ////console.log("VALUE")
-    ////console.log(promotionSettings)
-    ////console.log("Promotion Total Discount: ")
-    ////console.log(this.state.promotionTotalDiscount)
-    ////console.log("Voucher: ")
-    ////console.log(voucher)
-    //console.log("ELIGIBLE_QTY")
-    //console.log(targetQuantity)
-    //console.log("before")
-    //console.log(cart)
-
     cart.sort(function (a, b) {
       if (parseFloat(a.price) < parseFloat(b.price)) {
         return -1;
       }
       return 0;
     });
-
-    //console.log("after")
-    //console.log(cart)
 
     cart.map((value, key) => {
       var productID = value.id;
@@ -1662,7 +1629,7 @@ export default class Checkout extends React.Component {
     let creditStyle =
       credits > 0
         ? [styles.creditsText, { color: PRIMARY_COLOR }]
-        : console.log('was wawart');
+        : styles.creditsText;
 
     return (
       <View style={styles.paymentOptionsView}>
