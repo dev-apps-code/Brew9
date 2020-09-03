@@ -1,78 +1,65 @@
-import React from 'react'
-import {
-    View,
-    Image,
-    TouchableOpacity,
-    StyleSheet
-} from 'react-native'
-import Swiper from 'react-native-swiper'
-import BannerCell from "./BannerCell"
-import { alpha, fontAlpha } from "../Common/size";
+import React, { memo } from 'react';
+import { Image, StyleSheet, View, Dimensions } from 'react-native';
+import Swiper from 'react-native-swiper';
+import { alpha } from '../Common/size';
 
-export default class ImageCell extends React.PureComponent {
-    render() {
-        let { image, containerStyle } = this.props
-        let isArray = Array.isArray(image)
-        if (image) {
-            if (isArray) {
-                return (
+const { width } = Dimensions.get('window');
+const SWIPER_WIDTH = width - 80;
 
-                    <View style={[styles.imageblockView, containerStyle]}>
-                        <Swiper showsPagination={true} autoplay={false} paginationStyle={{ bottom: 5 }}>
-                            {
-                                image.map((item, index) => {
-                                    return (<Image
-                                        key={index}
-                                        source={{ uri: item.url }}
-                                        style={styles.productimageImage} />)
-                                }
-                                )
-                            }
-                        </Swiper>
-                    </View>
+const ImageCell = memo(({ containerStyle, product }) => {
+  const { gallery, image } = product;
 
-                )
-            } else {
-                return (
-                    <View
-                        style={styles.imageblockView}>
-                        <Image
-                            source={{ uri: image.url }}
-                            style={styles.productimageImage} />
-                    </View>
+  if (gallery && Array.isArray(gallery) && gallery.length > 0) {
+    return (
+      <View style={[styles.imageblockView, containerStyle]}>
+        <Swiper
+          showsPagination={true}
+          autoplay={true}
+          paginationStyle={{ bottom: -15 }}
+          width={SWIPER_WIDTH}
+        >
+          {gallery.map((item, index) => (
+            <Image
+              key={index}
+              source={{ uri: item }}
+              style={[styles.productimageImage, styles.galleryImageStyle]}
+            />
+          ))}
+        </Swiper>
+      </View>
+    );
+  } else if (image) {
+    return (
+      <View style={[styles.imageblockView, containerStyle]}>
+        <Image source={{ uri: image.url }} style={styles.productimageImage} />
+      </View>
+    );
+  }
 
-                )
-
-            }
-
-        } else {
-            return (<View />)
-        }
-
-
-    }
-
-
-}
-
+  return <View />;
+});
 
 const styles = StyleSheet.create({
-    imageblockView: {
-        backgroundColor: "white",
-        width: "100%",
-        marginTop: 21 * alpha,
-        height: 150 * alpha,
-        alignItems: "center",
-        justifyContent: 'center',
-        // flex: 1
+  imageblockView: {
+    backgroundColor: 'white',
+    marginTop: 21 * alpha,
+    width: '100%',
+    height: 150 * alpha,
+    alignItems: 'center',
+    justifyContent: 'center'
+    // flex: 1
+  },
+  galleryImageStyle: {
+    backgroundColor: 'cyan'
+  },
+  productimageImage: {
+    // backgroundColor: 'transparent',
+    resizeMode: 'cover',
+    width: 150 * alpha,
+    height: 150 * alpha,
+    // marginLeft: 5 * alpha,
+    alignSelf: 'center'
+  }
+});
 
-    },
-    productimageImage: {
-        backgroundColor: "transparent",
-        resizeMode: "cover",
-        width: 150 * alpha,
-        height: 150 * alpha,
-        // marginLeft: 5 * alpha,
-        alignSelf: 'center'
-    },
-})
+export default ImageCell;
