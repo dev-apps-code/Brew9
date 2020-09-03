@@ -184,6 +184,8 @@ export default class Home extends React.Component {
     scroll_Index: null,
     refresh_products: true,
     monitorLocation: null,
+    startFeatPromoLoading: true,
+    featPromoLoaded: false,
   });
 
   initializeOneSignal = () => {
@@ -553,70 +555,40 @@ export default class Home extends React.Component {
   }
 
   onRefresh() {
-    const callback = () => {
-      console.log('onRefresh');
-      this.loadShops();
-    };
+    const isRefreshing = true;
+    const refresh_products = true;
+    const data = [];
+    const products = [];
 
-    this.setState(
-      {
-        isRefreshing: true,
-        data: [],
-        products: [],
-        refresh_products: true,
-      },
-      callback,
+    this.setState({isRefreshing, data, products, refresh_products}, () =>
+      this.loadShops(),
     );
   }
 
   onCheckoutPressed = () => {
-    const {member_distance, delivery} = this.state;
-    const {navigate} = this.props.navigation;
-    const {
-      navigation,
-      dispatch,
-      currentMember,
-      shop,
-      cart,
-      promotions,
-    } = this.props;
+    const {navigation, currentMember} = this.props;
+    const {navigate, addListener, state} = navigation;
 
-    if (currentMember != undefined) {
+    if (currentMember !== null) {
       const analytics = new Analytics(ANALYTICS_ID);
       analytics.event(new Event('Home', 'Click', 'Checkout'));
-      // if (member_distance > shop.max_order_distance_in_km) {
-      // 	this.refs.toast.show("You are too far away", TOAST_DURATION)
-      // 	return
-      // } else {
 
-      this.navigationListener = navigation.addListener(
-        'willFocus',
-        (payload) => {
-          this.removeNavigationListener();
-          const {clearCart} = this.props;
+      this.navigationListener = addListener('willFocus', (payload) => {
+        this.removeNavigationListener();
+        const {clearCart} = this.props;
 
-          if (clearCart == true) {
-            console.log('--loadshops604--');
-            this.loadShops();
-            navigate('PickUp');
-          } else {
-          }
-        },
-      );
-
-      navigate('Checkout', {
-        returnToRoute: navigation.state,
-      });
-      // }
-    } else {
-      this.navigationListener = navigation.addListener(
-        'willFocus',
-        (payload) => {
-          this.removeNavigationListener();
+        if (clearCart === true) {
           this.loadShops();
-          console.log('--loadshops633--');
-        },
-      );
+          navigate('PickUp');
+        }
+      });
+
+      navigate('Checkout', {returnToRoute: state});
+    } else {
+      this.navigationListener = navigation.addListener('willFocus', () => {
+        this.removeNavigationListener();
+        this.loadShops();
+      });
       navigate('VerifyUser', {
         returnToRoute: navigation.state,
         check_promotion_trigger: () => this.check_promotion_trigger(),
@@ -632,6 +604,7 @@ export default class Home extends React.Component {
   }
 
   onBannerPressed = (item, index) => {
+    console.log(item);
     const productId = item?.promo_product_id || null;
 
     if (productId) {
@@ -655,9 +628,16 @@ export default class Home extends React.Component {
       if (banner_detail_image) {
         const selected_promotion = banner_detail_image;
         const isPromoToggle = true;
+        const startFeatPromoLoading = true;
+        const featPromoLoaded = false;
 
         this.calculateImageDimension(selected_promotion);
-        this.setState({isPromoToggle, selected_promotion});
+        this.setState({
+          isPromoToggle,
+          selected_promotion,
+          startFeatPromoLoading,
+          featPromoLoaded,
+        });
       }
     }
   };
@@ -1882,8 +1862,7 @@ export default class Home extends React.Component {
                 this.marker &&
                 this.marker.showCallout &&
                 this.marker.showCallout()
-              }
-            >
+              }>
               <Marker
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
@@ -2027,7 +2006,6 @@ export default class Home extends React.Component {
           if (result == null || result != shop.featured_promotion.id) {
             if (currentMember != null) {
               if (
-                shop.featured_promotion != null &&
                 shop.featured_promotion.for_new_user == true &&
                 currentMember.first_time_buyer == true
               ) {
@@ -2036,10 +2014,7 @@ export default class Home extends React.Component {
                   JSON.stringify(shop.featured_promotion.id),
                 );
                 this.onFeaturedPromotionPressed(shop.featured_promotion);
-              } else if (
-                shop.featured_promotion != null &&
-                shop.featured_promotion.for_new_user == false
-              ) {
+              } else if (shop.featured_promotion.for_new_user == false) {
                 AsyncStorage.setItem(
                   'featured',
                   JSON.stringify(shop.featured_promotion.id),
@@ -2209,16 +2184,22 @@ export default class Home extends React.Component {
       isPromoToggle,
       image_isLong,
       selected_promotion,
+      startFeatPromoLoading,
+      featPromoLoaded,
     } = this.state;
+
+    const showLoadingIndicator = startFeatPromoLoading && !featPromoLoaded;
+
     if (selected_promotion && isPromoToggle) {
       return (
         <Modal
           visible={isPromoToggle}
           style={{margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
-          {/* <ImageViewer backgroundColor={""} imageUrls={images}/> */}
-          <View style={styles.loading}>
-            <ActivityIndicator size='large' color='white' />
-          </View>
+          {showLoadingIndicator && (
+            <View style={styles.loading}>
+              <ActivityIndicator size='large' color='white' />
+            </View>
+          )}
           <ScrollView style={{horizontal: true, flex: 1}}>
             <View
               style={
@@ -2231,6 +2212,12 @@ export default class Home extends React.Component {
               <AutoHeightImage
                 source={{uri: selected_promotion}}
                 width={windowWidth}
+                onLoad={() =>
+                  this.setState({
+                    featPromoLoaded: true,
+                    startFeatPromoLoading: false,
+                  })
+                }
               />
             </View>
           </ScrollView>
