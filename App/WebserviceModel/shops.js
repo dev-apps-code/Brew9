@@ -7,10 +7,10 @@ import {
   deliveryFee,
   shopTown,
   favoriteShop,
-  unfavoriteShop
+  unfavoriteShop,
 } from '../Services/shops';
 import EventObject from './event_object';
-import { createAction } from '../Utils/index';
+import {createAction} from '../Utils/index';
 import _ from 'lodash';
 
 export default {
@@ -23,28 +23,28 @@ export default {
     selectedShop: null,
     currentOrder: null,
     popUp: false,
-    orders: []
+    orders: [],
   },
   reducers: {
-    setDefaultState(state, { payload }) {
+    setDefaultState(state, {payload}) {
       return {
-        ...state
+        ...state,
       };
     },
-    setAllShops(state, { payload }) {
-      return { ...state, allShops: payload };
+    setAllShops(state, {payload}) {
+      return {...state, allShops: payload};
     },
-    setNearbyShops(state, { payload }) {
-      return { ...state, nearbyShops: payload };
+    setNearbyShops(state, {payload}) {
+      return {...state, nearbyShops: payload};
     },
-    setSelectedShop(state, { payload }) {
-      return { ...state, selectedShop: payload };
+    setSelectedShop(state, {payload}) {
+      return {...state, selectedShop: payload};
     },
-    setFavoriteShops(state, { payload }) {
-      return { ...state, favoriteShops: payload };
+    setFavoriteShops(state, {payload}) {
+      return {...state, favoriteShops: payload};
     },
-    setCurrentOrder(state, { payload }) {
-      const { order } = payload;
+    setCurrentOrder(state, {payload}) {
+      const {order} = payload;
 
       let data = [...state.orders];
 
@@ -54,24 +54,24 @@ export default {
 
       data.unshift(order);
 
-      return { ...state, currentOrder: order, orders: data };
+      return {...state, currentOrder: order, orders: data};
     },
-    setOrders(state, { payload }) {
-      const { orders } = payload;
-      return { ...state, orders: orders };
+    setOrders(state, {payload}) {
+      const {orders} = payload;
+      return {...state, orders: orders};
     },
-    setPopUp(state, { payload }) {
-      const { popUp } = payload;
-      return { ...state, popUp };
+    setPopUp(state, {payload}) {
+      const {popUp} = payload;
+      return {...state, popUp};
     },
     clearNearbyShops(state) {
-      return { ...state, nearbyShops: [] };
-    }
+      return {...state, nearbyShops: []};
+    },
   },
   effects: {
-    *loadAllShops({ payload }, { call, put, select }) {
+    *loadAllShops({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
         const eventObject = new EventObject(json);
@@ -81,9 +81,9 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadShops({ payload }, { call, put, select }) {
+    *loadShops({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
         const eventObject = new EventObject(json);
@@ -93,9 +93,9 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *selectShop({ payload }, { call, put, select }) {
+    *selectShop({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
         const eventObject = new EventObject(json);
@@ -105,9 +105,9 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadFavoriteShops({ payload }, { call, put, select }) {
+    *loadFavoriteShops({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
         const eventObject = new EventObject(json);
@@ -117,18 +117,18 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadMakeFavoriteShop({ payload }, { call, select }) {
+    *loadMakeFavoriteShop({payload}, {call, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(favoriteShop, authtoken, object);
         const eventObject = new EventObject(json);
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadUnfavoriteShop({ payload }, { call, select }) {
+    *loadUnfavoriteShop({payload}, {call, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(unfavoriteShop, authtoken, object);
         const eventObject = new EventObject(json);
@@ -136,9 +136,9 @@ export default {
       } catch (err) {}
     },
 
-    *loadNearbyShops({ payload }, { call, put, select }) {
+    *loadNearbyShops({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shops, authtoken, object);
         const eventObject = new EventObject(json);
@@ -148,9 +148,9 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadMakeOrder({ payload }, { call, put, select }) {
+    *loadMakeOrder({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
 
         const authtoken = yield select((state) => state.members.userAuthToken);
 
@@ -159,26 +159,26 @@ export default {
         const eventObject = new EventObject(json);
         if (eventObject.success == true) {
           yield put(
-            createAction('setCurrentOrder')({ order: eventObject.result })
+            createAction('setCurrentOrder')({order: eventObject.result}),
           );
           if (eventObject.result.paid == true) {
-            yield put(createAction('setPopUp')({ popUp: true }));
+            yield put(createAction('setPopUp')({popUp: true}));
           }
           yield put(
             createAction('members/updateUnclaimedMission')(
-              eventObject.result.member.unclaimed_mission_count
-            )
+              eventObject.result.member.unclaimed_mission_count,
+            ),
           );
           yield put(
-            createAction('members/saveCurrentUser')(eventObject.result.member)
+            createAction('members/saveCurrentUser')(eventObject.result.member),
           );
         }
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadShopBanners({ payload }, { call, put, select }) {
+    *loadShopBanners({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.userAuthToken);
         const json = yield call(shop_banner, authtoken, object);
         const eventObject = new EventObject(json);
@@ -186,9 +186,9 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadMissions({ payload }, { call, put, select }) {
+    *loadMissions({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(missions, authtoken, object);
         const eventObject = new EventObject(json);
@@ -197,9 +197,9 @@ export default {
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
     },
-    *loadReview({ payload }, { call, put, select }) {
+    *loadReview({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(review, authtoken, object);
         const eventObject = new EventObject(json);
@@ -210,9 +210,9 @@ export default {
         console.log('err', err);
       }
     },
-    *loadDeliveryFee({ payload }, { call, put, select }) {
+    *loadDeliveryFee({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(deliveryFee, authtoken, object);
         const eventObject = new EventObject(json);
@@ -225,9 +225,9 @@ export default {
         console.log('err', err);
       }
     },
-    *loadShopTown({ payload }, { call, put, select }) {
+    *loadShopTown({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.members.userAuthToken);
         const json = yield call(shopTown, authtoken, object);
         const eventObject = new EventObject(json);
@@ -237,6 +237,6 @@ export default {
       } catch (err) {
         console.log('loadShopTown', err);
       }
-    }
-  }
+    },
+  },
 };
