@@ -879,44 +879,42 @@ export default class Checkout extends React.Component {
   };
 
   checkout = () => {
-    this.setState({isConfirmCheckout: true});
+    const {selected_payment} = this.state;
+    if (selected_payment === 'credit_card') {
+      this.setState({isConfirmCheckout: true});
+    } else {
+      this.onPayNowPressed();
+    }
   };
 
   renderConfirmPopup = () => {
-    const {selectedShop} = this.props;
-    const confirmText = getResponseMsg({
+    const {id} = this.props.selectedShop;
+    const {isConfirmCheckout} = this.state;
+    const description = getResponseMsg({
       props: this.props,
-      shopId: selectedShop.id,
-      key: 'Checkout Confirm',
+      shopId: id,
+      key: 'credit_card_confirm_popup_description',
       defaultText: 'Are you sure you want to order from this location?',
     });
-    const description = `${confirmText} ${selectedShop.name}`;
     const title = getResponseMsg({
       props: this.props,
-      shopId: selectedShop.id,
-      key: 'Checkout Confirm Title',
+      shopId: id,
+      key: 'credit_card_confirm_popup_title',
       defaultText: 'Confirm Checkout',
     });
     const OkText = getResponseMsg({
       props: this.props,
-      shopId: selectedShop.id,
-      key: 'heckout Confirm Button',
+      shopId: id,
+      key: 'credit_card_confirm_button',
       defaultText: 'Confirm',
     });
-    const cancelText = getResponseMsg({
-      props: this.props,
-      shopId: selectedShop.id,
-      key: 'Checkout Cancel Button',
-      defaultText: 'Cancel',
-    });
-    const popUpVisible = this.state.isConfirmCheckout;
+    const popUpVisible = isConfirmCheckout;
 
     return (
       <Brew9PopUp
         onPressOk={this.onPayNowPressed}
         onBackgroundPress={() => {}}
-        onPressCancel={() => this.setState({isConfirmCheckout: false})}
-        {...{popUpVisible, title, description, OkText, cancelText}}
+        {...{popUpVisible, title, description, OkText}}
       />
     );
   };
