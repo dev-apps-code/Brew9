@@ -890,13 +890,12 @@ export default class Checkout extends React.Component {
   renderConfirmPopup = () => {
     const {id} = this.props.selectedShop;
     const {isConfirmCheckout} = this.state;
-    const confirmText = getResponseMsg({
+    const description = getResponseMsg({
       props: this.props,
       shopId: id,
-      key: 'credit_card_confirm_popup_text',
+      key: 'credit_card_confirm_popup_description',
       defaultText: 'Are you sure you want to order from this location?',
     });
-    const description = `${confirmText}`;
     const title = getResponseMsg({
       props: this.props,
       shopId: id,
