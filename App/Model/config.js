@@ -25,13 +25,14 @@ export default {
     saveResponses(state, { payload }) {
       const responses = new Map();
       const overrides = new Map();
-      const shopMessages = new Map();
+
 
       payload.response_messages.map((r) => {
         responses.set(r.key, r.text);
 
         if (r.overrides && r.overrides.length > 0) {
           r.overrides.map((i) => {
+            const shopMessages = new Map();
             shopMessages.set(r.key, i.text);
             overrides.set(i.shop_id, shopMessages);
           });
