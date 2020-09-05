@@ -111,16 +111,16 @@ export default class ShopDetails extends Component {
       // let viewMoreText =
       //   this.props.responses.get('View More Button') || 'View More';
 
+
       const orderNowText = getResponseMsg({
         props: this.props,
-        shopId: details.id,
+        shopId: 1,
         key: 'Order Now Button',
         defaultText: 'Order Now',
       });
-
       const viewMoreText = getResponseMsg({
         props: this.props,
-        shopId: details.id,
+        shopId: 1,
         key: 'View More Button',
         defaultText: 'View More',
       });
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   },
   availabilityView: {
     height: alpha * 16,
-    width: alpha * 45,
+    // width: alpha * 45,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
@@ -322,6 +322,8 @@ const styles = StyleSheet.create({
     fontSize: fontAlpha * 10,
     color: '#00B2E3',
     fontFamily: TITLE_FONT,
+    marginLeft: 5 * alpha,
+    marginRight: 5 * alpha
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
