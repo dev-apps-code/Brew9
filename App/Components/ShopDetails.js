@@ -114,13 +114,13 @@ export default class ShopDetails extends Component {
 
       const orderNowText = getResponseMsg({
         props: this.props,
-        shopId: 1,
+        shopId: details.id,
         key: 'Order Now Button',
         defaultText: 'Order Now',
       });
       const viewMoreText = getResponseMsg({
         props: this.props,
-        shopId: 1,
+        shopId: details.id,
         key: 'View More Button',
         defaultText: 'View More',
       });
