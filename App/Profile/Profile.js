@@ -127,9 +127,15 @@ export default class Profile extends React.Component {
 
   loadAppSlogan() {
     const {selectedShop} = this.props;
+    let shop_id = 1
+
+    if (selectedShop != null) {
+      shop_id = selectedShop.id
+    }
+    
     const appSlogan = getResponseMsg({
       props: this.props,
-      shopId: selectedShop.id,
+      shopId: shop_id,
       key: 'App Slogan',
       defaultText: 'Redefine Coffee. Chocolate. Juice.',
     });
