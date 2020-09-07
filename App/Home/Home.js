@@ -17,7 +17,6 @@ import {
   BackHandler,
 } from 'react-native';
 import RNExitApp from 'react-native-kill-app';
-import Brew9Modal from '../Components/Brew9Modal';
 import Modal from 'react-native-modal';
 import PushRequestObject from '../Requests/push_request_object';
 import {connect} from 'react-redux';
@@ -27,10 +26,7 @@ import CategoryCell from './CategoryCell';
 import CartCell from './CartCell';
 import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import ProductRequestObject from '../Requests/product_request_object';
-import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
 import SwitchSelector from 'react-native-switch-selector';
-import Toast from 'react-native-easy-toast';
-import _ from 'lodash';
 import AutoHeightImage from 'react-native-auto-height-image';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -55,8 +51,7 @@ import {AsyncStorage} from 'react-native';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
-import AnimationLoading from '../Components/AnimationLoading';
-import Brew9Toast from '../Components/Brew9Toast';
+import {Brew9Modal, Brew9Toast, AnimationLoading} from '../Components';
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
