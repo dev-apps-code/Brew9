@@ -114,6 +114,7 @@ export default class Profile extends React.Component {
     };
     this.loadProfile = this.loadProfile.bind(this);
     this.moveAnimation = new Animated.ValueXY({x: 0, y: 0});
+    this.onFaqPressed = this.onFaqPressed.bind(this);
   }
 
   componentDidMount() {
@@ -127,12 +128,12 @@ export default class Profile extends React.Component {
 
   loadAppSlogan() {
     const {selectedShop} = this.props;
-    let shop_id = 1
+    let shop_id = 1;
 
     if (selectedShop != null) {
-      shop_id = selectedShop.id
+      shop_id = selectedShop.id;
     }
-    
+
     const appSlogan = getResponseMsg({
       props: this.props,
       shopId: shop_id,
@@ -949,38 +950,6 @@ export default class Profile extends React.Component {
               </Text>
             </View>
           </View>
-          {/* <TouchableOpacity
-				onPress={() => this.onMissionCenterPressed()}
-				style={styles.missioncenterbuttonButton}>
-				<Image
-					source={require("./../../assets/images/mission_center.png")}
-					style={styles.missionCenterBackground} />
-				<Animated.View style={[this.moveAnimation.getLayout(), hasShimmered ? { opacity: 1 } : { opacity: 0 }]} >
-					<Image
-						source={require("./../../assets/images/reflection.png")}
-						style={styles.missionCenterReflection} />
-				</Animated.View>
-				<View
-					style={styles.missionCentreView}>
-					<View
-						style={{
-							flex: 1,
-							flexDirection: "row",
-							alignItems: "center"
-						}}>
-						<Image
-							source={require("./../../assets/images/crown.png")}
-							style={styles.missioniconImage} />
-						<Text
-							style={styles.missioncenterbuttonButtonText}>Claim Rewards</Text>
-					</View>
-
-					<Image
-						source={require("./../../assets/images/next.png")}
-						style={styles.missionArrow} />
-				</View>
-			</TouchableOpacity> */}
-
           <View style={styles.menuView}>
             <ProfileMenu
               onPress={this.onOrderButtonPressed}
@@ -1003,7 +972,6 @@ export default class Profile extends React.Component {
               icon={require('./../../assets/images/myprofile.png')}
               separator={false}
             />
-            {/* <ProfileMenu onPress={this.onAddressPress} text={'My Address'} /> */}
             <View style={styles.graySeparator}></View>
             <ProfileMenu onPress={this.onFaqPressed} text={'FAQs'} />
             <ProfileMenu onPress={this.onFeedbackPressed} text={'Feedback'} />
@@ -1021,7 +989,6 @@ export default class Profile extends React.Component {
           style={{bottom: windowHeight / 2 - 40}}
           textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
         />
-        {/* {this.state.loading ? <HudLoading isLoading={this.state.loading} /> : undefined} */}
       </View>
     );
   }
