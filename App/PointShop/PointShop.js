@@ -8,25 +8,26 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
+import {Analytics, Event} from 'expo-analytics';
+import {connect} from 'react-redux';
 import PointProductCell from './PointProductCell';
 import {alpha, fontAlpha} from '../Common/size';
 import {KURL_INFO} from '../../App/Utils/server.js';
 import {createAction} from '../Utils';
-import {connect} from 'react-redux';
 import PointsProductsRequestObject from '../Requests/points_products_request_object.js';
-import {
+import * as commonStyles from '../Common/common_style';
+import {ANALYTICS_ID} from '../Common/config';
+import {getMemberIdForApi} from '../Services/members_helper';
+import {Brew9Toast} from '../Components';
+
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
   LIGHT_GREY,
   DEFAULT_GREY_BACKGROUND,
   TOAST_DURATION,
-} from '../Common/common_style';
-import {Analytics, Event, PageHit} from 'expo-analytics';
-import {ANALYTICS_ID} from '../Common/config';
-import {getMemberIdForApi} from '../Services/members_helper';
-import Brew9Toast from '../Components/Brew9Toast';
-
+} = commonStyles;
 @connect(({members}) => ({
   members: members.profile,
   company_id: members.company_id,
