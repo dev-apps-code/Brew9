@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "2.0.0",
+    "version": "2.0.4",
     "orientation": "portrait",
     "updates": {
       "fallbackToCacheTimeout": 0,
@@ -19,14 +19,14 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "buildNumber":"30",
+      "buildNumber": "32",
       "bundleIdentifier": "com.dreamcode.brew9",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan qr code to allow you to pay or redeem for vouchers.",
-        "NSLocationWhenInUseUsageDescription": "This app requires you to provide your location to suggest you the nearest shop", 
-        "CLIENT_ID":"666273029416-f39tfj1q96m66idd65r84tcuck3d6co3.apps.googleusercontent.com",
-        "REVERSED_CLIENT_ID":"com.googleusercontent.apps.666273029416-f39tfj1q96m66idd65r84tcuck3d6co3",
-        "API_KEY":"AIzaSyDYFeEhYm2hokvqq2-zJboGobxh_iMzwF0"        
+        "NSLocationWhenInUseUsageDescription": "This app requires you to provide your location to suggest you the nearest shop",
+        "CLIENT_ID": "666273029416-f39tfj1q96m66idd65r84tcuck3d6co3.apps.googleusercontent.com",
+        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.666273029416-f39tfj1q96m66idd65r84tcuck3d6co3",
+        "API_KEY": "AIzaSyDYFeEhYm2hokvqq2-zJboGobxh_iMzwF0"
       },
       "publishBundlePath": "ios/brew9/Supporting/shell-app.bundle",
       "publishManifestPath": "ios/brew9/Supporting/shell-app-manifest.json"
@@ -38,7 +38,7 @@
           "apiKey": "AIzaSyDAJsylYVu_i2yPaOVtqVnVtP9wjlOlxPo"
         }
       },
-      "versionCode":20,
+      "versionCode": 19,
       "googleServicesFile": "./assets/fcm/google-services.json",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
