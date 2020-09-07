@@ -1,11 +1,3 @@
-//
-//  MemberProfile
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   Text,
@@ -16,69 +8,60 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowHeight } from '../Common/size';
-import {
-  createAction,
-  validateEmail,
-  StackActions,
-  NavigationActions
-} from '../Utils';
-import { getAppVersion, getBuildVersion } from '../Utils/server';
+import {alpha, fontAlpha} from '../Common/size';
+import {createAction, validateEmail} from '../Utils';
+import {getAppVersion, getBuildVersion} from '../Utils/server';
 import UpdateProfileRequestObject from '../Requests/update_profile_request_object';
 import UpdateAvatarRequestObject from '../Requests/update_avatar_request_object';
 import UpdatePhoneNumberRequestObject from '../Requests/update_phone_number_request_object';
 import VerifyPhoneNumberUpdateRequestObject from '../Requests/verify_phone_number_update_request_object';
-import * as SecureStore from 'expo-secure-store';
 import Modal from 'react-native-modal';
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
-  RadioButtonLabel
+  RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import { connect } from 'react-redux';
-import PhoneInput from 'react-native-phone-input';
+import {connect} from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import DatePicker from 'react-native-datepicker';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import HudLoading from '../Components/HudLoading';
-import { Image as ExpoImage } from 'react-native-expo-image-cache';
-import {
+import Toast from 'react-native-easy-toast';
+import {Image as ExpoImage} from 'react-native-expo-image-cache';
+import moment from 'moment';
+import * as commonStyles from '../Common/common_style';
+import {getMemberIdForApi} from '../Services/members_helper';
+import LogoutRequestObject from '../Requests/logout_request_object';
+import {DEVELOP_MODE} from '../Common/config';
+import {logout} from '../Utils/route_helper';
+import {Brew9Modal, Brew9Toast, HudLoading} from '../Components';
+
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
   DISABLED_COLOR,
-  commonStyles,
   TOAST_DURATION,
-  LIGHT_GREY
-} from '../Common/common_style';
-import moment from 'moment';
-import { getMemberIdForApi } from '../Services/members_helper';
-import Brew9Modal from '../Components/Brew9Modal';
-import LogoutRequestObject from '../Requests/logout_request_object';
-import { DEVELOP_MODE } from '../Common/config';
-import { logout } from '../Utils/route_helper';
-import Brew9Toast from '../Components/Brew9Toast';
+  LIGHT_GREY,
+} = commonStyles;
 
-@connect(({ members }) => ({
-  members: members.profile
+@connect(({members}) => ({
+  members: members.profile,
 }))
 export default class MemberProfile extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTitle: (
         <Text
           style={{
             textAlign: 'center',
             alignSelf: 'center',
-            fontFamily: TITLE_FONT
-          }}
-        >
+            fontFamily: TITLE_FONT,
+          }}>
           Personal Info
         </Text>
       ),
@@ -87,8 +70,7 @@ export default class MemberProfile extends React.Component {
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onBackPressed ? params.onBackPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/back.png')}
               style={styles.navigationBarItemIcon}
@@ -103,8 +85,8 @@ export default class MemberProfile extends React.Component {
       ) : null,
       headerStyle: {
         elevation: 0,
-        shadowOpacity: 0
-      }
+        shadowOpacity: 0,
+      },
     };
   };
 
@@ -120,12 +102,12 @@ export default class MemberProfile extends React.Component {
       nickname: '',
       email: '',
       image: {
-        uri: null
+        uri: null,
       },
       phone_no: '',
       gender_options: [
-        { label: 'Male', value: 0 },
-        { label: 'Female', value: 1 }
+        {label: 'Male', value: 0},
+        {label: 'Female', value: 1},
       ],
       verification_code: '',
       gender: 2,
@@ -134,7 +116,7 @@ export default class MemberProfile extends React.Component {
       has_send_code: false,
       member_have_dob: false,
       birthdayAlert: false,
-      default_address: ''
+      default_address: '',
     };
   }
 
@@ -143,7 +125,7 @@ export default class MemberProfile extends React.Component {
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
       onItemPressed: this.onItemPressed,
-      onLogoutPressed: this.loadDestroy.bind(this)
+      onLogoutPressed: this.loadDestroy.bind(this),
     });
   }
 
@@ -182,28 +164,28 @@ export default class MemberProfile extends React.Component {
   };
 
   loadDestroy() {
-    const { dispatch } = this.props;
-    const { navigate } = this.props.navigation;
-    this.setState({ loading: true });
+    const {dispatch} = this.props;
+    const {navigate} = this.props.navigation;
+    this.setState({loading: true});
 
     const callback = (eventObject) => {
       this.setState(
         {
-          loading: false
+          loading: false,
         },
         () => {
           if (eventObject.success) {
             this.resetRoute();
           }
-        }
+        },
       );
     };
     const obj = new LogoutRequestObject(Constants.installationId);
     dispatch(
       createAction('members/loadDestroy')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
@@ -213,7 +195,7 @@ export default class MemberProfile extends React.Component {
 
   getPermissionAsync = async () => {
     // if (Constants.platform.ios) {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
     if (status !== 'granted') {
       return false;
@@ -223,50 +205,48 @@ export default class MemberProfile extends React.Component {
   };
 
   loadUpdateProfile(formData) {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
 
-    this.setState({ loading: true });
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.refs.toast.show('Profile updated successfully', TOAST_DURATION);
-        this.loadMember()
+        this.loadMember();
       } else {
         this.refs.toast.show(eventObject.message, TOAST_DURATION);
       }
       this.setState({
-        loading: false
+        loading: false,
       });
     };
     const obj = new UpdateProfileRequestObject(
       formData.dob,
       formData.nickname,
       formData.gender,
-      formData.email
+      formData.email,
     );
     obj.setUrlId(getMemberIdForApi(this.state.members));
     dispatch(
       createAction('members/loadUpdateProfile')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   loadUpdateAvatar(formData) {
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
 
-    this.setState({ loading: true });
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.refs.toast.show('Avatar updated successfully', TOAST_DURATION);
         this.loadMember();
-
-
       } else {
         this.refs.toast.show(eventObject.message, TOAST_DURATION);
       }
       this.setState({
-        loading: false
+        loading: false,
       });
     };
     const obj = new UpdateAvatarRequestObject(formData.image);
@@ -274,84 +254,84 @@ export default class MemberProfile extends React.Component {
     dispatch(
       createAction('members/loadUpdateAvatar')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   loadUpdatePhoneNumber(formData) {
-    const { dispatch } = this.props;
-    this.setState({ loading: true });
+    const {dispatch} = this.props;
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.message) {
         this.refs.toast.show(eventObject.message, TOAST_DURATION);
       }
       this.setState({
         loading: false,
-        has_send_code: true
+        has_send_code: true,
       });
     };
     const obj = new UpdatePhoneNumberRequestObject(
       formData.phone_no,
-      formData.country_code
+      formData.country_code,
     );
     obj.setUrlId(getMemberIdForApi(this.state.members));
     dispatch(
       createAction('members/loadUpdatePhoneNumber')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   loadVerifyPhoneNumberUpdate(formData) {
-    const { dispatch } = this.props;
-    this.setState({ loading: true });
+    const {dispatch} = this.props;
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState({
           member_phone_number: this.state.phone_no,
-          modalVisible: false
+          modalVisible: false,
         });
       } else {
         this.refs.toast.show(eventObject.message, TOAST_DURATION);
       }
       this.setState({
-        loading: false
+        loading: false,
       });
     };
     const obj = new VerifyPhoneNumberUpdateRequestObject(
       formData.code,
       formData.phone_no,
-      formData.country_code
+      formData.country_code,
     );
     obj.setUrlId(getMemberIdForApi(this.state.members));
     dispatch(
       createAction('members/loadVerifyPhoneNumberUpdate')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   }
 
   loadMember() {
-    const { members } = this.props;
+    const {members} = this.props;
     this.setState({
       members: members,
       image: {
-        uri: members.image
+        uri: members.image,
       },
       dob: members.dob,
       nickname: members.nickname,
       gender: members.gender,
       email: members.email,
       member_phone_number: members.phone_no,
-      default_address: members.defaultAddress
+      default_address: members.defaultAddress,
     });
 
     if (members.dob != undefined) {
       this.setState({
-        member_have_dob: true
+        member_have_dob: true,
       });
     }
   }
@@ -362,28 +342,28 @@ export default class MemberProfile extends React.Component {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 3]
+        aspect: [4, 3],
       });
 
       if (!result.cancelled) {
         let data = {
           uri: result.uri,
           name: Math.random().toString(36).substr(2, 5) + 'avatar.jpg',
-          type: 'image/jpg'
+          type: 'image/jpg',
         };
         this.setState(
           {
-            image: data
+            image: data,
           },
           function () {
             this.uploadAvatar();
-          }
+          },
         );
       }
     } else {
       this.refs.toast.show(
         'Please enable camera roll permission in settings.',
-        TOAST_DURATION
+        TOAST_DURATION,
       );
     }
   };
@@ -413,24 +393,24 @@ export default class MemberProfile extends React.Component {
   };
 
   onUpdatePressed = () => {
-    this.setState({ modalVisible: true });
+    this.setState({modalVisible: true});
   };
 
   onClosePressed = () => {
     Keyboard.dismiss();
-    this.setState({ modalVisible: false, phone_no: '', has_send_code: false });
+    this.setState({modalVisible: false, phone_no: '', has_send_code: false});
   };
 
   onUpdateCode(iso2) {
     var country_code = this.phone.getCountryCode();
     this.setState({
       country: iso2,
-      country_code: country_code
+      country_code: country_code,
     });
   }
 
   onSendCodePressed = () => {
-    const { country_code, phone_no } = this.state;
+    const {country_code, phone_no} = this.state;
 
     if (
       country_code == '' ||
@@ -443,19 +423,19 @@ export default class MemberProfile extends React.Component {
     }
 
     this.setState({
-      loading: true
+      loading: true,
     });
     const phoneFormData = {
       // phone_no: this.state.phone_no,
       phone_no,
-      country_code
+      country_code,
     };
 
     this.loadUpdatePhoneNumber(phoneFormData);
   };
 
   onConfirmButtonPressed = () => {
-    const { verification_code, has_send_code } = this.state;
+    const {verification_code, has_send_code} = this.state;
 
     if (!has_send_code) {
       return;
@@ -465,14 +445,14 @@ export default class MemberProfile extends React.Component {
       return;
     }
     this.setState({
-      loading: true
+      loading: true,
     });
     const phoneFormData = {
       code: this.state.verification_code,
       // phone_no: this.state.phone_no,
       phone_no: this.state.phone_no,
       // country_code: this.state.country_code,
-      country_code: this.state.country_code
+      country_code: this.state.country_code,
     };
 
     this.loadVerifyPhoneNumberUpdate(phoneFormData);
@@ -480,7 +460,7 @@ export default class MemberProfile extends React.Component {
 
   uploadAvatar = () => {
     const profileFormData = {
-      image: this.state.image
+      image: this.state.image,
     };
     this.loadUpdateAvatar(profileFormData);
   };
@@ -494,44 +474,41 @@ export default class MemberProfile extends React.Component {
         nickname: this.state.nickname,
         image: this.state.image,
         gender: this.state.gender,
-        email: this.state.email
+        email: this.state.email,
       };
       this.loadUpdateProfile(profileFormData);
     }
   };
   onChangeBirthdate = (dob) => {
-    this.setState({ dob: dob, birthdayAlert: true });
+    this.setState({dob: dob, birthdayAlert: true});
   };
 
   onChangeAddress = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     navigation.navigate('ShippingAddress', {
-      origin: navigation.state
+      origin: navigation.state,
     });
   };
 
   renderModalContent = () => (
     <View style={styles.popOutView}>
       <View
-        pointerEvents="box-none"
+        pointerEvents='box-none'
         style={{
           position: 'absolute',
           width: '100%',
           top: 15 * alpha,
-          height: '100%'
-        }}
-      >
+          height: '100%',
+        }}>
         <View
-          pointerEvents="box-none"
+          pointerEvents='box-none'
           style={{
             height: 81 * alpha,
-            marginLeft: 6 * alpha
-          }}
-        >
+            marginLeft: 6 * alpha,
+          }}>
           <TouchableOpacity
             onPress={this.onClosePressed}
-            style={styles.closeButton}
-          >
+            style={styles.closeButton}>
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
           <View style={styles.headerView}>
@@ -544,81 +521,67 @@ export default class MemberProfile extends React.Component {
         </View>
         <View style={styles.formView}>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               width: '100%',
               height: 30 * alpha,
               flexDirection: 'row',
-              alignItems: 'flex-start'
-            }}
-          >
+              alignItems: 'flex-start',
+            }}>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 width: 106 * alpha,
                 height: 30 * alpha,
                 alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
+                justifyContent: 'center',
+              }}>
               <TouchableOpacity style={styles.countrycodeButton}>
                 <Text style={styles.countrycodeButtonText}>+673</Text>
               </TouchableOpacity>
-              {/* <PhoneInput
-								ref={(ref) => { this.phone = ref }}
-								initialCountry={this.state.country}
-								textStyle={styles.phoneCountryCodeText}
-								disabled={true}
-								textProps={{keyboardType:"number-pad", editable:false}}
-								onSelectCountry={(iso2) => this.onUpdateCode(iso2)}
-								offset={10}
-
-							/> */}
               <View style={styles.lineView} />
             </View>
             <TextInput
-              keyboardType="number-pad"
-              clearButtonMode="always"
+              keyboardType='number-pad'
+              clearButtonMode='always'
               autoCorrect={false}
-              placeholder="Phone Number"
+              placeholder='Phone Number'
               placeholderTextColor={LIGHT_GREY}
-              onChangeText={(phone_no) => this.setState({ phone_no })}
+              onChangeText={(phone_no) => this.setState({phone_no})}
               style={styles.phoneNumberTextInput}
             />
           </View>
           <View style={styles.lineTwoView} />
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               width: '100%',
               height: 30 * alpha,
               marginTop: 4 * alpha,
               flexDirection: 'row',
-              alignItems: 'flex-start'
-            }}
-          >
+              alignItems: 'flex-start',
+            }}>
             <TextInput
               autoCorrect={false}
-              placeholder="SMS Code"
-              keyboardType="number-pad"
+              placeholder='SMS Code'
+              keyboardType='number-pad'
               placeholderTextColor={LIGHT_GREY}
               onChangeText={(verification_code) =>
-                this.setState({ verification_code })
+                this.setState({verification_code})
               }
               style={styles.codeTextInput}
             />
-            <View style={{ flex: 1 }} />
+            <View style={{flex: 1}} />
             <TouchableOpacity
               onPress={() => this.onSendCodePressed()}
-              style={styles.verificationcodeButton}
-            >
+              style={styles.verificationcodeButton}>
               <Text style={styles.verificationcodeButtonText}>Send Code</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.lineThreeView} />
           <View
             style={{
-              flex: 1
+              flex: 1,
             }}
           />
           <TouchableOpacity
@@ -627,8 +590,7 @@ export default class MemberProfile extends React.Component {
               this.state.has_send_code
                 ? styles.confirmButton
                 : styles.confirmDisabledButton
-            }
-          >
+            }>
             <Text style={styles.confirmButtonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
@@ -646,9 +608,9 @@ export default class MemberProfile extends React.Component {
       member_phone_number,
       email,
       selected_image,
-      default_address
+      default_address,
     } = this.state;
-    const preview = { uri: require('./../../assets/images/user.png') };
+    const preview = {uri: require('./../../assets/images/user.png')};
     const uri = image.uri;
     let maxDate = new Date(moment().subtract(10, 'years').calendar());
     let maxYear = maxDate.getFullYear();
@@ -658,17 +620,16 @@ export default class MemberProfile extends React.Component {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
-        style={{ flex: 1 }}
-        enabled
-      >
+        style={{flex: 1}}
+        enabled>
         <SafeAreaView style={styles.memberProfileView}>
           <View style={styles.memberProfileView}>
             <View style={styles.profileView}>
               <View style={styles.profilepicView}>
-                <View pointerEvents="box-none">
+                <View pointerEvents='box-none'>
                   <View style={styles.avatarImageContainer}>
                     {image.uri != null ? (
-                      <ExpoImage style={styles.avatarImage} {...{ uri, uri }} />
+                      <ExpoImage style={styles.avatarImage} {...{uri, uri}} />
                     ) : (
                       <Image
                         source={require('./../../assets/images/user.png')}
@@ -678,8 +639,7 @@ export default class MemberProfile extends React.Component {
                   </View>
                   <TouchableOpacity
                     onPress={this._pickImage}
-                    style={styles.imagebuttonButton}
-                  ></TouchableOpacity>
+                    style={styles.imagebuttonButton}></TouchableOpacity>
                   {image.uri == null && (
                     <Text style={styles.avatarUploadText}>Upload Photo</Text>
                   )}
@@ -689,80 +649,68 @@ export default class MemberProfile extends React.Component {
             </View>
             <View style={styles.personalInfoView}>
               <View style={styles.nicknameView}>
-                {/* <Image
-                source={require('./../../assets/images/line-17.png')}
-                style={styles.seperatorImage}
-              /> */}
                 <View style={styles.seperatorView} />
 
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
                     top: 0 * alpha,
                     bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
+                    justifyContent: 'center',
+                  }}>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       width: 315 * alpha,
                       height: 16 * alpha,
                       marginLeft: 22 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
+                      alignItems: 'center',
+                    }}>
                     <Text style={styles.nicknameText}>Nickname</Text>
                     <TextInput
                       autoCorrect={false}
-                      placeholder="Nickname"
+                      placeholder='Nickname'
                       style={styles.usernameTextInput}
                       returnKeyType={'done'}
                       placeholderTextColor={LIGHT_GREY}
-                      onChangeText={(nickname) => this.setState({ nickname })}
+                      onChangeText={(nickname) => this.setState({nickname})}
                       defaultValue={nickname}
                     />
                   </View>
                 </View>
               </View>
               <View style={styles.emailView}>
-                {/* <Image
-                source={require('./../../assets/images/line-17.png')}
-                style={styles.seperatorImage}
-              /> */}
                 <View style={styles.seperatorView} />
 
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
                     top: 0 * alpha,
                     bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
+                    justifyContent: 'center',
+                  }}>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       width: 315 * alpha,
                       height: 16 * alpha,
                       marginLeft: 22 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
+                      alignItems: 'center',
+                    }}>
                     <Text style={styles.emailText}>Email</Text>
                     <TextInput
                       autoCorrect={false}
-                      placeholder="Email (optional)"
+                      placeholder='Email (optional)'
                       style={styles.emailTextInput}
                       returnKeyType={'done'}
                       placeholderTextColor={LIGHT_GREY}
-                      onChangeText={(email) => this.setState({ email })}
+                      onChangeText={(email) => this.setState({email})}
                       defaultValue={email}
                     />
                   </View>
@@ -771,72 +719,63 @@ export default class MemberProfile extends React.Component {
               <View style={styles.phoneNumberView}>
                 <View style={styles.seperatorView} />
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
                     right: 0 * alpha,
                     top: 0 * alpha,
                     bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
+                    justifyContent: 'center',
+                  }}>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       height: 25 * alpha,
                       marginLeft: 22 * alpha,
                       marginRight: 22 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
+                      alignItems: 'center',
+                    }}>
                     <Text style={styles.phoneNumberText}>Phone Number</Text>
                     <Text style={styles.textInputTextInput}>
                       {member_phone_number}
                     </Text>
                     <View
                       style={{
-                        flex: 1
+                        flex: 1,
                       }}
                     />
                     <TouchableOpacity
                       onPress={this.onUpdatePressed}
-                      style={styles.updateButton}
-                    >
+                      style={styles.updateButton}>
                       <Text style={styles.updateButtonText}>update</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
               <View style={styles.genderView}>
-                {/* <Image
-                source={require('./../../assets/images/line-3-copy.png')}
-                style={styles.seperatorTwoImage}
-              /> */}
                 <View style={styles.seperatorView} />
 
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
                     right: 0 * alpha,
                     top: 0 * alpha,
                     bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
+                    justifyContent: 'center',
+                  }}>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       height: 16 * alpha,
                       marginLeft: 22 * alpha,
                       marginRight: 86 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
+                      alignItems: 'center',
+                    }}>
                     <Text style={styles.genderText}>Gender</Text>
                     <View style={styles.selectedradioView}>
                       <RadioForm formHorizontal={true} animation={true}>
@@ -844,7 +783,7 @@ export default class MemberProfile extends React.Component {
                           var onPress = (value, index) => {
                             this.setState({
                               gender: value,
-                              genderIndex: index
+                              genderIndex: index,
                             });
                           };
                           return (
@@ -867,7 +806,7 @@ export default class MemberProfile extends React.Component {
                                   backgroundColor: 'rgb(200, 200, 200)',
                                   borderWidth: 0,
                                   marginRight: 5 * alpha,
-                                  marginTop: 2 * alpha
+                                  marginTop: 2 * alpha,
                                 }}
                               />
                               <RadioButtonLabel
@@ -878,7 +817,7 @@ export default class MemberProfile extends React.Component {
                                   color: 'rgb(135, 135, 135)',
                                   fontSize: 13 * fontAlpha,
                                   marginRight: 10 * alpha,
-                                  fontFamily: NON_TITLE_FONT
+                                  fontFamily: NON_TITLE_FONT,
                                 }}
                                 labelWrapStyle={{}}
                               />
@@ -895,11 +834,11 @@ export default class MemberProfile extends React.Component {
                 <Text style={styles.birthdayText}>Birthday</Text>
                 <DatePicker
                   date={this.state.dob}
-                  mode="date"
-                  placeholder="Birthday"
-                  format="DD-MM-YYYY"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
+                  mode='date'
+                  placeholder='Birthday'
+                  format='DD-MM-YYYY'
+                  confirmBtnText='Confirm'
+                  cancelBtnText='Cancel'
                   showIcon={false}
                   maxDate={'31-12-' + maxYear}
                   style={styles.birthdayDatePicker}
@@ -908,59 +847,50 @@ export default class MemberProfile extends React.Component {
                     placeholderText: {
                       fontFamily: NON_TITLE_FONT,
                       fontSize: 13 * fontAlpha,
-                      color: LIGHT_GREY
+                      color: LIGHT_GREY,
                     },
 
                     dateText: {
                       fontFamily: NON_TITLE_FONT,
                       fontSize: 13 * fontAlpha,
-                      color: 'rgb(135, 135, 135)'
+                      color: 'rgb(135, 135, 135)',
                     },
                     dateInput: {
                       height: 18 * alpha,
                       borderWidth: 0,
                       position: 'absolute',
                       top: 0,
-                      left: 61 * alpha
+                      left: 61 * alpha,
                     },
                     disabled: {
-                      backgroundColor: 'transparent'
-                    }
+                      backgroundColor: 'transparent',
+                    },
                   }}
                   onDateChange={(dob) => {
                     this.onChangeBirthdate(dob);
                   }}
                 />
-                {/*<TextInput*/}
-                {/*	autoCorrect={false}*/}
-                {/*	placeholder="1973-11-10"*/}
-                {/*	style={styles.birthdayTextInput}*/}
-                {/*	defaultValue={"1973-11-10"}*/}
-                {/*/>*/}
               </View>
               <View style={styles.phoneNumberView}>
-                {/* <View style={styles.seperatorView} /> */}
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
                     right: 0 * alpha,
                     top: 0 * alpha,
                     bottom: 0 * alpha,
-                    justifyContent: 'center'
-                  }}
-                >
+                    justifyContent: 'center',
+                  }}>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       height: 25 * alpha,
                       marginLeft: 22 * alpha,
                       marginRight: 22 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
+                      alignItems: 'center',
+                    }}>
                     <Text style={styles.phoneNumberText}>Delivery Address</Text>
                     <TouchableOpacity
                       onPress={this.onChangeAddress}
@@ -968,11 +898,10 @@ export default class MemberProfile extends React.Component {
                         flex: 1,
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}
-                    >
+                        alignItems: 'center',
+                      }}>
                       <Text
-                        ellipsizeMode="tail"
+                        ellipsizeMode='tail'
                         numberOfLines={20}
                         style={[
                           styles.textInputTextInput,
@@ -980,10 +909,9 @@ export default class MemberProfile extends React.Component {
                             paddingRight: 10,
                             color: defaultAddress
                               ? 'rgb(135, 135, 135)'
-                              : LIGHT_GREY
-                          }
-                        ]}
-                      >
+                              : LIGHT_GREY,
+                          },
+                        ]}>
                         {defaultAddress}
                       </Text>
                       <Image
@@ -997,16 +925,14 @@ export default class MemberProfile extends React.Component {
             </View>
             <TouchableOpacity
               onPress={() => this.onSavePressed()}
-              style={styles.saveButton}
-            >
+              style={styles.saveButton}>
               <Text style={styles.saveButtonText}>SAVE</Text>
             </TouchableOpacity>
 
             <Modal
               isVisible={this.state.modalVisible}
               coverScreen={false}
-              avoidKeyboard={true}
-            >
+              avoidKeyboard={true}>
               {this.renderModalContent()}
             </Modal>
             <Brew9Modal
@@ -1017,26 +943,25 @@ export default class MemberProfile extends React.Component {
                 'Once you enter your birthday date, you can not update it again. Please make sure your birthday is correct!'
               }
               okayButtonAction={() => {
-                this.setState({ birthdayAlert: false });
+                this.setState({birthdayAlert: false});
               }}
               cancelButtonAction={() =>
-                this.setState({ birthdayAlert: false, dob: '' })
+                this.setState({birthdayAlert: false, dob: ''})
               }
             />
           </View>
-          <Brew9Toast ref="toast" />
+          <Brew9Toast ref='toast' />
           <Toast
-            ref="tapToast"
+            ref='tapToast'
             // style={{ bottom: windowHeight / 2 - 40 }}
-            textStyle={{ fontFamily: TITLE_FONT, color: '#ffffff' }}
-            position="bottom"
+            textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
+            position='bottom'
             defaultCloseDelay={0}
           />
           <HudLoading isLoading={this.state.loading} />
           <Text
             onPress={() => this.handleChangeServerTap()}
-            style={styles.versionText}
-          >
+            style={styles.versionText}>
             Version {getAppVersion()} (Build {getBuildVersion()})
           </Text>
         </SafeAreaView>
@@ -1049,39 +974,39 @@ const styles = StyleSheet.create({
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
+    width: 70 * alpha,
   },
   logoutText: {
     fontFamily: NON_TITLE_FONT,
     color: LIGHT_GREY,
     paddingRight: 8 * alpha,
-    fontSize: 13 * fontAlpha
+    fontSize: 13 * fontAlpha,
   },
   navigationBarItem: {
-    width: '100%'
+    width: '100%',
   },
   navigationBarItemTitle: {
     color: 'black',
     fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha
+    fontSize: 16 * fontAlpha,
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
     height: 18 * alpha,
-    tintColor: 'black'
+    tintColor: 'black',
   },
   memberProfileView: {
     backgroundColor: 'rgb(243, 243, 243)',
-    flex: 1
+    flex: 1,
   },
   profileView: {
     backgroundColor: 'white',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   profilepicView: {
     backgroundColor: 'transparent',
     marginTop: 27 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   avatarImageContainer: {
     backgroundColor: 'gray',
@@ -1089,7 +1014,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     width: 80 * alpha,
-    height: 80 * alpha
+    height: 80 * alpha,
   },
   avatarImage: {
     backgroundColor: 'transparent',
@@ -1100,10 +1025,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    height: 80 * alpha
+    height: 80 * alpha,
   },
   imagebuttonButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   imagebuttonButton: {
     backgroundColor: 'transparent',
@@ -1115,7 +1040,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 80 * alpha,
     top: 0,
-    height: 80 * alpha
+    height: 80 * alpha,
   },
   avatarUploadText: {
     backgroundColor: 'transparent',
@@ -1124,7 +1049,7 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    marginTop: 4 * alpha
+    marginTop: 4 * alpha,
   },
   nameText: {
     backgroundColor: 'transparent',
@@ -1134,16 +1059,16 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'center',
     marginTop: 10 * alpha,
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   personalInfoView: {
     backgroundColor: 'white',
     height: 323 * alpha,
-    marginTop: 10 * alpha
+    marginTop: 10 * alpha,
   },
   nicknameView: {
     backgroundColor: 'transparent',
-    height: 53 * alpha
+    height: 53 * alpha,
   },
   seperatorImage: {
     backgroundColor: 'transparent',
@@ -1152,7 +1077,7 @@ const styles = StyleSheet.create({
     left: 22 * alpha,
     right: 22 * alpha,
     top: 50 * alpha,
-    height: 3 * alpha
+    height: 3 * alpha,
   },
   nicknameText: {
     backgroundColor: 'transparent',
@@ -1161,7 +1086,7 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     width: 110 * alpha,
-    textAlign: 'left'
+    textAlign: 'left',
   },
   usernameTextInput: {
     backgroundColor: 'transparent',
@@ -1173,11 +1098,11 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     width: 200 * alpha,
-    height: 16 * alpha
+    height: 16 * alpha,
   },
   emailView: {
     backgroundColor: 'transparent',
-    height: 53 * alpha
+    height: 53 * alpha,
   },
   emailText: {
     backgroundColor: 'transparent',
@@ -1186,7 +1111,7 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     width: 110 * alpha,
-    textAlign: 'left'
+    textAlign: 'left',
   },
   emailTextInput: {
     backgroundColor: 'transparent',
@@ -1198,11 +1123,11 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     width: 200 * alpha,
-    height: 16 * alpha
+    height: 16 * alpha,
   },
   phoneNumberView: {
     backgroundColor: 'transparent',
-    height: 53 * alpha
+    height: 53 * alpha,
   },
   seperatorView: {
     backgroundColor: 'rgb(244, 244, 244)',
@@ -1210,7 +1135,7 @@ const styles = StyleSheet.create({
     left: 22 * alpha,
     right: 22 * alpha,
     top: 50 * alpha,
-    height: 1 * alpha
+    height: 1 * alpha,
   },
   phoneNumberText: {
     color: 'rgb(54, 54, 54)',
@@ -1219,7 +1144,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     width: 110 * alpha,
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   textInputTextInput: {
     color: 'rgb(135, 135, 135)',
@@ -1230,7 +1155,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    padding: 0
+    padding: 0,
   },
   updateButton: {
     backgroundColor: 'transparent',
@@ -1243,7 +1168,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 56 * alpha,
-    height: 25 * alpha
+    height: 25 * alpha,
   },
   updateButtonText: {
     color: 'rgb(54, 54, 54)',
@@ -1251,15 +1176,15 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   updateButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   genderView: {
     backgroundColor: 'transparent',
-    height: 53 * alpha
+    height: 53 * alpha,
   },
   seperatorTwoImage: {
     backgroundColor: 'transparent',
@@ -1268,7 +1193,7 @@ const styles = StyleSheet.create({
     left: 22 * alpha,
     right: 22 * alpha,
     top: 50 * alpha,
-    height: 3 * alpha
+    height: 3 * alpha,
   },
   genderText: {
     color: 'rgb(54, 54, 54)',
@@ -1277,19 +1202,19 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     width: 110 * alpha,
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   selectedradioView: {
     flex: 1,
     height: 53 * alpha,
     backgroundColor: 'transparent',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   birthdayView: {
     backgroundColor: 'transparent',
     height: 53 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   versionText: {
     backgroundColor: 'rgb(243, 243, 243)',
@@ -1298,7 +1223,7 @@ const styles = StyleSheet.create({
     fontSize: 10 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    paddingBottom: 15 * alpha
+    paddingBottom: 15 * alpha,
     // paddingLeft: 22 * alpha,
   },
   birthdayText: {
@@ -1308,11 +1233,11 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left',
-    marginLeft: 22 * alpha
+    marginLeft: 22 * alpha,
   },
   birthdayDatePicker: {
     width: 200 * alpha,
-    height: 18 * alpha
+    height: 18 * alpha,
   },
   birthdayTextInput: {
     backgroundColor: 'transparent',
@@ -1324,14 +1249,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: 200 * alpha,
     height: 18 * alpha,
-    marginLeft: 61 * alpha
+    marginLeft: 61 * alpha,
   },
   saveButtonText: {
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   saveButton: {
     backgroundColor: PRIMARY_COLOR,
@@ -1343,11 +1268,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 330 * alpha,
     height: 40 * alpha,
-    marginTop: 30 * alpha
+    marginTop: 30 * alpha,
   },
   saveButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   popOutView: {
     backgroundColor: 'white',
@@ -1357,7 +1282,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    borderColor: 'rgba(0, 0, 0, 0.1)'
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   closeButtonText: {
     color: 'rgb(113, 113, 113)',
@@ -1365,7 +1290,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   closeButton: {
     backgroundColor: 'transparent',
@@ -1378,7 +1303,7 @@ const styles = StyleSheet.create({
     right: 0 * alpha,
     width: 25 * alpha,
     top: 0 * alpha,
-    height: 25 * alpha
+    height: 25 * alpha,
   },
   headerView: {
     backgroundColor: 'transparent',
@@ -1387,7 +1312,7 @@ const styles = StyleSheet.create({
     right: 13 * alpha,
     top: 10 * alpha,
     height: 81 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   titleText: {
     backgroundColor: 'transparent',
@@ -1396,7 +1321,7 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   contentText: {
     backgroundColor: 'transparent',
@@ -1408,13 +1333,13 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     width: 272 * alpha,
-    marginTop: 11 * alpha
+    marginTop: 11 * alpha,
   },
   formView: {
     backgroundColor: 'transparent',
     height: 152 * alpha,
     marginTop: 29 * alpha,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   countrycodeButtonText: {
     color: 'rgb(0, 178, 227)',
@@ -1422,7 +1347,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   countrycodeButton: {
     backgroundColor: 'transparent',
@@ -1434,11 +1359,11 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     width: 56 * alpha,
     top: 0 * alpha,
-    height: 30 * alpha
+    height: 30 * alpha,
   },
   countrycodeButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   lineView: {
     backgroundColor: 'rgb(151, 151, 151)',
@@ -1447,7 +1372,7 @@ const styles = StyleSheet.create({
     left: 95 * alpha,
     width: 1 * alpha,
     top: 3 * alpha,
-    height: 25 * alpha
+    height: 25 * alpha,
   },
   phoneNumberTextInput: {
     backgroundColor: 'transparent',
@@ -1460,14 +1385,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: 193 * alpha,
     height: 30 * alpha,
-    marginLeft: 0 * alpha
+    marginLeft: 0 * alpha,
   },
   lineTwoView: {
     width: '100%',
     backgroundColor: 'rgb(151, 151, 151)',
     opacity: 0.29,
     height: 1 * alpha,
-    marginTop: 5 * alpha
+    marginTop: 5 * alpha,
   },
   codeTextInput: {
     backgroundColor: 'transparent',
@@ -1479,7 +1404,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     width: 193 * alpha,
-    height: 30 * alpha
+    height: 30 * alpha,
   },
   verificationcodeButtonText: {
     color: 'white',
@@ -1487,7 +1412,7 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   verificationcodeButton: {
     backgroundColor: PRIMARY_COLOR,
@@ -1497,18 +1422,18 @@ const styles = StyleSheet.create({
     padding: 0,
     borderRadius: 4 * alpha,
     width: 100 * alpha,
-    height: 30 * alpha
+    height: 30 * alpha,
   },
   verificationcodeButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   lineThreeView: {
     backgroundColor: 'rgb(151, 151, 151)',
     opacity: 0.29,
     width: 193 * alpha,
     height: 1 * alpha,
-    marginTop: 1 * alpha
+    marginTop: 1 * alpha,
   },
   confirmButtonText: {
     color: 'white',
@@ -1516,7 +1441,7 @@ const styles = StyleSheet.create({
     fontSize: 15 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   confirmButton: {
     backgroundColor: PRIMARY_COLOR,
@@ -1527,7 +1452,7 @@ const styles = StyleSheet.create({
     padding: 0,
     alignSelf: 'stretch',
     height: 37 * alpha,
-    marginBottom: 7 * alpha
+    marginBottom: 7 * alpha,
   },
   confirmDisabledButton: {
     backgroundColor: DISABLED_COLOR,
@@ -1538,15 +1463,15 @@ const styles = StyleSheet.create({
     padding: 0,
     alignSelf: 'stretch',
     height: 37 * alpha,
-    marginBottom: 7 * alpha
+    marginBottom: 7 * alpha,
   },
   confirmButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   menuRowArrowImage: {
     width: 10 * alpha,
     tintColor: 'rgb(195, 195, 195)',
-    resizeMode: 'contain'
-  }
+    resizeMode: 'contain',
+  },
 });
