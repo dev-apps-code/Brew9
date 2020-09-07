@@ -35,7 +35,7 @@ android {
     applicationId 'com.brew9.brew9android'
     minSdkVersion safeExtGet("minSdkVersion", 21)
     targetSdkVersion safeExtGet("targetSdkVersion", 28)
-    versionCode 19
+    versionCode 20
     versionName '2.0.4'
     ndk {
       // We use different `abiFilters` for distributing
