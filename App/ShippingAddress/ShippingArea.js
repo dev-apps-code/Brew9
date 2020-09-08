@@ -1,11 +1,3 @@
-//
-//  MemberVoucher
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   View,
   Text,
@@ -13,54 +5,37 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  TextInput
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowWidth } from '../Common/size';
-import { createAction } from '../Utils';
-import { connect } from 'react-redux';
-import HudLoading from '../Components/HudLoading';
+import {connect} from 'react-redux';
+import {alpha, fontAlpha} from '../Common/size';
+import {createAction} from '../Utils';
 import ShopAreaRequestObject from '../Requests/shop_area_request_object';
-import AnimationLoading from '../Components/AnimationLoading';
+import * as commonStyles from '../Common/common_style';
 
-import { KURL_INFO } from '../Utils/server';
-import {
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
-  DISABLED_COLOR,
-  commonStyles,
-  TOAST_DURATION,
-  LIGHT_GREY,
-  BUTTONBOTTOMPADDING
-} from '../Common/common_style';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
-import { getMemberIdForApi } from '../Services/members_helper';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
-import SwitchSelector from 'react-native-switch-selector';
+  BUTTONBOTTOMPADDING,
+} = commonStyles;
 
-@connect(({ members, shops }) => ({
+@connect(({members, shops}) => ({
   currentMember: members.profile,
   selectedShop: shops.selectedShop,
-  company_id: members.company_id
+  company_id: members.company_id,
 }))
 export default class ShippingArea extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTitle: (
         <Text
           style={{
             textAlign: 'center',
             alignSelf: 'center',
-            fontFamily: TITLE_FONT
-          }}
-        >
+            fontFamily: TITLE_FONT,
+          }}>
           Delivery Address
         </Text>
       ),
@@ -69,8 +44,7 @@ export default class ShippingArea extends React.Component {
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onBackPressed ? params.onBackPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/back.png')}
               style={styles.navigationBarItemIcon}
@@ -81,8 +55,8 @@ export default class ShippingArea extends React.Component {
       headerRight: null,
       headerStyle: {
         elevation: 0,
-        shadowOpacity: 0
-      }
+        shadowOpacity: 0,
+      },
     };
   };
 
@@ -90,17 +64,17 @@ export default class ShippingArea extends React.Component {
     super(props);
     this.state = {
       area: [],
-      loading: false
+      loading: false,
     };
   }
   loadArea = () => {
-    let { dispatch, selectedShop } = this.props;
-    this.setState({ loading: true });
+    let {dispatch, selectedShop} = this.props;
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState({
           loading: false,
-          area: eventObject.result.delivery_areas
+          area: eventObject.result.delivery_areas,
         });
       }
     };
@@ -109,8 +83,8 @@ export default class ShippingArea extends React.Component {
     dispatch(
       createAction('companies/loadShopArea')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   };
 
@@ -131,10 +105,10 @@ export default class ShippingArea extends React.Component {
       }
       return area;
     });
-    this.setState({ area: currentArea });
+    this.setState({area: currentArea});
   };
   onSavePressed = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     let selectedArea = this.state.area.find((item) => {
       return item.selected == true;
     });
@@ -144,7 +118,7 @@ export default class ShippingArea extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({
-      onBackPressed: this.onBackPressed
+      onBackPressed: this.onBackPressed,
     });
     this.loadArea();
   }
@@ -154,10 +128,9 @@ export default class ShippingArea extends React.Component {
     let selected_text = item.selected ? 'white' : 'rgb(54, 54, 54)';
     return (
       <TouchableOpacity
-        style={[styles.placesButton, { backgroundColor: selected }]}
-        onPress={() => this.onSelectArea(item)}
-      >
-        <Text style={[styles.areaTitle, { color: selected_text }]}>
+        style={[styles.placesButton, {backgroundColor: selected}]}
+        onPress={() => this.onSelectArea(item)}>
+        <Text style={[styles.areaTitle, {color: selected_text}]}>
           {item.area}
         </Text>
       </TouchableOpacity>
@@ -168,14 +141,14 @@ export default class ShippingArea extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.loading ? (
-          <AnimationLoading />
+          <Brew9Loading />
         ) : (
-          <View style={{ flex: 1, height: '100%' }}>
+          <View style={{flex: 1, height: '100%'}}>
             <View style={styles.addAddressForm}>
               <Text style={styles.header}>Please select your area</Text>
               <View style={styles.placesWrapperView}>
                 <FlatList
-                  renderItem={({ item }) => this.renderPlaces(item)}
+                  renderItem={({item}) => this.renderPlaces(item)}
                   data={this.state.area}
                   keyExtractor={(item, index) => index.toString()}
                   numColumns={3}
@@ -185,8 +158,7 @@ export default class ShippingArea extends React.Component {
             </View>
             <TouchableOpacity
               onPress={() => this.onSavePressed()}
-              style={styles.saveButton}
-            >
+              style={styles.saveButton}>
               <Text style={styles.saveButtonText}>SAVE</Text>
             </TouchableOpacity>
           </View>
@@ -200,24 +172,24 @@ const styles = StyleSheet.create({
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
+    width: 70 * alpha,
   },
   navigationBarItem: {
-    width: '100%'
+    width: '100%',
   },
   navigationBarItemTitle: {
     color: 'black',
     fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha
+    fontSize: 16 * fontAlpha,
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
     height: 18 * alpha,
-    tintColor: 'black'
+    tintColor: 'black',
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgb(243, 243, 243)'
+    backgroundColor: 'rgb(243, 243, 243)',
   },
   addAddressForm: {
     backgroundColor: 'white',
@@ -226,7 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10 * alpha,
     marginHorizontal: 10 * alpha,
     borderRadius: 10 * alpha,
-    marginBottom: BUTTONBOTTOMPADDING + 30 * alpha
+    marginBottom: BUTTONBOTTOMPADDING + 30 * alpha,
 
     // paddingBottom: 10 * alpha,
   },
@@ -241,14 +213,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     // width: 193 * alpha,
     // height: 30 * alpha,
-    flex: 1
+    flex: 1,
   },
   formDetail: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    paddingVertical: 10 * alpha
+    paddingVertical: 10 * alpha,
     // flex: 1
   },
   mainTitle: {
@@ -259,7 +231,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     paddingVertical: 15 * alpha,
-    paddingHorizontal: 15 * alpha
+    paddingHorizontal: 15 * alpha,
   },
   title: {
     backgroundColor: 'transparent',
@@ -268,7 +240,7 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     width: 110 * alpha,
-    textAlign: 'left'
+    textAlign: 'left',
   },
   header: {
     backgroundColor: 'transparent',
@@ -277,24 +249,24 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    paddingTop: 10 * alpha
+    paddingTop: 10 * alpha,
   },
   areaTitle: {
     color: 'rgb(54, 54, 54)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   seperatorImage: {
     backgroundColor: 'transparent',
     resizeMode: 'cover',
-    height: 3 * alpha
+    height: 3 * alpha,
   },
   selectedradioView: {
     flex: 1,
     backgroundColor: 'transparent',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   defaultAddressOption: {
     borderRadius: 10 * alpha,
@@ -302,18 +274,18 @@ const styles = StyleSheet.create({
     // height: 10 * alpha,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'black'
+    borderColor: 'black',
   },
   optionText: {
     fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha
+    fontSize: 10 * fontAlpha,
   },
   defaultAddressView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     // backgroundColor: 'red',
-    paddingVertical: 10 * alpha
+    paddingVertical: 10 * alpha,
   },
 
   placesButton: {
@@ -324,12 +296,12 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: PRIMARY_COLOR,
     margin: 5 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   placesWrapperView: {
     backgroundColor: 'transparent',
     marginTop: 10 * alpha,
-    marginBottom: BUTTONBOTTOMPADDING + 50 * alpha
+    marginBottom: BUTTONBOTTOMPADDING + 50 * alpha,
   },
   saveButton: {
     borderRadius: 4 * alpha,
@@ -343,13 +315,13 @@ const styles = StyleSheet.create({
     bottom: BUTTONBOTTOMPADDING + 20 * alpha,
     height: 47 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   saveButtonText: {
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
-  }
+    textAlign: 'left',
+  },
 });

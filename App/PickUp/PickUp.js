@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -9,18 +10,24 @@ import {
   AppState,
   Modal,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from 'react-native';
-import React from 'react';
-import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
 import {ScrollView} from 'react-native-gesture-handler';
+import Moment from 'moment';
+import _ from 'lodash';
+import {Analytics, Event} from 'expo-analytics';
+import {LinearGradient} from 'expo-linear-gradient';
+import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
 import {connect} from 'react-redux';
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object';
-import ProfileRequestObject from '../Requests/profile_request_object';
-import {createAction} from '../Utils/index';
-import openMap from 'react-native-open-maps';
 import {getResponseMsg} from '../Utils/responses';
-import {
+import * as commonStyles from '../Common/common_style';
+import {ANALYTICS_ID} from '../Common/config';
+import {createAction} from '../Utils/index';
+import {getMemberIdForApi} from '../Services/members_helper';
+import {Brew9Loading, CurveSeparator, HudLoading} from '../Components';
+
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   TABBAR_INACTIVE_TINT,
@@ -28,18 +35,8 @@ import {
   PRIMARY_COLOR,
   LIGHT_BLUE,
   HEADER_NO_BACK,
-  DEFAULT_GREY_BACKGROUND
-} from '../Common/common_style';
-import Moment from 'moment';
-import NotificationsRequestObject from '../Requests/notifications_request_object';
-import {LinearGradient} from 'expo-linear-gradient';
-import {Analytics, Event, PageHit} from 'expo-analytics';
-import {ANALYTICS_ID} from '../Common/config';
-import _ from 'lodash';
-import {getMemberIdForApi} from '../Services/members_helper';
-import AnimationLoading from '../Components/AnimationLoading';
-import HudLoading from '../Components/HudLoading';
-import CurveSeparator from '../Components/CurveSeparator';
+  DEFAULT_GREY_BACKGROUND,
+} = commonStyles;
 @connect(({members, shops, config}) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -50,7 +47,7 @@ import CurveSeparator from '../Components/CurveSeparator';
   currentOrder: shops.currentOrder,
   orders: shops.orders,
   responses: config.responses,
-  shopResponses: config.shopResponses
+  shopResponses: config.shopResponses,
 }))
 export default class PickUp extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -58,7 +55,7 @@ export default class PickUp extends React.Component {
       headerTitle: <Text style={HEADER_NO_BACK}>Your Order</Text>,
       headerTintColor: 'black',
       headerLeft: null,
-      headerRight: null
+      headerRight: null,
     };
   };
 
@@ -82,11 +79,11 @@ export default class PickUp extends React.Component {
               resizeMode: 'contain',
               width: 30,
               height: 30 * alpha,
-              tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT
+              tintColor: focused ? TABBAR_ACTIVE_TINT : TABBAR_INACTIVE_TINT,
             }}
           />
         );
-      }
+      },
     };
   };
 
@@ -98,7 +95,7 @@ export default class PickUp extends React.Component {
       appState: AppState.currentState,
       total_exp: 0,
       total_point: 0,
-      showPopUp: false
+      showPopUp: false,
     };
   }
 
@@ -154,7 +151,7 @@ export default class PickUp extends React.Component {
     const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-      new Event('My Order', getMemberIdForApi(currentMember), 'Order History')
+      new Event('My Order', getMemberIdForApi(currentMember), 'Order History'),
     );
 
     const {navigate} = this.props.navigation;
@@ -170,7 +167,7 @@ export default class PickUp extends React.Component {
     const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-      new Event('My Order', getMemberIdForApi(currentMember), 'Order')
+      new Event('My Order', getMemberIdForApi(currentMember), 'Order'),
     );
 
     navigate('Home');
@@ -188,7 +185,7 @@ export default class PickUp extends React.Component {
         }
         this.setState({
           loading: false,
-          refreshing: false
+          refreshing: false,
         });
       };
       const obj = new GetCurrentOrderRequestObject();
@@ -196,8 +193,8 @@ export default class PickUp extends React.Component {
       dispatch(
         createAction('members/loadCurrentOrder')({
           object: obj,
-          callback
-        })
+          callback,
+        }),
       );
     }
   }
@@ -248,7 +245,7 @@ export default class PickUp extends React.Component {
           shopId: selectedShop.id,
           key: 'Delivery Remark',
           defaultText:
-            'Your order is now in process and will be delivered to you estimated 30 minutes.'
+            'Your order is now in process and will be delivered to you estimated 30 minutes.',
         });
       } else {
         if (item.paid == true) {
@@ -259,7 +256,7 @@ export default class PickUp extends React.Component {
             shopId: selectedShop.id,
             key: 'Not Collected Order',
             defaultText:
-              'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable'
+              'Order must be collected within 30 minutes of collection time. Otherwise it will be canceled and non-refundable',
           });
         } else {
           //old response
@@ -268,7 +265,7 @@ export default class PickUp extends React.Component {
             props: this.props,
             shopId: selectedShop.id,
             key: 'Pending Payment (Remarks)',
-            defaultText: 'Your order will be processed upon receiving payment.'
+            defaultText: 'Your order will be processed upon receiving payment.',
           });
         }
 
@@ -287,12 +284,12 @@ export default class PickUp extends React.Component {
         return (
           <View style={styles.drinksView} key={key}>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
                 flex: 1,
-                flexDirection: 'row'
+                flexDirection: 'row',
               }}>
               <View
                 style={[styles.productDetailView, {marginRight: 5 * alpha}]}>
@@ -312,7 +309,7 @@ export default class PickUp extends React.Component {
                 style={{
                   flex: 0.4,
                   flexDirection: 'row',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
                 }}>
                 <Text style={styles.productQuantityText}>
                   x{productItem.quantity}
@@ -337,15 +334,15 @@ export default class PickUp extends React.Component {
         // if (item.reward_type == 'Discount') {
         if (item.value_type == 'fixed') {
           promotion_discount = `-$${parseFloat(item.promotion_value).toFixed(
-            2
+            2,
           )}`;
           calculate_cart_total -= item.value;
         } else if (item.value_type == 'percent') {
           promotion_discount = `-$${parseFloat(item.promotion_value).toFixed(
-            2
+            2,
           )}`;
           calculate_cart_total -= parseFloat(
-            calculate_cart_total * (item.value / 100)
+            calculate_cart_total * (item.value / 100),
           );
         }
 
@@ -356,7 +353,7 @@ export default class PickUp extends React.Component {
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
                 flex: 1,
-                flexDirection: 'row'
+                flexDirection: 'row',
               }}>
               <View style={styles.productDetailView}>
                 <Text style={[styles.productNameText, {marginBottom: 0}]}>
@@ -395,12 +392,12 @@ export default class PickUp extends React.Component {
         return (
           <View style={[styles.drinksView, {marginTop: 0}]} key={key}>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
                 flex: 1,
-                flexDirection: 'row'
+                flexDirection: 'row',
               }}>
               <View style={styles.productDetailView}>
                 <Text style={styles.productNameText}>
@@ -428,14 +425,14 @@ export default class PickUp extends React.Component {
       return (
         <View style={styles.pickUpQueueView} key={key}>
           <View
-            pointerEvents="box-none"
+            pointerEvents='box-none'
             style={{
               alignSelf: 'flex-start',
               flex: 1,
               height: 29 * alpha,
               marginLeft: 19 * alpha,
               flexDirection: 'row',
-              alignItems: 'flex-start'
+              alignItems: 'flex-start',
             }}></View>
           <View style={[styles.queueView, {marginTop: 15 * alpha}]}>
             <View
@@ -443,15 +440,15 @@ export default class PickUp extends React.Component {
                 styles.queueView,
                 {
                   alignItems: 'center',
-                  marginTop: item.paid == false ? 40 : 0 * alpha
-                }
+                  marginTop: item.paid == false ? 40 : 0 * alpha,
+                },
               ]}>
               <View
-                pointerEvents="box-none"
+                pointerEvents='box-none'
                 style={{
                   flex: 1,
                   marginTop: 19 * alpha,
-                  flexDirection: 'row'
+                  flexDirection: 'row',
                 }}>
                 <View style={styles.queueHeaderBlock}>
                   <Text style={styles.queueheaderText}>Order Number</Text>
@@ -485,7 +482,7 @@ export default class PickUp extends React.Component {
                   />
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text
@@ -512,7 +509,7 @@ export default class PickUp extends React.Component {
                   />
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text
@@ -539,7 +536,7 @@ export default class PickUp extends React.Component {
                   />
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text
@@ -585,7 +582,7 @@ export default class PickUp extends React.Component {
                 </View>
                 <View
                   style={{
-                    flex: 1
+                    flex: 1,
                   }}
                 />
                 <View style={styles.callView}>
@@ -599,7 +596,7 @@ export default class PickUp extends React.Component {
                   </TouchableOpacity>
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text style={styles.callText}>Call</Text>
@@ -615,7 +612,7 @@ export default class PickUp extends React.Component {
                   </TouchableOpacity>
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text style={styles.directionText}>Direction</Text>
@@ -636,7 +633,7 @@ export default class PickUp extends React.Component {
                 <Text style={styles.totallabelText}>Status</Text>
                 <View
                   style={{
-                    flex: 1
+                    flex: 1,
                   }}
                 />
                 <Text style={styles.orderTotalText}>
@@ -652,7 +649,7 @@ export default class PickUp extends React.Component {
                   <Text style={styles.totallabelText}>SubTotal</Text>
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text style={styles.orderTotalText}>{subtotal_string}</Text>
@@ -666,7 +663,7 @@ export default class PickUp extends React.Component {
                   <Text style={styles.totallabelText}>Delivery Fee</Text>
                   <View
                     style={{
-                      flex: 1
+                      flex: 1,
                     }}
                   />
                   <Text style={styles.orderTotalText}>
@@ -683,7 +680,7 @@ export default class PickUp extends React.Component {
                 <Text style={styles.totallabelText}>TOTAL</Text>
                 <View
                   style={{
-                    flex: 1
+                    flex: 1,
                   }}
                 />
                 <Text style={styles.orderTotalText}>
@@ -695,14 +692,14 @@ export default class PickUp extends React.Component {
             <View style={styles.remarkViewWrapper}>
               <View style={styles.remarkView}>
                 <View
-                  pointerEvents="box-none"
+                  pointerEvents='box-none'
                   style={{
                     marginHorizontal: 20 * alpha,
                     marginVertical: 11 * alpha,
-                    alignItems: 'flex-start'
+                    alignItems: 'flex-start',
                   }}>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       alignSelf: 'stretch',
                       // height: 19 * alpha,
@@ -710,7 +707,7 @@ export default class PickUp extends React.Component {
                       marginLeft: 3 * alpha,
                       marginRight: 4 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'flex-start'
+                      alignItems: 'flex-start',
                     }}>
                     <Text style={[styles.orderTime100717Text, {flex: 0.25}]}>
                       Order time{' '}
@@ -721,7 +718,7 @@ export default class PickUp extends React.Component {
                     </Text>
                   </View>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       alignSelf: 'stretch',
                       // height: 19 * alpha,
@@ -729,7 +726,7 @@ export default class PickUp extends React.Component {
                       marginLeft: 3 * alpha,
                       marginRight: 4 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'flex-start'
+                      alignItems: 'flex-start',
                     }}>
                     <Text style={[styles.orderNo020028201Text, {flex: 0.25}]}>
                       Receipt no.{' '}
@@ -740,7 +737,7 @@ export default class PickUp extends React.Component {
                     </Text>
                   </View>
                   <View
-                    pointerEvents="box-none"
+                    pointerEvents='box-none'
                     style={{
                       alignSelf: 'stretch',
                       // height: 19 * alpha,
@@ -748,7 +745,7 @@ export default class PickUp extends React.Component {
                       marginLeft: 3 * alpha,
                       marginRight: 4 * alpha,
                       flexDirection: 'row',
-                      alignItems: 'flex-start'
+                      alignItems: 'flex-start',
                     }}>
                     <Text style={[styles.remarkNoPackingText, {flex: 0.25}]}>
                       Remarks{' '}
@@ -791,8 +788,8 @@ export default class PickUp extends React.Component {
     dispatch(
       createAction('orders/editCart')({
         order_items: order_items,
-        order: current_order
-      })
+        order: current_order,
+      }),
     );
     navigate('Home');
   };
@@ -809,7 +806,7 @@ export default class PickUp extends React.Component {
       ios:
         'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
         location,
-      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location
+      android: 'https://www.google.com/maps/dir/?api=1&destination=' + location,
     });
 
     Linking.openURL(url);
@@ -819,8 +816,8 @@ export default class PickUp extends React.Component {
     const {dispatch} = this.props;
     dispatch(
       createAction('shops/setPopUp')({
-        popUp: false
-      })
+        popUp: false,
+      }),
     );
 
     this.setState({showPopUp: false});
@@ -835,7 +832,7 @@ export default class PickUp extends React.Component {
             flex: 1,
             borderColor: '#000',
             borderWidth: 1 * alpha,
-            borderRadius: 5 * alpha
+            borderRadius: 5 * alpha,
           }}>
           <View
             style={[StyleSheet.absoluteFill, {backgroundColor: 'transparent'}]}
@@ -850,7 +847,7 @@ export default class PickUp extends React.Component {
               top: 0,
               bottom: 0,
               borderRadius: 4 * alpha,
-              width: `${progress_percent}%`
+              width: `${progress_percent}%`,
             }}
           />
         </View>
@@ -864,13 +861,13 @@ export default class PickUp extends React.Component {
         <View style={styles.noOrderView}>
           <View style={styles.viewView}>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 position: 'absolute',
                 alignSelf: 'center',
                 top: 0 * alpha,
                 bottom: 0 * alpha,
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}>
               <View style={styles.centerView}>
                 <Image
@@ -886,7 +883,7 @@ export default class PickUp extends React.Component {
               </View>
             </View>
             <View
-              pointerEvents="box-none"
+              pointerEvents='box-none'
               style={{
                 position: 'absolute',
                 alignSelf: 'center',
@@ -894,7 +891,7 @@ export default class PickUp extends React.Component {
                 bottom: 23 * alpha,
                 height: 72 * alpha,
                 justifyContent: 'flex-end',
-                alignItems: 'center'
+                alignItems: 'center',
               }}>
               <TouchableOpacity
                 onPress={this.onOrderPressed}
@@ -926,7 +923,7 @@ export default class PickUp extends React.Component {
       currentOrder != null ? parseFloat(currentOrder.awarded_point) : 0;
     return (
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={this.state.showPopUp}
         onRequestClose={() => this.closePopUp()}>
@@ -964,7 +961,7 @@ export default class PickUp extends React.Component {
     return (
       <View style={styles.pickUpMainView}>
         {this.state.loading ? (
-          <AnimationLoading />
+          <Brew9Loading />
         ) : orders.length > 0 ? (
           this.renderQueueView(orders)
         ) : (
@@ -988,13 +985,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderTopRightRadius: 14 * alpha,
-    borderTopLeftRadius: 14 * alpha
+    borderTopLeftRadius: 14 * alpha,
   },
   updateOrderText: {
     color: 'white',
     textAlign: 'center',
     fontFamily: TITLE_FONT,
-    fontSize: 14 * alpha
+    fontSize: 14 * alpha,
   },
   orderPaidStatus: {
     position: 'absolute',
@@ -1004,18 +1001,18 @@ const styles = StyleSheet.create({
     height: 40 * alpha,
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopLeftRadius: 14 * alpha
+    borderTopLeftRadius: 14 * alpha,
   },
   orderPaidStatusText: {
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
     textAlign: 'center',
-    fontSize: 14 * alpha
+    fontSize: 14 * alpha,
   },
   popUpBackground: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   popUpContent: {
     backgroundColor: 'white',
@@ -1026,7 +1023,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 50 * alpha,
     paddingHorizontal: 20 * alpha,
     justifyContent: 'space-between',
-    borderRadius: 5 * alpha
+    borderRadius: 5 * alpha,
   },
   popUpInput1: {
     backgroundColor: '#fff5ee',
@@ -1036,7 +1033,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   popUpInput2: {
     backgroundColor: '#f5f5f5',
@@ -1046,7 +1043,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   popUpInput3: {
     backgroundColor: 'rgb(0, 178, 227)',
@@ -1056,16 +1053,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // flex: 1,
-    marginTop: 5
+    marginTop: 5,
   },
   pickUpMainView: {
     backgroundColor: DEFAULT_GREY_BACKGROUND,
-    flex: 1
+    flex: 1,
   },
   orderView: {
     backgroundColor: 'rgb(239, 239, 239)',
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   noOrderView: {
     backgroundColor: 'white',
@@ -1075,40 +1072,40 @@ const styles = StyleSheet.create({
     marginRight: 24 * alpha,
     marginTop: 70 * alpha,
     marginBottom: 70 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   viewView: {
     backgroundColor: 'transparent',
     flex: 1,
-    width: 185 * alpha
+    width: 185 * alpha,
   },
   centerView: {
     backgroundColor: 'transparent',
     width: 181 * alpha,
     height: 140 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 10 * alpha
+    padding: 10 * alpha,
   },
   logoImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 90 * alpha,
-    height: 90 * alpha
+    height: 90 * alpha,
   },
   messageView: {
     backgroundColor: 'transparent',
     width: windowWidth - 40 * alpha,
     height: 35 * alpha,
     marginTop: 16 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   youHavenTMakeAnyText: {
     color: 'rgb(134, 134, 134)',
@@ -1117,7 +1114,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   grabYoursNowText: {
     backgroundColor: 'transparent',
@@ -1127,7 +1124,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 7 * alpha
+    marginTop: 7 * alpha,
   },
   orderButton: {
     backgroundColor: 'rgb(0, 178, 227)',
@@ -1138,11 +1135,11 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 185 * alpha,
     height: 33 * alpha,
-    marginBottom: 23 * alpha
+    marginBottom: 23 * alpha,
   },
   orderButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   orderButtonText: {
     color: 'rgb(254, 254, 254)',
@@ -1150,7 +1147,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   orderHistoryButton: {
     backgroundColor: 'transparent',
@@ -1159,7 +1156,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 113 * alpha,
-    height: 16 * alpha
+    height: 16 * alpha,
   },
   orderHistoryButtonText: {
     color: 'rgb(176, 176, 176)',
@@ -1167,22 +1164,22 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   orderHistoryButtonImage: {
     tintColor: 'rgb(176, 176, 176)',
     width: 10 * alpha,
     resizeMode: 'contain',
-    marginLeft: 5 * alpha
+    marginLeft: 5 * alpha,
   },
   loadingIndicator: {
-    marginTop: 100 * alpha
+    marginTop: 100 * alpha,
   },
 
   pickUpQueueView: {
     // backgroundColor: 'rgb(239, 239, 239)',
     // backgroundColor: DEFAULT_GREY_BACKGROUND,
-    flex: 1
+    flex: 1,
   },
   customerServiceButton: {
     backgroundColor: 'rgb(251, 251, 251)',
@@ -1195,7 +1192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 96 * alpha,
-    height: 29 * alpha
+    height: 29 * alpha,
   },
   customerServiceButtonText: {
     color: 'rgb(51, 51, 51)',
@@ -1203,11 +1200,11 @@ const styles = StyleSheet.create({
     fontSize: 10 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   customerServiceButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   saySomethingButton: {
     backgroundColor: 'rgb(251, 251, 251)',
@@ -1221,7 +1218,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 96 * alpha,
     height: 29 * alpha,
-    marginLeft: 1 * alpha
+    marginLeft: 1 * alpha,
   },
   saySomethingButtonText: {
     color: 'rgb(51, 51, 51)',
@@ -1229,11 +1226,11 @@ const styles = StyleSheet.create({
     fontSize: 10 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   saySomethingButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   queueView: {
     backgroundColor: 'white',
@@ -1241,7 +1238,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 14 * alpha,
     flex: 1,
     marginLeft: 20 * alpha,
-    marginRight: 20 * alpha
+    marginRight: 20 * alpha,
     // marginTop: 40 * alpha,
     // alignItems: "center",
   },
@@ -1254,7 +1251,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 5 * alpha
+    marginTop: 5 * alpha,
   },
   queueheaderText: {
     color: 'rgb(50, 50, 50)',
@@ -1263,7 +1260,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   pickupTimeText: {
     backgroundColor: 'transparent',
@@ -1274,7 +1271,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     marginTop: 5 * alpha,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   pickupTimeAMPMText: {
     backgroundColor: 'transparent',
@@ -1284,7 +1281,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   delivery_day: {
     backgroundColor: 'transparent',
@@ -1294,7 +1291,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   pickupTimeheaderText: {
     color: 'rgb(50, 50, 50)',
@@ -1303,7 +1300,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   progressView: {
     backgroundColor: 'transparent',
@@ -1313,28 +1310,28 @@ const styles = StyleSheet.create({
     marginBottom: 5 * alpha,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   orderedView: {
     backgroundColor: 'transparent',
     width: 80 * alpha,
     height: 50 * alpha,
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   orderedImage: {
     tintColor: 'rgb(205, 207, 208)',
     backgroundColor: 'transparent',
     resizeMode: 'contain',
     height: 26 * alpha,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   orderedSelectedImage: {
     tintColor: 'rgb(35, 31, 32)',
     backgroundColor: 'transparent',
     resizeMode: 'contain',
     height: 26 * alpha,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   orderedText: {
     color: 'rgb(205, 207, 208)',
@@ -1343,7 +1340,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   orderedSelectedText: {
     color: 'rgb(35, 31, 32)',
@@ -1352,7 +1349,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   dividerImage: {
     backgroundColor: 'transparent',
@@ -1360,14 +1357,14 @@ const styles = StyleSheet.create({
     height: 4 * alpha,
     marginTop: 15 * alpha,
     marginLeft: -10 * alpha,
-    marginRight: -10 * alpha
+    marginRight: -10 * alpha,
   },
   pickUpView: {
     backgroundColor: 'transparent',
     width: 80 * alpha,
     height: 50 * alpha,
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   refreshView: {
     // backgroundColor: LIGHT_BLUE,
@@ -1377,7 +1374,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     right: 0 * alpha,
-    bottom: 63 * alpha
+    bottom: 63 * alpha,
     // borderWidth: 1,
     // borderColor: PRIMARY_COLOR,
     // borderRadius: 5
@@ -1388,18 +1385,18 @@ const styles = StyleSheet.create({
     tintColor: 'rgb(205, 207, 208)',
     resizeMode: 'contain',
     backgroundColor: 'transparent',
-    height: 25 * alpha
+    height: 25 * alpha,
   },
   refreshImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
-    height: 20 * alpha
+    height: 20 * alpha,
   },
   pickupSelectedImage: {
     tintColor: 'rgb(35, 31, 32)',
     resizeMode: 'contain',
     backgroundColor: 'transparent',
-    height: 25 * alpha
+    height: 25 * alpha,
   },
   pickUpText: {
     color: 'rgb(205, 207, 208)',
@@ -1408,7 +1405,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   pickUpSelectedText: {
     color: 'rgb(35, 31, 32)',
@@ -1417,27 +1414,27 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   processingView: {
     backgroundColor: 'transparent',
     width: 80 * alpha,
     height: 50 * alpha,
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   processingImage: {
     tintColor: 'rgb(205, 207, 208)',
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     alignSelf: 'center',
-    height: 26 * alpha
+    height: 26 * alpha,
   },
   processingSelectedImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     alignSelf: 'center',
-    height: 26 * alpha
+    height: 26 * alpha,
   },
   processingText: {
     color: 'rgb(205, 207, 208)',
@@ -1446,7 +1443,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   processingSelectedText: {
     color: 'rgb(35, 31, 32)',
@@ -1455,13 +1452,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   dividerTwoImage: {
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     width: 22 * alpha,
-    height: 4 * alpha
+    height: 4 * alpha,
   },
   waitingView: {
     backgroundColor: 'rgb(241, 241, 241)',
@@ -1470,7 +1467,7 @@ const styles = StyleSheet.create({
     height: 30 * alpha,
     marginTop: 9 * alpha,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   queuelengthText: {
     color: 'rgb(136, 136, 136)',
@@ -1479,7 +1476,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   messageText: {
     color: 'rgb(136, 136, 136)',
@@ -1490,21 +1487,21 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     marginBottom: 20 * alpha,
-    marginBottom: 20 * alpha
+    marginBottom: 20 * alpha,
   },
   orderDetailView: {
     backgroundColor: 'rgb(245,245,245)',
     flex: 1,
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   branchDirectionView: {
     backgroundColor: 'transparent',
     left: 0 * alpha,
     right: 2 * alpha,
     top: 0 * alpha,
-    height: 90 * alpha
+    height: 90 * alpha,
   },
   topFillImage: {
     resizeMode: 'cover',
@@ -1513,11 +1510,11 @@ const styles = StyleSheet.create({
     left: 0 * alpha,
     right: 0 * alpha,
     top: 0 * alpha,
-    height: 90 * alpha
+    height: 90 * alpha,
   },
   branchAddressView: {
     backgroundColor: 'transparent',
-    width: 200 * alpha
+    width: 200 * alpha,
   },
   shopNameText: {
     color: 'rgb(63, 63, 63)',
@@ -1527,7 +1524,7 @@ const styles = StyleSheet.create({
 
     textAlign: 'left',
     backgroundColor: 'transparent',
-    marginRight: 35 * alpha
+    marginRight: 35 * alpha,
   },
   addressText: {
     color: 'rgb(164, 164, 164)',
@@ -1537,7 +1534,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
   },
   phoneText: {
     color: 'rgb(164, 164, 164)',
@@ -1548,7 +1545,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     left: 1 * alpha,
-    bottom: 0 * alpha
+    bottom: 0 * alpha,
   },
   callButtonText: {
     color: 'black',
@@ -1556,7 +1553,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   callButton: {
     backgroundColor: 'transparent',
@@ -1570,10 +1567,10 @@ const styles = StyleSheet.create({
     padding: 0,
     width: 36 * alpha,
     height: 36 * alpha,
-    marginRight: 15 * alpha
+    marginRight: 15 * alpha,
   },
   callButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   directionButton: {
     backgroundColor: 'transparent',
@@ -1586,7 +1583,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 36 * alpha,
-    height: 36 * alpha
+    height: 36 * alpha,
   },
   directionButtonText: {
     color: 'black',
@@ -1594,27 +1591,27 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   directionButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   lineView: {
     backgroundColor: 'rgb(231, 231, 231)',
     height: 2 * alpha,
     width: windowWidth - 80 * alpha,
     marginTop: 10 * alpha,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   lineTwoView: {
     backgroundColor: 'rgb(231, 231, 231)',
     width: windowWidth - 80 * alpha,
     height: 2 * alpha,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   totalViewWrapper: {
     backgroundColor: 'rgb(245,245,245)',
-    flex: 1
+    flex: 1,
   },
   orderTotalView: {
     backgroundColor: 'transparent',
@@ -1624,7 +1621,7 @@ const styles = StyleSheet.create({
     marginTop: 10 * alpha,
     marginBottom: 10 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   totallabelText: {
     backgroundColor: 'transparent',
@@ -1632,7 +1629,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   orderTotalText: {
     color: 'rgb(54, 54, 54)',
@@ -1640,18 +1637,18 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   drinksViewWrapper: {
     backgroundColor: 'rgb(245,245,245)',
-    flex: 1
+    flex: 1,
   },
   drinksView: {
     backgroundColor: 'transparent',
     flex: 1,
     marginLeft: 25 * alpha,
     marginRight: 25 * alpha,
-    marginTop: 10 * alpha
+    marginTop: 10 * alpha,
   },
 
   dottedLineImageTwo: {
@@ -1660,7 +1657,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: 280 * alpha,
-    height: 2 * alpha
+    height: 2 * alpha,
   },
   totalView: {
     backgroundColor: 'transparent',
@@ -1669,7 +1666,7 @@ const styles = StyleSheet.create({
     marginRight: 24 * alpha,
     marginTop: 26 * alpha,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   totalText: {
     backgroundColor: 'transparent',
@@ -1678,19 +1675,19 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
 
-    textAlign: 'center'
+    textAlign: 'center',
   },
   remarkViewWrapper: {
     backgroundColor: 'rgb(245,245,245)',
     flex: 1,
     borderBottomRightRadius: 14 * alpha,
-    borderBottomLeftRadius: 14 * alpha
+    borderBottomLeftRadius: 14 * alpha,
   },
   remarkView: {
     backgroundColor: 'transparent',
     flex: 1,
     // height: 70 * alpha,
-    paddingBottom: 10 * alpha
+    paddingBottom: 10 * alpha,
   },
   bottomFillImage: {
     backgroundColor: 'transparent',
@@ -1699,7 +1696,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 334 * alpha,
     top: 0 * alpha,
-    height: 116 * alpha
+    height: 116 * alpha,
   },
 
   pleaseCallBranchFText: {
@@ -1711,7 +1708,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     marginLeft: 3 * alpha,
-    marginTop: 21 * alpha
+    marginTop: 21 * alpha,
   },
   orderTime100717Text: {
     color: 'rgb(164, 164, 164)',
@@ -1721,11 +1718,11 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     // textAlign: "center",
     backgroundColor: 'transparent',
-    marginTop: 2 * alpha
+    marginTop: 2 * alpha,
   },
   copyButtonImage: {
     resizeMode: 'contain',
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   copyButton: {
     backgroundColor: 'transparent',
@@ -1734,7 +1731,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     width: 27 * alpha,
-    height: 16 * alpha
+    height: 16 * alpha,
   },
   copyButtonText: {
     color: 'rgb(164, 164, 164)',
@@ -1742,7 +1739,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   orderNo020028201Text: {
     backgroundColor: 'transparent',
@@ -1753,7 +1750,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     // textAlign: "center",
     // marginLeft: 3 * alpha,
-    marginTop: 1 * alpha
+    marginTop: 1 * alpha,
   },
   remarkNoPackingText: {
     backgroundColor: 'transparent',
@@ -1761,7 +1758,7 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
-    fontWeight: 'normal'
+    fontWeight: 'normal',
     // textAlign: "center",
     // marginLeft: 3 * alpha,
     // marginTop: 5 * alpha,
@@ -1774,7 +1771,7 @@ const styles = StyleSheet.create({
     marginRight: 25 * alpha,
     marginBottom: 10 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   nameFourText: {
     backgroundColor: 'transparent',
@@ -1783,7 +1780,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
 
-    textAlign: 'left'
+    textAlign: 'left',
   },
   descriptionThreeText: {
     color: 'rgb(54, 54, 54)',
@@ -1792,13 +1789,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
 
   productDetailView: {
     backgroundColor: 'transparent',
     flex: 1,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   productNameText: {
     backgroundColor: 'transparent',
@@ -1807,7 +1804,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left',
-    marginBottom: 5 * alpha
+    marginBottom: 5 * alpha,
   },
   productVariantText: {
     color: 'rgb(164, 164, 164)',
@@ -1818,7 +1815,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     width: 191 * alpha,
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   productQuantityText: {
     color: 'rgb(50, 50, 50)',
@@ -1827,7 +1824,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
     // marginRight: 4 * alpha,
     // width: 25 * alpha,
   },
@@ -1838,11 +1835,11 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
     // width: 45 * alpha,
   },
   spacer: {
-    marginBottom: 10 * alpha
+    marginBottom: 10 * alpha,
   },
   dottedLineImage: {
     backgroundColor: 'transparent',
@@ -1851,12 +1848,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: 291 * alpha,
-    height: 2 * alpha
+    height: 2 * alpha,
   },
 
   locationWrapperView: {
     backgroundColor: 'rgb(245, 245, 245)',
-    flex: 1
+    flex: 1,
   },
   locationView: {
     backgroundColor: 'transparent',
@@ -1865,13 +1862,13 @@ const styles = StyleSheet.create({
     marginRight: 25 * alpha,
     marginTop: 18 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   branchView: {
     backgroundColor: 'transparent',
     alignSelf: 'flex-start',
     width: 182 * alpha,
-    height: 60 * alpha
+    height: 60 * alpha,
   },
   shopBranchText: {
     backgroundColor: 'transparent',
@@ -1880,7 +1877,7 @@ const styles = StyleSheet.create({
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'left',
-    marginRight: 12 * alpha
+    marginRight: 12 * alpha,
   },
   shopBranchAddressText: {
     color: 'rgb(146, 146, 146)',
@@ -1889,13 +1886,13 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
     backgroundColor: 'transparent',
-    marginLeft: 1 * alpha
+    marginLeft: 1 * alpha,
   },
   callView: {
     backgroundColor: 'transparent',
     width: 35 * alpha,
     height: 55 * alpha,
-    marginRight: 8 * alpha
+    marginRight: 8 * alpha,
   },
   callIconButton: {
     backgroundColor: 'transparent',
@@ -1907,10 +1904,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    height: 35 * alpha
+    height: 35 * alpha,
   },
   callIconButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   callText: {
     backgroundColor: 'transparent',
@@ -1920,12 +1917,12 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'center',
     marginLeft: 6 * alpha,
-    marginRight: 7 * alpha
+    marginRight: 7 * alpha,
   },
   directionView: {
     backgroundColor: 'transparent',
     width: 50 * alpha,
-    height: 55 * alpha
+    height: 55 * alpha,
   },
   directionIconButton: {
     backgroundColor: 'transparent',
@@ -1939,10 +1936,10 @@ const styles = StyleSheet.create({
     padding: 0,
     height: 35 * alpha,
     marginLeft: 8 * alpha,
-    marginRight: 7 * alpha
+    marginRight: 7 * alpha,
   },
   directionIconButtonImage: {
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   directionText: {
     color: 'rgb(163, 163, 163)',
@@ -1950,13 +1947,13 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   receiptSectionSeperator: {
     flex: 1,
     backgroundColor: 'rgb(239, 239, 239)',
     alignContent: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   curveSeparator: {
@@ -1964,7 +1961,7 @@ const styles = StyleSheet.create({
     height: 14 * alpha,
     resizeMode: 'stretch',
     width: '100%',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
 
   sectionSeperatorView: {
@@ -1972,35 +1969,35 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     width: 300 * alpha,
-    height: 1 * alpha
+    height: 1 * alpha,
   },
 
   queueHeaderBlock: {
     backgroundColor: 'transparent',
     marginLeft: 10 * alpha,
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   progressbarView: {
     backgroundColor: 'transparent',
     flex: 1,
     width: 250 * alpha,
     height: 10 * alpha,
-    marginBottom: 20 * alpha
+    marginBottom: 20 * alpha,
   },
 
   pointExpModalTitle: {
     paddingBottom: 5,
     textAlign: 'center',
-    fontFamily: TITLE_FONT
+    fontFamily: TITLE_FONT,
   },
   pointExpModalPointText: {
     color: PRIMARY_COLOR,
-    fontFamily: TITLE_FONT
+    fontFamily: TITLE_FONT,
   },
   pointExpModalExpText: {
     // color: '#deb887',
     // fontFamily: NON_TITLE_FONT,
     color: PRIMARY_COLOR,
-    fontFamily: TITLE_FONT
-  }
+    fontFamily: TITLE_FONT,
+  },
 });

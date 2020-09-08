@@ -1,11 +1,3 @@
-//
-//  MemberWallet
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-
 import {
   Image,
   View,
@@ -14,67 +6,67 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  AppState
-} from "react-native";
-import React from "react";
-import { alpha, fontAlpha } from "../Common/size";
-import { connect } from "react-redux";
-import { createAction } from "../Utils";
-import NotificationsRequestObject from "../Requests/notifications_request_object";
-import NotificationsCell from "./NotificationsCell";
-import NotificationBadgeIcon from "./NotificationBadgeIcon"
-import * as SecureStore from "expo-secure-store";
-import { TITLE_FONT, HEADER_NO_BACK, NON_TITLE_FONT, TABBAR_INACTIVE_TINT, TABBAR_ACTIVE_TINT, PRIMARY_COLOR } from "../Common/common_style";
+  AppState,
+} from 'react-native';
+import React from 'react';
+import {alpha, fontAlpha} from '../Common/size';
+import {connect} from 'react-redux';
+import {createAction} from '../Utils';
+import NotificationsRequestObject from '../Requests/notifications_request_object';
+import NotificationsCell from './NotificationsCell';
+import NotificationBadgeIcon from './NotificationBadgeIcon';
+import * as SecureStore from 'expo-secure-store';
+import {
+  TITLE_FONT,
+  HEADER_NO_BACK,
+  NON_TITLE_FONT,
+  TABBAR_INACTIVE_TINT,
+  TABBAR_ACTIVE_TINT,
+  PRIMARY_COLOR,
+} from '../Common/common_style';
 import IconBadge from 'react-native-icon-badge';
-import { AsyncStorage } from 'react-native'
-import { getMemberIdForApi } from '../Services/members_helper'
-import AnimationLoading from "../Components/AnimationLoading"
+import {AsyncStorage} from 'react-native';
+import {getMemberIdForApi} from '../Services/members_helper';
+import {Brew9Loading} from '../Components';
 
-@connect(({ members, config }) => ({
+@connect(({members, config}) => ({
   selectedTab: config.selectedTab,
   members: members.profile,
   notifications: members.notifications,
-  unreadNotificationCount: members.unreadNotificationCount
+  unreadNotificationCount: members.unreadNotificationCount,
 }))
-
 export default class Notification extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
-      headerTitle: (
-        <Text style={HEADER_NO_BACK}>
-          Notifications
-        </Text>
-      ),
+      headerTitle: <Text style={HEADER_NO_BACK}>Notifications</Text>,
       headerTintColor: 'black',
       headerLeft: null,
-      headerRight: null
+      headerRight: null,
     };
   };
 
   static tabBarItemOptions = (navigation, store) => {
-    const badgeCount = navigation.state.params && navigation.state.params.badgeCount || 0
+    const badgeCount =
+      (navigation.state.params && navigation.state.params.badgeCount) || 0;
     return {
-      tabBarLabel: "Inbox",
-      tabBarOnPress: ({ navigation, defaultHandler }) => {
-        store.dispatch(createAction("config/setToggleShopLocation")(false))
-        store.dispatch(createAction("config/setTab")("notification"))
-        defaultHandler()
+      tabBarLabel: 'Inbox',
+      tabBarOnPress: ({navigation, defaultHandler}) => {
+        store.dispatch(createAction('config/setToggleShopLocation')(false));
+        store.dispatch(createAction('config/setTab')('notification'));
+        defaultHandler();
       },
-      tabBarIcon: ({ iconTintColor, focused }) => {
+      tabBarIcon: ({iconTintColor, focused}) => {
         const image = focused
-          ? require("./../../assets/images/inbox_selected_tab.png")
-          : require("./../../assets/images/inbox_tab.png");
+          ? require('./../../assets/images/inbox_selected_tab.png')
+          : require('./../../assets/images/inbox_tab.png');
 
         return (
           <View style={styles.tabIconWrapper}>
-
             <NotificationBadgeIcon image={image} focused={focused} />
-
           </View>
-
         );
-      }
+      },
     };
   };
   constructor(props) {
@@ -85,17 +77,13 @@ export default class Notification extends React.Component {
       timestamp: undefined,
       appState: AppState.currentState,
     };
-
   }
 
   componentDidMount() {
-
-
     AppState.addEventListener('change', this._handleAppStateChange);
 
-    this.props.navigation.addListener('didFocus', this.loadNotifications)
+    this.props.navigation.addListener('didFocus', this.loadNotifications);
     this.loadNotifications();
-
 
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
@@ -108,7 +96,7 @@ export default class Notification extends React.Component {
   }
 
   _handleAppStateChange = (nextAppState) => {
-    const { members, selectedTab } = this.props;
+    const {members, selectedTab} = this.props;
     if (
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
@@ -117,42 +105,40 @@ export default class Notification extends React.Component {
       //   // this.loadNotifications();
       // }
     }
-    this.setState({ appState: nextAppState });
+    this.setState({appState: nextAppState});
   };
 
   loadNotifications = () => {
-
-    const { timestamp } = this.state
+    const {timestamp} = this.state;
 
     if (timestamp != undefined) {
-      const date = new Date()
-      const diff = date.getTime() - timestamp
+      const date = new Date();
+      const diff = date.getTime() - timestamp;
       if (diff < 10000) {
         this.setState({
-          isRefreshing: false
-        })
+          isRefreshing: false,
+        });
         return false;
       }
     }
-    const date = new Date()
-    this.setState({ timestamp: date.getTime() })
+    const date = new Date();
+    this.setState({timestamp: date.getTime()});
 
-    const { dispatch, members } = this.props;
-    this.setState({ loading: true });
-    const callback = eventObject => {
+    const {dispatch, members} = this.props;
+    this.setState({loading: true});
+    const callback = (eventObject) => {
       if (eventObject.success) {
-
       }
       this.setState({
         loading: false,
-        isRefreshing: false
+        isRefreshing: false,
       });
     };
 
-    AsyncStorage.getItem("notification_key", (err, result) => {
-      var last_note = 0
+    AsyncStorage.getItem('notification_key', (err, result) => {
+      var last_note = 0;
       if (result != null) {
-        last_note = result
+        last_note = result;
       }
       const obj = new NotificationsRequestObject(last_note);
 
@@ -161,35 +147,31 @@ export default class Notification extends React.Component {
       // }
 
       dispatch(
-        createAction("members/loadNotifications")({
+        createAction('members/loadNotifications')({
           object: obj,
-          callback
-        })
+          callback,
+        }),
       );
-    })
-
-  }
+    });
+  };
 
   onRefresh() {
-
     this.setState({
       isRefreshing: true,
-    })
-    this.loadNotifications()
+    });
+    this.loadNotifications();
   }
 
   onNotificationsCellPress = (item, type) => {
-    const { dispatch } = this.props
-    dispatch(createAction('members/markOnPressNotificationAsRead')({ item }))
-  }
-
-
+    const {dispatch} = this.props;
+    dispatch(createAction('members/markOnPressNotificationAsRead')({item}));
+  };
 
   onBackPressed = () => {
     this.props.navigation.goBack();
   };
 
-  renderPointhistoryFlatListCell = ({ item }) => {
+  renderPointhistoryFlatListCell = ({item}) => {
     return (
       <NotificationsCell
         onNotificationsCellPress={this.onNotificationsCellPress}
@@ -206,13 +188,12 @@ export default class Notification extends React.Component {
   };
 
   onReadAllPressed = () => {
-    const { dispatch } = this.props
-    dispatch(createAction('members/markAllNotificationAsRead')({}))
+    const {dispatch} = this.props;
+    dispatch(createAction('members/markAllNotificationAsRead')({}));
   };
 
   render() {
-
-    const { unreadNotificationCount, notifications } = this.props
+    const {unreadNotificationCount, notifications} = this.props;
 
     return (
       <View style={styles.notificationView}>
@@ -223,21 +204,20 @@ export default class Notification extends React.Component {
             </Text>
             <View
               style={{
-                flex: 1
+                flex: 1,
               }}
             />
             {unreadNotificationCount > 0 ? (
               <TouchableOpacity
                 onPress={this.onReadAllPressed}
-                style={styles.readallButton}
-              >
+                style={styles.readallButton}>
                 <Text style={styles.readallButtonText}>Read All</Text>
               </TouchableOpacity>
             ) : null}
           </View>
           <View style={styles.pointhistoryFlatListViewWrapper}>
             {this.state.loading ? (
-              <AnimationLoading />
+              <Brew9Loading />
             ) : !this.state.loading && notifications.length > 0 ? (
               <FlatList
                 renderItem={this.renderPointhistoryFlatListCell}
@@ -248,10 +228,10 @@ export default class Notification extends React.Component {
                 keyExtractor={(item, index) => index.toString()}
               />
             ) : (
-                  <View style={styles.blankView}>
-                    <Text style={styles.noLabelText}>No Notifications</Text>
-                  </View>
-                )}
+              <View style={styles.blankView}>
+                <Text style={styles.noLabelText}>No Notifications</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -261,104 +241,104 @@ export default class Notification extends React.Component {
 
 const styles = StyleSheet.create({
   headerLeftContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
+    width: 70 * alpha,
   },
   navigationBarItem: {
-    width: "100%"
+    width: '100%',
   },
   navigationBarItemTitle: {
-    color: "black",
+    color: 'black',
     fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha
+    fontSize: 16 * fontAlpha,
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
     height: 18 * alpha,
-    tintColor: "black"
+    tintColor: 'black',
   },
   notificationView: {
-    backgroundColor: "white",
-    flex: 1
+    backgroundColor: 'white',
+    flex: 1,
   },
   contentView: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     flex: 1,
-    alignItems: "flex-start"
+    alignItems: 'flex-start',
   },
   noticeView: {
-    backgroundColor: "rgb(245, 247, 246)",
+    backgroundColor: 'rgb(245, 247, 246)',
     width: 375 * alpha,
     height: 51 * alpha,
-    flexDirection: "row",
-    alignItems: "center"
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   noticeText: {
-    backgroundColor: "transparent",
-    color: "rgb(107, 109, 108)",
+    backgroundColor: 'transparent',
+    color: 'rgb(107, 109, 108)',
     fontFamily: TITLE_FONT,
     fontSize: 13 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
-    marginLeft: 20 * alpha
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    marginLeft: 20 * alpha,
   },
   readallButton: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 13 * alpha,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 0,
     width: 90 * alpha,
     height: 26 * alpha,
-    marginRight: 20 * alpha
+    marginRight: 20 * alpha,
   },
   readallButtonText: {
-    color: "rgb(107, 109, 108)",
+    color: 'rgb(107, 109, 108)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 13 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left"
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
   },
   readallButtonImage: {
-    resizeMode: "contain",
-    marginRight: 10 * alpha
+    resizeMode: 'contain',
+    marginRight: 10 * alpha,
   },
   pointhistoryFlatList: {
-    backgroundColor: "white",
-    width: "100%",
-    height: "100%"
+    backgroundColor: 'white',
+    width: '100%',
+    height: '100%',
   },
   pointhistoryFlatListViewWrapper: {
     flex: 1,
-    alignSelf: "stretch",
-    marginRight: 1
+    alignSelf: 'stretch',
+    marginRight: 1,
   },
   container: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10 * alpha
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10 * alpha,
   },
   blankView: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   noLabelText: {
-    color: "rgb(149, 149, 149)",
+    color: 'rgb(149, 149, 149)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
-    backgroundColor: "transparent"
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
   },
 });

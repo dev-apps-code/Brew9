@@ -17,27 +17,34 @@ import {
   BackHandler,
 } from 'react-native';
 import RNExitApp from 'react-native-kill-app';
-import Brew9Modal from '../Components/Brew9Modal';
 import Modal from 'react-native-modal';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import _ from 'lodash';
 import PushRequestObject from '../Requests/push_request_object';
 import {connect} from 'react-redux';
-import {createAction} from '../Utils/index';
+import SwitchSelector from 'react-native-switch-selector';
+import AutoHeightImage from 'react-native-auto-height-image';
+import OneSignal from 'react-native-onesignal';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import {Analytics, Event, PageHit} from 'expo-analytics';
+import {getPreciseDistance} from 'geolib';
+import {AsyncStorage} from 'react-native';
+import {createAction} from '../Utils';
 import ProductCell from './ProductCell';
 import CategoryCell from './CategoryCell';
 import CartCell from './CartCell';
 import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import ProductRequestObject from '../Requests/product_request_object';
-import NearestShopRequestObject from '../Requests/nearest_shop_request_object';
-import SwitchSelector from 'react-native-switch-selector';
-import Toast from 'react-native-easy-toast';
-import _ from 'lodash';
-import AutoHeightImage from 'react-native-auto-height-image';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {getResponseMsg} from '../Utils/responses';
 import CategoryHeaderCell from './CategoryHeaderCell';
-import {
+import * as commonStyles from '../Common/common_style';
+import {ANALYTICS_ID} from '../Common/config';
+import Banners from './Banners';
+import ImageCell from './ImageCell';
+import {Brew9Modal, Brew9Toast, Brew9Loading} from '../Components';
+
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   TABBAR_INACTIVE_TINT,
@@ -47,16 +54,7 @@ import {
   LIGHT_BLUE_BACKGROUND,
   TOAST_DURATION,
   DEFAULT_BORDER_RADIUS,
-} from '../Common/common_style';
-import {Analytics, Event, PageHit} from 'expo-analytics';
-import {ANALYTICS_ID} from '../Common/config';
-import {getPreciseDistance} from 'geolib';
-import {AsyncStorage} from 'react-native';
-import Banners from './Banners';
-import OneSignal from 'react-native-onesignal';
-import ImageCell from './ImageCell';
-import AnimationLoading from '../Components/AnimationLoading';
-import Brew9Toast from '../Components/Brew9Toast';
+} = commonStyles;
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
@@ -1782,7 +1780,7 @@ export default class Home extends React.Component {
         )}
         {this.renderPromotionTopBar()}
         {this.state.loading ? (
-          <AnimationLoading />
+          <Brew9Loading />
         ) : (
           <View
             style={styles.productsectionView}
