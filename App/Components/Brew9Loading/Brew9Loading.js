@@ -3,7 +3,7 @@ import {View, StyleSheet, Platform, Image} from 'react-native';
 import {alpha} from '../Common/size.js';
 import FastImage from 'react-native-fast-image';
 
-export const AnimationLoading = memo(({containerStyle}) => {
+export const Brew9Loading = memo(({containerStyle}) => {
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.onboarding_container}>
