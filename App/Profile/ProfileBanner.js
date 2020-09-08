@@ -8,9 +8,8 @@ const defaultBanner = Image.resolveAssetSource(
 
 export const ProfileBanner = memo(({url}) => {
   const source = url !== null ? {uri: url} : defaultBanner;
-  const height = url ? 285 * alpha : 353 * alpha;
 
-  return <Image {...{source}} style={[viewStyles.shopImage, height]} />;
+  return <Image {...{source}} style={viewStyles.shopImage} />;
 });
 
 const viewStyles = StyleSheet.create({
