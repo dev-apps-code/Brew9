@@ -1507,17 +1507,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
 
-  shopImage: {
-    resizeMode: 'cover',
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    width: windowWidth,
-    left: 0 * alpha,
-    right: 0 * alpha,
-    top: 0 * alpha,
-    height: 285 * alpha,
-  },
-
   missioniconImage: {
     backgroundColor: 'transparent',
     resizeMode: 'contain',
