@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -11,16 +12,21 @@ import {
   TouchableWithoutFeedback,
   Platform,
 } from 'react-native';
-import React from 'react';
-import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
 import {ScrollView} from 'react-native-gesture-handler';
+import Moment from 'moment';
+import _ from 'lodash';
+import {Analytics, Event} from 'expo-analytics';
+import {LinearGradient} from 'expo-linear-gradient';
+import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
 import {connect} from 'react-redux';
 import GetCurrentOrderRequestObject from '../Requests/get_current_order_request_object';
-import ProfileRequestObject from '../Requests/profile_request_object';
-import {createAction} from '../Utils/index';
-import openMap from 'react-native-open-maps';
 import {getResponseMsg} from '../Utils/responses';
-import {
+import * as commonStyles from '../Common/common_style';
+import {ANALYTICS_ID} from '../Common/config';
+import {getMemberIdForApi} from '../Services/members_helper';
+import {Brew9Loading, CurveSeparator, HudLoading} from '../Components';
+
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   TABBAR_INACTIVE_TINT,
@@ -29,16 +35,7 @@ import {
   LIGHT_BLUE,
   HEADER_NO_BACK,
   DEFAULT_GREY_BACKGROUND,
-} from '../Common/common_style';
-import Moment from 'moment';
-import NotificationsRequestObject from '../Requests/notifications_request_object';
-import {LinearGradient} from 'expo-linear-gradient';
-import {Analytics, Event, PageHit} from 'expo-analytics';
-import {ANALYTICS_ID} from '../Common/config';
-import _ from 'lodash';
-import {getMemberIdForApi} from '../Services/members_helper';
-import {Brew9Loading, CurveSeparator, HudLoading} from '../Components';
-import CurveSeparator from '../Components/CurveSeparator';
+} = commonStyles;
 @connect(({members, shops, config}) => ({
   currentMember: members.profile,
   company_id: members.company_id,

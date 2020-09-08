@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {View, StyleSheet, Platform, Image} from 'react-native';
-import {alpha} from '../Common/size.js';
+import {alpha} from '../../Common/size';
 import FastImage from 'react-native-fast-image';
 
 export const Brew9Loading = memo(({containerStyle}) => {
@@ -11,13 +11,13 @@ export const Brew9Loading = memo(({containerStyle}) => {
           {Platform.OS == 'ios' ? (
             <FastImage
               style={styles.onboarding_logo}
-              source={require('./../../assets/images/Loading.gif')}
+              source={require('../../../assets/images/Loading.gif')}
               resizeMode={FastImage.resizeMode.contain}
             />
           ) : (
             <Image
               style={styles.onboarding_logo}
-              source={require('./../../assets/images/Loading.gif')}
+              source={require('../../../assets/images/Loading.gif')}
             />
           )}
         </View>

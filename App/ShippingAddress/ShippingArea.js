@@ -11,7 +11,7 @@ import {connect} from 'react-redux';
 import {alpha, fontAlpha} from '../Common/size';
 import {createAction} from '../Utils';
 import ShopAreaRequestObject from '../Requests/shop_area_request_object';
-import commonStyles from '../Common/common_style';
+import * as commonStyles from '../Common/common_style';
 
 const {
   TITLE_FONT,

@@ -15,7 +15,7 @@ import {createAction} from '../Utils';
 import UpdateShippingAddressObjectRequest from '../Requests/update_shipping_address_request_object';
 import ShippingAddressRequestObject from '../Requests/get_shipping_address_request_object';
 import _ from 'lodash';
-import commonStyles from '../Common/common_style';
+import * as commonStyles from '../Common/common_style';
 import Brew9Toast from '../Components/Brew9Toast';
 
 const {TITLE_FONT, NON_TITLE_FONT, PRIMARY_COLOR} = commonStyles;
