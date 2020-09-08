@@ -663,6 +663,28 @@ export default class Profile extends React.Component {
     );
   }
 
+  renderShopImage = () => {
+    const {selectedShop} = this.props;
+    const url =
+      selectedShop.profile_image != null
+        ? selectedShop.profile_image.url
+        : null;
+    let shopImage = url ? (
+      <Image
+        source={{uri: url}}
+        resizeMode={'cover'}
+        style={styles.shopImage}
+      />
+    ) : (
+      <Image
+        source={require('./../../assets/images/B9_APP_Profile.png')}
+        style={styles.group133Image}
+      />
+    );
+
+    return shopImage;
+  };
+
   renderProgressBar(progress) {
     progress_percent = progress * 100;
     return (
@@ -775,10 +797,7 @@ export default class Profile extends React.Component {
             }}>
             <View style={styles.membersectionView}>
               <View style={styles.topbackgroundView}>
-                <Image
-                  source={require('./../../assets/images/B9_APP_Profile.png')}
-                  style={styles.group133Image}
-                />
+                {this.renderShopImage()}
               </View>
               <View style={styles.memberDetailView}>
                 <View
@@ -1505,6 +1524,17 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
+  },
+
+  shopImage: {
+    resizeMode: 'cover',
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    width: windowWidth,
+    left: 0 * alpha,
+    right: 0 * alpha,
+    top: 0 * alpha,
+    height: 285 * alpha,
   },
 
   missioniconImage: {
