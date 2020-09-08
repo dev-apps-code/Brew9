@@ -27,6 +27,7 @@ import {
 import IconBadge from 'react-native-icon-badge';
 import {AsyncStorage} from 'react-native';
 import {getMemberIdForApi} from '../Services/members_helper';
+import {Brew9Loading} from '../Components';
 
 @connect(({members, config}) => ({
   selectedTab: config.selectedTab,
@@ -216,7 +217,7 @@ export default class Notification extends React.Component {
           </View>
           <View style={styles.pointhistoryFlatListViewWrapper}>
             {this.state.loading ? (
-              <AnimationLoading />
+              <Brew9Loading />
             ) : !this.state.loading && notifications.length > 0 ? (
               <FlatList
                 renderItem={this.renderPointhistoryFlatListCell}

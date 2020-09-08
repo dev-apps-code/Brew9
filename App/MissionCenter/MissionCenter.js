@@ -15,7 +15,7 @@ import * as commonStyles from '../Common/common_style';
 import {ANALYTICS_ID} from '../Common/config';
 import MissionBadgeIcon from './MissionBadgeIcon';
 import {getMemberIdForApi} from '../Services/members_helper';
-import {AnimationLoading, Brew9Toast, HudLoading} from '../Components';
+import {Brew9Loading, Brew9Toast, HudLoading} from '../Components';
 
 const {TITLE_FONT, TOAST_DURATION, HEADER_NO_BACK} = commonStyles;
 
@@ -374,7 +374,7 @@ export default class MissionCenter extends React.Component {
     return (
       <View style={styles.missionCenterView}>
         {this.state.loading ? (
-          <AnimationLoading />
+          <Brew9Loading />
         ) : (
           <View style={styles.missionlistFlatListViewWrapper}>
             <FlatList

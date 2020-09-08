@@ -19,7 +19,7 @@ import {KURL_INFO} from '../Utils/server';
 import * as commonStyles from '../Common/common_style';
 import {getMemberIdForApi} from '../Services/members_helper';
 import {ANALYTICS_ID} from '../Common/config';
-import {AnimationLoading} from '../Components';
+import {Brew9Loading} from '../Components';
 
 const {TITLE_FONT, NON_TITLE_FONT} = commonStyles;
 @connect(({members, shops}) => ({
@@ -496,7 +496,7 @@ export default class MemberVoucher extends React.Component {
               <Text style={styles.howToUseButtonText}>How to use</Text>
             </TouchableOpacity>
             {this.state.loading ? (
-              <AnimationLoading />
+              <Brew9Loading />
             ) : this.state.current_data.length == 0 && !this.state.loading ? (
               <View style={styles.novoucherviewView}>
                 <Text style={styles.noRewardAvailableText}>

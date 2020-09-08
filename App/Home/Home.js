@@ -51,7 +51,7 @@ import {AsyncStorage} from 'react-native';
 import Banners from './Banners';
 import OneSignal from 'react-native-onesignal';
 import ImageCell from './ImageCell';
-import {Brew9Modal, Brew9Toast, AnimationLoading} from '../Components';
+import {Brew9Modal, Brew9Toast, Brew9Loading} from '../Components';
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
@@ -1777,7 +1777,7 @@ export default class Home extends React.Component {
         )}
         {this.renderPromotionTopBar()}
         {this.state.loading ? (
-          <AnimationLoading />
+          <Brew9Loading />
         ) : (
           <View
             style={styles.productsectionView}
