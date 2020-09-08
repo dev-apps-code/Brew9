@@ -48,6 +48,7 @@ import HudLoading from '../Components/HudLoading';
 import Brew9PopUp from '../Components/Brew9PopUp';
 import _ from 'lodash';
 import Brew9Toast from '../Components/Brew9Toast';
+import {ProfileBanner} from './ProfileBanner';
 
 @connect(({members, config, shops}) => ({
   selectedTab: config.selectedTab,
@@ -696,8 +697,10 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    const {currentMember, members} = this.props;
+    const {currentMember, selectedShop} = this.props;
     const {hasShimmered} = this.state;
+
+    const bannerImage = selectedShop?.profile_image?.url || null;
 
     var background_photo;
     var level_name;
@@ -775,10 +778,7 @@ export default class Profile extends React.Component {
             }}>
             <View style={styles.membersectionView}>
               <View style={styles.topbackgroundView}>
-                <Image
-                  source={require('./../../assets/images/B9_APP_Profile.png')}
-                  style={styles.group133Image}
-                />
+                <ProfileBanner url={bannerImage} />
               </View>
               <View style={styles.memberDetailView}>
                 <View
