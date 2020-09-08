@@ -664,28 +664,6 @@ export default class Profile extends React.Component {
     );
   }
 
-  renderShopImage = () => {
-    const {selectedShop} = this.props;
-    const url =
-      selectedShop.profile_image != null
-        ? selectedShop.profile_image.url
-        : null;
-    let shopImage = url ? (
-      <Image
-        source={{uri: url}}
-        resizeMode={'cover'}
-        style={styles.shopImage}
-      />
-    ) : (
-      <Image
-        source={require('./../../assets/images/B9_APP_Profile.png')}
-        style={styles.group133Image}
-      />
-    );
-
-    return shopImage;
-  };
-
   renderProgressBar(progress) {
     progress_percent = progress * 100;
     return (
