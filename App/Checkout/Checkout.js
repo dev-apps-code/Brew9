@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Animated,
   StyleSheet,
@@ -10,20 +11,24 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React from 'react';
-import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
+import _ from 'lodash';
+import Moment from 'moment';
 import {connect} from 'react-redux';
-import Toast, {DURATION} from 'react-native-easy-toast';
-import HudLoading from '../Components/HudLoading';
-import {createAction, Storage} from '../Utils';
+import {Analytics, Event} from 'expo-analytics';
+import {createAction} from '../Utils';
+import {Brew9PopUp, Brew9Toast, HudLoading} from '../Components';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
-import _ from 'lodash';
-import Brew9Toast from '../Components/Brew9Toast';
 import {getResponseMsg} from '../Utils/responses';
+import * as commonStyles from '../Common/common_style';
+import {ANALYTICS_ID} from '../Common/config';
+import {getMemberIdForApi} from '../Services/members_helper';
+import TimeSelector from '../Components/OrderForSelector';
+import CurveSeparator from '../Components/CurveSeparator';
 
-import {
+const {
   TITLE_FONT,
   NON_TITLE_FONT,
   BUTTONBOTTOMPADDING,
@@ -31,15 +36,7 @@ import {
   PRIMARY_COLOR,
   TOAST_DURATION,
   LIGHT_GREY,
-} from '../Common/common_style';
-import Moment from 'moment';
-import {Analytics, Event} from 'expo-analytics';
-import {ANALYTICS_ID} from '../Common/config';
-import openMap from 'react-native-open-maps';
-import {getMemberIdForApi} from '../Services/members_helper';
-import Brew9PopUp from '../Components/Brew9PopUp';
-import OrderForSelector from '../Components/OrderForSelector';
-import CurveSeparator from '../Components/CurveSeparator';
+} = commonStyles;
 @connect(({members, shops, orders, config}) => ({
   company_id: members.company_id,
   currentMember: members.profile,
@@ -53,7 +50,7 @@ import CurveSeparator from '../Components/CurveSeparator';
   promotion_ids: orders.promotion_ids,
   cart_total: orders.cart_total,
   discount_cart_total: orders.discount_cart_total,
-  delivery: orders.isDelivery,
+  isDelivery: orders.isDelivery,
   location: members.location,
   shippingAddress: members.shippingAddress,
   responses: config.responses,
@@ -153,7 +150,7 @@ export default class Checkout extends React.Component {
       onItemPressed: this.onItemPressed,
     });
 
-    const {dispatch, delivery} = this.props;
+    const {dispatch, isDelivery} = this.props;
 
     this.setState(
       {
@@ -162,7 +159,7 @@ export default class Checkout extends React.Component {
       function () {
         this.loadValidVouchers();
         {
-          delivery && this.loadDeliveryFee();
+          isDelivery && this.loadDeliveryFee();
         }
       },
     );
@@ -205,42 +202,35 @@ export default class Checkout extends React.Component {
   formatSelectedHour = (hr) => (hr < 10 ? `0${hr}` : hr);
 
   loadDeliveryFee = () => {
-    const {selected_address, delivery} = this.state;
-    // delivery fees are based on location so if recipient address is empty
-    // no delivery fee is calculated
-    if (this.state.selected_address === null || delivery) {
+    const {selected_address} = this.state;
+    const {cart_total, dispatch, isDelivery, selectedShop} = this.props;
+
+    console.log('isDelivery ', isDelivery);
+
+    if (isDelivery === false || selected_address === null) {
       this.setState({deliveryFee: 0.0, delivery_description: ''});
       return;
     }
 
     const callback = (response) => {
       if (response.success) {
-        let deliveryFee = response?.result?.delivery_fee || 0;
-        let description = response?.result?.delivery_fee_description || '';
-        this.setState({
-          deliveryFee: parseFloat(deliveryFee).toFixed(2),
-          delivery_description: description,
-        });
+        const {result} = response;
+        const deliveryFee = parseFloat(result?.delivery_fee || 0).toFixed(2);
+        const delivery_description = result?.delivery_fee_description || '';
+        this.setState({deliveryFee, delivery_description});
       } else {
-        // Reset values if in case request fails
-        ////console.log('Something went wrong.');
         this.setState({deliveryFee: 0.0, delivery_description: ''});
       }
     };
 
     const object = new DeliveryFeeRequestObject(
-      this.props.cart_total,
-      this.state.selected_address.id,
+      cart_total,
+      selected_address.id,
     );
 
-    object.setUrlId(this.props.selectedShop.id);
-
-    this.props.dispatch(
-      createAction('shops/loadDeliveryFee')({
-        object,
-        callback,
-      }),
-    );
+    object.setUrlId(selectedShop.id);
+    const action = createAction('shops/loadDeliveryFee')({object, callback});
+    dispatch(action);
   };
 
   loadValidVouchers() {
@@ -426,17 +416,9 @@ export default class Checkout extends React.Component {
   }
 
   check_promotion_trigger = () => {
-    const {
-      currentMember,
-      dispatch,
-      promotions,
-      cart_total,
-      selectedShop,
-      delivery,
-      cart,
-    } = this.props;
+    const {currentMember, dispatch, cart_total, selectedShop} = this.props;
 
-    let {sub_total_voucher, deliveryFee} = this.state;
+    let {sub_total_voucher} = this.state;
     let shop = selectedShop;
     let newcart = [...this.props.cart];
     let finalCart = [];
@@ -738,7 +720,7 @@ export default class Checkout extends React.Component {
       cart_order_id,
       navigation,
       location,
-      delivery,
+      isDelivery,
     } = this.props;
     const {navigate} = this.props.navigation;
     const {
@@ -807,7 +789,7 @@ export default class Checkout extends React.Component {
     }
 
     delivery_option = 0; // 0 - Pickup 1 - Delivery
-    if (delivery) {
+    if (isDelivery) {
       delivery_option = 1;
     }
 
@@ -918,7 +900,7 @@ export default class Checkout extends React.Component {
       pick_up_time,
       selected_address,
     } = this.state;
-    const {currentMember, selectedShop, delivery} = this.props;
+    const {currentMember, selectedShop, isDelivery} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     const event = new Event(
       'Checkout',
@@ -929,7 +911,7 @@ export default class Checkout extends React.Component {
     analytics.event(event);
 
     if (currentMember != undefined) {
-      if (delivery && !selected_address) {
+      if (isDelivery && !selected_address) {
         this.addShippingAddress();
         return;
       } else {
@@ -1225,7 +1207,7 @@ export default class Checkout extends React.Component {
   }
 
   renderPaymentSection() {
-    const {currentMember, delivery} = this.props;
+    const {currentMember} = this.props;
     const {selected_payment} = this.state;
 
     const credits =
@@ -1267,8 +1249,8 @@ export default class Checkout extends React.Component {
 
   renderPickupTime() {
     const {pick_up_status, pick_up_time} = this.state;
-    var {delivery} = this.props;
-    var pick_up = delivery ? 'Delivery Time' : 'Pick Up Time';
+    var {isDelivery} = this.props;
+    var pick_up = isDelivery ? 'Delivery Time' : 'Pick Up Time';
     var formatted_time = this._getFormattedSchedule();
     return (
       <View style={styles.sectionView}>
@@ -1385,7 +1367,7 @@ export default class Checkout extends React.Component {
       <View
         style={[
           styles.sectionView,
-          this.props.delivery && {
+          this.props.isDelivery && {
             paddingTop: 20,
           },
         ]}>
@@ -1551,21 +1533,21 @@ export default class Checkout extends React.Component {
     );
   };
 
-  renderOrderForSelector = () => {
-    const {delivery, selectedShop} = this.props;
+  renderTimeSelector = () => {
+    const {isDelivery, selectedShop} = this.props;
     const {opening_hour, delivery_hour} = selectedShop;
     let today = [];
     let tomorrow = [];
-    if (delivery) {
+    if (isDelivery) {
       (today = delivery_hour?.today?.delivery_time_slot || []),
         (tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || []);
     } else {
       today = opening_hour?.ordering_time_slot || [];
     }
     return (
-      <OrderForSelector
+      <TimeSelector
         ref='timepicker'
-        delivery={this.props.delivery}
+        delivery={this.props.isDelivery}
         today={today || []}
         tomorrow={tomorrow || []}
         animation={this.timeSelectorAnimation}
@@ -1576,9 +1558,9 @@ export default class Checkout extends React.Component {
   };
 
   renderPaymentOptions = () => {
-    const {currentMember, delivery} = this.props;
+    const {currentMember, isDelivery} = this.props;
     const {final_price, selected_payment} = this.state;
-    let cashPayment = delivery ? 'Cash On Delivery' : 'Pay In Store';
+    let cashPayment = isDelivery ? 'Cash On Delivery' : 'Pay In Store';
     let credits =
       currentMember != undefined
         ? parseFloat(currentMember.credits).toFixed(2)
@@ -1717,7 +1699,7 @@ export default class Checkout extends React.Component {
       selected_address,
       deliveryFee,
     } = this.state;
-    let {selectedShop, cart, promotions, delivery} = this.props;
+    let {selectedShop, cart, promotions, isDelivery} = this.props;
     var final_price_delivery =
       parseFloat(final_price) + parseFloat(deliveryFee);
     let non_negative_final_price = parseFloat(
@@ -1736,7 +1718,7 @@ export default class Checkout extends React.Component {
                 flex: 1,
               }}>
               <View style={styles.locationWrapperView}>
-                {!delivery && (
+                {!isDelivery && (
                   <View style={styles.locationView}>
                     <View style={styles.branchView}>
                       <Text style={styles.shopBranchText}>
@@ -1792,7 +1774,7 @@ export default class Checkout extends React.Component {
                 )}
               </View>
 
-              {!delivery && <CurveSeparator />}
+              {!isDelivery && <CurveSeparator />}
               {this.renderOrderItems(cart, promotions)}
               {this.renderPromotions(promotions)}
               <CurveSeparator />
@@ -1805,12 +1787,12 @@ export default class Checkout extends React.Component {
 
               <CurveSeparator />
 
-              {delivery
+              {isDelivery
                 ? selected_address != undefined
                   ? this.renderDeliveryAddress(selected_address)
                   : this.renderDeliveryAddress(false)
                 : undefined}
-              {delivery && <CurveSeparator />}
+              {isDelivery && <CurveSeparator />}
               <View style={styles.totalViewWrapper}>
                 <View style={styles.totalView}>
                   <Text style={styles.totallabelText}>TOTAL</Text>
@@ -1882,7 +1864,7 @@ export default class Checkout extends React.Component {
           <View style={styles.checkoutViewOverlay} />
         )}
         {this.renderPayNow(non_negative_final_price)}
-        {this.renderOrderForSelector()}
+        {this.renderTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
         <Brew9Toast ref='toast' />
         <Brew9PopUp
