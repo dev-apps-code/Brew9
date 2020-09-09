@@ -658,7 +658,7 @@ export default class Home extends React.Component {
       });
       return;
     }
-    dispatch(createAction('members/setDeliveryOption')(delivery));
+    dispatch(createAction('orders/setDeliveryOption')(delivery));
   };
 
   onSelectCategory = (scroll_index, selected_index) => {
