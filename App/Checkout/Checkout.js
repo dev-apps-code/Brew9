@@ -53,8 +53,8 @@ import CurveSeparator from '../Components/CurveSeparator';
   promotion_ids: orders.promotion_ids,
   cart_total: orders.cart_total,
   discount_cart_total: orders.discount_cart_total,
+  delivery: orders.isDelivery,
   location: members.location,
-  delivery: members.delivery,
   shippingAddress: members.shippingAddress,
   responses: config.responses,
   shopResponses: config.shopResponses,
@@ -64,27 +64,27 @@ export default class Checkout extends React.Component {
     const {params = {}} = navigation.state;
     return {
       headerTitle: (
-          <Text
-              style={{
-                textAlign: 'center',
-                alignSelf: 'center',
-                fontFamily: TITLE_FONT,
-              }}>
-            Checkout
-          </Text>
+        <Text
+          style={{
+            textAlign: 'center',
+            alignSelf: 'center',
+            fontFamily: TITLE_FONT,
+          }}>
+          Checkout
+        </Text>
       ),
       headerTintColor: 'black',
       headerLeft: (
-          <View style={styles.headerLeftContainer}>
-            <TouchableOpacity
-                onPress={params.onBackPressed ? params.onBackPressed : () => null}
-                style={styles.navigationBarItem}>
-              <Image
-                  source={require('./../../assets/images/back.png')}
-                  style={styles.navigationBarItemIcon}
-              />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.headerLeftContainer}>
+          <TouchableOpacity
+            onPress={params.onBackPressed ? params.onBackPressed : () => null}
+            style={styles.navigationBarItem}>
+            <Image
+              source={require('./../../assets/images/back.png')}
+              style={styles.navigationBarItemIcon}
+            />
+          </TouchableOpacity>
+        </View>
       ),
       headerRight: null,
       headerStyle: {
@@ -97,8 +97,8 @@ export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     _.throttle(
-        this.checkout.bind(this),
-        500, // no new clicks within 500ms time window
+      this.checkout.bind(this),
+      500, // no new clicks within 500ms time window
     );
     const {discount_cart_total, currentMember, cart_total} = props;
     this.state = {
@@ -156,15 +156,15 @@ export default class Checkout extends React.Component {
     const {dispatch, delivery} = this.props;
 
     this.setState(
+      {
+        valid_vouchers: [],
+      },
+      function () {
+        this.loadValidVouchers();
         {
-          valid_vouchers: [],
-        },
-        function () {
-          this.loadValidVouchers();
-          {
-            delivery && this.loadDeliveryFee();
-          }
-        },
+          delivery && this.loadDeliveryFee();
+        }
+      },
     );
     dispatch(createAction('orders/noClearCart')());
     this.check_promotion_trigger();
@@ -172,16 +172,16 @@ export default class Checkout extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-        prevProps.promotion_trigger_count != this.props.promotion_trigger_count
+      prevProps.promotion_trigger_count != this.props.promotion_trigger_count
     ) {
       this.check_promotion_trigger();
     }
     if (prevProps.currentMember !== this.props.currentMember) {
       this.setState(
-          {
-            selected_address: this.props.currentMember.defaultAddress,
-          },
-          () => this.loadDeliveryFee(),
+        {
+          selected_address: this.props.currentMember.defaultAddress,
+        },
+        () => this.loadDeliveryFee(),
       );
     }
   }
@@ -205,9 +205,10 @@ export default class Checkout extends React.Component {
   formatSelectedHour = (hr) => (hr < 10 ? `0${hr}` : hr);
 
   loadDeliveryFee = () => {
+    const {selected_address, delivery} = this.state;
     // delivery fees are based on location so if recipient address is empty
     // no delivery fee is calculated
-    if (this.state.selected_address === null) {
+    if (this.state.selected_address === null || delivery) {
       this.setState({deliveryFee: 0.0, delivery_description: ''});
       return;
     }
@@ -228,17 +229,17 @@ export default class Checkout extends React.Component {
     };
 
     const object = new DeliveryFeeRequestObject(
-        this.props.cart_total,
-        this.state.selected_address.id,
+      this.props.cart_total,
+      this.state.selected_address.id,
     );
 
     object.setUrlId(this.props.selectedShop.id);
 
     this.props.dispatch(
-        createAction('shops/loadDeliveryFee')({
-          object,
-          callback,
-        }),
+      createAction('shops/loadDeliveryFee')({
+        object,
+        callback,
+      }),
     );
   };
 
@@ -263,11 +264,11 @@ export default class Checkout extends React.Component {
 
           const analytics = new Analytics(ANALYTICS_ID);
           analytics.event(
-              new Event(
-                  'Valid Voucher',
-                  getMemberIdForApi(currentMember),
-                  valid_voucher_counts,
-              ),
+            new Event(
+              'Valid Voucher',
+              getMemberIdForApi(currentMember),
+              valid_voucher_counts,
+            ),
           );
         }
       };
@@ -276,19 +277,19 @@ export default class Checkout extends React.Component {
       filtered_cart = _.filter(cart, {clazz: 'product'});
 
       const obj = new ValidVouchersRequestObject(
-          selectedShop.id,
-          filtered_cart,
-          promotions,
-          cart_order_id,
+        selectedShop.id,
+        filtered_cart,
+        promotions,
+        cart_order_id,
       );
 
       obj.setUrlId(currentMember.id);
 
       dispatch(
-          createAction('vouchers/loadVouchersForCart')({
-            object: obj,
-            callback,
-          }),
+        createAction('vouchers/loadVouchersForCart')({
+          object: obj,
+          callback,
+        }),
       );
     }
   }
@@ -312,7 +313,7 @@ export default class Checkout extends React.Component {
     var pick_up_time = `${selected_date.format('YYYY-MM-DD')} ${hour}:${min}`;
 
     this.setState({pick_up_time, pick_up_status, range}, () =>
-        this.setPayNowStatus(),
+      this.setPayNowStatus(),
     );
 
     this._toggleTimeSelector();
@@ -350,34 +351,20 @@ export default class Checkout extends React.Component {
     let location = latitude + ',' + longitude;
     const url = Platform.select({
       ios:
-          'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
-          location,
+        'https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=' +
+        location,
       android: 'https://www.google.com/maps/dir/?api=1&destination=' + location,
     });
 
     Linking.openURL(url);
   }
 
-  onDeliveryButtonPressed = () => {
-    this.setState({
-      delivery_options: 'delivery',
-    });
-  };
-
-  onPickUpButtonPressed = () => {
-    this.setState({
-      delivery_options: 'pickup',
-    });
-  };
-
-  onAutoFillPressed = () => {};
-
   onVoucherButtonPressed = () => {
     const {navigate} = this.props.navigation;
     const {currentMember} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-        new Event('Checkout', getMemberIdForApi(currentMember), 'Select Voucher'),
+      new Event('Checkout', getMemberIdForApi(currentMember), 'Select Voucher'),
     );
     navigate('CheckoutVoucher', {
       valid_vouchers: this.state.valid_vouchers,
@@ -408,17 +395,17 @@ export default class Checkout extends React.Component {
   onCancelVoucher = (item) => {
     let new_voucher_list = [...this.state.vouchers_to_use];
     const search_voucher_index = new_voucher_list.findIndex(
-        (element) => element.id == item.id,
+      (element) => element.id == item.id,
     );
 
     new_voucher_list.splice(search_voucher_index, 1);
     this.setState(
-        {
-          vouchers_to_use: new_voucher_list,
-        },
-        function () {
-          this.applyVoucher(new_voucher_list);
-        },
+      {
+        vouchers_to_use: new_voucher_list,
+      },
+      function () {
+        this.applyVoucher(new_voucher_list);
+      },
     );
   };
 
@@ -430,7 +417,7 @@ export default class Checkout extends React.Component {
   roundOff(value) {
     roundOffValue = 0;
     let n = parseInt((value * 100).toFixed(10)),
-        x = n % 10;
+      x = n % 10;
     let result = n + 10 - x;
     if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
     roundOffValue = (result / 100).toFixed(2);
@@ -455,9 +442,9 @@ export default class Checkout extends React.Component {
     let finalCart = [];
     var promotions_item = [];
     var final_cart_value =
-        sub_total_voucher != 0 ? sub_total_voucher : cart_total;
+      sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var cart_total_voucher =
-        sub_total_voucher != 0 ? sub_total_voucher : cart_total;
+      sub_total_voucher != 0 ? sub_total_voucher : cart_total;
     var final_promo_text = '';
 
     // reset cart promotions
@@ -479,12 +466,12 @@ export default class Checkout extends React.Component {
             if (remaining <= 0) {
               shop.all_promotions[index].has_triggered = true;
               if (
-                  promotion.reward_type != null &&
-                  promotion.reward_type == 'Discount'
+                promotion.reward_type != null &&
+                promotion.reward_type == 'Discount'
               ) {
                 if (
-                    promotion.value_type != null &&
-                    promotion.value_type == 'percent'
+                  promotion.value_type != null &&
+                  promotion.value_type == 'percent'
                 ) {
                   var promotionSettings = {
                     value: promotion.value,
@@ -495,21 +482,21 @@ export default class Checkout extends React.Component {
                   });
                   var discount_value = promotion.value ? promotion.value : 0;
                   price = this.roundOff(
-                      (final_cart_value * discount_value) / 100,
+                    (final_cart_value * discount_value) / 100,
                   );
                   roundedPrice = this.roundOff(
-                      (final_cart_value * discount_value) / 100,
+                    (final_cart_value * discount_value) / 100,
                   );
                   if (
-                      promotion.maximum_discount_allow != null &&
-                      price > promotion.maximum_discount_allow
+                    promotion.maximum_discount_allow != null &&
+                    price > promotion.maximum_discount_allow
                   ) {
                     price = promotion.maximum_discount_allow;
                   }
                   final_cart_value = final_cart_value - price;
                 } else if (
-                    promotion.value_type != null &&
-                    promotion.value_type == 'fixed'
+                  promotion.value_type != null &&
+                  promotion.value_type == 'fixed'
                 ) {
                   var promotionSettings = {
                     value: promotion.value,
@@ -538,8 +525,8 @@ export default class Checkout extends React.Component {
             } else {
               var display_text = promotion.display_text;
               final_promo_text = display_text.replace(
-                  '$remaining',
-                  `$${parseFloat(remaining).toFixed(2)}`,
+                '$remaining',
+                `$${parseFloat(remaining).toFixed(2)}`,
               );
 
               break;
@@ -564,20 +551,20 @@ export default class Checkout extends React.Component {
     }
 
     dispatch(
-        createAction('orders/updatePromotionText')({
-          promotionText: final_promo_text,
-        }),
+      createAction('orders/updatePromotionText')({
+        promotionText: final_promo_text,
+      }),
     );
     dispatch(
-        createAction('orders/updatePromotions')({
-          promotions: promotions_item,
-        }),
+      createAction('orders/updatePromotions')({
+        promotions: promotions_item,
+      }),
     );
 
     dispatch(
-        createAction('orders/updateDiscountCartTotal')({
-          discount_cart_total: final_cart_value,
-        }),
+      createAction('orders/updateDiscountCartTotal')({
+        discount_cart_total: final_cart_value,
+      }),
     );
   };
 
@@ -614,37 +601,37 @@ export default class Checkout extends React.Component {
           if (promotionSettings.type == 'percent') {
             if (voucherDetails.discount_type.toLowerCase() == 'fixed') {
               voucherDiscountTotal =
-                  voucherDiscountTotal +
-                  voucherDetails.discount_price * discountVoucherQuantity;
+                voucherDiscountTotal +
+                voucherDetails.discount_price * discountVoucherQuantity;
             } else if (
-                voucherDetails.discount_type.toLowerCase() == 'percent'
+              voucherDetails.discount_type.toLowerCase() == 'percent'
             ) {
               var voucherDeductionPercentage = voucherDetails.discount_price;
               productPrice -= this.roundOff(
-                  (productPrice * promotionSettings.value) / 100,
+                (productPrice * promotionSettings.value) / 100,
               );
               var voucherDeductionValue = this.roundOff(
-                  (productPrice * voucherDetails.discount_price) / 100.0,
+                (productPrice * voucherDetails.discount_price) / 100.0,
               );
               voucherDiscountTotal =
-                  voucherDiscountTotal +
-                  voucherDeductionValue * discountVoucherQuantity;
+                voucherDiscountTotal +
+                voucherDeductionValue * discountVoucherQuantity;
             }
           } else if (promotionSettings.type == null) {
             if (voucherDetails.discount_type.toLowerCase() == 'fixed') {
               voucherDiscountTotal =
-                  voucherDiscountTotal +
-                  voucherDetails.discount_price * discountVoucherQuantity;
+                voucherDiscountTotal +
+                voucherDetails.discount_price * discountVoucherQuantity;
             } else if (
-                voucherDetails.discount_type.toLowerCase() == 'percent'
+              voucherDetails.discount_type.toLowerCase() == 'percent'
             ) {
               var voucherDeductionPercentage = voucherDetails.discount_price;
               var voucherDeductionValue = this.roundOff(
-                  (productPrice * voucherDetails.discount_price) / 100.0,
+                (productPrice * voucherDetails.discount_price) / 100.0,
               );
               voucherDiscountTotal =
-                  voucherDiscountTotal +
-                  voucherDeductionValue * discountVoucherQuantity;
+                voucherDiscountTotal +
+                voucherDeductionValue * discountVoucherQuantity;
             }
           }
         }
@@ -666,21 +653,21 @@ export default class Checkout extends React.Component {
         voucherDeductedTotal = voucherDeductedTotal - voucher.discount_price;
       } else if (voucher.voucher_type == 'Discount') {
         if (
-            voucher.discount_type != null &&
-            voucher.discount_type != '' &&
-            voucher.discount_price != null &&
-            voucher.discount_price != 0
+          voucher.discount_type != null &&
+          voucher.discount_type != '' &&
+          voucher.discount_price != null &&
+          voucher.discount_price != 0
         ) {
           if (vouchers_to_use[index].product_ids.length != 0) {
             voucherDeductedTotal = this.filterProductsByVoucher(
-                vouchers_to_use[index],
+              vouchers_to_use[index],
             );
           } else if (voucher.discount_type.toLowerCase() == 'fixed') {
             voucherDeductedTotal =
-                voucherDeductedTotal - voucher.discount_price;
+              voucherDeductedTotal - voucher.discount_price;
           } else if (voucher.discount_type.toLowerCase() == 'percent') {
             var voucherConvertedToFix = this.roundOff(
-                (voucherDeductedTotal * voucher.discount_price) / 100.0,
+              (voucherDeductedTotal * voucher.discount_price) / 100.0,
             );
             voucherDeductedTotal = voucherDeductedTotal - voucherConvertedToFix;
           }
@@ -701,11 +688,11 @@ export default class Checkout extends React.Component {
   onPaymentButtonPressed = () => {
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
-        new Event(
-            'Checkout',
-            getMemberIdForApi(this.props.currentMember),
-            'Select Payment',
-        ),
+      new Event(
+        'Checkout',
+        getMemberIdForApi(this.props.currentMember),
+        'Select Payment',
+      ),
     );
     this.tooglePayment();
   };
@@ -720,9 +707,9 @@ export default class Checkout extends React.Component {
       }
     }
     dispatch(
-        createAction('orders/updateCart')({
-          cart: newcart,
-        }),
+      createAction('orders/updateCart')({
+        cart: newcart,
+      }),
     );
   }
 
@@ -730,15 +717,15 @@ export default class Checkout extends React.Component {
     const {dispatch} = this.props;
     let new_cart = [...this.props.cart];
     const search_product_index = new_cart.findIndex(
-        (element) => element.id == item.id,
+      (element) => element.id == item.id,
     );
 
     new_cart.splice(search_product_index, 1);
 
     dispatch(
-        createAction('orders/updateCart')({
-          cart: new_cart,
-        }),
+      createAction('orders/updateCart')({
+        cart: new_cart,
+      }),
     );
   }
 
@@ -772,17 +759,17 @@ export default class Checkout extends React.Component {
       if (eventObject.success) {
         if (selected_payment == 'credits') {
           setTimeout(
-              function () {
-                this.clearCart();
-              }.bind(this),
-              500,
+            function () {
+              this.clearCart();
+            }.bind(this),
+            500,
           );
         } else if (selected_payment == 'counter') {
           setTimeout(
-              function () {
-                this.clearCart();
-              }.bind(this),
-              500,
+            function () {
+              this.clearCart();
+            }.bind(this),
+            500,
           );
         } else {
           const order = eventObject.result;
@@ -827,24 +814,24 @@ export default class Checkout extends React.Component {
     filtered_cart = _.filter(cart, {clazz: 'product'});
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
     const obj = new MakeOrderRequestObj(
-        filtered_cart,
-        voucher_item_ids,
-        this.state.selected_payment,
-        promotion_ids,
-        pick_up_status,
-        pick_up_time,
-        cart_order_id,
-        latitude,
-        longitude,
-        delivery_option,
-        address_id,
+      filtered_cart,
+      voucher_item_ids,
+      this.state.selected_payment,
+      promotion_ids,
+      pick_up_status,
+      pick_up_time,
+      cart_order_id,
+      latitude,
+      longitude,
+      delivery_option,
+      address_id,
     );
     obj.setUrlId(selectedShop.id);
     dispatch(
-        createAction('shops/loadMakeOrder')({
-          object: obj,
-          callback,
-        }),
+      createAction('shops/loadMakeOrder')({
+        object: obj,
+        callback,
+      }),
     );
   }
 
@@ -911,11 +898,11 @@ export default class Checkout extends React.Component {
     const popUpVisible = isConfirmCheckout;
 
     return (
-        <Brew9PopUp
-            onPressOk={this.onPayNowPressed}
-            onBackgroundPress={() => {}}
-            {...{popUpVisible, title, description, OkText}}
-        />
+      <Brew9PopUp
+        onPressOk={this.onPayNowPressed}
+        onBackgroundPress={() => {}}
+        {...{popUpVisible, title, description, OkText}}
+      />
     );
   };
 
@@ -934,9 +921,9 @@ export default class Checkout extends React.Component {
     const {currentMember, selectedShop, delivery} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     const event = new Event(
-        'Checkout',
-        getMemberIdForApi(currentMember),
-        'Pay Now',
+      'Checkout',
+      getMemberIdForApi(currentMember),
+      'Pay Now',
     );
 
     analytics.event(event);
@@ -952,8 +939,7 @@ export default class Checkout extends React.Component {
             props: this.props,
             shopId: selectedShop.id,
             key: 'Popup - Select Payment',
-            defaultText:
-                'Please select a payment method',
+            defaultText: 'Please select a payment method',
           });
 
           this.refs.toast.show(paymentSelectionText, TOAST_DURATION + 1000);
@@ -963,15 +949,15 @@ export default class Checkout extends React.Component {
 
         if (selected_payment == 'credits') {
           if (
-              parseFloat(final_price) >
-              parseFloat(currentMember.credits).toFixed(2)
+            parseFloat(final_price) >
+            parseFloat(currentMember.credits).toFixed(2)
           ) {
             const insufficientText = getResponseMsg({
               props: this.props,
               shopId: selectedShop.id,
               key: 'Popup - Insufficient credit',
               defaultText:
-                  'Oops, insufficient E-Wallet credit! Please select other payment option.',
+                'Oops, insufficient E-Wallet credit! Please select other payment option.',
             });
 
             this.refs.toast.show(insufficientText, TOAST_DURATION + 1000);
@@ -1044,21 +1030,21 @@ export default class Checkout extends React.Component {
 
     if (isPickupToogle) {
       this.setState(
-          {isPickupToogle: false, isTimeSelectorToggled: false},
-          function () {
-            Animated.spring(this.movePickAnimation, {
-              toValue: {x: 0, y: windowHeight},
-            }).start();
-          },
+        {isPickupToogle: false, isTimeSelectorToggled: false},
+        function () {
+          Animated.spring(this.movePickAnimation, {
+            toValue: {x: 0, y: windowHeight},
+          }).start();
+        },
       );
     } else {
       this.setState(
-          {isPickupToogle: true, isTimeSelectorToggled: true},
-          function () {
-            Animated.spring(this.movePickAnimation, {
-              toValue: {x: 0, y: 52 * alpha},
-            }).start();
-          },
+        {isPickupToogle: true, isTimeSelectorToggled: true},
+        function () {
+          Animated.spring(this.movePickAnimation, {
+            toValue: {x: 0, y: 52 * alpha},
+          }).start();
+        },
       );
     }
   };
@@ -1133,7 +1119,7 @@ export default class Checkout extends React.Component {
           discount_value = item.voucher.discount_price;
         } else if (item.voucher.discount_type == 'percent') {
           discount_value =
-              (discount_cart_total * item.voucher.discount_price) / 100.0;
+            (discount_cart_total * item.voucher.discount_price) / 100.0;
         }
       }
       if (item.product_ids.length != 0) {
@@ -1141,100 +1127,100 @@ export default class Checkout extends React.Component {
       }
 
       return (
-          <View style={[styles.drinksView]} key={key}>
-            <View
-                pointerEvents='box-none'
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-              <View style={styles.productDetailView}>
-                <View style={styles.voucherDetailView}>
-                  <Text style={styles.productNameText}>{voucherDisplayName}</Text>
-                  <View style={styles.voucherButtonView}>
-                    <Text style={styles.voucherButtonText}>Voucher</Text>
-                  </View>
+        <View style={[styles.drinksView]} key={key}>
+          <View
+            pointerEvents='box-none'
+            style={{
+              justifyContent: 'center',
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={styles.productDetailView}>
+              <View style={styles.voucherDetailView}>
+                <Text style={styles.productNameText}>{voucherDisplayName}</Text>
+                <View style={styles.voucherButtonView}>
+                  <Text style={styles.voucherButtonText}>Voucher</Text>
                 </View>
-                {/* {item.voucher.description.length > 0 && (
+              </View>
+              {/* {item.voucher.description.length > 0 && (
                 <View style={styles.voucherDetailView}>
                   <Text style={styles.productVariantText}>
                     {item.voucher.description}
                   </Text>
                 </View>
               )} */}
-                <View style={styles.spacer} />
-              </View>
-              {/* {item.voucher.free_quantity ? <Text
-                        style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
-              {discount_value ? (
-                  <Text style={styles.voucherPriceText}>{`-$${parseFloat(
-                      this.roundOff(this.state.voucherTotalDiscount),
-                  ).toFixed(2)}`}</Text>
-              ) : undefined}
-
-              <TouchableOpacity
-                  onPress={() => this.onCancelVoucher(item)}
-                  style={styles.cancelVoucherButton}>
-                <Image
-                    source={require('./../../assets/images/cancel.png')}
-                    style={styles.cancelImage}
-                />
-              </TouchableOpacity>
-
-              <Image
-                  source={require('./../../assets/images/dotted-line.png')}
-                  style={styles.dottedLineImage}
-              />
+              <View style={styles.spacer} />
             </View>
+            {/* {item.voucher.free_quantity ? <Text
+                        style={styles.voucherQuantityText}>x{item.voucher.free_quantity}</Text> : undefined} */}
+            {discount_value ? (
+              <Text style={styles.voucherPriceText}>{`-$${parseFloat(
+                this.roundOff(this.state.voucherTotalDiscount),
+              ).toFixed(2)}`}</Text>
+            ) : undefined}
+
+            <TouchableOpacity
+              onPress={() => this.onCancelVoucher(item)}
+              style={styles.cancelVoucherButton}>
+              <Image
+                source={require('./../../assets/images/cancel.png')}
+                style={styles.cancelImage}
+              />
+            </TouchableOpacity>
+
+            <Image
+              source={require('./../../assets/images/dotted-line.png')}
+              style={styles.dottedLineImage}
+            />
           </View>
+        </View>
       );
     });
 
     var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (
-        o,
+      o,
     ) {
       if (o.is_valid == true) return o;
     }).length;
     return (
-        <View style={styles.sectionView}>
-          <TouchableOpacity
-              onPress={
-                this.state.valid_vouchers != null &&
-                this.state.valid_vouchers.length > 0
-                    ? () => this.onVoucherButtonPressed()
-                    : () => null
-              }
-              style={styles.voucherButton}>
-            <View pointerEvents='box-none' style={styles.sectionRowView}>
-              <Text style={styles.productNameText}>Brew9 Vouchers</Text>
-              <View style={styles.spacer} />
-              <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                <Text
-                    style={
-                      this.state.valid_vouchers != null &&
-                      this.state.valid_vouchers.length > 0
-                          ? styles.productVoucherText
-                          : styles.productVoucherDisableText
-                    }>
-                  {this.state.valid_vouchers != null ? valid_voucher_counts : '-'}{' '}
-                  usable
-                </Text>
-                <Image
-                    source={require('./../../assets/images/next.png')}
-                    style={styles.menuRowArrowImage}
-                />
-              </View>
+      <View style={styles.sectionView}>
+        <TouchableOpacity
+          onPress={
+            this.state.valid_vouchers != null &&
+            this.state.valid_vouchers.length > 0
+              ? () => this.onVoucherButtonPressed()
+              : () => null
+          }
+          style={styles.voucherButton}>
+          <View pointerEvents='box-none' style={styles.sectionRowView}>
+            <Text style={styles.productNameText}>Brew9 Vouchers</Text>
+            <View style={styles.spacer} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={
+                  this.state.valid_vouchers != null &&
+                  this.state.valid_vouchers.length > 0
+                    ? styles.productVoucherText
+                    : styles.productVoucherDisableText
+                }>
+                {this.state.valid_vouchers != null ? valid_voucher_counts : '-'}{' '}
+                usable
+              </Text>
+              <Image
+                source={require('./../../assets/images/next.png')}
+                style={styles.menuRowArrowImage}
+              />
             </View>
-          </TouchableOpacity>
-          <View style={styles.orderitemsView}>{voucher_items}</View>
-        </View>
+          </View>
+        </TouchableOpacity>
+        <View style={styles.orderitemsView}>{voucher_items}</View>
+      </View>
     );
   }
 
@@ -1243,32 +1229,32 @@ export default class Checkout extends React.Component {
     const {selected_payment} = this.state;
 
     const credits =
-        currentMember != undefined
-            ? parseFloat(currentMember.credits).toFixed(2)
-            : 0;
+      currentMember != undefined
+        ? parseFloat(currentMember.credits).toFixed(2)
+        : 0;
 
     return (
-        <View style={styles.sectionView}>
-          <View style={styles.voucherButton}>
-            <View style={styles.sectionRowView}>
+      <View style={styles.sectionView}>
+        <View style={styles.voucherButton}>
+          <View style={styles.sectionRowView}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                <View
-                    style={[
-                      selected_payment != ''
-                          ? styles.greenCircle
-                          : styles.redCircle,
-                    ]}
-                />
-                <Text style={[styles.productNameText]}>Payment</Text>
-              </View>
+                style={[
+                  selected_payment != ''
+                    ? styles.greenCircle
+                    : styles.redCircle,
+                ]}
+              />
+              <Text style={[styles.productNameText]}>Payment</Text>
             </View>
           </View>
         </View>
+      </View>
     );
   }
 
@@ -1285,35 +1271,35 @@ export default class Checkout extends React.Component {
     var pick_up = delivery ? 'Delivery Time' : 'Pick Up Time';
     var formatted_time = this._getFormattedSchedule();
     return (
-        <View style={styles.sectionView}>
-          <TouchableOpacity
-              onPress={() => this.changeTimeSchedule()}
-              style={styles.voucherButton}>
-            <View pointerEvents='box-none' style={styles.sectionRowView}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View
-                    style={
-                      pick_up_status != null ? styles.greenCircle : styles.redCircle
-                    }
-                />
-                <Text style={styles.productNameText}>{pick_up}</Text>
-              </View>
+      <View style={styles.sectionView}>
+        <TouchableOpacity
+          onPress={() => this.changeTimeSchedule()}
+          style={styles.voucherButton}>
+          <View pointerEvents='box-none' style={styles.sectionRowView}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                <Text style={styles.productVoucherText}>
-                  {pick_up_time != null ? formatted_time : 'Please select'}
-                </Text>
-                <Image
-                    source={require('./../../assets/images/next.png')}
-                    style={styles.menuRowArrowImage}
-                />
-              </View>
+                style={
+                  pick_up_status != null ? styles.greenCircle : styles.redCircle
+                }
+              />
+              <Text style={styles.productNameText}>{pick_up}</Text>
             </View>
-          </TouchableOpacity>
-        </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.productVoucherText}>
+                {pick_up_time != null ? formatted_time : 'Please select'}
+              </Text>
+              <Image
+                source={require('./../../assets/images/next.png')}
+                style={styles.menuRowArrowImage}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -1323,152 +1309,152 @@ export default class Checkout extends React.Component {
 
     const order_items = fullList.map((item, key) => {
       var price_string =
-          item.price != undefined && item.price > 0 && item.clazz == 'product'
-              ? `$${parseFloat(item.price).toFixed(2)}`
-              : item.price != undefined &&
-              item.price > 0 &&
-              item.clazz == 'promotion'
-              ? `-$${parseFloat(item.roundedPrice).toFixed(2)}`
-              : item.type != undefined && item.type == 'Free Items and vouchers'
-                  ? 'Free'
-                  : '';
+        item.price != undefined && item.price > 0 && item.clazz == 'product'
+          ? `$${parseFloat(item.price).toFixed(2)}`
+          : item.price != undefined &&
+            item.price > 0 &&
+            item.clazz == 'promotion'
+          ? `-$${parseFloat(item.roundedPrice).toFixed(2)}`
+          : item.type != undefined && item.type == 'Free Items and vouchers'
+          ? 'Free'
+          : '';
 
       let filtered =
-          item.selected_variants != null
-              ? item.selected_variants.filter(function (el) {
-                return el;
-              })
-              : [];
+        item.selected_variants != null
+          ? item.selected_variants.filter(function (el) {
+              return el;
+            })
+          : [];
 
       let variant_array = filtered.map((a) => a.value);
       return (
-          <View style={styles.drinksView} key={key}>
-            <View
-                pointerEvents='box-none'
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row',
-                }}>
-              <View style={styles.productDetailView}>
-                <Text
-                    style={
-                      item.cannot_order != undefined && item.cannot_order == true
-                          ? styles.productNameDisabledText
-                          : styles.productNameText
-                    }>
-                  {item.name}
-                </Text>
-                {variant_array.length > 0 ? (
-                    <Text style={styles.productVariantText}>
-                      {variant_array.join(', ')}
-                    </Text>
-                ) : (
-                    <View style={styles.spacer} />
-                )}
-              </View>
-              <Text style={styles.productQuantityText}>
-                {item.quantity != null &&
-                item.quantity > 0 &&
-                `x${item.quantity}`}
+        <View style={styles.drinksView} key={key}>
+          <View
+            pointerEvents='box-none'
+            style={{
+              justifyContent: 'center',
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row',
+            }}>
+            <View style={styles.productDetailView}>
+              <Text
+                style={
+                  item.cannot_order != undefined && item.cannot_order == true
+                    ? styles.productNameDisabledText
+                    : styles.productNameText
+                }>
+                {item.name}
               </Text>
-              <Text style={styles.productPriceText}>{price_string}</Text>
-              {item.cannot_order != undefined && item.cannot_order == true && (
-                  <TouchableOpacity
-                      onPress={() => this.onRemoveItem(item)}
-                      style={styles.cancelVoucherButton}>
-                    <Image
-                        source={require('./../../assets/images/cancel.png')}
-                        style={styles.cancelImage}
-                    />
-                  </TouchableOpacity>
-              )}
-              {item.id != last_item.id && (
-                  <Image
-                      source={require('./../../assets/images/dotted-line.png')}
-                      style={styles.dottedLineImage}
-                  />
+              {variant_array.length > 0 ? (
+                <Text style={styles.productVariantText}>
+                  {variant_array.join(', ')}
+                </Text>
+              ) : (
+                <View style={styles.spacer} />
               )}
             </View>
+            <Text style={styles.productQuantityText}>
+              {item.quantity != null &&
+                item.quantity > 0 &&
+                `x${item.quantity}`}
+            </Text>
+            <Text style={styles.productPriceText}>{price_string}</Text>
+            {item.cannot_order != undefined && item.cannot_order == true && (
+              <TouchableOpacity
+                onPress={() => this.onRemoveItem(item)}
+                style={styles.cancelVoucherButton}>
+                <Image
+                  source={require('./../../assets/images/cancel.png')}
+                  style={styles.cancelImage}
+                />
+              </TouchableOpacity>
+            )}
+            {item.id != last_item.id && (
+              <Image
+                source={require('./../../assets/images/dotted-line.png')}
+                style={styles.dottedLineImage}
+              />
+            )}
           </View>
+        </View>
       );
     });
 
     return (
-        <View
-            style={[
-              styles.sectionView,
-              this.props.delivery && {
-                paddingTop: 20,
-              },
-            ]}>
-          <View style={styles.orderitemsView}>{order_items}</View>
-        </View>
+      <View
+        style={[
+          styles.sectionView,
+          this.props.delivery && {
+            paddingTop: 20,
+          },
+        ]}>
+        <View style={styles.orderitemsView}>{order_items}</View>
+      </View>
     );
   }
 
   renderPromotions = (promotions) => {
     let promotions_item = promotions.map((item, key) => {
       var price_string =
-          item.price != undefined && item.price > 0 && item.clazz == 'product'
-              ? `$${parseFloat(item.price).toFixed(2)}`
-              : item.price != undefined &&
-              item.price > 0 &&
-              item.clazz == 'promotion'
-              ? `-$${parseFloat(item.price).toFixed(2)}`
-              : item.type != undefined && item.type == 'Free Items and vouchers'
-                  ? 'Free'
-                  : 'Rebate';
+        item.price != undefined && item.price > 0 && item.clazz == 'product'
+          ? `$${parseFloat(item.price).toFixed(2)}`
+          : item.price != undefined &&
+            item.price > 0 &&
+            item.clazz == 'promotion'
+          ? `-$${parseFloat(item.price).toFixed(2)}`
+          : item.type != undefined && item.type == 'Free Items and vouchers'
+          ? 'Free'
+          : 'Rebate';
       let filtered =
-          item.selected_variants != null
-              ? item.selected_variants.filter(function (el) {
-                return el;
-              })
-              : [];
+        item.selected_variants != null
+          ? item.selected_variants.filter(function (el) {
+              return el;
+            })
+          : [];
 
       return (
+        <View
+          style={[styles.drinksView, {marginVertical: 0 * alpha}]}
+          key={key}>
           <View
-              style={[styles.drinksView, {marginVertical: 0 * alpha}]}
-              key={key}>
-            <View
-                pointerEvents='box-none'
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: 'transparent',
-                  flex: 1,
-                  flexDirection: 'row',
-                }}>
-              <View style={styles.productDetailView}>
-                <Text
-                    style={[
-                      item.cannot_order != undefined && item.cannot_order == true
-                          ? styles.productNameDisabledText
-                          : styles.productNameText,
-                      {marginBottom: 0},
-                    ]}>
-                  {item.name}
-                </Text>
-              </View>
-              <Text style={styles.productQuantityText}>
-                {item.quantity != null &&
+            pointerEvents='box-none'
+            style={{
+              justifyContent: 'center',
+              backgroundColor: 'transparent',
+              flex: 1,
+              flexDirection: 'row',
+            }}>
+            <View style={styles.productDetailView}>
+              <Text
+                style={[
+                  item.cannot_order != undefined && item.cannot_order == true
+                    ? styles.productNameDisabledText
+                    : styles.productNameText,
+                  {marginBottom: 0},
+                ]}>
+                {item.name}
+              </Text>
+            </View>
+            <Text style={styles.productQuantityText}>
+              {item.quantity != null &&
                 item.quantity > 0 &&
                 `x${item.quantity}`}
-              </Text>
-              <Text style={styles.productPriceText}>{price_string}</Text>
-            </View>
+            </Text>
+            <Text style={styles.productPriceText}>{price_string}</Text>
           </View>
+        </View>
       );
     });
 
     if (promotions_item && promotions_item.length > 0) {
       return (
-          <View>
-            <CurveSeparator />
-            <View style={[styles.sectionView, {paddingBottom: 10 * alpha}]}>
-              <View style={styles.orderitemsView}>{promotions_item}</View>
-            </View>
+        <View>
+          <CurveSeparator />
+          <View style={[styles.sectionView, {paddingBottom: 10 * alpha}]}>
+            <View style={styles.orderitemsView}>{promotions_item}</View>
           </View>
+        </View>
       );
     }
   };
@@ -1477,91 +1463,91 @@ export default class Checkout extends React.Component {
     let {deliveryFee, final_price, delivery_description} = this.state;
     let text = address ? 'Change' : 'Add';
     let non_negative_subTotal_price = parseFloat(
-        Math.max(0, final_price),
+      Math.max(0, final_price),
     ).toFixed(2);
     return (
-        <View style={styles.deliveryAddressView}>
-          <View style={styles.voucherButton}>
-            <View style={styles.drinksView}>
-              <View style={[styles.deliveryAddressDetail, {flex: 1}]}>
-                <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      paddingBottom: 3 * alpha,
-                    }}>
-                  <Text style={[styles.productNameText]}>Delivery Address</Text>
-                  <TouchableOpacity
-                      onPress={() => this.addShippingAddress()}
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                    <Text style={[styles.editAddressText]}>{text}</Text>
-                    <Image
-                        source={require('./../../assets/images/next.png')}
-                        style={styles.menuRowArrowImage}
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                {address && (
-                    <View>
-                      <Text style={styles.addressText}>
-                        {
-                          address.address
-                          // '\n' +
-                          // address.city +
-                          // ' , ' +
-                          // address.postal_code +
-                          // ', ' +
-                          // address.state +
-                          // ', ' +
-                          // address.country
-                        }
-                      </Text>
-                    </View>
-                )}
-              </View>
-            </View>
-          </View>
-          <View>
-            <View
+      <View style={styles.deliveryAddressView}>
+        <View style={styles.voucherButton}>
+          <View style={styles.drinksView}>
+            <View style={[styles.deliveryAddressDetail, {flex: 1}]}>
+              <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  // paddingHorizontal: 10 * alpha,
-                  paddingBottom: 10 * alpha,
+                  paddingBottom: 3 * alpha,
                 }}>
-              <Text style={styles.productNameText}>Subtotal</Text>
-              <Text style={styles.productVoucherText}>
-                {`$${parseFloat(non_negative_subTotal_price).toFixed(2)}` ||
-                '$ 0.00'}
-              </Text>
-            </View>
-            {address && (
-                <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                  <View style={{flex: 1}}>
-                    <Text style={styles.productNameText}>Delivery fees</Text>
-                    {delivery_description != '' && (
-                        <Text style={styles.deliveryNoted}>
-                          {delivery_description}
-                        </Text>
-                    )}
-                  </View>
-                  <Text style={styles.productVoucherText}>
-                    {this._formattedPrice(deliveryFee)}
+                <Text style={[styles.productNameText]}>Delivery Address</Text>
+                <TouchableOpacity
+                  onPress={() => this.addShippingAddress()}
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={[styles.editAddressText]}>{text}</Text>
+                  <Image
+                    source={require('./../../assets/images/next.png')}
+                    style={styles.menuRowArrowImage}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              {address && (
+                <View>
+                  <Text style={styles.addressText}>
+                    {
+                      address.address
+                      // '\n' +
+                      // address.city +
+                      // ' , ' +
+                      // address.postal_code +
+                      // ', ' +
+                      // address.state +
+                      // ', ' +
+                      // address.country
+                    }
                   </Text>
                 </View>
-            )}
+              )}
+            </View>
           </View>
         </View>
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              // paddingHorizontal: 10 * alpha,
+              paddingBottom: 10 * alpha,
+            }}>
+            <Text style={styles.productNameText}>Subtotal</Text>
+            <Text style={styles.productVoucherText}>
+              {`$${parseFloat(non_negative_subTotal_price).toFixed(2)}` ||
+                '$ 0.00'}
+            </Text>
+          </View>
+          {address && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flex: 1}}>
+                <Text style={styles.productNameText}>Delivery fees</Text>
+                {delivery_description != '' && (
+                  <Text style={styles.deliveryNoted}>
+                    {delivery_description}
+                  </Text>
+                )}
+              </View>
+              <Text style={styles.productVoucherText}>
+                {this._formattedPrice(deliveryFee)}
+              </Text>
+            </View>
+          )}
+        </View>
+      </View>
     );
   };
 
@@ -1572,20 +1558,20 @@ export default class Checkout extends React.Component {
     let tomorrow = [];
     if (delivery) {
       (today = delivery_hour?.today?.delivery_time_slot || []),
-          (tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || []);
+        (tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || []);
     } else {
       today = opening_hour?.ordering_time_slot || [];
     }
     return (
-        <OrderForSelector
-            ref='timepicker'
-            delivery={this.props.delivery}
-            today={today || []}
-            tomorrow={tomorrow || []}
-            animation={this.timeSelectorAnimation}
-            toggleDelivery={this._toggleTimeSelector}
-            onConfirm={this.onConfirmOrderSchedule}
-        />
+      <OrderForSelector
+        ref='timepicker'
+        delivery={this.props.delivery}
+        today={today || []}
+        tomorrow={tomorrow || []}
+        animation={this.timeSelectorAnimation}
+        toggleDelivery={this._toggleTimeSelector}
+        onConfirm={this.onConfirmOrderSchedule}
+      />
     );
   };
 
@@ -1594,89 +1580,89 @@ export default class Checkout extends React.Component {
     const {final_price, selected_payment} = this.state;
     let cashPayment = delivery ? 'Cash On Delivery' : 'Pay In Store';
     let credits =
-        currentMember != undefined
-            ? parseFloat(currentMember.credits).toFixed(2)
-            : 0;
+      currentMember != undefined
+        ? parseFloat(currentMember.credits).toFixed(2)
+        : 0;
     var no_payment_needed = final_price <= 0 ? true : false;
 
     let walletSelectBox =
-        selected_payment == 'credits' ? (
-            <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
-        ) : (
-            <View style={styles.selectBox} />
-        );
+      selected_payment == 'credits' ? (
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
+      ) : (
+        <View style={styles.selectBox} />
+      );
 
     let cardSelectBox =
-        selected_payment == 'credit_card' ? (
-            <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
-        ) : (
-            <View style={styles.selectBox} />
-        );
+      selected_payment == 'credit_card' ? (
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
+      ) : (
+        <View style={styles.selectBox} />
+      );
 
     let counterSelectBox =
-        selected_payment == 'counter' ? (
-            <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
-        ) : (
-            <View style={styles.selectBox} />
-        );
+      selected_payment == 'counter' ? (
+        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
+      ) : (
+        <View style={styles.selectBox} />
+      );
 
     let walletIconStyle =
-        selected_payment == 'credits'
-            ? [styles.paymentWalletIcon, {tintColor: PRIMARY_COLOR}]
-            : styles.paymentWalletIcon;
+      selected_payment == 'credits'
+        ? [styles.paymentWalletIcon, {tintColor: PRIMARY_COLOR}]
+        : styles.paymentWalletIcon;
 
     let cardIconStyle =
-        selected_payment == 'credit_card'
-            ? [styles.paymentCardIcon, {tintColor: PRIMARY_COLOR}]
-            : styles.paymentCardIcon;
+      selected_payment == 'credit_card'
+        ? [styles.paymentCardIcon, {tintColor: PRIMARY_COLOR}]
+        : styles.paymentCardIcon;
 
     let cashIconStyle =
-        selected_payment == 'counter'
-            ? [styles.paymentCashIcon, {tintColor: PRIMARY_COLOR}]
-            : styles.paymentCashIcon;
+      selected_payment == 'counter'
+        ? [styles.paymentCashIcon, {tintColor: PRIMARY_COLOR}]
+        : styles.paymentCashIcon;
 
     let creditStyle =
-        credits > 0
-            ? [styles.creditsText, {color: PRIMARY_COLOR}]
-            : styles.creditsText;
+      credits > 0
+        ? [styles.creditsText, {color: PRIMARY_COLOR}]
+        : styles.creditsText;
 
     return (
-        <View style={styles.paymentOptionsView}>
-          <TouchableOpacity
-              onPress={() => this.onWalletButtonPressed()}
-              style={styles.paymentOptionsListView}>
-            <Image
-                source={require('./../../assets/images/wallet_center.png')}
-                style={walletIconStyle}
-            />
-            <View>
-              <View style={styles.walletTextContainer}>
-                <Text style={styles.paymentOptionText}>Wallet</Text>
-                {/* <View style={styles.tag}>
+      <View style={styles.paymentOptionsView}>
+        <TouchableOpacity
+          onPress={() => this.onWalletButtonPressed()}
+          style={styles.paymentOptionsListView}>
+          <Image
+            source={require('./../../assets/images/wallet_center.png')}
+            style={walletIconStyle}
+          />
+          <View>
+            <View style={styles.walletTextContainer}>
+              <Text style={styles.paymentOptionText}>Wallet</Text>
+              {/* <View style={styles.tag}>
                 <Text style={styles.tagText}>Top up $10 & get $5 extra</Text>
               </View> */}
-              </View>
-              <Text style={creditStyle}>${credits}</Text>
             </View>
-            {walletSelectBox}
-          </TouchableOpacity>
-          <TouchableOpacity
-              onPress={() => this.onCreditButtonPressed()}
-              style={styles.paymentOptionsListView}>
-            <Image
-                source={require('./../../assets/images/credit_card.png')}
-                style={cardIconStyle}
-            />
-            <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
-            <Image
-                source={require('./../../assets/images/cc.png')}
-                style={styles.cc}
-            />
-            <Image
-                source={require('./../../assets/images/visa.png')}
-                style={styles.visa}
-            />
-            {/* <Image
+            <Text style={creditStyle}>${credits}</Text>
+          </View>
+          {walletSelectBox}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.onCreditButtonPressed()}
+          style={styles.paymentOptionsListView}>
+          <Image
+            source={require('./../../assets/images/credit_card.png')}
+            style={cardIconStyle}
+          />
+          <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
+          <Image
+            source={require('./../../assets/images/cc.png')}
+            style={styles.cc}
+          />
+          <Image
+            source={require('./../../assets/images/visa.png')}
+            style={styles.visa}
+          />
+          {/* <Image
             source={require('./../../assets/images/union.png')}
             style={styles.union}
           />
@@ -1684,19 +1670,19 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/dc.png')}
             style={styles.dc}
           /> */}
-            {cardSelectBox}
-          </TouchableOpacity>
-          <TouchableOpacity
-              onPress={() => this.onCounterButtonPressed()}
-              style={styles.paymentOptionsListView}>
-            <Image
-                source={require('./../../assets/images/cash.png')}
-                style={cashIconStyle}
-            />
-            <Text style={styles.paymentOptionText}>{cashPayment}</Text>
-            {counterSelectBox}
-          </TouchableOpacity>
-        </View>
+          {cardSelectBox}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.onCounterButtonPressed()}
+          style={styles.paymentOptionsListView}>
+          <Image
+            source={require('./../../assets/images/cash.png')}
+            style={cashIconStyle}
+          />
+          <Text style={styles.paymentOptionText}>{cashPayment}</Text>
+          {counterSelectBox}
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -1704,21 +1690,21 @@ export default class Checkout extends React.Component {
     let {selectedShop} = this.props;
     let {url} = selectedShop.image;
     let shopImage = url ? (
-        <View style={styles.completeOrderView}>
-          <Image
-              source={{uri: url}}
-              resizeMode={'cover'}
-              style={styles.shopImage}
-          />
-        </View>
+      <View style={styles.completeOrderView}>
+        <Image
+          source={{uri: url}}
+          resizeMode={'cover'}
+          style={styles.shopImage}
+        />
+      </View>
     ) : (
-        <View style={styles.completeOrderView}>
-          <Image
-              source={require('./../../assets/images/group-3-20.png')}
-              style={styles.logoImage}
-          />
-          <Text style={styles.completedOrderText}>Order Information</Text>
-        </View>
+      <View style={styles.completeOrderView}>
+        <Image
+          source={require('./../../assets/images/group-3-20.png')}
+          style={styles.logoImage}
+        />
+        <Text style={styles.completedOrderText}>Order Information</Text>
+      </View>
     );
 
     return shopImage;
@@ -1733,142 +1719,142 @@ export default class Checkout extends React.Component {
     } = this.state;
     let {selectedShop, cart, promotions, delivery} = this.props;
     var final_price_delivery =
-        parseFloat(final_price) + parseFloat(deliveryFee);
+      parseFloat(final_price) + parseFloat(deliveryFee);
     let non_negative_final_price = parseFloat(
-        Math.max(0, final_price_delivery),
+      Math.max(0, final_price_delivery),
     ).toFixed(2);
     return (
-        <View style={styles.orderReceiptView}>
-          <ScrollView style={styles.orderScrollView}>
-            <View style={styles.orderCartView}>
-              <View pointerEvents='box-none' style={styles.whiteboxView}>
-                {this.renderShopImage()}
-              </View>
-              <View
-                  pointerEvents='box-none'
-                  style={{
-                    flex: 1,
-                  }}>
-                <View style={styles.locationWrapperView}>
-                  {!delivery && (
-                      <View style={styles.locationView}>
-                        <View style={styles.branchView}>
-                          <Text style={styles.shopBranchText}>
-                            {selectedShop.name}
-                          </Text>
-                          <Text
-                              numberOfLines={3}
-                              style={styles.shopBranchAddressText}>
-                            {selectedShop.short_address}
-                          </Text>
-                        </View>
-                        <View
-                            style={{
-                              flex: 1,
-                            }}
-                        />
-                        <View style={styles.callView}>
-                          <TouchableOpacity
-                              onPress={() =>
-                                  this.onCallPressed(selectedShop.phone_no)
-                              }
-                              style={styles.callIconButton}>
-                            <Image
-                                source={require('./../../assets/images/call-Icon.png')}
-                                style={styles.callIconButtonImage}
-                            />
-                          </TouchableOpacity>
-                          <View
-                              style={{
-                                flex: 1,
-                              }}
-                          />
-                          <Text style={styles.callText}>Call</Text>
-                        </View>
-                        <View style={styles.directionView}>
-                          <TouchableOpacity
-                              onPress={() => this.onPressDirection(selectedShop)}
-                              // onPress={() => this.onLocationButtonPressed()}
-                              style={styles.directionIconButton}>
-                            <Image
-                                source={require('./../../assets/images/direction-Icon.png')}
-                                style={styles.directionIconButtonImage}
-                            />
-                          </TouchableOpacity>
-                          <View
-                              style={{
-                                flex: 1,
-                              }}
-                          />
-                          <Text style={styles.directionText}>Direction</Text>
-                        </View>
-                      </View>
-                  )}
-                </View>
-
-                {!delivery && <CurveSeparator />}
-                {this.renderOrderItems(cart, promotions)}
-                {this.renderPromotions(promotions)}
-                <CurveSeparator />
-                {this.renderVoucherSection(vouchers_to_use)}
-                <CurveSeparator />
-                {this.renderPickupTime()}
-                <CurveSeparator />
-                {this.renderPaymentSection()}
-                {this.renderPaymentOptions()}
-
-                <CurveSeparator />
-
-                {delivery
-                    ? selected_address != undefined
-                        ? this.renderDeliveryAddress(selected_address)
-                        : this.renderDeliveryAddress(false)
-                    : undefined}
-                {delivery && <CurveSeparator />}
-                <View style={styles.totalViewWrapper}>
-                  <View style={styles.totalView}>
-                    <Text style={styles.totallabelText}>TOTAL</Text>
+      <View style={styles.orderReceiptView}>
+        <ScrollView style={styles.orderScrollView}>
+          <View style={styles.orderCartView}>
+            <View pointerEvents='box-none' style={styles.whiteboxView}>
+              {this.renderShopImage()}
+            </View>
+            <View
+              pointerEvents='box-none'
+              style={{
+                flex: 1,
+              }}>
+              <View style={styles.locationWrapperView}>
+                {!delivery && (
+                  <View style={styles.locationView}>
+                    <View style={styles.branchView}>
+                      <Text style={styles.shopBranchText}>
+                        {selectedShop.name}
+                      </Text>
+                      <Text
+                        numberOfLines={3}
+                        style={styles.shopBranchAddressText}>
+                        {selectedShop.short_address}
+                      </Text>
+                    </View>
                     <View
+                      style={{
+                        flex: 1,
+                      }}
+                    />
+                    <View style={styles.callView}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.onCallPressed(selectedShop.phone_no)
+                        }
+                        style={styles.callIconButton}>
+                        <Image
+                          source={require('./../../assets/images/call-Icon.png')}
+                          style={styles.callIconButtonImage}
+                        />
+                      </TouchableOpacity>
+                      <View
                         style={{
                           flex: 1,
                         }}
-                    />
-                    <Text style={styles.totalText}>
-                      ${non_negative_final_price}
-                    </Text>
+                      />
+                      <Text style={styles.callText}>Call</Text>
+                    </View>
+                    <View style={styles.directionView}>
+                      <TouchableOpacity
+                        onPress={() => this.onPressDirection(selectedShop)}
+                        // onPress={() => this.onLocationButtonPressed()}
+                        style={styles.directionIconButton}>
+                        <Image
+                          source={require('./../../assets/images/direction-Icon.png')}
+                          style={styles.directionIconButtonImage}
+                        />
+                      </TouchableOpacity>
+                      <View
+                        style={{
+                          flex: 1,
+                        }}
+                      />
+                      <Text style={styles.directionText}>Direction</Text>
+                    </View>
                   </View>
+                )}
+              </View>
+
+              {!delivery && <CurveSeparator />}
+              {this.renderOrderItems(cart, promotions)}
+              {this.renderPromotions(promotions)}
+              <CurveSeparator />
+              {this.renderVoucherSection(vouchers_to_use)}
+              <CurveSeparator />
+              {this.renderPickupTime()}
+              <CurveSeparator />
+              {this.renderPaymentSection()}
+              {this.renderPaymentOptions()}
+
+              <CurveSeparator />
+
+              {delivery
+                ? selected_address != undefined
+                  ? this.renderDeliveryAddress(selected_address)
+                  : this.renderDeliveryAddress(false)
+                : undefined}
+              {delivery && <CurveSeparator />}
+              <View style={styles.totalViewWrapper}>
+                <View style={styles.totalView}>
+                  <Text style={styles.totallabelText}>TOTAL</Text>
+                  <View
+                    style={{
+                      flex: 1,
+                    }}
+                  />
+                  <Text style={styles.totalText}>
+                    ${non_negative_final_price}
+                  </Text>
                 </View>
               </View>
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 
   renderPayNow(final_price) {
     let {deliveryFee, enablePaynow} = this.state;
     let style = enablePaynow
-        ? [styles.payNowButton, {backgroundColor: 'rgb(0, 178, 227)'}]
-        : [styles.payNowButton, {backgroundColor: '#BDBDBD'}];
+      ? [styles.payNowButton, {backgroundColor: 'rgb(0, 178, 227)'}]
+      : [styles.payNowButton, {backgroundColor: '#BDBDBD'}];
 
     let final_price_delivery =
-        parseFloat(final_price) + parseFloat(deliveryFee);
+      parseFloat(final_price) + parseFloat(deliveryFee);
     return (
-        <View style={styles.totalPayNowView}>
-          <View style={styles.paymentButton}>
-            <Text style={styles.paymentButtonText}>
-              ${final_price_delivery.toFixed(2)}
-            </Text>
-          </View>
-          <TouchableOpacity
-              onPress={() => this.checkout()}
-              style={style}
-              disabled={!enablePaynow}>
-            <Text style={styles.payNowButtonText}>
-              {this.state.selected_payment == 'counter' ? 'Order Now' : 'Pay Now'}
-            </Text>
-          </TouchableOpacity>
+      <View style={styles.totalPayNowView}>
+        <View style={styles.paymentButton}>
+          <Text style={styles.paymentButtonText}>
+            ${final_price_delivery.toFixed(2)}
+          </Text>
         </View>
+        <TouchableOpacity
+          onPress={() => this.checkout()}
+          style={style}
+          disabled={!enablePaynow}>
+          <Text style={styles.payNowButtonText}>
+            {this.state.selected_payment == 'counter' ? 'Order Now' : 'Pay Now'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -1881,64 +1867,64 @@ export default class Checkout extends React.Component {
     } = this.state;
     let {cart_total, discount_cart_total} = this.props;
     let non_negative_final_price = parseFloat(Math.max(0, final_price)).toFixed(
-        2,
+      2,
     );
     return (
-        <SafeAreaView style={styles.checkoutViewPadding}>
-          <ScrollView
-              style={styles.scrollviewScrollView}
-              onLayout={(event) => this.measureView(event)}>
-            <View style={styles.ordersummaryView}>
-              {this.renderCheckoutReceipt()}
-            </View>
-          </ScrollView>
-          {(isPaymentToggle == true || isPickupToogle == true) && (
-              <View style={styles.checkoutViewOverlay} />
-          )}
-          {this.renderPayNow(non_negative_final_price)}
-          {this.renderOrderForSelector()}
-          <HudLoading isLoading={this.state.loading} />
-          <Brew9Toast ref='toast' />
+      <SafeAreaView style={styles.checkoutViewPadding}>
+        <ScrollView
+          style={styles.scrollviewScrollView}
+          onLayout={(event) => this.measureView(event)}>
+          <View style={styles.ordersummaryView}>
+            {this.renderCheckoutReceipt()}
+          </View>
+        </ScrollView>
+        {(isPaymentToggle == true || isPickupToogle == true) && (
+          <View style={styles.checkoutViewOverlay} />
+        )}
+        {this.renderPayNow(non_negative_final_price)}
+        {this.renderOrderForSelector()}
+        <HudLoading isLoading={this.state.loading} />
+        <Brew9Toast ref='toast' />
+        <Brew9PopUp
+          popUpVisible={this.state.visible}
+          title={''}
+          description={'Please add delivery address'}
+          OkText={'Add address'}
+          cancelText={'Cancel'}
+          onPressOk={this.addFirstShippingAddress}
+          onPressCancel={() => this.setState({visible: false})}
+          onBackgroundPress={this.closePopUp}
+          onChangeText={(text) => this.onChangeCoupon(text)}
+        />
+        {this.renderConfirmPopup()}
+        {selected_address && (
           <Brew9PopUp
-              popUpVisible={this.state.visible}
-              title={''}
-              description={'Please add delivery address'}
-              OkText={'Add address'}
-              cancelText={'Cancel'}
-              onPressOk={this.addFirstShippingAddress}
-              onPressCancel={() => this.setState({visible: false})}
-              onBackgroundPress={this.closePopUp}
-              onChangeText={(text) => this.onChangeCoupon(text)}
+            popUpVisible={this.state.addressConfirmation}
+            title={'Are you sure to use this address as delivery address?'}
+            description={
+              selected_address.address +
+              '\n' +
+              selected_address.city +
+              ' , ' +
+              selected_address.postal_code +
+              ', ' +
+              selected_address.state +
+              ', ' +
+              selected_address.country
+            }
+            OkText={'Confirm'}
+            cancelText={'Cancel'}
+            onPressOk={() =>
+              this.setState({addressConfirmation: false}, () =>
+                this.loadMakeOrder(),
+              )
+            }
+            onPressCancel={() => this.setState({addressConfirmation: false})}
+            onBackgroundPress={this.closePopUp}
+            onChangeText={(text) => this.onChangeCoupon(text)}
           />
-          {this.renderConfirmPopup()}
-          {selected_address && (
-              <Brew9PopUp
-                  popUpVisible={this.state.addressConfirmation}
-                  title={'Are you sure to use this address as delivery address?'}
-                  description={
-                    selected_address.address +
-                    '\n' +
-                    selected_address.city +
-                    ' , ' +
-                    selected_address.postal_code +
-                    ', ' +
-                    selected_address.state +
-                    ', ' +
-                    selected_address.country
-                  }
-                  OkText={'Confirm'}
-                  cancelText={'Cancel'}
-                  onPressOk={() =>
-                      this.setState({addressConfirmation: false}, () =>
-                          this.loadMakeOrder(),
-                      )
-                  }
-                  onPressCancel={() => this.setState({addressConfirmation: false})}
-                  onBackgroundPress={this.closePopUp}
-                  onChangeText={(text) => this.onChangeCoupon(text)}
-              />
-          )}
-        </SafeAreaView>
+        )}
+      </SafeAreaView>
     );
   }
 }
