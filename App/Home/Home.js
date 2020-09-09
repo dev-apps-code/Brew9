@@ -641,7 +641,6 @@ export default class Home extends React.Component {
   };
 
   _toggleDelivery = (value) => {
-    console.log(this.props.responses);
     const {dispatch, shop} = this.props;
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(new Event('Home', 'Click', 'Delivery'));
