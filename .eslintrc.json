@@ -18,10 +18,26 @@
   "plugins": ["react"],
   "rules": {
     "comma-dangle": "off",
-    "indent": ["error", 2],
+    "eqeqeq": ["error", "always"],
+    "import/no-unresolved": "off",
     "linebreak-style": ["error", "unix"],
+    "no-console": "error",
     "no-duplicate-imports": "error",
+    "no-prototype-builtins": "off",
     "quotes": ["error", "single"],
+    "radix": ["error", "as-needed"],
+    "react-native/no-unused-styles": "error",
+    "react-native/sort-styles": [
+      "error",
+      "asc"
+    ],
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "ignoreCase": true
+      }
+    ],
     "semi": ["error", "always"]
   }
 }
