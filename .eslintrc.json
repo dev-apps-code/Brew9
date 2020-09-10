@@ -17,8 +17,10 @@
   },
   "plugins": ["react"],
   "rules": {
+    "comma-dangle": "off",
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
+    "no-duplicate-imports": "error",
     "quotes": ["error", "single"],
     "semi": ["error", "always"]
   }
