@@ -365,10 +365,12 @@ const PushProfile = createStackNavigator(
 const defaultStackGetStateForAction = PushProfile.router.getStateForAction;
 
 PushProfile.router.getStateForAction = (action, state) => {
-  if (state === undefined) {
-    if (state.index === 0 && action.type === 'Navigation/BACK') {
-      return state;
-    }
+  if (
+    state !== undefined &&
+    state.index === 0 &&
+    action.type === 'Navigation/BACK'
+  ) {
+    return state;
   }
   return defaultStackGetStateForAction(action, state);
 };
