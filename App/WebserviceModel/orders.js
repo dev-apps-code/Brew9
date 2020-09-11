@@ -1,4 +1,4 @@
-import { getOrders } from '../Services/orders';
+import {getOrders} from '../Services/orders';
 import EventObject from './event_object';
 
 export default {
@@ -18,17 +18,18 @@ export default {
     promotions: [],
     promotion_ids: [],
     clearCart: false,
-    currentPromoText: ''
+    currentPromoText: '',
+    isDelivery: false,
   },
 
   reducers: {
-    setDefaultState(state, { payload }) {
+    setDefaultState(state, {payload}) {
       return {
-        ...state
+        ...state,
       };
     },
-    updatePromotions(state, { payload }) {
-      const { promotions } = payload;
+    updatePromotions(state, {payload}) {
+      const {promotions} = payload;
       const promotion_ids = [];
       for (var index in promotions) {
         const promotion = promotions[index];
@@ -37,18 +38,18 @@ export default {
       return {
         ...state,
         promotions,
-        promotion_ids
+        promotion_ids,
       };
     },
-    updatePromotionText(state, { payload }) {
-      const { promotionText } = payload;
+    updatePromotionText(state, {payload}) {
+      const {promotionText} = payload;
 
       return {
         ...state,
-        currentPromoText: promotionText
+        currentPromoText: promotionText,
       };
     },
-    resetCart(state, { payload }) {
+    resetCart(state, {payload}) {
       return {
         ...state,
         cart_order_id: null,
@@ -58,17 +59,17 @@ export default {
         cart_total_quantity: 0,
         cart_total: 0,
         remaining: 0,
-        clearCart: true
+        clearCart: true,
       };
     },
-    noClearCart(state, { payload }) {
+    noClearCart(state, {payload}) {
       return {
         ...state,
-        clearCart: false
+        clearCart: false,
       };
     },
-    updateCart(state, { payload }) {
-      const { cart } = payload;
+    updateCart(state, {payload}) {
+      const {cart} = payload;
       var promotion_trigger_count = state.promotion_trigger_count + 1;
 
       var total = 0.0;
@@ -88,11 +89,11 @@ export default {
         toggle_update_count: state.toggle_update_count + 1,
         cart_total_quantity: quantity,
         cart_total: total,
-        promotion_trigger_count
+        promotion_trigger_count,
       };
     },
-    editCart(state, { payload }) {
-      const { order, order_items } = payload;
+    editCart(state, {payload}) {
+      const {order, order_items} = payload;
       var promotion_trigger_count = state.promotion_trigger_count + 1;
 
       var total = 0.0;
@@ -108,7 +109,7 @@ export default {
             description: '',
             price: item.final_price,
             quantity: item.quantity,
-            selected_variants: item.selected_variants
+            selected_variants: item.selected_variants,
           };
           new_cart.push(cartItem);
           var calculated = (
@@ -126,21 +127,24 @@ export default {
         toggle_update_count: state.toggle_update_count + 1,
         cart_total_quantity: quantity,
         cart_total: total,
-        promotion_trigger_count
+        promotion_trigger_count,
       };
     },
-    updateDiscountCartTotal(state, { payload }) {
-      const { discount_cart_total } = payload;
+    updateDiscountCartTotal(state, {payload}) {
+      const {discount_cart_total} = payload;
       return {
         ...state,
-        discount_cart_total
+        discount_cart_total,
       };
-    }
+    },
+    setDeliveryOption(state, {payload}) {
+      return {...state, isDelivery: payload};
+    },
   },
   effects: {
-    *loadGetOrders({ payload }, { call, put, select }) {
+    *loadGetOrders({payload}, {call, put, select}) {
       try {
-        const { object, callback } = payload;
+        const {object, callback} = payload;
         const authtoken = yield select((state) => state.member.userAuthToken);
         const json = yield call(getOrders, authtoken, object);
         const eventObject = new EventObject(json);
@@ -148,6 +152,6 @@ export default {
         }
         typeof callback === 'function' && callback(eventObject);
       } catch (err) {}
-    }
-  }
+    },
+  },
 };
