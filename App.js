@@ -1,27 +1,18 @@
-//
-//  App.js
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
-import * as Font from 'expo-font';
-import { DangerZone, AppLoading } from 'expo';
 import React from 'react';
+import * as Font from 'expo-font';
+import {AppLoading} from 'expo';
 import * as Sentry from 'sentry-expo';
 import {
   createBottomTabNavigator,
-  NavigationActions,
-  createMaterialTopTabNavigator
-} from 'react-navigation';
-import Constants from 'expo-constants';
-import {
+  createMaterialTopTabNavigator,
   createStackNavigator,
   createAppContainer,
-  createSwitchNavigator
 } from 'react-navigation';
-import { BackHandler, Alert } from 'react-native';
-import Login from './App/Login/Login';
+import {create} from 'dva-core';
+import {Provider} from 'react-redux';
+import {Asset} from 'react-native-unimodules';
+import RNUxcam from 'react-native-ux-cam';
+
 import Checkout from './App/Checkout/Checkout';
 import ShippingAddress from './App/ShippingAddress/ShippingAddress';
 import AddShippingAddress from './App/ShippingAddress/AddShippingAddress';
@@ -38,7 +29,7 @@ import MemberProfile from './App/MemberProfile/MemberProfile';
 import Home from './App/Home/Home';
 import Favourite from './App/SelectShop/Favourite';
 import Outlet from './App/SelectShop/Outlet';
-import { headerStyle } from './App/Components/brew9NavigationHeader';
+import {headerStyle} from './App/Components/brew9NavigationHeader';
 
 import VIPPurchase from './App/VIPPurchase/VIPPurchase';
 import PointHistory from './App/PointHistory/PointHistory';
@@ -59,7 +50,6 @@ import RedeemPromotion from './App/RedeemPromotion/RedeemPromotion';
 import Notification from './App/Notification/Notification';
 import PromotionDetail from './App/Notification/PromotionDetail';
 import MissionCenter from './App/MissionCenter/MissionCenter';
-import Confirmation from './App/Confirmation/Confirmation';
 import FirstScreen from './App/FirstScreen/FirstScreen';
 import BannerView from './App/Home/BannerView';
 import VerifyUser from './App/VerifyUser/VerifyUser';
@@ -72,16 +62,12 @@ import CreditHistory from './App/CreditHistory/CreditHistory';
 import About from './App/About/About';
 import EditOrder from './App/EditOrder/EditOrder';
 
-import { create } from 'dva-core';
-import { Provider, connect } from 'react-redux';
-import { registerModels } from './App/Model/index';
+import {registerModels} from './App/Model/index';
 import PaymentsWebview from './App/Checkout/PaymentsWebview';
 import {
   TABBAR_ACTIVE_TINT,
-  TABBAR_INACTIVE_TINT
+  TABBAR_INACTIVE_TINT,
 } from './App/Common/common_style';
-import { Asset } from 'react-native-unimodules';
-import RNUxcam from 'react-native-ux-cam';
 import ChangeServer from './App/ChangeServer/ChangeServer';
 
 RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
@@ -90,124 +76,124 @@ RNUxcam.startWithKey('qlswr42nsngf21b'); // Add this line after
 Sentry.init({
   dsn: 'https://a6c00af5b64644139799e721b45d61f4@sentry.io/1797623',
   enableInExpoDevelopment: true,
-  debug: true
+  debug: true,
 });
 
 const VerifyUserStack = createStackNavigator(
   {
     VerifyUser: {
-      screen: VerifyUser
+      screen: VerifyUser,
     },
     ChangeServer: {
-      screen: ChangeServer
+      screen: ChangeServer,
     },
     Register: {
-      screen: Register
+      screen: Register,
     },
     WebCommonModal: {
-      screen: WebCommonModal
+      screen: WebCommonModal,
     },
     WebCommon: {
-      screen: WebCommon
-    }
+      screen: WebCommon,
+    },
   },
   {
     initialRouteName: 'VerifyUser',
-    header: 'none'
-  }
+    header: 'none',
+  },
 );
 const selectShopTabs = createMaterialTopTabNavigator(
   {
     Outlet: {
-      screen: Outlet
+      screen: Outlet,
     },
     Favourite: {
-      screen: Favourite
-    }
+      screen: Favourite,
+    },
   },
   {
-    initialRouteName: 'Outlet'
-  }
+    initialRouteName: 'Outlet',
+  },
 );
 
-selectShopTabs.navigationOptions = ({ navigation }) => {
+selectShopTabs.navigationOptions = ({navigation}) => {
   return headerStyle(navigation);
 };
 
 const PushOrder = createStackNavigator(
   {
     Home: {
-      screen: Home
+      screen: Home,
     },
     SelectShop: {
-      screen: selectShopTabs
+      screen: selectShopTabs,
     },
     PaymentsWebview: {
-      screen: PaymentsWebview
+      screen: PaymentsWebview,
     },
     ShippingAddress: {
-      screen: ShippingAddress
+      screen: ShippingAddress,
     },
     Checkout: {
       screen: Checkout,
       navigationOptions: {
-        tabBarVisible: false
-      }
+        tabBarVisible: false,
+      },
     },
     FeaturedPromotionDetail: {
-      screen: FeaturedPromotionDetail
+      screen: FeaturedPromotionDetail,
     },
     DirectionMap: {
-      screen: DirectionMap
+      screen: DirectionMap,
     },
     CheckoutVoucher: {
-      screen: CheckoutVoucher
+      screen: CheckoutVoucher,
     },
 
     AddShippingAddress: {
-      screen: AddShippingAddress
+      screen: AddShippingAddress,
     },
     ShippingArea: {
-      screen: ShippingArea
+      screen: ShippingArea,
     },
     MapShippingAddress: {
-      screen: MapShippingAddress
+      screen: MapShippingAddress,
     },
     VoucherDetail: {
-      screen: VoucherDetail
+      screen: VoucherDetail,
     },
     BannerView: {
-      screen: BannerView
+      screen: BannerView,
     },
     PayByWallet: {
-      screen: PayByWallet
+      screen: PayByWallet,
     },
     PayByCard: {
-      screen: PayByCard
+      screen: PayByCard,
     },
     Transaction: {
-      screen: Transaction
+      screen: Transaction,
     },
     WebCommonModal: {
-      screen: WebCommonModal
+      screen: WebCommonModal,
     },
     WebCommon: {
-      screen: WebCommon
+      screen: WebCommon,
     },
     Register: {
       screen: Register,
-      header: 'none'
+      header: 'none',
     },
     ScanQr: {
-      screen: ScanQr
+      screen: ScanQr,
     },
     VerifyUser: {
-      screen: VerifyUser
-    }
+      screen: VerifyUser,
+    },
   },
   {
-    initialRouteName: 'Home'
-  }
+    initialRouteName: 'Home',
+  },
 );
 
 // export const VerifyStack = createStackNavigator(
@@ -233,175 +219,177 @@ const PushOrder = createStackNavigator(
 const PushPickup = createStackNavigator(
   {
     PickUp: {
-      screen: PickUp
+      screen: PickUp,
     },
     OrderHistory: {
-      screen: OrderHistory
+      screen: OrderHistory,
     },
     OrderReceipt: {
-      screen: OrderReceipt
+      screen: OrderReceipt,
     },
     EditOrder: {
-      screen: EditOrder
-    }
+      screen: EditOrder,
+    },
   },
   {
     initialRouteName: 'PickUp',
     navigationOptions: {
-      gesturesEnabled: false
-    }
-  }
+      gesturesEnabled: false,
+    },
+  },
 );
 
 const PushMission = createStackNavigator(
   {
     MissionCenter: {
-      screen: MissionCenter
-    }
+      screen: MissionCenter,
+    },
   },
   {
-    initialRouteName: 'MissionCenter'
-  }
+    initialRouteName: 'MissionCenter',
+  },
 );
 
 const PushInbox = createStackNavigator(
   {
     Notification: {
-      screen: Notification
+      screen: Notification,
     },
     PromotionDetail: {
-      screen: PromotionDetail
+      screen: PromotionDetail,
     },
     MemberVoucher: {
-      screen: MemberVoucher
-    }
+      screen: MemberVoucher,
+    },
   },
   {
-    initialRouteName: 'Notification'
-  }
+    initialRouteName: 'Notification',
+  },
 );
 
 const PushProfile = createStackNavigator(
   {
     Profile: {
-      screen: Profile
+      screen: Profile,
     },
     PaymentsWebview: {
-      screen: PaymentsWebview
+      screen: PaymentsWebview,
     },
     VIPPurchase: {
-      screen: VIPPurchase
+      screen: VIPPurchase,
     },
     Transaction: {
-      screen: Transaction
+      screen: Transaction,
     },
     MembershipInfo: {
-      screen: MembershipInfo
+      screen: MembershipInfo,
     },
     MemberVoucher: {
-      screen: MemberVoucher
+      screen: MemberVoucher,
     },
     PointHistory: {
-      screen: PointHistory
+      screen: PointHistory,
     },
     CreditHistory: {
-      screen: CreditHistory
+      screen: CreditHistory,
     },
     MemberWallet: {
-      screen: MemberWallet
+      screen: MemberWallet,
     },
     OrderHistory: {
-      screen: OrderHistory
+      screen: OrderHistory,
     },
     PointShop: {
-      screen: PointShop
+      screen: PointShop,
     },
     PointShopFullList: {
-      screen: PointShopFullList
+      screen: PointShopFullList,
     },
     PointShopItem: {
-      screen: PointShopItem
+      screen: PointShopItem,
     },
     PointShopHistory: {
-      screen: PointShopHistory
+      screen: PointShopHistory,
     },
     MemberProfile: {
-      screen: MemberProfile
+      screen: MemberProfile,
     },
     MemberCenter: {
-      screen: MemberCenter
+      screen: MemberCenter,
     },
     WebCommon: {
-      screen: WebCommon
+      screen: WebCommon,
     },
     OrderReceipt: {
-      screen: OrderReceipt
+      screen: OrderReceipt,
     },
     OrderReview: {
-      screen: OrderReview
+      screen: OrderReview,
     },
     OrderInvoice: {
-      screen: OrderInvoice
+      screen: OrderInvoice,
     },
     RedeemPromotion: {
-      screen: RedeemPromotion
+      screen: RedeemPromotion,
     },
     PayByWallet: {
-      screen: PayByWallet
+      screen: PayByWallet,
     },
     MissionCenter: {
-      screen: MissionCenter
+      screen: MissionCenter,
     },
     VoucherDetail: {
-      screen: VoucherDetail
+      screen: VoucherDetail,
     },
     About: {
-      screen: About
+      screen: About,
     },
     ShippingAddress: {
-      screen: ShippingAddress
+      screen: ShippingAddress,
     },
     MapShippingAddress: {
-      screen: MapShippingAddress
+      screen: MapShippingAddress,
     },
     AddShippingAddress: {
-      screen: AddShippingAddress
+      screen: AddShippingAddress,
     },
     ShippingArea: {
-      screen: ShippingArea
-    }
+      screen: ShippingArea,
+    },
   },
   {
-    initialRouteName: 'Profile'
-  }
+    initialRouteName: 'Profile',
+  },
 );
 
 const defaultStackGetStateForAction = PushProfile.router.getStateForAction;
 
 PushProfile.router.getStateForAction = (action, state) => {
-  if (state != undefined) {
-    if (state.index === 0 && action.type === 'Navigation/BACK') {
-      return state;
-    }
+  if (
+    state !== undefined &&
+    state.index === 0 &&
+    action.type === 'Navigation/BACK'
+  ) {
+    return state;
   }
   return defaultStackGetStateForAction(action, state);
 };
 
-PushOrder.navigationOptions = ({ navigation }) => {
+PushOrder.navigationOptions = ({navigation}) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
-    if (navigation.state.routes[i].routeName != 'Home') {
+    if (navigation.state.routes[i].routeName !== 'Home') {
       tabBarVisible = false;
     }
   }
   return {
-    tabBarVisible
+    tabBarVisible,
   };
 };
 
 const prevGetStateForMission = PushMission.router.getStateForAction;
 PushMission.router.getStateForAction = (action, state) => {
-  if (state != undefined) {
+  if (state !== undefined) {
     if (state.index === 0 && action.type === 'Navigation/BACK') {
       return state;
     }
@@ -420,7 +408,7 @@ VerifyUserStack.router.getStateForAction = (action, state) => {
     return {
       ...state,
       routes,
-      index: routes.length - 1
+      index: routes.length - 1,
     };
   }
 
@@ -438,22 +426,22 @@ PushOrder.router.getStateForAction = (action, state) => {
     return {
       ...state,
       routes,
-      index: routes.length - 1
+      index: routes.length - 1,
     };
   }
 
   return prevGetStateForHome(action, state);
 };
 
-PushPickup.navigationOptions = ({ navigation }) => {
+PushPickup.navigationOptions = ({navigation}) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
-    if (navigation.state.routes[i].routeName != 'PickUp') {
+    if (navigation.state.routes[i].routeName !== 'PickUp') {
       tabBarVisible = false;
     }
   }
   return {
-    tabBarVisible
+    tabBarVisible,
   };
 };
 
@@ -470,15 +458,15 @@ PushPickup.router.getStateForAction = (action, state) => {
   return prevGetStateForPickUp(action, state);
 };
 
-PushInbox.navigationOptions = ({ navigation }) => {
+PushInbox.navigationOptions = ({navigation}) => {
   let tabBarVisible = true;
   for (let i = 0; i < navigation.state.routes.length; i++) {
-    if (navigation.state.routes[i].routeName != 'Notification') {
+    if (navigation.state.routes[i].routeName !== 'Notification') {
       tabBarVisible = false;
     }
   }
   return {
-    tabBarVisible
+    tabBarVisible,
   };
 };
 
@@ -495,17 +483,17 @@ PushInbox.router.getStateForAction = (action, state) => {
   return prevGetStateForPushInbox(action, state);
 };
 
-PushProfile.navigationOptions = ({ navigation }) => {
+PushProfile.navigationOptions = ({navigation}) => {
   let tabBarVisible = true;
 
   let routeName = navigation.state.routes[navigation.state.index].routeName;
 
-  if (routeName != 'Profile') {
+  if (routeName !== 'Profile') {
     tabBarVisible = false;
   }
 
   return {
-    tabBarVisible
+    tabBarVisible,
   };
 };
 
@@ -525,20 +513,20 @@ PushProfile.router.getStateForAction = (action, state) => {
 const TabGroupOne = createBottomTabNavigator(
   {
     PushOrder: {
-      screen: PushOrder
+      screen: PushOrder,
     },
     PushPickup: {
-      screen: PushPickup
+      screen: PushPickup,
     },
     PushInbox: {
-      screen: PushInbox
+      screen: PushInbox,
     },
     PushMission: {
-      screen: PushMission
+      screen: PushMission,
     },
     PushProfile: {
-      screen: PushProfile
-    }
+      screen: PushProfile,
+    },
   },
   {
     tabBarPosition: 'bottom',
@@ -552,14 +540,14 @@ const TabGroupOne = createBottomTabNavigator(
       activeTintColor: TABBAR_ACTIVE_TINT,
       inactiveTintColor: TABBAR_INACTIVE_TINT,
       indicatorStyle: {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       },
       style: {
-        backgroundColor: 'rgb(224, 224, 224)'
-      }
+        backgroundColor: 'rgb(224, 224, 224)',
+      },
     },
-    defaultNavigationOptions: ({ navigation }) => {
-      const { routeName } = navigation.state;
+    defaultNavigationOptions: ({navigation}) => {
+      const {routeName} = navigation.state;
 
       switch (routeName) {
         case 'PushOrder':
@@ -573,22 +561,8 @@ const TabGroupOne = createBottomTabNavigator(
         case 'PushProfile':
           return Profile.tabBarItemOptions(navigation, store);
       }
-    }
-  }
-);
-
-const AuthenticationStack = createStackNavigator(
-  {
-    Login: {
-      screen: Login
     },
-    Confirmation: {
-      screen: Confirmation
-    }
   },
-  {
-    initialRouteName: 'Login'
-  }
 );
 
 const RootNavigator = createStackNavigator(
@@ -596,21 +570,18 @@ const RootNavigator = createStackNavigator(
     FirstScreen: {
       screen: FirstScreen,
       navigationOptions: {
-        gesturesEnabled: false
-      }
+        gesturesEnabled: false,
+      },
     },
     TabGroupOne: {
       screen: TabGroupOne,
       navigationOptions: {
-        gesturesEnabled: false
-      }
+        gesturesEnabled: false,
+      },
     },
-    // VerifyStack: {
-    //   screen: VerifyStack
-    // },
     VerifyUserStack: {
-      screen: VerifyUserStack
-    }
+      screen: VerifyUserStack,
+    },
   },
   {
     initialRouteName: 'FirstScreen',
@@ -618,13 +589,13 @@ const RootNavigator = createStackNavigator(
     animationEnabled: false,
     transitionConfig: () => ({
       transitionSpec: {
-        duration: 0 // Set the animation duration time as 0 !!
-      }
+        duration: 0, // Set the animation duration time as 0 !!
+      },
     }),
     navigationOptions: {
-      gesturesEnabled: false
-    }
-  }
+      gesturesEnabled: false,
+    },
+  },
 );
 
 const app = create(); // 创建dva实例，可传递配置参数。https://dvajs.com/api/#app-dva-opts
@@ -650,7 +621,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontsReady: false
+      fontsReady: false,
     };
   }
 
@@ -663,7 +634,7 @@ export default class App extends React.Component {
     await cacheImages([
       require('./assets/images/x-3.png'),
       require('./assets/images/back.png'),
-      require('./assets/images/curve_in_background.png')
+      require('./assets/images/curve_in_background.png'),
     ]);
   }
 
@@ -672,10 +643,10 @@ export default class App extends React.Component {
 
     await Font.loadAsync({
       'ClanPro-Book': require('./assets/fonts/ClanPro-Book.ttf'),
-      'ClanPro-News': require('./assets/fonts/ClanPro-News.ttf')
+      'ClanPro-News': require('./assets/fonts/ClanPro-News.ttf'),
     });
     this.setState({
-      fontsReady: true
+      fontsReady: true,
     });
   }
 

@@ -79,8 +79,12 @@
     "sentry-expo": "^2.0.1"
   },
   "devDependencies": {
+    "@react-native-community/eslint-config": "^2.0.0",
     "babel-preset-expo": "^6.0.0",
-    "jetifier": "^1.6.5"
+    "eslint": "^7.8.1",
+    "eslint-plugin-react": "^7.20.6",
+    "jetifier": "^1.6.5",
+    "prettier": "^2.1.1"
   },
   "private": true
 }

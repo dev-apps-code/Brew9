@@ -74,7 +74,7 @@ const {
   responses: config.responses,
   shopResponses: config.shopResponses,
 }))
-export default class Home extends React.Component {
+class Home extends React.Component {
   static navigationOptions = ({navigation}) => {
     const {params = {}} = navigation.state;
     return {
@@ -790,16 +790,16 @@ export default class Home extends React.Component {
     if (item.clazz == 'product') {
       return (
         <CartCell
-          navigation={this.props.navigation}
           id={item.id}
-          name={item.name}
           index={index}
           item={item}
-          quantity={item.quantity}
-          variations={item.selected_variants}
-          // currency={this.props.members.currency}
+          name={item.name}
+          navigation={this.props.navigation}
           onChangeQuantity={this.onChangeQuantityPress}
           price={item.price}
+          // currency={this.props.members.currency}
+          quantity={item.quantity}
+          variations={item.selected_variants}
         />
       );
       // } else if (item.clazz == "promotion") {
@@ -815,15 +815,15 @@ export default class Home extends React.Component {
   renderCategorylistFlatListCell = ({item, index}) => {
     return (
       <CategoryCell
-        navigation={this.props.navigation}
-        categoryname={item.name}
-        categoryImage={item.image.url}
         categoryDescription={item.description}
+        categoryImage={item.image.url}
+        categoryname={item.name}
         index={index}
-        scrollIndex={item.scroll_index}
-        onSelectCategory={this.onSelectCategory}
-        selected={item.selected}
         label={item.label}
+        navigation={this.props.navigation}
+        onSelectCategory={this.onSelectCategory}
+        scrollIndex={item.scroll_index}
+        selected={item.selected}
       />
     );
   };
@@ -833,29 +833,29 @@ export default class Home extends React.Component {
       if (item.clazz == 'product') {
         return (
           <ProductCell
-            navigation={this.props.navigation}
             currency={'$'}
             index={index}
             item={item}
+            navigation={this.props.navigation}
+            onCellPress={this.onCellPress}
+            onChangeQuantity={this.onChangeQuantityPress}
+            productDiscountPrice={item.discounted_price}
+            productDiscountTitle={item.discount_title}
+            productenable={item.enabled}
+            productHidden={item.hidden}
+            productimage={item.middle}
+            productingredient={item.ingredients}
             productname={item.name}
             productprice={item.price}
-            productDiscountTitle={item.discount_title}
-            productDiscountPrice={item.discounted_price}
-            productimage={item.middle}
             productquantity={item.quantity}
-            productsummary={item.summary}
-            productvariant={item.variants}
-            productenable={item.enabled}
             productstatus={item.status}
-            productHidden={item.hidden}
-            productTagLabel={item.discount_tag_label}
+            productsummary={item.summary}
             productTagColor={item.discount_tag_color}
+            productTagLabel={item.discount_tag_label}
             productTagText={item.discount_tag_text_color}
-            recommended={item.recommended}
-            productingredient={item.ingredients}
             producttotalquantity={item.total_quantity}
-            onChangeQuantity={this.onChangeQuantityPress}
-            onCellPress={this.onCellPress}
+            productvariant={item.variants}
+            recommended={item.recommended}
           />
         );
       } else if (item.clazz == 'menu_banner') {
@@ -878,11 +878,11 @@ export default class Home extends React.Component {
       } else if (item.clazz == 'product_category') {
         return (
           <CategoryHeaderCell
+            categoryDescription={item.description}
+            categoryName={item.name}
             index={index}
             item={item}
             navigation={this.props.navigation}
-            categoryName={item.name}
-            categoryDescription={item.description}
           />
         );
       }
@@ -947,7 +947,9 @@ export default class Home extends React.Component {
         }
       } else {
         if (cartItem.quantity > 1) {
-          if (item.quantity > 0) item.quantity = item.quantity - 1;
+          if (item.quantity > 0) {
+            item.quantity = item.quantity - 1;
+          }
           cartItem.quantity = cartItem.quantity - 1;
           item.total_quantity = item.total_quantity - 1;
         } else {
@@ -1055,7 +1057,9 @@ export default class Home extends React.Component {
     let n = parseInt((value * 100).toFixed(10)),
       x = n % 10;
     let result = n + 10 - x;
-    if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+    if (x < 6) {
+      result -= 10 / (parseInt(x / 3) + 1);
+    }
     roundOffValue = (result / 100).toFixed(2);
     console.log('\n\nValue');
     console.log(roundOffValue);
@@ -1317,11 +1321,18 @@ export default class Home extends React.Component {
         product.discounted_price > 0
           ? (product.current_price = product.discounted_price)
           : (product.current_price = product.price);
-        if (product.quantity == null) product.quantity = 1;
-        if (product.calculated_price == null)
+        if (product.quantity == null) {
+          product.quantity = 1;
+        }
+        if (product.calculated_price == null) {
           product.calculated_price = product.current_price;
-        if (product.selected_quantity == null) product.selected_quantity = 1;
-        if (product.total_quantity == null) product.total_quantity = 0;
+        }
+        if (product.selected_quantity == null) {
+          product.selected_quantity = 1;
+        }
+        if (product.total_quantity == null) {
+          product.total_quantity = 0;
+        }
         if (product.variants) {
           if (product.selected_variants == null) {
             var selected = [];
@@ -1419,12 +1430,12 @@ export default class Home extends React.Component {
     const ingredients = selected_product.ingredients.map((item, key) => {
       return (
         <View
+          key={key}
           style={
             item.highlight
               ? styles.ingredientHighlightView
               : styles.ingredientView
-          }
-          key={key}>
+          }>
           <Text
             style={
               item.highlight
@@ -1442,7 +1453,7 @@ export default class Home extends React.Component {
       let required_variant = item.required;
 
       return (
-        <View style={styles.optionsTwoView} key={key}>
+        <View key={key} style={styles.optionsTwoView}>
           <Text style={styles.optiontitleTwoText}>{item.display_name}</Text>
           <View style={styles.optionchoiceView}>
             {item.variant_values.map((value, value_key) => {
@@ -1497,9 +1508,9 @@ export default class Home extends React.Component {
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
-        <ImageCell product={selected_product} image={selected_product.image} />
+        <ImageCell image={selected_product.image} product={selected_product} />
 
-        <View pointerEvents='box-none'>
+        <View pointerEvents="box-none">
           <ScrollView style={styles.contentScrollView}>
             <View style={styles.productView}>
               <Text style={styles.nameText}>{selected_product.name}</Text>
@@ -1510,7 +1521,7 @@ export default class Home extends React.Component {
               />
               {selected_product.ingredients && (
                 <View
-                  pointerEvents='box-none'
+                  pointerEvents="box-none"
                   style={{
                     alignSelf: 'flex-start',
                     flex: 1,
@@ -1537,7 +1548,7 @@ export default class Home extends React.Component {
               <View style={styles.lineView} />
               <View style={styles.summaryView}>
                 <View
-                  pointerEvents='box-none'
+                  pointerEvents="box-none"
                   style={{
                     // height: 32 * alpha,
                     flexDirection: 'row',
@@ -1556,7 +1567,7 @@ export default class Home extends React.Component {
                   />
                   <View style={styles.controlView}>
                     <View
-                      pointerEvents='box-none'
+                      pointerEvents="box-none"
                       style={{
                         position: 'absolute',
                         alignSelf: 'center',
@@ -1567,7 +1578,7 @@ export default class Home extends React.Component {
                       <Text style={styles.quantityText}>{select_quantity}</Text>
                     </View>
                     <View
-                      pointerEvents='box-none'
+                      pointerEvents="box-none"
                       style={{
                         position: 'absolute',
                         left: 0 * alpha,
@@ -1579,10 +1590,11 @@ export default class Home extends React.Component {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
-                          if (select_quantity > 1 && enabled == true)
+                          if (select_quantity > 1 && enabled == true) {
                             this.setState({
                               select_quantity: (select_quantity -= 1),
                             });
+                          }
                         }}
                         style={styles.removeButton}>
                         <Image
@@ -1597,10 +1609,14 @@ export default class Home extends React.Component {
                       />
                       <TouchableOpacity
                         onPress={() => {
-                          if (select_quantity < order_limit && enabled == true)
+                          if (
+                            select_quantity < order_limit &&
+                            enabled == true
+                          ) {
                             this.setState({
                               select_quantity: (select_quantity += 1),
                             });
+                          }
                         }}
                         style={styles.addButton}>
                         <Image
@@ -1632,7 +1648,7 @@ export default class Home extends React.Component {
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={{height: 10 * alpha}}></View>
+            <View style={{height: 10 * alpha}} />
           )}
         </View>
       </View>
@@ -1643,7 +1659,7 @@ export default class Home extends React.Component {
     let selected_product = this.get_product(this.state.selected_index);
     let {delivery, distance} = this.state;
     let {isToggleShopLocation, cart, promotions, shop} = this.props;
-    let categoryBottomSpacer = undefined;
+    let categoryBottomSpacer;
     let renderBottom = this.renderBottom;
     // let should_show = this.shouldShowFeatured(shop)
     let fullList = [...cart, ...promotions];
@@ -1679,7 +1695,7 @@ export default class Home extends React.Component {
         {shop !== null && (
           <View style={styles.topsectionView}>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 height: 31 * alpha,
                 marginLeft: 10 * alpha,
@@ -1711,29 +1727,29 @@ export default class Home extends React.Component {
               <View style={styles.pickUpDeliveryView}>
                 {shop && (
                   <SwitchSelector
-                    ref='toggle'
+                    backgroundColor={'rgb(240,240,240)'}
+                    borderColor={'#979797'}
+                    buttonColor={'#2A2929'}
+                    fontSize={10 * alpha}
+                    height={32 * alpha}
+                    initial={this.state.delivery}
+                    onPress={(value) => this._toggleDelivery(value)}
                     options={[
                       {label: 'Pick Up', value: 0},
                       {label: 'Delivery', value: 1},
                     ]}
-                    initial={this.state.delivery}
-                    value={this.state.delivery}
-                    textColor={'#4E4D4D'}
+                    ref="toggle"
                     selectedColor={'#FFFFFF'}
-                    buttonColor={'#2A2929'}
-                    borderColor={'#979797'}
-                    backgroundColor={'rgb(240,240,240)'}
                     style={styles.pickUpDeliveryViewTemp}
+                    textColor={'#4E4D4D'}
                     textStyle={styles.optionText}
-                    fontSize={10 * alpha}
-                    height={32 * alpha}
-                    onPress={(value) => this._toggleDelivery(value)}
+                    value={this.state.delivery}
                   />
                 )}
               </View>
             </View>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 height: 14 * alpha,
                 marginLeft: 10 * alpha,
@@ -1782,14 +1798,14 @@ export default class Home extends React.Component {
           <Brew9Loading />
         ) : (
           <View
-            style={styles.productsectionView}
-            onLayout={(event) => this.measureView(event)}>
+            onLayout={(event) => this.measureView(event)}
+            style={styles.productsectionView}>
             <View style={[styles.categorylistFlatListViewWrapper]}>
               <FlatList
-                renderItem={this.renderCategorylistFlatListCell}
                 data={this.state.data}
-                style={styles.categorylistFlatList}
                 keyExtractor={(item, index) => index.toString()}
+                renderItem={this.renderCategorylistFlatListCell}
+                style={styles.categorylistFlatList}
               />
 
               <View style={categoryBottomSpacer} />
@@ -1808,9 +1824,13 @@ export default class Home extends React.Component {
               }>
               {this.state.loading ? undefined : (
                 <FlatList
-                  renderItem={this.renderProductlistFlatListCell}
                   data={this.state.products}
                   initialNumToRender={6}
+                  keyExtractor={(item, index) => index.toString()}
+                  onRefresh={this.onRefresh.bind(this)}
+                  onScrollBeginDrag={() => {
+                    this.setState({scroll_Index: null});
+                  }}
                   onScrollToIndexFailed={(error) => {
                     this.flatListRef.scrollToOffset({
                       offset: error.averageItemLength * error.index,
@@ -1828,17 +1848,13 @@ export default class Home extends React.Component {
                       }
                     }, 5);
                   }}
+                  onViewableItemsChanged={this.reachProductIndex}
                   ref={(ref) => {
                     this.flatListRef = ref;
                   }}
-                  style={styles.productlistFlatList}
                   refreshing={this.state.isRefreshing}
-                  onRefresh={this.onRefresh.bind(this)}
-                  onViewableItemsChanged={this.reachProductIndex}
-                  onScrollBeginDrag={() => {
-                    this.setState({scroll_Index: null});
-                  }}
-                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={this.renderProductlistFlatListCell}
+                  style={styles.productlistFlatList}
                 />
               )}
             </View>
@@ -1847,8 +1863,6 @@ export default class Home extends React.Component {
         {isToggleShopLocation && (
           <View style={styles.showLocationView}>
             <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.mapImage}
               initialRegion={{
                 latitude: shop ? parseFloat(shop.latitude) : 0.0,
                 longitude: shop ? parseFloat(shop.longitude) : 0.0,
@@ -1859,7 +1873,9 @@ export default class Home extends React.Component {
                 this.marker &&
                 this.marker.showCallout &&
                 this.marker.showCallout()
-              }>
+              }
+              provider={PROVIDER_GOOGLE}
+              style={styles.mapImage}>
               <Marker
                 coordinate={{
                   latitude: shop ? parseFloat(shop.latitude) : 0.0,
@@ -1870,9 +1886,9 @@ export default class Home extends React.Component {
                   <Text style={styles.areaText}>{shop.name}</Text>
                 </View>
                 <Image
+                  resizeMode="contain"
                   source={require('./../../assets/images/location.png')}
                   style={styles.pinImage}
-                  resizeMode='contain'
                 />
               </Marker>
             </MapView>
@@ -1915,10 +1931,10 @@ export default class Home extends React.Component {
           </View>
           <View style={styles.popOutCartFlatListViewWrapper}>
             <FlatList
-              renderItem={this.renderPopOutCartFlatListCell}
               data={fullList}
-              style={styles.popOutCartFlatList}
               keyExtractor={(item, index) => index.toString()}
+              renderItem={this.renderPopOutCartFlatListCell}
+              style={styles.popOutCartFlatList}
             />
           </View>
         </Animated.View>
@@ -1929,31 +1945,29 @@ export default class Home extends React.Component {
         </View>
         {selected_product ? (
           <Modal
+            hideModalContentWhileAnimating={true}
             isVisible={this.state.modalVisible}
-            onBackdropPress={() => this.dismissProduct()}
-            hideModalContentWhileAnimating={true}>
+            onBackdropPress={() => this.dismissProduct()}>
             {this.renderModalContent(selected_product, shop)}
           </Modal>
         ) : null}
 
         {this.renderGallery()}
-        <Brew9Toast ref='toast' />
+        <Brew9Toast ref="toast" />
 
         <Brew9Modal
-          visible={this.state.visible}
           cancelable={true}
-          title={'Exit App '}
+          cancelButtonAction={() => this.setState({visible: false})}
           description={'Exit the application?'}
           okayButtonAction={() => {
             RNExitApp.exitApp();
           }}
-          cancelButtonAction={() => this.setState({visible: false})}
+          title={'Exit App '}
+          visible={this.state.visible}
         />
 
         <Brew9Modal
-          visible={this.state.popUpVisible}
           cancelable={false}
-          title={this.state.title}
           description={this.state.description}
           okayButtonAction={() => {
             if (this.state.url != null && this.state.url != '') {
@@ -1962,6 +1976,8 @@ export default class Home extends React.Component {
               this.setState({popUpVisible: false});
             }
           }}
+          title={this.state.title}
+          visible={this.state.popUpVisible}
         />
       </View>
     );
@@ -2032,7 +2048,7 @@ export default class Home extends React.Component {
   }
 
   renderFeaturedPromo(shop, cart) {
-    let style = undefined;
+    let style;
     if (shop !== null) {
       if (shop.can_order == false) {
         if (cart.length > 0) {
@@ -2097,7 +2113,7 @@ export default class Home extends React.Component {
       return (
         <View style={styles.cartView}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               position: 'absolute',
               left: 0 * alpha,
@@ -2108,7 +2124,7 @@ export default class Home extends React.Component {
             <View style={styles.totalAmountView}>
               <View style={styles.rectangleView} />
               <View
-                pointerEvents='box-none'
+                pointerEvents="box-none"
                 style={{
                   position: 'absolute',
                   left: 28 * alpha,
@@ -2127,7 +2143,7 @@ export default class Home extends React.Component {
                     style={styles.shopppingCartButton}>
                     <View style={styles.group5View}>
                       <View
-                        pointerEvents='box-none'
+                        pointerEvents="box-none"
                         style={{
                           width: 15 * alpha,
                           marginTop: 1 * alpha,
@@ -2190,11 +2206,11 @@ export default class Home extends React.Component {
     if (selected_promotion && isPromoToggle) {
       return (
         <Modal
-          visible={isPromoToggle}
-          style={{margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
+          style={{margin: 0, flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
+          visible={isPromoToggle}>
           {showLoadingIndicator && (
             <View style={styles.loading}>
-              <ActivityIndicator size='large' color='white' />
+              <ActivityIndicator color="white" size="large" />
             </View>
           )}
           <ScrollView style={{horizontal: true, flex: 1}}>
@@ -2207,14 +2223,14 @@ export default class Home extends React.Component {
                   : styles.bannerImage
               }>
               <AutoHeightImage
-                source={{uri: selected_promotion}}
-                width={windowWidth}
                 onLoad={() =>
                   this.setState({
                     featPromoLoaded: true,
                     startFeatPromoLoading: false,
                   })
                 }
+                source={{uri: selected_promotion}}
+                width={windowWidth}
               />
             </View>
           </ScrollView>
@@ -2230,73 +2246,165 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  navigationBarItem: {},
-  loadingIndicator: {
-    marginTop: 100 * alpha,
-  },
-  loading: {
-    position: 'absolute',
-    width: '100%',
-    flex: 1,
+  addButton: {
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navigationBarItemIcon: {
-    tintColor: 'rgb(0, 194, 236)',
-  },
-  navigationBarRightItemIcon: {
-    resizeMode: 'contain',
-    tintColor: TABBAR_INACTIVE_TINT,
-  },
-  shopImage: {
-    resizeMode: 'cover',
-    width: windowWidth,
-    aspectRatio: 2 / 1,
-    marginRight: 50,
-    // height: 45 * alpha,
-  },
-  headerLeftContainer: {
-    flexDirection: 'row',
-    marginLeft: 8 * alpha,
-  },
-  headerRightContainer: {
-    flexDirection: 'row',
-    marginRight: 8 * alpha,
-  },
-  page1View: {
-    backgroundColor: 'rgb(243, 243, 243)',
-    flex: 1,
-  },
-  topsectionView: {
-    backgroundColor: 'white',
-    shadowColor: 'rgba(198, 192, 192, 0.5)',
-    shadowRadius: 5 * alpha,
-    shadowOpacity: 1 * alpha,
-    left: 0 * alpha,
-    right: 0 * alpha,
-    height: 67 * alpha,
-  },
-  branchView: {
-    backgroundColor: 'transparent',
-    width: 200 * alpha,
-    height: 19 * alpha,
-    marginTop: 6 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  branchButtonImage: {
-    resizeMode: 'contain',
-    marginLeft: 10 * alpha,
-  },
-  branchButton: {
+    alignSelf: 'center',
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'center',
+    height: 23 * alpha,
     justifyContent: 'center',
     padding: 0,
-    width: 190 * alpha,
+    width: 23 * alpha,
+  },
+  addButtonImage: {
+    resizeMode: 'contain',
+  },
+  addButtonText: {
+    color: 'black',
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  addToCartButton: {
+    alignItems: 'center',
+    borderRadius: 4 * alpha,
+    flexDirection: 'row',
+    height: 36 * alpha,
+    justifyContent: 'center',
+    marginBottom: 15 * alpha,
+    marginLeft: 20 * alpha,
+    marginRight: 20 * alpha,
+    padding: 0,
+  },
+  addToCartButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  addToCartButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  alertView: {
+    backgroundColor: 'darkgray',
+  },
+  alertViewCart: {
+    backgroundColor: 'darkgray',
+    marginBottom: 35 * alpha,
+    paddingBottom: 10 * alpha,
+    // position: "absolute",
+    // left: 0 * alpha,
+    // right: 0 * alpha,
+    // bottom: 60 * alpha,
+  },
+  alertViewText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontFamily: TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    paddingBottom: 7 * alpha,
+    paddingLeft: 7 * alpha,
+    paddingRight: 7 * alpha,
+    paddingTop: 7 * alpha,
+  },
+  alertViewTitle: {
+    alignSelf: 'center',
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    paddingBottom: 5 * alpha,
+    paddingTop: 10 * alpha,
+  },
+  areaBubble: {
+    backgroundColor: 'white',
+    borderColor: '#00B2E3',
+    borderRadius: DEFAULT_BORDER_RADIUS,
+    borderWidth: 1,
+    marginBottom: alpha * 2,
+  },
+  areaText: {
+    fontFamily: TITLE_FONT,
+    fontSize: fontAlpha * 14,
+    margin: alpha * 5,
+  },
+  badgeView: {
+    alignItems: 'center',
+    aspectRatio: 1,
+    backgroundColor: 'rgb(0, 178, 227)',
+    borderColor: 'white',
+    borderRadius: 10 * alpha,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    flex: 1,
+    height: 20 * alpha,
+    justifyContent: 'center',
+    left: 100 * alpha,
+    position: 'absolute',
+    top: 5 * alpha,
+  },
+  bannerContainImage: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    height: windowHeight,
+    justifyContent: 'center',
+  },
+  bannerImage: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+
+  bannerShortImage: {
+    alignItems: 'center',
+    flex: 1,
+    height: windowHeight,
+    justifyContent: 'center',
+  },
+
+  bottomAlertView: {
+    bottom: 0 * alpha,
+    flex: 1,
+    left: 0 * alpha,
+    position: 'absolute',
+    right: 0 * alpha,
+    width: windowWidth,
+  },
+  bottomView: {
+    backgroundColor: 'transparent',
+    // height: 113 * alpha,
+    justifyContent: 'flex-end',
+  },
+  branchAddress: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 3 * alpha,
+    textAlign: 'left',
+  },
+  branchButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
     height: 19 * alpha,
+    justifyContent: 'center',
     marginTop: 6 * alpha,
+    padding: 0,
+    width: 190 * alpha,
+  },
+  branchButtonImage: {
+    marginLeft: 10 * alpha,
+    resizeMode: 'contain',
   },
   branchButtonText: {
     color: 'rgb(99, 97, 97)',
@@ -2306,105 +2414,107 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
   },
-  pickUpDeliveryView: {
-    borderRadius: 16 * alpha,
-    width: 96 * alpha,
-    height: 32 * alpha,
+  branchContact: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 3 * alpha,
+    textAlign: 'left',
+  },
+  branchHeaderAddress: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 9 * alpha,
+    textAlign: 'left',
+  },
+  branchHeaderContact: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 9 * alpha,
+    textAlign: 'left',
   },
 
-  pickUpDeliveryViewTemp: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    borderRadius: 16 * alpha,
-    width: 96 * alpha,
-    height: 32 * alpha,
+  branchInfoText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(55, 55, 55)',
+    fontFamily: TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginLeft: 10 * alpha,
+    textAlign: 'left',
+  },
+  branchInfoView: {
+    backgroundColor: 'transparent',
+    // flex: 1,
+    // width: windowWidth - 100 * alpha,
+    // height: 76 * alpha,
+    // marginHorizontal: 10 * alpha,
+    // marginTop: 15 * alpha,
+    alignItems: 'flex-start',
   },
 
-  pickUpView: {
-    backgroundColor: 'rgba(42, 41, 41, 0.89)',
-    borderRadius: 14.5 * alpha,
-    width: 49 * alpha,
-    height: 29 * alpha,
-    justifyContent: 'center',
-  },
-  optionText: {
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha,
-  },
-  pickUpText: {
-    color: 'rgb(253, 253, 253)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    marginLeft: 7 * alpha,
-    marginRight: 7 * alpha,
-  },
-  deliveryText: {
-    color: 'rgb(78, 77, 77)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-  },
-  distance1kmText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(188, 181, 181)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    // textAlign: "left",
-  },
-  moreView: {
-    backgroundColor: 'transparent',
-    width: 65 * alpha,
-    height: 12 * alpha,
-    marginTop: 1 * alpha,
-    flexDirection: 'row',
+  branchView: {
     alignItems: 'center',
-  },
-  moreButton: {
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: 0,
-    flex: 1,
-    height: 12 * alpha,
-    marginRight: 2 * alpha,
+    height: 19 * alpha,
+    marginTop: 6 * alpha,
+    width: 200 * alpha,
   },
-  moreButtonText: {
-    color: 'rgb(162, 162, 162)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha,
+  businessHeaderHourText: {
+    alignSelf: 'stretch',
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    marginTop: 9 * alpha,
     textAlign: 'left',
   },
-  moreButtonImage: {
+  businessHourText: {
+    alignSelf: 'stretch',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 14 * fontAlpha,
+    paddingVertical: 10 * alpha,
+    textAlign: 'left',
+  },
+  cartImage: {
+    height: 20 * alpha,
     resizeMode: 'contain',
-    marginRight: 10 * alpha,
+    width: 20 * alpha,
   },
-
-  productsectionView: {
+  cartView: {
     backgroundColor: 'transparent',
+    bottom: 0 * alpha,
+    height: 60 * alpha,
+    left: 0 * alpha,
+    position: 'absolute',
+    right: 0 * alpha,
+  },
+  cartsummaryviewView: {
+    backgroundColor: 'transparent',
+    bottom: 25 * alpha,
     flex: 1,
-    flexDirection: 'row',
-  },
-  categorylistFlatList: {
-    backgroundColor: 'transparent',
-    width: '100%',
-    height: '100%',
-  },
-
-  categorylistFlatListViewWrapper: {
-    width: 85 * alpha,
+    left: 0 * alpha,
+    position: 'absolute',
+    right: 0 * alpha,
   },
   categoryListPosition1: {
     height: 0 * alpha,
@@ -2418,158 +2528,29 @@ const styles = StyleSheet.create({
   categoryListPosition4: {
     height: 30 * alpha,
   },
-  productlistFlatList: {
-    backgroundColor: 'white',
-    width: '100%',
+  categorylistFlatList: {
+    backgroundColor: 'transparent',
     height: '100%',
+    width: '100%',
   },
-  productlistFlatListViewWrapper: {
-    width: 290 * alpha,
-    marginBottom: 1 * alpha,
-  },
-  productlistFlatListViewWrapperwithALert: {
-    width: 290 * alpha,
-    marginBottom: 25 * alpha,
-  },
-  cartView: {
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    left: 0 * alpha,
-    right: 0 * alpha,
-    bottom: 0 * alpha,
-    height: 60 * alpha,
-  },
-  bannerImage: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
-  },
-  bannerShortImage: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: windowHeight,
-  },
-  bannerContainImage: {
-    backgroundColor: 'transparent',
-    height: windowHeight,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  totalAmountView: {
-    backgroundColor: 'transparent',
-    width: 280 * alpha,
-    height: 70 * alpha,
-  },
-  rectangleView: {
-    backgroundColor: 'rgb(231, 230, 230)',
-    position: 'absolute',
-    left: 0 * alpha,
-    right: 0 * alpha,
-    top: 20 * alpha,
-    height: 46 * alpha,
-  },
-  shopppingCartView: {
-    backgroundColor: 'white',
-    borderRadius: 20 * alpha,
-    width: 90 * alpha,
-    // aspectRatio: 1 / 2,
-    height: 40 * alpha,
-    justifyContent: 'center',
-  },
-  shopppingCartButton: {
-    backgroundColor: 'transparent',
-    borderRadius: 20 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    position: 'absolute',
-    width: 90 * alpha,
-    height: 40 * alpha,
-  },
-  group5View: {
-    backgroundColor: 'transparent',
-    height: 26 * alpha,
-    marginLeft: 12 * alpha,
-    marginRight: 12 * alpha,
-    flexDirection: 'row',
-  },
-
-  line8View: {
-    backgroundColor: 'rgb(85, 85, 85)',
-    width: 9 * alpha,
-    height: 1 * alpha,
-  },
-  shoppingCartText: {
-    color: 'rgb(57, 57, 57)',
-    fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha,
-    textAlign: 'center',
-    marginLeft: 10 * alpha,
-    backgroundColor: 'transparent',
-    alignSelf: 'center',
-  },
-  cartImage: {
-    resizeMode: 'contain',
-    width: 20 * alpha,
-    height: 20 * alpha,
-  },
-  totalpriceText: {
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 18 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    marginTop: 24 * alpha,
-    // fontWeight:'bold'
-  },
-  badgeView: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 10 * alpha,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderStyle: 'solid',
-    position: 'absolute',
-    left: 100 * alpha,
-    top: 5 * alpha,
-    height: 20 * alpha,
-    aspectRatio: 1,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  numberofitemText: {
-    color: 'rgb(255, 251, 251)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-  },
-  checkoutButtonView: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    position: 'absolute',
-    right: 0 * alpha,
-    width: 95 * alpha,
-    top: 15 * alpha,
-    height: 46 * alpha,
+  categorylistFlatListViewWrapper: {
+    width: 85 * alpha,
   },
   checkoutButton: {
+    alignItems: 'center',
     backgroundColor: 'rgb(0, 178, 227)',
     flexDirection: 'row',
-    alignItems: 'center',
+    height: 46 * alpha,
     justifyContent: 'center',
     padding: 0,
     position: 'absolute',
     right: 0 * alpha,
-    width: 95 * alpha,
     top: 0 * alpha,
-    height: 46 * alpha,
+    width: 95 * alpha,
+  },
+  checkoutButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
   },
   checkoutButtonText: {
     color: 'white',
@@ -2578,25 +2559,107 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     textAlign: 'left',
   },
-  checkoutButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  cartsummaryviewView: {
-    backgroundColor: 'transparent',
+  checkoutButtonView: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    height: 46 * alpha,
+    justifyContent: 'center',
+    padding: 0,
     position: 'absolute',
-    left: 0 * alpha,
     right: 0 * alpha,
-    bottom: 25 * alpha,
-    flex: 1,
+    top: 15 * alpha,
+    width: 95 * alpha,
+  },
+  choiceButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(238, 238, 238)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    height: 27 * alpha,
+    justifyContent: 'center',
+    marginLeft: 13 * alpha,
+    padding: 0,
+    width: 66 * alpha,
+  },
+
+  choiceButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  choiceButtonText: {
+    color: 'rgb(82, 80, 80)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 9 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
+  choiceThreeButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(238, 238, 238)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    height: 28 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+    width: 94 * alpha,
+  },
+  choiceThreeButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  choiceThreeButtonText: {
+    color: 'rgb(82, 80, 80)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 9 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
+  choiceTwoButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(238, 238, 238)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    height: 27 * alpha,
+    justifyContent: 'center',
+    marginLeft: 10 * alpha,
+    marginRight: 10 * alpha,
+    padding: 0,
+  },
+  choiceTwoButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  choiceTwoButtonText: {
+    color: 'rgb(82, 80, 80)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 9 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
   },
   clearAllView: {
+    alignItems: 'flex-start',
     backgroundColor: 'rgb(245, 245, 245)',
     height: 31 * alpha,
+    justifyContent: 'center',
     marginLeft: 1 * alpha,
     marginRight: 1 * alpha,
+  },
+  clearButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 18 * alpha,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    marginLeft: 15 * alpha,
+    padding: 0,
+    width: 55 * alpha,
+  },
+  clearButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
   },
   clearButtonText: {
     color: 'rgb(144, 141, 141)',
@@ -2606,46 +2669,168 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
   },
-  clearButton: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
+  closeButton: {
     alignItems: 'center',
+    backgroundColor: 'rgb(191, 191, 191)',
+    borderRadius: 12.5 * alpha,
+    flexDirection: 'row',
+    height: 25 * alpha,
     justifyContent: 'center',
     padding: 0,
-    width: 55 * alpha,
-    height: 18 * alpha,
-    marginLeft: 15 * alpha,
+    width: 25 * alpha,
   },
-  clearButtonImage: {
-    resizeMode: 'contain',
+  closeButtonImage: {
     marginRight: 10 * alpha,
+    resizeMode: 'contain',
   },
-  popOutCartFlatList: {
-    backgroundColor: 'white',
-    width: '100%',
-    marginBottom: 33 * alpha,
-    flex: 1,
+  closeButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 18 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
   },
-  popOutCartFlatListViewWrapper: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
-  popOutView: {
-    backgroundColor: 'white',
-    borderRadius: 11 * alpha,
+  closeGalleryButton: {
+    alignItems: 'center',
+    backgroundColor: 'black',
+    borderRadius: 20 * alpha,
+    flexDirection: 'row',
+    height: 40 * alpha,
+    justifyContent: 'center',
+    padding: 0,
     position: 'absolute',
-    width: '100%',
-    flex: 1,
+    right: 10 * alpha,
+    top: 30 * alpha,
+    width: 40 * alpha,
   },
-  topbuttonView: {
+  closeGalleryButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  closeGalleryButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 18 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  contentScrollView: {
     backgroundColor: 'transparent',
-    position: 'absolute',
-    width: 67 * alpha,
+    flex: 1,
+    marginTop: 5 * alpha,
+    maxHeight: 320 * alpha,
+  },
+  controlView: {
+    backgroundColor: 'transparent',
+    height: 23 * alpha,
+    width: 74 * alpha,
+  },
+  deliverAreaAffectText: {
+    alignSelf: 'stretch',
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  deliveredByBrew9Text: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 19 * alpha,
+    textAlign: 'left',
+  },
+  deliveryRm5ExtraText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  deliveryText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(78, 77, 77)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  deliveryTwoText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(55, 55, 55)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  deliveryView: {
+    backgroundColor: 'transparent',
+    height: 105 * alpha,
+    marginLeft: 14 * alpha,
+    marginTop: 7 * alpha,
+    width: 322 * alpha,
+  },
+  descriptionHeaderText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(167, 167, 167)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 28 * alpha,
+    marginTop: 10 * alpha,
+    textAlign: 'left',
+  },
+  descriptionText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(130, 130, 130)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 17 * alpha,
+    marginBottom: 5 * alpha,
+    marginRight: 28 * alpha,
+    marginTop: 5 * alpha,
+    textAlign: 'justify',
+  },
+  disabled: {
+    backgroundColor: 'rgba(0, 178, 227, 0.3)',
+  },
+  distance1kmText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(188, 181, 181)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    // textAlign: "left",
+  },
+  favouriteButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(191, 191, 191)',
+    borderRadius: 14 * alpha,
+    flexDirection: 'row',
     height: 28 * alpha,
-    top: 14 * alpha,
-    right: 14 * alpha,
-    alignItems: 'flex-end',
-    zIndex: 999,
+    justifyContent: 'center',
+    marginRight: 11 * alpha,
+    padding: 0,
+    width: 28 * alpha,
   },
   favouriteButtonImage: {
     resizeMode: 'contain',
@@ -2657,113 +2842,84 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
   },
-  favouriteButton: {
-    backgroundColor: 'rgb(191, 191, 191)',
-    borderRadius: 14 * alpha,
-    flexDirection: 'row',
+  featuredpromoButton: {
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 28 * alpha,
-    height: 28 * alpha,
-    marginRight: 11 * alpha,
-  },
-  closeButton: {
-    backgroundColor: 'rgb(191, 191, 191)',
-    borderRadius: 12.5 * alpha,
+    backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'center',
+    height: 60 * alpha,
     justifyContent: 'center',
-    padding: 0,
-    width: 25 * alpha,
-    height: 25 * alpha,
-  },
-  closeButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  closeButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 18 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-  },
-  closeGalleryButton: {
-    backgroundColor: 'black',
-    borderRadius: 20 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    left: 10 * alpha,
     padding: 0,
     position: 'absolute',
-    width: 40 * alpha,
-    height: 40 * alpha,
-    top: 30 * alpha,
-    right: 10 * alpha,
+    width: 60 * alpha,
   },
-  closeGalleryButtonImage: {
+  featuredpromoButtonImage: {
+    height: '100%',
     resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  closeGalleryButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 18 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-  },
-  contentScrollView: {
-    backgroundColor: 'transparent',
-    flex: 1,
-    marginTop: 5 * alpha,
-    maxHeight: 320 * alpha,
-  },
-  productView: {
-    backgroundColor: 'transparent',
     width: '100%',
-    flex: 1,
-    marginLeft: 19 * alpha,
-    marginTop: 20 * alpha,
   },
-  nameText: {
-    color: 'rgb(54, 54, 54)',
+  featuredpromoButtonPosition1: {
+    bottom: 0 * alpha,
+  },
+
+  featuredpromoButtonPosition2: {
+    bottom: 40 * alpha,
+  },
+  featuredpromoButtonPosition3: {
+    bottom: 90 * alpha,
+  },
+  freeWithRm40SpendText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(160, 160, 160)',
     fontFamily: NON_TITLE_FONT,
-    fontSize: 17 * fontAlpha,
+    fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    marginTop: 9 * alpha,
     textAlign: 'left',
-    backgroundColor: 'transparent',
-    marginRight: 28 * alpha,
   },
-  descriptionHeaderText: {
-    color: 'rgb(167, 167, 167)',
+  group5View: {
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 26 * alpha,
+    marginLeft: 12 * alpha,
+    marginRight: 12 * alpha,
+  },
+  headerLeftContainer: {
+    flexDirection: 'row',
+    marginLeft: 8 * alpha,
+  },
+  headerRightContainer: {
+    flexDirection: 'row',
+    marginRight: 8 * alpha,
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10 * alpha,
+  },
+  imageblockView: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    height: 150 * alpha,
+    marginTop: 21 * alpha,
+    width: '100%',
+  },
+  ingredientHighlightText: {
+    backgroundColor: 'transparent',
+    color: PRIMARY_COLOR,
     fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
+    fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    marginBottom: 4 * alpha,
+    marginLeft: 4 * alpha,
+    marginRight: 4 * alpha,
+    marginTop: 4 * alpha,
     textAlign: 'left',
-    backgroundColor: 'transparent',
-    marginRight: 28 * alpha,
-    marginTop: 10 * alpha,
   },
-  descriptionText: {
-    color: 'rgb(130, 130, 130)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'justify',
-    backgroundColor: 'transparent',
-    marginRight: 28 * alpha,
-    marginTop: 5 * alpha,
-    marginBottom: 5 * alpha,
-    lineHeight: 17 * alpha,
-  },
-  ingredientView: {
-    backgroundColor: 'rgb(245, 245, 245)',
+  ingredientHighlightView: {
+    backgroundColor: LIGHT_BLUE_BACKGROUND,
     justifyContent: 'center',
     marginRight: 5 * alpha,
     marginTop: 3 * alpha,
@@ -2775,275 +2931,233 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    marginRight: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginTop: 4 * alpha,
     marginBottom: 4 * alpha,
+    marginLeft: 4 * alpha,
+    marginRight: 4 * alpha,
+    marginTop: 4 * alpha,
+    textAlign: 'left',
   },
-  ingredientHighlightView: {
-    backgroundColor: LIGHT_BLUE_BACKGROUND,
+  ingredientView: {
+    backgroundColor: 'rgb(245, 245, 245)',
     justifyContent: 'center',
     marginRight: 5 * alpha,
     marginTop: 3 * alpha,
   },
-  ingredientHighlightText: {
-    backgroundColor: 'transparent',
-    color: PRIMARY_COLOR,
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginRight: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginTop: 4 * alpha,
-    marginBottom: 4 * alpha,
+  line8View: {
+    backgroundColor: 'rgb(85, 85, 85)',
+    height: 1 * alpha,
+    width: 9 * alpha,
   },
-
+  lineView: {
+    backgroundColor: 'rgb(151, 151, 151)',
+    height: 1 * alpha,
+    marginBottom: 12 * alpha,
+    opacity: 0.29,
+  },
+  loading: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    position: 'absolute',
+    width: '100%',
+  },
+  loadingIndicator: {
+    marginTop: 100 * alpha,
+  },
+  mapImage: {
+    backgroundColor: 'transparent',
+    height: 200 * alpha,
+    width: '100%',
+  },
   milkText: {
+    backgroundColor: 'transparent',
     color: 'rgb(167, 167, 167)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 9 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
     marginLeft: 6 * alpha,
     marginRight: 5 * alpha,
+    textAlign: 'left',
   },
-  optionsTwoView: {
+  moreButton: {
+    alignItems: 'center',
     backgroundColor: 'transparent',
-    marginTop: 5 * alpha,
-    marginBottom: 5 * alpha,
-    alignItems: 'flex-start',
-    borderRadius: 7.0,
-    overflow: 'hidden',
+    flexDirection: 'row',
+    flex: 1,
+    height: 12 * alpha,
+    justifyContent: 'flex-end',
+    marginRight: 2 * alpha,
+    padding: 0,
   },
-  optiontitleTwoText: {
-    color: 'rgb(141, 141, 141)',
+  moreButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  moreButtonText: {
+    color: 'rgb(162, 162, 162)',
     fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontSize: 10 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
+  },
+  moreView: {
+    alignItems: 'center',
     backgroundColor: 'transparent',
-    marginLeft: 20 * alpha,
+    flexDirection: 'row',
+    height: 12 * alpha,
+    marginTop: 1 * alpha,
+    width: 65 * alpha,
+  },
+  nameText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 17 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 28 * alpha,
+    textAlign: 'left',
+  },
+  navigationBarItem: {},
+  navigationBarItemIcon: {
+    tintColor: 'rgb(0, 194, 236)',
+  },
+  navigationBarRightItemIcon: {
+    resizeMode: 'contain',
+    tintColor: TABBAR_INACTIVE_TINT,
+  },
+  normal: {
+    backgroundColor: 'rgb(0, 178, 227)',
+  },
+  numberofitemText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(255, 251, 251)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'center',
+  },
+  optionText: {
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha,
   },
   optionchoiceView: {
+    alignItems: 'flex-start',
     backgroundColor: 'transparent',
+    flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: 20 * alpha,
     marginRight: 20 * alpha,
     marginTop: 2 * alpha,
-    flexDirection: 'row',
+  },
+  optionsText: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'transparent',
+    color: 'rgb(141, 141, 141)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginLeft: 1 * alpha,
+    marginTop: 1 * alpha,
+    textAlign: 'left',
+  },
+  optionsTwoView: {
     alignItems: 'flex-start',
-  },
-  unselectedButton: {
-    backgroundColor: 'rgb(238, 238, 238)',
-    borderRadius: 2 * alpha,
+    backgroundColor: 'transparent',
+    borderRadius: 7.0,
+    marginBottom: 5 * alpha,
+    marginTop: 5 * alpha,
     overflow: 'hidden',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    marginBottom: 4 * alpha,
-    marginRight: 4 * alpha,
-  },
-  recommendedStarImage: {
-    resizeMode: 'contain',
-    marginLeft: 4 * alpha,
-    marginRight: -4 * alpha,
-  },
-  unselectedButtonText: {
-    color: 'rgb(82, 80, 80)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-    marginRight: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginTop: 4 * alpha,
-    marginBottom: 4 * alpha,
-  },
-  selectedButton: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 2 * alpha,
-    overflow: 'hidden',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    marginBottom: 4 * alpha,
-    marginRight: 4 * alpha,
-  },
-  selectedButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  selectedButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-    marginRight: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginTop: 4 * alpha,
-    marginBottom: 4 * alpha,
   },
   optionsView: {
+    alignItems: 'flex-start',
     backgroundColor: 'transparent',
-    width: 270 * alpha,
     height: 87 * alpha,
     marginLeft: 20 * alpha,
     marginTop: 10 * alpha,
-    alignItems: 'flex-start',
+    width: 270 * alpha,
   },
   optiontitleText: {
+    backgroundColor: 'transparent',
     color: 'rgb(141, 141, 141)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
+  },
+  optiontitleTwoText: {
     backgroundColor: 'transparent',
-  },
-  recommendedButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  recommendedButton: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 2 * alpha,
-    overflow: 'hidden',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 85 * alpha,
-    height: 28 * alpha,
-  },
-  recommendedButtonText: {
-    color: 'white',
+    color: 'rgb(141, 141, 141)',
     fontFamily: NON_TITLE_FONT,
-    fontSize: 9 * fontAlpha,
+    fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  unavailableButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  unavailableButtonText: {
-    color: 'rgb(201, 201, 201)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 9 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  unavailableButton: {
-    backgroundColor: 'rgba(238, 238, 238, 0.62)',
-    borderRadius: 2 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 67 * alpha,
-    height: 28 * alpha,
-    marginLeft: 12 * alpha,
-  },
-  choiceThreeButton: {
-    backgroundColor: 'rgb(238, 238, 238)',
-    borderRadius: 2 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 94 * alpha,
-    height: 28 * alpha,
-  },
-  choiceThreeButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  choiceThreeButtonText: {
-    color: 'rgb(82, 80, 80)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 9 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  choiceTwoButton: {
-    backgroundColor: 'rgb(238, 238, 238)',
-    borderRadius: 2 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    marginRight: 10 * alpha,
-    marginLeft: 10 * alpha,
-    height: 27 * alpha,
-  },
-  choiceTwoButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  choiceTwoButtonText: {
-    color: 'rgb(82, 80, 80)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 9 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  choiceButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  choiceButton: {
-    backgroundColor: 'rgb(238, 238, 238)',
-    borderRadius: 2 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 66 * alpha,
-    height: 27 * alpha,
-    marginLeft: 13 * alpha,
-  },
-  choiceButtonText: {
-    color: 'rgb(82, 80, 80)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 9 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  bottomView: {
-    backgroundColor: 'transparent',
-    // height: 113 * alpha,
-    justifyContent: 'flex-end',
-  },
-  lineView: {
-    backgroundColor: 'rgb(151, 151, 151)',
-    opacity: 0.29,
-    height: 1 * alpha,
-    marginBottom: 12 * alpha,
-  },
-  summaryView: {
-    backgroundColor: 'transparent',
-    // height: 37 * alpha,
     marginLeft: 20 * alpha,
-    marginRight: 20 * alpha,
-    marginBottom: 12 * alpha,
+    textAlign: 'left',
+  },
+  page1View: {
+    backgroundColor: 'rgb(243, 243, 243)',
+    flex: 1,
+  },
+  pickUpDeliveryView: {
+    borderRadius: 16 * alpha,
+    height: 32 * alpha,
+    width: 96 * alpha,
+  },
+  pickUpDeliveryViewTemp: {
+    borderRadius: 16 * alpha,
+    height: 32 * alpha,
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    width: 96 * alpha,
+  },
+  pickUpText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(253, 253, 253)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginLeft: 7 * alpha,
+    marginRight: 7 * alpha,
+    textAlign: 'left',
+  },
+  pickUpView: {
+    backgroundColor: 'rgba(42, 41, 41, 0.89)',
+    borderRadius: 14.5 * alpha,
+    height: 29 * alpha,
+    justifyContent: 'center',
+    width: 49 * alpha,
+  },
+  pinImage: {
+    height: 20 * alpha,
+    tintColor: '#00B2E3',
+    width: 20 * alpha,
+  },
+  popOutCartFlatList: {
+    backgroundColor: 'white',
+    flex: 1,
+    marginBottom: 33 * alpha,
+    width: '100%',
+  },
+  popOutCartFlatListViewWrapper: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  popOutView: {
+    backgroundColor: 'white',
+    borderRadius: 11 * alpha,
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
   },
   priceText: {
+    alignSelf: 'flex-start',
     backgroundColor: 'transparent',
     color: 'rgb(0, 178, 227)',
     fontFamily: TITLE_FONT,
@@ -3051,12 +3165,56 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    alignSelf: 'flex-start',
   },
-  controlView: {
+  productView: {
     backgroundColor: 'transparent',
-    width: 74 * alpha,
-    height: 23 * alpha,
+    flex: 1,
+    marginLeft: 19 * alpha,
+    marginTop: 20 * alpha,
+    width: '100%',
+  },
+  productimageImage: {
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    height: 150 * alpha,
+    resizeMode: 'cover',
+    width: 150 * alpha,
+  },
+  productlistFlatList: {
+    backgroundColor: 'white',
+    height: '100%',
+    width: '100%',
+  },
+  productlistFlatListViewWrapper: {
+    marginBottom: 1 * alpha,
+    width: 290 * alpha,
+  },
+  productlistFlatListViewWrapperwithALert: {
+    marginBottom: 25 * alpha,
+    width: 290 * alpha,
+  },
+  productsectionView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  promotionBarView: {
+    alignItems: 'center',
+    backgroundColor: RED,
+    height: 32 * alpha,
+    justifyContent: 'center',
+    width: '100%',
+  },
+  promotionTopBarText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * alpha,
+    paddingLeft: 10 * alpha,
+    paddingRight: 10 * alpha,
+  },
+  promotionTopBarView: {
+    backgroundColor: 'transparent',
   },
   quantityText: {
     backgroundColor: 'transparent',
@@ -3067,14 +3225,50 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
   },
+  recommendedButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0, 178, 227)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    height: 28 * alpha,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    padding: 0,
+    width: 85 * alpha,
+  },
+  recommendedButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  recommendedButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 9 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
+  recommendedStarImage: {
+    marginLeft: 4 * alpha,
+    marginRight: -4 * alpha,
+    resizeMode: 'contain',
+  },
+  rectangleView: {
+    backgroundColor: 'rgb(231, 230, 230)',
+    height: 46 * alpha,
+    left: 0 * alpha,
+    position: 'absolute',
+    right: 0 * alpha,
+    top: 20 * alpha,
+  },
   removeButton: {
+    alignItems: 'center',
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'center',
+    height: 23 * alpha,
     justifyContent: 'center',
     padding: 0,
     width: 23 * alpha,
-    height: 23 * alpha,
   },
   removeButtonImage: {
     resizeMode: 'contain',
@@ -3086,351 +3280,175 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'left',
   },
-  addButton: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    alignSelf: 'center',
-    width: 23 * alpha,
-    height: 23 * alpha,
+  rightArrowImage: {
+    height: 9 * alpha,
+    marginLeft: alpha * 5,
+    tintColor: '#C5C5C5',
+    width: 9 * alpha,
   },
-  addButtonText: {
-    color: 'black',
+  selectShopButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  selectedButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0, 178, 227)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 4 * alpha,
+    marginRight: 4 * alpha,
+    overflow: 'hidden',
+    padding: 0,
+  },
+  selectedButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  selectedButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
+    marginBottom: 4 * alpha,
+    marginLeft: 4 * alpha,
+    marginRight: 4 * alpha,
+    marginTop: 4 * alpha,
+    textAlign: 'center',
   },
-  addButtonImage: {
-    resizeMode: 'contain',
+  shopImage: {
+    aspectRatio: 2 / 1,
+    marginRight: 50,
+    resizeMode: 'cover',
+    width: windowWidth,
+    // height: 45 * alpha,
   },
-  optionsText: {
+  shoppingCartText: {
+    alignSelf: 'center',
     backgroundColor: 'transparent',
-    color: 'rgb(141, 141, 141)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    alignSelf: 'flex-start',
-    marginLeft: 1 * alpha,
-    marginTop: 1 * alpha,
+    color: 'rgb(57, 57, 57)',
+    fontFamily: TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    marginLeft: 10 * alpha,
+    textAlign: 'center',
   },
-  normal: {
-    backgroundColor: 'rgb(0, 178, 227)',
-  },
-  disabled: {
-    backgroundColor: 'rgba(0, 178, 227, 0.3)',
-  },
-  addToCartButton: {
-    borderRadius: 4 * alpha,
-    flexDirection: 'row',
+  shopppingCartButton: {
     alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderRadius: 20 * alpha,
+    flexDirection: 'row',
+    height: 40 * alpha,
     justifyContent: 'center',
     padding: 0,
-    height: 36 * alpha,
-    marginLeft: 20 * alpha,
-    marginRight: 20 * alpha,
-    marginBottom: 15 * alpha,
-  },
-  addToCartButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  addToCartButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-  },
-  productimageImage: {
-    resizeMode: 'cover',
-    backgroundColor: 'transparent',
-    alignSelf: 'center',
-    width: 150 * alpha,
-    height: 150 * alpha,
-  },
-  imageblockView: {
-    backgroundColor: 'white',
-    width: '100%',
-    marginTop: 21 * alpha,
-    height: 150 * alpha,
-    alignItems: 'center',
-  },
-  bottomAlertView: {
     position: 'absolute',
-    left: 0 * alpha,
-    right: 0 * alpha,
-    bottom: 0 * alpha,
-    flex: 1,
-    width: windowWidth,
+    width: 90 * alpha,
   },
-  alertViewCart: {
-    backgroundColor: 'darkgray',
-    marginBottom: 35 * alpha,
-    paddingBottom: 10 * alpha,
-    // position: "absolute",
-    // left: 0 * alpha,
-    // right: 0 * alpha,
-    // bottom: 60 * alpha,
-  },
-  alertView: {
-    backgroundColor: 'darkgray',
-  },
-  alertViewTitle: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    paddingTop: 10 * alpha,
-    paddingBottom: 5 * alpha,
-    alignSelf: 'center',
-  },
-  alertViewText: {
-    color: 'white',
-    fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    paddingTop: 7 * alpha,
-    paddingLeft: 7 * alpha,
-    paddingRight: 7 * alpha,
-    paddingBottom: 7 * alpha,
-    alignSelf: 'center',
-  },
-  container: {
-    flex: 1,
+  shopppingCartView: {
+    backgroundColor: 'white',
+    borderRadius: 20 * alpha,
+    width: 90 * alpha,
+    // aspectRatio: 1 / 2,
+    height: 40 * alpha,
     justifyContent: 'center',
   },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10 * alpha,
-  },
   showLocationView: {
-    backgroundColor: 'white',
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    marginTop: 67 * alpha,
     alignItems: 'flex-start',
+    backgroundColor: 'white',
+    height: '100%',
+    marginTop: 67 * alpha,
+    position: 'absolute',
+    width: '100%',
     // flex: 1,
     // marginHorizontal:10
   },
-  deliveryView: {
+  summaryView: {
     backgroundColor: 'transparent',
-    width: 322 * alpha,
-    height: 105 * alpha,
-    marginLeft: 14 * alpha,
-    marginTop: 7 * alpha,
+    // height: 37 * alpha,
+    marginLeft: 20 * alpha,
+    marginRight: 20 * alpha,
+    marginBottom: 12 * alpha,
   },
-  deliveryTwoText: {
+  topbuttonView: {
+    alignItems: 'flex-end',
     backgroundColor: 'transparent',
-    color: 'rgb(55, 55, 55)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-  },
-  freeWithRm40SpendText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginTop: 9 * alpha,
-  },
-  deliveredByBrew9Text: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginTop: 19 * alpha,
-  },
-  deliverAreaAffectText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    alignSelf: 'stretch',
-  },
-  deliveryRm5ExtraText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-  },
-  branchInfoView: {
-    backgroundColor: 'transparent',
-    // flex: 1,
-    // width: windowWidth - 100 * alpha,
-    // height: 76 * alpha,
-    // marginHorizontal: 10 * alpha,
-    // marginTop: 15 * alpha,
-    alignItems: 'flex-start',
-  },
-  branchInfoText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(55, 55, 55)',
-    fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginLeft: 10 * alpha,
-  },
-  branchHeaderAddress: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginTop: 9 * alpha,
-  },
-  branchAddress: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginTop: 3 * alpha,
-  },
-  branchHeaderContact: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginTop: 9 * alpha,
-  },
-  branchContact: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    marginTop: 3 * alpha,
-  },
-  businessHeaderHourText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(160, 160, 160)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    alignSelf: 'stretch',
-    marginTop: 9 * alpha,
-  },
-  businessHourText: {
-    fontFamily: NON_TITLE_FONT,
-    color: 'rgb(160, 160, 160)',
-    fontSize: 13 * fontAlpha,
-    paddingVertical: 10 * alpha,
-    lineHeight: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    alignSelf: 'stretch',
-  },
-  featuredpromoButton: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
+    height: 28 * alpha,
     position: 'absolute',
-    width: 60 * alpha,
-    height: 60 * alpha,
-    left: 10 * alpha,
+    right: 14 * alpha,
+    top: 14 * alpha,
+    width: 67 * alpha,
+    zIndex: 999,
   },
-  featuredpromoButtonPosition1: {
-    bottom: 0 * alpha,
-  },
-  featuredpromoButtonPosition2: {
-    bottom: 40 * alpha,
-  },
-  featuredpromoButtonPosition3: {
-    bottom: 90 * alpha,
-  },
-  featuredpromoButtonImage: {
-    resizeMode: 'contain',
-    width: '100%',
-    height: '100%',
-  },
-  mapImage: {
-    backgroundColor: 'transparent',
-    height: 200 * alpha,
-    width: '100%',
-  },
-  promotionTopBarView: {
-    backgroundColor: 'transparent',
-  },
-  promotionBarView: {
-    width: '100%',
-    height: 32 * alpha,
-    backgroundColor: RED,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  promotionTopBarText: {
-    fontFamily: TITLE_FONT,
-    color: 'white',
-    fontSize: 12 * alpha,
-    alignSelf: 'center',
-    paddingLeft: 10 * alpha,
-    paddingRight: 10 * alpha,
-  },
-  rightArrowImage: {
-    width: 9 * alpha,
-    height: 9 * alpha,
-    tintColor: '#C5C5C5',
-    marginLeft: alpha * 5,
-  },
-  selectShopButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  areaBubble: {
+  topsectionView: {
     backgroundColor: 'white',
-    borderRadius: DEFAULT_BORDER_RADIUS,
-    marginBottom: alpha * 2,
-    borderWidth: 1,
-    borderColor: '#00B2E3',
+    height: 67 * alpha,
+    left: 0 * alpha,
+    right: 0 * alpha,
+    shadowColor: 'rgba(198, 192, 192, 0.5)',
+    shadowOpacity: 1 * alpha,
+    shadowRadius: 5 * alpha,
   },
-  areaText: {
+  totalAmountView: {
+    backgroundColor: 'transparent',
+    height: 70 * alpha,
+    width: 280 * alpha,
+  },
+  totalpriceText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
-    fontSize: fontAlpha * 14,
-    margin: alpha * 5,
+    fontSize: 18 * fontAlpha,
+    fontStyle: 'normal',
+    marginTop: 24 * alpha,
+    textAlign: 'center',
+    // fontWeight:'bold'
   },
-  pinImage: {
-    width: 20 * alpha,
-    height: 20 * alpha,
-    tintColor: '#00B2E3',
+  unavailableButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(238, 238, 238, 0.62)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    height: 28 * alpha,
+    justifyContent: 'center',
+    marginLeft: 12 * alpha,
+    padding: 0,
+    width: 67 * alpha,
+  },
+  unavailableButtonImage: {
+    marginRight: 10 * alpha,
+    resizeMode: 'contain',
+  },
+  unavailableButtonText: {
+    color: 'rgb(201, 201, 201)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 9 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
+  unselectedButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(238, 238, 238)',
+    borderRadius: 2 * alpha,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 4 * alpha,
+    marginRight: 4 * alpha,
+    overflow: 'hidden',
+    padding: 0,
+  },
+  unselectedButtonText: {
+    color: 'rgb(82, 80, 80)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginBottom: 4 * alpha,
+    marginLeft: 4 * alpha,
+    marginRight: 4 * alpha,
+    marginTop: 4 * alpha,
+    textAlign: 'center',
   },
 });
+
+export default Home;
