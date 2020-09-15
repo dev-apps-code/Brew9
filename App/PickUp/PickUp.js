@@ -272,6 +272,13 @@ export default class PickUp extends React.Component {
         remarks = item.paid ? paid_order_message : unpaid_order_message;
       }
 
+      const pendingPayment = getResponseMsg({
+        props: this.props,
+        shopId: selectedShop.id,
+        key: 'Pending Payment Text',
+        defaultText: 'Pending Payment',
+      });
+
       const order_items = item.order_items.map((productItem, key) => {
         var price_string =
           productItem.total_price != undefined && productItem.total_price > 0
@@ -284,7 +291,7 @@ export default class PickUp extends React.Component {
         return (
           <View style={styles.drinksView} key={key}>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
@@ -392,7 +399,7 @@ export default class PickUp extends React.Component {
         return (
           <View style={[styles.drinksView, {marginTop: 0}]} key={key}>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 justifyContent: 'center',
                 backgroundColor: 'transparent',
@@ -425,7 +432,7 @@ export default class PickUp extends React.Component {
       return (
         <View style={styles.pickUpQueueView} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               alignSelf: 'flex-start',
               flex: 1,
@@ -444,7 +451,7 @@ export default class PickUp extends React.Component {
                 },
               ]}>
               <View
-                pointerEvents='box-none'
+                pointerEvents="box-none"
                 style={{
                   flex: 1,
                   marginTop: 19 * alpha,
@@ -567,7 +574,7 @@ export default class PickUp extends React.Component {
                 onPress={() => {
                   this.onEditOrder(item.order_items, item);
                 }}>
-                <Text style={styles.updateOrderText}>Pending Payment</Text>
+                <Text style={styles.updateOrderText}>{pendingPayment}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -692,14 +699,14 @@ export default class PickUp extends React.Component {
             <View style={styles.remarkViewWrapper}>
               <View style={styles.remarkView}>
                 <View
-                  pointerEvents='box-none'
+                  pointerEvents="box-none"
                   style={{
                     marginHorizontal: 20 * alpha,
                     marginVertical: 11 * alpha,
                     alignItems: 'flex-start',
                   }}>
                   <View
-                    pointerEvents='box-none'
+                    pointerEvents="box-none"
                     style={{
                       alignSelf: 'stretch',
                       // height: 19 * alpha,
@@ -718,7 +725,7 @@ export default class PickUp extends React.Component {
                     </Text>
                   </View>
                   <View
-                    pointerEvents='box-none'
+                    pointerEvents="box-none"
                     style={{
                       alignSelf: 'stretch',
                       // height: 19 * alpha,
@@ -737,7 +744,7 @@ export default class PickUp extends React.Component {
                     </Text>
                   </View>
                   <View
-                    pointerEvents='box-none'
+                    pointerEvents="box-none"
                     style={{
                       alignSelf: 'stretch',
                       // height: 19 * alpha,
@@ -861,7 +868,7 @@ export default class PickUp extends React.Component {
         <View style={styles.noOrderView}>
           <View style={styles.viewView}>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 position: 'absolute',
                 alignSelf: 'center',
@@ -883,7 +890,7 @@ export default class PickUp extends React.Component {
               </View>
             </View>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 position: 'absolute',
                 alignSelf: 'center',
@@ -923,7 +930,7 @@ export default class PickUp extends React.Component {
       currentOrder != null ? parseFloat(currentOrder.awarded_point) : 0;
     return (
       <Modal
-        animationType='slide'
+        animationType="slide"
         transparent={true}
         visible={this.state.showPopUp}
         onRequestClose={() => this.closePopUp()}>
