@@ -112,6 +112,8 @@ export default class Profile extends React.Component {
       showRedeemVoucher: false,
       loading: false,
       appSlogan: '',
+      message: '',
+      visible: false,
     };
     this.loadProfile = this.loadProfile.bind(this);
     this.moveAnimation = new Animated.ValueXY({x: 0, y: 0});
@@ -122,9 +124,26 @@ export default class Profile extends React.Component {
     this.loadAppSlogan();
     this.loadProfile();
     this.loopShimmer();
+    this.loadMessage();
     this.timer = setInterval(() => this.loopShimmer(), 3000);
     this.props.navigation.addListener('didFocus', this.loadProfile);
     AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  closeTopUp = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  loadMessage() {
+    const {params} = this.props.navigation.state;
+    const success = params ? params.successTopUp : null;
+    if (success) {
+      this.setState({
+        visible: true,
+      });
+    }
   }
 
   loadAppSlogan() {
@@ -772,7 +791,7 @@ export default class Profile extends React.Component {
       <View style={styles.profileView}>
         <ScrollView>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               height: 530 * alpha,
             }}>
@@ -782,7 +801,7 @@ export default class Profile extends React.Component {
               </View>
               <View style={styles.memberDetailView}>
                 <View
-                  pointerEvents='box-none'
+                  pointerEvents="box-none"
                   style={{
                     position: 'absolute',
                     left: 0 * alpha,
@@ -795,7 +814,7 @@ export default class Profile extends React.Component {
                     <View style={styles.rectangleView} />
                   </View>
                   <View
-                    pointerEvents='box-none'
+                    pointerEvents="box-none"
                     style={{
                       position: 'absolute',
                       left: 15 * alpha,
@@ -804,7 +823,7 @@ export default class Profile extends React.Component {
                       height: 187 * alpha,
                     }}>
                     <View
-                      pointerEvents='box-none'
+                      pointerEvents="box-none"
                       style={{
                         height: 79 * alpha,
                         flexDirection: 'row',
@@ -812,7 +831,7 @@ export default class Profile extends React.Component {
                       }}>
                       <View style={styles.membershipinfoView}>
                         <View
-                          pointerEvents='box-none'
+                          pointerEvents="box-none"
                           style={{
                             width: 250 * alpha,
                             height: 23 * alpha,
@@ -841,7 +860,7 @@ export default class Profile extends React.Component {
                         </View>
                         <View style={[styles.expbarView]}>
                           <View
-                            pointerEvents='box-none'
+                            pointerEvents="box-none"
                             style={{
                               position: 'absolute',
                               left: 0,
@@ -850,7 +869,7 @@ export default class Profile extends React.Component {
                               height: 24 * alpha,
                             }}>
                             <View
-                              pointerEvents='box-none'
+                              pointerEvents="box-none"
                               style={{
                                 position: 'absolute',
                                 left: 0 * alpha,
@@ -897,7 +916,7 @@ export default class Profile extends React.Component {
                     </View>
                     <View style={styles.dividerView} />
                     <View
-                      pointerEvents='box-none'
+                      pointerEvents="box-none"
                       style={{
                         height: 83 * alpha,
                         marginTop: 15 * alpha,
@@ -932,7 +951,7 @@ export default class Profile extends React.Component {
               </View>
             </View>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 position: 'absolute',
                 left: 20 * alpha,
@@ -985,9 +1004,17 @@ export default class Profile extends React.Component {
           {this.renderRedeemVoucher()}
         </ScrollView>
         <Toast
-          ref='toast'
+          ref="toast"
           style={{bottom: windowHeight / 2 - 40}}
           textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
+        />
+        <Brew9PopUp
+          popUpVisible={this.state.visible}
+          title={'Brew9'}
+          description={'Brew9 Top Up Sucessfully'}
+          OkText={'Ok'}
+          onPressOk={this.closeTopUp}
+          onBackgroundPress={this.closeTopUp}
         />
       </View>
     );

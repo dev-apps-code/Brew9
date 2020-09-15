@@ -22,7 +22,6 @@ import {
   TOAST_DURATION,
 } from '../Common/common_style';
 import {alpha, fontAlpha, windowHeight} from '../Common/size';
-
 @connect(({members, shops}) => ({
   currentMember: members.profile,
   company_id: members.company_id,
@@ -73,16 +72,17 @@ export default class ScanQr extends React.Component {
     loading: false,
     hasCameraPermission: null,
     scanned: false,
+    visible: false,
   });
 
   componentDidMount() {
     this.getPermissionsAsync();
-    this.loadQrCodeScan('tup_afdab3b6-eaea-4ffa-b58f-0f789156d8b2');
+    // this.loadQrCodeScan('tup_98a17541-60c5-41fc-bcf1-9e6a65bed85d');
   }
 
   onSuccessfulScan() {
-    const message = 'Successfully topped up.';
-    this.props.navigation.navigate('Profile', {message});
+    const successTopUp = true;
+    this.props.navigation.navigate('Profile', {successTopUp});
   }
 
   loadScanStatus(qr_code) {
@@ -90,11 +90,7 @@ export default class ScanQr extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject?.message) {
-          this.refs.toast.show(eventObject.message, 1500, () => {
-            if (eventObject.result.clazz == 'member') {
-              this.onSuccessfulScan();
-            }
-          });
+          this.onSuccessfulScan();
         } else {
           if (eventObject.result.clazz == 'member') {
             this.onSuccessfulScan();
@@ -126,6 +122,7 @@ export default class ScanQr extends React.Component {
     this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
+        console.log(eventObject);
         setTimeout(
           function () {
             this.loadScanStatus(qr_code);
@@ -202,10 +199,11 @@ export default class ScanQr extends React.Component {
           />
         )}
         <Toast
-          ref='toast'
+          ref="toast"
           style={{bottom: windowHeight / 2 - 40}}
           textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
         />
+
         <HudLoading isLoading={this.state.loading} />
       </View>
     );
