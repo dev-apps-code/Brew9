@@ -11,6 +11,9 @@ class SaveShippingAddressObjectRequest extends BaseRequestObject {
     this.state = data.state;
     this.postal_code = data.postal_code;
     this.country = data.country;
+    // FIXME this should be data.tag but data.tag is used differently in the component
+    this.tag = data.tag;
+    // FIXME this should be removed if no longer used
     this.land_mark = data.land_mark;
     this.latitude = data.latitude;
     this.longitude = data.longitude;

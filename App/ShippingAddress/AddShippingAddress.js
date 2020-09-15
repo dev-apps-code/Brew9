@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -8,14 +9,12 @@ import {
   TouchableOpacity,
   Dimensions,
   Animated,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
-import React from 'react';
-import Toast from 'react-native-easy-toast';
-import { connect } from 'react-redux';
-
-import { alpha, fontAlpha, windowHeight, windowWidth } from '../Common/size';
-import { createAction } from '../Utils';
+import {connect} from 'react-redux';
+import SwitchSelector from 'react-native-switch-selector';
+import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
+import {createAction} from '../Utils';
 import SaveShippingAddressObjectRequest from '../Requests/save_shipping_address_request_object';
 import UpdateShippingAddressObjectRequest from '../Requests/update_shipping_address_request_object';
 import ShopTownRequestObject from '../Requests/shop_town_request_object';
@@ -25,30 +24,28 @@ import {
   PRIMARY_COLOR,
   LIGHT_GREY,
   BUTTONBOTTOMPADDING,
-  DEFAULT_GREY_BACKGROUND
+  DEFAULT_GREY_BACKGROUND,
 } from '../Common/common_style';
 import ShippingDetail from './ShippingDetail';
-import SwitchSelector from 'react-native-switch-selector';
 import Brew9Toast from '../Components/Brew9Toast';
 
-@connect(({ members, shops }) => ({
+@connect(({members, shops}) => ({
   currentMember: members.profile,
   selectedShop: shops.selectedShop,
   company_id: members.company_id,
-  location: members.location
+  location: members.location,
 }))
-export default class AddShippingAddress extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+class AddShippingAddress extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    const {params = {}} = navigation.state;
     return {
       headerTitle: (
         <Text
           style={{
             textAlign: 'center',
             alignSelf: 'center',
-            fontFamily: TITLE_FONT
-          }}
-        >
+            fontFamily: TITLE_FONT,
+          }}>
           Add Address
         </Text>
       ),
@@ -57,8 +54,7 @@ export default class AddShippingAddress extends React.Component {
         <View style={styles.headerLeftContainer}>
           <TouchableOpacity
             onPress={params.onBackPressed ? params.onBackPressed : () => null}
-            style={styles.navigationBarItem}
-          >
+            style={styles.navigationBarItem}>
             <Image
               source={require('./../../assets/images/back.png')}
               style={styles.navigationBarItemIcon}
@@ -69,8 +65,8 @@ export default class AddShippingAddress extends React.Component {
       headerRight: null,
       headerStyle: {
         elevation: 0,
-        shadowOpacity: 0
-      }
+        shadowOpacity: 0,
+      },
     };
   };
 
@@ -96,8 +92,8 @@ export default class AddShippingAddress extends React.Component {
         latitude: this.address.latitude ? this.address.latitude : '',
         longitude: this.address.longitude ? this.address.longitude : '',
         gender_options: [
-          { label: 'Male', value: 0 },
-          { label: 'Female', value: 1 }
+          {label: 'Male', value: 0},
+          {label: 'Female', value: 1},
         ],
         verification_code: '',
         gender: 2,
@@ -105,7 +101,7 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: this.address.delivery_area
           ? this.address.delivery_area
           : '',
-        primary: this.address.primary == true ? 1 : 0,
+        primary: this.address.primary === true ? 1 : 0,
         tag: this.props.selectedShop.address_tags,
         showArea: false,
         tabTitles: ['District', 'Area'],
@@ -115,7 +111,7 @@ export default class AddShippingAddress extends React.Component {
         populateAreas: false,
         chosenTown: 0,
         chosenArea: 0,
-        isSaveDisabled: false
+        isSaveDisabled: false,
       };
     } else {
       this.state = {
@@ -133,8 +129,8 @@ export default class AddShippingAddress extends React.Component {
         delivery_area: '',
         primary: 1,
         gender_options: [
-          { label: 'Male', value: 0 },
-          { label: 'Female', value: 1 }
+          {label: 'Male', value: 0},
+          {label: 'Female', value: 1},
         ],
         verification_code: '',
         gender: 2,
@@ -148,7 +144,7 @@ export default class AddShippingAddress extends React.Component {
         populateAreas: false,
         chosenTown: 0,
         chosenArea: 0,
-        isSaveDisabled: false
+        isSaveDisabled: false,
       };
     }
   }
@@ -159,7 +155,7 @@ export default class AddShippingAddress extends React.Component {
     Animated.timing(this.state.animation, {
       toValue: 1,
       duration: 300,
-      useNativeDriver: true
+      useNativeDriver: true,
     }).start();
   };
 
@@ -167,14 +163,14 @@ export default class AddShippingAddress extends React.Component {
     Animated.timing(this.state.animation, {
       toValue: 0,
       duration: 200,
-      useNativeDriver: true
+      useNativeDriver: true,
     }).start();
 
     this.setState({
       showArea: false,
       populateTowns: true,
       populateAreas: false,
-      defTab: 0
+      defTab: 0,
     });
   };
 
@@ -196,33 +192,33 @@ export default class AddShippingAddress extends React.Component {
       showArea: true,
       populateTowns: false,
       populateAreas: true,
-      defTab: 1
+      defTab: 1,
     });
   }
 
   selectArea(index) {
     this.setState({
       chosenArea: index,
-      delivery_area: this.state.town[this.state.chosenTown].areas[index].area
+      delivery_area: this.state.town[this.state.chosenTown].areas[index].area,
     });
     this.handleClose();
   }
 
   //editing here
   onChangeName = (fullname) => {
-    this.setState({ fullname });
+    this.setState({fullname});
   };
 
   onChangeContactNo = (contact_number) => {
-    this.setState({ contact_number });
+    this.setState({contact_number});
   };
 
   onSavePressed = () => {
     this.setState({
-      isSaveDisabled: true
+      isSaveDisabled: true,
     });
-    let formcheck = this.checkForm();
-    let primary = this.state.primary == 1 ? true : false;
+    const formcheck = this.checkForm();
+    const primary = this.state.primary === 1 ? true : false;
     if (formcheck) {
       const shippingAddress = {
         member_id: this.props.currentMember.id,
@@ -235,22 +231,23 @@ export default class AddShippingAddress extends React.Component {
         postal_code: this.state.postal_code,
         country: this.state.country,
         land_mark: this.state.land_mark,
+        tag: this.state.land_mark,
         latitude: this.state.latitude,
         longitude: this.state.longitude,
         delivery_area: this.state.delivery_area,
-        primary: primary
+        primary: primary,
       };
-      console.log(shippingAddress);
+      console.log('onSavePressed ', shippingAddress);
       this.loadUpdateProfile(shippingAddress);
     }
   };
 
   loadUpdateProfile(formData) {
-    const { dispatch, currentMember, navigation } = this.props;
-    isInitialAddress = this.props.navigation.state.params.initialAddress;
+    const {dispatch, currentMember, navigation} = this.props;
+    const isInitialAddress = this.props.navigation.state.params.initialAddress;
     const callback = (eventObject) => {
       this.setState({
-        isSaveDisabled: false
+        isSaveDisabled: false,
       });
       if (eventObject.success) {
         isInitialAddress
@@ -263,44 +260,32 @@ export default class AddShippingAddress extends React.Component {
     if (this.address == null) {
       const obj = new SaveShippingAddressObjectRequest(
         formData,
-        currentMember.id
+        currentMember.id,
       );
       obj.setUrlId(currentMember.id);
       dispatch(
         createAction('members/saveShippingAddress')({
           object: obj,
-          callback
-        })
+          callback,
+        }),
       );
     } else {
       const obj = new UpdateShippingAddressObjectRequest(
         formData,
-        currentMember.id
+        currentMember.id,
       );
       obj.setUrlId(this.address.id);
       dispatch(
         createAction('members/updateShippingAddress')({
           object: obj,
-          callback
-        })
+          callback,
+        }),
       );
     }
   }
 
   checkForm = () => {
-    let {
-      fullname,
-      address,
-      contact_number,
-      city,
-      state,
-      postal_code,
-      country,
-      land_mark,
-      latitude,
-      longitude,
-      delivery_area
-    } = this.state;
+    let {fullname, address, contact_number} = this.state;
     if (!fullname) {
       this.refs.toast.show('Please enter receiver name', 500);
       return false;
@@ -322,20 +307,20 @@ export default class AddShippingAddress extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({
-      onBackPressed: this.onBackPressed
+      onBackPressed: this.onBackPressed,
     });
     this.loadTag();
     this.loadShopTown();
   }
 
   loadShopTown = () => {
-    let { dispatch, selectedShop } = this.props;
-    this.setState({ loading: true });
+    let {dispatch, selectedShop} = this.props;
+    this.setState({loading: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
         this.setState({
           town: eventObject.result,
-          populateTowns: true
+          populateTowns: true,
         });
       }
     };
@@ -344,8 +329,8 @@ export default class AddShippingAddress extends React.Component {
     dispatch(
       createAction('shops/loadShopTown')({
         object: obj,
-        callback
-      })
+        callback,
+      }),
     );
   };
 
@@ -355,7 +340,7 @@ export default class AddShippingAddress extends React.Component {
       showArea: false,
       chosenTown: 0,
       populateAreas: false,
-      defTab: 0
+      defTab: 0,
     });
   };
 
@@ -369,13 +354,13 @@ export default class AddShippingAddress extends React.Component {
         }
         return item;
       });
-      this.setState({ tag: current_tag });
+      this.setState({tag: current_tag});
     }
   };
 
   returnData(info) {
     this.setState({
-      delivery_area: info.area
+      delivery_area: info.area,
     });
   }
 
@@ -394,7 +379,7 @@ export default class AddShippingAddress extends React.Component {
       postal_code: info.postal_code,
       country: info.country,
       latitude,
-      longitude
+      longitude,
     });
   }
 
@@ -403,26 +388,26 @@ export default class AddShippingAddress extends React.Component {
   };
 
   onChangeDefaultAddress = (value) => {
-    this.setState({ primary: value });
+    this.setState({primary: value});
   };
 
   onSelectShippingArea = () => {
-    const { navigate } = this.props.navigation;
+    const {navigate} = this.props.navigation;
     navigate('ShippingArea', {
       returnToRoute: this.props.navigation.state,
-      returnData: this.returnData.bind(this)
+      returnData: this.returnData.bind(this),
     });
   };
 
   onSelectAddress = () => {
-    const { navigate } = this.props.navigation;
-    let { address, address_details, delivery_area } = this.state;
+    const {navigate} = this.props.navigation;
+    let {address, address_details, delivery_area} = this.state;
 
     if (delivery_area) {
       navigate('MapShippingAddress', {
         returnToRoute: this.props.navigation.state,
         returnAddress: this.returnAddress.bind(this),
-        addressInfo: { address, address_details }
+        addressInfo: {address, address_details},
       });
     } else {
       this.refs.toast.show('Please select your area first', 500);
@@ -439,7 +424,7 @@ export default class AddShippingAddress extends React.Component {
       }
       return tag;
     });
-    this.setState({ tag: selectedTag, land_mark: item.name });
+    this.setState({tag: selectedTag, land_mark: item.name});
   };
 
   renderFormDetail = (
@@ -450,7 +435,7 @@ export default class AddShippingAddress extends React.Component {
     edit,
     selected,
     onPress,
-    keyboardType
+    keyboardType,
   ) => (
     <ShippingDetail
       {...{
@@ -461,13 +446,13 @@ export default class AddShippingAddress extends React.Component {
         edit,
         selected,
         onPress,
-        keyboardType
+        keyboardType,
       }}
     />
   );
 
   renderAddressForm = () => {
-    let { address, address_details } = this.state;
+    let {address, address_details} = this.state;
     return (
       <View>
         <View>
@@ -480,14 +465,13 @@ export default class AddShippingAddress extends React.Component {
                 flex: 1,
                 marginRight: 10 * alpha,
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}
-              onPress={this.onSelectAddress}
-            >
+              onPress={this.onSelectAddress}>
               {address ? (
                 <Text style={[styles.textInput]}>{address}</Text>
               ) : (
-                <Text style={[styles.textInput, { color: LIGHT_GREY }]}>
+                <Text style={[styles.textInput, {color: LIGHT_GREY}]}>
                   {'Select address'}
                 </Text>
               )}
@@ -511,9 +495,8 @@ export default class AddShippingAddress extends React.Component {
                   flex: 1,
                   marginRight: 10 * alpha,
                   alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
+                  justifyContent: 'center',
+                }}>
                 {/* {address_details ? ( */}
                 <Text style={[styles.textInput]}>{address_details}</Text>
                 {/* ) : null} */}
@@ -526,15 +509,14 @@ export default class AddShippingAddress extends React.Component {
       </View>
     );
   };
-  renderPlaces = ({ item, index }) => {
+  renderPlaces = ({item, index}) => {
     const button_selected = item.selected ? PRIMARY_COLOR : 'lightgray';
     const text_selected = item.selected ? 'white' : 'black';
     return (
       <TouchableOpacity
-        style={[styles.tagButton, { backgroundColor: button_selected }]}
-        onPress={() => this.onSelectTag(item)}
-      >
-        <Text style={[styles.tagText, { color: text_selected }]}>
+        style={[styles.tagButton, {backgroundColor: button_selected}]}
+        onPress={() => this.onSelectTag(item)}>
+        <Text style={[styles.tagText, {color: text_selected}]}>
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -569,15 +551,15 @@ export default class AddShippingAddress extends React.Component {
           translateY: this.state.animation.interpolate({
             inputRange: [0, 0.01],
             outputRange: [screenHeight, 0],
-            extrapolate: 'clamp'
-          })
-        }
+            extrapolate: 'clamp',
+          }),
+        },
       ],
       opacity: this.state.animation.interpolate({
         inputRange: [0.01, 0.5],
         outputRange: [0, 1],
-        extrapolate: 'clamp'
-      })
+        extrapolate: 'clamp',
+      }),
     };
 
     const slideUp = {
@@ -586,10 +568,10 @@ export default class AddShippingAddress extends React.Component {
           translateY: this.state.animation.interpolate({
             inputRange: [0.01, 1],
             outputRange: [0, -1 * screenHeight],
-            extrapolate: 'clamp'
-          })
-        }
-      ]
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
     };
     return (
       <Animated.View style={[StyleSheet.absoluteFill, styles.cover, backdrop]}>
@@ -599,14 +581,12 @@ export default class AddShippingAddress extends React.Component {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginBottom: 10 * alpha
-              }}
-            >
+                marginBottom: 10 * alpha,
+              }}>
               <Text style={styles.PleaseSelectText}>Please select</Text>
               <TouchableOpacity
                 onPress={this.handleClose}
-                style={styles.cancelVoucherButton}
-              >
+                style={styles.cancelVoucherButton}>
                 <Image
                   source={require('./../../assets/images/cancel.png')}
                   style={styles.cancelImage}
@@ -616,15 +596,13 @@ export default class AddShippingAddress extends React.Component {
             <View
               style={{
                 flexDirection: 'row',
-                paddingHorizontal: 10 * alpha
-              }}
-            >
+                paddingHorizontal: 10 * alpha,
+              }}>
               <View style={styles.sectionSeperatorView2} />
               {this.state.showArea == true ? (
                 <TouchableOpacity
                   onPress={this.defaultTown}
-                  style={styles.areaView}
-                >
+                  style={styles.areaView}>
                   <Text style={[styles.townText]}>
                     {this.state.town[this.state.chosenTown].name}
                   </Text>
@@ -632,23 +610,21 @@ export default class AddShippingAddress extends React.Component {
               ) : null}
               <TouchableOpacity
                 style={styles.townView}
-                onPress={this.defaultTown}
-              >
-                <Text style={[styles.townText, { color: PRIMARY_COLOR }]}>
+                onPress={this.defaultTown}>
+                <Text style={[styles.townText, {color: PRIMARY_COLOR}]}>
                   {this.state.tabTitles[this.state.defTab]}
                 </Text>
               </TouchableOpacity>
             </View>
             {/* <ScrollView scrollsToTop={false}> */}
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{flex: 1}}>
               <ScrollView>
                 {this.state.populateTowns
                   ? this.state.town.map((item, key) => {
                       return (
-                        <View {...{ key }} style={styles.itemView} key={key}>
+                        <View {...{key}} style={styles.itemView} key={key}>
                           <TouchableOpacity
-                            onPress={() => this.selectTown(key)}
-                          >
+                            onPress={() => this.selectTown(key)}>
                             <Text style={styles.itemText}>{item.name}</Text>
                           </TouchableOpacity>
                         </View>
@@ -662,13 +638,12 @@ export default class AddShippingAddress extends React.Component {
                         return (
                           <View style={styles.itemView} key={key}>
                             <TouchableOpacity
-                              onPress={() => this.selectArea(key)}
-                            >
+                              onPress={() => this.selectArea(key)}>
                               <Text style={styles.itemText}>{item.area}</Text>
                             </TouchableOpacity>
                           </View>
                         );
-                      }
+                      },
                     )
                   : null}
               </ScrollView>
@@ -682,7 +657,7 @@ export default class AddShippingAddress extends React.Component {
 
   render() {
     let current_area = this.state.delivery_area;
-    let { fullname, contact_number } = this.state;
+    let {fullname, contact_number} = this.state;
     let primary =
       this.state.primary == 0 ? DEFAULT_GREY_BACKGROUND : PRIMARY_COLOR;
     return (
@@ -694,7 +669,7 @@ export default class AddShippingAddress extends React.Component {
               fullname,
               'Name',
               (text) => this.onChangeName(text),
-              true
+              true,
             )}
 
             {this.renderFormDetail(
@@ -705,7 +680,7 @@ export default class AddShippingAddress extends React.Component {
               true,
               false,
               () => {},
-              'number-pad'
+              'number-pad',
             )}
 
             {this.renderFormDetail(
@@ -715,7 +690,7 @@ export default class AddShippingAddress extends React.Component {
               (text) => console.log(text),
               true,
               true,
-              () => this.handleOpen()
+              () => this.handleOpen(),
             )}
 
             {this.renderAddressForm()}
@@ -723,13 +698,13 @@ export default class AddShippingAddress extends React.Component {
             {this.renderTags()}
 
             <View style={[styles.defaultAddressView]}>
-              <Text style={[styles.title, { width: 100 * alpha }]}>
+              <Text style={[styles.title, {width: 100 * alpha}]}>
                 Primary address
               </Text>
               <SwitchSelector
                 options={[
-                  { label: '', value: 0 },
-                  { label: '', value: 1 }
+                  {label: '', value: 0},
+                  {label: '', value: 1},
                 ]}
                 initial={this.state.primary}
                 value={0}
@@ -751,8 +726,7 @@ export default class AddShippingAddress extends React.Component {
         <TouchableOpacity
           disabled={this.state.isSaveDisabled}
           onPress={() => this.onSavePressed()}
-          style={styles.saveButton}
-        >
+          style={styles.saveButton}>
           <Text style={styles.saveButtonText}>SAVE</Text>
         </TouchableOpacity>
         {this.toogleDeliveryArea()}
@@ -767,10 +741,10 @@ const styles = StyleSheet.create({
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
-    width: 70 * alpha
+    width: 70 * alpha,
   },
   cover: {
-    backgroundColor: 'rgba(0,0,0,.5)'
+    backgroundColor: 'rgba(0,0,0,.5)',
   },
   sheet: {
     position: 'absolute',
@@ -778,37 +752,37 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '100%',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   popup: {
     backgroundColor: '#FFF',
 
     minHeight: windowHeight / 3,
     maxHeight: windowHeight / 2,
-    padding: '3%'
+    padding: '3%',
   },
   cancelImage: {
     width: 18 * alpha,
     height: 18 * alpha,
     resizeMode: 'contain',
-    tintColor: DEFAULT_GREY_BACKGROUND
+    tintColor: DEFAULT_GREY_BACKGROUND,
   },
   navigationBarItem: {
-    width: '100%'
+    width: '100%',
   },
   navigationBarItemTitle: {
     color: 'black',
     fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha
+    fontSize: 16 * fontAlpha,
   },
   navigationBarItemIcon: {
     width: 18 * alpha,
     height: 18 * alpha,
-    tintColor: 'black'
+    tintColor: 'black',
   },
   container: {
     flex: 1,
-    backgroundColor: 'rgb(243, 243, 243)'
+    backgroundColor: 'rgb(243, 243, 243)',
   },
   addAddressForm: {
     backgroundColor: 'white',
@@ -817,7 +791,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10 * alpha,
     marginTop: 20 * alpha,
     borderRadius: 10 * alpha,
-    paddingBottom: 10 * alpha
+    paddingBottom: 10 * alpha,
   },
   textInput: {
     backgroundColor: 'transparent',
@@ -830,7 +804,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: 193 * alpha,
     // height: 30 * alpha,
-    flex: 1
+    flex: 1,
   },
   formDetail: {
     flexDirection: 'row',
@@ -838,10 +812,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
     paddingVertical: 10 * alpha,
-    flex: 1
+    flex: 1,
   },
   areasDistrictsText: {
-    fontSize: 14 * fontAlpha
+    fontSize: 14 * fontAlpha,
   },
   title: {
     backgroundColor: 'transparent',
@@ -850,7 +824,7 @@ const styles = StyleSheet.create({
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
     width: 75 * alpha,
-    textAlign: 'left'
+    textAlign: 'left',
   },
   tagText: {
     backgroundColor: 'transparent',
@@ -858,34 +832,34 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 13 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   seperatorImage: {
     backgroundColor: 'transparent',
     resizeMode: 'cover',
-    height: 3 * alpha
+    height: 3 * alpha,
   },
   selectedradioView: {
     flex: 1,
     backgroundColor: 'transparent',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   defaultAddressOption: {
     borderRadius: 10 * alpha,
     width: 50 * alpha,
     // height: 10 * alpha,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   optionText: {
     fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha
+    fontSize: 10 * fontAlpha,
   },
   defaultAddressView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10 * alpha
+    paddingVertical: 10 * alpha,
   },
   saveButton: {
     borderRadius: 4 * alpha,
@@ -899,21 +873,21 @@ const styles = StyleSheet.create({
     bottom: BUTTONBOTTOMPADDING + 20 * alpha,
     height: 47 * alpha,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   saveButtonText: {
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   placesWrapperView: {
     backgroundColor: 'transparent',
     // marginVertical: 10 * alpha,
     // width: windowWidth / 2,
     justifyContent: 'space-evenly',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   tagButton: {
     // width: 75 * alpha,
@@ -925,12 +899,12 @@ const styles = StyleSheet.create({
     // borderColor: PRIMARY_COLOR,
     marginRight: 5 * alpha,
     marginTop: 5 * alpha,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   menuRowArrowImage: {
     width: 10 * alpha,
     tintColor: 'rgb(195, 195, 195)',
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   PleaseSelectText: {
     backgroundColor: 'transparent',
@@ -939,7 +913,7 @@ const styles = StyleSheet.create({
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   townText: {
     backgroundColor: 'transparent',
@@ -949,15 +923,15 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    paddingBottom: 10 * alpha
+    paddingBottom: 10 * alpha,
   },
   townView: {
     borderBottomWidth: 1,
     marginRight: 10 * alpha,
-    borderBottomColor: PRIMARY_COLOR
+    borderBottomColor: PRIMARY_COLOR,
   },
   areaView: {
-    marginRight: 10 * alpha
+    marginRight: 10 * alpha,
   },
   sectionSeperatorView: {
     backgroundColor: 'rgb(244, 244, 244)',
@@ -965,18 +939,18 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     width: windowWidth - 40 * alpha,
     height: 1 * alpha,
-    marginLeft: 10 * alpha
+    marginLeft: 10 * alpha,
   },
   sectionSeperatorView2: {
     backgroundColor: 'rgb(244, 244, 244)',
     // position: 'absolute',
     // alignSelf: 'flex-end',
     // width: windowWidth - 40 * alpha,
-    height: 1 * alpha
+    height: 1 * alpha,
     // marginLeft: 10 * alpha
   },
   itemView: {
-    paddingHorizontal: 10 * alpha
+    paddingHorizontal: 10 * alpha,
   },
   itemText: {
     color: 'black',
@@ -985,6 +959,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    paddingVertical: 5 * alpha
-  }
+    paddingVertical: 5 * alpha,
+  },
 });
+
+export default AddShippingAddress;
