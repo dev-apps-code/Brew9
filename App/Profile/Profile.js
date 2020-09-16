@@ -114,6 +114,7 @@ export default class Profile extends React.Component {
       appSlogan: '',
       message: '',
       visible: false,
+      message: '',
     };
     this.loadProfile = this.loadProfile.bind(this);
     this.moveAnimation = new Animated.ValueXY({x: 0, y: 0});
@@ -138,9 +139,10 @@ export default class Profile extends React.Component {
 
   loadMessage() {
     const {params} = this.props.navigation.state;
-    const success = params ? params.successTopUp : null;
-    if (success) {
+    const message = params ? params.message : null;
+    if (message) {
       this.setState({
+        message: message,
         visible: true,
       });
     }
@@ -1011,7 +1013,7 @@ export default class Profile extends React.Component {
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={'Brew9'}
-          description={'Brew9 Top Up Sucessfully'}
+          description={this.state.message}
           OkText={'Ok'}
           onPressOk={this.closeTopUp}
           onBackgroundPress={this.closeTopUp}

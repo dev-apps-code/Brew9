@@ -77,12 +77,11 @@ export default class ScanQr extends React.Component {
 
   componentDidMount() {
     this.getPermissionsAsync();
-    // this.loadQrCodeScan('tup_98a17541-60c5-41fc-bcf1-9e6a65bed85d');
+    // this.loadQrCodeScan('tup_0c961f1d-6f0e-4d04-bd4b-f0056a623cfc');
   }
 
-  onSuccessfulScan() {
-    const successTopUp = true;
-    this.props.navigation.navigate('Profile', {successTopUp});
+  onSuccessfulScan(message) {
+    this.props.navigation.navigate('Profile', {message});
   }
 
   loadScanStatus(qr_code) {
@@ -90,7 +89,8 @@ export default class ScanQr extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject?.message) {
-          this.onSuccessfulScan();
+          console.log(eventObject);
+          this.onSuccessfulScan(eventObject.message);
         } else {
           if (eventObject.result.clazz == 'member') {
             this.onSuccessfulScan();
