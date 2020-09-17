@@ -109,7 +109,7 @@ export default class PointProductCell extends React.Component {
 const styles = StyleSheet.create({
   itemContainer: {
     width: windowWidth * 0.5,
-    height: windowHeight * 0.23,
+    height: windowHeight * 0.25,
     backgroundColor: '#FFFFFF',
   },
   name: {

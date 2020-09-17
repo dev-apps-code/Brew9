@@ -251,6 +251,7 @@ export default class PointShop extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.spacer} />
           {this.state.loading ? (
             <View style={[styles.container, styles.horizontal]}>
               <ActivityIndicator size="large" />
@@ -434,11 +435,14 @@ const styles = StyleSheet.create({
     height: 20 * alpha,
   },
   pointproductlistFlatList: {
-    backgroundColor: DEFAULT_GREY_BACKGROUND,
     width: '100%',
-    height: '100%',
   },
   pointproductlistFlatListViewWrapper: {
     flex: 1,
+  },
+  spacer: {
+    width: '100%',
+    height: alpha * 20,
+    backgroundColor: '#FFFFFF',
   },
 });
