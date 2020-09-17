@@ -193,7 +193,7 @@ export default class PointShop extends React.Component {
         navigation={this.props.navigation}
         sectionId={item.id}
         sectionHeader={'Redemption Zone'}
-        products={item.points_products}
+        item={item}
         onPressItem={this.onItemPressed}
         index={index}
       />
@@ -202,6 +202,7 @@ export default class PointShop extends React.Component {
 
   render() {
     const {members} = this.props;
+    const {data} = this.state;
 
     var expiry_date = '';
 
@@ -252,18 +253,19 @@ export default class PointShop extends React.Component {
           </View>
           {this.state.loading ? (
             <View style={[styles.container, styles.horizontal]}>
-              <ActivityIndicator size='large' />
+              <ActivityIndicator size="large" />
             </View>
           ) : (
             <FlatList
               renderItem={this.renderPointproductlistFlatListCell}
-              data={this.state.data}
+              data={data['0'].points_products}
               style={styles.pointproductlistFlatList}
               keyExtractor={(item, index) => index.toString()}
+              numColumns={2}
             />
           )}
         </View>
-        <Brew9Toast ref='toast' />
+        <Brew9Toast ref="toast" />
       </View>
     );
   }
