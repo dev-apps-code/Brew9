@@ -37,7 +37,6 @@ export default class PointProductCell extends React.Component {
 
   onPointProductCellPress = (item, item_name) => {
     const {navigate} = this.props.navigation;
-
     const analytics = new Analytics(ANALYTICS_ID);
     analytics.event(
       new Event(
@@ -59,33 +58,6 @@ export default class PointProductCell extends React.Component {
 
   render() {
     const {sectionId, sectionHeader, item} = this.props;
-
-    // return (
-    //   <TouchableWithoutFeedback
-    //     navigation={this.props.navigation}
-    //     style={styles.pointproductcell}
-    //     onPress={() => this.onPointProductCellPress(item, item.name)}>
-    //     {/* <View style={styles.itemView}> */}
-    //       <Image source={{uri: item.image}} style={styles.imageImage} />
-    //       <View style={styles.viewView}>
-    //         <Text style={styles.titleText}>{item.name}</Text>
-    //         <View
-    //           pointerEvents="box-none"
-    //           style={{
-    //             width: 78 * alpha,
-    //             height: 22 * alpha,
-    //             marginLeft: 13 * alpha,
-    //             flexDirection: 'row',
-    //             alignItems: 'flex-start',
-    //           }}>
-    //           <Text style={styles.valueText}>
-    //             {item.points} <Text style={styles.pointsText}>Points</Text>
-    //           </Text>
-    //         </View>
-    //       </View>
-    //     {/* </View> */}
-    //   </TouchableWithoutFeedback>
-    // );
 
     return (
       <TouchableOpacity
