@@ -848,7 +848,11 @@ export default class Checkout extends React.Component {
   };
 
   checkout = () => {
-    const {selected_payment, pick_up_status} = this.state;
+    const {selected_payment, pick_up_status, pick_up_time} = this.state;
+
+    // var test = Moment().diff(pick_up_time, 'minutes');
+    // console.log(test);
+
     if (selected_payment === 'credit_card') {
       this.setState({isConfirmCheckout: true});
     } else {
@@ -957,6 +961,11 @@ export default class Checkout extends React.Component {
             var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm');
             var pickup = Moment(pick_up_time, 'h:mm');
             var now = Moment(new Date(), 'HH:mm');
+            const timeDiff = Moment().diff(pick_up_time, 'minutes');
+            if (timeDiff > 10) {
+              this._toggleTimeSelector();
+              return;
+            }
             if (pickup < now && pick_up_status == 'Pick Later') {
               const message = 'Pick up time is not available';
               this.refs.toast.show(message, TOAST_DURATION);
@@ -1111,7 +1120,7 @@ export default class Checkout extends React.Component {
       return (
         <View style={[styles.drinksView]} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1176,7 +1185,7 @@ export default class Checkout extends React.Component {
               : () => null
           }
           style={styles.voucherButton}>
-          <View pointerEvents='box-none' style={styles.sectionRowView}>
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
             <View
@@ -1257,7 +1266,7 @@ export default class Checkout extends React.Component {
         <TouchableOpacity
           onPress={() => this.changeTimeSchedule()}
           style={styles.voucherButton}>
-          <View pointerEvents='box-none' style={styles.sectionRowView}>
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={
@@ -1312,7 +1321,7 @@ export default class Checkout extends React.Component {
       return (
         <View style={styles.drinksView} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1400,7 +1409,7 @@ export default class Checkout extends React.Component {
           style={[styles.drinksView, {marginVertical: 0 * alpha}]}
           key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1546,7 +1555,7 @@ export default class Checkout extends React.Component {
     }
     return (
       <TimeSelector
-        ref='timepicker'
+        ref="timepicker"
         delivery={this.props.isDelivery}
         today={today || []}
         tomorrow={tomorrow || []}
@@ -1709,11 +1718,11 @@ export default class Checkout extends React.Component {
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
-            <View pointerEvents='box-none' style={styles.whiteboxView}>
+            <View pointerEvents="box-none" style={styles.whiteboxView}>
               {this.renderShopImage()}
             </View>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 flex: 1,
               }}>
@@ -1866,7 +1875,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
-        <Brew9Toast ref='toast' />
+        <Brew9Toast ref="toast" />
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}
