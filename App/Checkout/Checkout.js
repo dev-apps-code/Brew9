@@ -57,7 +57,7 @@ const {
   responses: config.responses,
   shopResponses: config.shopResponses,
 }))
-export default class Checkout extends React.Component {
+class Checkout extends React.Component {
   static navigationOptions = ({navigation}) => {
     const {params = {}} = navigation.state;
     return {
@@ -2808,3 +2808,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default Checkout;
