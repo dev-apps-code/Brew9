@@ -1,12 +1,12 @@
 import React from 'react';
-import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
+import {Animated, Image, Text, TouchableOpacity, View} from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
-import { alpha, fontAlpha, windowWidth } from '../Common/size';
+import {alpha, fontAlpha, windowWidth} from '../Common/size';
 
 import {
   PRIMARY_COLOR,
   TITLE_FONT,
-  NON_TITLE_FONT
+  NON_TITLE_FONT,
 } from '../Common/common_style';
 import Moment from 'moment';
 import _ from 'lodash';
@@ -30,7 +30,7 @@ export default class OrderForSelector extends React.Component {
     current_time_options: [],
     time_options: [],
     selected_day_index: 0,
-    selected_time_index: 0
+    selected_time_index: 0,
   });
 
   componentDidMount() {
@@ -41,8 +41,8 @@ export default class OrderForSelector extends React.Component {
    * Set the proper time options using data from the API
    */
   _setTimeOptions = () => {
-    const { delivery, today, tomorrow } = this.props;
-    
+    const {delivery, today, tomorrow} = this.props;
+
     let day_options = [];
     let time_options = [];
 
@@ -61,14 +61,14 @@ export default class OrderForSelector extends React.Component {
     this.setState({
       day_options,
       current_time_options,
-      time_options
+      time_options,
     });
   };
 
   _confirm = () => {
     let selected = this.state.day_options[this.state.selected_day_index];
 
-    const { option, hour, mins, range } = this.getOptionHourMinsRange(selected);
+    const {option, hour, mins, range} = this.getOptionHourMinsRange(selected);
     // confirm
     this.props.onConfirm(option, hour, mins, range);
   };
@@ -111,7 +111,7 @@ export default class OrderForSelector extends React.Component {
       hour = _t[0];
       mins = _t[1];
     }
-    return { option, hour, mins, range };
+    return {option, hour, mins, range};
   }
 
   /**
@@ -123,31 +123,31 @@ export default class OrderForSelector extends React.Component {
 
   _changeTimeOptions = (index) => {
     const current_time_options = this.state.time_options[index];
-    this.setState({ current_time_options }, () => this.sp.scrollToIndex(0));
+    this.setState({current_time_options}, () => this.sp.scrollToIndex(0));
   };
 
   _onDayChange = (data, index) => {
     this.setState(
       {
         selected_day_index: index,
-        selected_time_index: 0
+        selected_time_index: 0,
       },
       () => {
         // this._setTimeOptions(index);
         this._changeTimeOptions(index);
-      }
+      },
     );
   };
 
   _onTimeValueChange = (index) => {
     this.setState({
-      selected_time_index: index
+      selected_time_index: index,
     });
     this.sp.scrollToIndex(index);
   };
 
   render() {
-    const { animation, delivery } = this.props;
+    const {animation, delivery} = this.props;
     const TITLE = delivery ? 'Delivery Time' : 'Pick Up Time';
 
     return (
@@ -158,17 +158,15 @@ export default class OrderForSelector extends React.Component {
               {
                 justifyContent: 'space-evenly',
                 height: BAR_HEIGHT,
-                paddingHorizontal: 10
-              }
-            ]}
-          >
+                paddingHorizontal: 10,
+              },
+            ]}>
             <TouchableOpacity
               onPress={() => this.props.toggleDelivery()}
-              style={defaultStyles.closeButton}
-            >
+              style={defaultStyles.closeButton}>
               <Image
                 source={closeButtonImage}
-                style={{ resizeMode: 'contain' }}
+                style={{resizeMode: 'contain'}}
               />
             </TouchableOpacity>
             <Text style={defaultStyles.title}>{TITLE}</Text>
@@ -176,8 +174,7 @@ export default class OrderForSelector extends React.Component {
               onPress={() => {
                 this._confirm();
               }}
-              style={defaultStyles.pickupConfirmButton}
-            >
+              style={defaultStyles.pickupConfirmButton}>
               <Text style={[defaultStyles.confirmText]}>Confirm</Text>
             </TouchableOpacity>
           </View>
@@ -188,82 +185,77 @@ export default class OrderForSelector extends React.Component {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                alignSelf: 'center'
-              }
-            ]}
-          >
+                alignSelf: 'center',
+              },
+            ]}>
             <ScrollPicker
-              rotationEnabled={false}
               dataSource={this.state.day_options}
-              selectedIndex={0}
-              itemHeight={ITEM_HEIGHT}
               fixedHeight={true}
-              wrapperHeight={WRAPPER_HEIGHT}
-              wrapperStyle={{ flex: 1 }}
+              itemHeight={ITEM_HEIGHT}
+              onValueChange={(data, selectedIndex) => {
+                this._onDayChange(data, selectedIndex);
+              }}
               renderItem={(data, index, isSelected) => {
                 return (
                   <View
                     style={{
                       width: '100%',
                       alignItems: 'flex-end',
-                      paddingEnd: 20
-                    }}
-                  >
+                      paddingEnd: 20,
+                    }}>
                     <Text
                       style={
                         isSelected
                           ? defaultStyles.selected
                           : defaultStyles.notSelected
-                      }
-                    >
+                      }>
                       {data}
                     </Text>
                   </View>
                 );
               }}
-              onValueChange={(data, selectedIndex) => {
-                this._onDayChange(data, selectedIndex);
-              }}
+              rotationEnabled={false}
+              selectedIndex={0}
+              wrapperHeight={WRAPPER_HEIGHT}
+              wrapperStyle={{flex: 1}}
             />
 
             {/* Time picker */}
             <ScrollPicker
-              ref={(sp) => (this.sp = sp)}
               dataSource={this.state.current_time_options}
-              rotationEnabled={false}
-              selectedIndex={0}
-              itemHeight={ITEM_HEIGHT}
               fixedHeight={true}
-              wrapperHeight={WRAPPER_HEIGHT}
-              wrapperStyle={{ flex: 1 }}
+              itemHeight={ITEM_HEIGHT}
+              onValueChange={(data, selectedIndex) => {
+                this._onTimeValueChange(selectedIndex);
+              }}
+              ref={(sp) => (this.sp = sp)}
               renderItem={(data, index, isSelected) => {
                 return (
                   <View
                     style={{
                       width: '100%',
                       alignItems: 'flex-start',
-                      paddingStart: 20
-                    }}
-                  >
+                      paddingStart: 20,
+                    }}>
                     <Text
                       style={
                         isSelected
                           ? defaultStyles.selected
                           : defaultStyles.notSelected
-                      }
-                    >
+                      }>
                       {data}
                     </Text>
                   </View>
                 );
               }}
-              onValueChange={(data, selectedIndex) => {
-                this._onTimeValueChange(selectedIndex);
-              }}
+              rotationEnabled={false}
+              selectedIndex={0}
+              wrapperHeight={WRAPPER_HEIGHT}
+              wrapperStyle={{flex: 1}}
             />
 
-            <Line style={{ top: ITEM_HEIGHT }} />
-            <Line style={{ top: WRAPPER_HEIGHT - ITEM_HEIGHT }} />
+            <Line style={{top: ITEM_HEIGHT}} />
+            <Line style={{top: WRAPPER_HEIGHT - ITEM_HEIGHT}} />
           </View>
         </View>
       </Animated.View>
@@ -280,8 +272,8 @@ const Line = (props) => (
         backgroundColor: 'rgb(245, 245, 245)',
         alignSelf: 'center',
         width: windowWidth,
-        height: 1 * alpha
-      }
+        height: 1 * alpha,
+      },
     ]}
   />
 );
@@ -293,7 +285,7 @@ const defaultStyles = {
     backgroundColor: '#fff',
     bottom: 0 * alpha,
     width: windowWidth,
-    height: TOTAL_HEIGHT
+    height: TOTAL_HEIGHT,
   },
   closeButton: {
     backgroundColor: 'white',
@@ -306,7 +298,7 @@ const defaultStyles = {
     left: 12 * alpha,
     width: 21 * alpha,
     top: 19 * alpha,
-    height: 21 * alpha
+    height: 21 * alpha,
   },
   title: {
     backgroundColor: 'transparent',
@@ -318,7 +310,7 @@ const defaultStyles = {
     textAlign: 'left',
     position: 'absolute',
     alignSelf: 'center',
-    top: 19 * alpha
+    top: 19 * alpha,
   },
   pickupConfirmButton: {
     backgroundColor: 'white',
@@ -331,23 +323,23 @@ const defaultStyles = {
     right: 12 * alpha,
     top: 19 * alpha,
     // paddingVertical: 10 * alpha,
-    height: 21 * alpha
+    height: 21 * alpha,
   },
   confirmText: {
     color: PRIMARY_COLOR,
     fontFamily: TITLE_FONT,
     fontSize: 15 * fontAlpha,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   selected: {
     color: 'rgb(54, 54, 54)',
     fontSize: 20 * fontAlpha,
     fontFamily: TITLE_FONT,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   notSelected: {
     color: 'rgb(82, 82, 82)',
     fontSize: 19 * fontAlpha,
-    fontFamily: NON_TITLE_FONT
-  }
+    fontFamily: NON_TITLE_FONT,
+  },
 };
