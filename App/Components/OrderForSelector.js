@@ -1,24 +1,31 @@
 import React from 'react';
-import {Animated, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Animated,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ScrollPicker from 'rn-scrollable-picker';
 import {alpha, fontAlpha, windowWidth} from '../Common/size';
-
 import {
   PRIMARY_COLOR,
   TITLE_FONT,
   NON_TITLE_FONT,
 } from '../Common/common_style';
 import Moment from 'moment';
-import _ from 'lodash';
 
-const closeButtonImage = require('./../../assets/images/x-3.png');
+const closeButtonImage = Image.resolveAssetSource(
+  require('./../../assets/images/x-3.png'),
+);
 
 const TOTAL_HEIGHT = 220 * alpha;
 const BAR_HEIGHT = 50 * alpha;
 const ITEM_HEIGHT = 35 * alpha;
 const WRAPPER_HEIGHT = ITEM_HEIGHT * 3;
 
-export default class OrderForSelector extends React.Component {
+class OrderForSelector extends React.Component {
   constructor(props) {
     super(props);
 
@@ -79,15 +86,10 @@ export default class OrderForSelector extends React.Component {
     let option = null;
     let range = '';
     let _t = this.state.current_time_options[this.state.selected_time_index];
-    if (selected == 'Today') {
+    if (selected.toLowerCase() === 'today') {
       range = _t;
       if (_t.toLowerCase() !== 'now') {
         option = 'Later';
-        _t = _t.split(' - ');
-
-        if (_.length > 0) {
-          _t = _t[0];
-        }
 
         _t = _t.split(':');
         hour = _t[0];
@@ -101,11 +103,6 @@ export default class OrderForSelector extends React.Component {
     } else {
       option = 'Tomorrow';
       range = _t;
-      _t = _t.split(' - ');
-
-      if (_.length > 0) {
-        _t = _t[0];
-      }
 
       _t = _t.split(':');
       hour = _t[0];
@@ -153,21 +150,11 @@ export default class OrderForSelector extends React.Component {
     return (
       <Animated.View style={animation.getLayout()}>
         <View style={[defaultStyles.container]}>
-          <View
-            style={[
-              {
-                justifyContent: 'space-evenly',
-                height: BAR_HEIGHT,
-                paddingHorizontal: 10,
-              },
-            ]}>
+          <View style={defaultStyles.titleContainer}>
             <TouchableOpacity
               onPress={() => this.props.toggleDelivery()}
               style={defaultStyles.closeButton}>
-              <Image
-                source={closeButtonImage}
-                style={{resizeMode: 'contain'}}
-              />
+              <Image source={closeButtonImage} />
             </TouchableOpacity>
             <Text style={defaultStyles.title}>{TITLE}</Text>
             <TouchableOpacity
@@ -179,15 +166,7 @@ export default class OrderForSelector extends React.Component {
             </TouchableOpacity>
           </View>
 
-          <View
-            style={[
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                alignSelf: 'center',
-              },
-            ]}>
+          <View style={defaultStyles.pickerContainer}>
             <ScrollPicker
               dataSource={this.state.day_options}
               fixedHeight={true}
@@ -197,12 +176,7 @@ export default class OrderForSelector extends React.Component {
               }}
               renderItem={(data, index, isSelected) => {
                 return (
-                  <View
-                    style={{
-                      width: '100%',
-                      alignItems: 'flex-end',
-                      paddingEnd: 20,
-                    }}>
+                  <View style={[defaultStyles.picker, defaultStyles.dayPicker]}>
                     <Text
                       style={
                         isSelected
@@ -217,7 +191,7 @@ export default class OrderForSelector extends React.Component {
               rotationEnabled={false}
               selectedIndex={0}
               wrapperHeight={WRAPPER_HEIGHT}
-              wrapperStyle={{flex: 1}}
+              wrapperStyle={defaultStyles.wrapperStyle}
             />
 
             {/* Time picker */}
@@ -232,11 +206,7 @@ export default class OrderForSelector extends React.Component {
               renderItem={(data, index, isSelected) => {
                 return (
                   <View
-                    style={{
-                      width: '100%',
-                      alignItems: 'flex-start',
-                      paddingStart: 20,
-                    }}>
+                    style={[defaultStyles.picker, defaultStyles.timePicker]}>
                     <Text
                       style={
                         isSelected
@@ -251,7 +221,7 @@ export default class OrderForSelector extends React.Component {
               rotationEnabled={false}
               selectedIndex={0}
               wrapperHeight={WRAPPER_HEIGHT}
-              wrapperStyle={{flex: 1}}
+              wrapperStyle={defaultStyles.wrapperStyle}
             />
 
             <Line style={{top: ITEM_HEIGHT}} />
@@ -263,67 +233,21 @@ export default class OrderForSelector extends React.Component {
   }
 }
 
-const Line = (props) => (
-  <View
-    style={[
-      props.style,
-      {
-        position: 'absolute',
-        backgroundColor: 'rgb(245, 245, 245)',
-        alignSelf: 'center',
-        width: windowWidth,
-        height: 1 * alpha,
-      },
-    ]}
-  />
-);
+const Line = (props) => <View style={[props.style, defaultStyles.line]} />;
 
-const defaultStyles = {
-  container: {
-    flex: 1,
-    position: 'absolute',
-    backgroundColor: '#fff',
-    bottom: 0 * alpha,
-    width: windowWidth,
-    height: TOTAL_HEIGHT,
-  },
+const defaultStyles = StyleSheet.create({
   closeButton: {
+    alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 10.5 * alpha,
     flexDirection: 'row',
-    alignItems: 'center',
+    height: 21 * alpha,
     justifyContent: 'center',
-    padding: 0,
-    position: 'absolute',
     left: 12 * alpha,
-    width: 21 * alpha,
-    top: 19 * alpha,
-    height: 21 * alpha,
-  },
-  title: {
-    backgroundColor: 'transparent',
-    color: 'rgb(54, 54, 54)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 17 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    position: 'absolute',
-    alignSelf: 'center',
-    top: 19 * alpha,
-  },
-  pickupConfirmButton: {
-    backgroundColor: 'white',
-    borderRadius: 10.5 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 0,
     position: 'absolute',
-    right: 12 * alpha,
     top: 19 * alpha,
-    // paddingVertical: 10 * alpha,
-    height: 21 * alpha,
+    width: 21 * alpha,
   },
   confirmText: {
     color: PRIMARY_COLOR,
@@ -331,15 +255,81 @@ const defaultStyles = {
     fontSize: 15 * fontAlpha,
     textAlign: 'center',
   },
-  selected: {
-    color: 'rgb(54, 54, 54)',
-    fontSize: 20 * fontAlpha,
-    fontFamily: TITLE_FONT,
-    fontWeight: 'bold',
+  container: {
+    backgroundColor: '#fff',
+    bottom: 0 * alpha,
+    flex: 1,
+    height: TOTAL_HEIGHT,
+    position: 'absolute',
+    width: windowWidth,
+  },
+  dayPicker: {
+    alignItems: 'flex-end',
+    paddingEnd: 20,
+  },
+  line: {
+    alignSelf: 'center',
+    backgroundColor: 'rgb(245, 245, 245)',
+    height: 1 * alpha,
+    position: 'absolute',
+    width: windowWidth,
   },
   notSelected: {
     color: 'rgb(82, 82, 82)',
-    fontSize: 19 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
+    fontSize: 19 * fontAlpha,
   },
-};
+  picker: {
+    width: '100%',
+  },
+  pickerContainer: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  pickupConfirmButton: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10.5 * alpha,
+    flexDirection: 'row',
+    height: 21 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+    position: 'absolute',
+    right: 12 * alpha,
+    top: 19 * alpha,
+  },
+  selected: {
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 20 * fontAlpha,
+    fontWeight: 'bold',
+  },
+  timePicker: {
+    alignItems: 'flex-start',
+    paddingStart: 20,
+  },
+  title: {
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 17 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    position: 'absolute',
+    textAlign: 'left',
+    top: 19 * alpha,
+  },
+  titleContainer: {
+    height: BAR_HEIGHT,
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 10,
+  },
+  wrapperStyle: {
+    flex: 1,
+  },
+});
+
+export default OrderForSelector;
