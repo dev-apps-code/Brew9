@@ -27,6 +27,7 @@ import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
 import TimeSelector from '../Components/OrderForSelector';
 import CurveSeparator from '../Components/CurveSeparator';
+import SelectShopRequestObject from '../Requests/select_shop_request_object';
 
 const {
   TITLE_FONT,
@@ -145,6 +146,7 @@ export default class Checkout extends React.Component {
   }
 
   componentDidMount() {
+    this.fetchShopDetails();
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
       onItemPressed: this.onItemPressed,
@@ -795,6 +797,7 @@ export default class Checkout extends React.Component {
 
     filtered_cart = _.filter(cart, {clazz: 'product'});
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
+
     const obj = new MakeOrderRequestObj(
       filtered_cart,
       voucher_item_ids,
@@ -847,11 +850,66 @@ export default class Checkout extends React.Component {
     });
   };
 
+  getCurrentTime = () => {
+    var now = new Date();
+
+    var formattedDate =
+      now.getFullYear() +
+      '-' +
+      ('0' + (now.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('0' + now.getDate()).slice(-2) +
+      ' ' +
+      now.getHours() +
+      ':' +
+      now.getMinutes();
+
+    return formattedDate;
+    return formattedDate;
+  };
+
+  test = () => {
+    console.log('\n\n\n');
+    console.log(this.props.selectedShop.id);
+  };
+
+  fetchShopDetails = () => {
+    const {location, selectedShop} = this.props;
+    const {id} = selectedShop;
+    const latitude = location != null ? location.coords.latitude : null;
+    const longitude = location != null ? location.coords.longitude : null;
+
+    if (latitude !== null && longitude !== null) {
+      const object = new SelectShopRequestObject(latitude, longitude);
+
+      object.setUrlId(this.props.companyId);
+      object.setShopId(id);
+
+      const callback = this.fetchShopDetailsCallback;
+      const params = {object, callback};
+      const action = createAction('shops/selectShop')(params);
+      this.props.dispatch(action);
+    } else {
+      const object = new SelectShopRequestObject();
+      object.setUrlId(this.props.companyId);
+      object.setShopId(id);
+
+      const callback = this.fetchShopDetailsCallback;
+      const params = {object, callback};
+      const action = createAction('shops/selectShop')(params);
+      this.props.dispatch(action);
+    }
+  };
+
+  fetchShopDetailsCallback = (eventObject) => {
+    if (eventObject.success) {
+      console.log(eventObject);
+      this._toggleTimeSelector();
+    }
+  };
+
   checkout = () => {
     const {selected_payment, pick_up_status, pick_up_time} = this.state;
-
-    // var test = Moment().diff(pick_up_time, 'minutes');
-    // console.log(test);
 
     if (selected_payment === 'credit_card') {
       this.setState({isConfirmCheckout: true});
@@ -920,7 +978,6 @@ export default class Checkout extends React.Component {
         return;
       } else {
         if (selected_payment == '') {
-          // this.tooglePayment();
           const paymentSelectionText = getResponseMsg({
             props: this.props,
             shopId: selectedShop.id,
@@ -962,10 +1019,11 @@ export default class Checkout extends React.Component {
             var pickup = Moment(pick_up_time, 'h:mm');
             var now = Moment(new Date(), 'HH:mm');
             const timeDiff = Moment().diff(pick_up_time, 'minutes');
-            if (timeDiff > 10) {
-              this._toggleTimeSelector();
+            if (timeDiff > 0) {
+              this.fetchShopDetails();
               return;
             }
+
             if (pickup < now && pick_up_status == 'Pick Later') {
               const message = 'Pick up time is not available';
               this.refs.toast.show(message, TOAST_DURATION);
