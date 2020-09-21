@@ -34,6 +34,7 @@ export default class PointShopItem extends React.Component {
             textAlign: 'center',
             alignSelf: 'center',
             fontFamily: TITLE_FONT,
+            width: alpha * 280,
           }}>
           {navigation.getParam('item_name', '')}
         </Text>
