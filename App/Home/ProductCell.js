@@ -4,24 +4,21 @@ import {
   Image,
   TouchableWithoutFeedback,
   StyleSheet,
-  TouchableOpacity
 } from 'react-native';
 import React from 'react';
-import { alpha, fontAlpha, windowWidth } from '../Common/size';
+import {alpha, fontAlpha} from '../Common/size';
 import {
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
-  LIGHT_BLUE,
   LIGHT_BLUE_BACKGROUND,
-  LIGHT_GREY
 } from '../Common/common_style';
-import { Analytics, Event, PageHit } from 'expo-analytics';
-import { ANALYTICS_ID } from '../Common/config';
+import {Analytics, Event} from 'expo-analytics';
+import {ANALYTICS_ID} from '../Common/config';
 import Constants from 'expo-constants';
-import { Image as ExpoImage } from 'react-native-expo-image-cache';
+import {Image as ExpoImage} from 'react-native-expo-image-cache';
 
-export default class ProductCell extends React.PureComponent {
+class ProductCell extends React.PureComponent {
   constructor(props) {
     super(props);
   }
@@ -41,7 +38,7 @@ export default class ProductCell extends React.PureComponent {
       this.props.item,
       this.props.index,
       'add',
-      false
+      false,
     );
   };
 
@@ -50,7 +47,7 @@ export default class ProductCell extends React.PureComponent {
       this.props.item,
       this.props.index,
       'remove',
-      false
+      false,
     );
   };
 
@@ -63,7 +60,7 @@ export default class ProductCell extends React.PureComponent {
       this.props.item,
       this.props.index,
       'add',
-      false
+      false,
     );
   };
 
@@ -72,7 +69,7 @@ export default class ProductCell extends React.PureComponent {
       this.props.item,
       this.props.index,
       'remove',
-      false
+      false,
     );
   };
 
@@ -94,7 +91,7 @@ export default class ProductCell extends React.PureComponent {
       productsummary,
       productTagLabel,
       productTagColor,
-      productTagText
+      productTagText,
     } = this.props;
     var ingredients = null;
     if (productingredient !== undefined) {
@@ -107,21 +104,19 @@ export default class ProductCell extends React.PureComponent {
 
         return (
           <View
+            key={key}
             style={
               item.highlight
                 ? styles.ingredientHighlightView
                 : styles.ingredientView
-            }
-            key={key}
-          >
+            }>
             <Text
               numberOfLines={1}
               style={
                 item.highlight
                   ? styles.ingredientHighlightText
                   : styles.ingredientText
-              }
-            >
+              }>
               {item.name}
             </Text>
           </View>
@@ -135,17 +130,17 @@ export default class ProductCell extends React.PureComponent {
     const uri = productimage;
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
-        <View style={{ backgroundColor: 'white' }}>
+        <View style={{backgroundColor: 'white'}}>
           <View navigation={navigation} style={styles.productcell}>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
               {productHidden ? (
                 <Image
-                  source={{ uri: productimage }}
-                  style={styles.productblurimageImage}
                   blurRadius={10}
+                  source={{uri: productimage}}
+                  style={styles.productblurimageImage}
                 />
               ) : (
-                <ExpoImage {...{ uri }} style={styles.productimageImage} />
+                <ExpoImage {...{uri}} style={styles.productimageImage} />
               )}
               {productstatus != null && productstatus.length > 0 ? (
                 <View style={styles.soldView}>
@@ -163,7 +158,7 @@ export default class ProductCell extends React.PureComponent {
             ) : (
               <View style={styles.detailsView}>
                 <View>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <Text numberOfLines={2} style={styles.titleText}>
                       {productname}
                     </Text>
@@ -178,22 +173,19 @@ export default class ProductCell extends React.PureComponent {
                   <View
                     style={{
                       flexDirection: 'row',
-                      flexWrap: 'wrap'
-                    }}
-                  >
+                      flexWrap: 'wrap',
+                    }}>
                     {hasDiscount && (
                       <View
                         style={[
                           styles.promoBox,
-                          { backgroundColor: productTagColor }
-                        ]}
-                      >
+                          {backgroundColor: productTagColor},
+                        ]}>
                         <Text
                           style={[
                             styles.promoBoxText,
-                            { color: productTagText }
-                          ]}
-                        >
+                            {color: productTagText},
+                          ]}>
                           {productTagLabel}
                         </Text>
                       </View>
@@ -204,18 +196,16 @@ export default class ProductCell extends React.PureComponent {
 
                   <Text
                     numberOfLines={hasPrice ? 2 : 3}
-                    style={styles.descriptionText}
-                  >
+                    style={styles.descriptionText}>
                     {productsummary}
                   </Text>
                 </View>
 
                 {hasPrice && (
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     {hasDiscount ? (
                       <View
-                        style={{ flexDirection: 'row', alignItems: 'baseline' }}
-                      >
+                        style={{flexDirection: 'row', alignItems: 'baseline'}}>
                         <Text style={styles.priceText}>
                           {hasPrice
                             ? `$${parseFloat(productDiscountPrice).toFixed(2)}`
@@ -251,115 +241,17 @@ export default class ProductCell extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-  promoBox: {
-    backgroundColor: '#fde9f1',
-    paddingVertical: 4 * alpha,
-    marginVertical: 4 * alpha,
-    marginRight: 2.5 * alpha,
-    alignSelf: 'flex-start'
-    // borderRadius: 5 * alpha
-  },
-  promoBoxText: {
-    color: '#f05071',
-    paddingHorizontal: 4 * alpha,
-    fontFamily: TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left'
-  },
   blurView: {
-    flex: 1,
-    width: '100%',
-    // height: 143 * alpha,
-    position: 'absolute',
-    top: 0,
+    backgroundColor: 'transparent',
     bottom: 0,
-    left: 0,
-    right: 0
-  },
-  notBlurred: {
-    ...StyleSheet.absoluteFill,
-    top: Constants.statusBarHeight
-  },
-  productcell: {
-    width: '100%',
-    flex: 1,
-    flexDirection: 'row',
-    paddingVertical: 5 * alpha,
-    backgroundColor: 'white'
-  },
-  productimageImage: {
-    backgroundColor: 'transparent',
-    resizeMode: 'cover',
-    width: 74 * alpha,
-    height: 74 * alpha,
-    marginLeft: 5 * alpha
-  },
-  blurView: {
-    backgroundColor: 'transparent',
-    width: '100%',
     flex: 1,
     height: 113 * alpha,
-    marginRight: 10 * alpha
-  },
-  detailBlurImage: {
-    backgroundColor: 'transparent',
-    resizeMode: 'contain',
-    width: 200 * alpha,
-    height: '100%'
-  },
-  productblurimageImage: {
-    backgroundColor: 'transparent',
-    resizeMode: 'cover',
-    width: 74 * alpha,
-    height: 74 * alpha,
-    marginLeft: 5 * alpha
-  },
-
-  // soldtextText: {
-  //   backgroundColor: "transparent",
-  //   color: "white",
-  //   fontFamily: NON_TITLE_FONT,
-  //   fontSize: 13 * fontAlpha,
-  //   fontStyle: "normal",
-  //   fontWeight: "normal",
-  //   textAlign: "center"
-  // },
-  soldView: {
-    backgroundColor: 'transparent',
-    width: 74 * alpha,
-
-    // justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  soldtextText: {
-    backgroundColor: PRIMARY_COLOR,
-    color: 'white',
-    fontFamily: TITLE_FONT,
-    fontSize: 10 * fontAlpha,
-    textAlign: 'center',
-    paddingLeft: 5 * alpha,
-    paddingRight: 5 * alpha,
-    paddingTop: 2 * alpha,
-    paddingBottom: 2 * alpha
-  },
-  detailsView: {
-    backgroundColor: 'transparent',
-    width: '100%',
-    flex: 1,
-    marginLeft: 10 * alpha,
+    left: 0,
     marginRight: 10 * alpha,
-    justifyContent: 'space-between'
-  },
-  titleText: {
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent'
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '100%',
   },
   descriptionText: {
     backgroundColor: 'transparent',
@@ -369,136 +261,32 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    width: '100%'
+    width: '100%',
+  },
+  detailBlurImage: {
+    backgroundColor: 'transparent',
+    height: '100%',
+    resizeMode: 'contain',
+    width: 200 * alpha,
+  },
+  detailsView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    justifyContent: 'space-between',
+    marginLeft: 10 * alpha,
+    marginRight: 10 * alpha,
+    width: '100%',
   },
   discountPriceText: {
-    marginLeft: 5 * alpha,
     backgroundColor: 'transparent',
     color: 'rgb(130, 130, 130)',
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    marginLeft: 5 * alpha,
     marginTop: 5 * alpha,
-    // marginBottom: 30 * alpha,
-    fontStyle: 'normal',
     textAlign: 'left',
-    // paddingBottom: 1 * alpha,
-    textDecorationLine: 'line-through'
-  },
-  priceText: {
-    color: PRIMARY_COLOR,
-    fontFamily: TITLE_FONT,
-    fontSize: 20 * fontAlpha,
-    marginTop: 5 * alpha,
-    // marginBottom: 30 * alpha,
-    fontStyle: 'normal',
-    textAlign: 'left'
-  },
-  addButton: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    position: 'absolute',
-    right: 7 * alpha,
-    width: 20 * alpha,
-    bottom: 1 * alpha,
-    height: 20 * alpha
-  },
-  addButtonText: {
-    color: 'black',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left'
-  },
-  addButtonImage: {
-    resizeMode: 'contain'
-  },
-  selectoptionView: {
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    right: 0 * alpha,
-    width: 61 * alpha,
-    bottom: 0 * alpha,
-    height: 28 * alpha
-  },
-  optionButton: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 10 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    position: 'absolute',
-    right: 6 * alpha,
-    width: 55 * alpha,
-    bottom: 0 * alpha,
-    height: 20 * alpha
-  },
-  optionButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left'
-  },
-  optionButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha
-  },
-  badgeView: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 7 * alpha,
-    borderWidth: 1 * alpha,
-    borderColor: 'white',
-    borderStyle: 'solid',
-    position: 'absolute',
-    right: 0 * alpha,
-    width: 14 * alpha,
-    bottom: 13 * alpha,
-    height: 15 * alpha,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  numberofitemText: {
-    color: 'rgb(255, 251, 251)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent'
-  },
-
-  ingredientView: {
-    backgroundColor: 'rgb(245, 245, 245)',
-    justifyContent: 'center',
-    paddingVertical: 2 * alpha,
-    marginVertical: 4 * alpha,
-    marginRight: 4 * alpha
-  },
-  ingredientHighlightView: {
-    backgroundColor: LIGHT_BLUE_BACKGROUND,
-    justifyContent: 'center',
-    paddingVertical: 2 * alpha,
-    marginVertical: 4 * alpha,
-    marginRight: 4 * alpha
-  },
-  ingredientText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(130, 130, 130)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    paddingHorizontal: 4 * alpha
-    // marginRight:
-    // marginLeft: 4 * alpha,
-    // marginTop: 4 * alpha,
-    // marginBottom: 4 * alpha
+    textDecorationLine: 'line-through',
   },
   ingredientHighlightText: {
     backgroundColor: 'transparent',
@@ -507,37 +295,127 @@ const styles = StyleSheet.create({
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    paddingHorizontal: 4 * alpha,
     textAlign: 'left',
-    paddingHorizontal: 4 * alpha
-
-    // marginRight: 4 * alpha,
-    // marginLeft: 4 * alpha,
-    // marginTop: 4 * alpha,
-    // marginBottom: 4 * alpha
+  },
+  ingredientHighlightView: {
+    backgroundColor: LIGHT_BLUE_BACKGROUND,
+    justifyContent: 'center',
+    marginRight: 4 * alpha,
+    marginVertical: 4 * alpha,
+    paddingVertical: 2 * alpha,
+  },
+  ingredientText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(130, 130, 130)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    paddingHorizontal: 4 * alpha,
+    textAlign: 'left',
+  },
+  ingredientView: {
+    backgroundColor: 'rgb(245, 245, 245)',
+    justifyContent: 'center',
+    marginRight: 4 * alpha,
+    marginVertical: 4 * alpha,
+    paddingVertical: 2 * alpha,
+  },
+  priceText: {
+    color: PRIMARY_COLOR,
+    fontFamily: TITLE_FONT,
+    fontSize: 20 * fontAlpha,
+    fontStyle: 'normal',
+    marginTop: 5 * alpha,
+    textAlign: 'left',
+  },
+  productblurimageImage: {
+    backgroundColor: 'transparent',
+    height: 74 * alpha,
+    marginLeft: 5 * alpha,
+    resizeMode: 'cover',
+    width: 74 * alpha,
+  },
+  productcell: {
+    backgroundColor: 'white',
+    flex: 1,
+    flexDirection: 'row',
+    paddingVertical: 5 * alpha,
+    width: '100%',
+  },
+  productimageImage: {
+    backgroundColor: 'transparent',
+    height: 74 * alpha,
+    marginLeft: 5 * alpha,
+    resizeMode: 'cover',
+    width: 74 * alpha,
+  },
+  promoBox: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#fde9f1',
+    marginRight: 2.5 * alpha,
+    marginVertical: 4 * alpha,
+    paddingVertical: 4 * alpha,
+  },
+  promoBoxText: {
+    color: '#f05071',
+    fontFamily: TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    paddingHorizontal: 4 * alpha,
+    textAlign: 'left',
   },
   recommendedStarImage: {
-    resizeMode: 'contain',
-    marginLeft: 3 * alpha,
-    width: 14 * alpha,
+    backgroundColor: 'transparent',
     height: 14 * alpha,
     marginLeft: 6 * alpha,
     marginRight: -4 * alpha,
-    backgroundColor: 'transparent'
+    resizeMode: 'contain',
+    width: 14 * alpha,
+  },
+  soldView: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    width: 74 * alpha,
+  },
+  soldtextText: {
+    backgroundColor: PRIMARY_COLOR,
+    color: 'white',
+    fontFamily: TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    paddingBottom: 2 * alpha,
+    paddingLeft: 5 * alpha,
+    paddingRight: 5 * alpha,
+    paddingTop: 2 * alpha,
+    textAlign: 'center',
+  },
+  titleText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
   },
   toBeUnvieiledText: {
+    backgroundColor: PRIMARY_COLOR,
     color: 'white',
     fontFamily: TITLE_FONT,
     fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: PRIMARY_COLOR,
-    position: 'absolute',
-    paddingTop: 3 * alpha,
     paddingBottom: 3 * alpha,
-    paddingRight: 5 * alpha,
     paddingLeft: 5 * alpha,
+    paddingRight: 5 * alpha,
+    paddingTop: 3 * alpha,
+    position: 'absolute',
     right: 0,
-    top: 0
-  }
+    textAlign: 'left',
+    top: 0,
+  },
 });
+
+export default ProductCell;
