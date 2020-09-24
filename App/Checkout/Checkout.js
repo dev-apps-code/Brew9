@@ -997,26 +997,28 @@ class Checkout extends React.Component {
           }
         }
 
-        if (pick_up_status == null) {
-          this._toggleTimeSelector();
+        if (pick_up_status === null) {
+          this.fetchShopDetails();
           return;
         } else {
-          if (selectedShop != null) {
-            var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
-            var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm');
-            var pickup = Moment(pick_up_time, 'h:mm');
-            var now = Moment(new Date(), 'HH:mm');
+          if (selectedShop !== null) {
+            const {opening_hour} = selectedShop;
+            const closingTime = Moment(opening_hour.end_time, 'h:mm');
+            const pickupTime = Moment(pick_up_time, 'h:mm');
+            const timeNow = Moment(new Date(), 'HH:mm');
             const timeDiff = Moment().diff(pick_up_time, 'minutes');
+
+            // selected pickup or delivery time must not be below current time
             if (timeDiff > 0) {
               this.fetchShopDetails();
               return;
             }
 
-            if (pickup < now && pick_up_status == 'Pick Later') {
+            if (pickupTime < timeNow && pick_up_status === 'Pick Later') {
               const message = 'Pick up time is not available';
               this.refs.toast.show(message, TOAST_DURATION);
               return;
-            } else if (pickup > closing) {
+            } else if (pickupTime > closingTime) {
               // TODO please convert
               const message = 'We are closed at this time.';
               this.refs.toast.show(message, TOAST_DURATION);
