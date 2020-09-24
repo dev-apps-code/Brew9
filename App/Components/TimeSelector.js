@@ -151,8 +151,12 @@ class OrderForSelector extends React.Component {
     this.sp.scrollToIndex(index);
   };
 
+  toggle = () => {
+    this.props.toggle();
+  };
+
   render() {
-    const {animation, delivery} = this.props;
+    const {animation, delivery, toggle} = this.props;
     const TITLE = delivery ? 'Delivery Time' : 'Pick Up Time';
 
     return (
@@ -160,7 +164,7 @@ class OrderForSelector extends React.Component {
         <View style={[defaultStyles.container]}>
           <View style={defaultStyles.titleContainer}>
             <TouchableOpacity
-              onPress={() => this.props.toggleDelivery()}
+              onPress={toggle}
               style={defaultStyles.closeButton}>
               <Image source={closeButtonImage} />
             </TouchableOpacity>
