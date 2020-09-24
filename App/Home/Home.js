@@ -2014,7 +2014,7 @@ class Home extends React.Component {
       const {featured_promotion} = shop;
       const {always_on, id} = featured_promotion;
 
-      AsyncStorage.getItem('featuredPromotionIds', (err, result) => {
+      AsyncStorage.getItem('featuredPromotionIds', (result) => {
         if (result) {
           let featuredPromotionIds = result.split(',');
           const wasSeen = featuredPromotionIds.includes(id.toString());
