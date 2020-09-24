@@ -2010,93 +2010,46 @@ class Home extends React.Component {
   }
 
   shouldShowFeatured(shop) {
-    const {currentMember} = this.props;
-    //jira
-    if (shop?.featured_promotion && currentMember != null) {
+    if (shop.featured_promotion !== null) {
       const {featured_promotion} = shop;
-      console.log(featured_promotion);
       const {always_on, id} = featured_promotion;
 
       AsyncStorage.getItem('featuredPromotionIds', (err, result) => {
         if (result) {
-          const featuredPromotionIds = result.split(',');
+          let featuredPromotionIds = result.split(',');
           const wasSeen = featuredPromotionIds.includes(id.toString());
-          console.log('\n\n');
-          console.log('record');
-          console.log(featuredPromotionIds);
-          console.log('always on');
-          console.log(always_on);
-          console.log('was seen: ');
-          console.log(wasSeen);
-          console.log('id');
-          console.log(id);
-
           if (always_on === true) {
-            console.log('show');
             this.onFeaturedPromotionPressed(featured_promotion);
             featuredPromotionIds.push(id);
+            let featuredPromotionIdsString = featuredPromotionIds.toString();
             AsyncStorage.setItem(
               'featuredPromotionIds',
-              featuredPromotionIds.toString(),
+              featuredPromotionIdsString,
             );
-          } else if (always_on === false) {
+          } else {
             if (wasSeen === true) {
-              console.log('no show');
               return;
-            } else if (wasSeen === false) {
-              console.log('show');
+            } else {
               this.onFeaturedPromotionPressed(featured_promotion);
               featuredPromotionIds.push(id);
+              let featuredPromotionIdsString = featuredPromotionIds.toString();
               AsyncStorage.setItem(
                 'featuredPromotionIds',
-                featuredPromotionIds.toString(),
+                featuredPromotionIdsString,
               );
             }
           }
         } else {
           this.onFeaturedPromotionPressed(featured_promotion);
-          const featuredPromotionIds = [id];
+          let featuredPromotionIds = [id];
+          let featuredPromotionIdsString = featuredPromotionIds.toString();
           AsyncStorage.setItem(
             'featuredPromotionIds',
-            featuredPromotionIds.toString(),
+            featuredPromotionIdsString,
           );
         }
       });
-
-      // this.onFeaturedPromotionPressed(shop.featured_promotion);
     }
-    // if (shop) {
-    //   AsyncStorage.getItem('featured', (err, result) => {
-    //     if (shop.featured_promotion != null) {
-    //       if (result == null || result != shop.featured_promotion.id) {
-    //         if (currentMember != null) {
-    //           if (
-    //             shop.featured_promotion.for_new_user == true &&
-    //             currentMember.first_time_buyer == true
-    //           ) {
-    //             AsyncStorage.setItem(
-    //               'featured',
-    //               JSON.stringify(shop.featured_promotion.id),
-    //             );
-    //             this.onFeaturedPromotionPressed(shop.featured_promotion);
-    //           } else if (shop.featured_promotion.for_new_user == false) {
-    //             AsyncStorage.setItem(
-    //               'featured',
-    //               JSON.stringify(shop.featured_promotion.id),
-    //             );
-    //             this.onFeaturedPromotionPressed(shop.featured_promotion);
-    //           }
-    //         } else {
-    //           AsyncStorage.setItem(
-    //             'featured',
-    //             JSON.stringify(shop.featured_promotion.id),
-    //           );
-    //           this.onFeaturedPromotionPressed(shop.featured_promotion);
-    //         }
-    //       }
-    //     }
-    //   });
-    // }
   }
 
   renderFeaturedPromo(shop, cart) {
