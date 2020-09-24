@@ -2009,47 +2009,33 @@ class Home extends React.Component {
     return undefined;
   }
 
-  shouldShowFeatured(shop) {
+  async shouldShowFeatured(shop) {
     if (shop && shop.featured_promotion !== null) {
       const {featured_promotion} = shop;
       const {always_on, id} = featured_promotion;
 
       try {
-        const result = AsyncStorage.getItem('featuredPromotionIds');
-        if (result) {
-          let featuredPromotionIds = result.split(',');
-          const wasSeen = featuredPromotionIds.includes(id.toString());
-          if (always_on === true) {
-            this.onFeaturedPromotionPressed(featured_promotion);
-            featuredPromotionIds.push(id);
-            let featuredPromotionIdsString = featuredPromotionIds.toString();
-            AsyncStorage.setItem(
-              'featuredPromotionIds',
-              featuredPromotionIdsString,
-            );
-          } else {
-            if (wasSeen === true) {
-              return;
-            } else {
-              this.onFeaturedPromotionPressed(featured_promotion);
-              featuredPromotionIds.push(id);
-              let featuredPromotionIdsString = featuredPromotionIds.toString();
-              AsyncStorage.setItem(
-                'featuredPromotionIds',
-                featuredPromotionIdsString,
-              );
-            }
-          }
+        const result = await AsyncStorage.getItem('@seenFeatPromoIds');
+        const seenFeatPromoIds = result ? result.split(',') : [];
+        const promoId = id.toString();
+
+        if (!seenFeatPromoIds.includes(promoId)) {
+          this.onFeaturedPromotionPressed(featured_promotion);
+          seenFeatPromoIds.push(promoId);
+          const _seenFeatPromoIds = seenFeatPromoIds.toString();
+          await AsyncStorage.setItem('@seenFeatPromoIds', _seenFeatPromoIds);
         } else {
-          let featuredPromotionIds = [id];
-          let featuredPromotionIdsString = featuredPromotionIds.toString();
-          AsyncStorage.setItem(
-            'featuredPromotionIds',
-            featuredPromotionIdsString,
-          );
+          if (always_on) {
+            this.onFeaturedPromotionPressed(featured_promotion);
+          }
         }
       } catch (error) {
+        // this means that AsyncStorage doesn't have
+        // a stored value with key @seenFeatPromoIds
+        // so we must create a new one for the first time
         this.onFeaturedPromotionPressed(featured_promotion);
+        const _firstSeenFeatPromoId = [id].toString();
+        await AsyncStorage.setItem('@seenFeatPromoIds', _firstSeenFeatPromoId);
       }
     }
   }
