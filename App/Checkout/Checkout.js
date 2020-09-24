@@ -849,29 +849,6 @@ class Checkout extends React.Component {
     });
   };
 
-  getCurrentTime = () => {
-    var now = new Date();
-
-    var formattedDate =
-      now.getFullYear() +
-      '-' +
-      ('0' + (now.getMonth() + 1)).slice(-2) +
-      '-' +
-      ('0' + now.getDate()).slice(-2) +
-      ' ' +
-      now.getHours() +
-      ':' +
-      now.getMinutes();
-
-    return formattedDate;
-    return formattedDate;
-  };
-
-  test = () => {
-    console.log('\n\n\n');
-    console.log(this.props.selectedShop.id);
-  };
-
   fetchShopDetails = () => {
     const {location, selectedShop} = this.props;
     const {id} = selectedShop;
