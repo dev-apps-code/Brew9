@@ -25,7 +25,7 @@ import {getResponseMsg} from '../Utils/responses';
 import * as commonStyles from '../Common/common_style';
 import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
-import TimeSelector from '../Components/OrderForSelector';
+import TimeSelector from '../Components/TimeSelector';
 import CurveSeparator from '../Components/CurveSeparator';
 import SelectShopRequestObject from '../Requests/select_shop_request_object';
 
@@ -39,7 +39,7 @@ const {
   LIGHT_GREY,
 } = commonStyles;
 @connect(({members, shops, orders, config}) => ({
-  company_id: members.company_id,
+  companyId: members.company_id,
   currentMember: members.profile,
   members: members,
   selectedShop: shops.selectedShop,
@@ -98,7 +98,7 @@ class Checkout extends React.Component {
       this.checkout.bind(this),
       500, // no new clicks within 500ms time window
     );
-    const {discount_cart_total, currentMember, cart_total} = props;
+    const {currentMember, cart_total} = props;
     this.state = {
       delivery_options: 'pickup',
       delivery_description: '',
@@ -146,7 +146,6 @@ class Checkout extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchShopDetails();
     this.props.navigation.setParams({
       onBackPressed: this.onBackPressed,
       onItemPressed: this.onItemPressed,
@@ -876,8 +875,8 @@ class Checkout extends React.Component {
   fetchShopDetails = () => {
     const {location, selectedShop} = this.props;
     const {id} = selectedShop;
-    const latitude = location != null ? location.coords.latitude : null;
-    const longitude = location != null ? location.coords.longitude : null;
+    const latitude = location !== null ? location.coords.latitude : null;
+    const longitude = location !== null ? location.coords.longitude : null;
 
     if (latitude !== null && longitude !== null) {
       const object = new SelectShopRequestObject(latitude, longitude);
@@ -902,14 +901,26 @@ class Checkout extends React.Component {
   };
 
   fetchShopDetailsCallback = (eventObject) => {
+    const noTimeSlotsAvailableText = getResponseMsg({
+      props: this.props,
+      shopId: this.props.selectedShop.id,
+      key: 'no_time_slots_available',
+      defaultText: 'No time slots available.',
+    });
+
     if (eventObject.success) {
-      console.log(eventObject);
-      this._toggleTimeSelector();
+      this.timepicker.updateTimeOptions(() => {
+        if (!this.timepicker.hasSchedule()) {
+          this.refs.toast.show(noTimeSlotsAvailableText, TOAST_DURATION);
+        } else {
+          this.timepicker.toggle();
+        }
+      });
     }
   };
 
   checkout = () => {
-    const {selected_payment, pick_up_status, pick_up_time} = this.state;
+    const {selected_payment} = this.state;
 
     if (selected_payment === 'credit_card') {
       this.setState({isConfirmCheckout: true});
@@ -943,8 +954,8 @@ class Checkout extends React.Component {
 
     return (
       <Brew9PopUp
-        onPressOk={this.onPayNowPressed}
         onBackgroundPress={() => {}}
+        onPressOk={this.onPayNowPressed}
         {...{popUpVisible, title, description, OkText}}
       />
     );
@@ -1307,11 +1318,8 @@ class Checkout extends React.Component {
     );
   }
 
-  changeTimeSchedule = () => {
-    if (!this.refs.timepicker.hasSchedule()) {
-      this.refs.toast.show('No time slots available.', TOAST_DURATION);
-    }
-    this._toggleTimeSelector();
+  onSelectTimePress = () => {
+    this.fetchShopDetails();
   };
 
   renderPickupTime() {
@@ -1322,7 +1330,7 @@ class Checkout extends React.Component {
     return (
       <View style={styles.sectionView}>
         <TouchableOpacity
-          onPress={() => this.changeTimeSchedule()}
+          onPress={() => this.onSelectTimePress()}
           style={styles.voucherButton}>
           <View pointerEvents="box-none" style={styles.sectionRowView}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -1603,23 +1611,25 @@ class Checkout extends React.Component {
   renderTimeSelector = () => {
     const {isDelivery, selectedShop} = this.props;
     const {opening_hour, delivery_hour} = selectedShop;
+
     let today = [];
     let tomorrow = [];
+
     if (isDelivery) {
-      (today = delivery_hour?.today?.delivery_time_slot || []),
-        (tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || []);
+      today = delivery_hour?.today?.delivery_time_slot || [];
+      tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || [];
     } else {
       today = opening_hour?.ordering_time_slot || [];
     }
     return (
       <TimeSelector
-        ref="timepicker"
-        delivery={this.props.isDelivery}
-        today={today || []}
-        tomorrow={tomorrow || []}
         animation={this.timeSelectorAnimation}
-        toggleDelivery={this._toggleTimeSelector}
+        delivery={this.props.isDelivery}
         onConfirm={this.onConfirmOrderSchedule}
+        ref={(ref) => (this.timepicker = ref)}
+        today={today || []}
+        toggle={this._toggleTimeSelector}
+        tomorrow={tomorrow || []}
       />
     );
   };
