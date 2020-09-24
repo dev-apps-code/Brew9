@@ -118,6 +118,14 @@ class OrderForSelector extends React.Component {
    */
   hasSchedule = () => this.state.time_options.length;
 
+  /**
+   * Updates the time options
+   * @public
+   */
+  updateTimeOptions = () => {
+    this._setTimeOptions();
+  };
+
   _changeTimeOptions = (index) => {
     const current_time_options = this.state.time_options[index];
     this.setState({current_time_options}, () => this.sp.scrollToIndex(0));
