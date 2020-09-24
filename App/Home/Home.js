@@ -2041,7 +2041,6 @@ class Home extends React.Component {
             }
           }
         } else {
-          this.onFeaturedPromotionPressed(featured_promotion);
           let featuredPromotionIds = [id];
           let featuredPromotionIdsString = featuredPromotionIds.toString();
           AsyncStorage.setItem(
@@ -2050,7 +2049,7 @@ class Home extends React.Component {
           );
         }
       } catch (error) {
-        // Error
+        this.onFeaturedPromotionPressed(featured_promotion);
       }
     }
   }
