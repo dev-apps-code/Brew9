@@ -122,8 +122,12 @@ class OrderForSelector extends React.Component {
    * Updates the time options
    * @public
    */
-  updateTimeOptions = () => {
+  updateTimeOptions = (callback) => {
     this._setTimeOptions();
+
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
   };
 
   _changeTimeOptions = (index) => {
