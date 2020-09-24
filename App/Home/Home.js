@@ -2010,11 +2010,12 @@ class Home extends React.Component {
   }
 
   shouldShowFeatured(shop) {
-    if (shop.featured_promotion !== null) {
+    if (shop && shop.featured_promotion !== null) {
       const {featured_promotion} = shop;
       const {always_on, id} = featured_promotion;
 
-      AsyncStorage.getItem('featuredPromotionIds', (err, result) => {
+      try {
+        const result = AsyncStorage.getItem('featuredPromotionIds');
         if (result) {
           let featuredPromotionIds = result.split(',');
           const wasSeen = featuredPromotionIds.includes(id.toString());
@@ -2048,7 +2049,9 @@ class Home extends React.Component {
             featuredPromotionIdsString,
           );
         }
-      });
+      } catch (error) {
+        // Error
+      }
     }
   }
 
