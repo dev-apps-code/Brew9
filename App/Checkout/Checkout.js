@@ -20,6 +20,8 @@ import {Brew9PopUp, Brew9Toast, HudLoading} from '../Components';
 import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
+import TopUpProductsRequestObject from '../Requests/top_up_products_request_object';
+
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
 import {getResponseMsg} from '../Utils/responses';
 import * as commonStyles from '../Common/common_style';
@@ -137,6 +139,7 @@ export default class Checkout extends React.Component {
       },
       enablePaynow: true,
       isConfirmCheckout: false,
+      topUpPromo: null,
     };
     const xy = {x: 0, y: windowHeight};
     this.movePickAnimation = new Animated.ValueXY(xy);
@@ -158,6 +161,7 @@ export default class Checkout extends React.Component {
       },
       function () {
         this.loadValidVouchers();
+        this.loadTopUpProducts();
         {
           isDelivery && this.loadDeliveryFee();
         }
@@ -361,6 +365,48 @@ export default class Checkout extends React.Component {
       cart: this.props.cart,
       addVoucherAction: this.addVoucherItemsToCart,
     });
+  };
+
+  loadTopUpProducts() {
+    const {dispatch, members} = this.props;
+    const callback = (eventObject) => {
+      if (eventObject.success) {
+        console.log(eventObject);
+        const topUpPromoList = eventObject.result;
+
+        const availableTopUpPromotion = topUpPromoList.find(function (elem) {
+          let {promotion_text} = elem;
+          console.log(promotion_text);
+
+          if (promotion_text) {
+            return true;
+          }
+          return false;
+        });
+        const {promotion_text} = availableTopUpPromotion;
+        console.log(promotion_text);
+        this.setState({
+          topUpPromo: promotion_text,
+        });
+      }
+    };
+    const obj = new TopUpProductsRequestObject();
+    obj.setUrlId(members.company_id);
+    dispatch(
+      createAction('companies/loadTopUpProducts')({
+        object: obj,
+        callback,
+      }),
+    );
+  }
+
+  renderTopUpPromotion = () => {
+    const {topUpPromo} = this.state;
+    return topUpPromo ? (
+      <View style={styles.tag}>
+        <Text style={styles.tagText}> {topUpPromo}</Text>
+      </View>
+    ) : null;
   };
 
   addShippingAddress = () => {
@@ -1111,7 +1157,7 @@ export default class Checkout extends React.Component {
       return (
         <View style={[styles.drinksView]} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1176,7 +1222,7 @@ export default class Checkout extends React.Component {
               : () => null
           }
           style={styles.voucherButton}>
-          <View pointerEvents='box-none' style={styles.sectionRowView}>
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
             <View
@@ -1257,7 +1303,7 @@ export default class Checkout extends React.Component {
         <TouchableOpacity
           onPress={() => this.changeTimeSchedule()}
           style={styles.voucherButton}>
-          <View pointerEvents='box-none' style={styles.sectionRowView}>
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={
@@ -1312,7 +1358,7 @@ export default class Checkout extends React.Component {
       return (
         <View style={styles.drinksView} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1400,7 +1446,7 @@ export default class Checkout extends React.Component {
           style={[styles.drinksView, {marginVertical: 0 * alpha}]}
           key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1546,7 +1592,7 @@ export default class Checkout extends React.Component {
     }
     return (
       <TimeSelector
-        ref='timepicker'
+        ref="timepicker"
         delivery={this.props.isDelivery}
         today={today || []}
         tomorrow={tomorrow || []}
@@ -1559,7 +1605,7 @@ export default class Checkout extends React.Component {
 
   renderPaymentOptions = () => {
     const {currentMember, isDelivery} = this.props;
-    const {final_price, selected_payment} = this.state;
+    const {final_price, selected_payment, topUpPromo} = this.state;
     let cashPayment = isDelivery ? 'Cash On Delivery' : 'Pay In Store';
     let credits =
       currentMember != undefined
@@ -1620,9 +1666,7 @@ export default class Checkout extends React.Component {
           <View>
             <View style={styles.walletTextContainer}>
               <Text style={styles.paymentOptionText}>Wallet</Text>
-              {/* <View style={styles.tag}>
-                <Text style={styles.tagText}>Top up $10 & get $5 extra</Text>
-              </View> */}
+              {this.renderTopUpPromotion()}
             </View>
             <Text style={creditStyle}>${credits}</Text>
           </View>
@@ -1709,11 +1753,11 @@ export default class Checkout extends React.Component {
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
-            <View pointerEvents='box-none' style={styles.whiteboxView}>
+            <View pointerEvents="box-none" style={styles.whiteboxView}>
               {this.renderShopImage()}
             </View>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 flex: 1,
               }}>
@@ -1866,7 +1910,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
-        <Brew9Toast ref='toast' />
+        <Brew9Toast ref="toast" />
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}
