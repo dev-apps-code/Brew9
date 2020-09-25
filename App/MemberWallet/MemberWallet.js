@@ -25,10 +25,13 @@ import TopUpOrderRequestObject from '../Requests/top_up_order_request_object';
 import {Analytics, Event, PageHit} from 'expo-analytics';
 import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
+import {getResponseMsg} from '../Utils/responses';
 
-@connect(({members, shops}) => ({
+@connect(({members, shops, config}) => ({
   members: members.profile,
   selectedShop: shops.selectedShop,
+  responses: config.responses,
+  shopResponses: config.shopResponses,
 }))
 export default class MemberWallet extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -203,6 +206,18 @@ export default class MemberWallet extends React.Component {
     );
   };
 
+  renderTopUpMessage = () => {
+    const {id} = this.props.selectedShop;
+    const topUpMessage = getResponseMsg({
+      props: this.props,
+      shopId: id,
+      key: 'top_up_wallet_message',
+      defaultText: 'Top Up is also available in-store',
+    });
+
+    return topUpMessage;
+  };
+
   render() {
     const {members} = this.props;
     const {toggleTopUp} = this.state;
@@ -247,7 +262,7 @@ export default class MemberWallet extends React.Component {
           </View>
           <View style={styles.shopTopUp}>
             <Text style={styles.shopTopUpText}>
-              Top up is also available in-store.
+              {this.renderTopUpMessage()}
             </Text>
           </View>
         </ScrollView>
