@@ -60,8 +60,7 @@ export default class TopUpCard extends React.Component {
   };
 
   render() {
-    const {image, promotion} = this.props;
-    const promotionText = promotion ? promotionText : console.log(this.props);
+    const {image} = this.props;
     return (
       <TouchableWithoutFeedback onPress={this.onCardPress}>
         <View navigation={this.props.navigation} style={styles.cardcell}>
