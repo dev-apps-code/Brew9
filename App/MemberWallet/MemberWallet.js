@@ -187,16 +187,18 @@ export default class MemberWallet extends React.Component {
   };
 
   renderTopuplistFlatListCell = ({item, index}) => {
+    const {image, price, promotion_text} = item;
     return (
       <TopUpCard
         navigation={this.props.navigation}
-        image={item.image}
-        price={item.price}
+        image={image}
+        price={price}
         index={index}
         item={item}
         currency={this.props.members.currency}
         selected={this.state.selected}
         onPressItem={this.onTopUpCardPressed}
+        promotion={promotion_text}
       />
     );
   };
