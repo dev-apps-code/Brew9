@@ -371,13 +371,10 @@ export default class Checkout extends React.Component {
     const {dispatch, members} = this.props;
     const callback = (eventObject) => {
       if (eventObject.success) {
-        console.log(eventObject);
         const topUpPromoList = eventObject.result;
 
         const availableTopUpPromotion = topUpPromoList.find(function (elem) {
           let {promotion_text} = elem;
-          console.log(promotion_text);
-
           if (promotion_text) {
             return true;
           }
@@ -1604,7 +1601,15 @@ export default class Checkout extends React.Component {
   };
 
   renderPaymentOptions = () => {
-    const {currentMember, isDelivery} = this.props;
+    const {currentMember, isDelivery, selectedShop} = this.props;
+    const {
+      allow_wallet,
+      allow_wallet_text,
+      allow_credit_card,
+      allow_credit_card_text,
+      allow_pay_in_store,
+      allow_pay_in_store_text,
+    } = selectedShop;
     const {final_price, selected_payment, topUpPromo} = this.state;
     let cashPayment = isDelivery ? 'Cash On Delivery' : 'Pay In Store';
     let credits =
@@ -1656,39 +1661,46 @@ export default class Checkout extends React.Component {
 
     return (
       <View style={styles.paymentOptionsView}>
-        <TouchableOpacity
-          onPress={() => this.onWalletButtonPressed()}
-          style={styles.paymentOptionsListView}>
-          <Image
-            source={require('./../../assets/images/wallet_center.png')}
-            style={walletIconStyle}
-          />
-          <View>
-            <View style={styles.walletTextContainer}>
-              <Text style={styles.paymentOptionText}>Wallet</Text>
-              {this.renderTopUpPromotion()}
+        {allow_wallet && (
+          <TouchableOpacity
+            onPress={() => this.onWalletButtonPressed()}
+            style={styles.paymentOptionsListView}>
+            <Image
+              source={require('./../../assets/images/wallet_center.png')}
+              style={walletIconStyle}
+            />
+            <View>
+              <View style={styles.walletTextContainer}>
+                <Text style={styles.paymentOptionText}>Wallet</Text>
+                {this.renderTopUpPromotion()}
+              </View>
+              <Text style={creditStyle}>${credits}</Text>
             </View>
-            <Text style={creditStyle}>${credits}</Text>
-          </View>
-          {walletSelectBox}
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.onCreditButtonPressed()}
-          style={styles.paymentOptionsListView}>
-          <Image
-            source={require('./../../assets/images/credit_card.png')}
-            style={cardIconStyle}
-          />
-          <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
-          <Image
-            source={require('./../../assets/images/cc.png')}
-            style={styles.cc}
-          />
-          <Image
-            source={require('./../../assets/images/visa.png')}
-            style={styles.visa}
-          />
-          {/* <Image
+            {walletSelectBox}
+          </TouchableOpacity>
+        )}
+        {allow_wallet_text && (
+          <Text style={styles.allowText}>{allow_wallet_text}</Text>
+        )}
+
+        {allow_credit_card && (
+          <TouchableOpacity
+            onPress={() => this.onCreditButtonPressed()}
+            style={styles.paymentOptionsListView}>
+            <Image
+              source={require('./../../assets/images/credit_card.png')}
+              style={cardIconStyle}
+            />
+            <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
+            <Image
+              source={require('./../../assets/images/cc.png')}
+              style={styles.cc}
+            />
+            <Image
+              source={require('./../../assets/images/visa.png')}
+              style={styles.visa}
+            />
+            {/* <Image
             source={require('./../../assets/images/union.png')}
             style={styles.union}
           />
@@ -1696,18 +1708,27 @@ export default class Checkout extends React.Component {
             source={require('./../../assets/images/dc.png')}
             style={styles.dc}
           /> */}
-          {cardSelectBox}
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.onCounterButtonPressed()}
-          style={styles.paymentOptionsListView}>
-          <Image
-            source={require('./../../assets/images/cash.png')}
-            style={cashIconStyle}
-          />
-          <Text style={styles.paymentOptionText}>{cashPayment}</Text>
-          {counterSelectBox}
-        </TouchableOpacity>
+            {cardSelectBox}
+          </TouchableOpacity>
+        )}
+        {allow_credit_card && (
+          <Text style={styles.allowText}>{allow_credit_card_text}</Text>
+        )}
+        {allow_pay_in_store && (
+          <TouchableOpacity
+            onPress={() => this.onCounterButtonPressed()}
+            style={styles.paymentOptionsListView}>
+            <Image
+              source={require('./../../assets/images/cash.png')}
+              style={cashIconStyle}
+            />
+            <Text style={styles.paymentOptionText}>{cashPayment}</Text>
+            {counterSelectBox}
+          </TouchableOpacity>
+        )}
+        {allow_pay_in_store && (
+          <Text style={styles.allowText}>{allow_pay_in_store_text}</Text>
+        )}
       </View>
     );
   };
@@ -1965,6 +1986,17 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
     width: 191 * alpha,
+  },
+  allowText: {
+    color: '#ff4500',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    backgroundColor: 'transparent',
+    width: 191 * alpha,
+    marginLeft: alpha * 10,
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
@@ -2687,12 +2719,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   paymentOptionsView: {
-    height: alpha * 120,
+    // height: alpha * 120,
     flex: 1,
     paddingHorizontal: alpha * 17,
   },
   paymentOptionsListView: {
     flex: 1,
+    minHeight: alpha * 40,
     flexDirection: 'row',
     alignItems: 'center',
   },
