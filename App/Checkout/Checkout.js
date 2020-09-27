@@ -25,8 +25,9 @@ import {getResponseMsg} from '../Utils/responses';
 import * as commonStyles from '../Common/common_style';
 import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
-import TimeSelector from '../Components/OrderForSelector';
+import TimeSelector from '../Components/TimeSelector';
 import CurveSeparator from '../Components/CurveSeparator';
+import SelectShopRequestObject from '../Requests/select_shop_request_object';
 
 const {
   TITLE_FONT,
@@ -38,7 +39,7 @@ const {
   LIGHT_GREY,
 } = commonStyles;
 @connect(({members, shops, orders, config}) => ({
-  company_id: members.company_id,
+  companyId: members.company_id,
   currentMember: members.profile,
   members: members,
   selectedShop: shops.selectedShop,
@@ -56,7 +57,7 @@ const {
   responses: config.responses,
   shopResponses: config.shopResponses,
 }))
-export default class Checkout extends React.Component {
+class Checkout extends React.Component {
   static navigationOptions = ({navigation}) => {
     const {params = {}} = navigation.state;
     return {
@@ -97,7 +98,7 @@ export default class Checkout extends React.Component {
       this.checkout.bind(this),
       500, // no new clicks within 500ms time window
     );
-    const {discount_cart_total, currentMember, cart_total} = props;
+    const {currentMember, cart_total} = props;
     this.state = {
       delivery_options: 'pickup',
       delivery_description: '',
@@ -795,6 +796,7 @@ export default class Checkout extends React.Component {
 
     filtered_cart = _.filter(cart, {clazz: 'product'});
     const voucher_item_ids = vouchers_to_use.map((item) => item.id);
+
     const obj = new MakeOrderRequestObj(
       filtered_cart,
       voucher_item_ids,
@@ -847,8 +849,56 @@ export default class Checkout extends React.Component {
     });
   };
 
+  fetchShopDetails = () => {
+    const {location, selectedShop} = this.props;
+    const {id} = selectedShop;
+    const latitude = location !== null ? location.coords.latitude : null;
+    const longitude = location !== null ? location.coords.longitude : null;
+
+    if (latitude !== null && longitude !== null) {
+      const object = new SelectShopRequestObject(latitude, longitude);
+
+      object.setUrlId(this.props.companyId);
+      object.setShopId(id);
+
+      const callback = this.fetchShopDetailsCallback;
+      const params = {object, callback};
+      const action = createAction('shops/selectShop')(params);
+      this.props.dispatch(action);
+    } else {
+      const object = new SelectShopRequestObject();
+      object.setUrlId(this.props.companyId);
+      object.setShopId(id);
+
+      const callback = this.fetchShopDetailsCallback;
+      const params = {object, callback};
+      const action = createAction('shops/selectShop')(params);
+      this.props.dispatch(action);
+    }
+  };
+
+  fetchShopDetailsCallback = (eventObject) => {
+    const noTimeSlotsAvailableText = getResponseMsg({
+      props: this.props,
+      shopId: this.props.selectedShop.id,
+      key: 'no_time_slots_available',
+      defaultText: 'No time slots available.',
+    });
+
+    if (eventObject.success) {
+      this.timepicker.updateTimeOptions(() => {
+        if (!this.timepicker.hasSchedule()) {
+          this.refs.toast.show(noTimeSlotsAvailableText, TOAST_DURATION);
+        } else {
+          this.timepicker.toggle();
+        }
+      });
+    }
+  };
+
   checkout = () => {
-    const {selected_payment, pick_up_status} = this.state;
+    const {selected_payment} = this.state;
+
     if (selected_payment === 'credit_card') {
       this.setState({isConfirmCheckout: true});
     } else {
@@ -881,8 +931,8 @@ export default class Checkout extends React.Component {
 
     return (
       <Brew9PopUp
-        onPressOk={this.onPayNowPressed}
         onBackgroundPress={() => {}}
+        onPressOk={this.onPayNowPressed}
         {...{popUpVisible, title, description, OkText}}
       />
     );
@@ -916,7 +966,6 @@ export default class Checkout extends React.Component {
         return;
       } else {
         if (selected_payment == '') {
-          // this.tooglePayment();
           const paymentSelectionText = getResponseMsg({
             props: this.props,
             shopId: selectedShop.id,
@@ -948,20 +997,28 @@ export default class Checkout extends React.Component {
           }
         }
 
-        if (pick_up_status == null) {
-          this._toggleTimeSelector();
+        if (pick_up_status === null) {
+          this.fetchShopDetails();
           return;
         } else {
-          if (selectedShop != null) {
-            var opening = Moment(selectedShop.opening_hour.start_time, 'h:mm');
-            var closing = Moment(selectedShop.opening_hour.end_time, 'h:mm');
-            var pickup = Moment(pick_up_time, 'h:mm');
-            var now = Moment(new Date(), 'HH:mm');
-            if (pickup < now && pick_up_status == 'Pick Later') {
+          if (selectedShop !== null) {
+            const {opening_hour} = selectedShop;
+            const closingTime = Moment(opening_hour.end_time, 'h:mm');
+            const pickupTime = Moment(pick_up_time, 'h:mm');
+            const timeNow = Moment(new Date(), 'HH:mm');
+            const timeDiff = Moment().diff(pick_up_time, 'minutes');
+
+            // selected pickup or delivery time must not be below current time
+            if (timeDiff > 0) {
+              this.fetchShopDetails();
+              return;
+            }
+
+            if (pickupTime < timeNow && pick_up_status === 'Pick Later') {
               const message = 'Pick up time is not available';
               this.refs.toast.show(message, TOAST_DURATION);
               return;
-            } else if (pickup > closing) {
+            } else if (pickupTime > closingTime) {
               // TODO please convert
               const message = 'We are closed at this time.';
               this.refs.toast.show(message, TOAST_DURATION);
@@ -1111,7 +1168,7 @@ export default class Checkout extends React.Component {
       return (
         <View style={[styles.drinksView]} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1176,7 +1233,7 @@ export default class Checkout extends React.Component {
               : () => null
           }
           style={styles.voucherButton}>
-          <View pointerEvents='box-none' style={styles.sectionRowView}>
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <Text style={styles.productNameText}>Brew9 Vouchers</Text>
             <View style={styles.spacer} />
             <View
@@ -1240,11 +1297,8 @@ export default class Checkout extends React.Component {
     );
   }
 
-  changeTimeSchedule = () => {
-    if (!this.refs.timepicker.hasSchedule()) {
-      this.refs.toast.show('No time slots available.', TOAST_DURATION);
-    }
-    this._toggleTimeSelector();
+  onSelectTimePress = () => {
+    this.fetchShopDetails();
   };
 
   renderPickupTime() {
@@ -1255,9 +1309,9 @@ export default class Checkout extends React.Component {
     return (
       <View style={styles.sectionView}>
         <TouchableOpacity
-          onPress={() => this.changeTimeSchedule()}
+          onPress={() => this.onSelectTimePress()}
           style={styles.voucherButton}>
-          <View pointerEvents='box-none' style={styles.sectionRowView}>
+          <View pointerEvents="box-none" style={styles.sectionRowView}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View
                 style={
@@ -1312,7 +1366,7 @@ export default class Checkout extends React.Component {
       return (
         <View style={styles.drinksView} key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1400,7 +1454,7 @@ export default class Checkout extends React.Component {
           style={[styles.drinksView, {marginVertical: 0 * alpha}]}
           key={key}>
           <View
-            pointerEvents='box-none'
+            pointerEvents="box-none"
             style={{
               justifyContent: 'center',
               backgroundColor: 'transparent',
@@ -1536,23 +1590,25 @@ export default class Checkout extends React.Component {
   renderTimeSelector = () => {
     const {isDelivery, selectedShop} = this.props;
     const {opening_hour, delivery_hour} = selectedShop;
+
     let today = [];
     let tomorrow = [];
+
     if (isDelivery) {
-      (today = delivery_hour?.today?.delivery_time_slot || []),
-        (tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || []);
+      today = delivery_hour?.today?.delivery_time_slot || [];
+      tomorrow = delivery_hour?.tomorrow?.delivery_time_slot || [];
     } else {
       today = opening_hour?.ordering_time_slot || [];
     }
     return (
       <TimeSelector
-        ref='timepicker'
-        delivery={this.props.isDelivery}
-        today={today || []}
-        tomorrow={tomorrow || []}
         animation={this.timeSelectorAnimation}
-        toggleDelivery={this._toggleTimeSelector}
+        delivery={this.props.isDelivery}
         onConfirm={this.onConfirmOrderSchedule}
+        ref={(ref) => (this.timepicker = ref)}
+        today={today || []}
+        toggle={this._toggleTimeSelector}
+        tomorrow={tomorrow || []}
       />
     );
   };
@@ -1709,11 +1765,11 @@ export default class Checkout extends React.Component {
       <View style={styles.orderReceiptView}>
         <ScrollView style={styles.orderScrollView}>
           <View style={styles.orderCartView}>
-            <View pointerEvents='box-none' style={styles.whiteboxView}>
+            <View pointerEvents="box-none" style={styles.whiteboxView}>
               {this.renderShopImage()}
             </View>
             <View
-              pointerEvents='box-none'
+              pointerEvents="box-none"
               style={{
                 flex: 1,
               }}>
@@ -1866,7 +1922,7 @@ export default class Checkout extends React.Component {
         {this.renderPayNow(non_negative_final_price)}
         {this.renderTimeSelector()}
         <HudLoading isLoading={this.state.loading} />
-        <Brew9Toast ref='toast' />
+        <Brew9Toast ref="toast" />
         <Brew9PopUp
           popUpVisible={this.state.visible}
           title={''}
@@ -2741,3 +2797,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default Checkout;
