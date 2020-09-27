@@ -23,13 +23,17 @@
     "no-console": "error",
     "no-duplicate-imports": "error",
     "no-prototype-builtins": "off",
-    "quotes": ["error", "single"],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": false,
+        "allowTemplateLiterals": true
+      }
+    ],
     "radix": ["error", "as-needed"],
     "react-native/no-unused-styles": "error",
-    "react-native/sort-styles": [
-      "error",
-      "asc"
-    ],
+    "react-native/sort-styles": ["error", "asc"],
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-sort-props": [
       "error",
