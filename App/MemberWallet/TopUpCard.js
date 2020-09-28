@@ -54,7 +54,9 @@ export default class TopUpCard extends React.Component {
     const {promotion} = this.props;
     return promotion ? (
       <View style={styles.tag}>
-        <Text style={styles.tagText}>{promotion}</Text>
+        <Text numberOfLines={1} style={styles.tagText}>
+          {promotion}
+        </Text>
       </View>
     ) : null;
   };
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: alpha * 7,
     paddingVertical: alpha * 2,
     marginRight: alpha * 5,
+    maxWidth: alpha * 150,
   },
 
   tagText: {
