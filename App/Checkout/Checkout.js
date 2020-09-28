@@ -254,7 +254,9 @@ class Checkout extends React.Component {
           this.setState({valid_vouchers});
 
           var valid_voucher_counts = _.filter(valid_vouchers, function (o) {
-            if (o.is_valid == true) return o;
+            if (o.is_valid == true) {
+              return o;
+            }
           }).length;
 
           const analytics = new Analytics(ANALYTICS_ID);
@@ -455,7 +457,9 @@ class Checkout extends React.Component {
     let n = parseInt((value * 100).toFixed(10)),
       x = n % 10;
     let result = n + 10 - x;
-    if (x < 6) result -= 10 / (parseInt(x / 3) + 1);
+    if (x < 6) {
+      result -= 10 / (parseInt(x / 3) + 1);
+    }
     roundOffValue = (result / 100).toFixed(2);
 
     return roundOffValue;
@@ -1211,7 +1215,7 @@ class Checkout extends React.Component {
       }
 
       return (
-        <View style={[styles.drinksView]} key={key}>
+        <View key={key} style={[styles.drinksView]}>
           <View
             pointerEvents="box-none"
             style={{
@@ -1266,7 +1270,9 @@ class Checkout extends React.Component {
     var valid_voucher_counts = _.filter(this.state.valid_vouchers, function (
       o,
     ) {
-      if (o.is_valid == true) return o;
+      if (o.is_valid == true) {
+        return o;
+      }
     }).length;
     return (
       <View style={styles.sectionView}>
@@ -1409,7 +1415,7 @@ class Checkout extends React.Component {
 
       let variant_array = filtered.map((a) => a.value);
       return (
-        <View style={styles.drinksView} key={key}>
+        <View key={key} style={styles.drinksView}>
           <View
             pointerEvents="box-none"
             style={{
@@ -1496,8 +1502,8 @@ class Checkout extends React.Component {
 
       return (
         <View
-          style={[styles.drinksView, {marginVertical: 0 * alpha}]}
-          key={key}>
+          key={key}
+          style={[styles.drinksView, {marginVertical: 0 * alpha}]}>
           <View
             pointerEvents="box-none"
             style={{
@@ -1658,141 +1664,148 @@ class Checkout extends React.Component {
     );
   };
 
-  renderPaymentOptions = () => {
-    const {currentMember, isDelivery, selectedShop} = this.props;
-    const {
-      allow_wallet,
-      allow_wallet_text,
-      allow_credit_card,
-      allow_credit_card_text,
-      allow_pay_in_store,
-      allow_pay_in_store_text,
-    } = selectedShop;
-    const {final_price, selected_payment, topUpPromo} = this.state;
-    let cashPayment = isDelivery ? 'Cash On Delivery' : 'Pay In Store';
-    let credits =
-      currentMember != undefined
+  renderWalletPaymentSection = () => {
+    const {selected_payment} = this.state;
+    const {currentMember, selectedShop} = this.props;
+    const {allow_wallet, allow_wallet_text} = selectedShop;
+
+    const selectBoxStyle =
+      selected_payment === 'credits'
+        ? styles.activeSelectBox
+        : styles.inactiveSelectBox;
+
+    const iconStyle =
+      selected_payment === 'credits'
+        ? styles.walletActiveIcon
+        : styles.walletInactiveIcon;
+
+    const credits =
+      currentMember !== undefined
         ? parseFloat(currentMember.credits).toFixed(2)
         : 0;
-    var no_payment_needed = final_price <= 0 ? true : false;
 
-    let walletSelectBox =
-      selected_payment == 'credits' ? (
-        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
-      ) : (
-        <View style={styles.selectBox} />
-      );
+    const walletCreditsStyle =
+      credits > 0 ? styles.activeCreditsText : styles.inActiveCreditsText;
 
-    let cardSelectBox =
-      selected_payment == 'credit_card' ? (
-        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
-      ) : (
-        <View style={styles.selectBox} />
-      );
-
-    let counterSelectBox =
-      selected_payment == 'counter' ? (
-        <View style={[styles.selectBox, {backgroundColor: '#00B2E3'}]} />
-      ) : (
-        <View style={styles.selectBox} />
-      );
-
-    let walletIconStyle =
-      selected_payment == 'credits'
-        ? [styles.paymentWalletIcon, {tintColor: PRIMARY_COLOR}]
-        : styles.paymentWalletIcon;
-
-    let cardIconStyle =
-      selected_payment == 'credit_card'
-        ? [styles.paymentCardIcon, {tintColor: PRIMARY_COLOR}]
-        : styles.paymentCardIcon;
-
-    let cashIconStyle =
-      selected_payment == 'counter'
-        ? [styles.paymentCashIcon, {tintColor: PRIMARY_COLOR}]
-        : styles.paymentCashIcon;
-
-    let creditStyle =
-      credits > 0
-        ? [styles.creditsText, {color: PRIMARY_COLOR}]
-        : styles.creditsText;
+    const allowText = allow_wallet_text ? (
+      <Text style={styles.allowText}>{allow_wallet_text}</Text>
+    ) : null;
 
     return (
-      <View style={styles.paymentOptionsView}>
-        {allow_wallet && (
-          <TouchableOpacity
-            onPress={() => this.onWalletButtonPressed()}
-            style={styles.paymentOptionsListView}>
-            <View style={styles.iconContainer}>
-              <Image
-                source={require('./../../assets/images/wallet_center.png')}
-                style={walletIconStyle}
-              />
+      <View>
+        <TouchableOpacity
+          onPress={() => this.onWalletButtonPressed()}
+          style={styles.paymentOptionsListView}>
+          <View style={styles.iconContainer}>
+            <Image
+              source={require('./../../assets/images/wallet_center.png')}
+              style={iconStyle}
+            />
+          </View>
+          <View>
+            <View style={styles.walletTextContainer}>
+              <Text style={styles.paymentOptionText}>Wallet</Text>
+              {this.renderTopUpPromotion()}
             </View>
-            <View>
-              <View style={styles.walletTextContainer}>
-                <Text style={styles.paymentOptionText}>Wallet</Text>
-                {this.renderTopUpPromotion()}
-              </View>
-              <Text style={creditStyle}>${credits}</Text>
-            </View>
-            {walletSelectBox}
-          </TouchableOpacity>
-        )}
-        {allow_wallet && (
-          <Text style={styles.allowText}>{allow_wallet_text}</Text>
-        )}
+            <Text style={walletCreditsStyle}>${credits}</Text>
+          </View>
+          <View style={selectBoxStyle} />
+        </TouchableOpacity>
+        {allowText}
+      </View>
+    );
+  };
 
-        {allow_credit_card && (
-          <TouchableOpacity
-            onPress={() => this.onCreditButtonPressed()}
-            style={styles.paymentOptionsListView}>
-            <View style={styles.iconContainer}>
-              <Image
-                source={require('./../../assets/images/credit_card.png')}
-                style={cardIconStyle}
-              />
-            </View>
-            <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
+  renderCardPaymentSection = () => {
+    const {selected_payment} = this.state;
+    const {selectedShop} = this.props;
+    const {allow_credit_card, allow_credit_card_text} = selectedShop;
+
+    const selectBoxStyle =
+      selected_payment === 'credit_card'
+        ? styles.activeSelectBox
+        : styles.inactiveSelectBox;
+
+    const iconStyle =
+      selected_payment === 'credit_card'
+        ? styles.cardActiveIcon
+        : styles.cardInactiveICon;
+
+    const allowText = allow_credit_card_text ? (
+      <Text style={styles.allowText}>{allow_credit_card_text}</Text>
+    ) : null;
+
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => this.onCreditButtonPressed()}
+          style={styles.paymentOptionsListView}>
+          <View style={styles.iconContainer}>
             <Image
-              source={require('./../../assets/images/cc.png')}
-              style={styles.cc}
+              source={require('./../../assets/images/credit_card.png')}
+              style={iconStyle}
             />
-            <Image
-              source={require('./../../assets/images/visa.png')}
-              style={styles.visa}
-            />
-            {/* <Image
-            source={require('./../../assets/images/union.png')}
-            style={styles.union}
-          />
-          <Image
-            source={require('./../../assets/images/dc.png')}
-            style={styles.dc}
-          /> */}
-            {cardSelectBox}
-          </TouchableOpacity>
-        )}
-        {allow_credit_card && (
-          <Text style={styles.allowText}>{allow_credit_card_text}</Text>
-        )}
-        {allow_pay_in_store && (
-          <TouchableOpacity
-            onPress={() => this.onCounterButtonPressed()}
-            style={styles.paymentOptionsListView}>
-            <View style={styles.iconContainer}>
-              <Image
-                source={require('./../../assets/images/cash.png')}
-                style={cashIconStyle}
-              />
+          </View>
+          <View>
+            <View style={styles.walletTextContainer}>
+              <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
             </View>
-            <Text style={styles.paymentOptionText}>{cashPayment}</Text>
-            {counterSelectBox}
-          </TouchableOpacity>
-        )}
-        {allow_pay_in_store && (
-          <Text style={styles.allowText}>{allow_pay_in_store_text}</Text>
-        )}
+          </View>
+          <View style={selectBoxStyle} />
+        </TouchableOpacity>
+        {allowText}
+      </View>
+    );
+  };
+
+  renderCashPaymentSection = () => {
+    const {selected_payment} = this.state;
+    const {selectedShop} = this.props;
+    const {allow_pay_in_store, allow_pay_in_store_text} = selectedShop;
+
+    const selectBoxStyle =
+      selected_payment === 'counter'
+        ? styles.activeSelectBox
+        : styles.inactiveSelectBox;
+
+    const iconStyle =
+      selected_payment === 'counter'
+        ? styles.cashActiveIcon
+        : styles.cashInactiveIcon;
+
+    const allowText = allow_pay_in_store_text ? (
+      <Text style={styles.allowText}>{allow_pay_in_store_text}</Text>
+    ) : null;
+
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => this.onCounterButtonPressed()}
+          style={styles.paymentOptionsListView}>
+          <View style={styles.iconContainer}>
+            <Image
+              source={require('./../../assets/images/cash.png')}
+              style={iconStyle}
+            />
+          </View>
+          <View>
+            <View style={styles.walletTextContainer}>
+              <Text style={styles.paymentOptionText}>Pay In Store</Text>
+            </View>
+          </View>
+          <View style={selectBoxStyle} />
+        </TouchableOpacity>
+        {allowText}
+      </View>
+    );
+  };
+
+  renderPaymentOptions = () => {
+    return (
+      <View style={styles.paymentOptionsView}>
+        {this.renderWalletPaymentSection()}
+        {this.renderCardPaymentSection()}
+        {this.renderCashPaymentSection()}
       </View>
     );
   };
@@ -1803,8 +1816,8 @@ class Checkout extends React.Component {
     let shopImage = url ? (
       <View style={styles.completeOrderView}>
         <Image
-          source={{uri: url}}
           resizeMode={'cover'}
+          source={{uri: url}}
           style={styles.shopImage}
         />
       </View>
@@ -1958,9 +1971,9 @@ class Checkout extends React.Component {
           </Text>
         </View>
         <TouchableOpacity
+          disabled={!enablePaynow}
           onPress={() => this.checkout()}
-          style={style}
-          disabled={!enablePaynow}>
+          style={style}>
           <Text style={styles.payNowButtonText}>
             {this.state.selected_payment == 'counter' ? 'Order Now' : 'Pay Now'}
           </Text>
@@ -1983,8 +1996,8 @@ class Checkout extends React.Component {
     return (
       <SafeAreaView style={styles.checkoutViewPadding}>
         <ScrollView
-          style={styles.scrollviewScrollView}
-          onLayout={(event) => this.measureView(event)}>
+          onLayout={(event) => this.measureView(event)}
+          style={styles.scrollviewScrollView}>
           <View style={styles.ordersummaryView}>
             {this.renderCheckoutReceipt()}
           </View>
@@ -1997,21 +2010,20 @@ class Checkout extends React.Component {
         <HudLoading isLoading={this.state.loading} />
         <Brew9Toast ref="toast" />
         <Brew9PopUp
-          popUpVisible={this.state.visible}
-          title={''}
+          cancelText={'Cancel'}
           description={'Please add delivery address'}
           OkText={'Add address'}
-          cancelText={'Cancel'}
-          onPressOk={this.addFirstShippingAddress}
-          onPressCancel={() => this.setState({visible: false})}
           onBackgroundPress={this.closePopUp}
           onChangeText={(text) => this.onChangeCoupon(text)}
+          onPressCancel={() => this.setState({visible: false})}
+          onPressOk={this.addFirstShippingAddress}
+          popUpVisible={this.state.visible}
+          title={''}
         />
         {this.renderConfirmPopup()}
         {selected_address && (
           <Brew9PopUp
-            popUpVisible={this.state.addressConfirmation}
-            title={'Are you sure to use this address as delivery address?'}
+            cancelText={'Cancel'}
             description={
               selected_address.address +
               '\n' +
@@ -2024,15 +2036,16 @@ class Checkout extends React.Component {
               selected_address.country
             }
             OkText={'Confirm'}
-            cancelText={'Cancel'}
+            onBackgroundPress={this.closePopUp}
+            onChangeText={(text) => this.onChangeCoupon(text)}
+            onPressCancel={() => this.setState({addressConfirmation: false})}
             onPressOk={() =>
               this.setState({addressConfirmation: false}, () =>
                 this.loadMakeOrder(),
               )
             }
-            onPressCancel={() => this.setState({addressConfirmation: false})}
-            onBackgroundPress={this.closePopUp}
-            onChangeText={(text) => this.onChangeCoupon(text)}
+            popUpVisible={this.state.addressConfirmation}
+            title={'Are you sure to use this address as delivery address?'}
           />
         )}
       </SafeAreaView>
@@ -2041,26 +2054,177 @@ class Checkout extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  deliveryNoted: {
-    color: '#ff4500',
+  activeCreditsText: {
+    color: PRIMARY_COLOR,
     fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontSize: fontAlpha * 14,
+  },
+  activeSelectBox: {
+    backgroundColor: '#00B2E3',
+    borderColor: '#BAB7B7',
+    borderRadius: 9 * alpha,
+    borderStyle: 'solid',
+    borderWidth: 1 * alpha,
+    height: 16 * alpha,
+    position: 'absolute',
+    right: alpha * 10,
+    width: 16 * alpha,
+  },
+  addressText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(146, 146, 146)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
+    paddingBottom: 5 * alpha,
+    paddingLeft: 0,
     width: 191 * alpha,
   },
   allowText: {
+    backgroundColor: 'transparent',
     color: '#ff4500',
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    width: 191 * alpha,
     marginLeft: alpha * 10,
+    textAlign: 'left',
+    width: 191 * alpha,
+  },
+  branchText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+
+    fontSize: 15 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  branchView: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'transparent',
+    height: 60 * alpha,
+    justifyContent: 'center',
+    width: 182 * alpha,
+  },
+
+  callIconButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderColor: 'rgb(180, 179, 179)',
+    borderRadius: 17.5 * alpha,
+    borderStyle: 'solid',
+    borderWidth: 1 * alpha,
+    flexDirection: 'row',
+    height: 35 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+  },
+  callIconButtonImage: {
+    resizeMode: 'contain',
+  },
+  callText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(163, 163, 163)',
+    fontFamily: TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    marginLeft: 6 * alpha,
+    marginRight: 7 * alpha,
+    textAlign: 'center',
+  },
+  callView: {
+    backgroundColor: 'transparent',
+    height: 55 * alpha,
+    marginRight: 8 * alpha,
+    width: 35 * alpha,
+  },
+  callrefundText: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'transparent',
+    color: 'rgb(152, 149, 149)',
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    marginBottom: 13,
+    marginLeft: 26 * alpha,
+    marginTop: 13 * alpha,
+    textAlign: 'left',
+  },
+  cancelImage: {
+    height: 15 * alpha,
+    resizeMode: 'contain',
+    width: 15 * alpha,
+  },
+  cancelVoucherButton: {
+    height: 15 * alpha,
+    marginLeft: 5 * alpha,
+    width: 15 * alpha,
+  },
+
+  cardActiveIcon: {
+    height: alpha * 23,
+    tintColor: PRIMARY_COLOR,
+    width: alpha * 23,
+  },
+  cardInactiveICon: {
+    height: alpha * 23,
+    tintColor: 'rgb(186, 183, 183)',
+    width: alpha * 23,
+  },
+  cashActiveIcon: {
+    height: alpha * 19,
+    tintColor: PRIMARY_COLOR,
+    width: alpha * 19,
+  },
+  cashInactiveIcon: {
+    height: alpha * 19,
+    tintColor: 'rgb(186, 183, 183)',
+    width: alpha * 19,
+  },
+  cc: {
+    height: alpha * 16,
+    marginLeft: alpha * 9,
+    width: alpha * 27,
+  },
+  checkoutViewOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    bottom: 0,
+    flex: 1,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  checkoutViewPadding: {
+    backgroundColor: DEFAULT_GREY_BACKGROUND,
+    flex: 1,
+    paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
+  },
+  completeOrderView: {
+    alignItems: 'center',
+    borderTopLeftRadius: 14 * alpha,
+    borderTopRightRadius: 14 * alpha,
+    height: alpha * 150,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  completedOrderText: {
+    backgroundColor: 'transparent',
+    color: PRIMARY_COLOR,
+    fontFamily: TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    marginBottom: 30 * alpha,
+    marginTop: 10 * alpha,
+    textAlign: 'center',
+  },
+  dc: {
+    height: alpha * 30,
+    marginLeft: alpha * 7,
+    width: alpha * 25,
   },
   deliveryAddressDetail: {
     backgroundColor: 'transparent',
@@ -2068,161 +2232,277 @@ const styles = StyleSheet.create({
     fontFamily: TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'right',
     marginBottom: 5 * alpha,
+    textAlign: 'right',
   },
-  addressText: {
-    color: 'rgb(146, 146, 146)',
-    fontSize: 11 * fontAlpha,
+  deliveryAddressView: {
+    backgroundColor: 'rgb(245,245,245)',
+    paddingHorizontal: 24 * alpha,
+  },
+  deliveryImage: {
+    backgroundColor: 'transparent',
+    height: 23 * alpha,
+    resizeMode: 'contain',
+    width: 35 * alpha,
+  },
+  deliveryNoted: {
+    backgroundColor: 'transparent',
+    color: '#ff4500',
     fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    backgroundColor: 'transparent',
+    textAlign: 'left',
     width: 191 * alpha,
-    paddingLeft: 0,
-    paddingBottom: 5 * alpha,
   },
+  deliveryView: {
+    backgroundColor: 'white',
+    borderColor: 'rgb(151, 151, 151)',
+    borderStyle: 'solid',
+    borderWidth: 1 * alpha,
+    height: 54 * alpha,
+    width: 168 * alpha,
+  },
+  deliveryView_selected: {
+    backgroundColor: 'white',
+    borderColor: 'rgb(0, 178, 227)',
+    borderStyle: 'solid',
+    borderWidth: 1 * alpha,
+    height: 54 * alpha,
+    width: 168 * alpha,
+  },
+
+  descriptionText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(146, 146, 146)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+
+    textAlign: 'left',
+  },
+  directionIconButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderColor: 'rgb(180, 179, 179)',
+    borderRadius: 17.5 * alpha,
+    borderStyle: 'solid',
+    borderWidth: 1 * alpha,
+    flexDirection: 'row',
+    height: 35 * alpha,
+    justifyContent: 'center',
+    marginLeft: 8 * alpha,
+    marginRight: 7 * alpha,
+    padding: 0,
+  },
+
+  directionIconButtonImage: {
+    resizeMode: 'contain',
+  },
+  directionText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(163, 163, 163)',
+    fontFamily: TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'center',
+  },
+  directionView: {
+    backgroundColor: 'transparent',
+    height: 55 * alpha,
+    width: 50 * alpha,
+  },
+  dottedLineImage: {
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    bottom: 0,
+    height: 2 * alpha,
+    position: 'absolute',
+    resizeMode: 'cover',
+    width: 291 * alpha,
+  },
+
+  drinksView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    paddingTop: 10 * alpha,
+  },
+
   editAddressText: {
+    backgroundColor: 'transparent',
     color: 'rgb(50, 50, 50)',
+    flex: 1,
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'right',
-    backgroundColor: 'transparent',
     width: 191 * alpha,
-    flex: 1,
     // marginBottom: 10 * alpha,
   },
-  deliveryAddressView: {
-    paddingHorizontal: 24 * alpha,
-    backgroundColor: 'rgb(245,245,245)',
+  greenCircle: {
+    backgroundColor: 'green',
+    borderRadius: 5 * alpha,
+    height: 10 * alpha,
+    marginRight: 5 * alpha,
+    width: 10 * alpha,
   },
-
   headerLeftContainer: {
     flexDirection: 'row',
     marginLeft: 8 * alpha,
     width: 70 * alpha,
   },
+  iconContainer: {
+    marginRight: alpha * 5,
+    width: alpha * 25,
+  },
+  inActiveCreditsText: {
+    color: '#ED6E69',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: fontAlpha * 14,
+  },
+  inactiveSelectBox: {
+    backgroundColor: 'transparent',
+    borderColor: '#BAB7B7',
+    borderRadius: 9 * alpha,
+    borderStyle: 'solid',
+    borderWidth: 1 * alpha,
+    height: 16 * alpha,
+    position: 'absolute',
+    right: alpha * 10,
+    width: 16 * alpha,
+  },
+  item2View: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 46 * alpha,
+    marginRight: 1 * alpha,
+  },
+  itemTwoView: {
+    alignItems: 'flex-start',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 90 * alpha,
+    marginRight: 1 * alpha,
+  },
+  itemView: {
+    alignItems: 'flex-start',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 90 * alpha,
+  },
+  lineThreeView: {
+    backgroundColor: 'rgb(234, 234, 234)',
+    height: 1 * alpha,
+    marginLeft: 25 * alpha,
+    marginRight: 24 * alpha,
+    marginTop: 14 * alpha,
+  },
+  locationView: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 64 * alpha,
+    marginLeft: 25 * alpha,
+    marginRight: 25 * alpha,
+    marginTop: 18 * alpha,
+  },
+  locationWrapperView: {
+    backgroundColor: 'rgb(245, 245, 245)',
+    flex: 1,
+  },
+  logoImage: {
+    backgroundColor: 'transparent',
+    height: 60 * alpha,
+    marginTop: 30 * alpha,
+    resizeMode: 'contain',
+    width: 30 * alpha,
+  },
+  menuRowArrowImage: {
+    width: 10 * alpha,
+    height: 10 * alpha,
+    marginLeft: 5 * alpha,
+    // marginTop: 4 * alpha,
+    tintColor: 'rgb(50, 50, 50)',
+    resizeMode: 'contain',
+  },
+  nameText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 15 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'left',
+  },
+  nameThreeText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 15 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'left',
+    width: 190 * alpha,
+  },
   navigationBarItem: {
     width: '100%',
   },
   navigationBarItemIcon: {
-    width: 18 * alpha,
     height: 18 * alpha,
     tintColor: 'black',
+    width: 18 * alpha,
   },
-  checkoutViewOverlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  orderCartView: {
+    alignSelf: 'stretch',
+    backgroundColor: 'rgb(245, 245, 245)',
+    borderRadius: 14 * alpha,
     flex: 1,
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
+    marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
+    marginLeft: 18 * alpha,
+    marginRight: 18 * alpha,
+    marginTop: 13 * alpha,
   },
-  checkoutViewPadding: {
+  orderReceiptView: {
     backgroundColor: DEFAULT_GREY_BACKGROUND,
-    paddingBottom: (47 + BUTTONBOTTOMPADDING) * alpha,
     flex: 1,
   },
-  scrollviewScrollView: {
+  orderScrollView: {
     backgroundColor: 'transparent',
     flex: 1,
   },
-  branchText: {
-    color: 'rgb(54, 54, 54)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 15 * fontAlpha,
-
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-  },
-
-  tabImage: {
-    resizeMode: 'contain',
-    backgroundColor: 'transparent',
-    alignSelf: 'flex-end',
-    width: 17 * alpha,
-    height: 17 * alpha,
-  },
-  tabTwoImage: {
-    resizeMode: 'contain',
-    backgroundColor: 'transparent',
-    alignSelf: 'flex-end',
-    width: 17 * alpha,
-    height: 17 * alpha,
-  },
-  pickupbuttonButtonImage: {
-    resizeMode: 'contain',
-  },
-  pickupbuttonButton: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 168 * alpha,
-    height: 54 * alpha,
-  },
-  pickupbuttonButtonText: {
-    color: 'white',
-    fontFamily: TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'left',
-  },
-  deliveryView: {
-    backgroundColor: 'white',
-    borderWidth: 1 * alpha,
-    borderColor: 'rgb(151, 151, 151)',
-    borderStyle: 'solid',
-    width: 168 * alpha,
-    height: 54 * alpha,
-  },
-  deliveryView_selected: {
-    backgroundColor: 'white',
-    borderWidth: 1 * alpha,
-    borderColor: 'rgb(0, 178, 227)',
-    borderStyle: 'solid',
-    width: 168 * alpha,
-    height: 54 * alpha,
-  },
-  deliveryImage: {
-    resizeMode: 'contain',
-    backgroundColor: 'transparent',
-    width: 35 * alpha,
-    height: 23 * alpha,
+  orderitemsView: {
+    // backgroundColor: 'green',
+    // marginLeft: 24 * alpha,
+    // marginRight: 24 * alpha,
+    // flex: 1
   },
   ordersummaryView: {
     backgroundColor: 'white',
     flex: 1,
     paddingTop: 0 * alpha,
   },
-  voucherButton: {
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
+  payNowButton: {
     alignItems: 'center',
+    backgroundColor: 'rgb(0, 178, 227)',
+    flexDirection: 'row',
+    height: 47 * alpha,
     justifyContent: 'center',
     padding: 0,
-    flex: 1,
+    width: 114 * alpha,
   },
-  voucherButtonText: {
+  payNowButtonText: {
     color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
+    fontFamily: TITLE_FONT,
+    fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-    fontWeight: 'normal',
     textAlign: 'left',
   },
   paymentButton: {
-    width: '100%',
+    alignItems: 'center',
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    alignItems: 'center',
     flex: 1,
+    width: '100%',
   },
   paymentButtonText: {
     color: 'rgb(54, 54, 54)',
@@ -2232,6 +2512,246 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     marginLeft: 20 * alpha,
     textAlign: 'left',
+  },
+  paymentOptionText: {
+    color: '#363636',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: fontAlpha * 14,
+  },
+  paymentOptionsListView: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    minHeight: alpha * 40,
+  },
+  paymentOptionsView: {
+    // height: alpha * 120,
+    flex: 1,
+    paddingHorizontal: alpha * 17,
+  },
+  pickupbuttonButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 54 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+    width: 168 * alpha,
+  },
+  pickupbuttonButtonImage: {
+    resizeMode: 'contain',
+  },
+  pickupbuttonButtonText: {
+    color: 'white',
+    fontFamily: TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'left',
+  },
+
+  priceText: {
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 26 * alpha,
+    textAlign: 'left',
+  },
+  priceThreeText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 3 * alpha,
+    textAlign: 'right',
+  },
+  productDetailView: {
+    alignItems: 'flex-start',
+    backgroundColor: 'transparent',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  productNameDisabledText: {
+    backgroundColor: 'transparent',
+    color: LIGHT_GREY,
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    marginBottom: 5 * alpha,
+    textAlign: 'left',
+  },
+
+  productNameText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(63, 63, 63)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    textAlign: 'left',
+    // marginBottom: 5 * alpha
+  },
+
+  productPriceText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(50, 50, 50)',
+    fontFamily: TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'right',
+    width: 55 * alpha,
+  },
+  productQuantityText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(50, 50, 50)',
+    fontFamily: TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 4 * alpha,
+    textAlign: 'right',
+    width: 25 * alpha,
+  },
+
+  productVariantText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(164, 164, 164)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginBottom: 10 * alpha,
+    textAlign: 'left',
+    width: 191 * alpha,
+  },
+  productVoucherDisableText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(163, 163, 163)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'right',
+  },
+  productVoucherText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(50, 50, 50)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'right',
+  },
+  quantityText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 52 * alpha,
+    marginTop: 26 * alpha,
+    textAlign: 'right',
+  },
+  quantityThreeText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 56 * alpha,
+    textAlign: 'right',
+  },
+  redCircle: {
+    backgroundColor: 'red',
+    borderRadius: 5 * alpha,
+    height: 10 * alpha,
+    marginRight: 5 * alpha,
+    width: 10 * alpha,
+  },
+  scrollviewScrollView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+  },
+  sectionRowView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: alpha * 40,
+  },
+  sectionView: {
+    backgroundColor: 'rgb(245,245,245)',
+    flex: 1,
+    paddingHorizontal: 24 * alpha,
+  },
+  shopBranchAddressText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(146, 146, 146)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 11 * fontAlpha,
+    fontStyle: 'normal',
+    marginLeft: 1 * alpha,
+    textAlign: 'left',
+  },
+  shopBranchText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    marginRight: 12 * alpha,
+    textAlign: 'left',
+  },
+  shopImage: {
+    height: '100%',
+    width: '100%',
+  },
+  shopImageContainer: {
+    borderColor: 'red',
+    borderWidth: 2,
+    height: alpha * 100,
+    paddingLeft: 18 * alpha,
+    paddingRight: 18 * alpha,
+    width: windowWidth,
+  },
+
+  spacer: {
+    marginBottom: 10 * alpha,
+  },
+
+  tabImage: {
+    alignSelf: 'flex-end',
+    backgroundColor: 'transparent',
+    height: 17 * alpha,
+    resizeMode: 'contain',
+    width: 17 * alpha,
+  },
+  tabTwoImage: {
+    alignSelf: 'flex-end',
+    backgroundColor: 'transparent',
+    height: 17 * alpha,
+    resizeMode: 'contain',
+    width: 17 * alpha,
+  },
+
+  tag: {
+    backgroundColor: '#ED6E69',
+    borderRadius: alpha * 10,
+    marginLeft: 10,
+    maxWidth: alpha * 150,
+    paddingHorizontal: alpha * 7,
+    paddingVertical: alpha * 2,
+  },
+  tagText: {
+    color: '#FFFFFF',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha,
   },
   totalPayNowView: {
     backgroundColor: '#FFFFFF',
@@ -2244,231 +2764,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  payNowButton: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 114 * alpha,
-    height: 47 * alpha,
-  },
-  payNowButtonText: {
-    color: 'white',
+  totalText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
     fontFamily: TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left',
-  },
-
-  orderReceiptView: {
-    backgroundColor: DEFAULT_GREY_BACKGROUND,
-    flex: 1,
-  },
-  orderScrollView: {
-    backgroundColor: 'transparent',
-    flex: 1,
-  },
-
-  orderCartView: {
-    alignSelf: 'stretch',
-    marginLeft: 18 * alpha,
-    marginRight: 18 * alpha,
-    marginTop: 13 * alpha,
-    marginBottom: 50 * alpha + BUTTONBOTTOMPADDING,
-    borderRadius: 14 * alpha,
-    backgroundColor: 'rgb(245, 245, 245)',
-    flex: 1,
-  },
-  whiteboxView: {
-    backgroundColor: 'white',
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    borderTopRightRadius: 14 * alpha,
-    borderTopLeftRadius: 14 * alpha,
-  },
-  completeOrderView: {
-    height: alpha * 150,
-    width: '100%',
-    borderTopRightRadius: 14 * alpha,
-    borderTopLeftRadius: 14 * alpha,
-    overflow: 'hidden',
-    alignItems: 'center',
-  },
-  logoImage: {
-    resizeMode: 'contain',
-    backgroundColor: 'transparent',
-    width: 30 * alpha,
-    height: 60 * alpha,
-    marginTop: 30 * alpha,
-  },
-
-  shopImageContainer: {
-    height: alpha * 100,
-    width: windowWidth,
-    paddingLeft: 18 * alpha,
-    paddingRight: 18 * alpha,
-    borderWidth: 2,
-    borderColor: 'red',
-  },
-
-  shopImage: {
-    height: '100%',
-    width: '100%',
-  },
-  completedOrderText: {
-    color: PRIMARY_COLOR,
-    fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    marginTop: 10 * alpha,
-    marginBottom: 30 * alpha,
-  },
-  locationWrapperView: {
-    backgroundColor: 'rgb(245, 245, 245)',
-    flex: 1,
-  },
-  locationView: {
-    backgroundColor: 'transparent',
-    height: 64 * alpha,
-    marginLeft: 25 * alpha,
-    marginRight: 25 * alpha,
-    marginTop: 18 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  branchView: {
-    backgroundColor: 'transparent',
-    alignSelf: 'flex-start',
-    justifyContent: 'center',
-    width: 182 * alpha,
-    height: 60 * alpha,
-  },
-  shopBranchText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'left',
-    marginRight: 12 * alpha,
-  },
-  shopBranchAddressText: {
-    color: 'rgb(146, 146, 146)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    marginLeft: 1 * alpha,
-  },
-  callView: {
-    backgroundColor: 'transparent',
-    width: 35 * alpha,
-    height: 55 * alpha,
-    marginRight: 8 * alpha,
-  },
-  callIconButton: {
-    backgroundColor: 'transparent',
-    borderRadius: 17.5 * alpha,
-    borderWidth: 1 * alpha,
-    borderColor: 'rgb(180, 179, 179)',
-    borderStyle: 'solid',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    height: 35 * alpha,
-  },
-  callIconButtonImage: {
-    resizeMode: 'contain',
-  },
-  callText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(163, 163, 163)',
-    fontFamily: TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    marginLeft: 6 * alpha,
-    marginRight: 7 * alpha,
-  },
-  directionView: {
-    backgroundColor: 'transparent',
-    width: 50 * alpha,
-    height: 55 * alpha,
-  },
-  directionIconButton: {
-    backgroundColor: 'transparent',
-    borderRadius: 17.5 * alpha,
-    borderWidth: 1 * alpha,
-    borderColor: 'rgb(180, 179, 179)',
-    borderStyle: 'solid',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    height: 35 * alpha,
-    marginLeft: 8 * alpha,
-    marginRight: 7 * alpha,
-  },
-  directionIconButtonImage: {
-    resizeMode: 'contain',
-  },
-  directionText: {
-    color: 'rgb(163, 163, 163)',
-    fontFamily: TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-  },
-  voucherView: {
-    backgroundColor: 'transparent',
-    height: 18 * alpha,
-    marginLeft: 26 * alpha,
-    marginRight: 25 * alpha,
-    marginTop: 42 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  voucherDescriptionText: {
-    color: 'rgb(54, 54, 54)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-  },
-  voucher2View: {
-    backgroundColor: 'transparent',
-    height: 17 * alpha,
-    marginLeft: 26 * alpha,
-    marginRight: 25 * alpha,
-    marginTop: 17 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  totalViewWrapper: {
-    backgroundColor: 'rgb(245,245,245)',
-    flex: 1,
-    borderBottomLeftRadius: 14 * alpha,
-    borderBottomRightRadius: 14 * alpha,
+    textAlign: 'right',
   },
   totalView: {
+    alignItems: 'center',
     backgroundColor: 'transparent',
+    flexDirection: 'row',
     height: 21 * alpha,
+    marginBottom: 18 * alpha,
     marginLeft: 26 * alpha,
     marginRight: 24 * alpha,
     marginTop: 10 * alpha,
-    marginBottom: 18 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
+  totalViewWrapper: {
+    backgroundColor: 'rgb(245,245,245)',
+    borderBottomLeftRadius: 14 * alpha,
+    borderBottomRightRadius: 14 * alpha,
+    flex: 1,
+  },
+
   totallabelText: {
     backgroundColor: 'transparent',
     color: 'rgb(54, 54, 54)',
@@ -2478,266 +2798,50 @@ const styles = StyleSheet.create({
 
     textAlign: 'center',
   },
-  totalText: {
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 16 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'right',
-    backgroundColor: 'transparent',
+
+  union: {
+    height: alpha * 27,
+    marginLeft: alpha * 7,
+    width: alpha * 27,
   },
-  lineThreeView: {
-    backgroundColor: 'rgb(234, 234, 234)',
-    height: 1 * alpha,
-    marginLeft: 25 * alpha,
-    marginRight: 24 * alpha,
-    marginTop: 14 * alpha,
+  visa: {
+    height: alpha * 9,
+    marginLeft: alpha * 7,
+    width: alpha * 27,
   },
-  callrefundText: {
+  voucher2View: {
+    alignItems: 'center',
     backgroundColor: 'transparent',
-    color: 'rgb(152, 149, 149)',
-    fontFamily: TITLE_FONT,
+    flexDirection: 'row',
+    height: 17 * alpha,
+    marginLeft: 26 * alpha,
+    marginRight: 25 * alpha,
+    marginTop: 17 * alpha,
+  },
+  voucherButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 0,
+  },
+
+  voucherButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
-    textAlign: 'left',
-    alignSelf: 'flex-start',
-    marginLeft: 26 * alpha,
-    marginTop: 13 * alpha,
-    marginBottom: 13,
-  },
-  orderitemsView: {
-    // backgroundColor: 'green',
-    // marginLeft: 24 * alpha,
-    // marginRight: 24 * alpha,
-    // flex: 1
-  },
-  itemView: {
-    backgroundColor: 'transparent',
-    height: 90 * alpha,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  nameText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 15 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'left',
-  },
-  descriptionText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(146, 146, 146)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-
-    textAlign: 'left',
-  },
-  quantityText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    marginRight: 52 * alpha,
-    marginTop: 26 * alpha,
-  },
-  priceText: {
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    marginTop: 26 * alpha,
   },
-  itemTwoView: {
-    backgroundColor: 'transparent',
-    height: 90 * alpha,
-    marginRight: 1 * alpha,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-
-  item2View: {
-    backgroundColor: 'transparent',
-    height: 46 * alpha,
-    marginRight: 1 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  nameThreeText: {
-    color: 'rgb(54, 54, 54)',
+  voucherButtonText: {
+    color: 'white',
     fontFamily: TITLE_FONT,
-    fontSize: 15 * fontAlpha,
-    fontStyle: 'normal',
-    width: 190 * alpha,
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-  },
-  quantityThreeText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    marginRight: 56 * alpha,
-  },
-  priceThreeText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(54, 54, 54)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    marginRight: 3 * alpha,
-  },
-
-  voucherView: {
-    backgroundColor: 'transparent',
-    height: 18 * alpha,
-    marginBottom: 10 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  sectionView: {
-    backgroundColor: 'rgb(245,245,245)',
-    flex: 1,
-    paddingHorizontal: 24 * alpha,
-  },
-  drinksView: {
-    backgroundColor: 'transparent',
-    flex: 1,
-    paddingTop: 10 * alpha,
-  },
-
-  productDetailView: {
-    backgroundColor: 'transparent',
-    flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-  voucherDetailView: {
-    backgroundColor: 'transparent',
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  productNameText: {
-    backgroundColor: 'transparent',
-    color: 'rgb(63, 63, 63)',
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'left',
-    // marginBottom: 5 * alpha
-  },
-  productNameDisabledText: {
-    backgroundColor: 'transparent',
-    color: LIGHT_GREY,
-    fontFamily: TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'left',
-    marginBottom: 5 * alpha,
-  },
-  productVariantText: {
-    color: 'rgb(164, 164, 164)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 11 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    width: 191 * alpha,
-    marginBottom: 10 * alpha,
-  },
-  productQuantityText: {
-    color: 'rgb(50, 50, 50)',
-    fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    backgroundColor: 'transparent',
-    marginRight: 4 * alpha,
-    width: 25 * alpha,
-  },
-  voucherQuantityText: {
-    color: 'rgb(50, 50, 50)',
-    fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    width: 50 * alpha,
-  },
-  productPriceText: {
-    color: 'rgb(50, 50, 50)',
-    fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    backgroundColor: 'transparent',
-    width: 55 * alpha,
-  },
-  voucherPriceText: {
-    color: 'rgb(50, 50, 50)',
-    fontFamily: TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    backgroundColor: 'transparent',
-    width: 55 * alpha,
-  },
-  productVoucherText: {
-    color: 'rgb(50, 50, 50)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    backgroundColor: 'transparent',
-  },
-  productVoucherDisableText: {
-    color: 'rgb(163, 163, 163)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'right',
-    backgroundColor: 'transparent',
-  },
-  spacer: {
-    marginBottom: 10 * alpha,
-  },
-  dottedLineImage: {
-    backgroundColor: 'transparent',
-    resizeMode: 'cover',
-    alignSelf: 'center',
-    position: 'absolute',
-    bottom: 0,
-    width: 291 * alpha,
-    height: 2 * alpha,
-  },
-
-  menuRowArrowImage: {
-    width: 10 * alpha,
-    height: 10 * alpha,
-    marginLeft: 5 * alpha,
-    // marginTop: 4 * alpha,
-    tintColor: 'rgb(50, 50, 50)',
-    resizeMode: 'contain',
+    fontSize: 10 * alpha,
+    paddingLeft: 5 * alpha,
+    paddingRight: 5 * alpha,
+    textAlign: 'center',
   },
 
   voucherButtonView: {
@@ -2749,139 +2853,81 @@ const styles = StyleSheet.create({
     // marginBottom: 5 * alpha,
     marginLeft: 5 * alpha,
   },
-  voucherButtonText: {
-    color: 'white',
+
+  voucherDescriptionText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+
+  voucherDetailView: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flex: 1,
+    flexDirection: 'row',
+  },
+
+  voucherPriceText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(50, 50, 50)',
     fontFamily: TITLE_FONT,
-    fontSize: 10 * alpha,
-    textAlign: 'center',
-    paddingLeft: 5 * alpha,
-    paddingRight: 5 * alpha,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'right',
+    width: 55 * alpha,
   },
 
-  redCircle: {
-    backgroundColor: 'red',
-    width: 10 * alpha,
-    height: 10 * alpha,
-    borderRadius: 5 * alpha,
-    marginRight: 5 * alpha,
-  },
-  greenCircle: {
-    backgroundColor: 'green',
-    width: 10 * alpha,
-    height: 10 * alpha,
-    borderRadius: 5 * alpha,
-    marginRight: 5 * alpha,
-  },
-  cancelVoucherButton: {
-    width: 15 * alpha,
-    height: 15 * alpha,
-    marginLeft: 5 * alpha,
-  },
-  cancelImage: {
-    width: 15 * alpha,
-    height: 15 * alpha,
-    resizeMode: 'contain',
-  },
-  paymentOptionsView: {
-    // height: alpha * 120,
-    flex: 1,
-    paddingHorizontal: alpha * 17,
-  },
-  paymentOptionsListView: {
-    flex: 1,
-    minHeight: alpha * 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  sectionRowView: {
+  voucherQuantityText: {
     backgroundColor: 'transparent',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: alpha * 40,
+    color: 'rgb(50, 50, 50)',
+    fontFamily: TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    width: 50 * alpha,
   },
-
-  paymentWalletIcon: {
+  voucherView: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 18 * alpha,
+    marginLeft: 26 * alpha,
+    marginRight: 25 * alpha,
+    marginTop: 42 * alpha,
+  },
+  voucherView: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 18 * alpha,
+    marginBottom: 10 * alpha,
+  },
+  walletActiveIcon: {
     height: alpha * 25,
+    tintColor: PRIMARY_COLOR,
     width: alpha * 25,
+  },
+  walletInactiveIcon: {
+    height: alpha * 25,
     tintColor: 'rgb(186, 183, 183)',
-  },
-  paymentCardIcon: {
-    height: alpha * 23,
-    width: alpha * 23,
-    tintColor: 'rgb(186, 183, 183)',
-  },
-  paymentCashIcon: {
-    height: alpha * 19,
-    width: alpha * 19,
-    tintColor: 'rgb(186, 183, 183)',
-  },
-
-  paymentOptionText: {
-    fontSize: fontAlpha * 14,
-    fontFamily: NON_TITLE_FONT,
-    color: '#363636',
-  },
-  iconContainer: {
     width: alpha * 25,
-    marginRight: alpha * 5,
-  },
-
-  selectBox: {
-    backgroundColor: 'transparent',
-    borderRadius: 9 * alpha,
-    borderWidth: 1 * alpha,
-    borderColor: '#BAB7B7',
-    borderStyle: 'solid',
-    width: 16 * alpha,
-    height: 16 * alpha,
-    position: 'absolute',
-    right: alpha * 10,
-  },
-
-  creditsText: {
-    fontSize: fontAlpha * 14,
-    fontFamily: NON_TITLE_FONT,
-    color: '#ED6E69',
-  },
-
-  cc: {
-    height: alpha * 16,
-    width: alpha * 27,
-    marginLeft: alpha * 9,
-  },
-  visa: {
-    height: alpha * 9,
-    width: alpha * 27,
-    marginLeft: alpha * 7,
-  },
-  union: {
-    height: alpha * 27,
-    width: alpha * 27,
-    marginLeft: alpha * 7,
-  },
-  dc: {
-    height: alpha * 30,
-    width: alpha * 25,
-    marginLeft: alpha * 7,
   },
   walletTextContainer: {
     flexDirection: 'row',
   },
-  tag: {
-    borderRadius: alpha * 10,
-    backgroundColor: '#ED6E69',
-    paddingHorizontal: alpha * 7,
-    paddingVertical: alpha * 2,
-    marginLeft: 10,
-    maxWidth: alpha * 150,
-  },
-  tagText: {
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 10 * fontAlpha,
-    color: '#FFFFFF',
+  whiteboxView: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 14 * alpha,
+    borderTopRightRadius: 14 * alpha,
+    flex: 1,
+    width: '100%',
   },
 });
 
