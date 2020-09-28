@@ -402,7 +402,9 @@ class Checkout extends React.Component {
     const {topUpPromo} = this.state;
     return topUpPromo ? (
       <View style={styles.tag}>
-        <Text style={styles.tagText}> {topUpPromo}</Text>
+        <Text numberOfLines={1} style={styles.tagText}>
+          {topUpPromo}
+        </Text>
       </View>
     ) : null;
   };
@@ -1735,7 +1737,7 @@ class Checkout extends React.Component {
             {walletSelectBox}
           </TouchableOpacity>
         )}
-        {allow_wallet_text && (
+        {allow_wallet && (
           <Text style={styles.allowText}>{allow_wallet_text}</Text>
         )}
 
@@ -2867,6 +2869,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: alpha * 7,
     paddingVertical: alpha * 2,
     marginLeft: 10,
+    maxWidth: alpha * 150,
   },
   tagText: {
     fontFamily: NON_TITLE_FONT,
