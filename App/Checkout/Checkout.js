@@ -1723,10 +1723,12 @@ class Checkout extends React.Component {
           <TouchableOpacity
             onPress={() => this.onWalletButtonPressed()}
             style={styles.paymentOptionsListView}>
-            <Image
-              source={require('./../../assets/images/wallet_center.png')}
-              style={walletIconStyle}
-            />
+            <View style={styles.iconContainer}>
+              <Image
+                source={require('./../../assets/images/wallet_center.png')}
+                style={walletIconStyle}
+              />
+            </View>
             <View>
               <View style={styles.walletTextContainer}>
                 <Text style={styles.paymentOptionText}>Wallet</Text>
@@ -1745,10 +1747,12 @@ class Checkout extends React.Component {
           <TouchableOpacity
             onPress={() => this.onCreditButtonPressed()}
             style={styles.paymentOptionsListView}>
-            <Image
-              source={require('./../../assets/images/credit_card.png')}
-              style={cardIconStyle}
-            />
+            <View style={styles.iconContainer}>
+              <Image
+                source={require('./../../assets/images/credit_card.png')}
+                style={cardIconStyle}
+              />
+            </View>
             <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
             <Image
               source={require('./../../assets/images/cc.png')}
@@ -1776,10 +1780,12 @@ class Checkout extends React.Component {
           <TouchableOpacity
             onPress={() => this.onCounterButtonPressed()}
             style={styles.paymentOptionsListView}>
-            <Image
-              source={require('./../../assets/images/cash.png')}
-              style={cashIconStyle}
-            />
+            <View style={styles.iconContainer}>
+              <Image
+                source={require('./../../assets/images/cash.png')}
+                style={cashIconStyle}
+              />
+            </View>
             <Text style={styles.paymentOptionText}>{cashPayment}</Text>
             {counterSelectBox}
           </TouchableOpacity>
@@ -2801,25 +2807,26 @@ const styles = StyleSheet.create({
     height: alpha * 25,
     width: alpha * 25,
     tintColor: 'rgb(186, 183, 183)',
-    marginRight: alpha * 10,
   },
   paymentCardIcon: {
     height: alpha * 23,
     width: alpha * 23,
     tintColor: 'rgb(186, 183, 183)',
-    marginRight: alpha * 10,
   },
   paymentCashIcon: {
     height: alpha * 19,
     width: alpha * 19,
     tintColor: 'rgb(186, 183, 183)',
-    marginRight: alpha * 10,
   },
 
   paymentOptionText: {
     fontSize: fontAlpha * 14,
     fontFamily: NON_TITLE_FONT,
     color: '#363636',
+  },
+  iconContainer: {
+    width: alpha * 25,
+    marginRight: alpha * 5,
   },
 
   selectBox: {
