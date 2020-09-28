@@ -371,20 +371,23 @@ class Checkout extends React.Component {
   };
 
   loadTopUpProducts() {
-    const {dispatch, members} = this.props;
+    const {dispatch, members, selectedShop} = this.props;
+    const {id} = selectedShop;
     const callback = (eventObject) => {
       if (eventObject.success) {
         const topUpPromoList = eventObject.result;
-
         const availableTopUpPromotion = topUpPromoList.find(function (elem) {
-          let {promotion_text} = elem;
-          if (promotion_text) {
+          let {promotion_text, shops} = elem;
+          var exists = shops.includes(id);
+          console.log(elem.id);
+          if (promotion_text && exists) {
+            console.log('----');
+            console.log(elem);
             return true;
           }
           return false;
         });
         const {promotion_text} = availableTopUpPromotion;
-        console.log(promotion_text);
         this.setState({
           topUpPromo: promotion_text,
         });
