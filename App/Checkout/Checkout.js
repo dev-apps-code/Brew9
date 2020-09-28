@@ -379,10 +379,7 @@ class Checkout extends React.Component {
         const availableTopUpPromotion = topUpPromoList.find(function (elem) {
           let {promotion_text, shops} = elem;
           var exists = shops.includes(id);
-          console.log(elem.id);
           if (promotion_text && exists) {
-            console.log('----');
-            console.log(elem);
             return true;
           }
           return false;
@@ -405,9 +402,24 @@ class Checkout extends React.Component {
 
   renderTopUpPromotion = () => {
     const {topUpPromo} = this.state;
+    const {allow_wallet} = this.props;
+    const tagStyle = allow_wallet
+      ? styles.tag
+      : [
+          styles.tag,
+          {
+            borderColor: '#A3A3A3',
+            borderWidth: alpha * 1,
+            backgroundColor: 'transparent',
+          },
+        ];
+    const tagTextStyle = allow_wallet
+      ? styles.tagText
+      : [styles.tagText, {color: '#A3A3A3'}];
+
     return topUpPromo ? (
-      <View style={styles.tag}>
-        <Text numberOfLines={1} style={styles.tagText}>
+      <View style={tagStyle}>
+        <Text numberOfLines={1} style={tagTextStyle}>
           {topUpPromo}
         </Text>
       </View>
@@ -1672,10 +1684,11 @@ class Checkout extends React.Component {
     const {currentMember, selectedShop} = this.props;
     const {allow_wallet, allow_wallet_text} = selectedShop;
 
-    const selectBoxStyle =
-      selected_payment === 'credits'
+    const selectBoxStyle = allow_wallet
+      ? selected_payment === 'credits'
         ? styles.activeSelectBox
-        : styles.inactiveSelectBox;
+        : styles.inactiveSelectBox
+      : [styles.inactiveSelectBox, {backgroundColor: '#A3A3A3'}];
 
     const iconStyle =
       selected_payment === 'credits'
@@ -1694,6 +1707,10 @@ class Checkout extends React.Component {
       <Text style={styles.allowText}>{allow_wallet_text}</Text>
     ) : null;
 
+    const titleTextStyle = allow_wallet
+      ? styles.allowedPaymentOption
+      : styles.notAllowedPaymentOption;
+
     return (
       <View>
         <TouchableOpacity
@@ -1707,10 +1724,10 @@ class Checkout extends React.Component {
           </View>
           <View>
             <View style={styles.walletTextContainer}>
-              <Text style={styles.paymentOptionText}>Wallet</Text>
+              <Text style={titleTextStyle}>Wallet</Text>
               {this.renderTopUpPromotion()}
             </View>
-            <Text style={walletCreditsStyle}>${credits}</Text>
+            {allow_wallet && <Text style={walletCreditsStyle}>${credits}</Text>}
           </View>
           <View style={selectBoxStyle} />
         </TouchableOpacity>
@@ -1724,10 +1741,11 @@ class Checkout extends React.Component {
     const {selectedShop} = this.props;
     const {allow_credit_card, allow_credit_card_text} = selectedShop;
 
-    const selectBoxStyle =
-      selected_payment === 'credit_card'
+    const selectBoxStyle = allow_credit_card
+      ? selected_payment === 'credit_card'
         ? styles.activeSelectBox
-        : styles.inactiveSelectBox;
+        : styles.inactiveSelectBox
+      : [styles.inactiveSelectBox, {backgroundColor: '#A3A3A3'}];
 
     const iconStyle =
       selected_payment === 'credit_card'
@@ -1737,6 +1755,10 @@ class Checkout extends React.Component {
     const allowText = allow_credit_card_text ? (
       <Text style={styles.allowText}>{allow_credit_card_text}</Text>
     ) : null;
+
+    const titleTextStyle = allow_credit_card
+      ? styles.allowedPaymentOption
+      : styles.notAllowedPaymentOption;
 
     return (
       <View>
@@ -1751,7 +1773,7 @@ class Checkout extends React.Component {
           </View>
           <View>
             <View style={styles.walletTextContainer}>
-              <Text style={styles.paymentOptionText}>Credit / Debit Card</Text>
+              <Text style={titleTextStyle}>Credit / Debit Card</Text>
             </View>
           </View>
           <View style={selectBoxStyle} />
@@ -1766,10 +1788,11 @@ class Checkout extends React.Component {
     const {selectedShop} = this.props;
     const {allow_pay_in_store, allow_pay_in_store_text} = selectedShop;
 
-    const selectBoxStyle =
-      selected_payment === 'counter'
+    const selectBoxStyle = allow_pay_in_store
+      ? selected_payment === 'counter'
         ? styles.activeSelectBox
-        : styles.inactiveSelectBox;
+        : styles.inactiveSelectBox
+      : [styles.inactiveSelectBox, {backgroundColor: '#A3A3A3'}];
 
     const iconStyle =
       selected_payment === 'counter'
@@ -1780,6 +1803,9 @@ class Checkout extends React.Component {
       <Text style={styles.allowText}>{allow_pay_in_store_text}</Text>
     ) : null;
 
+    const titleTextStyle = allow_pay_in_store
+      ? styles.allowedPaymentOption
+      : styles.notAllowedPaymentOption;
     return (
       <View>
         <TouchableOpacity
@@ -1793,7 +1819,7 @@ class Checkout extends React.Component {
           </View>
           <View>
             <View style={styles.walletTextContainer}>
-              <Text style={styles.paymentOptionText}>Pay In Store</Text>
+              <Text style={titleTextStyle}>Pay In Store</Text>
             </View>
           </View>
           <View style={selectBoxStyle} />
@@ -2086,7 +2112,7 @@ const styles = StyleSheet.create({
   },
   allowText: {
     backgroundColor: 'transparent',
-    color: '#ff4500',
+    color: '#A3A3A3',
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
@@ -2516,8 +2542,13 @@ const styles = StyleSheet.create({
     marginLeft: 20 * alpha,
     textAlign: 'left',
   },
-  paymentOptionText: {
+  allowedPaymentOption: {
     color: '#363636',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: fontAlpha * 14,
+  },
+  notAllowedPaymentOption: {
+    color: '#A3A3A3',
     fontFamily: NON_TITLE_FONT,
     fontSize: fontAlpha * 14,
   },
