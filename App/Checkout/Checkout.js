@@ -402,7 +402,9 @@ class Checkout extends React.Component {
 
   renderTopUpPromotion = () => {
     const {topUpPromo} = this.state;
-    const {allow_wallet} = this.props;
+    const {selectedShop} = this.props;
+    const {allow_wallet} = selectedShop;
+
     const tagStyle = allow_wallet
       ? styles.tag
       : [
@@ -1688,7 +1690,10 @@ class Checkout extends React.Component {
       ? selected_payment === 'credits'
         ? styles.activeSelectBox
         : styles.inactiveSelectBox
-      : [styles.inactiveSelectBox, {backgroundColor: '#A3A3A3'}];
+      : [
+          styles.inactiveSelectBox,
+          {backgroundColor: '#E4E4E4', borderWidth: 0},
+        ];
 
     const iconStyle =
       selected_payment === 'credits'
@@ -1745,7 +1750,10 @@ class Checkout extends React.Component {
       ? selected_payment === 'credit_card'
         ? styles.activeSelectBox
         : styles.inactiveSelectBox
-      : [styles.inactiveSelectBox, {backgroundColor: '#A3A3A3'}];
+      : [
+          styles.inactiveSelectBox,
+          {backgroundColor: '#E4E4E4', borderWidth: 0},
+        ];
 
     const iconStyle =
       selected_payment === 'credit_card'
@@ -1792,7 +1800,10 @@ class Checkout extends React.Component {
       ? selected_payment === 'counter'
         ? styles.activeSelectBox
         : styles.inactiveSelectBox
-      : [styles.inactiveSelectBox, {backgroundColor: '#A3A3A3'}];
+      : [
+          styles.inactiveSelectBox,
+          {backgroundColor: '#E4E4E4', borderWidth: 0},
+        ];
 
     const iconStyle =
       selected_payment === 'counter'
