@@ -93,7 +93,6 @@ export default class MemberWallet extends React.Component {
     const {id} = selectedShop;
     let filteredData = [];
     data.forEach((element) => {
-      console.log(element);
       const {shops} = element;
       var exists = shops.includes(id);
       if (exists) {
@@ -102,15 +101,6 @@ export default class MemberWallet extends React.Component {
     });
 
     return filteredData;
-
-    // (function (elem) {
-    //   let {promotion_text, shops} = elem;
-    //   var exists = shops.includes(id);
-    //   if (promotion_text && exists) {
-    //     return true;
-    //   }
-    //   return false;
-    // });
   };
 
   loadTopUpProducts() {
@@ -119,7 +109,6 @@ export default class MemberWallet extends React.Component {
     this.setState({loading_list: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
-        // console.log(eventObject.result);
         const {result} = eventObject;
         const filteredData = this.filterShopExclusiveItems(result);
 
@@ -284,9 +273,10 @@ export default class MemberWallet extends React.Component {
               renderItem={this.renderTopuplistFlatListCell}
               data={this.state.data}
               numColumns={2}
-              style={styles.topuplistFlatList}
+              // style={styles.topuplistFlatList}
               selected={this.state.selected}
               keyExtractor={(item, index) => index.toString()}
+              columnWrapperStyle={{alignItems: 'flex-start'}}
             />
           </View>
           <View style={styles.shopTopUp}>

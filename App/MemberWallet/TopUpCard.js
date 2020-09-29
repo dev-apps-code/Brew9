@@ -77,7 +77,6 @@ export default class TopUpCard extends React.Component {
 const styles = StyleSheet.create({
   cardcell: {
     width: windowWidth / 2,
-    flex: 1,
     flexDirection: 'column',
     paddingLeft: 10 * alpha,
     paddingBottom: 10 * alpha,
