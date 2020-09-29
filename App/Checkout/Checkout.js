@@ -1719,6 +1719,7 @@ class Checkout extends React.Component {
     return (
       <View>
         <TouchableOpacity
+          disabled={!allow_wallet}
           onPress={() => this.onWalletButtonPressed()}
           style={styles.paymentOptionsListView}>
           <View style={styles.iconContainer}>
@@ -1771,6 +1772,7 @@ class Checkout extends React.Component {
     return (
       <View>
         <TouchableOpacity
+          disabled={!allow_credit_card}
           onPress={() => this.onCreditButtonPressed()}
           style={styles.paymentOptionsListView}>
           <View style={styles.iconContainer}>
@@ -1820,6 +1822,7 @@ class Checkout extends React.Component {
     return (
       <View>
         <TouchableOpacity
+          disabled={!allow_pay_in_store}
           onPress={() => this.onCounterButtonPressed()}
           style={styles.paymentOptionsListView}>
           <View style={styles.iconContainer}>
