@@ -88,15 +88,44 @@ export default class MemberWallet extends React.Component {
     });
   }
 
+  filterShopExclusiveItems = (data) => {
+    const {selectedShop} = this.props;
+    const {id} = selectedShop;
+    let filteredData = [];
+    data.forEach((element) => {
+      console.log(element);
+      const {shops} = element;
+      var exists = shops.includes(id);
+      if (exists) {
+        filteredData.push(element);
+      }
+    });
+
+    return filteredData;
+
+    // (function (elem) {
+    //   let {promotion_text, shops} = elem;
+    //   var exists = shops.includes(id);
+    //   if (promotion_text && exists) {
+    //     return true;
+    //   }
+    //   return false;
+    // });
+  };
+
   loadTopUpProducts() {
     const {dispatch, members} = this.props;
 
     this.setState({loading_list: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
+        // console.log(eventObject.result);
+        const {result} = eventObject;
+        const filteredData = this.filterShopExclusiveItems(result);
+
         this.setState(
           {
-            data: eventObject.result,
+            data: filteredData,
           },
           function () {
             if (eventObject.result.length > 0) {
