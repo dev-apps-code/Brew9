@@ -647,7 +647,7 @@ class Home extends React.Component {
     let delivery = value == 1 ? true : false;
 
     if (delivery && shop.delivery_option == false) {
-      this.setState({delivery: 0}, () => {
+      this.setState({delivery: value}, () => {
         this.refs.toggle.toggleItem(0, false);
 
         var msg =
@@ -657,7 +657,10 @@ class Home extends React.Component {
         this.refs.toast.show(msg, TOAST_DURATION);
       });
       return;
+    } else {
+      this.setState({delivery: value});
     }
+
     dispatch(createAction('orders/setDeliveryOption')(delivery));
   };
 
@@ -1421,11 +1424,13 @@ class Home extends React.Component {
       order_limit = selected_product.product_settings[0].order_limit;
     }
 
-    var enabled = selected_product.enabled;
+    const {delivery} = this.state;
+    const {enabled, allow_delivery} = selected_product;
+    const isProductEnabled = enabled;
+    const isProductAllowedDelivery = delivery ? allow_delivery : true;
 
-    if (!shop.can_order) {
-      enabled = false;
-    }
+    const canAddToCart =
+      shop.can_order && isProductEnabled && isProductAllowedDelivery;
 
     const ingredients = selected_product.ingredients.map((item, key) => {
       return (
@@ -1637,10 +1642,10 @@ class Home extends React.Component {
                 </Text>
               </View>
               <TouchableOpacity
-                disabled={!enabled}
+                disabled={!canAddToCart}
                 onPress={() => this.onAddToCartPressed(selected_product)}
                 style={
-                  enabled
+                  canAddToCart
                     ? [styles.addToCartButton, styles.normal]
                     : [styles.addToCartButton, styles.disabled]
                 }>
