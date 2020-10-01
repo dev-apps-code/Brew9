@@ -263,6 +263,7 @@ export default class PointShop extends React.Component {
               style={styles.pointproductlistFlatList}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}
+              scrollIndicatorInsets={{right: 1}}
             />
           )}
         </View>
@@ -437,9 +438,7 @@ const styles = StyleSheet.create({
   pointproductlistFlatList: {
     width: '100%',
   },
-  pointproductlistFlatListViewWrapper: {
-    flex: 1,
-  },
+
   spacer: {
     width: '100%',
     height: alpha * 20,
