@@ -114,10 +114,11 @@ apply from: 'expo.gradle'
 apply from: "../../node_modules/react-native-unimodules/gradle.groovy"
 
 dependencies {
-    implementation project(':react-native-ux-cam')
-    implementation project(':react-native-fast-image')
-    implementation project(':react-native-onesignal')
+  implementation project(':react-native-ux-cam')
+  implementation project(':react-native-fast-image')
+  implementation project(':react-native-onesignal')
   implementation project(':react-native-kochava-tracker')
+  implementation project(':react-native-exit-app')
   //Required: Google Play Services Ads Identifier (If publishing to Google Play)
   implementation 'com.google.android.gms:play-services-ads-identifier:15.0.1'
   //Required: Install Referrer (If publishing to Google Play)
