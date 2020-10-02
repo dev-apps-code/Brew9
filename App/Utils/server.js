@@ -1,11 +1,6 @@
 import Constants from 'expo-constants';
 import {Platform, AsyncStorage} from 'react-native';
-
-import {
-  SERVERS as AVAILABLE_SERVERS,
-  DEFAULT_SERVER,
-  DEFAULT_PROTOCOL,
-} from '../Constants/server_list';
+import {DEFAULT_SERVER, DEFAULT_PROTOCOL} from '../Constants';
 import {DEVELOP_MODE} from '../Common/config';
 
 const URL = async () => {
