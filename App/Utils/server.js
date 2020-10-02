@@ -1,7 +1,11 @@
 import Constants from 'expo-constants';
 import {Platform, AsyncStorage} from 'react-native';
 import {DEFAULT_SERVER, DEFAULT_PROTOCOL} from '../Constants';
-import {DEVELOP_MODE} from '../Common/config';
+import {
+  BUILD_VERSION_ANDROID,
+  BUILD_VERSION_IOS,
+  DEVELOP_MODE,
+} from '../Common/config';
 
 const URL = async () => {
   let server = DEFAULT_SERVER;
@@ -27,8 +31,8 @@ export var KURL_EULA = '';
 export var KURL_MEMBERSHIP_INFO = '';
 
 export var KCURRENT_API_VERSION_HEADER = 'application/dc.v7 gzip';
-export var APPBUILDVERSIONIOS = '32';
-export var APPBUILDVERSIONANDROID = '32';
+export var APPBUILDVERSIONIOS = BUILD_VERSION_IOS;
+export var APPBUILDVERSIONANDROID = BUILD_VERSION_ANDROID;
 
 export const KTIMEOUT = 3 * 1000;
 
