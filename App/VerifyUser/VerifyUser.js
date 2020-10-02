@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import {alpha, fontAlpha, windowWidth} from '../Common/size';
 import {connect} from 'react-redux';
-import Toast from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object';
 import LoginWithSmsRequestObject from '../Requests/login_with_sms_request_object';
@@ -32,6 +32,8 @@ import {
 import {resetTo} from '../Utils/route_helper';
 import {BUILD_VERSION_ANDROID, DEVELOP_MODE} from '../Common/config';
 import Brew9Toast from '../Components/Brew9Toast';
+
+const {FOREVER} = DURATION;
 
 @connect(({members}) => ({
   members: members.profile,
@@ -254,7 +256,7 @@ class VerifyUser extends React.Component {
           let count = this.tapCount;
           let tap = count < 9 ? 'taps' : 'tap';
           let toastText = `You are ${10 - count} ${tap} away to change server.`;
-          this.refs.tapToast.show(toastText, DURATION.FOREVER);
+          this.refs.tapToast.show(toastText, FOREVER);
         }
         if (this.tapCount == 10) {
           this.refs.tapToast.close();
@@ -319,10 +321,10 @@ class VerifyUser extends React.Component {
                 <TextInput
                   autoCorrect={false}
                   keyboardType="phone-pad"
-                  placeholder="123456789"
-                  style={styles.textInputTextInput}
-                  // maxLength={7}
                   onChangeText={(phone_no) => this.setState({phone_no})}
+                  placeholder="123456789"
+                  // maxLength={7}
+                  style={styles.textInputTextInput}
                 />
                 <View
                   style={{
@@ -340,11 +342,11 @@ class VerifyUser extends React.Component {
               <View style={styles.activationView}>
                 <TextInput
                   autoCorrect={false}
-                  placeholder="Activation Code"
                   keyboardType="phone-pad"
-                  value={this.state.code}
-                  style={styles.activationCodeTextInput}
                   onChangeText={(code) => this.setState({code: code})}
+                  placeholder="Activation Code"
+                  style={styles.activationCodeTextInput}
+                  value={this.state.code}
                 />
 
                 {/* <OTPInputView
@@ -375,21 +377,21 @@ class VerifyUser extends React.Component {
               <View style={styles.countDownWrapper}>
                 {this.state.is_counting ? (
                   <CountDown
-                    until={120}
+                    digitStyle={{backgroundColor: 'transparent'}}
+                    digitTxtStyle={styles.countdownText}
                     onFinish={() => this.setState({is_counting: false})}
                     running={this.state.is_counting}
+                    separatorStyle={{color: '#FFFFFF'}}
+                    showSeparator
+                    size={12}
                     style={
                       this.state.is_counting
                         ? styles.sendCountdown
                         : styles.hidden
                     }
-                    size={12}
-                    digitStyle={{backgroundColor: 'transparent'}}
-                    digitTxtStyle={styles.countdownText}
-                    separatorStyle={{color: '#FFFFFF'}}
-                    timeToShow={['M', 'S']}
                     timeLabels={{m: null, s: null}}
-                    showSeparator
+                    timeToShow={['M', 'S']}
+                    until={120}
                   />
                 ) : undefined}
               </View>
@@ -412,6 +414,16 @@ class VerifyUser extends React.Component {
 							style={styles.termsAndConditionsButtonText}>Terms and Conditions</Text>
 					</TouchableOpacity> */}
           <Hyperlink
+            linkStyle={[{color: '#0000EE'}, styles.description_text]}
+            linkText={(url) =>
+              url === KURL_TERMS_OF_SERVICE
+                ? 'Terms of Service'
+                : url === KURL_PRIVACY_POLICY
+                ? 'Privacy Policy'
+                : url === KURL_EULA
+                ? 'End User License Agreement'
+                : url
+            }
             onPress={(url) =>
               this.onTermsAndConditionsPressed(
                 url,
@@ -423,18 +435,8 @@ class VerifyUser extends React.Component {
                   ? 'End User License Agreement'
                   : url,
               )
-            }
-            linkStyle={[{color: '#0000EE'}, styles.description_text]}
-            linkText={(url) =>
-              url === KURL_TERMS_OF_SERVICE
-                ? 'Terms of Service'
-                : url === KURL_PRIVACY_POLICY
-                ? 'Privacy Policy'
-                : url === KURL_EULA
-                ? 'End User License Agreement'
-                : url
             }>
-            <Text style={styles.description_text} numberOfLines={2}>
+            <Text numberOfLines={2} style={styles.description_text}>
               By using this app, you agree to our{' '}
               <Text style={{textDecorationLine: 'underline'}}>
                 {KURL_TERMS_OF_SERVICE}
@@ -452,11 +454,11 @@ class VerifyUser extends React.Component {
         <HudLoading isLoading={this.state.loading} />
         <Brew9Toast ref="toast" />
         <Toast
-          ref="tapToast"
-          // style={{ bottom: windowHeight / 2 - 40 }}
-          textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
-          position="bottom"
           defaultCloseDelay={0}
+          // style={{ bottom: windowHeight / 2 - 40 }}
+          position="bottom"
+          ref="tapToast"
+          textStyle={{fontFamily: TITLE_FONT, color: '#ffffff'}}
         />
       </View>
     );
@@ -464,173 +466,58 @@ class VerifyUser extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  verifyuserView: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
-  modalView: {
+  activationCodeTextInput: {
     backgroundColor: 'transparent',
-    flex: 1,
-    marginTop: 40 * alpha,
-  },
-  bitmapImage: {
-    resizeMode: 'contain',
-    backgroundColor: 'transparent',
-    width: 28 * alpha,
-    height: 16 * alpha,
-    marginLeft: 34 * alpha,
-  },
-  closeButton: {
-    backgroundColor: 'transparent',
-    borderRadius: 12.5 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    alignSelf: 'flex-end',
-    height: 25 * alpha,
-    marginRight: 11 * alpha,
-    marginTop: 11 * alpha,
-  },
-  closeButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  closeButtonText: {
-    color: 'black',
-    fontFamily: NON_TITLE_FONT,
-    color: 'rgb(0, 178, 227)',
-    fontSize: 18 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-  },
-  logoImage: {
-    resizeMode: 'contain',
-    tintColor: 'rgb(0, 178, 227)',
-    backgroundColor: 'transparent',
-    width: 110 * alpha,
-    height: 54 * alpha,
-    marginLeft: 23 * alpha,
-  },
-  welcomeText: {
-    color: 'black',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 25 * fontAlpha,
-    fontStyle: 'normal',
-
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    marginTop: 83 * alpha,
-    marginLeft: 23 * alpha,
-  },
-  messageText: {
-    color: 'black',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 16 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    marginTop: 8 * alpha,
-    marginLeft: 23 * alpha,
-  },
-  formView: {
-    backgroundColor: 'transparent',
-    alignSelf: 'center',
-    width: 330 * alpha,
-    marginLeft: 10 * alpha,
-    marginRight: 10 * alpha,
-    height: 100 * alpha,
-    marginTop: 16 * alpha,
-  },
-  countrycodeButtonText: {
-    width: 60 * alpha,
-    color: 'rgb(0, 178, 227)',
-    fontFamily: NON_TITLE_FONT,
-    textAlign: 'center',
-    marginRight: 10 * alpha,
-    fontSize: 16 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  countryCodeView: {
-    borderRadius: 7 * alpha,
-    borderColor: 'rgb(140, 140, 140)',
-    borderWidth: 0.5,
-    width: 60 * alpha,
-    height: 41 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  numberView: {
-    backgroundColor: 'white',
-    borderRadius: 7 * alpha,
-    borderColor: 'rgb(140, 140, 140)',
-    borderWidth: 0.5,
-    width: 259 * alpha,
-    height: 42 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  textInputTextInput: {
     color: 'rgb(46, 46, 46)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    padding: 0,
-    width: 140 * alpha,
     height: 25 * alpha,
-    marginLeft: 15 * alpha,
+    marginLeft: 14 * alpha,
+    padding: 0,
+    textAlign: 'left',
+    width: 221 * alpha,
+  },
+  activationView: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderColor: 'rgb(140, 140, 140)',
+    borderRadius: 7 * alpha,
+    borderWidth: 0.5,
+    flexDirection: 'row',
+    height: 41 * alpha,
+    marginTop: 17 * alpha,
+    overflow: 'hidden',
+  },
+  closeButton: {
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    backgroundColor: 'transparent',
+    borderRadius: 12.5 * alpha,
+    flexDirection: 'row',
+    height: 25 * alpha,
+    justifyContent: 'center',
+    marginRight: 11 * alpha,
+    marginTop: 11 * alpha,
+    padding: 0,
+  },
+  closeButtonText: {
+    color: 'rgb(0, 178, 227)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 18 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
   },
   countDownContainer: {
+    alignItems: 'center',
     marginTop: 20 * alpha,
     width: 330 * alpha,
-    alignItems: 'center',
   },
   countDownWrapper: {
     backgroundColor: 'rgb(0, 178, 227)',
     borderRadius: 4 * alpha,
-  },
-  sendButton: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 4 * alpha,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 72 * alpha,
-    height: 26 * alpha,
-    marginRight: 8 * alpha,
-  },
-  sendButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  sendButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-  hidden: {
-    width: 0,
-    height: 0,
-  },
-  sendCountdown: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    width: 100 * alpha,
-    height: 40 * alpha,
   },
   countdownText: {
     color: 'white',
@@ -641,41 +528,135 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 100 * alpha,
   },
-  activationView: {
-    backgroundColor: 'white',
-    borderRadius: 7 * alpha,
-    overflow: 'hidden',
-    borderColor: 'rgb(140, 140, 140)',
-    borderWidth: 0.5,
-    height: 41 * alpha,
-    marginTop: 17 * alpha,
-    flexDirection: 'row',
+  countryCodeView: {
     alignItems: 'center',
+    borderColor: 'rgb(140, 140, 140)',
+    borderRadius: 7 * alpha,
+    borderWidth: 0.5,
+    flexDirection: 'row',
+    height: 41 * alpha,
+    width: 60 * alpha,
   },
-  activationCodeTextInput: {
+  countrycodeButtonText: {
+    color: 'rgb(0, 178, 227)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginRight: 10 * alpha,
+    textAlign: 'center',
+    width: 60 * alpha,
+  },
+
+  description_text: {
+    color: 'rgb(90, 90, 90)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    marginBottom: 40 * alpha,
+    paddingLeft: 15 * alpha,
+    paddingRight: 15 * alpha,
+    textAlign: 'center',
+    width: windowWidth,
+  },
+  formView: {
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    height: 100 * alpha,
+    marginLeft: 10 * alpha,
+    marginRight: 10 * alpha,
+    marginTop: 16 * alpha,
+    width: 330 * alpha,
+  },
+  hidden: {
+    height: 0,
+    width: 0,
+  },
+  logoImage: {
+    backgroundColor: 'transparent',
+    height: 54 * alpha,
+    marginLeft: 23 * alpha,
+    resizeMode: 'contain',
+    tintColor: 'rgb(0, 178, 227)',
+    width: 110 * alpha,
+  },
+  messageText: {
+    backgroundColor: 'transparent',
+    color: 'black',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginLeft: 23 * alpha,
+    marginTop: 8 * alpha,
+    textAlign: 'left',
+  },
+  modalView: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    marginTop: 40 * alpha,
+  },
+  numberView: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderColor: 'rgb(140, 140, 140)',
+    borderRadius: 7 * alpha,
+    borderWidth: 0.5,
+    flexDirection: 'row',
+    height: 42 * alpha,
+    width: 259 * alpha,
+  },
+  sendButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(0, 178, 227)',
+    borderRadius: 4 * alpha,
+    flexDirection: 'row',
+    height: 26 * alpha,
+    justifyContent: 'center',
+    marginRight: 8 * alpha,
+    padding: 0,
+    width: 72 * alpha,
+  },
+  sendButtonText: {
+    color: 'white',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+  },
+  sendCountdown: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: 40 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+    width: 100 * alpha,
+  },
+  textInputTextInput: {
+    backgroundColor: 'transparent',
     color: 'rgb(46, 46, 46)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    textAlign: 'left',
-    backgroundColor: 'transparent',
-    padding: 0,
-    width: 221 * alpha,
     height: 25 * alpha,
-    marginLeft: 14 * alpha,
+    marginLeft: 15 * alpha,
+    padding: 0,
+    textAlign: 'left',
+    width: 140 * alpha,
   },
   verifyButton: {
-    backgroundColor: 'rgb(0, 178, 227)',
-    borderRadius: 4 * alpha,
-
-    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'rgb(0, 178, 227)',
+
+    borderRadius: 4 * alpha,
+    flexDirection: 'row',
+    height: 26 * alpha,
     justifyContent: 'center',
+    marginRight: 8 * alpha,
     padding: 0,
     width: 72 * alpha,
-    height: 26 * alpha,
-    marginRight: 8 * alpha,
   },
   verifyButtonText: {
     color: 'white',
@@ -685,88 +666,20 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
   },
-  verifyButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
+  verifyuserView: {
+    backgroundColor: 'white',
+    flex: 1,
   },
-  termsAndConditionsButton: {
+  welcomeText: {
     backgroundColor: 'transparent',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    alignSelf: 'center',
-    width: 210 * alpha,
-    height: 16 * alpha,
-    marginBottom: 40 * alpha,
-  },
-  termsAndConditionsButtonText: {
-    color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: 'normal',
-
-    textAlign: 'center',
-  },
-  termsAndConditionsButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-  description_text: {
-    width: windowWidth,
-    marginBottom: 40 * alpha,
-    color: 'rgb(90, 90, 90)',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    textAlign: 'center',
-    paddingLeft: 15 * alpha,
-    paddingRight: 15 * alpha,
-  },
-  phoneCountryCodeText: {
-    marginLeft: 0 * alpha,
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 14 * fontAlpha,
     color: 'black',
-  },
-  errorMessageText: {
-    color: 'white',
-    fontSize: 12 * fontAlpha,
     fontFamily: NON_TITLE_FONT,
+    fontSize: 25 * fontAlpha,
+
     fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    marginTop: 48 * alpha,
-  },
-  container: {
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10 * alpha,
-  },
-  reSendButtonImage: {
-    resizeMode: 'contain',
-    marginRight: 10 * alpha,
-  },
-
-  underlineStyleBase: {
-    backgroundColor: 'transparent',
-    fontFamily: TITLE_FONT,
-    color: 'rgb(46, 46, 46)',
-    width: 10 * alpha,
-    borderWidth: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-    marginLeft: 0,
-    marginRight: 0,
-  },
-
-  underlineStyleHighLighted: {
-    borderColor: '#03DAC6',
+    marginLeft: 23 * alpha,
+    marginTop: 83 * alpha,
+    textAlign: 'left',
   },
 });
 
