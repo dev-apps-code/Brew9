@@ -248,9 +248,7 @@ class VerifyUser extends React.Component {
       const PRESS_DELAY = 15000;
 
       if (this.lastTap && now - this.lastTap < PRESS_DELAY) {
-        // await changeServerIndex(KSERVERURLLIST.length);
         this.tapCount++;
-        console.log('tapped %s times', this.tapCount);
 
         if (this.tapCount >= 5 && this.tapCount < 10) {
           let count = this.tapCount;
