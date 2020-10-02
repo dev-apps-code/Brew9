@@ -9,9 +9,9 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React from 'react';
-import {alpha, fontAlpha, windowWidth, windowHeight} from '../Common/size';
+import {alpha, fontAlpha, windowWidth} from '../Common/size';
 import {connect} from 'react-redux';
-import Toast, {DURATION} from 'react-native-easy-toast';
+import Toast from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object';
 import LoginWithSmsRequestObject from '../Requests/login_with_sms_request_object';
@@ -38,7 +38,7 @@ import Brew9Toast from '../Components/Brew9Toast';
   company_id: members.company_id,
   location: members.location,
 }))
-export default class VerifyUser extends React.Component {
+class VerifyUser extends React.Component {
   static navigationOptions = ({navigation}) => {
     const {params = {}} = navigation.state;
     return {
@@ -769,3 +769,5 @@ const styles = StyleSheet.create({
     borderColor: '#03DAC6',
   },
 });
+
+export default VerifyUser;
