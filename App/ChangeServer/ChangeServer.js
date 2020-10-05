@@ -14,9 +14,9 @@ import {
   PROTOCOLS,
   FAILED_ERROR_MESSAGE,
   TIMEOUT_SECONDS,
-} from '../Constants';
+} from '@constants';
 import Modal from 'react-native-modal';
-import {StackActions, NavigationActions} from '../Utils';
+import {StackActions, NavigationActions} from '@utils';
 
 class ChangeServer extends React.Component {
   state = {

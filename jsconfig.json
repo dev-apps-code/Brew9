@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "*": ["./App/*"],
+      "@utils": ["./App/Utils"],
+      "@components": ["./App/Components"],
+      "@common": ["./App/Common"],
+      "@constants": ["./App/Constants"]
+    }
+  }
+}

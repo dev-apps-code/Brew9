@@ -15,7 +15,7 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import HudLoading from '../Components/HudLoading';
 import ActivateAccountRequestObject from '../Requests/activate_account_request_object';
 import LoginWithSmsRequestObject from '../Requests/login_with_sms_request_object';
-import {createAction} from '../Utils';
+import {createAction} from '@utils';
 import CountDown from 'react-native-countdown-component';
 import {
   KURL_TERMS_OF_SERVICE,

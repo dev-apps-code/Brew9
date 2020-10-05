@@ -1,6 +1,7 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import {
+  AsyncStorage,
   Text,
   StyleSheet,
   FlatList,
@@ -27,10 +28,9 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import OneSignal from 'react-native-onesignal';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import {Analytics, Event, PageHit} from 'expo-analytics';
+import {Analytics, Event} from 'expo-analytics';
 import {getPreciseDistance} from 'geolib';
-import {AsyncStorage} from 'react-native';
-import {createAction} from '../Utils';
+// import {createAction} from '../Utils';
 import ProductCell from './ProductCell';
 import CategoryCell from './CategoryCell';
 import CartCell from './CartCell';
@@ -38,13 +38,11 @@ import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import ProductRequestObject from '../Requests/product_request_object';
 import {getResponseMsg} from '../Utils/responses';
 import CategoryHeaderCell from './CategoryHeaderCell';
-import * as commonStyles from '../Common/common_style';
-import {ANALYTICS_ID} from '../Common/config';
 import Banners from './Banners';
 import ImageCell from './ImageCell';
-import {Brew9Modal, Brew9Toast, Brew9Loading} from '../Components';
-
-const {
+import {Brew9Modal, Brew9Toast, Brew9Loading} from '@components';
+import {
+  ANALYTICS_ID,
   TITLE_FONT,
   NON_TITLE_FONT,
   TABBAR_INACTIVE_TINT,
@@ -54,7 +52,8 @@ const {
   LIGHT_BLUE_BACKGROUND,
   TOAST_DURATION,
   DEFAULT_BORDER_RADIUS,
-} = commonStyles;
+} from '@common';
+import {createAction} from '@utils';
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,

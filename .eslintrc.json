@@ -5,6 +5,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
     "@react-native-community"
   ],
   "parserOptions": {
@@ -42,5 +44,10 @@
       }
     ],
     "semi": ["error", "always"]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
   }
 }
