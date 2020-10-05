@@ -1,5 +1,5 @@
-import { windowWidth, windowHeight, alpha } from './size';
-import { StyleSheet, Platform } from 'react-native';
+import {windowWidth, windowHeight, alpha} from './size';
+import {StyleSheet, Platform} from 'react-native';
 
 export const TITLE_FONT = 'ClanPro-News';
 export const NON_TITLE_FONT = 'ClanPro-Book';
@@ -23,33 +23,33 @@ export const TAB_STYLE =
   Platform.OS === 'android'
     ? {
         height: alpha * 5,
-        marginBottom: alpha * 4
+        marginBottom: alpha * 4,
       }
     : {
-      height: 29,
-    };
+        height: 29,
+      };
 
 export const commonStyles = StyleSheet.create({
   lightGraySeparator: {
     backgroundColor: 'blue',
     height: 5 * alpha,
-    width: windowWidth
+    width: windowWidth,
   },
   normal: {
-    backgroundColor: 'rgb(0, 178, 227)'
+    backgroundColor: 'rgb(0, 178, 227)',
   },
   disabled: {
-    backgroundColor: 'rgba(0, 178, 227, 0.5)'
+    backgroundColor: 'rgba(0, 178, 227, 0.5)',
   },
   text_primary_color: {
-    color: 'rgb(0, 178, 227)'
+    color: 'rgb(0, 178, 227)',
   },
   background_primary_color: {
-    backgroundColor: 'rgb(0, 178, 227)'
-  }
+    backgroundColor: 'rgb(0, 178, 227)',
+  },
 });
 
 export const HEADER_NO_BACK =
   Platform.OS === 'android'
-    ? { marginLeft: alpha * 10, flex: 1, fontFamily: TITLE_FONT }
-    : { textAlign: 'center', flex: 1, fontFamily: TITLE_FONT };
+    ? {marginLeft: alpha * 10, flex: 1, fontFamily: TITLE_FONT}
+    : {textAlign: 'center', flex: 1, fontFamily: TITLE_FONT};

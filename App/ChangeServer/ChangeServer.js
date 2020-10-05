@@ -7,94 +7,87 @@ import {
   SafeAreaView,
   ActivityIndicator,
   View,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native';
-// import { SERVERS, PROTOCOLS } from '../Constants/server_list';
-import * as SERVERS from '../Constants/servers.json';
+import {
+  SERVERS,
+  PROTOCOLS,
+  FAILED_ERROR_MESSAGE,
+  TIMEOUT_SECONDS,
+} from '../Constants';
 import Modal from 'react-native-modal';
-import { StackActions, NavigationActions } from '../Utils';
-import { loadServer } from '../Utils/server';
-
-const FAILED_ERROR_MESSAGE =
-  'Failed to change server. Please select a different one.';
+import {StackActions, NavigationActions} from '../Utils';
 
 class ChangeServer extends React.Component {
   state = {
     loading: false,
-    cancelled: false
+    cancelled: false,
   };
 
   timeout(ms, promise) {
-    return new Promise(function (resolve, reject) {
-      setTimeout(function () {
+    return new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
         reject(new Error('timeout'));
       }, ms);
-      promise.then(resolve, reject);
+      promise.then(
+        (res) => {
+          clearTimeout(timeoutId);
+          resolve(res);
+        },
+        (err) => {
+          clearTimeout(timeoutId);
+          reject(err);
+        },
+      );
     });
   }
 
-  _changeServer = async (server, protocol) => {
-    this.setState({ loading: true, cancelled: false, hasFailed: false });
+  onPressServer = async (server, protocol) => {
+    this.setState({loading: true, cancelled: false, hasFailed: false});
 
     let hasFailed = false;
     let server_string = `${protocol}${server}/admin/login`;
 
-    this.timeout(5000, fetch(server_string))
-      .then((response) => {
-        if (response.status == 200) {
-          if (!this.state.cancelled) {
+    this.timeout(TIMEOUT_SECONDS * 1000, fetch(server_string))
+      .then(({status}) => {
+        if (status === 200) {
+          if (this.state.cancelled === false) {
             return Promise.all([
-              AsyncStorage.clear(),
               AsyncStorage.setItem('selected_server_url', server),
-              AsyncStorage.setItem('selected_server_protocol', protocol)
+              AsyncStorage.setItem('selected_server_protocol', protocol),
             ]);
           }
-        } else {
-          hasFailed = true;
         }
       })
       .then(() => {
-        if (hasFailed == false) {
-          return Promise.all(loadServer());
+        if (!hasFailed) {
+          this.redirect();
         }
       })
-      .catch((error) => (hasFailed = true))
-      .finally(() => {
-        this.setState({ hasFailed });
-        if (!hasFailed) {
-          this.setState(
-            { loading: false, hasFailed: false, cancelled: false },
-            () => {
-              this.redirect();
-            }
-          );
-        }
-      });
+      .catch(() => this.setState({hasFailed: true}));
   };
 
   redirect() {
-    console.log('---redirecting---');
     const resetAction = StackActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'VerifyUserStack' })]
+      actions: [NavigationActions.navigate({routeName: 'VerifyUserStack'})],
     });
     this.props.navigation.dispatch(resetAction);
   }
 
-  _renderServerList() {
-    const items = SERVERS.servers.map((server, serverIndex) =>
-      SERVERS.protocols.map((protocol, protocolIndex) => {
+  renderServerList() {
+    const items = SERVERS.map((server, serverIndex) =>
+      PROTOCOLS.map((protocol, protocolIndex) => {
         let serverText = `${protocol}${server}`;
         return (
           <TouchableOpacity
             key={`server-${serverIndex}-${protocolIndex}`}
-            style={styles.button}
-            onPress={this._changeServer.bind(this, server, protocol)}
-          >
+            onPress={() => this.onPressServer(server, protocol)}
+            style={styles.button}>
             <Text style={styles.text}>{serverText}</Text>
           </TouchableOpacity>
         );
-      })
+      }),
     );
 
     return items;
@@ -105,33 +98,29 @@ class ChangeServer extends React.Component {
       <ScrollView style={styles.container}>
         <SafeAreaView style={styles.container}>
           <Text style={styles.selectServerText}>Select Server</Text>
-          {this._renderServerList()}
+          {this.renderServerList()}
           <Modal
-            isVisible={this.state.loading}
-            hideModalContentWhileAnimating={true}
             animationIn="fadeIn"
             animationOut="slideOutDown"
-          >
+            hideModalContentWhileAnimating={true}
+            isVisible={this.state.loading}>
             <View style={styles.loading}>
               {this.state.hasFailed ? (
                 <Text style={styles.text}>{FAILED_ERROR_MESSAGE}</Text>
               ) : (
                 <>
                   <ActivityIndicator
-                    size="large"
                     color="white"
-                    style={{ marginBottom: 20 }}
+                    size="large"
+                    style={styles.loadingIndicator}
                   />
                   <Text style={styles.text}>Checking Server</Text>
                 </>
               )}
 
               <TouchableOpacity
-                onPress={() =>
-                  this.setState({ loading: false, cancelled: true })
-                }
-                style={styles.cancelButton}
-              >
+                onPress={() => this.setState({loading: false, cancelled: true})}
+                style={styles.cancelButton}>
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
