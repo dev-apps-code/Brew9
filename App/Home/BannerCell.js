@@ -1,6 +1,12 @@
 import React from 'react';
-import {TouchableWithoutFeedback, Image, View, StyleSheet} from 'react-native';
-import {alpha} from '../Common/size';
+import {
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Image,
+  View,
+  StyleSheet,
+} from 'react-native';
+import {alpha, Colors} from '@common';
 import {Analytics, Event} from 'expo-analytics';
 import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
@@ -11,8 +17,13 @@ import {connect} from 'react-redux';
   members: members,
 }))
 class BannerCell extends React.Component {
+  state = {
+    isLoading: true,
+  };
+
   constructor(props) {
     super(props);
+    this.onBannerCellPress = this.onBannerCellPress.bind(this);
   }
 
   onBannerCellPress = () => {
@@ -29,9 +40,18 @@ class BannerCell extends React.Component {
   render() {
     const {item, navigation} = this.props;
     return (
-      <TouchableWithoutFeedback onPress={this.onBannerCellPress.bind(this)}>
+      <TouchableWithoutFeedback onPress={this.onBannerCellPress}>
         <View navigation={navigation} style={styles.bannercell}>
-          <Image source={{uri: item.image}} style={styles.bannerImage} />
+          {this.state.isLoading && (
+            <View style={styles.loadingIndicatorContainer}>
+              <ActivityIndicator size="small" />
+            </View>
+          )}
+          <Image
+            onLoadEnd={() => this.setState({isLoading: false})}
+            source={{uri: item.image, cache: 'force-cache'}}
+            style={styles.bannerImage}
+          />
         </View>
       </TouchableWithoutFeedback>
     );
@@ -48,9 +68,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   bannercell: {
-    backgroundColor: 'transparent',
     flex: 1,
     width: 150 * 2 * alpha,
+  },
+  loadingIndicatorContainer: {
+    alignContent: 'center',
+    backgroundColor: Colors.lightGray1,
+    height: 150 * alpha,
+    justifyContent: 'center',
+    width: 300 * alpha,
   },
 });
 
