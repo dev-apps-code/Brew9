@@ -7,7 +7,8 @@
       "@utils": ["./App/Utils"],
       "@components": ["./App/Components"],
       "@common": ["./App/Common"],
-      "@constants": ["./App/Constants"]
+      "@constants": ["./App/Constants"],
+      "@requests": ["./App/Requests"]
     }
   }
 }

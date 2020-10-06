@@ -11,6 +11,7 @@ module.exports = function (api) {
             '@common': './App/Common',
             '@constants': './App/Constants',
             '@utils': './App/Utils',
+            '@requests': './App/Requests',
           },
         },
       ],
