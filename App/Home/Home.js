@@ -30,18 +30,19 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import {Analytics, Event} from 'expo-analytics';
 import {getPreciseDistance} from 'geolib';
-// import {createAction} from '../Utils';
 import ProductCell from './ProductCell';
 import CategoryCell from './CategoryCell';
 import CartCell from './CartCell';
-import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
-import ProductRequestObject from '../Requests/product_request_object';
-import {getResponseMsg} from '../Utils/responses';
-import CategoryHeaderCell from './CategoryHeaderCell';
 import Banners from './Banners';
 import ImageCell from './ImageCell';
+import ProductRequestObject from '../Requests/product_request_object';
+import CategoryHeaderCell from './CategoryHeaderCell';
 import {Brew9Modal, Brew9Toast, Brew9Loading} from '@components';
 import {
+  alpha,
+  fontAlpha,
+  windowHeight,
+  windowWidth,
   ANALYTICS_ID,
   TITLE_FONT,
   NON_TITLE_FONT,
@@ -53,7 +54,7 @@ import {
   TOAST_DURATION,
   DEFAULT_BORDER_RADIUS,
 } from '@common';
-import {createAction, loadShop} from '@utils';
+import {createAction, getResponseMsg, loadShop} from '@utils';
 import {SHOP_SELECTION} from '@constants';
 
 @connect(({members, shops, config, orders}) => ({
