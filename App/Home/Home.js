@@ -53,7 +53,8 @@ import {
   TOAST_DURATION,
   DEFAULT_BORDER_RADIUS,
 } from '@common';
-import {createAction} from '@utils';
+import {createAction, loadShop} from '@utils';
+import {SHOP_SELECTION} from '@constants';
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
@@ -140,6 +141,7 @@ class Home extends React.Component {
     this.renderBottom = false;
     this.moveAnimation = new Animated.ValueXY({x: 0, y: windowHeight});
 
+    this.onRefresh = this.onRefresh.bind(this);
     this.toggleCartView = this.toggleCartView.bind(this);
     this.check_promotion_trigger = this.check_promotion_trigger.bind(this);
     this._onShopNamePressed = this._onShopNamePressed.bind(this);
@@ -434,47 +436,16 @@ class Home extends React.Component {
   };
 
   loadShops() {
+    const {shop, responses} = this.props;
     const callback = () => {
-      const {shop, location, responses} = this.props;
-
       if (shop === null) {
-        let message =
-          responses.get('Shop Selection') ||
-          'Please select an outlet that is near you.';
+        let message = responses.get('Shop Selection') || SHOP_SELECTION;
 
-        const latitude = location != null ? location.coords.latitude : null;
-        const longitude = location != null ? location.coords.longitude : null;
-
-        if (latitude === null || longitude === null) {
-          message =
-            responses.get('Location Not Available') ||
-            'Could not detect your location.\nPlease select store.';
-        }
-
-        this.refs.toast.show(message, 3000);
-
-        const callback = () => {
+        this.refs.toast.show(message, 3000, () => {
           this.props.navigation.navigate('SelectShop');
-        };
-
-        this.refs.toast.show(message, 1000, callback);
+        });
       } else {
-        const {menu_banners} = shop;
-        const {first_promo_popup, refresh_products} = this.state;
-        const callback = () => {
-          this.check_promotion_trigger();
-          this.computeDistance();
-
-          if (refresh_products) {
-            this.loadStoreProducts();
-
-            if (!first_promo_popup) {
-              this.shouldShowFeatured(shop);
-            }
-          }
-        };
-
-        this.setState({menu_banners}, callback);
+        this.resetShopData();
       }
     };
     this.props.dispatch(createAction('config/loadConfig')({callback}));
@@ -558,9 +529,33 @@ class Home extends React.Component {
     const products = [];
 
     this.setState({isRefreshing, data, products, refresh_products}, () =>
-      this.loadShops(),
+      this.reloadShopData(),
     );
   }
+
+  reloadShopData = () => {
+    const {shop, location, dispatch, company_id} = this.props;
+    loadShop(shop.id, location, company_id, dispatch, this.resetShopData);
+  };
+
+  resetShopData = () => {
+    const {shop} = this.props;
+    const {menu_banners} = shop;
+    const {first_promo_popup, refresh_products} = this.state;
+
+    this.setState({menu_banners}, () => {
+      this.check_promotion_trigger();
+      this.computeDistance();
+
+      if (refresh_products) {
+        this.loadStoreProducts();
+
+        if (!first_promo_popup) {
+          this.shouldShowFeatured(shop);
+        }
+      }
+    });
+  };
 
   onCheckoutPressed = () => {
     const {navigation, currentMember} = this.props;
@@ -601,7 +596,6 @@ class Home extends React.Component {
   }
 
   onBannerPressed = (item, index) => {
-    console.log(item);
     const productId = item?.promo_product_id || null;
 
     if (productId) {
@@ -1826,7 +1820,7 @@ class Home extends React.Component {
                   data={this.state.products}
                   initialNumToRender={6}
                   keyExtractor={(item, index) => index.toString()}
-                  onRefresh={this.onRefresh.bind(this)}
+                  onRefresh={this.onRefresh}
                   onScrollBeginDrag={() => {
                     this.setState({scroll_Index: null});
                   }}
