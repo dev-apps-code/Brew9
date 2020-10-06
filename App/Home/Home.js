@@ -223,7 +223,7 @@ class Home extends React.Component {
   };
 
   _onShopNamePressed = () => {
-    this.setState({refresh_products: true});
+    this.setState({isRefreshing: true, loading: true, refresh_products: true});
     this.props.navigation.navigate('SelectShop');
   };
 
@@ -440,7 +440,7 @@ class Home extends React.Component {
     const {shop, responses} = this.props;
     const callback = () => {
       if (shop === null) {
-        let message = responses.get('Shop Selection') || SHOP_SELECTION;
+        const message = responses.get('Shop Selection') || SHOP_SELECTION;
 
         this.refs.toast.show(message, 3000, () => {
           this.props.navigation.navigate('SelectShop');
@@ -462,7 +462,6 @@ class Home extends React.Component {
     const callback = (eventObject) => {
       if (eventObject.success) {
         if (eventObject.result.force_upgrade) {
-          const {message} = eventObject;
           const callback = () => {
             Linking.openURL(eventObject.result.url);
           };
