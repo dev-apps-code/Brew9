@@ -1,6 +1,6 @@
 import BaseRequestObject from './base_request_object';
 
-export default class SelectShopRequestObject extends BaseRequestObject {
+export class SelectShopRequestObject extends BaseRequestObject {
   constructor(latitude, longitude) {
     super();
 
