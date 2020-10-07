@@ -1734,10 +1734,10 @@ class Checkout extends React.Component {
               {this.renderTopUpPromotion()}
             </View>
             {allow_wallet && <Text style={walletCreditsStyle}>${credits}</Text>}
+            {allowText}
           </View>
           <View style={selectBoxStyle} />
         </TouchableOpacity>
-        {allowText}
       </View>
     );
   };
@@ -1785,10 +1785,10 @@ class Checkout extends React.Component {
             <View style={styles.walletTextContainer}>
               <Text style={titleTextStyle}>Credit / Debit Card</Text>
             </View>
+            {allowText}
           </View>
           <View style={selectBoxStyle} />
         </TouchableOpacity>
-        {allowText}
       </View>
     );
   };
@@ -1835,10 +1835,10 @@ class Checkout extends React.Component {
             <View style={styles.walletTextContainer}>
               <Text style={titleTextStyle}>Pay In Store</Text>
             </View>
+            {allowText}
           </View>
           <View style={selectBoxStyle} />
         </TouchableOpacity>
-        {allowText}
       </View>
     );
   };
@@ -2131,7 +2131,6 @@ const styles = StyleSheet.create({
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
-    marginLeft: alpha * 10,
     textAlign: 'left',
     width: 191 * alpha,
   },
@@ -2570,7 +2569,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    minHeight: alpha * 40,
+    minHeight: alpha * 50,
   },
   paymentOptionsView: {
     // height: alpha * 120,
