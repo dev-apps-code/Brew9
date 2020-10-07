@@ -1,5 +1,6 @@
 import {
   Animated,
+  BackHandler,
   Easing,
   Image,
   Keyboard,
@@ -111,8 +112,8 @@ class Outlet extends React.Component {
     this.setState({isLoading: true});
     const {companyId, dispatch, location} = this.props;
 
-    const latitude = location != null ? location.coords.latitude : null;
-    const longitude = location != null ? location.coords.longitude : null;
+    const latitude = location !== null ? location.coords.latitude : null;
+    const longitude = location !== null ? location.coords.longitude : null;
 
     const allShopsObject = new AllShopsRequestObject();
     allShopsObject.setUrlId(companyId);
@@ -212,8 +213,8 @@ class Outlet extends React.Component {
 
   onPressOrderNow = async (id) => {
     const {location} = this.props;
-    const latitude = location != null ? location.coords.latitude : null;
-    const longitude = location != null ? location.coords.longitude : null;
+    const latitude = location !== null ? location.coords.latitude : null;
+    const longitude = location !== null ? location.coords.longitude : null;
 
     if (latitude !== null && longitude !== null) {
       const object = new SelectShopRequestObject(latitude, longitude);
@@ -256,11 +257,11 @@ class Outlet extends React.Component {
   };
 
   onAreaChosen = (area, district) => {
-    if (area == 'All') {
+    if (area === 'All') {
       let selectedAreaText = district + ' > ' + area;
       let {allShops} = this.props;
       var newArray = allShops.filter(function (obj) {
-        return obj.district == district;
+        return obj.district === district;
       });
       this.setState({
         selectedDistrict: district,
@@ -269,7 +270,7 @@ class Outlet extends React.Component {
         displayShopList: newArray,
         selectedShop: newArray[0],
       });
-    } else if (area == null) {
+    } else if (area === null) {
       this.setState({
         displayShopList: [],
         selectedDistrict: null,
@@ -280,7 +281,7 @@ class Outlet extends React.Component {
       let selectedAreaText = district + ' > ' + area;
       let {allShops} = this.props;
       var newArray = allShops.filter(function (obj) {
-        return obj.area == area;
+        return obj.area === area;
       });
       this.setState({
         selectedArea: area,
@@ -310,7 +311,7 @@ class Outlet extends React.Component {
 
   onPressCancel = () => {
     Keyboard.dismiss();
-    this.refs.searchInput.clear();
+    this.searchInput.clear();
     this.resetSearchFieldWidth();
     this.setState({
       isSearching: false,
@@ -357,12 +358,7 @@ class Outlet extends React.Component {
     }).start();
 
     return (
-      <Animated.View
-        style={{
-          left: this.filterView,
-          justifyContent: 'center',
-          // maxWidth: FILTER_FIELD_WIDTH
-        }}>
+      <Animated.View style={styles.filterButtonContainer}>
         <TouchableOpacity
           onPress={this.toggleAreaView}
           style={styles.filterButton}>
@@ -396,7 +392,7 @@ class Outlet extends React.Component {
 
   renderMap(shops) {
     let {selectedShop} = this.state;
-    let {allShops} = this.props;
+
     let latitude,
       longitude,
       shopName = null;
@@ -431,20 +427,12 @@ class Outlet extends React.Component {
               longitudeDelta: 0.004,
             }}
             style={styles.map}>
-            {/* <MapView.Marker
-              ref={(shopName) => (this.marker = shopName)}
-              coordinate={{
-                latitude: latitude,
-                longitude: longitude
-              }}
-              title={shopName}
-            /> */}
             <Marker
               coordinate={{
                 latitude: latitude,
                 longitude: longitude,
               }}
-              style={{alignItems: 'center'}}>
+              style={styles.center}>
               <View style={styles.areaBubble}>
                 <Text style={styles.areaText}>{shopName}</Text>
               </View>
@@ -477,7 +465,7 @@ class Outlet extends React.Component {
             source={require('./../../assets/images/search.png')}
             style={styles.searchImage}
           />
-          <View style={{flex: 1, justifyContent: 'center'}}>
+          <View style={styles.searchInputContainer}>
             <TextInput
               // pointerEvents="none"
               autoCapitalize="none"
@@ -485,7 +473,7 @@ class Outlet extends React.Component {
               onFocus={this.onFocusSearchField}
               placeholder="Search"
               placeholderTextColor={DISABLED_COLOR}
-              ref="searchInput"
+              ref={(ref) => (this.searchInput = ref)}
               style={styles.searchFieldInput}
               underlineColorAndroid="transparent"
             />
@@ -535,10 +523,6 @@ class Outlet extends React.Component {
           {this.renderSearchField()}
         </View>
         {this.renderMap(shops)}
-        {/* <Brew9DropDown
-          results={this.state.searchResults}
-          onPressResult={this.onS}
-        /> */}
         <TouchableOpacity onPress={this.toggleMap} style={styles.button_3}>
           <Text style={styles.text_2}>
             {this.state.showMap ? 'Hide Map' : 'Show map'}
@@ -565,9 +549,7 @@ class Outlet extends React.Component {
           cancelable={true}
           description={'exit the  application?'}
           locationList={this.props.allShops}
-          okayButtonAction={() => {
-            BackHandler.exitApp();
-          }}
+          okayButtonAction={() => BackHandler.exitApp()}
           onAreaChosen={this.onAreaChosen}
           selectedArea={this.state.selectedArea}
           selectedDistrict={this.state.selectedDistrict}
@@ -596,7 +578,6 @@ Outlet.navigationOptions = {
       height: 20 * alpha,
       justifyContent: 'center',
       alignItems: 'center',
-      // backgroundColor: 'yellow'
     },
     tabStyle: TAB_STYLE,
     indicatorStyle: {
@@ -609,35 +590,90 @@ Outlet.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  //view
+  areaBubble: {
+    backgroundColor: 'white',
+    borderColor: '#00B2E3',
+    borderRadius: DEFAULT_BORDER_RADIUS,
+    borderWidth: 1,
+    marginBottom: alpha * 2,
+  },
+  areaText: {
+    fontFamily: TITLE_FONT,
+    fontSize: fontAlpha * 14,
+    margin: alpha * 5,
+  },
+  button_3: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    height: alpha * 25,
+    justifyContent: 'center',
+    width: '100%',
+  },
+  cancelSearchButton: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: 6 * alpha,
+  },
+  cancelSearchContainer: {
+    alignItems: 'center',
+    borderRadius: alpha * 21,
+    flexDirection: 'row',
+    height: alpha * 33,
+    paddingHorizontal: alpha * 6,
+    position: 'absolute',
+    right: -CANCEL_WIDTH,
+    width: CANCEL_WIDTH,
+  },
+  cancelSearchText: {
+    color: '#363636',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    textAlign: 'center',
+  },
+  center: {alignItems: 'center'},
+  filterAreaText: {
+    color: '#363636',
+    flexWrap: 'wrap',
+    fontFamily: TITLE_FONT,
+    fontSize: fontAlpha * 13,
+    marginRight: alpha * 7,
+  },
+  filterButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  filterButtonContainer: {
+    justifyContent: 'center',
+    left: this.filterView,
+  },
   mainView: {
     backgroundColor: LIGHT_GREY_BACKGROUND,
     height: '100%',
     width: '100%',
   },
-  subHeaderView: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    left: -100,
-    paddingHorizontal: alpha * 10,
-    paddingVertical: alpha * 7,
-    position: 'relative',
-    right: 0,
-    width: windowWidth + 100,
-    zIndex: 1,
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  mapToggleImage: {
+    height: 5 * alpha,
+    marginRight: alpha * 6,
+    tintColor: '#BDBDBD',
+    width: 10 * alpha,
   },
   mapView: {
     height: alpha * 160,
   },
-  searchView: {
-    alignItems: 'center',
-    borderRadius: alpha * 21,
-    flexDirection: 'row',
-    height: alpha * 28,
-    paddingHorizontal: alpha * 6,
-    position: 'relative',
-    right: 0,
+  pinImage: {
+    height: 20 * alpha,
+    tintColor: '#00B2E3',
+    width: 20 * alpha,
+  },
+  rightArrowImage: {
+    height: 9 * alpha,
+    tintColor: '#C5C5C5',
+    width: 9 * alpha,
   },
   searchField: {
     alignItems: 'center',
@@ -654,105 +690,42 @@ const styles = StyleSheet.create({
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
   },
-  cancelSearchContainer: {
-    alignItems: 'center',
-    borderRadius: alpha * 21,
-    flexDirection: 'row',
-    height: alpha * 33,
-    paddingHorizontal: alpha * 6,
-    position: 'absolute',
-    right: -CANCEL_WIDTH,
-    width: CANCEL_WIDTH,
-  },
-  cancelSearchButton: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    paddingVertical: 6 * alpha,
-  },
-  cancelSearchText: {
-    color: '#363636',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    textAlign: 'center',
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  view_2: {
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-  },
-
-  //image
-  rightArrowImage: {
-    height: 9 * alpha,
-    tintColor: '#C5C5C5',
-    width: 9 * alpha,
-  },
-
   searchImage: {
     height: 12 * alpha,
     marginRight: alpha * 6,
     tintColor: '#868686',
     width: 12 * alpha,
   },
-  mapToggleImage: {
-    height: 5 * alpha,
-    marginRight: alpha * 6,
-    tintColor: '#BDBDBD',
-    width: 10 * alpha,
+  searchInputContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
-
-  //button
-  filterButton: {
+  searchView: {
     alignItems: 'center',
+    borderRadius: alpha * 21,
     flexDirection: 'row',
+    height: alpha * 28,
+    paddingHorizontal: alpha * 6,
+    position: 'relative',
+    right: 0,
   },
-
-  button_3: {
-    alignItems: 'center',
+  subHeaderView: {
     backgroundColor: 'white',
     flexDirection: 'row',
-    height: alpha * 25,
-    justifyContent: 'center',
-    width: '100%',
+    justifyContent: 'space-between',
+    left: -100,
+    paddingHorizontal: alpha * 10,
+    paddingVertical: alpha * 7,
+    position: 'relative',
+    right: 0,
+    width: windowWidth + 100,
+    zIndex: 1,
   },
-
-  //txt
-  filterAreaText: {
-    color: '#363636',
-    flexWrap: 'wrap',
-    fontFamily: TITLE_FONT,
-    fontSize: fontAlpha * 13,
-    marginRight: alpha * 7,
-  },
-
   text_2: {
     color: '#BDBDBD',
     fontFamily: TITLE_FONT,
     fontSize: fontAlpha * 12,
     marginRight: alpha * 4,
-  },
-  areaBubble: {
-    backgroundColor: 'white',
-    borderColor: '#00B2E3',
-    borderRadius: DEFAULT_BORDER_RADIUS,
-    borderWidth: 1,
-    marginBottom: alpha * 2,
-  },
-  areaText: {
-    fontFamily: TITLE_FONT,
-    fontSize: fontAlpha * 14,
-    margin: alpha * 5,
-  },
-  pinImage: {
-    height: 20 * alpha,
-    tintColor: '#00B2E3',
-    width: 20 * alpha,
   },
 });
 
