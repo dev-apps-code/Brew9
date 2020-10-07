@@ -1,29 +1,30 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { alpha, fontAlpha } from '../Common/size';
-import { connect } from 'react-redux';
-import { createAction } from '../Utils/index';
+import {Platform, StyleSheet, Text, View} from 'react-native';
+import {connect} from 'react-redux';
 import {
+  alpha,
+  fontAlpha,
   TINT_COLOR,
   TABBAR_INACTIVE_TINT,
   TITLE_FONT,
   TAB_STYLE,
   LIGHT_GREY_BACKGROUND,
-  NON_TITLE_FONT
-} from '../Common/common_style';
-import ShopList from '../Components/ShopList';
+  NON_TITLE_FONT,
+} from '@common';
+import {ShopList} from '@components';
 import {
   FavoriteShopsRequestObject,
-  DeleteFavoriteRequestObject
-} from '../Requests/favorite_shops_request_object';
-import SelectShopRequestObject from '../Requests/select_shop_request_object';
+  DeleteFavoriteRequestObject,
+  SelectShopRequestObject,
+} from '@requests';
+import {createAction} from '@utils';
 
-@connect(({ members, shops, orders, config }) => ({
+@connect(({members, shops, orders, config}) => ({
   token: members.userAuthToken,
   favoriteShops: shops.favoriteShops,
-  responses: config.responses
+  responses: config.responses,
 }))
-export default class Favourite extends React.Component {
+class Favourite extends React.Component {
   constructor(props) {
     super(props);
     this._didFocus = this._didFocus.bind(this);
@@ -34,11 +35,11 @@ export default class Favourite extends React.Component {
   _getState = () => ({
     showMap: true,
     isNeedLoggined: false,
-    isLoading: false
+    isLoading: false,
   });
 
   componentDidMount() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     this.focusListener = navigation.addListener('didFocus', this._didFocus);
   }
 
@@ -51,43 +52,43 @@ export default class Favourite extends React.Component {
   };
 
   loadFavoriteShops = () => {
-    this.setState({ isLoading: true });
-    const { companyId, dispatch } = this.props;
+    this.setState({isLoading: true});
+    const {companyId, dispatch} = this.props;
 
     const object = new FavoriteShopsRequestObject();
     object.setUrlId(companyId);
 
     const callback = this.updateShopsList.bind(this);
-    const params = { object, callback };
+    const params = {object, callback};
     const action = createAction('shops/loadFavoriteShops')(params);
     dispatch(action);
   };
 
   updateShopsList = (eventObject) => {
-    this.setState({ isLoading: false });
+    this.setState({isLoading: false});
   };
 
   toggleMap = () => {
     this.setState({
-      showMap: !this.state.showMap
+      showMap: !this.state.showMap,
     });
   };
 
   onPressFavourite = (id) => {
-    this.setState({ isLoading: true });
-    const { companyId, dispatch } = this.props;
+    this.setState({isLoading: true});
+    const {companyId, dispatch} = this.props;
 
     const callback = this._onPressFavouriteCallback;
     const object = new DeleteFavoriteRequestObject(id);
     object.setUrlId(companyId);
 
-    const params = { object, callback };
+    const params = {object, callback};
     const action = createAction('shops/loadUnfavoriteShop')(params);
     dispatch(action);
   };
 
   _onPressFavouriteCallback = (eventObject) => {
-    this.setState({ isLoading: false });
+    this.setState({isLoading: false});
     this.loadFavoriteShops();
   };
 
@@ -97,7 +98,7 @@ export default class Favourite extends React.Component {
     object.setShopId(id);
 
     const callback = this.onPressOrderNowCallback.bind(this);
-    const params = { object, callback };
+    const params = {object, callback};
     const action = createAction('shops/selectShop')(params);
 
     this.props.dispatch(action);
@@ -110,21 +111,21 @@ export default class Favourite extends React.Component {
   };
 
   render() {
-    const { favoriteShops, token, responses } = this.props;
-    let needLoginText = responses.get('Favourite Login Required') || 'Login to view your favourite shops.';
+    const {favoriteShops, token, responses} = this.props;
+    let needLoginText =
+      responses.get('Favourite Login Required') ||
+      'Login to view your favourite shops.';
     return (
       <View style={styles.mainView}>
         {token === '' ? (
-          <Text style={styles.needLoginText}>
-            {needLoginText}
-          </Text>
+          <Text style={styles.needLoginText}>{needLoginText}</Text>
         ) : (
           <ShopList
-            shops={favoriteShops}
             onPressFavourite={this.onPressFavourite}
             onPressOrderNow={this.onPressOrderNow}
             onRefresh={() => this.loadFavoriteShops()}
             refreshing={this.state.isLoading}
+            shops={favoriteShops}
           />
         )}
       </View>
@@ -153,31 +154,25 @@ Favourite.navigationOptions = {
     indicatorStyle: {
       backgroundColor: TINT_COLOR,
       width: '10%',
-      left: '20%'
+      left: '20%',
     },
     tabStyle: TAB_STYLE,
-    upperCaseLabel: false
-  }
+    upperCaseLabel: false,
+  },
 };
 
 const styles = StyleSheet.create({
   mainView: {
+    backgroundColor: LIGHT_GREY_BACKGROUND,
     height: '100%',
     width: '100%',
-    backgroundColor: LIGHT_GREY_BACKGROUND
-  },
-  headerLeftContainer: {},
-  navigationBarItem: {},
-  navigationBarItemIcon: {
-    width: 18 * alpha,
-    height: 18 * alpha,
-    tintColor: 'black',
-    marginLeft: 12 * alpha
   },
   needLoginText: {
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
     paddingVertical: 20,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
+
+export default Favourite;
