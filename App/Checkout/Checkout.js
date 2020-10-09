@@ -27,7 +27,7 @@ import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
 import TimeSelector from '../Components/TimeSelector';
 import CurveSeparator from '../Components/CurveSeparator';
-import SelectShopRequestObject from '../Requests/select_shop_request_object';
+import {SelectShopRequestObject} from '@requests';
 
 const {
   TITLE_FONT,
