@@ -68,7 +68,7 @@ import {
   TABBAR_ACTIVE_TINT,
   TABBAR_INACTIVE_TINT,
 } from './App/Common/common_style';
-import ChangeServer from './App/ChangeServer/ChangeServer';
+import ChangeServer from './App/ChangeServer';
 
 RNUxcam.optIntoSchematicRecordings(); // Add this line to enable iOS screen recordings
 RNUxcam.startWithKey('qlswr42nsngf21b'); // Add this line after

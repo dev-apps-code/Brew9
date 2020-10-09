@@ -1,15 +1,13 @@
-import Constants from "expo-constants";
-import { BUILD_VERSION_ANDROID, BUILD_VERSION_IOS } from '../Common/config';
-import { Platform } from "react-native";
+import Constants from 'expo-constants';
+import {BUILD_VERSION_ANDROID, BUILD_VERSION_IOS} from '../Common/config';
+import {Platform} from 'react-native';
 
-export { StackActions, NavigationActions } from 'react-navigation';
+export {StackActions, NavigationActions} from 'react-navigation';
 
-export { default as Storage } from './storage';
+export {default as Storage} from './storage';
 
 export const delay = (time) =>
   new Promise((resolve) => setTimeout(resolve, time));
-
-export const createAction = (type) => (payload) => ({ type, payload });
 
 export const validateEmail = (email) => {
   var re = /\S+@\S+\.\S+/;
@@ -21,13 +19,13 @@ export const toRad = (angle) => (angle * Math.PI) / 180;
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
   );
 }
 
 export function navigationAware(ScreenComponent, routeName) {
   const mapStateToProps = (state) => ({
-    routeName: state.navigation.route
+    routeName: state.navigation.route,
   });
 
   class NavigationAware extends Component {
@@ -57,3 +55,7 @@ export function getBuildVersion() {
   }
   return BUILD_VERSION_IOS;
 }
+
+export * from './createAction';
+export * from './loadShop';
+export * from './responses';
