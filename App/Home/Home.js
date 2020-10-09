@@ -39,6 +39,7 @@ import ProductRequestObject from '../Requests/product_request_object';
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {Brew9Modal, Brew9Toast, Brew9Loading} from '@components';
 import {
+  Colors,
   alpha,
   fontAlpha,
   windowHeight,
@@ -783,9 +784,11 @@ class Home extends React.Component {
   }
 
   renderPopOutCartFlatListCell = ({item, index}) => {
-    if (item.clazz == 'product') {
+    const isDelivery = this.state.delivery === 1;
+    if (item.clazz === 'product') {
       return (
         <CartCell
+          {...{isDelivery}}
           id={item.id}
           index={index}
           item={item}
@@ -793,18 +796,10 @@ class Home extends React.Component {
           navigation={this.props.navigation}
           onChangeQuantity={this.onChangeQuantityPress}
           price={item.price}
-          // currency={this.props.members.currency}
           quantity={item.quantity}
           variations={item.selected_variants}
         />
       );
-      // } else if (item.clazz == "promotion") {
-      // 	return <CartPromoCell
-      // 		navigation={this.props.navigation}
-      // 		name={item.name}
-      // 		price={item.price}
-      // 		type={item.type}
-      // 	/>
     }
   };
 
@@ -814,6 +809,7 @@ class Home extends React.Component {
         categoryDescription={item.description}
         categoryImage={item.image.url}
         categoryname={item.name}
+        delivery={this.state.delivery === 1}
         index={index}
         label={item.label}
         navigation={this.props.navigation}
@@ -1211,6 +1207,7 @@ class Home extends React.Component {
       price: product.calculated_price,
       quantity: this.state.select_quantity,
       selected_variants: clone_variants,
+      allow_delivery: product.allow_delivery,
     };
 
     product.total_quantity =
@@ -1421,7 +1418,6 @@ class Home extends React.Component {
     const {enabled, allow_delivery} = selected_product;
     const isProductEnabled = enabled;
     const isProductAllowedDelivery = delivery ? allow_delivery : true;
-
     const canAddToCart =
       shop.can_order && isProductEnabled && isProductAllowedDelivery;
 
@@ -2100,6 +2096,19 @@ class Home extends React.Component {
 
   renderBottomBar(cart, shop) {
     const {cart_total_quantity, cart_total} = this.props;
+    const isDelivery = this.state.delivery === 1;
+
+    let canCheckout = true;
+
+    if (isDelivery) {
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].allow_delivery === false) {
+          canCheckout = false;
+          break;
+        }
+      }
+    }
+
     if (cart.length > 0) {
       return (
         <View style={styles.cartView}>
@@ -2171,8 +2180,12 @@ class Home extends React.Component {
           </View>
           <View style={styles.checkoutButtonView}>
             <TouchableOpacity
+              disabled={!canCheckout}
               onPress={() => this.onCheckoutPressed()}
-              style={styles.checkoutButton}>
+              style={[
+                styles.checkoutButton,
+                !canCheckout && {backgroundColor: Colors.disabled},
+              ]}>
               <Text style={styles.checkoutButtonText}>Checkout</Text>
             </TouchableOpacity>
           </View>
