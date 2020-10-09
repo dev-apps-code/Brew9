@@ -17,6 +17,7 @@ import com.uxcam.RNUxcamPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.kochava.reactlibrary.RNKochavaTrackerPackage;
+import com.github.wumke.RNExitApp.RNExitAppPackage;
 
 public class MainApplication extends ExpoApplication implements AppLoaderPackagesProviderInterface<ReactPackage> {
 
@@ -36,7 +37,8 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
             new RNUxcamPackage(),
             new FastImageViewPackage(),
             new ReactNativeOneSignalPackage(),
-            new RNKochavaTrackerPackage()
+            new RNKochavaTrackerPackage(),
+            new RNExitAppPackage()
     );
   }
 
