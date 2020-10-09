@@ -1,255 +1,242 @@
-//
-//  CartCell
-//  Brew9
-//
-//  Created by [Author].
-//  Copyright © 2018 brew9. All rights reserved.
-//
+import React from 'react';
+import {
+  Text,
+  TouchableWithoutFeedback,
+  View,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from 'react-native';
+import {alpha, fontAlpha, NON_TITLE_FONT, Colors} from '@common';
+import {ONLY_FOR_PICKUP} from '@constants';
+import {defined} from '@utils';
 
-import { Text, TouchableWithoutFeedback, View, TouchableOpacity, Image, StyleSheet } from "react-native"
-import React from "react"
-import {alpha, fontAlpha} from "../Common/size";
-import {TITLE_FONT, NON_TITLE_FONT} from "../Common/common_style";
+class CartCell extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
+  onMinusPressed = () => {
+    this.props.onChangeQuantity(
+      this.props.item,
+      this.props.index,
+      'remove',
+      true,
+    );
+  };
 
-export default class CartCell extends React.Component {
+  onAddPressed = () => {
+    this.props.onChangeQuantity(this.props.item, this.props.index, 'add', true);
+  };
 
-	constructor(props) {
-		super(props)
-	}
+  render() {
+    var filtered = [];
+    var variants = [];
 
-	componentDidMount() {
-	
-	}
+    if (this.props.variations) {
+      filtered = this.props.variations.filter(function (el) {
+        return el;
+      });
+      variants = filtered.map((a) => a.value);
+    }
 
-	onMinusPressed = () => {
-		this.props.onChangeQuantity(this.props.item,this.props.index, "remove", true);
-	}
+    const {item, isDelivery} = this.props;
+    const {allow_delivery, not_allow_delivery_text} = item;
 
-	onAddPressed = () => {
-		this.props.onChangeQuantity(this.props.item,this.props.index, "add", true);
-	}
+    const allowDelivery = !defined(allow_delivery) || allow_delivery;
+    const notForDelivery = isDelivery && allowDelivery === false;
+    const notForDeliveryText = not_allow_delivery_text || ONLY_FOR_PICKUP;
 
-	render() {
-
-		var filtered = []
-		var variants = []
-
-		if (this.props.variations) {
-			filtered = this.props.variations.filter(function(el) { return el })
-			variants = filtered.map(a => a.value)
-		}
-
-		return <TouchableWithoutFeedback
-			onPress={this.onCart3Press}>
-			<View
-				navigation={this.props.navigation}
-				style={styles.cart3}>
-				<View
-					pointerEvents="box-none"
-					style={{
-						position: "absolute",
-						left: 0 * alpha,
-						right: 0 * alpha,
-						top: 0 * alpha,
-						bottom: 0 * alpha,
-						justifyContent: "center",
-					}}>
-					<View
-						pointerEvents="box-none"
-						style={{
-							height: 47 * alpha,
-							marginLeft: 20 * alpha,
-							marginRight: 19 * alpha,
-							flexDirection: "row",
-							alignItems: "center",
-						}}>
-						<View
-							style={styles.detailsView}>
-							<View
-								style={styles.infoView}>
-								<Text
-									style={styles.titleText}>{this.props.name}</Text>
-								<Text
-									style={styles.descriptionText}>{variants.join(", ")}</Text>
-							</View>
-							<View
-								style={{
-									flex: 1,
-								}}/>
-							<Text
-								style={styles.priceText}>${parseFloat(this.props.price).toFixed(2)}</Text>
-						</View>
-						<View
-							style={{
-								flex: 1,
-							}}/>
-						<View
-							style={styles.optionsView}>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									alignSelf: "center",
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<Text
-									style={styles.quantityText}>{this.props.quantity}</Text>
-							</View>
-							<View
-								pointerEvents="box-none"
-								style={{
-									position: "absolute",
-									right: 0 * alpha,
-									top: 0 * alpha,
-									bottom: 0 * alpha,
-									justifyContent: "center",
-								}}>
-								<View
-									pointerEvents="box-none"
-									style={{
-										width: 74 * alpha,
-										height: 23 * alpha,
-										flexDirection: "row",
-										justifyContent: "flex-end",
-										alignItems: "center",
-									}}>
-									<TouchableOpacity
-										onPress={this.onMinusPressed}
-										style={styles.minusButton}>
-										<Image
-											source={require("./../../assets/images/button-4.png")}
-											style={styles.minusButtonImage}/>
-									</TouchableOpacity>
-									<View
-										style={{
-											flex: 1,
-										}}/>
-									<TouchableOpacity
-										onPress={this.onAddPressed}
-										style={styles.addButton}>
-										<Image
-											source={require("./../../assets/images/add-17.png")}
-											style={styles.addButtonImage}/>
-									</TouchableOpacity>
-								</View>
-							</View>
-						</View>
-					</View>
-				</View>
-				<View
-					style={styles.lineView}/>
-			</View>
-		</TouchableWithoutFeedback>
-	}
+    return (
+      <TouchableWithoutFeedback onPress={this.onCart3Press}>
+        <View navigation={this.props.navigation} style={styles.cart3}>
+          <View pointerEvents="box-none" style={styles.container}>
+            <View pointerEvents="box-none" style={styles.cartContent}>
+              <View style={styles.detailsView}>
+                <View style={styles.infoView}>
+                  <Text style={styles.titleText}>{this.props.name}</Text>
+                  <Text style={styles.descriptionText}>
+                    {variants.join(', ')}
+                  </Text>
+                  {notForDelivery && (
+                    <Text style={styles.alert}>{notForDeliveryText}</Text>
+                  )}
+                </View>
+                <View style={styles.flex} />
+                <Text style={styles.priceText}>
+                  ${parseFloat(this.props.price).toFixed(2)}
+                </Text>
+              </View>
+              <View style={styles.flex} />
+              <View style={styles.optionsView}>
+                <View pointerEvents="box-none" style={styles.quantityContainer}>
+                  <Text style={styles.quantityText}>{this.props.quantity}</Text>
+                </View>
+                <View pointerEvents="box-none" style={styles.buttonsContainer}>
+                  <View pointerEvents="box-none" style={styles.buttonsContent}>
+                    <TouchableOpacity
+                      onPress={this.onMinusPressed}
+                      style={styles.minusButton}>
+                      <Image
+                        source={require('./../../assets/images/button-4.png')}
+                        style={styles.minusButtonImage}
+                      />
+                    </TouchableOpacity>
+                    <View style={styles.flex} />
+                    <TouchableOpacity
+                      onPress={this.onAddPressed}
+                      style={styles.addButton}>
+                      <Image
+                        source={require('./../../assets/images/add-17.png')}
+                        style={styles.addButtonImage}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.lineView} />
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	cart3: {
-		backgroundColor: "white",
-		width: "100%",
-		height: 70 * alpha,
-	},
-	detailsView: {
-		backgroundColor: "transparent",
-		width: 242 * alpha,
-		height: 47 * alpha,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	infoView: {
-		backgroundColor: "transparent",
-		width: 200 * alpha,
-		height: 47 * alpha,
-	},
-	titleText: {
-		backgroundColor: "transparent",
-		color: "rgb(54, 54, 54)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 14 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	descriptionText: {
-		backgroundColor: "transparent",
-		color: "rgb(130, 128, 128)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 10 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		marginTop: 4 * alpha,
-	},
-	priceText: {
-		backgroundColor: "transparent",
-		color: "rgb(57, 57, 57)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 13 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	optionsView: {
-		backgroundColor: "transparent",
-		width: 74 * alpha,
-		height: 23 * alpha,
-	},
-	quantityText: {
-		backgroundColor: "transparent",
-		color: "rgb(85, 83, 81)",
-		fontFamily: NON_TITLE_FONT,
-		fontSize: 16 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	minusButtonText: {
-		color: "black",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	minusButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		width: 23 * alpha,
-		height: 23 * alpha,
-	},
-	minusButtonImage: {
-		resizeMode: "contain",
-	},
-	addButton: {
-		backgroundColor: "transparent",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 0,
-		width: 23 * alpha,
-		height: 23 * alpha,
-	},
-	addButtonImage: {
-		resizeMode: "contain",
-	},
-	addButtonText: {
-		color: "black",
-		fontSize: 12 * fontAlpha,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-	},
-	lineView: {
-		backgroundColor: "rgb(229, 227, 227)",
-		position: "absolute",
-		left: 18 * alpha,
-		right: 19 * alpha,
-		bottom: 0 * alpha,
-		height: 1 * alpha,
-	},
-})
+  addButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 23 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+    width: 23 * alpha,
+  },
+  addButtonImage: {
+    resizeMode: 'contain',
+  },
+  alert: {
+    color: Colors.red,
+    fontSize: 10 * fontAlpha,
+  },
+  buttonsContainer: {
+    bottom: 0 * alpha,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 0 * alpha,
+    top: 0 * alpha,
+  },
+  buttonsContent: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: 23 * alpha,
+    justifyContent: 'flex-end',
+    width: 74 * alpha,
+  },
+  cart3: {
+    backgroundColor: 'white',
+    height: 70 * alpha,
+    width: '100%',
+  },
+  cartContent: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: 47 * alpha,
+    marginLeft: 20 * alpha,
+    marginRight: 19 * alpha,
+  },
+  container: {
+    bottom: 0 * alpha,
+    justifyContent: 'center',
+    left: 0 * alpha,
+    position: 'absolute',
+    right: 0 * alpha,
+    top: 0 * alpha,
+  },
+  descriptionText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(130, 128, 128)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 10 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 4 * alpha,
+    textAlign: 'left',
+  },
+  detailsView: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 47 * alpha,
+    width: 242 * alpha,
+  },
+  flex: {
+    flex: 1,
+  },
+  infoView: {
+    backgroundColor: 'transparent',
+    height: 47 * alpha,
+    width: 200 * alpha,
+  },
+  lineView: {
+    backgroundColor: 'rgb(229, 227, 227)',
+    bottom: 0 * alpha,
+    height: 1 * alpha,
+    left: 18 * alpha,
+    position: 'absolute',
+    right: 19 * alpha,
+  },
+  minusButton: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    height: 23 * alpha,
+    justifyContent: 'center',
+    padding: 0,
+    width: 23 * alpha,
+  },
+  minusButtonImage: {
+    resizeMode: 'contain',
+  },
+  optionsView: {
+    backgroundColor: 'transparent',
+    height: 23 * alpha,
+    width: 74 * alpha,
+  },
+  priceText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(57, 57, 57)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  quantityContainer: {
+    alignSelf: 'center',
+    bottom: 0 * alpha,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0 * alpha,
+  },
+  quantityText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(85, 83, 81)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 16 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  titleText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 14 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+});
+export default CartCell;
