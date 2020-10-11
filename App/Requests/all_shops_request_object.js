@@ -1,6 +1,6 @@
 import BaseRequestObject from './base_request_object';
 
-class AllShopsRequestObject extends BaseRequestObject {
+export class AllShopsRequestObject extends BaseRequestObject {
   constructor(latitude, longitude) {
     super();
 
@@ -14,4 +14,3 @@ class AllShopsRequestObject extends BaseRequestObject {
     return `companies/${this.url_id}/shops/all`;
   }
 }
-export default AllShopsRequestObject;
