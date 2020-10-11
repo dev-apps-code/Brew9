@@ -15,23 +15,17 @@ import _ from 'lodash';
 import Moment from 'moment';
 import {connect} from 'react-redux';
 import {Analytics, Event} from 'expo-analytics';
-import {createAction} from '../Utils';
-import {Brew9PopUp, Brew9Toast, HudLoading} from '../Components';
-import {alpha, fontAlpha, windowHeight, windowWidth} from '../Common/size';
 import DeliveryFeeRequestObject from '../Requests/delivery_fee_request_object';
 import MakeOrderRequestObj from '../Requests/make_order_request_obj.js';
 import TopUpProductsRequestObject from '../Requests/top_up_products_request_object';
-
 import ValidVouchersRequestObject from '../Requests/valid_voucher_request_object.js';
-import {getResponseMsg} from '../Utils/responses';
-import * as commonStyles from '../Common/common_style';
-import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
-import TimeSelector from '../Components/TimeSelector';
-import CurveSeparator from '../Components/CurveSeparator';
-import SelectShopRequestObject from '../Requests/select_shop_request_object';
-
-const {
+import {
+  alpha,
+  fontAlpha,
+  windowHeight,
+  windowWidth,
+  ANALYTICS_ID,
   TITLE_FONT,
   NON_TITLE_FONT,
   BUTTONBOTTOMPADDING,
@@ -39,7 +33,17 @@ const {
   PRIMARY_COLOR,
   TOAST_DURATION,
   LIGHT_GREY,
-} = commonStyles;
+} from '@common';
+import {
+  Brew9PopUp,
+  Brew9Toast,
+  HudLoading,
+  CurveSeparator,
+  TimeSelector,
+} from '@components';
+import {SelectShopRequestObject} from '@requests';
+import {createAction, getResponseMsg} from '@utils';
+
 @connect(({members, shops, orders, config}) => ({
   companyId: members.company_id,
   currentMember: members.profile,
