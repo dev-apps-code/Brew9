@@ -9,8 +9,14 @@ import {
 } from 'react-native';
 import {alpha, fontAlpha, NON_TITLE_FONT, Colors} from '@common';
 import {ONLY_FOR_PICKUP} from '@constants';
-import {defined} from '@utils';
+import {defined, getResponseMsg} from '@utils';
+import {connect} from 'react-redux';
 
+@connect(({config, shops}) => ({
+  responses: config.response,
+  shopResponses: config.shopResponses,
+  shop: shops.selectedShop,
+}))
 class CartCell extends React.Component {
   constructor(props) {
     super(props);
@@ -41,11 +47,19 @@ class CartCell extends React.Component {
     }
 
     const {item, isDelivery} = this.props;
-    const {allow_delivery, not_allow_delivery_text} = item;
+    const {allow_delivery} = item;
+
+    const {responses} = this.props.responses;
+    console.log(responses);
 
     const allowDelivery = !defined(allow_delivery) || allow_delivery;
     const notForDelivery = isDelivery && allowDelivery === false;
-    const notForDeliveryText = not_allow_delivery_text || ONLY_FOR_PICKUP;
+    const notForDeliveryText = getResponseMsg({
+      props: this.props,
+      shopId: this.props.shop.id,
+      key: 'not_allow_delivery',
+      defaultText: ONLY_FOR_PICKUP,
+    });
 
     return (
       <TouchableWithoutFeedback onPress={this.onCart3Press}>
