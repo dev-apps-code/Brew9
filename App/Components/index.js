@@ -6,3 +6,4 @@ export {default as Brew9PopUp} from './Brew9PopUp';
 export {default as CurveSeparator} from './CurveSeparator';
 export {default as ShopList} from './ShopList';
 export {default as ShopDetails} from './ShopDetails';
+export {default as TimeSelector} from './TimeSelector';

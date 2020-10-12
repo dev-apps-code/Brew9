@@ -25,10 +25,13 @@ import TopUpOrderRequestObject from '../Requests/top_up_order_request_object';
 import {Analytics, Event, PageHit} from 'expo-analytics';
 import {ANALYTICS_ID} from '../Common/config';
 import {getMemberIdForApi} from '../Services/members_helper';
+import {getResponseMsg} from '../Utils/responses';
 
-@connect(({members, shops}) => ({
+@connect(({members, shops, config}) => ({
   members: members.profile,
   selectedShop: shops.selectedShop,
+  responses: config.responses,
+  shopResponses: config.shopResponses,
 }))
 export default class MemberWallet extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -85,15 +88,33 @@ export default class MemberWallet extends React.Component {
     });
   }
 
+  filterShopExclusiveItems = (data) => {
+    const {selectedShop} = this.props;
+    const {id} = selectedShop;
+    let filteredData = [];
+    data.forEach((element) => {
+      const {shops} = element;
+      var exists = shops.includes(id);
+      if (exists) {
+        filteredData.push(element);
+      }
+    });
+
+    return filteredData;
+  };
+
   loadTopUpProducts() {
     const {dispatch, members} = this.props;
 
     this.setState({loading_list: true});
     const callback = (eventObject) => {
       if (eventObject.success) {
+        const {result} = eventObject;
+        const filteredData = this.filterShopExclusiveItems(result);
+
         this.setState(
           {
-            data: eventObject.result,
+            data: filteredData,
           },
           function () {
             if (eventObject.result.length > 0) {
@@ -187,18 +208,32 @@ export default class MemberWallet extends React.Component {
   };
 
   renderTopuplistFlatListCell = ({item, index}) => {
+    const {image, price, promotion_text} = item;
     return (
       <TopUpCard
         navigation={this.props.navigation}
-        image={item.image}
-        price={item.price}
+        image={image}
+        price={price}
         index={index}
         item={item}
         currency={this.props.members.currency}
         selected={this.state.selected}
         onPressItem={this.onTopUpCardPressed}
+        promotion={promotion_text}
       />
     );
+  };
+
+  renderTopUpMessage = () => {
+    const {id} = this.props.selectedShop;
+    const topUpMessage = getResponseMsg({
+      props: this.props,
+      shopId: id,
+      key: 'top_up_wallet_message',
+      defaultText: 'Top Up is also available in-store',
+    });
+
+    return topUpMessage;
   };
 
   render() {
@@ -238,14 +273,15 @@ export default class MemberWallet extends React.Component {
               renderItem={this.renderTopuplistFlatListCell}
               data={this.state.data}
               numColumns={2}
-              style={styles.topuplistFlatList}
+              // style={styles.topuplistFlatList}
               selected={this.state.selected}
               keyExtractor={(item, index) => index.toString()}
+              columnWrapperStyle={{alignItems: 'flex-start'}}
             />
           </View>
           <View style={styles.shopTopUp}>
             <Text style={styles.shopTopUpText}>
-              Top up is also available in-store.
+              {this.renderTopUpMessage()}
             </Text>
           </View>
         </ScrollView>

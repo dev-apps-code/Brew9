@@ -11,11 +11,11 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableWithoutFeedback
-} from "react-native";
-import React from "react";
-import { alpha, fontAlpha } from "../Common/size";
-import { TITLE_FONT, NON_TITLE_FONT } from "../Common/common_style";
+  TouchableWithoutFeedback,
+} from 'react-native';
+import React from 'react';
+import {alpha, fontAlpha} from '../Common/size';
+import {NON_TITLE_FONT} from '../Common/common_style';
 
 export default class Cell extends React.Component {
   constructor(props) {
@@ -29,78 +29,31 @@ export default class Cell extends React.Component {
   render() {
     return (
       <TouchableWithoutFeedback onPress={this.onPointItemCellPress}>
-        <View navigation={this.props.navigation} style={styles.pointitemcell}>
-          <View
-            pointerEvents="box-none"
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              justifyContent: "center"
-            }}
-          >
-            <Image source={{ uri: this.props.product_image || null }} style={styles.imageImage} />
-            
-          </View>
-          <View
-            pointerEvents="box-none"
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              top: 15 * alpha,
-              bottom: 0,
-              alignItems: "flex-start"
-            }}
-          >
-            <View
-              pointerEvents="box-none"
-              style={{
-                alignSelf: "stretch",
-                height: 17 * alpha,
-                marginLeft: 118 * alpha,
-                marginRight: 16 * alpha,
-                flexDirection: "row",
-                alignItems: "flex-start"
-              }}
-            >
-              <Text style={styles.nameText}>{this.props.redeem_name}</Text>
-              <View
-                style={{
-                  flex: 1
-                }}
-              />
+        <View navigation={this.props.navigation} style={styles.cellContainer}>
+          <Image
+            source={{uri: this.props.product_image || null}}
+            style={styles.imageImage}
+          />
+          <View style={styles.infoContainer}>
+            <View style={styles.firstRowContainer}>
+              <Text numberOfLines={1} style={styles.nameText}>
+                {this.props.redeem_name}
+              </Text>
+
               <Text style={styles.pointsText}>
                 {this.props.redeem_points} Points
               </Text>
             </View>
             <Text style={styles.dateText}>
-              {this.props.updated_at} - {this.props.updated_at}{" "}
+              {this.props.updated_at} - {this.props.updated_at}{' '}
             </Text>
             <Text style={styles.redeemTimeText}>
               Redeem Date: {this.props.redeem_at}
             </Text>
-            <View
-              pointerEvents="box-none"
-              style={{
-                width: 175 * alpha,
-                height: 14 * alpha,
-                marginLeft: 119 * alpha,
-                marginTop: 5 * alpha,
-                flexDirection: "row",
-                alignItems: "flex-start"
-              }}
-            >
+            <View style={styles.bottomRowContainer}>
               <Text style={styles.redeemText}>Redeemed at</Text>
               <Text style={styles.shopText}>{this.props.redeem_shop}</Text>
             </View>
-            <View
-              style={{
-                flex: 1
-              }}
-            />
-            <View style={styles.lineView} />
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -109,82 +62,95 @@ export default class Cell extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  pointitemcell: {
-    backgroundColor: "transparent",
-    width: "100%",
-    height: 120 * alpha
+  bottomRowContainer: {
+    flexDirection: 'row',
+    marginBottom: alpha * 3,
+    paddingRight: alpha * 10,
+  },
+  cellContainer: {
+    alignItems: 'center',
+    borderBottomColor: 'rgb(233, 233, 233)',
+    borderBottomWidth: alpha * 1,
+    flexDirection: 'row',
+    height: 120 * alpha,
+    paddingTop: alpha * 5,
+    width: '100%',
+  },
+  dateText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(148, 148, 148)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 13 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginTop: 5 * alpha,
+    textAlign: 'left',
+    width: 169 * alpha,
+  },
+  firstRowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: alpha * 3,
+    paddingRight: alpha * 10,
+    width: alpha * 260,
   },
   imageImage: {
     // backgroundColor: "rgb(246, 246, 246)",
-    resizeMode: "contain",
-    width: 90 * alpha,
     height: 90 * alpha,
-    marginLeft: 15 * alpha
+    marginLeft: 15 * alpha,
+    resizeMode: 'contain',
+    width: 90 * alpha,
+  },
+  infoContainer: {
+    marginLeft: alpha * 10,
   },
   nameText: {
-    backgroundColor: "transparent",
-    color: "rgb(54, 54, 54)",
+    backgroundColor: 'transparent',
+    color: 'rgb(54, 54, 54)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 14 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left"
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+    width: alpha * 180,
   },
   pointsText: {
-    backgroundColor: "transparent",
-    color: "rgb(148, 148, 148)",
+    backgroundColor: 'transparent',
+    color: 'rgb(148, 148, 148)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 13 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left"
-  },
-  dateText: {
-    backgroundColor: "transparent",
-    color: "rgb(148, 148, 148)",
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 13 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
-    width: 169 * alpha,
-    marginLeft: 119 * alpha,
-    marginTop: 5 * alpha
-  },
-  redeemTimeText: {
-    color: "rgb(189, 186, 186)",
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
-    backgroundColor: "transparent",
-    width: 206 * alpha,
-    marginLeft: 119 * alpha,
-    marginTop: 18 * alpha
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
   },
   redeemText: {
-    color: "rgb(189, 186, 186)",
+    backgroundColor: 'transparent',
+    color: 'rgb(189, 186, 186)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
-    backgroundColor: "transparent"
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
+  },
+  redeemTimeText: {
+    backgroundColor: 'transparent',
+    color: 'rgb(189, 186, 186)',
+    fontFamily: NON_TITLE_FONT,
+    fontSize: 12 * fontAlpha,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    marginBottom: alpha * 5,
+    marginTop: 18 * alpha,
+    textAlign: 'left',
+    width: 206 * alpha,
   },
   shopText: {
-    color: "rgb(0, 178, 227)",
+    backgroundColor: 'transparent',
+    color: 'rgb(0, 178, 227)',
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
-    backgroundColor: "transparent",
-    marginLeft: 5 * alpha
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
   },
-  lineView: {
-    backgroundColor: "rgb(233, 233, 233)",
-    alignSelf: "stretch",
-    height: 1 * alpha
-  }
 });

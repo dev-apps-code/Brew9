@@ -26,7 +26,7 @@ import {getResponseMsg} from '../Utils/responses';
   responses: config.responses,
   shopResponses: config.shopResponses,
 }))
-export default class ShopDetails extends Component {
+class ShopDetails extends Component {
   constructor(props) {
     super(props);
   }
@@ -45,7 +45,7 @@ export default class ShopDetails extends Component {
           onPress={() => onPressFavourite(details.id, details.favourite)}
           style={styles.favoriteButton}
           {...{disabled}}>
-          <Image resizeMode='contain' source={likeImage} />
+          <Image resizeMode="contain" source={likeImage} />
         </TouchableOpacity>
       );
     }
@@ -95,9 +95,7 @@ export default class ShopDetails extends Component {
           });
     return (
       <View style={viewStyle}>
-        <Text style={textStyle}>
-          {availablityText}
-        </Text>
+        <Text style={textStyle}>{availablityText}</Text>
       </View>
     );
   };
@@ -110,7 +108,6 @@ export default class ShopDetails extends Component {
       //   this.props.responses.get('Order Now Button') || 'Order Now';
       // let viewMoreText =
       //   this.props.responses.get('View More Button') || 'View More';
-
 
       const orderNowText = getResponseMsg({
         props: this.props,
@@ -323,7 +320,7 @@ const styles = StyleSheet.create({
     color: '#00B2E3',
     fontFamily: TITLE_FONT,
     marginLeft: 5 * alpha,
-    marginRight: 5 * alpha
+    marginRight: 5 * alpha,
   },
   shopName: {
     color: 'rgb(54, 54, 54)',
@@ -361,3 +358,4 @@ const styles = StyleSheet.create({
     marginRight: alpha * 8,
   },
 });
+export default ShopDetails;
