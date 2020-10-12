@@ -1690,6 +1690,7 @@ class Checkout extends React.Component {
     const {currentMember, selectedShop} = this.props;
     const {allow_wallet, allow_wallet_text} = selectedShop;
 
+    // FIXME: Refactor this code
     const selectBoxStyle = allow_wallet
       ? selected_payment === 'credits'
         ? styles.activeSelectBox
@@ -1699,11 +1700,13 @@ class Checkout extends React.Component {
           {backgroundColor: '#E4E4E4', borderWidth: 0},
         ];
 
+    // FIXME: Refactor this code
     const iconStyle =
       selected_payment === 'credits'
         ? styles.walletActiveIcon
         : styles.walletInactiveIcon;
 
+    // FIXME: Refactor this code
     const credits =
       currentMember !== undefined
         ? parseFloat(currentMember.credits).toFixed(2)
@@ -1712,6 +1715,7 @@ class Checkout extends React.Component {
     const walletCreditsStyle =
       credits > 0 ? styles.activeCreditsText : styles.inActiveCreditsText;
 
+    // FIXME: Refactor this code
     const allowText = allow_wallet_text ? (
       <Text style={styles.allowText}>{allow_wallet_text}</Text>
     ) : null;
@@ -1751,6 +1755,7 @@ class Checkout extends React.Component {
     const {selectedShop} = this.props;
     const {allow_credit_card, allow_credit_card_text} = selectedShop;
 
+    // FIXME: Refactor this code
     const selectBoxStyle = allow_credit_card
       ? selected_payment === 'credit_card'
         ? styles.activeSelectBox
@@ -1760,11 +1765,13 @@ class Checkout extends React.Component {
           {backgroundColor: '#E4E4E4', borderWidth: 0},
         ];
 
+    // FIXME: Refactor this code
     const iconStyle =
       selected_payment === 'credit_card'
         ? styles.cardActiveIcon
         : styles.cardInactiveICon;
 
+    // FIXME: Refactor this code
     const allowText = allow_credit_card_text ? (
       <Text style={styles.allowText}>{allow_credit_card_text}</Text>
     ) : null;
@@ -1802,6 +1809,7 @@ class Checkout extends React.Component {
     const {selectedShop} = this.props;
     const {allow_pay_in_store, allow_pay_in_store_text} = selectedShop;
 
+    // FIXME: Refactor this code
     const selectBoxStyle = allow_pay_in_store
       ? selected_payment === 'counter'
         ? styles.activeSelectBox
@@ -1811,11 +1819,13 @@ class Checkout extends React.Component {
           {backgroundColor: '#E4E4E4', borderWidth: 0},
         ];
 
+    // FIXME: Refactor this code
     const iconStyle =
       selected_payment === 'counter'
         ? styles.cashActiveIcon
         : styles.cashInactiveIcon;
 
+    // FIXME: Refactor this code
     const allowText = allow_pay_in_store_text ? (
       <Text style={styles.allowText}>{allow_pay_in_store_text}</Text>
     ) : null;
