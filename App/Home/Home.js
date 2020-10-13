@@ -797,6 +797,9 @@ class Home extends React.Component {
           onChangeQuantity={this.onChangeQuantityPress}
           price={item.price}
           quantity={item.quantity}
+          responses={this.props.responses}
+          shopId={this.props.shop.id}
+          shopResponses={this.props.shopResponses}
           variations={item.selected_variants}
         />
       );
