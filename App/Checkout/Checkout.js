@@ -1798,6 +1798,14 @@ class Checkout extends React.Component {
             </View>
             {allowText}
           </View>
+          <Image
+            source={require('./../../assets/images/cc.png')}
+            style={styles.cc}
+          />
+          <Image
+            source={require('./../../assets/images/visa.png')}
+            style={styles.visa}
+          />
           <View style={selectBoxStyle} />
         </TouchableOpacity>
       </View>
