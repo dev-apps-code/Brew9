@@ -2182,11 +2182,7 @@ class Home extends React.Component {
                           style={styles.cartImage}
                         />
                       </View>
-                      <View
-                        style={{
-                          flex: 1,
-                        }}
-                      />
+                      <View style={styles.flex} />
                       <Text style={styles.shoppingCartText}>Cart</Text>
                     </View>
                   </TouchableOpacity>
@@ -2199,8 +2195,16 @@ class Home extends React.Component {
                   ${parseFloat(cart_total).toFixed(2)}
                 </Text>
               </View>
-              <View style={styles.badgeView}>
-                <Text style={styles.numberofitemText}>
+              <View
+                style={[
+                  styles.badgeView,
+                  !canCheckout && {backgroundColor: Colors.darkGray1},
+                ]}>
+                <Text
+                  style={[
+                    styles.numberofitemText,
+                    !canCheckout && {color: Colors.white},
+                  ]}>
                   {cart_total_quantity}
                 </Text>
               </View>
@@ -2212,7 +2216,7 @@ class Home extends React.Component {
               onPress={() => this.onCheckoutPressed()}
               style={[
                 styles.checkoutButton,
-                !canCheckout && {backgroundColor: Colors.disabled},
+                !canCheckout && {backgroundColor: Colors.darkGray1},
               ]}>
               <Text style={styles.checkoutButtonText}>Checkout</Text>
             </TouchableOpacity>
@@ -2884,6 +2888,7 @@ const styles = StyleSheet.create({
   featuredpromoButtonPosition3: {
     bottom: 90 * alpha,
   },
+  flex: {flex: 1},
   freeWithRm40SpendText: {
     backgroundColor: 'transparent',
     color: 'rgb(160, 160, 160)',

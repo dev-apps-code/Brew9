@@ -12,11 +12,6 @@ import {ONLY_FOR_PICKUP} from '@constants';
 import {defined, getResponseMsg} from '@utils';
 import {connect} from 'react-redux';
 
-@connect(({config, shops}) => ({
-  responses: config.response,
-  shopResponses: config.shopResponses,
-  shop: shops.selectedShop,
-}))
 class CartCell extends React.Component {
   constructor(props) {
     super(props);
@@ -49,18 +44,16 @@ class CartCell extends React.Component {
     const {item, isDelivery} = this.props;
     const {allow_delivery} = item;
 
-    const {responses} = this.props.responses;
-    console.log(responses);
-
     const allowDelivery = !defined(allow_delivery) || allow_delivery;
     const notForDelivery = isDelivery && allowDelivery === false;
-    const notForDeliveryText = getResponseMsg({
-      props: this.props,
-      shopId: this.props.shop.id,
-      key: 'not_allow_delivery',
-      defaultText: ONLY_FOR_PICKUP,
-    });
+    const notForDeliveryText = ONLY_FOR_PICKUP;
 
+    // getResponseMsg({
+    //   props: this.props,
+    //   shopId: this.props.shop.id,
+    //   key: 'not_allow_delivery',
+    //   defaultText: ONLY_FOR_PICKUP,
+    // });
     return (
       <TouchableWithoutFeedback onPress={this.onCart3Press}>
         <View navigation={this.props.navigation} style={styles.cart3}>
@@ -68,8 +61,18 @@ class CartCell extends React.Component {
             <View pointerEvents="box-none" style={styles.cartContent}>
               <View style={styles.detailsView}>
                 <View style={styles.infoView}>
-                  <Text style={styles.titleText}>{this.props.name}</Text>
-                  <Text style={styles.descriptionText}>
+                  <Text
+                    style={[
+                      styles.titleText,
+                      notForDelivery && {color: Colors.lightGray3},
+                    ]}>
+                    {this.props.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.descriptionText,
+                      notForDelivery && {color: Colors.darkGray2},
+                    ]}>
                     {variants.join(', ')}
                   </Text>
                   {notForDelivery && (
