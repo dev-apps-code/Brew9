@@ -35,27 +35,25 @@ class CartCell extends React.Component {
     var filtered = [];
     var variants = [];
 
-    if (this.props.variations) {
-      filtered = this.props.variations.filter(function (el) {
+    const {item, isDelivery, variations, disabledMessage} = this.props;
+
+    if (variations) {
+      // FIXME: What is this for?
+      filtered = variations.filter(function (el) {
         return el;
       });
       variants = filtered.map((a) => a.value);
     }
 
-    const {item, isDelivery} = this.props;
     const {allow_delivery} = item;
 
     const allowDelivery = !defined(allow_delivery) || allow_delivery;
     const notForDelivery = isDelivery && allowDelivery === false;
-    const notForDeliveryText = this.props.disabledMessage;
-
-    console.log(
-      `${this.props.name}|allowDelivery: ${allow_delivery}|notForDelivery: ${notForDelivery}|delivery:${isDelivery}`,
-    );
+    const notForDeliveryText = disabledMessage;
 
     return (
       <TouchableWithoutFeedback onPress={this.onCart3Press}>
-        <View navigation={this.props.navigation} style={styles.cart3}>
+        <View style={styles.cart3}>
           <View pointerEvents="box-none" style={styles.container}>
             <View pointerEvents="box-none" style={styles.cartContent}>
               <View style={styles.detailsView}>
