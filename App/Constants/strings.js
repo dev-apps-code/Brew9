@@ -3,3 +3,4 @@ export const FAILED_ERROR_MESSAGE = 'Failed to change server. Please select a di
 export const SHOP_SELECTION = 'Please select an outlet that is near you.';
 export const LOCATION_NOT_AVAILABLE = 'Could not detect your location.\nPlease select store.';
 export const ONLY_FOR_PICKUP = 'Only for store pick up';
+export const NOT_FOR_CHECKOUT_TOAST = 'Unavailable for checkout :(';

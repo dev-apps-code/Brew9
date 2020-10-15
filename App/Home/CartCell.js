@@ -46,14 +46,8 @@ class CartCell extends React.Component {
 
     const allowDelivery = !defined(allow_delivery) || allow_delivery;
     const notForDelivery = isDelivery && allowDelivery === false;
-    const notForDeliveryText = ONLY_FOR_PICKUP;
+    const notForDeliveryText = this.props.disabledMessage;
 
-    // getResponseMsg({
-    //   props: this.props,
-    //   shopId: this.props.shop.id,
-    //   key: 'not_allow_delivery',
-    //   defaultText: ONLY_FOR_PICKUP,
-    // });
     return (
       <TouchableWithoutFeedback onPress={this.onCart3Press}>
         <View navigation={this.props.navigation} style={styles.cart3}>

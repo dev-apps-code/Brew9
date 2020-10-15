@@ -56,7 +56,11 @@ import {
   DEFAULT_BORDER_RADIUS,
 } from '@common';
 import {createAction, getResponseMsg, loadShop} from '@utils';
-import {SHOP_SELECTION} from '@constants';
+import {
+  NOT_FOR_CHECKOUT_TOAST,
+  ONLY_FOR_PICKUP,
+  SHOP_SELECTION,
+} from '@constants';
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
@@ -558,7 +562,19 @@ class Home extends React.Component {
     });
   };
 
-  onCheckoutPressed = () => {
+  onCheckoutPressed = (canCheckout) => {
+    const notForDeliveryToastMessage = getResponseMsg({
+      props: this.props,
+      shopId: this.props.shop.id,
+      defaultText: NOT_FOR_CHECKOUT_TOAST,
+      key: 'not_allow_delivery',
+    });
+
+    if (!canCheckout) {
+      this.refs.toast.show(notForDeliveryToastMessage, TOAST_DURATION);
+      return;
+    }
+
     const {navigation, currentMember} = this.props;
     const {navigate, addListener, state} = navigation;
 
@@ -785,10 +801,18 @@ class Home extends React.Component {
 
   renderPopOutCartFlatListCell = ({item, index}) => {
     const isDelivery = this.state.delivery === 1;
+    const notForDeliveryMessage = getResponseMsg({
+      props: this.props,
+      shopId: this.props.shop.id,
+      defaultText: ONLY_FOR_PICKUP,
+      key: 'not_allow_delivery',
+    });
+
     if (item.clazz === 'product') {
       return (
         <CartCell
           {...{isDelivery}}
+          disabledMessage={notForDeliveryMessage}
           id={item.id}
           index={index}
           item={item}
@@ -797,9 +821,6 @@ class Home extends React.Component {
           onChangeQuantity={this.onChangeQuantityPress}
           price={item.price}
           quantity={item.quantity}
-          responses={this.props.responses}
-          shopId={this.props.shop.id}
-          shopResponses={this.props.shopResponses}
           variations={item.selected_variants}
         />
       );
@@ -2212,8 +2233,7 @@ class Home extends React.Component {
           </View>
           <View style={styles.checkoutButtonView}>
             <TouchableOpacity
-              disabled={!canCheckout}
-              onPress={() => this.onCheckoutPressed()}
+              onPress={() => this.onCheckoutPressed(canCheckout)}
               style={[
                 styles.checkoutButton,
                 !canCheckout && {backgroundColor: Colors.darkGray1},
