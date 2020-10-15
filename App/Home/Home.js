@@ -924,7 +924,7 @@ class Home extends React.Component {
 
     if (isCart) {
       var product_index = this.state.products.findIndex(
-        (element) => element.id == item.id && element.clazz == 'product',
+        (element) => element.id === item.id && element.clazz === 'product',
       );
 
       var item = this.state.products[product_index];
@@ -938,6 +938,7 @@ class Home extends React.Component {
         price: selected_cart.price,
         selected_variants: selected_cart.selected_variants,
         quantity: selected_cart.quantity,
+        allow_delivery: item.allow_delivery,
       };
 
       if (operation === 'add') {
@@ -1010,6 +1011,7 @@ class Home extends React.Component {
         image: item.image,
         price: item.price,
         quantity: item.quantity,
+        allow_delivery: item.allow_delivery,
       };
 
       var cart_index = cart.findIndex((element) => element.id == item.id);
@@ -1854,11 +1856,7 @@ class Home extends React.Component {
               <View style={categoryBottomSpacer} />
               {this.renderFeaturedPromo(shop, cart)}
             </View>
-            <View
-              style={{
-                flex: 1,
-              }}
-            />
+            <View style={styles.flex} />
             <View
               style={
                 !renderBottom

@@ -11,6 +11,7 @@ import {alpha, fontAlpha, NON_TITLE_FONT, Colors} from '@common';
 import {ONLY_FOR_PICKUP} from '@constants';
 import {defined, getResponseMsg} from '@utils';
 import {connect} from 'react-redux';
+import {allow} from 'expo/build/ScreenOrientation/ScreenOrientation';
 
 class CartCell extends React.Component {
   constructor(props) {
@@ -47,6 +48,10 @@ class CartCell extends React.Component {
     const allowDelivery = !defined(allow_delivery) || allow_delivery;
     const notForDelivery = isDelivery && allowDelivery === false;
     const notForDeliveryText = this.props.disabledMessage;
+
+    console.log(
+      `${this.props.name}|allowDelivery: ${allow_delivery}|notForDelivery: ${notForDelivery}|delivery:${isDelivery}`,
+    );
 
     return (
       <TouchableWithoutFeedback onPress={this.onCart3Press}>
