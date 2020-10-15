@@ -1429,6 +1429,8 @@ class Home extends React.Component {
     const canAddToCart =
       shop.can_order && isProductEnabled && isProductAllowedDelivery;
 
+    const productImageContainerStyle = !canAddToCart && {opacity: 0.5};
+
     const ingredients = selected_product.ingredients.map((item, key) => {
       return (
         <View
@@ -1519,10 +1521,11 @@ class Home extends React.Component {
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Product Image or Product Image Gallery */}
         <ImageCell
-          image={selected_product.image}
+          containerStyle={productImageContainerStyle}
           product={selected_product}
-          {...{canAddToCart}}
         />
 
         <View pointerEvents="box-none">
