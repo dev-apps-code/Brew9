@@ -2206,24 +2206,12 @@ class Home extends React.Component {
                     </View>
                   </TouchableOpacity>
                 </View>
-                {/* <View
-								style={{
-									flex: 1,
-								}} /> */}
                 <Text style={styles.totalpriceText}>
                   ${parseFloat(cart_total).toFixed(2)}
                 </Text>
               </View>
-              <View
-                style={[
-                  styles.badgeView,
-                  !canCheckout && {backgroundColor: Colors.darkGray1},
-                ]}>
-                <Text
-                  style={[
-                    styles.numberofitemText,
-                    !canCheckout && {color: Colors.white},
-                  ]}>
+              <View style={styles.badgeView}>
+                <Text style={styles.numberofitemText}>
                   {cart_total_quantity}
                 </Text>
               </View>
