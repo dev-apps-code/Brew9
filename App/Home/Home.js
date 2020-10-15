@@ -1463,6 +1463,7 @@ class Home extends React.Component {
               var price = this.getVariantPrice(value.price);
               return (
                 <TouchableOpacity
+                  disabled={!canAddToCart}
                   key={value_key}
                   onPress={() =>
                     this.onVariantPressed(
@@ -1473,9 +1474,14 @@ class Home extends React.Component {
                       required_variant,
                     )
                   }
-                  style={
-                    selected ? styles.selectedButton : styles.unselectedButton
-                  }>
+                  style={[
+                    styles.variantButton,
+                    canAddToCart
+                      ? selected
+                        ? styles.selectedButton
+                        : styles.unselectedButton
+                      : styles.variantButtonDisabled,
+                  ]}>
                   {value.recommended && (
                     <Image
                       source={require('./../../assets/images/star.png')}
@@ -1483,11 +1489,14 @@ class Home extends React.Component {
                     />
                   )}
                   <Text
-                    style={
-                      selected
-                        ? styles.selectedButtonText
-                        : styles.unselectedButtonText
-                    }>
+                    style={[
+                      styles.variantButtonText,
+                      canAddToCart
+                        ? selected
+                          ? styles.selectedButtonText
+                          : styles.unselectedButtonText
+                        : styles.variantButtonTextDisabled,
+                    ]}>
                     {value.value}{' '}
                     <Text style={{color: selected ? 'white' : PRIMARY_COLOR}}>
                       {value.price > 0 && `$${price}`}
@@ -1510,17 +1519,17 @@ class Home extends React.Component {
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
-        <ImageCell image={selected_product.image} product={selected_product} />
+        <ImageCell
+          image={selected_product.image}
+          product={selected_product}
+          {...{canAddToCart}}
+        />
 
         <View pointerEvents="box-none">
           <ScrollView style={styles.contentScrollView}>
             <View style={styles.productView}>
               <Text style={styles.nameText}>{selected_product.name}</Text>
-              <View
-                style={{
-                  flex: 1,
-                }}
-              />
+              <View style={styles.flex} />
               {selected_product.ingredients && (
                 <View
                   pointerEvents="box-none"
@@ -1644,9 +1653,17 @@ class Home extends React.Component {
                 style={
                   canAddToCart
                     ? [styles.addToCartButton, styles.normal]
-                    : [styles.addToCartButton, styles.disabled]
+                    : [styles.addToCartButton, styles.disabledAddToCart]
                 }>
-                <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                <Text
+                  style={[
+                    styles.addToCartText,
+                    canAddToCart
+                      ? styles.addToCartTextNormal
+                      : styles.addToCartTextDisabled,
+                  ]}>
+                  Add to Cart
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -2293,13 +2310,18 @@ const styles = StyleSheet.create({
     marginRight: 10 * alpha,
     resizeMode: 'contain',
   },
-  addToCartButtonText: {
-    color: 'white',
+  addToCartText: {
     fontFamily: NON_TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
+  },
+  addToCartTextNormal: {
+    color: 'white',
+  },
+  addToCartTextDisabled: {
+    color: Colors.lightGray3,
   },
   alertView: {
     backgroundColor: 'darkgray',
@@ -2821,8 +2843,8 @@ const styles = StyleSheet.create({
     marginTop: 5 * alpha,
     textAlign: 'justify',
   },
-  disabled: {
-    backgroundColor: 'rgba(0, 178, 227, 0.3)',
+  disabledAddToCart: {
+    backgroundColor: Colors.lightGray2,
   },
   distance1kmText: {
     backgroundColor: 'transparent',
@@ -2832,27 +2854,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     // textAlign: "left",
-  },
-  favouriteButton: {
-    alignItems: 'center',
-    backgroundColor: 'rgb(191, 191, 191)',
-    borderRadius: 14 * alpha,
-    flexDirection: 'row',
-    height: 28 * alpha,
-    justifyContent: 'center',
-    marginRight: 11 * alpha,
-    padding: 0,
-    width: 28 * alpha,
-  },
-  favouriteButtonImage: {
-    resizeMode: 'contain',
-  },
-  favouriteButtonText: {
-    color: 'black',
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
   },
   featuredpromoButton: {
     alignItems: 'center',
@@ -3319,15 +3320,6 @@ const styles = StyleSheet.create({
   },
   selectedButtonText: {
     color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    marginBottom: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginRight: 4 * alpha,
-    marginTop: 4 * alpha,
-    textAlign: 'center',
   },
   shopImage: {
     aspectRatio: 2 / 1,
@@ -3439,8 +3431,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   unselectedButton: {
-    alignItems: 'center',
     backgroundColor: 'rgb(238, 238, 238)',
+  },
+  unselectedButtonText: {
+    color: 'rgb(82, 80, 80)',
+  },
+  variantButton: {
+    alignItems: 'center',
     borderRadius: 2 * alpha,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -3449,8 +3446,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 0,
   },
-  unselectedButtonText: {
-    color: 'rgb(82, 80, 80)',
+  variantButtonText: {
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
@@ -3460,6 +3456,12 @@ const styles = StyleSheet.create({
     marginRight: 4 * alpha,
     marginTop: 4 * alpha,
     textAlign: 'center',
+  },
+  variantButtonDisabled: {
+    backgroundColor: Colors.darkGray1,
+  },
+  variantButtonTextDisabled: {
+    color: Colors.white,
   },
 });
 
