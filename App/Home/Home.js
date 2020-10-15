@@ -824,10 +824,15 @@ class Home extends React.Component {
   };
 
   renderProductlistFlatListCell = ({item, index}) => {
+    const {allow_delivery} = item;
+    const isDelivery = this.state.delivery === 1;
+    const canAddToCart = isDelivery ? allow_delivery : true;
+
     if (item) {
-      if (item.clazz == 'product') {
+      if (item.clazz === 'product') {
         return (
           <ProductCell
+            {...{canAddToCart}}
             currency={'$'}
             index={index}
             item={item}
