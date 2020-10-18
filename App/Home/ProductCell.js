@@ -136,7 +136,7 @@ class ProductCell extends React.PureComponent {
               {productHidden ? (
                 <Image
                   blurRadius={10}
-                  source={{uri: productimage}}
+                  source={{uri: productimage, cache: 'force-cache'}}
                   style={styles.productblurimageImage}
                 />
               ) : (
