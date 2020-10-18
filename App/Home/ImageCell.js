@@ -13,15 +13,15 @@ const ImageCell = memo(({containerStyle, product}) => {
     return (
       <View style={[styles.imageblockView, containerStyle]}>
         <Swiper
-          showsPagination={true}
           autoplay={true}
           paginationStyle={{bottom: -15}}
+          showsPagination={true}
           width={SWIPER_WIDTH}>
           {gallery.map((item, index) => (
             <Image
               key={index}
-              source={{uri: item}}
-              style={[styles.productimageImage, styles.galleryImageStyle]}
+              source={{uri: item, cache: 'force-cache'}}
+              style={styles.productimageImage}
             />
           ))}
         </Swiper>
@@ -30,7 +30,10 @@ const ImageCell = memo(({containerStyle, product}) => {
   } else if (image) {
     return (
       <View style={[styles.imageblockView, containerStyle]}>
-        <Image source={{uri: image.url}} style={styles.productimageImage} />
+        <Image
+          source={{uri: image.url, cache: 'force-cache'}}
+          style={styles.productimageImage}
+        />
       </View>
     );
   }
@@ -39,25 +42,22 @@ const ImageCell = memo(({containerStyle, product}) => {
 });
 
 const styles = StyleSheet.create({
-  imageblockView: {
-    backgroundColor: 'white',
-    marginTop: 21 * alpha,
-    width: '100%',
-    height: 150 * alpha,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // flex: 1
-  },
   galleryImageStyle: {
     backgroundColor: 'cyan',
   },
+  imageblockView: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    height: 150 * alpha,
+    justifyContent: 'center',
+    marginTop: 21 * alpha,
+    width: '100%',
+  },
   productimageImage: {
-    // backgroundColor: 'transparent',
+    alignSelf: 'center',
+    height: 150 * alpha,
     resizeMode: 'cover',
     width: 150 * alpha,
-    height: 150 * alpha,
-    // marginLeft: 5 * alpha,
-    alignSelf: 'center',
   },
 });
 
