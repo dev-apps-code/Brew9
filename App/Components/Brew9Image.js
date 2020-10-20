@@ -48,8 +48,8 @@ class Brew9Image extends React.Component {
         <View style={styles.absolute}>
           <Image
             onLoad={() => this.onLoadImage()}
-            // resizeMode="cover"
-            source={this.props.imageSource}
+            resizeMode="cover"
+            source={{...this.props.imageSource, cache: 'force-cache'}}
             style={[styles.productimageImage, this.props.imageStyle]}
           />
         </View>
