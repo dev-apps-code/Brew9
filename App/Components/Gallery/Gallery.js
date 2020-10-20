@@ -1,6 +1,6 @@
 import {alpha} from '@common';
 import React, {memo} from 'react';
-import {Dimensions, Image, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper';
 import {Brew9Image} from '../Brew9Image';
 
