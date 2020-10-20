@@ -1,8 +1,7 @@
-import React, {memo, useState} from 'react';
-import {Image, StyleSheet, View, ActivityIndicator} from 'react-native';
-import {alpha, Colors} from '@common';
-import {Gallery} from '@components';
-import {Brew9ProgressiveImage} from '@components';
+import React, {memo} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {alpha} from '@common';
+import {Brew9ProgressiveImage, Gallery} from '@components';
 
 const ImageCell = memo(({containerStyle, product}) => {
   const {gallery, image} = product;
@@ -37,6 +36,7 @@ const styles = StyleSheet.create({
     marginTop: 21 * alpha,
     width: '100%',
   },
+  pagination: {bottom: -15},
   productimageImage: {
     alignSelf: 'center',
     height: 150 * alpha,
