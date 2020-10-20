@@ -56,6 +56,8 @@ export function getBuildVersion() {
   return BUILD_VERSION_IOS;
 }
 
+export const defined = (variable) => typeof variable !== 'undefined';
+
 export * from './createAction';
 export * from './loadShop';
 export * from './responses';

@@ -92,36 +92,29 @@ class ProductCell extends React.PureComponent {
       productTagLabel,
       productTagColor,
       productTagText,
+      canAddToCart,
     } = this.props;
     var ingredients = null;
     if (productingredient !== undefined) {
-      ingredients = productingredient.map((item, key) => {
-        var highlight = false;
-
-        if (item.highlight == true) {
-          hightlight = true;
-        }
-
-        return (
-          <View
-            key={key}
+      ingredients = productingredient.map((item, key) => (
+        <View
+          key={key}
+          style={
+            item.highlight
+              ? styles.ingredientHighlightView
+              : styles.ingredientView
+          }>
+          <Text
+            numberOfLines={1}
             style={
               item.highlight
-                ? styles.ingredientHighlightView
-                : styles.ingredientView
+                ? styles.ingredientHighlightText
+                : styles.ingredientText
             }>
-            <Text
-              numberOfLines={1}
-              style={
-                item.highlight
-                  ? styles.ingredientHighlightText
-                  : styles.ingredientText
-              }>
-              {item.name}
-            </Text>
-          </View>
-        );
-      });
+            {item.name}
+          </Text>
+        </View>
+      ));
     }
 
     var hasDiscount =
@@ -130,7 +123,7 @@ class ProductCell extends React.PureComponent {
     const uri = productimage;
     return (
       <TouchableWithoutFeedback onPress={this.onProductCellPress}>
-        <View style={{backgroundColor: 'white'}}>
+        <View style={!canAddToCart && styles.disabled}>
           <View navigation={navigation} style={styles.productcell}>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               {productHidden ? (
@@ -276,6 +269,9 @@ const styles = StyleSheet.create({
     marginLeft: 10 * alpha,
     marginRight: 10 * alpha,
     width: '100%',
+  },
+  disabled: {
+    opacity: 0.5,
   },
   discountPriceText: {
     backgroundColor: 'transparent',

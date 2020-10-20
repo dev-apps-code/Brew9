@@ -39,6 +39,7 @@ import ProductRequestObject from '../Requests/product_request_object';
 import CategoryHeaderCell from './CategoryHeaderCell';
 import {Brew9Modal, Brew9Toast, Brew9Loading} from '@components';
 import {
+  Colors,
   alpha,
   fontAlpha,
   windowHeight,
@@ -55,7 +56,11 @@ import {
   DEFAULT_BORDER_RADIUS,
 } from '@common';
 import {createAction, getResponseMsg, loadShop} from '@utils';
-import {SHOP_SELECTION} from '@constants';
+import {
+  NOT_FOR_CHECKOUT_TOAST,
+  ONLY_FOR_PICKUP,
+  SHOP_SELECTION,
+} from '@constants';
 
 @connect(({members, shops, config, orders}) => ({
   currentMember: members.profile,
@@ -557,7 +562,19 @@ class Home extends React.Component {
     });
   };
 
-  onCheckoutPressed = () => {
+  onCheckoutPressed = (canCheckout) => {
+    const notForDeliveryToastMessage = getResponseMsg({
+      props: this.props,
+      shopId: this.props.shop.id,
+      defaultText: NOT_FOR_CHECKOUT_TOAST,
+      key: 'not_allow_delivery',
+    });
+
+    if (!canCheckout) {
+      this.refs.toast.show(notForDeliveryToastMessage, TOAST_DURATION);
+      return;
+    }
+
     const {navigation, currentMember} = this.props;
     const {navigate, addListener, state} = navigation;
 
@@ -640,7 +657,7 @@ class Home extends React.Component {
     let delivery = value == 1 ? true : false;
 
     if (delivery && shop.delivery_option == false) {
-      this.setState({delivery: 0}, () => {
+      this.setState({delivery: value}, () => {
         this.refs.toggle.toggleItem(0, false);
 
         var msg =
@@ -650,7 +667,10 @@ class Home extends React.Component {
         this.refs.toast.show(msg, TOAST_DURATION);
       });
       return;
+    } else {
+      this.setState({delivery: value});
     }
+
     dispatch(createAction('orders/setDeliveryOption')(delivery));
   };
 
@@ -780,9 +800,19 @@ class Home extends React.Component {
   }
 
   renderPopOutCartFlatListCell = ({item, index}) => {
-    if (item.clazz == 'product') {
+    const isDelivery = this.state.delivery === 1;
+    const notForDeliveryMessage = getResponseMsg({
+      props: this.props,
+      shopId: this.props.shop.id,
+      defaultText: ONLY_FOR_PICKUP,
+      key: 'not_allow_delivery',
+    });
+
+    if (item.clazz === 'product') {
       return (
         <CartCell
+          {...{isDelivery}}
+          disabledMessage={notForDeliveryMessage}
           id={item.id}
           index={index}
           item={item}
@@ -790,18 +820,10 @@ class Home extends React.Component {
           navigation={this.props.navigation}
           onChangeQuantity={this.onChangeQuantityPress}
           price={item.price}
-          // currency={this.props.members.currency}
           quantity={item.quantity}
           variations={item.selected_variants}
         />
       );
-      // } else if (item.clazz == "promotion") {
-      // 	return <CartPromoCell
-      // 		navigation={this.props.navigation}
-      // 		name={item.name}
-      // 		price={item.price}
-      // 		type={item.type}
-      // 	/>
     }
   };
 
@@ -811,6 +833,7 @@ class Home extends React.Component {
         categoryDescription={item.description}
         categoryImage={item.image.url}
         categoryname={item.name}
+        delivery={this.state.delivery === 1}
         index={index}
         label={item.label}
         navigation={this.props.navigation}
@@ -822,10 +845,15 @@ class Home extends React.Component {
   };
 
   renderProductlistFlatListCell = ({item, index}) => {
+    const {allow_delivery} = item;
+    const isDelivery = this.state.delivery === 1;
+    const canAddToCart = isDelivery ? allow_delivery : true;
+
     if (item) {
-      if (item.clazz == 'product') {
+      if (item.clazz === 'product') {
         return (
           <ProductCell
+            {...{canAddToCart}}
             currency={'$'}
             index={index}
             item={item}
@@ -896,7 +924,7 @@ class Home extends React.Component {
 
     if (isCart) {
       var product_index = this.state.products.findIndex(
-        (element) => element.id == item.id && element.clazz == 'product',
+        (element) => element.id === item.id && element.clazz === 'product',
       );
 
       var item = this.state.products[product_index];
@@ -910,6 +938,7 @@ class Home extends React.Component {
         price: selected_cart.price,
         selected_variants: selected_cart.selected_variants,
         quantity: selected_cart.quantity,
+        allow_delivery: item.allow_delivery,
       };
 
       if (operation === 'add') {
@@ -982,6 +1011,7 @@ class Home extends React.Component {
         image: item.image,
         price: item.price,
         quantity: item.quantity,
+        allow_delivery: item.allow_delivery,
       };
 
       var cart_index = cart.findIndex((element) => element.id == item.id);
@@ -1208,6 +1238,7 @@ class Home extends React.Component {
       price: product.calculated_price,
       quantity: this.state.select_quantity,
       selected_variants: clone_variants,
+      allow_delivery: product.allow_delivery,
     };
 
     product.total_quantity =
@@ -1414,11 +1445,14 @@ class Home extends React.Component {
       order_limit = selected_product.product_settings[0].order_limit;
     }
 
-    var enabled = selected_product.enabled;
+    const {delivery} = this.state;
+    const {enabled, allow_delivery} = selected_product;
+    const isProductEnabled = enabled;
+    const isProductAllowedDelivery = delivery ? allow_delivery : true;
+    const canAddToCart =
+      shop.can_order && isProductEnabled && isProductAllowedDelivery;
 
-    if (!shop.can_order) {
-      enabled = false;
-    }
+    const productImageContainerStyle = !canAddToCart && {opacity: 0.5};
 
     const ingredients = selected_product.ingredients.map((item, key) => {
       return (
@@ -1454,6 +1488,7 @@ class Home extends React.Component {
               var price = this.getVariantPrice(value.price);
               return (
                 <TouchableOpacity
+                  disabled={!canAddToCart}
                   key={value_key}
                   onPress={() =>
                     this.onVariantPressed(
@@ -1464,9 +1499,14 @@ class Home extends React.Component {
                       required_variant,
                     )
                   }
-                  style={
-                    selected ? styles.selectedButton : styles.unselectedButton
-                  }>
+                  style={[
+                    styles.variantButton,
+                    canAddToCart
+                      ? selected
+                        ? styles.selectedButton
+                        : styles.unselectedButton
+                      : styles.variantButtonDisabled,
+                  ]}>
                   {value.recommended && (
                     <Image
                       source={require('./../../assets/images/star.png')}
@@ -1474,11 +1514,14 @@ class Home extends React.Component {
                     />
                   )}
                   <Text
-                    style={
-                      selected
-                        ? styles.selectedButtonText
-                        : styles.unselectedButtonText
-                    }>
+                    style={[
+                      styles.variantButtonText,
+                      canAddToCart
+                        ? selected
+                          ? styles.selectedButtonText
+                          : styles.unselectedButtonText
+                        : styles.variantButtonTextDisabled,
+                    ]}>
                     {value.value}{' '}
                     <Text style={{color: selected ? 'white' : PRIMARY_COLOR}}>
                       {value.price > 0 && `$${price}`}
@@ -1501,17 +1544,18 @@ class Home extends React.Component {
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
         </View>
-        <ImageCell image={selected_product.image} product={selected_product} />
+
+        {/* Product Image or Product Image Gallery */}
+        <ImageCell
+          containerStyle={productImageContainerStyle}
+          product={selected_product}
+        />
 
         <View pointerEvents="box-none">
           <ScrollView style={styles.contentScrollView}>
             <View style={styles.productView}>
               <Text style={styles.nameText}>{selected_product.name}</Text>
-              <View
-                style={{
-                  flex: 1,
-                }}
-              />
+              <View style={styles.flex} />
               {selected_product.ingredients && (
                 <View
                   pointerEvents="box-none"
@@ -1630,14 +1674,22 @@ class Home extends React.Component {
                 </Text>
               </View>
               <TouchableOpacity
-                disabled={!enabled}
+                disabled={!canAddToCart}
                 onPress={() => this.onAddToCartPressed(selected_product)}
                 style={
-                  enabled
+                  canAddToCart
                     ? [styles.addToCartButton, styles.normal]
-                    : [styles.addToCartButton, styles.disabled]
+                    : [styles.addToCartButton, styles.disabledAddToCart]
                 }>
-                <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                <Text
+                  style={[
+                    styles.addToCartText,
+                    canAddToCart
+                      ? styles.addToCartTextNormal
+                      : styles.addToCartTextDisabled,
+                  ]}>
+                  Add to Cart
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -1804,11 +1856,7 @@ class Home extends React.Component {
               <View style={categoryBottomSpacer} />
               {this.renderFeaturedPromo(shop, cart)}
             </View>
-            <View
-              style={{
-                flex: 1,
-              }}
-            />
+            <View style={styles.flex} />
             <View
               style={
                 !renderBottom
@@ -2095,6 +2143,19 @@ class Home extends React.Component {
 
   renderBottomBar(cart, shop) {
     const {cart_total_quantity, cart_total} = this.props;
+    const isDelivery = this.state.delivery === 1;
+
+    let canCheckout = true;
+
+    if (isDelivery) {
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].allow_delivery === false) {
+          canCheckout = false;
+          break;
+        }
+      }
+    }
+
     if (cart.length > 0) {
       return (
         <View style={styles.cartView}>
@@ -2140,19 +2201,11 @@ class Home extends React.Component {
                           style={styles.cartImage}
                         />
                       </View>
-                      <View
-                        style={{
-                          flex: 1,
-                        }}
-                      />
+                      <View style={styles.flex} />
                       <Text style={styles.shoppingCartText}>Cart</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
-                {/* <View
-								style={{
-									flex: 1,
-								}} /> */}
                 <Text style={styles.totalpriceText}>
                   ${parseFloat(cart_total).toFixed(2)}
                 </Text>
@@ -2166,8 +2219,11 @@ class Home extends React.Component {
           </View>
           <View style={styles.checkoutButtonView}>
             <TouchableOpacity
-              onPress={() => this.onCheckoutPressed()}
-              style={styles.checkoutButton}>
+              onPress={() => this.onCheckoutPressed(canCheckout)}
+              style={[
+                styles.checkoutButton,
+                !canCheckout && {backgroundColor: Colors.darkGray1},
+              ]}>
               <Text style={styles.checkoutButtonText}>Checkout</Text>
             </TouchableOpacity>
           </View>
@@ -2267,13 +2323,18 @@ const styles = StyleSheet.create({
     marginRight: 10 * alpha,
     resizeMode: 'contain',
   },
-  addToCartButtonText: {
-    color: 'white',
+  addToCartText: {
     fontFamily: NON_TITLE_FONT,
     fontSize: 16 * fontAlpha,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
+  },
+  addToCartTextNormal: {
+    color: 'white',
+  },
+  addToCartTextDisabled: {
+    color: Colors.lightGray3,
   },
   alertView: {
     backgroundColor: 'darkgray',
@@ -2795,8 +2856,8 @@ const styles = StyleSheet.create({
     marginTop: 5 * alpha,
     textAlign: 'justify',
   },
-  disabled: {
-    backgroundColor: 'rgba(0, 178, 227, 0.3)',
+  disabledAddToCart: {
+    backgroundColor: Colors.lightGray2,
   },
   distance1kmText: {
     backgroundColor: 'transparent',
@@ -2806,27 +2867,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     // textAlign: "left",
-  },
-  favouriteButton: {
-    alignItems: 'center',
-    backgroundColor: 'rgb(191, 191, 191)',
-    borderRadius: 14 * alpha,
-    flexDirection: 'row',
-    height: 28 * alpha,
-    justifyContent: 'center',
-    marginRight: 11 * alpha,
-    padding: 0,
-    width: 28 * alpha,
-  },
-  favouriteButtonImage: {
-    resizeMode: 'contain',
-  },
-  favouriteButtonText: {
-    color: 'black',
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
   },
   featuredpromoButton: {
     alignItems: 'center',
@@ -2854,6 +2894,7 @@ const styles = StyleSheet.create({
   featuredpromoButtonPosition3: {
     bottom: 90 * alpha,
   },
+  flex: {flex: 1},
   freeWithRm40SpendText: {
     backgroundColor: 'transparent',
     color: 'rgb(160, 160, 160)',
@@ -3293,15 +3334,6 @@ const styles = StyleSheet.create({
   },
   selectedButtonText: {
     color: 'white',
-    fontFamily: NON_TITLE_FONT,
-    fontSize: 12 * fontAlpha,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    marginBottom: 4 * alpha,
-    marginLeft: 4 * alpha,
-    marginRight: 4 * alpha,
-    marginTop: 4 * alpha,
-    textAlign: 'center',
   },
   shopImage: {
     aspectRatio: 2 / 1,
@@ -3413,8 +3445,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   unselectedButton: {
-    alignItems: 'center',
     backgroundColor: 'rgb(238, 238, 238)',
+  },
+  unselectedButtonText: {
+    color: 'rgb(82, 80, 80)',
+  },
+  variantButton: {
+    alignItems: 'center',
     borderRadius: 2 * alpha,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -3423,8 +3460,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 0,
   },
-  unselectedButtonText: {
-    color: 'rgb(82, 80, 80)',
+  variantButtonText: {
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
     fontStyle: 'normal',
@@ -3434,6 +3470,12 @@ const styles = StyleSheet.create({
     marginRight: 4 * alpha,
     marginTop: 4 * alpha,
     textAlign: 'center',
+  },
+  variantButtonDisabled: {
+    backgroundColor: Colors.darkGray1,
+  },
+  variantButtonTextDisabled: {
+    color: Colors.white,
   },
 });
 
