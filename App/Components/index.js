@@ -7,3 +7,6 @@ export {default as CurveSeparator} from './CurveSeparator';
 export {default as ShopList} from './ShopList';
 export {default as ShopDetails} from './ShopDetails';
 export {default as TimeSelector} from './TimeSelector';
+export * from './Gallery';
+export * from './Brew9Image';
+export * from './Brew9ProgressiveImage';

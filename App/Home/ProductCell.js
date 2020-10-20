@@ -6,16 +6,16 @@ import {
   StyleSheet,
 } from 'react-native';
 import React from 'react';
-import {alpha, fontAlpha} from '../Common/size';
 import {
+  alpha,
+  fontAlpha,
+  ANALYTICS_ID,
   TITLE_FONT,
   NON_TITLE_FONT,
   PRIMARY_COLOR,
   LIGHT_BLUE_BACKGROUND,
-} from '../Common/common_style';
+} from '@common';
 import {Analytics, Event} from 'expo-analytics';
-import {ANALYTICS_ID} from '../Common/config';
-import Constants from 'expo-constants';
 import {Image as ExpoImage} from 'react-native-expo-image-cache';
 
 class ProductCell extends React.PureComponent {
