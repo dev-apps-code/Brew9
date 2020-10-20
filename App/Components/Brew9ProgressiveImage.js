@@ -25,7 +25,7 @@ class Brew9ProgressiveImage extends Component {
       toValue: 0,
       duration: this.props.imageFadeDuration,
     }).start();
-    // this.props.onLoadImage()
+    this.props.onLoadImage();
   }
 
   render() {
@@ -56,7 +56,7 @@ class Brew9ProgressiveImage extends Component {
         <Image
           onLoad={() => this.onLoadImage()}
           resizeMode="cover"
-          source={this.props.imageSource}
+          source={{...this.props.imageSource, cache: 'force-cache'}}
           style={[styles.image, this.props.style]}
         />
       </View>
