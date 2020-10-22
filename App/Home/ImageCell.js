@@ -1,44 +1,33 @@
 import React, {memo} from 'react';
-import {Image, StyleSheet, View, Dimensions} from 'react-native';
-import Swiper from 'react-native-swiper';
-import {alpha} from '../Common/size';
-
-const {width} = Dimensions.get('window');
-const SWIPER_WIDTH = width - 80;
+import {StyleSheet, View} from 'react-native';
+import {alpha} from '@common';
+import {Brew9ProgressiveImage, Gallery} from '@components';
 
 const ImageCell = memo(({containerStyle, product}) => {
   const {gallery, image} = product;
-
-  if (gallery && Array.isArray(gallery) && gallery.length > 0) {
-    return (
-      <View style={[styles.imageblockView, containerStyle]}>
-        <Swiper
-          autoplay={true}
-          paginationStyle={styles.pagination}
-          showsPagination={true}
-          width={SWIPER_WIDTH}>
-          {gallery.map((item, index) => (
-            <Image
-              key={index}
-              source={{uri: item}}
-              style={[styles.productimageImage]}
-            />
-          ))}
-        </Swiper>
-      </View>
-    );
-  } else if (image) {
-    return (
-      <View style={[styles.imageblockView, containerStyle]}>
-        <Image source={{uri: image.url}} style={styles.productimageImage} />
-      </View>
-    );
-  }
-
-  return <View />;
+  const isGallery = gallery && Array.isArray(gallery) && gallery.length > 0;
+  const thumb = image.thumb.url;
+  return (
+    <View style={[styles.imageblockView, containerStyle]}>
+      {isGallery ? (
+        <Gallery {...{gallery, thumb}} />
+      ) : (
+        <Brew9ProgressiveImage
+          imageSource={{uri: image.url, cache: 'force-cache'}}
+          style={styles.productimageImage}
+          thumbnailBlurRadius={5}
+          thumbnailFadeDuration={100}
+          thumbnailSource={{uri: image.thumb.url}}
+        />
+      )}
+    </View>
+  );
 });
 
 const styles = StyleSheet.create({
+  galleryImageStyle: {
+    backgroundColor: 'cyan',
+  },
   imageblockView: {
     alignItems: 'center',
     backgroundColor: 'white',
