@@ -2154,7 +2154,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    width: 191 * alpha,
   },
   branchText: {
     backgroundColor: 'transparent',
