@@ -1717,7 +1717,9 @@ class Checkout extends React.Component {
 
     // FIXME: Refactor this code
     const allowText = allow_wallet_text ? (
-      <Text style={styles.allowText}>{allow_wallet_text}</Text>
+      <Text numberOfLines={1} style={styles.allowText}>
+        {allow_wallet_text}
+      </Text>
     ) : null;
 
     const titleTextStyle = allow_wallet
@@ -1773,7 +1775,10 @@ class Checkout extends React.Component {
 
     // FIXME: Refactor this code
     const allowText = allow_credit_card_text ? (
-      <Text style={styles.allowText}>{allow_credit_card_text}</Text>
+      <Text numberOfLines={1} style={styles.allowText}>
+        adfasfadsfadfasfadsfadfasfadsfadfasfadsfadfasfadsfadfasfadsfadfasfadsf
+        {allow_credit_card_text}
+      </Text>
     ) : null;
 
     const titleTextStyle = allow_credit_card
@@ -1793,19 +1798,24 @@ class Checkout extends React.Component {
             />
           </View>
           <View>
-            <View style={styles.walletTextContainer}>
+            <View
+              style={[
+                styles.walletTextContainer,
+                {alignItems: 'center', marginBottom: alpha * 2},
+              ]}>
               <Text style={titleTextStyle}>Credit / Debit Card</Text>
+              <Image
+                source={require('./../../assets/images/cc.png')}
+                style={styles.cc}
+              />
+              <Image
+                source={require('./../../assets/images/visa.png')}
+                style={styles.visa}
+              />
             </View>
             {allowText}
           </View>
-          <Image
-            source={require('./../../assets/images/cc.png')}
-            style={styles.cc}
-          />
-          <Image
-            source={require('./../../assets/images/visa.png')}
-            style={styles.visa}
-          />
+
           <View style={selectBoxStyle} />
         </TouchableOpacity>
       </View>
@@ -1835,7 +1845,9 @@ class Checkout extends React.Component {
 
     // FIXME: Refactor this code
     const allowText = allow_pay_in_store_text ? (
-      <Text style={styles.allowText}>{allow_pay_in_store_text}</Text>
+      <Text numberOfLines={1} style={styles.allowText}>
+        {allow_pay_in_store_text}
+      </Text>
     ) : null;
 
     const titleTextStyle = allow_pay_in_store
@@ -2148,6 +2160,7 @@ const styles = StyleSheet.create({
   },
   allowText: {
     backgroundColor: 'transparent',
+    width: alpha * 200,
     color: '#A3A3A3',
     fontFamily: NON_TITLE_FONT,
     fontSize: 12 * fontAlpha,
